@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocrsr.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +46,14 @@ private:
     // forbidden and not implemented.
     //SwUnoCrsr( const SwUnoCrsr& );
     SwUnoCrsr & operator= ( const SwUnoCrsr& );
-public:
 
-    virtual operator SwUnoCrsr* ();
+protected:
+
+    virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
+        BOOL & io_rbLeft, BOOL bVisualAllowed, BOOL bInsertCrsr);
+    virtual void DoSetBidiLevelUpDown();
+
+public:
 
 //  virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
@@ -62,21 +64,23 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 
+    virtual bool IsReadOnlyAvailable() const;
+
     BOOL IsRemainInSection() const          { return bRemainInSection; }
     void SetRemainInSection( BOOL bFlag )   { bRemainInSection = bFlag; }
 
-    BOOL IsSkipOverProtectSections() const
+    virtual BOOL IsSkipOverProtectSections() const
                                     { return bSkipOverProtectSections; }
     void SetSkipOverProtectSections( BOOL bFlag )
                                     { bSkipOverProtectSections = bFlag; }
 
-    BOOL IsSkipOverHiddenSections() const
+    virtual BOOL IsSkipOverHiddenSections() const
                                     { return bSkipOverHiddenSections; }
     void SetSkipOverHiddenSections( BOOL bFlag )
                                     { bSkipOverHiddenSections = bFlag; }
 
     // make copy of cursor
-    SwUnoCrsr * Clone() const;
+    virtual SwUnoCrsr * Clone() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 };
@@ -98,16 +102,14 @@ public:
 
 //  virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
-    virtual operator SwUnoCrsr* ();
-    virtual operator SwUnoTableCrsr* ();
-    virtual operator SwTableCursor* ();
-
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
     virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
+
+    virtual SwUnoTableCrsr * Clone() const;
 
     void MakeBoxSels();
 

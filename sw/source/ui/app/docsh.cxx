@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.cxx,v $
- * $Revision: 1.79.188.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,49 +27,38 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/jobset.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/adjitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/PasswordHelper.hxx>
+#include <editeng/adjitem.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <sfx2/app.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/misccfg.hxx>
-#ifndef _PASSWD_HXX
 #include <sfx2/passwd.hxx>
-#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/flstitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/svxmsbas.hxx>
 #include <svtools/soerr.hxx>
 #include <sot/clsids.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-//#ifndef _SB_SBJSMOD_HXX //autogen
-//#include <basic/sbjsmod.hxx>
-//#endif
 #include <swevent.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
@@ -81,41 +67,26 @@
 #include <swwait.hxx>
 #include <swprtopt.hxx>
 #include <frmatr.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>         // fuer die aktuelle Sicht
-#endif
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 #include <wrtsh.hxx>        // Verbindung zur Core
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Dokumenterzeugung
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <viewopt.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <usrpref.hxx>
 #include <shellio.hxx>      // I/O
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <mdiexp.hxx>
 #include <swbaslnk.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <ndindex.hxx>
 #include <ndole.hxx>
 #include <swcli.hxx>
@@ -127,41 +98,31 @@
 #include <docary.hxx>
 // <--
 #include <swerror.h>        // Fehlermeldungen
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
-#include <cmdid.h>          //
-#endif
-#ifndef _GLOBALS_HRC
+#include <cmdid.h>
 #include <globals.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#include "warnpassword.hxx"
 
 #include <cfgid.h>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/fltrcfg.hxx>
-#include <svx/htmlcfg.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/fltrcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #define SwDocShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #include <com/sun/star/document/UpdateDocMode.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <unomid.h>
+
+#include <sfx2/Metadatable.hxx>
+
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -336,7 +297,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     SW_MOD()->SetEmbeddedLoadSave( FALSE );
 
-    SetError( nErr );
+    SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     BOOL bOk = !IsError( nErr );
 
     // --> OD 2006-11-07 #i59688#
@@ -414,8 +375,7 @@ BOOL SwDocShell::Save()
                     //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
                     //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                        nVBWarning = SvxImportMSVBasic::
-                                        GetSaveWarningOfMSVBAStorage( *this );
+                        nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
                     pDoc->SetContainsMSVBasic( FALSE );
                 }
 
@@ -443,7 +403,7 @@ BOOL SwDocShell::Save()
         }
         SW_MOD()->SetEmbeddedLoadSave( FALSE );
     }
-    SetError( nErr ? nErr : nVBWarning );
+    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
@@ -468,8 +428,12 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         pView->GetEditWin().StopQuickHelp();
 
     //#i91811# mod if we have an active margin window, write back the text
-    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
-        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+    if ( pView &&
+         pView->GetPostItMgr() &&
+         pView->GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) &&
         !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS) )
@@ -533,8 +497,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
             //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
             if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                nVBWarning = SvxImportMSVBasic::
-                                GetSaveWarningOfMSVBAStorage( *this );
+                nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
             pDoc->SetContainsMSVBasic( FALSE );
         }
 
@@ -578,7 +541,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         SW_MOD()->SetEmbeddedLoadSave( FALSE );
     }
-    SetError( nErr ? nErr : nVBWarning );
+    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     return !IsError( nErr );
 }
@@ -610,24 +573,17 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         return FALSE;
     }
 
-    // if the imported word document is password protected - warn the user
-    // about saving it without the password.
-    if(pDoc->IsWinEncrypted())
-    {
-        if(!SwWarnPassword::WarningOnPassword( rMedium ))
-        {
-            SetError(ERRCODE_ABORT);
-            return FALSE;
-        }
-    }
-
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
 
     //#i91811# mod if we have an active margin window, write back the text
-    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
-        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+    if ( pView &&
+         pView->GetPostItMgr() &&
+         pView->GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     ULONG nVBWarning = 0;
 
@@ -642,8 +598,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             DBG_ASSERT( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                SvxImportMSVBasic aTmp( *this, *xStg );
-                nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave, String::CreateFromAscii("Macros") );
+                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, String::CreateFromAscii("Macros") );
                 xStg->Commit();
                 pDoc->SetContainsMSVBasic( TRUE );
             }
@@ -672,7 +627,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                     Sequence<rtl::OUString> aModNames = xLib->getElementNames();
                     if(aModNames.getLength())
                     {
-                        SetError(WARN_SWG_HTML_NO_MACROS);
+                        SetError(WARN_SWG_HTML_NO_MACROS, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                         break;
                     }
                 }
@@ -815,6 +770,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     if ( pWrtShell )
     {
         SwWait aWait( *this, TRUE );
+        // --> OD 2009-12-31 #i106906#
+        const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
+        pWrtShell->LockView( sal_True );
+        // <--
         pWrtShell->StartAllAction();
         pWrtShell->Push();
         SwWriter aWrt( rMedium, *pWrtShell, TRUE );
@@ -825,6 +784,9 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             pWrtShell->Pop(FALSE);
             pWrtShell->EndAllAction();
+            // --> OD 2009-12-31 #i106906#
+            pWrtShell->LockView( bFormerLockView );
+            // <--
         }
     }
     else
@@ -844,7 +806,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     SW_MOD()->SetEmbeddedLoadSave( FALSE );
-    SetError( nErrno ? nErrno : nVBWarning );
+    SetError( nErrno ? nErrno : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
 
@@ -1126,15 +1088,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         break;
         case SID_SOURCEVIEW:
         {
-            if(IsLoading())
-                rSet.DisableItem(nWhich);
-            else
-            {
-                SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
-                                            : SfxViewShell::Current();
-                BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
-                rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
-            }
+            SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
+                                        : SfxViewShell::Current();
+            BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
+            rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
         }
         break;
         case SID_HTML_MODE:
@@ -1159,18 +1116,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_BROWSER_MODE:
         case FN_PRINT_LAYOUT:
             {
-                SfxViewShell* pViewShell = SfxViewShell::Current();
-                BOOL bDisable = 0 != PTR_CAST(SwPagePreView, pViewShell) ||
-                                0 != PTR_CAST(SwSrcView, pViewShell);
-                if (bDisable)
-                    rSet.DisableItem( nWhich );
-                else
-                {
-                    sal_Bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
-                    if(FN_PRINT_LAYOUT == nWhich)
-                        bState = !bState;
-                    rSet.Put( SfxBoolItem( nWhich, bState));
-                }
+                sal_Bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
+                if(FN_PRINT_LAYOUT == nWhich)
+                    bState = !bState;
+                rSet.Put( SfxBoolItem( nWhich, bState));
             }
             break;
 
@@ -1190,7 +1139,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
                         pFmtr ? pFmtr->GetYear2000()
-                              : SFX_APP()->GetMiscConfig()->GetYear2000() )));
+                              : ::utl::MiscCfg().GetYear2000() )));
             }
             break;
         case SID_ATTR_CHAR_FONTLIST:
@@ -1380,40 +1329,118 @@ uno::Reference< frame::XController >
 /* -----------------------------12.02.01 12:08--------------------------------
 
  ---------------------------------------------------------------------------*/
+static const char* pEventNames[] =
+{
+    "OnPageCountChange",
+    "OnMailMerge",
+    "OnMailMergeFinished",
+    "OnFieldMerge",
+    "OnFieldMergeFinished",
+    "OnLayoutFinished"
+};
+
 Sequence< OUString >    SwDocShell::GetEventNames()
 {
     Sequence< OUString > aRet = SfxObjectShell::GetEventNames();
     sal_Int32 nLen = aRet.getLength();
-    aRet.realloc(nLen + 2);
+    aRet.realloc(nLen + 6);
     OUString* pNames = aRet.getArray();
-    pNames[nLen++] = OUString::createFromAscii("OnMailMerge");
-    pNames[nLen] = OUString::createFromAscii("OnPageCountChange");
+    pNames[nLen++] = GetEventName(0);
+    pNames[nLen++] = GetEventName(1);
+    pNames[nLen++] = GetEventName(2);
+    pNames[nLen++] = GetEventName(3);
+    pNames[nLen++] = GetEventName(4);
+    pNames[nLen]   = GetEventName(5);
+
     return aRet;
 }
-/*
-void SwTmpPersist::FillClass( SvGlobalName * pClassName,
-                            ULONG * pClipFormat,
-                            String * pAppName,
-                            String * pLongUserName,
-                            String * pUserName,
-                            sal_Int32 nFileFormat ) const
+
+static sal_Int32 nEvents=13;
+
+rtl::OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 {
-    pDShell->SwDocShell::FillClass( pClassName, pClipFormat, pAppName,
-                                    pLongUserName, pUserName, nFileFormat );
+    if ( nIndex<nEvents )
+        return ::rtl::OUString::createFromAscii(pEventNames[nIndex]);
+    return rtl::OUString();
 }
 
-BOOL SwTmpPersist::Save()
+const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
-    if( SaveChilds() )
-        return SvPersist::Save();
-    return FALSE;
+    return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
 }
 
-BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
+
+bool SwDocShell::IsChangeRecording() const
 {
-    if( SaveCompletedChilds( pStor ) )
-        return SvPersist::SaveCompleted( pStor );
-    return FALSE;
-} */
+    return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
+}
+
+
+bool SwDocShell::HasChangeRecordProtection() const
+{
+    return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
+}
+
+
+void SwDocShell::SetChangeRecording( bool bActivate )
+{
+    USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
+    USHORT nMode = pWrtShell->GetRedlineMode();
+    pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+}
+
+
+bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == aPasswd.getLength() > 0)
+        return false;
+
+    bool bRes = false;
+
+    if (rNewPassword.Len())
+    {
+        // when password protection is applied change tracking must always be active
+        SetChangeRecording( true );
+
+        Sequence< sal_Int8 > aNewPasswd;
+        SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
+        pIDRA->SetRedlinePassword( aNewPasswd );
+        bRes = true;
+    }
+    else
+    {
+        pIDRA->SetRedlinePassword( Sequence< sal_Int8 >() );
+        bRes = true;
+    }
+
+    return bRes;
+}
+
+
+bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
+        return false;
+    rPasswordHash = aPasswdHash;
+    bRes = true;
+
+    return bRes;
+}
 
 

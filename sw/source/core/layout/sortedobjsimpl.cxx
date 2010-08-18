@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sortedobjsimpl.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,16 +38,13 @@
 #include <ndtxt.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
+
 
 using namespace ::com::sun::star;
 
 typedef std::vector< SwAnchoredObject* >::iterator tIter;
 typedef std::vector< SwAnchoredObject* >::const_iterator tConstIter;
-
-using namespace ::com::sun::star;
 
 
 SwSortedObjsImpl::SwSortedObjsImpl()
@@ -96,36 +90,36 @@ struct ObjAnchorOrder
         const SwFmtAnchor* pAnchorNew = &(rFmtNew.GetAnchor());
 
         // check for to-page anchored objects
-        if ( pAnchorListed->GetAnchorId() == FLY_PAGE &&
-             pAnchorNew->GetAnchorId() != FLY_PAGE )
+        if ((pAnchorListed->GetAnchorId() == FLY_AT_PAGE) &&
+            (pAnchorNew   ->GetAnchorId() != FLY_AT_PAGE))
         {
             return true;
         }
-        else if ( pAnchorListed->GetAnchorId() != FLY_PAGE &&
-                  pAnchorNew->GetAnchorId() == FLY_PAGE )
+        else if ((pAnchorListed->GetAnchorId() != FLY_AT_PAGE) &&
+                 (pAnchorNew   ->GetAnchorId() == FLY_AT_PAGE))
         {
             return false;
         }
-        else if ( pAnchorListed->GetAnchorId() == FLY_PAGE &&
-                  pAnchorNew->GetAnchorId() == FLY_PAGE )
+        else if ((pAnchorListed->GetAnchorId() == FLY_AT_PAGE) &&
+                 (pAnchorNew   ->GetAnchorId() == FLY_AT_PAGE))
         {
             return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
         }
 
         // Both objects aren't anchored to page.
         // Thus, check for to-fly anchored objects
-        if ( pAnchorListed->GetAnchorId() == FLY_AT_FLY &&
-             pAnchorNew->GetAnchorId() != FLY_AT_FLY )
+        if ((pAnchorListed->GetAnchorId() == FLY_AT_FLY) &&
+            (pAnchorNew   ->GetAnchorId() != FLY_AT_FLY))
         {
             return true;
         }
-        else if ( pAnchorListed->GetAnchorId() != FLY_AT_FLY &&
-                  pAnchorNew->GetAnchorId() == FLY_AT_FLY )
+        else if ((pAnchorListed->GetAnchorId() != FLY_AT_FLY) &&
+                 (pAnchorNew   ->GetAnchorId() == FLY_AT_FLY))
         {
             return false;
         }
-        else if ( pAnchorListed->GetAnchorId() == FLY_AT_FLY &&
-                  pAnchorNew->GetAnchorId() == FLY_AT_FLY )
+        else if ((pAnchorListed->GetAnchorId() == FLY_AT_FLY) &&
+                 (pAnchorNew   ->GetAnchorId() == FLY_AT_FLY))
         {
             return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
         }
@@ -144,21 +138,21 @@ struct ObjAnchorOrder
         // --> OD 2006-11-29 #???# - objects have to be ordered by anchor node position
         // Thus, compare content anchor node positions and anchor type,
         // if not anchored at-paragraph
-        if ( pAnchorListed->GetAnchorId() != FLY_AT_CNTNT &&
-             pAnchorNew->GetAnchorId() != FLY_AT_CNTNT &&
+        if ((pAnchorListed->GetAnchorId() != FLY_AT_PARA) &&
+            (pAnchorNew   ->GetAnchorId() != FLY_AT_PARA) &&
              pCntntAnchorListed && pCntntAnchorNew )
         {
             if ( pCntntAnchorListed->nContent != pCntntAnchorNew->nContent )
             {
                 return pCntntAnchorListed->nContent < pCntntAnchorNew->nContent;
             }
-            else if ( pAnchorListed->GetAnchorId() == FLY_AUTO_CNTNT &&
-                      pAnchorNew->GetAnchorId() == FLY_IN_CNTNT )
+            else if ((pAnchorListed->GetAnchorId() == FLY_AT_CHAR) &&
+                     (pAnchorNew   ->GetAnchorId() == FLY_AS_CHAR))
             {
                 return true;
             }
-            else if ( pAnchorListed->GetAnchorId() == FLY_IN_CNTNT &&
-                      pAnchorNew->GetAnchorId() == FLY_AUTO_CNTNT )
+            else if ((pAnchorListed->GetAnchorId() == FLY_AS_CHAR) &&
+                     (pAnchorNew   ->GetAnchorId() == FLY_AT_CHAR))
             {
                 return false;
             }

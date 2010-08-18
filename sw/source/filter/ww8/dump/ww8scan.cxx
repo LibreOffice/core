@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +31,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
-#ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
-#endif
 
 #include <string.h>         // memset()
 #include <osl/endian.h>
@@ -6661,7 +6654,7 @@ SEPr::SEPr() :
     dttmPropRMark(0), dxtCharSpace(0), dyaLinePitch(0), clm(0), reserved1(0),
     dmOrientPage(0), iHeadingPgn(0), pgnStart(1), lnnMin(0), wTextFlow(0),
     reserved2(0), pgbApplyTo(0), pgbPageDepth(0), pgbOffsetFrom(0),
-    xaPage(12240), yaPage(15840), xaPageNUp(12240), yaPageNUp(15840),
+    xaPage(12242), yaPage(15842), xaPageNUp(12242), yaPageNUp(15842),
     dxaLeft(1800), dxaRight(1800), dyaTop(1440), dyaBottom(1440), dzaGutter(0),
     dyaHdrTop(720), dyaHdrBottom(720), ccolM1(0), fEvenlySpaced(1),
     reserved3(0), fBiDi(0), fFacingCol(0), fRTLGutter(0), fRTLAlignment(0),

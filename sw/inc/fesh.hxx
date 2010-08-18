@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fesh.hxx,v $
- * $Revision: 1.63.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +62,11 @@ class SotDataObject;
 class SwFrmFmt;
 struct SwSortOptions;
 class SdrMarkList;
+
+namespace svx
+{
+    class ISdrObjectFilter;
+}
 
 
 // return values for GetFrmType() und GetSelFrmType().
@@ -353,6 +355,13 @@ public:
     const Graphic *GetGrfAtPos( const Point &rDocPos,
                                 String &rName, BOOL &rbLink ) const;
 
+    // --> OD 2009-07-13 #i73249#
+    const String GetObjTitle() const;
+    void SetObjTitle( const String& rTitle );
+    const String GetObjDescription() const;
+    void SetObjDescription( const String& rDescription );
+    // <--
+
 //SS fuer Rahmen --------------------------------------------
 
     BOOL IsFrmSelected() const;
@@ -460,6 +469,7 @@ public:
     BOOL GetObjAttr( SfxItemSet &rSet ) const;
     BOOL SetObjAttr( const SfxItemSet &rSet );
 
+    const SdrObject* GetBestObject( BOOL bNext, USHORT eType = GOTOOBJ_DRAW_ANY, BOOL bFlat = TRUE, const ::svx::ISdrObjectFilter* pFilter = NULL );
     BOOL GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
 
     //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
@@ -472,7 +482,7 @@ public:
     void EndTextEdit();             //Loescht ggf. das Objekt.
 
     //Ankertyp des selektierten Objektes, -1 bei Uneindeutigkeit oder
-    //Rahmenselektion; FLY_PAGE bzw. FLY_AT_CNTNT aus frmatr.hxx sonst.
+    //Rahmenselektion; FLY_AT_PAGE bzw. FLY_AT_PARA aus frmatr.hxx sonst.
     short GetAnchorId() const;
 
     //Erzeugen von DrawObjekten, beim Begin wird der Objekttyp mitgegeben.
@@ -532,10 +542,10 @@ public:
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
-    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-    // angemeldet sein.
-    void Insert( SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet = 0,
-                SwFrmFmt* = 0, const Point* = 0 );
+
+    // Insertion of a drawing object which have to be already inserted in the DrawModel
+    void InsertDrawObj( SdrObject& rDrawObj,
+                        const Point& rInsertPosition );
 
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8struc.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,7 +197,7 @@ struct WW8_BordersSO            // fuer StarOffice-Border Code
 
 /*
 // Linien-Defaults in Twips: fruehere Writer-Defaults,
-//                           siehe auch <svx/boxitem.hxx>
+//                           siehe auch <editeng/boxitem.hxx>
 #define DEF_LINE_WIDTH_0        1
 #define DEF_LINE_WIDTH_1        20
 #define DEF_LINE_WIDTH_2        50

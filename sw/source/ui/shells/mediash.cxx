@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mediash.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +36,15 @@
 #endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgcoitm.hxx>
@@ -57,24 +52,18 @@
 #include <svx/sdgtritm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/grfflt.hxx>
 #include <fmturl.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <frmatr.hxx>
 #include <swundo.hxx>
 #include <uitool.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _MEDIASH_HXX
 #include <mediash.hxx>
-#endif
 #include <frmmgr.hxx>
 #include <frmdlg.hxx>
 #include <frmfmt.hxx>
@@ -95,7 +84,7 @@
 #include <avmedia/mediaitem.hxx>
 
 #define SwMediaShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
 

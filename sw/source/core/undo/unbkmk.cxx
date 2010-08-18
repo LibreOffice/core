@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unbkmk.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,67 +40,53 @@
 
 #include "SwRewriter.hxx"
 
+
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
-SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& rBkmk )
+SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
+            const ::sw::mark::IMark& rBkmk )
     : SwUndo( nUndoId )
+    , m_pHistoryBookmark(new SwHistoryBookmark(rBkmk, true, rBkmk.IsExpanded()))
 {
-    pHBookmark = new SwHstryBookmark(rBkmk, true, rBkmk.IsExpanded());
 }
-
-
 
 SwUndoBookmark::~SwUndoBookmark()
 {
-    delete pHBookmark;
 }
-
 
 void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 {
-    pHBookmark->SetInDoc( pDoc, FALSE );
+    m_pHistoryBookmark->SetInDoc( pDoc, false );
 }
 
 
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getMarksBegin();
-        ppBkmk != pMarkAccess->getMarksEnd();
-        ppBkmk++)
-        if( pHBookmark->IsEqualBookmark( **ppBkmk ))
+    for (IDocumentMarkAccess::const_iterator_t ppBkmk =
+                pMarkAccess->getMarksBegin();
+            ppBkmk != pMarkAccess->getMarksEnd();
+            ++ppBkmk)
+    {
+        if ( m_pHistoryBookmark->IsEqualBookmark( **ppBkmk ) )
         {
-                pMarkAccess->deleteMark( ppBkmk );
-                break;
+            pMarkAccess->deleteMark( ppBkmk );
+            break;
         }
+    }
 }
 
 SwRewriter SwUndoBookmark::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, pHBookmark->GetName());
+    aResult.AddRule(UNDO_ARG1, m_pHistoryBookmark->GetName());
 
     return aResult;
 }
 
-SwUndoDelBookmark::SwUndoDelBookmark( const ::sw::mark::IMark& rBkmk )
-    : SwUndoBookmark( UNDO_DELBOOKMARK, rBkmk )
-{
-}
-
-
-void SwUndoDelBookmark::Undo( SwUndoIter& rUndoIter )
-{
-    SetInDoc( &rUndoIter.GetDoc() );
-}
-
-
-void SwUndoDelBookmark::Redo( SwUndoIter& rUndoIter )
-{
-    ResetInDoc( &rUndoIter.GetDoc() );
-}
+//----------------------------------------------------------------------
 
 
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )

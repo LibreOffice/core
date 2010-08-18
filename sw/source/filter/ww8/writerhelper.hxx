@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writerhelper.hxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,13 +36,14 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <sfx2/objsh.hxx>
-#   include "types.hxx"
-#   include <svtools/itempool.hxx>     //SfxItemPool
-#   include <svtools/itemset.hxx>      //SfxItemSet
-#   include <format.hxx>               //SwFmt
-#   include <node.hxx>                 //SwCntntNode
-#   include <pam.hxx>                  //SwPaM
-#   include <tools/poly.hxx>           //Polygon, PolyPolygon
+#include "types.hxx"
+#include <svl/itempool.hxx>     //SfxItemPool
+#include <svl/itemset.hxx>      //SfxItemSet
+#include <format.hxx>               //SwFmt
+#include <node.hxx>                 //SwCntntNode
+#include <pam.hxx>                  //SwPaM
+#include <tools/poly.hxx>           //Polygon, PolyPolygon
+#include <doc.hxx>                  //SwDoc
 
 //Uncomment to dump debugging streams of graphics
 #if OSL_DEBUG_LEVEL > 1
@@ -633,8 +631,6 @@ namespace sw
             need them to have something to be anchored to. So this method
             returns all the floating elements in a document as a STL container
             of sw::Frames which are guaranteed to have an appropiate anchor.
-            This will include drawing objects, use GetNonDrawingFrames if
-            you are not interested in the drawing objects.
 
             @param rDoc
             The SwDoc document to get the styles from
@@ -648,31 +644,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        Frames GetAllFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
-
-        /** Get the Floating elements in a SwDoc
-
-            Writer's FrmFmts may or may not be anchored to some text content,
-            e.g. Page Anchored elements will not be. For the winword export we
-            need them to have something to be anchored to. So this method
-            returns all the floating elements in a document as a STL container
-            of sw::Frames which are guaranteed to have an appropiate anchor.
-            This will not include drawing objects, use GetAllFrames if you
-            are interested in the drawing objects.
-
-            @param rDoc
-            The SwDoc document to get the styles from
-
-            @param pPaM
-            The SwPam to describe the selection in the document to get the
-            elements from. 0 means the entire document.
-
-            @return A Frames containing the selections Floating elements
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        Frames GetNonDrawingFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
+        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
 
         /** Get the Frames anchored to a given node
 
@@ -691,6 +663,7 @@ namespace sw
         */
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
 
+#if 0
         /** Get the Frames anchored for all nodes between two points
 
             Given a container of frames, find the ones anchored to the nodes
@@ -713,7 +686,7 @@ namespace sw
         */
         Frames GetFramesBetweenNodes(const Frames &rFrames,
                 const SwNode &rStart, const SwNode &rEnd);
-
+#endif
         /** Get the Numbering Format used on a paragraph
 
             There are two differing types of numbering formats that may be on a

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writerwordglue.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,25 +91,6 @@ namespace sw
         {
             return ww::needed_cast<Ret, Param>(in);
         }
-
-
-        /** If a page dimension is close to a standard page size, snap to it.
-
-            Commonly a page dimension is slightly different from a standard
-            page size, so close that its likely a rounding error after
-            creeping in. Use this to snap to standard sizes when within a
-            trivial distance from a standard size.
-
-            @param
-            nSize the dimension to test against standard dimensions
-
-            @return New dimension to use, equal to nSize unless within a
-            trivial amount of a standard page dimension
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        long SnapPageDimension(long nSize) throw();
     }
 
     namespace util

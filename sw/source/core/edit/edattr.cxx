@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edattr.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,10 @@
 
 #include <hintids.hxx>
 
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/lrspitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <txatbase.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
@@ -60,7 +53,7 @@
 #include <crsskip.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <charfmt.hxx>  // #i27615#
 #include <numrule.hxx>
 
@@ -172,11 +165,6 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
 
                 if( aSet.Count() )
                     aSet.ClearItem();
-
-#ifdef JP_NEWCORE
-            // vieleicht sollte man hier noch erfragen, ob schon alle Attribute
-            // "DontCare" sind. Dann kann man abbrechen!
-#endif
             }
             pSet = &aSet;
         }
@@ -238,8 +226,8 @@ BOOL SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
     if( !pTxtNd )
         return FALSE;
 
-    SwTxtAttr *pFtn = pTxtNd->GetTxtAttr( pCrsr->GetPoint()->nContent,
-                                            RES_TXTATR_FTN );
+    SwTxtAttr *const pFtn = pTxtNd->GetTxtAttrForCharAt(
+        pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( pFtn && pFillFtn )
     {
         // Daten vom Attribut uebertragen
@@ -251,9 +239,9 @@ BOOL SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
 }
 
 
-BOOL SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
+bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 {
-    BOOL bChgd = FALSE;
+    bool bChgd = false;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr(), *pFirst = pCrsr;
@@ -284,7 +272,7 @@ BOOL SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 } */
 
 
-BOOL SwEditShell::HasFtns( BOOL bEndNotes ) const
+bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
     for ( USHORT i = 0; i < rIdxs.Count(); ++i )
@@ -298,7 +286,7 @@ BOOL SwEditShell::HasFtns( BOOL bEndNotes ) const
 
 
     // gebe Liste aller Fussnoten und deren Anfangstexte
-USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, BOOL bEndNotes )
+USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     if( rList.Count() )
         rList.Remove( 0, rList.Count() );
@@ -457,17 +445,21 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     }
 
     // and fields
-    const SwTxtAttr* pTFld;
-    if( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) &&
-        0 != ( pTFld = rTNd.GetTxtAttr( nPos ) ) )
+    if ( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) )
     {
-        bRet = TRUE;                    // all other then fields can be
-                                        // defined as weak-script ?
-        const SwField* pFld;
-        if( RES_TXTATR_FIELD == pTFld->Which() &&
-            0 != (pFld = pTFld->GetFld().GetFld() ) )
+        const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
+        if (pAttr)
         {
-            sExp += pFld->Expand();
+            bRet = TRUE; // all other than fields can be
+                         // defined as weak-script ?
+            if ( RES_TXTATR_FIELD == pAttr->Which() )
+            {
+                const SwField* const pFld = pAttr->GetFld().GetFld();
+                if (pFld)
+                {
+                    sExp += pFld->ExpandField(rTNd.GetDoc()->IsClipBoard());
+                }
+            }
         }
     }
 
@@ -479,14 +471,14 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         {
             USHORT nScript;
             for( n = 0; n < nEnd; n = (xub_StrLen)
-                    pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
+                    pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
             {
-                nScript = pBreakIt->xBreak->getScriptType( sExp, n );
+                nScript = pBreakIt->GetBreakIter()->getScriptType( sExp, n );
                 rScrpt |= lcl_SetScriptFlags( nScript );
             }
         }
         else
-            rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
+            rScrpt |= lcl_SetScriptFlags( pBreakIt->GetBreakIter()->
                                         getScriptType( sExp, nEnd-1 ));
     }
 
@@ -498,7 +490,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 USHORT SwEditShell::GetScriptType() const
 {
     USHORT nRet = 0;
-    if( pBreakIt->xBreak.is() )
+    //if( pBreakIt->GetBreakIter().is() )
     {
         FOREACHPAM_START(this)
 
@@ -530,7 +522,7 @@ USHORT SwEditShell::GetScriptType() const
                     {
                         nScript = pScriptInfo ?
                                   pScriptInfo->ScriptType( nPos ) :
-                                  pBreakIt->xBreak->getScriptType( pTNd->GetTxt(), nPos );
+                                  pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
                     }
                     else
                         nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
@@ -539,7 +531,7 @@ USHORT SwEditShell::GetScriptType() const
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
-            else
+            else if ( pBreakIt->GetBreakIter().is() )
             {
                 ULONG nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
@@ -568,7 +560,7 @@ USHORT SwEditShell::GetScriptType() const
                         {
                             nScript = pScriptInfo ?
                                       pScriptInfo->ScriptType( nChg ) :
-                                      pBreakIt->xBreak->getScriptType(
+                                      pBreakIt->GetBreakIter()->getScriptType(
                                                                 rTxt, nChg );
 
                             if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE,
@@ -583,7 +575,7 @@ USHORT SwEditShell::GetScriptType() const
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
-                                   (xub_StrLen)pBreakIt->xBreak->endOfScript(
+                                   (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                                     rTxt, nChg, nScript );
 
                             nFldPos = rTxt.Search(

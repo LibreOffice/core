@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NDTXT_HXX
-#define _NDTXT_HXX
+#ifndef SW_NDTXT_HXX
+#define SW_NDTXT_HXX
+
+#include <cppuhelper/weakref.hxx>
 
 #include "swdllapi.h"
 #include <error.h>
@@ -38,6 +37,14 @@
 #include <errhdl.hxx>
 #include <modeltoviewhelper.hxx>
 #include <SwNumberTreeTypes.hxx>
+#include <IDocumentContentOperations.hxx>
+
+#include <sfx2/Metadatable.hxx>
+
+#include <vector>
+#include <set>
+
+
 class SwNumRule;
 class SwNodeNum;
 // --> OD 2008-05-06 #refactorlists#
@@ -46,9 +53,6 @@ class SwList;
 // --> OD 2008-12-02 #i96772#
 class SvxLRSpaceItem;
 // <--
-
-#include <vector>
-#include <set>
 
 namespace utl {
     class TransliterationWrapper;
@@ -71,21 +75,19 @@ class SwScriptInfo;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
 
-// Konstanten fuer das Text-Insert:
-#define INS_DEFAULT         0x0000 // keine Extras
-#define INS_EMPTYEXPAND     0x0001 // leere Hints beim Einfuegen aufspannen
-#define INS_NOHINTEXPAND    0x0002 // Hints an der InsPos nicht aufspannen
-
-namespace com { namespace sun { namespace star { namespace uno {
-    template < class > class Sequence;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        template < class > class Sequence;
+    }
+    namespace text { class XTextContent; }
+} } }
 
 typedef std::set< xub_StrLen > SwSoftPageBreakList;
 
 // --------------------
 // SwTxtNode
 // --------------------
-class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
+class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
 
     // fuer das Erzeugen des ersten TextNode
@@ -93,30 +95,28 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     friend class SwNodes;
     friend class SwTxtFrm;
     friend class SwScriptInfo;
-    friend void SwpHints::Insert( SwTxtAttr*, SwTxtNode&, USHORT );
-    friend void SwpHints::BuildPortions( SwTxtNode&, SwTxtAttr&, USHORT );
 
     //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
     //Also niemals direkt zugreifen!
-    SwpHints    *pSwpHints;
+    SwpHints    *m_pSwpHints;
 
     // --> OD 2005-11-02 #i51089 - TUNING#
     mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
     // <--
-    XubString   aText;
+    XubString   m_Text;
 
-    SwParaIdleData_Impl* pParaIdleData_Impl;
+    SwParaIdleData_Impl* m_pParaIdleData_Impl;
 
     // Some of the chars this para are hidden. Paragraph has to be reformatted
     // on changing the view to print preview.
-    mutable BOOL bContainsHiddenChars : 1;
+    mutable bool m_bContainsHiddenChars : 1;
     // The whole paragraph is hidden because of the hidden text attribute
-    mutable BOOL bHiddenCharsHidePara : 1;
+    mutable bool m_bHiddenCharsHidePara : 1;
     // The last two flags have to be recalculated if this flag is set:
-    mutable BOOL bRecalcHiddenCharFlags : 1;
+    mutable bool m_bRecalcHiddenCharFlags : 1;
 
-    bool bNotifiable;
-    mutable BOOL bLastOutlineState : 1;
+    mutable bool m_bLastOutlineState : 1;
+    bool m_bNotifiable;
 
     // BYTE nOutlineLevel; //#outline level, removed by zhaojianwei.
     // --> OD 2008-11-19 #i70748#
@@ -133,6 +133,11 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     // pointer to the list, to whose the text node is added to
     SwList* mpList;
     // <--
+    /// #i111677# cached expansion (for clipboard)
+    ::std::auto_ptr< ::rtl::OUString > m_pNumStringCache;
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextContent> m_wXParagraph;
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
@@ -143,11 +148,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, BOOL bNext = TRUE,
                                 BOOL bChgFollow = TRUE );
 
-    SW_DLLPRIVATE void  _Cut( SwTxtNode *pDest, const SwIndex &rDestStart,
-                  const SwIndex &rStart, xub_StrLen nLen, BOOL bUpdate = TRUE );
-
-    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxPoolItem& rNew, xub_StrLen nStt, xub_StrLen nEnd, bool bRedlineAttr = false );
-    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd );
+    SW_DLLPRIVATE void CutImpl(
+          SwTxtNode * const pDest, const SwIndex & rDestStart,
+          const SwIndex & rStart, /*const*/ xub_StrLen nLen,
+          const bool bUpdate = true );
 
     // Verlagere alles umfassende harte Attribute in den AttrSet des Absatzes
     SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // wird von SplitNode gerufen.
@@ -160,12 +164,13 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 
     // Optimization: Asking for information about hidden characters at SwScriptInfo
     // updates these flags.
-    inline bool IsCalcHiddenCharFlags() const { return bRecalcHiddenCharFlags; }
+    inline bool IsCalcHiddenCharFlags() const
+        { return m_bRecalcHiddenCharFlags; }
     inline void SetHiddenCharAttribute( bool bNewHiddenCharsHidePara, bool bNewContainsHiddenChars ) const
     {
-        bHiddenCharsHidePara = bNewHiddenCharsHidePara;
-        bContainsHiddenChars = bNewContainsHiddenChars;
-        bRecalcHiddenCharFlags = false;
+        m_bHiddenCharsHidePara = bNewHiddenCharsHidePara;
+        m_bContainsHiddenChars = bNewContainsHiddenChars;
+        m_bRecalcHiddenCharFlags = false;
     }
 
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
@@ -193,6 +198,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
         @return number of this node
     */
     SwNodeNum* CreateNum() const;
+
+    inline void TryDeleteSwpHints();
+
+    SW_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
 
 public:
     bool IsWordCountDirty() const;
@@ -223,14 +232,14 @@ public:
 public:
     using SwCntntNode::GetAttr;
 
-    const String& GetTxt() const { return aText; }
+    const String& GetTxt() const { return m_Text; }
 
-    // Zugriff auf SwpHints
+    // getters for SwpHints
     inline       SwpHints &GetSwpHints();
     inline const SwpHints &GetSwpHints() const;
-    inline       SwpHints *GetpSwpHints() { return pSwpHints; }
-    inline const SwpHints *GetpSwpHints() const { return pSwpHints; }
-    inline BOOL  HasHints() const { return pSwpHints ? TRUE : FALSE; }
+    inline       SwpHints *GetpSwpHints()       { return m_pSwpHints; }
+    inline const SwpHints *GetpSwpHints() const { return m_pSwpHints; }
+    inline       bool   HasHints() const { return m_pSwpHints ? true : false; }
     inline       SwpHints &GetOrCreateSwpHints();
 
     virtual ~SwTxtNode();
@@ -250,21 +259,30 @@ public:
     virtual USHORT ResetAllAttr();
     // <--
 
-    /*
-     * Einfuegen anderer Datentypen durch Erzeugen eines
-     * temporaeren Strings.
+    /// insert text content
+    void InsertText( const XubString & rStr, const SwIndex & rIdx,
+                     const enum IDocumentContentOperations::InsertFlags nMode
+                         = IDocumentContentOperations::INS_DEFAULT );
+
+    /** delete text content
+        ATTENTION: must not be called with a range that overlaps the start of
+                   an attribute with both extent and dummy char
      */
-    SwTxtNode&  Insert( xub_Unicode c, const SwIndex &rIdx );
-    SwTxtNode&  Insert( const XubString &rStr, const SwIndex &rIdx,
-                        const USHORT nMode = INS_DEFAULT );
+    void EraseText ( const SwIndex &rIdx, const xub_StrLen nCount = STRING_LEN,
+                     const enum IDocumentContentOperations::InsertFlags nMode
+                         = IDocumentContentOperations::INS_DEFAULT );
 
-    SwTxtNode&  Erase( const SwIndex &rIdx, xub_StrLen nCount = STRING_LEN,
-                       const USHORT nMode = INS_DEFAULT );
-
-    // Aktionen auf Attributen
-    // loesche alle TextAttribute die als Attribut im Set vorhanden sind
-    // (Set-Pointer != 0 ) oder alle deren Which-Wert mit nWhich mappen
-    // oder wenn Which = 0, alle.
+    /** delete all attributes.
+        If neither pSet nor nWhich is given, delete all attributes (except
+        refmarks, toxmarks, meta) in range.
+        @param rIdx     start position
+        @param nLen     range in which attributes will be deleted
+        @param pSet     if not 0, delete only attributes contained in pSet
+        @param nWhich   if not 0, delete only attributes with matching which
+        @param bInclRefToxMark
+            refmarks, toxmarks, and metas will be ignored unless this is true
+        ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
+     */
     void    RstAttr( const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich = 0,
                     const SfxItemSet* pSet = 0, BOOL bInclRefToxMark = FALSE );
     void    GCAttr();
@@ -275,17 +293,20 @@ public:
     // loesche alle Attribute aus dem SwpHintsArray.
     void    ClearSwpHintsArr( bool bDelFields );
 
-    // Insert pAttr into hints array.
-    BOOL    Insert( SwTxtAttr *pAttr, USHORT nMode = 0 );
-    // lege ein neues TextAttribut an und fuege es ins SwpHints-Array ein
-    // returne den neuen Pointer (oder 0 bei Fehlern)!
-    SwTxtAttr* InsertItem( const SfxPoolItem& rAttr,
-                           xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
+    /// Insert pAttr into hints array. @return true iff inserted successfully
+    bool    InsertHint( SwTxtAttr * const pAttr,
+                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
+    /// create new text attribute from rAttr and insert it
+    /// @return     inserted hint; 0 if not sure the hint is inserted
+    SwTxtAttr* InsertItem( SfxPoolItem& rAttr,
+                  const xub_StrLen nStart, const xub_StrLen nEnd,
+                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
 
     // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
     // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
     BOOL SetAttr( const SfxItemSet& rSet,
-                  xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
+                  xub_StrLen nStt, xub_StrLen nEnd,
+                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
     // erfrage die Attribute vom TextNode ueber den Bereich
     // --> OD 2008-01-16 #newlistlevelattrs#
     // Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
@@ -303,32 +324,34 @@ public:
     // uebertrage Attribute eines AttrSets ( AutoFmt ) in das SwpHintsArray
     void FmtToTxtAttr( SwTxtNode* pNd );
 
-    // loeschen eines einzelnen Attributes (fuer SwUndoAttr)
-    // ( nur das Attribut loeschen, dass mit Which,Start und End oder
-    //   mit pTxtHint identisch ist (es gibt nur ein gueltiges))
-    //  AUSNAHME: ToxMarks !!!
-    void    Delete( USHORT nTxtWhich, xub_StrLen nStart, xub_StrLen nEnd = 0 );
-    void    Delete( SwTxtAttr * pTxtAttr, BOOL bThisOnly = FALSE );
+    /// delete all attributes of type nWhich at nStart (opt. end nEnd)
+    void DeleteAttributes( const USHORT nWhich,
+                  const xub_StrLen nStart, const xub_StrLen nEnd = 0 );
+    /// delete the attribute pTxtAttr
+    void DeleteAttribute ( SwTxtAttr * const pTxtAttr );
 
     // Aktionen auf Text und Attributen
     // --> OD 2008-11-18 #i96213#
     // introduce optional parameter to control, if all attributes have to be copied.
-    void Copy( SwTxtNode *pDest,
+    void CopyText( SwTxtNode * const pDest,
                const SwIndex &rStart,
-               USHORT nLen,
+               const xub_StrLen nLen,
                const bool bForceCopyOfAllAttrs = false );
-    void Copy( SwTxtNode *pDest,
+    void CopyText( SwTxtNode * const pDest,
                const SwIndex &rDestStart,
                const SwIndex &rStart,
                xub_StrLen nLen,
                const bool bForceCopyOfAllAttrs = false );
     // <--
-    void    Cut(SwTxtNode *pDest, const SwIndex &rStart, xub_StrLen nLen);
-    inline void Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
-                    const SwIndex &rStart, xub_StrLen nLen);
-    // ersetze im String an Position nIdx das Zeichen
-    void Replace( const SwIndex& rStart, xub_Unicode cCh );
-    void Replace( const SwIndex& rStart, xub_StrLen nLen, const XubString& rText );
+
+    void        CutText(SwTxtNode * const pDest,
+                    const SwIndex & rStart, const xub_StrLen nLen);
+    inline void CutText(SwTxtNode * const pDest, const SwIndex &rDestStart,
+                    const SwIndex & rStart, const xub_StrLen nLen);
+
+    /// replace nDelLen characters at rStart with rText
+    void ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
+            const XubString& rText );
     void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,
                     const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
@@ -341,24 +364,43 @@ public:
     SwCntntNode *AppendNode( const SwPosition & );
 
     // setze ggf. das DontExpand-Flag an INet bzw. Zeichenvorlagen
-    BOOL DontExpandFmt( const SwIndex& rIdx, BOOL bFlag = TRUE,
+    BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
                         BOOL bFmtToTxtAttributes = TRUE );
 
-    // gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
-    // gesetzt ist zurueck. Gibt es keines, returne 0-Pointer
-    // gesetzt heisst: Start <= rIdx < End
-    SwTxtAttr *GetTxtAttr( const SwIndex& rIdx, USHORT nWhichHt,
-                           BOOL bExpand = FALSE ) const;
+    enum GetTxtAttrMode {
+        DEFAULT,    /// DEFAULT: (Start <  nIndex <= End)
+        EXPAND,     /// EXPAND : (Start <= nIndex <  End)
+        PARENT,     /// PARENT : (Start <  nIndex <  End)
+    };
 
-    // Diese Methode liefert nur Textattribute auf der Position nIdx
-    // zurueck, die kein EndIdx besitzen und denselben Which besitzen.
-    // Ueblicherweise steht an dieser Position ein CH_TXTATR.
-    // Bei RES_TXTATR_END entfaellt die Pruefung auf den Which-Wert.
-    SwTxtAttr *GetTxtAttr( const xub_StrLen nIdx,
-                           const USHORT nWhichHt = RES_TXTATR_END ) const;
+    /** get the innermost text attribute covering position nIndex.
+        @param nWhich   only attribute with this id is returned.
+        @param eMode    the predicate for matching (@see GetTxtAttrMode).
 
-    SwTxtFld  *GetTxtFld( const SwIndex& rIdx )
-        { return (SwTxtFld *)GetTxtAttr( rIdx, RES_TXTATR_FIELD ); }
+        ATTENTION: this function is not well-defined for those
+        hints of which several may cover a single position, like
+        RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
+     */
+    SwTxtAttr *GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                            enum GetTxtAttrMode const eMode = DEFAULT) const;
+
+    /** get the innermost text attributes covering position nIndex.
+        @param nWhich   only attributes with this id are returned.
+        @param eMode    the predicate for matching (@see GetTxtAttrMode).
+     */
+    ::std::vector<SwTxtAttr *> GetTxtAttrsAt(xub_StrLen const nIndex,
+                            RES_TXTATR const nWhich,
+                            enum GetTxtAttrMode const eMode = DEFAULT) const;
+
+    /** get the text attribute at position nIndex which owns
+        the dummy character CH_TXTATR_* at that position, if one exists.
+        @param nIndex   the position in the text
+        @param nWhich   if different from RES_TXTATR_END, return only
+                        attribute with given which id
+        @return the text attribute at nIndex of type nWhich, if it exists
+    */
+    SwTxtAttr *GetTxtAttrForCharAt( const xub_StrLen nIndex,
+                       const RES_TXTATR nWhich = RES_TXTATR_END ) const;
 
     // Aktuelles Wort zurueckliefern
     XubString GetCurWord(xub_StrLen) const;
@@ -400,12 +442,12 @@ public:
     /**
        Returns if this text node is an outline.
 
-       @retval TRUE      this text node is an outline
-       @retval FALSE     else
+       @retval true      this text node is an outline
+       @retval false     else
      */
-    BOOL IsOutline() const;
+    bool IsOutline() const;
 
-    BOOL IsOutlineStateChanged() const;
+    bool IsOutlineStateChanged() const;
 
     void UpdateOutlineState();
 
@@ -465,6 +507,10 @@ public:
        @retval FALSE  else
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+
+    // --> OD 2010-01-05 #b6884103#
+    SwTwips GetAdditionalIndentForStartingNewList() const;
+    // <--
 
     // --> OD 2008-12-02 #i96772#
     void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
@@ -712,29 +758,29 @@ public:
     // Passes back info needed on the dropcap dimensions
     bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
 
-
-    //
     // Hidden Paragraph Field:
-    //
-    inline BOOL CalcHiddenParaField()
-        { if(pSwpHints) return pSwpHints->CalcHiddenParaField(); return FALSE; }
-    // Setzen des CalcVisible-Flags
-    inline void SetCalcHiddenParaField(){ if(pSwpHints) pSwpHints->SetCalcHiddenParaField(); }
+    inline bool CalcHiddenParaField()
+        { return m_pSwpHints ? m_pSwpHints->CalcHiddenParaField() : false; }
+    // set CalcVisible flags
+    inline void SetCalcHiddenParaField()
+        { if (m_pSwpHints) m_pSwpHints->SetCalcHiddenParaField(); }
 
-    // Ist der Absatz sichtbar
-    inline BOOL HasHiddenParaField() const
-        { return pSwpHints ? pSwpHints->HasHiddenParaField() : FALSE; }
+    // is the paragraph visible?
+    inline bool HasHiddenParaField() const
+        { return m_pSwpHints ? m_pSwpHints->HasHiddenParaField()  : false; }
 
     //
     // Hidden Paragraph Field:
     //
     inline bool HasHiddenCharAttribute( bool bWholePara ) const
     {
-        if ( bRecalcHiddenCharFlags )
+        if ( m_bRecalcHiddenCharFlags )
             CalcHiddenCharFlags();
-        return bWholePara ? bHiddenCharsHidePara : bContainsHiddenChars;
+        return bWholePara ? m_bHiddenCharsHidePara : m_bContainsHiddenChars;
     }
-    inline void SetCalcHiddenCharFlags() const { bRecalcHiddenCharFlags = TRUE; }
+
+    inline void SetCalcHiddenCharFlags() const
+        { m_bRecalcHiddenCharFlags = true; }
 
 // --> FME 2004-06-08 #i12836# enhanced pdf
     //
@@ -746,17 +792,14 @@ public:
     bool IsHidden() const;
 // <--
 
-    inline SwTxtAttr* MakeRedlineTxtAttr( const SfxPoolItem& rNew )
-        { return MakeTxtAttr( rNew, 0, 0, true ); }
-
     TYPEINFO(); // fuer rtti
 
     // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
-    // aus SwIndexReg
-    virtual void Update( const SwIndex & aPos, USHORT xub_StrLen,
-                         BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
+    // override SwIndexReg
+    virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
+                 const bool bNegative = false, const bool bDelete = false );
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
@@ -765,16 +808,6 @@ public:
 
     // count words in given range
     void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
-
-    // #111840#
-    /**
-       Returns position of certain text attribute.
-
-       @param pAttr     text attribute to search
-
-       @return position of given attribute or NULL in case of failure
-     */
-    SwPosition * GetPosition(const SwTxtAttr * pAttr);
 
     // Checks some global conditions like loading or destruction of document
     // to economize notifications
@@ -808,32 +841,57 @@ public:
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
+    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextContent> const& GetXParagraph() const
+            { return m_wXParagraph; }
+    SW_DLLPRIVATE void SetXParagraph(::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextContent> const& xParagraph)
+            { m_wXParagraph = xParagraph; }
+
+    // sfx2::Metadatable
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry();
+    virtual bool IsInClipboard() const;
+    virtual bool IsInUndo() const;
+    virtual bool IsInContent() const;
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 
 //-----------------------------------------------------------------------------
 
-inline SwpHints &SwTxtNode::GetSwpHints()
+inline SwpHints & SwTxtNode::GetSwpHints()
 {
-    ASSERT_ID( pSwpHints, ERR_NOHINTS);
-    return *pSwpHints;
+    ASSERT_ID( m_pSwpHints, ERR_NOHINTS);
+    return *m_pSwpHints;
 }
 inline const SwpHints &SwTxtNode::GetSwpHints() const
 {
-    ASSERT_ID( pSwpHints, ERR_NOHINTS);
-    return *pSwpHints;
+    ASSERT_ID( m_pSwpHints, ERR_NOHINTS);
+    return *m_pSwpHints;
 }
 
 inline SwpHints& SwTxtNode::GetOrCreateSwpHints()
 {
-    if( !pSwpHints )
-        pSwpHints = new SwpHints;
-    return *pSwpHints;
+    if ( !m_pSwpHints )
+    {
+        m_pSwpHints = new SwpHints;
+    }
+    return *m_pSwpHints;
+}
+
+inline void SwTxtNode::TryDeleteSwpHints()
+{
+    if ( m_pSwpHints && m_pSwpHints->CanBeDeleted() )
+    {
+        DELETEZ( m_pSwpHints );
+    }
 }
 
 inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
 {
-    return (SwTxtFmtColl*)GetRegisteredIn();
+    return static_cast<SwTxtFmtColl*>(const_cast<SwModify*>(GetRegisteredIn()));
 }
 
 // fuer den IBM-Compiler nicht inlinen wg. 42876
@@ -841,19 +899,19 @@ inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
 inline       SwTxtNode   *SwNode::GetTxtNode()
 {
-     return ND_TEXTNODE == nNodeType ? (SwTxtNode*)this : 0;
+     return ND_TEXTNODE == nNodeType ? static_cast<SwTxtNode*>(this) : 0;
 }
 inline const SwTxtNode   *SwNode::GetTxtNode() const
 {
-     return ND_TEXTNODE == nNodeType ? (const SwTxtNode*)this : 0;
+     return ND_TEXTNODE == nNodeType ? static_cast<const SwTxtNode*>(this) : 0;
 }
 #endif
 
-inline void SwTxtNode::Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
-                            const SwIndex &rStart, xub_StrLen nLen)
+inline void
+SwTxtNode::CutText(SwTxtNode * const pDest, const SwIndex & rDestStart,
+                    const SwIndex & rStart, const xub_StrLen nLen)
 {
-    _Cut( pDest, rDestStart, rStart, nLen, TRUE );
+    CutImpl( pDest, rDestStart, rStart, nLen, true );
 }
-
 
 #endif

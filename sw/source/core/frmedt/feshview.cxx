@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: feshview.cxx,v $
- * $Revision: 1.61.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,11 @@
 #include "hintids.hxx"
 
 #ifdef WIN
-#define NEEDED_BY_FESHVIEW
 #define _FESHVIEW_ONLY_INLINE_NEEDED
 #endif
 
+#include <svx/sdrobjectfilter.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdoole2.hxx>
@@ -48,9 +46,9 @@
 #include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 
@@ -239,10 +237,7 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
             if( bForget )
             {
                 pDView->UnmarkAll();
-                if ( pTmpObj )
-                    pDView->MarkObj( pTmpObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
-                else
-                    pDView->MarkObj( rPt, MINMOVE );
+                pDView->MarkObj( pTmpObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
                 break;
             }
         }
@@ -327,7 +322,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
         SwFmtAnchor aAnch( rFmt.GetAnchor() );
         RndStdIds nAnchorId = aAnch.GetAnchorId();
-        if ( FLY_IN_CNTNT == nAnchorId )
+        if ( FLY_AS_CHAR == nAnchorId )
             return sal_False;
         if( pOld->IsVertical() )
         {
@@ -349,7 +344,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
             }
         }
         switch ( nAnchorId ) {
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
             {
                 ASSERT( pOld->IsPageFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_UP == nDir )
@@ -363,7 +358,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                 }
                 break;
             }
-            case FLY_AUTO_CNTNT:
+            case FLY_AT_CHAR:
             {
                 ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_LEFT == nDir || SW_MOVE_RIGHT == nDir )
@@ -397,7 +392,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                     }
                 }
             } // no break!
-            case FLY_AT_CNTNT:
+            case FLY_AT_PARA:
             {
                 ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_UP == nDir )
@@ -1178,7 +1173,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
         USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        bRet = 0 != pDView->PickObj( rPt, pObj, pPV, SDRSEARCH_PICKMARKABLE );
+        bRet = 0 != pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
@@ -1186,9 +1181,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
 }
 
 // #107513#
-// Test if there is a draw object at that position and if it should be selected.
-// The 'should' is aimed at Writer text fly frames which may be in front of
-// the draw object.
+// Test if there is a object at that position and if it should be selected.
 sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
     SET_CURR_SHELL(this);
@@ -1202,42 +1195,82 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         sal_uInt16 nOld(pDrawView->GetHitTolerancePixel());
 
         pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
-        bRet = pDrawView->PickObj(rPt, pObj, pPV, SDRSEARCH_PICKMARKABLE);
+        bRet = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE);
         pDrawView->SetHitTolerancePixel(nOld);
 
-        if(bRet && pObj)
+        if ( bRet && pObj )
         {
             const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
-            if( pObj->GetLayer() == pIDDMA->GetHellId() )
+            // --> OD 2009-12-30 #i89920#
+            // Do not select object in background which is overlapping this text
+            // at the given position.
+            bool bObjInBackground( false );
             {
-                const SwFrm *pPageFrm = GetLayout()->Lower();
-                while( pPageFrm && !pPageFrm->Frm().IsInside( rPt ) )
+                if ( pObj->GetLayer() == pIDDMA->GetHellId() )
                 {
-                    if ( rPt.Y() < pPageFrm->Frm().Top() )
-                        pPageFrm = 0;
-                    else
-                        pPageFrm = pPageFrm->GetNext();
-                }
-                if( pPageFrm )
-                {
-                    SwRect aTmp( pPageFrm->Prt() );
-                    aTmp += pPageFrm->Frm().Pos();
-                    if( aTmp.IsInside( rPt ) )
-                        return sal_False;
+                    const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+                    const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+                    const SwFmtSurround& rSurround = rFmt.GetSurround();
+                    if ( rSurround.GetSurround() == SURROUND_THROUGHT )
+                    {
+                        bObjInBackground = true;
+                    }
                 }
             }
-
-            const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
-            // --> FME 2005-04-18 #i20965# Use GetOrdNum() instead of GetOrdNumDirect()
-            // because ordnums might be wrong
-            for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
+            if ( bObjInBackground )
             {
-            // <--
-                SdrObject *pCandidate = pPage->GetObj(a);
-
-                if(pCandidate->ISA(SwVirtFlyDrawObj) && ((SwVirtFlyDrawObj*)pCandidate)->GetCurrentBoundRect().IsInside(rPt))
+                const SwPageFrm* pPageFrm = GetLayout()->GetPageAtPos( rPt );
+                if( pPageFrm )
                 {
-                    bRet = sal_False;
+                    const SwCntntFrm* pCntntFrm( pPageFrm->ContainsCntnt() );
+                    while ( pCntntFrm )
+                    {
+                        if ( pCntntFrm->UnionFrm().IsInside( rPt ) )
+                        {
+                            const SwTxtFrm* pTxtFrm =
+                                    dynamic_cast<const SwTxtFrm*>(pCntntFrm);
+                            if ( pTxtFrm )
+                            {
+                                SwPosition* pPos =
+                                    new SwPosition( *(pTxtFrm->GetTxtNode()) );
+                                Point aTmpPt( rPt );
+                                if ( pTxtFrm->GetKeyCrsrOfst( pPos, aTmpPt ) )
+                                {
+                                    SwRect aCursorCharRect;
+                                    if ( pTxtFrm->GetCharRect( aCursorCharRect, *pPos ) )
+                                    {
+                                        if ( aCursorCharRect.IsOver( SwRect( pObj->GetLastBoundRect() ) ) )
+                                        {
+                                            bRet = sal_False;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                bRet = sal_False;
+                            }
+                            break;
+                        }
+
+                        pCntntFrm = pCntntFrm->GetNextCntntFrm();
+                    }
+                }
+            }
+            // <--
+
+            if ( bRet )
+            {
+                const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
+                for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
+                {
+                    SdrObject *pCandidate = pPage->GetObj(a);
+
+                    if (pCandidate->ISA(SwVirtFlyDrawObj) &&
+                       ( (SwVirtFlyDrawObj*)pCandidate)->GetCurrentBoundRect().IsInside(rPt) )
+                    {
+                        bRet = sal_False;
+                    }
                 }
             }
         }
@@ -1276,197 +1309,225 @@ BOOL lcl_IsControlGroup( const SdrObject *pObj )
     return bRet;
 }
 
-BOOL SwFEShell::GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType )
+namespace
+{
+    class MarkableObjectsOnly : public ::svx::ISdrObjectFilter
+    {
+    public:
+        MarkableObjectsOnly( SdrPageView* i_pPV )
+            :m_pPV( i_pPV )
+        {
+        }
+
+        virtual bool    includeObject( const SdrObject& i_rObject ) const
+        {
+            return m_pPV && m_pPV->GetView().IsObjMarkable( const_cast< SdrObject* >( &i_rObject ), m_pPV );
+        }
+
+    private:
+        SdrPageView*    m_pPV;
+    };
+}
+
+const SdrObject* SwFEShell::GetBestObject( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType, BOOL bFlat, const ::svx::ISdrObjectFilter* pFilter )
 {
     if( !Imp()->HasDrawView() )
-        return FALSE;
-    else
+        return NULL;
+
+    const SdrObject *pBest  = 0,
+                    *pTop   = 0;
+
+    const long nTmp = bNext ? LONG_MAX : 0;
+    Point aBestPos( nTmp, nTmp );
+    Point aTopPos(  nTmp, nTmp );
+    Point aCurPos;
+    Point aPos;
+    BOOL bNoDraw = 0 == (GOTOOBJ_DRAW_ANY & eType);
+    BOOL bNoFly = 0 == (GOTOOBJ_FLY_ANY & eType);
+
+    if( !bNoFly && bNoDraw )
     {
-        const SdrObject *pBest  = 0,
-                        *pTop   = 0;
+        SwFlyFrm *pFly = GetCurrFrm( FALSE )->FindFlyFrm();
+        if( pFly )
+            pBest = pFly->GetVirtDrawObj();
+    }
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+    SdrPageView* pPV = Imp()->GetDrawView()->GetSdrPageView();
 
-        const long nTmp = bNext ? LONG_MAX : 0;
-        Point aBestPos( nTmp, nTmp );
-        Point aTopPos(  nTmp, nTmp );
-        Point aCurPos;
-        Point aPos;
-        BOOL  bRet = FALSE;
-        BOOL bNoDraw = 0 == (GOTOOBJ_DRAW_ANY & eType);
-        BOOL bNoFly = 0 == (GOTOOBJ_FLY_ANY & eType);
+    MarkableObjectsOnly aDefaultFilter( pPV );
+    if ( !pFilter )
+        pFilter = &aDefaultFilter;
 
-        if( !bNoFly && bNoDraw )
+    if( !pBest || rMrkList.GetMarkCount() == 1 )
+    {
+        // Ausgangspunkt bestimmen.
+        SdrObjList* pList = NULL;
+        if ( rMrkList.GetMarkCount() )
         {
-            SwFlyFrm *pFly = GetCurrFrm( FALSE )->FindFlyFrm();
-            if( pFly )
-                pBest = pFly->GetVirtDrawObj();
-        }
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        SdrPageView* pPV = Imp()->GetDrawView()->GetSdrPageView();
-
-        if( !pBest || rMrkList.GetMarkCount() == 1 )
-        {
-            // Ausgangspunkt bestimmen.
-            SdrObjList* pList = NULL;
-            if ( rMrkList.GetMarkCount() )
-            {
-                const SdrObject* pStartObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
-                if( pStartObj->ISA(SwVirtFlyDrawObj) )
-                    aPos = ((SwVirtFlyDrawObj*)pStartObj)->GetFlyFrm()->Frm().Pos();
-                else
-                    aPos = pStartObj->GetSnapRect().TopLeft();
-
-                // If an object inside a group is selected, we want to
-                // iterate over the group members.
-                if ( ! pStartObj->GetUserCall() )
-                    pList = pStartObj->GetObjList();
-            }
+            const SdrObject* pStartObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
+            if( pStartObj->ISA(SwVirtFlyDrawObj) )
+                aPos = ((SwVirtFlyDrawObj*)pStartObj)->GetFlyFrm()->Frm().Pos();
             else
-            {
-                // If no object is selected, we check if we just entered a group.
-                // In this case we want to iterate over the group members.
-                aPos = GetCharRect().Center();
-                const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : 0;
-                if ( pStartObj && pStartObj->ISA( SdrObjGroup ) )
-                    pList = pStartObj->GetSubList();
-            }
+                aPos = pStartObj->GetSnapRect().TopLeft();
 
-            if ( ! pList )
-            {
-                // Here we are if
-                // A  No object has been selected and no group has been entered or
-                // B  An object has been selected and it is not inside a group
-                pList = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
-            }
-
-
-            ASSERT( pList, "No object list to iterate" )
-
-            const ULONG nObjs = pList->GetObjCount();
-            for( ULONG nObj = 0; nObj < nObjs; ++nObj )
-            {
-                SdrObject* pObj = pList->GetObj( nObj );
-                BOOL bFlyFrm = pObj->ISA(SwVirtFlyDrawObj);
-                if( ( bNoFly && bFlyFrm ) ||
-                    ( bNoDraw && !bFlyFrm ) ||
-                    ( eType == GOTOOBJ_DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ) ||
-                    ( eType == GOTOOBJ_DRAW_CONTROL && !lcl_IsControlGroup( pObj ) ) ||
-                    ( pPV && ! pPV->GetView().IsObjMarkable( pObj, pPV ) ) )
-                    continue;
-                if( bFlyFrm )
-                {
-                    SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pObj;
-                    SwFlyFrm *pFly = pO->GetFlyFrm();
-                    if( GOTOOBJ_FLY_ANY != ( GOTOOBJ_FLY_ANY & eType ) )
-                    {
-                        switch ( eType )
-                        {
-                            case GOTOOBJ_FLY_FRM:
-                                if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
-                                    continue;
-                            break;
-                            case GOTOOBJ_FLY_GRF:
-                                if ( pFly->Lower() &&
-                                    (pFly->Lower()->IsLayoutFrm() ||
-                                    !((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode()))
-                                    continue;
-                            break;
-                            case GOTOOBJ_FLY_OLE:
-                                if ( pFly->Lower() &&
-                                    (pFly->Lower()->IsLayoutFrm() ||
-                                    !((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode()))
-                                    continue;
-                            break;
-                        }
-                    }
-                    aCurPos = pFly->Frm().Pos();
-                }
-                else
-                    aCurPos = pObj->GetCurrentBoundRect().TopLeft();
-
-                // Sonderfall wenn ein anderes Obj auf selber Y steht.
-                if( aCurPos != aPos &&          // nur wenn ich es nicht selber bin
-                    aCurPos.Y() == aPos.Y() &&  // ist die Y Position gleich
-                    (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
-                            (aCurPos.X() < aPos.X())) ) // " reverse
-                {
-                    aBestPos = Point( nTmp, nTmp );
-                    for( ULONG i = 0; i < nObjs; ++i )
-                    {
-                        SdrObject *pTmpObj = pList->GetObj( i );
-                        bFlyFrm = pTmpObj->ISA(SwVirtFlyDrawObj);
-                        if( ( bNoFly && bFlyFrm ) || ( bNoDraw && !bFlyFrm ) )
-                            continue;
-                        if( bFlyFrm )
-                        {
-                            SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pTmpObj;
-                            aCurPos = pO->GetFlyFrm()->Frm().Pos();
-                        }
-                        else
-                            aCurPos = pTmpObj->GetCurrentBoundRect().TopLeft();
-
-                        if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
-                            (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
-                                    (aCurPos.X() < aPos.X())) &&    // " reverse
-                            (bNext? (aCurPos.X() < aBestPos.X()) :  // besser als Beste
-                                    (aCurPos.X() > aBestPos.X())) ) // " reverse
-                        {
-                            aBestPos = aCurPos;
-                            pBest = pTmpObj;
-                        }
-                    }
-                    break;
-                }
-
-                if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
-                            (aPos.Y() > aCurPos.Y())) &&        // " reverse
-                    (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
-                            (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
-                            (aBestPos.Y() == aCurPos.Y() &&
-                    (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
-                            (aBestPos.X() < aCurPos.X()))))     // " reverse
-
-                {
-                    aBestPos = aCurPos;
-                    pBest = pObj;
-                }
-
-                if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // hoeher als Beste
-                            (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
-                            (aTopPos.Y() == aCurPos.Y() &&
-                    (bNext? (aTopPos.X() > aCurPos.X()) :       // weiter links
-                            (aTopPos.X() < aCurPos.X()))))      // " reverse
-                {
-                    aTopPos = aCurPos;
-                    pTop = pObj;
-                }
-            }
-            // leider nichts gefunden
-            if( (bNext? (aBestPos.X() == LONG_MAX) : (aBestPos.X() == 0)) )
-                pBest = pTop;
+            // If an object inside a group is selected, we want to
+            // iterate over the group members.
+            if ( ! pStartObj->GetUserCall() )
+                pList = pStartObj->GetObjList();
+        }
+        else
+        {
+            // If no object is selected, we check if we just entered a group.
+            // In this case we want to iterate over the group members.
+            aPos = GetCharRect().Center();
+            const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : 0;
+            if ( pStartObj && pStartObj->ISA( SdrObjGroup ) )
+                pList = pStartObj->GetSubList();
         }
 
-        if( pBest )
+        if ( ! pList )
         {
-            BOOL bFlyFrm = pBest->ISA(SwVirtFlyDrawObj);
+            // Here we are if
+            // A  No object has been selected and no group has been entered or
+            // B  An object has been selected and it is not inside a group
+            pList = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
+        }
+
+
+        ASSERT( pList, "No object list to iterate" )
+
+        SdrObjListIter aObjIter( *pList, bFlat ? IM_FLAT : IM_DEEPNOGROUPS );
+        while ( aObjIter.IsMore() )
+        {
+            SdrObject* pObj = aObjIter.Next();
+            BOOL bFlyFrm = pObj->ISA(SwVirtFlyDrawObj);
+            if( ( bNoFly && bFlyFrm ) ||
+                ( bNoDraw && !bFlyFrm ) ||
+                ( eType == GOTOOBJ_DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ) ||
+                ( eType == GOTOOBJ_DRAW_CONTROL && !lcl_IsControlGroup( pObj ) ) ||
+                ( pFilter && !pFilter->includeObject( *pObj ) ) )
+                continue;
             if( bFlyFrm )
             {
-                SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pBest;
-                const SwRect& rFrm = pO->GetFlyFrm()->Frm();
-                SelectObj( rFrm.Pos(), 0, (SdrObject*)pBest );
-                if( !ActionPend() )
-                    MakeVisible( rFrm );
+                SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pObj;
+                SwFlyFrm *pFly = pO->GetFlyFrm();
+                if( GOTOOBJ_FLY_ANY != ( GOTOOBJ_FLY_ANY & eType ) )
+                {
+                    switch ( eType )
+                    {
+                        case GOTOOBJ_FLY_FRM:
+                            if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
+                                continue;
+                        break;
+                        case GOTOOBJ_FLY_GRF:
+                            if ( pFly->Lower() &&
+                                (pFly->Lower()->IsLayoutFrm() ||
+                                !((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode()))
+                                continue;
+                        break;
+                        case GOTOOBJ_FLY_OLE:
+                            if ( pFly->Lower() &&
+                                (pFly->Lower()->IsLayoutFrm() ||
+                                !((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode()))
+                                continue;
+                        break;
+                    }
+                }
+                aCurPos = pFly->Frm().Pos();
             }
             else
+                aCurPos = pObj->GetCurrentBoundRect().TopLeft();
+
+            // Sonderfall wenn ein anderes Obj auf selber Y steht.
+            if( aCurPos != aPos &&          // nur wenn ich es nicht selber bin
+                aCurPos.Y() == aPos.Y() &&  // ist die Y Position gleich
+                (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
+                        (aCurPos.X() < aPos.X())) ) // " reverse
             {
-                SelectObj( Point(), 0, (SdrObject*)pBest );
-                if( !ActionPend() )
-                    MakeVisible( pBest->GetCurrentBoundRect() );
+                aBestPos = Point( nTmp, nTmp );
+                SdrObjListIter aTmpIter( *pList, bFlat ? IM_FLAT : IM_DEEPNOGROUPS );
+                while ( aTmpIter.IsMore() )
+                {
+                    SdrObject* pTmpObj = aTmpIter.Next();
+                    bFlyFrm = pTmpObj->ISA(SwVirtFlyDrawObj);
+                    if( ( bNoFly && bFlyFrm ) || ( bNoDraw && !bFlyFrm ) )
+                        continue;
+                    if( bFlyFrm )
+                    {
+                        SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pTmpObj;
+                        aCurPos = pO->GetFlyFrm()->Frm().Pos();
+                    }
+                    else
+                        aCurPos = pTmpObj->GetCurrentBoundRect().TopLeft();
+
+                    if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
+                        (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
+                                (aCurPos.X() < aPos.X())) &&    // " reverse
+                        (bNext? (aCurPos.X() < aBestPos.X()) :  // besser als Beste
+                                (aCurPos.X() > aBestPos.X())) ) // " reverse
+                    {
+                        aBestPos = aCurPos;
+                        pBest = pTmpObj;
+                    }
+                }
+                break;
             }
-            CallChgLnk();
-            bRet = TRUE;
+
+            if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
+                        (aPos.Y() > aCurPos.Y())) &&        // " reverse
+                (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
+                        (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
+                        (aBestPos.Y() == aCurPos.Y() &&
+                (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
+                        (aBestPos.X() < aCurPos.X()))))     // " reverse
+
+            {
+                aBestPos = aCurPos;
+                pBest = pObj;
+            }
+
+            if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // hoeher als Beste
+                        (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
+                        (aTopPos.Y() == aCurPos.Y() &&
+                (bNext? (aTopPos.X() > aCurPos.X()) :       // weiter links
+                        (aTopPos.X() < aCurPos.X()))))      // " reverse
+            {
+                aTopPos = aCurPos;
+                pTop = pObj;
+            }
         }
-        return bRet;
+        // leider nichts gefunden
+        if( (bNext? (aBestPos.X() == LONG_MAX) : (aBestPos.X() == 0)) )
+            pBest = pTop;
     }
+
+    return pBest;
+}
+
+BOOL SwFEShell::GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType )
+{
+    const SdrObject* pBest = GetBestObject( bNext, eType );
+
+    if ( !pBest )
+        return FALSE;
+
+    BOOL bFlyFrm = pBest->ISA(SwVirtFlyDrawObj);
+    if( bFlyFrm )
+    {
+        SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pBest;
+        const SwRect& rFrm = pO->GetFlyFrm()->Frm();
+        SelectObj( rFrm.Pos(), 0, (SdrObject*)pBest );
+        if( !ActionPend() )
+            MakeVisible( rFrm );
+    }
+    else
+    {
+        SelectObj( Point(), 0, (SdrObject*)pBest );
+        if( !ActionPend() )
+            MakeVisible( pBest->GetCurrentBoundRect() );
+    }
+    CallChgLnk();
+    return TRUE;
 }
 
 /*************************************************************************
@@ -1653,7 +1714,7 @@ BOOL SwFEShell::ImpEndCreate()
 
             if( bCharBound )
             {
-                aAnch.SetType( FLY_IN_CNTNT );
+                aAnch.SetType( FLY_AS_CHAR );
                 aAnch.SetAnchor( &aPos );
             }
         }
@@ -1720,7 +1781,7 @@ BOOL SwFEShell::ImpEndCreate()
                 bAtPage = true;
             else
             {
-                aAnch.SetType( FLY_AT_CNTNT );
+                aAnch.SetType( FLY_AT_PARA );
                 aAnch.SetAnchor( &aPos );
             }
         }
@@ -1729,7 +1790,7 @@ BOOL SwFEShell::ImpEndCreate()
         {
             pPage = pAnch->FindPageFrm();
 
-            aAnch.SetType( FLY_PAGE );
+            aAnch.SetType( FLY_AT_PAGE );
             aAnch.SetPageNum( pPage->GetPhyPageNum() );
             pAnch = pPage;      // die Page wird jetzt zum Anker
         }
@@ -1872,9 +1933,10 @@ BOOL SwFEShell::ImpEndCreate()
         // <--
         if( bCharBound )
         {
-            ASSERT( aAnch.GetAnchorId() == FLY_IN_CNTNT, "wrong AnchorType" );
+            ASSERT( aAnch.GetAnchorId() == FLY_AS_CHAR, "wrong AnchorType" );
             SwTxtNode *pNd = aAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-            pNd->InsertItem( SwFmtFlyCnt( pFmt ),
+            SwFmtFlyCnt aFmt( pFmt );
+            pNd->InsertItem(aFmt,
                             aAnch.GetCntntAnchor()->nContent.GetIndex(), 0 );
             SwFmtVertOrient aVertical( pFmt->GetVertOrient() );
             aVertical.SetVertOrient( text::VertOrientation::LINE_CENTER );
@@ -2256,7 +2318,7 @@ BOOL SwFEShell::IsGroupSelected()
                  // --> FME 2004-12-08 #i38505# No ungroup allowed for 3d objects
                  !pObj->Is3DObj() &&
                  // <--
-                 FLY_IN_CNTNT != ((SwDrawContact*)GetUserCall(pObj))->
+                 FLY_AS_CHAR != ((SwDrawContact*)GetUserCall(pObj))->
                                       GetFmt()->GetAnchor().GetAnchorId() )
             {
                 return TRUE;
@@ -2287,12 +2349,6 @@ bool SwFEShell::IsGroupAllowed() const
             else
                 pUpGroup = pObj->GetUpGroup();
 
-            // --> OD 2006-11-06 #130889# - make code robust
-//            if ( bIsGroupAllowed &&
-//                 FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
-//            {
-//                bIsGroupAllowed = false;
-//            }
             if ( bIsGroupAllowed )
             {
                 SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
@@ -2302,12 +2358,11 @@ bool SwFEShell::IsGroupAllowed() const
                             "<SwFEShell::IsGroupAllowed()> - missing frame format" );
                     bIsGroupAllowed = false;
                 }
-                else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+                else if ( FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     bIsGroupAllowed = false;
                 }
             }
-            // <--
 
             // OD 27.06.2003 #108784# - check, if all selected objects are in the
             // same header/footer or not in header/footer.
@@ -2619,7 +2674,7 @@ BOOL SwFEShell::IsAlignPossible() const
             SdrObject *pO = Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
             //only as character bound drawings can be aligned
-            bRet = pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
+            bRet = (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR);
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();
@@ -2664,7 +2719,7 @@ void SwFEShell::CheckUnboundObjects()
             {
             pAnch = ::FindAnchor( pPage, aPt, TRUE );
             SwPosition aPos( *((SwCntntFrm*)pAnch)->GetNode() );
-            aAnch.SetType( FLY_AT_CNTNT );
+            aAnch.SetType( FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );
             ((SwRect&)GetCharRect()).Pos() = aPt;
             }
@@ -2724,7 +2779,7 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
         const USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        if( pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE ) &&
+        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) &&
             pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
@@ -2759,7 +2814,7 @@ int SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
         const USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE );
+        pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
 

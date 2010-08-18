@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fecopy.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,23 +31,17 @@
 
 #include <hintids.hxx>
 
-#ifdef WIN
-#define NEEDED_BY_FESHVIEW
-#endif
-
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/xfillit.hxx>
@@ -58,9 +49,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdoole2.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include <svx/unomodel.hxx>
 // --> OD 2005-08-03 #i50824#
 #include <svx/svditer.hxx>
@@ -93,9 +82,7 @@
 #include <dview.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <pagedesc.hxx>
 #include <mvsave.hxx>
 #include <vcl/virdev.hxx>
@@ -145,7 +132,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     // benutzen.
     if( pNewClpTxt )
     {
-        pTxtNd->Insert( *pNewClpTxt, SwIndex( pTxtNd ) );
+        pTxtNd->InsertText( *pNewClpTxt, SwIndex( pTxtNd ) );
         return TRUE;                // das wars.
     }
 
@@ -161,14 +148,16 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         SwFrmFmt* pFlyFmt = pFly->GetFmt();
         SwFmtAnchor aAnchor( pFlyFmt->GetAnchor() );
 
-        if ( FLY_AT_CNTNT == aAnchor.GetAnchorId() ||
-             FLY_AUTO_CNTNT == aAnchor.GetAnchorId() ||
-             FLY_AT_FLY == aAnchor.GetAnchorId() ||
-             FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+        if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+            (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+            (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+            (FLY_AS_CHAR == aAnchor.GetAnchorId()))
         {
             SwPosition aPos( aSttIdx );
-            if( FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+            if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
+            {
                 aPos.nContent.Assign( pTxtNd, 0 );
+            }
             aAnchor.SetAnchor( &aPos );
         }
         pFlyFmt = pClpDoc->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
@@ -185,7 +174,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             rSpzFrmFmts.Insert( pFlyFmt, 0 );
         }
 
-        if( FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+        if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
         {
             // JP 13.02.99 Bug 61863: wenn eine Rahmenselektion ins Clipboard
             //              gestellt wird, so muss beim Pasten auch wieder
@@ -193,12 +182,13 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             //              das kopierte TextAttribut wieder entfernt werden,
             //              sonst wird es als TextSelektion erkannt
             const SwIndex& rIdx = pFlyFmt->GetAnchor().GetCntntAnchor()->nContent;
-            SwTxtFlyCnt* pTxtFly = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
-                                                rIdx, RES_TXTATR_FLYCNT );
+            SwTxtFlyCnt *const pTxtFly = static_cast<SwTxtFlyCnt *>(
+                pTxtNd->GetTxtAttrForCharAt(
+                    rIdx.GetIndex(), RES_TXTATR_FLYCNT));
             if( pTxtFly )
             {
                 ((SwFmtFlyCnt&)pTxtFly->GetFlyCnt()).SetFlyFmt( 0 );
-                pTxtNd->Erase( rIdx, 1 );
+                pTxtNd->EraseText( rIdx, 1 );
             }
         }
         bRet = TRUE;
@@ -216,24 +206,25 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             {
                 SfxItemSet aSet( pClpDoc->GetAttrPool(), aFrmFmtSetRange );
 
-                SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+                SwFmtAnchor aAnchor( FLY_AT_PARA );
                 aAnchor.SetAnchor( &aPos );
                 aSet.Put( aAnchor );
 
-                SdrObject* pNew = pClpDoc->CloneSdrObj( *pObj, FALSE, TRUE );
+                SdrObject *const pNew =
+                    pClpDoc->CloneSdrObj( *pObj, FALSE, TRUE );
 
                 SwPaM aTemp(aPos);
-                   pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
+                pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
             }
             else
             {
                 SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
                 SwFrmFmt *pFmt = pContact->GetFmt();
                 SwFmtAnchor aAnchor( pFmt->GetAnchor() );
-                if ( FLY_AT_CNTNT == aAnchor.GetAnchorId() ||
-                     FLY_AUTO_CNTNT == aAnchor.GetAnchorId() ||
-                     FLY_AT_FLY == aAnchor.GetAnchorId() ||
-                     FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+                if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                    (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                    (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+                    (FLY_AS_CHAR == aAnchor.GetAnchorId()))
                 {
                     aAnchor.SetAnchor( &aPos );
                 }
@@ -279,7 +270,9 @@ BOOL lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
     SwCntntFrm* pTmpFrm = rNd.GetCntntNode()->GetFrm( &rInsPt, 0, FALSE );
     SwFlyFrm *pTmpFly = pTmpFrm->FindFlyFrm();
     if( pTmpFly && bCheckFlyRecur && pFly->IsUpperOf( *pTmpFly ) )
+    {
         bRet = FALSE;
+    }
     else if ( FLY_AT_FLY == rAnchor.GetAnchorId() )
     {
         if( pTmpFly )
@@ -291,7 +284,7 @@ BOOL lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
         }
         else
         {
-            rAnchor.SetType( FLY_PAGE );
+            rAnchor.SetType( FLY_AT_PAGE );
             rAnchor.SetPageNum( rDestShell.GetPageNumber( rInsPt ) );
             const SwFrm *pPg = pTmpFrm->FindPageFrm();
             rNewPos = pPg->Frm().Pos();
@@ -339,7 +332,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             // in die Gruppe einfuegen, wenns aus einer betretenen Gruppe
             // kommt oder das Object nicht zeichengebunden ist
             if( pSrcDrwView->IsGroupEntered() ||
-                FLY_IN_CNTNT != rAnchor.GetAnchorId() )
+                (FLY_AS_CHAR != rAnchor.GetAnchorId()) )
 
             {
                 SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
@@ -355,10 +348,10 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             SwFmtAnchor aAnchor( rAnchor );
             Point aNewAnch;
 
-            if ( FLY_AT_CNTNT == aAnchor.GetAnchorId() ||
-                    FLY_AUTO_CNTNT == aAnchor.GetAnchorId() ||
-                    FLY_AT_FLY == aAnchor.GetAnchorId() ||
-                    FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+            if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+                (FLY_AS_CHAR == aAnchor.GetAnchorId()))
             {
                 if ( this == pDestShell )
                 {
@@ -388,7 +381,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                                 aNewAnch, FALSE );
                 }
             }
-            else if( FLY_PAGE == aAnchor.GetAnchorId() )
+            else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
             {
                 aAnchor.SetPageNum( pDestShell->GetPageNumber( rInsPt ) );
                 const SwRootFrm* pTmpRoot = pDestShell->GetLayout();
@@ -416,7 +409,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 if ( pFmt )
                 {
                     SdrObject* pNew = pFmt->FindSdrObject();
-                    if( FLY_IN_CNTNT != aAnchor.GetAnchorId() )
+                    if ( FLY_AS_CHAR != aAnchor.GetAnchorId() )
                     {
                         Point aPos( rInsPt );
                         aPos -= aNewAnch;
@@ -506,10 +499,10 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         bRet = TRUE;
         Point aNewAnch;
 
-        if ( FLY_AT_CNTNT == aAnchor.GetAnchorId() ||
-             FLY_AUTO_CNTNT == aAnchor.GetAnchorId() ||
-             FLY_AT_FLY == aAnchor.GetAnchorId() ||
-             FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+        if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+            (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+            (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+            (FLY_AS_CHAR == aAnchor.GetAnchorId()))
         {
             if ( this == pDestShell )
             {
@@ -547,7 +540,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                                     aNewAnch, GetDoc() == pDestShell->GetDoc());
             }
         }
-        else if( FLY_PAGE == aAnchor.GetAnchorId() )
+        else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
         {
             aAnchor.SetPageNum( pDestShell->GetPageNumber( rInsPt ) );
             const SwRootFrm* pTmpRoot = pDestShell->GetLayout();
@@ -564,7 +557,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             SwFrmFmt *pOldFmt = pFlyFmt;
             pFlyFmt = pDestShell->GetDoc()->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
 
-            if( FLY_IN_CNTNT != aAnchor.GetAnchorId() )
+            if ( FLY_AS_CHAR != aAnchor.GetAnchorId() )
             {
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
@@ -840,11 +833,11 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
                 aIndexBefore--;
-                pClpDoc->Copy( rCopy, rInsPos );
+                pClpDoc->CopyRange( rCopy, rInsPos, false );
                 {
                     aIndexBefore++;
-                    SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                               SwPosition(rInsPos.nNode, 0));
+                    SwPaM aPaM(SwPosition(aIndexBefore),
+                               SwPosition(rInsPos.nNode));
                     aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
                 }
             }
@@ -928,7 +921,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
                 if( Imp()->GetDrawView()->IsGroupEntered() &&
                     RES_DRAWFRMFMT == rCpyFmt.Which() &&
-                    FLY_IN_CNTNT != rCpyFmt.GetAnchor().GetAnchorId() )
+                    (FLY_AS_CHAR != rCpyFmt.GetAnchor().GetAnchorId()) )
                 {
                     const SdrObject* pSdrObj = rCpyFmt.FindSdrObject();
                     if( pSdrObj )
@@ -976,9 +969,9 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 if( bInsWithFmt  )
                 {
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                    if( FLY_AT_CNTNT == aAnchor.GetAnchorId() ||
-                        FLY_AUTO_CNTNT == aAnchor.GetAnchorId() ||
-                        FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+                    if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                        (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                        (FLY_AS_CHAR == aAnchor.GetAnchorId()))
                     {
                         SwPosition* pPos = PCURCRSR->GetPoint();
                         // #108784# allow shapes (no controls) in header/footer
@@ -989,7 +982,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
                         aAnchor.SetAnchor( pPos );
                     }
-                    else if( FLY_PAGE == aAnchor.GetAnchorId() )
+                    else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
                     {
                         aAnchor.SetPageNum( GetPhyPageNum() );
                     }
@@ -1069,12 +1062,12 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
                 aIndexBefore--;
 
-                pClpDoc->Copy( aCpyPam, rInsPos );
+                pClpDoc->CopyRange( aCpyPam, rInsPos, false );
 
                 {
                     aIndexBefore++;
-                    SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                               SwPosition(rInsPos.nNode, 0));
+                    SwPaM aPaM(SwPosition(aIndexBefore),
+                               SwPosition(rInsPos.nNode));
 
                     aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
                 }
@@ -1101,7 +1094,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                     if( bInsWithFmt  )
                     {
                         SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                        if( FLY_PAGE == aAnchor.GetAnchorId() )
+                        if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
                         {
                             aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
                         }
@@ -1209,7 +1202,7 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
         {
             const SwFrmFmt& rCpyFmt = *(*GetDoc()->GetSpzFrmFmts())[i];
             SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-            if( FLY_PAGE == aAnchor.GetAnchorId() &&
+            if ((FLY_AT_PAGE == aAnchor.GetAnchorId()) &&
                     aAnchor.GetPageNum() >= nStartPage && aAnchor.GetPageNum() <= nEndPage)
             {
                 aAnchor.SetPageNum( aAnchor.GetPageNum() - nStartPage + 1);

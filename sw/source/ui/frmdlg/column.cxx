@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +36,12 @@
 
 #include "hintids.hxx"
 #include <svx/htmlmode.hxx>
-#include <svx/borderline.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/sizeitem.hxx>
-#include "svx/frmdiritem.hxx"
-#include <svtools/ctloptions.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include "editeng/frmdiritem.hxx"
+#include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <swmodule.hxx>
@@ -125,7 +122,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     FreeResource();
 
     SwRect aRect;
-    rWrtShell.CalcBoundRect(aRect, FLY_IN_CNTNT);
+    rWrtShell.CalcBoundRect(aRect, FLY_AS_CHAR);
 
     nSelectionWidth = aRect.Width();
 
@@ -230,6 +227,8 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     //#i80458# if no columns can be set then disable OK
     if( !aApplyToLB.GetEntryCount() )
         aOK.Enable( sal_False );
+    //#i97810# set focus to the TabPage
+    pTabPage->ActivateColumnControl();
 }
 
 /*--------------------------------------------------------------------
@@ -355,7 +354,8 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
         const SwSection* pCurrSection = rWrtShell.GetCurrSection();
         const SwSectionFmt* pFmt = pCurrSection->GetFmt();
         USHORT nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
-        rWrtShell.ChgSection( nNewPos, *pCurrSection, pSectionSet );
+        SwSectionData aData(*pCurrSection);
+        rWrtShell.UpdateSection( nNewPos, aData, pSectionSet );
     }
 
     if(pSectionSet && pSectionSet->Count() && bSelSectionChanged )

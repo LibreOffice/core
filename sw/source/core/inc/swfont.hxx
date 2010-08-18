@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfont.hxx,v $
- * $Revision: 1.37.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo
 
@@ -141,6 +138,7 @@ class SwFont
     Color       aOverColor;     // color of the overlining
     BYTE        nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     BYTE        nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
+    BYTE        m_nMetaCount;   // count META/METAFIELD
     BYTE        nActual;        // actual font (Latin, CJK or CTL)
 
     // Schalter fuer die Font-Extensions
@@ -245,6 +243,9 @@ public:
     inline BYTE &GetRef() { return nRefCnt; }
     inline BYTE GetRef() const { return nRefCnt; }
     inline BOOL IsRef() const { return ( 0 != nRefCnt ); }
+    inline BYTE &GetMeta() { return m_nMetaCount; }
+    inline BYTE GetMeta() const { return m_nMetaCount; }
+    inline bool IsMeta() const { return (0 != m_nMetaCount); }
     inline void SetURL( const BOOL bURL );
     inline BOOL IsURL() const { return bURL; }
     inline void SetGreyWave( const BOOL bNew );
@@ -844,7 +845,7 @@ public:
  *                      class SvStatistics
  *************************************************************************/
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define SV_STAT(nWhich)
 #else
 

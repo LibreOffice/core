@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unsort.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +163,8 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
-            rDoc.Move(aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT);
+            rDoc.MoveNodeRange(aRg, aIdx,
+                IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
@@ -238,7 +236,8 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
-            rDoc.Move(aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT);
+            rDoc.MoveNodeRange(aRg, aIdx,
+                IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrftn.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>       // ASSERT in ~SwTxtFtn()
 #include <pagefrm.hxx>      // RemoveFtn()
@@ -62,11 +59,11 @@
 *************************************************************************/
 
 
-SwFmtFtn::SwFmtFtn( BOOL bEN )
+SwFmtFtn::SwFmtFtn( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN ),
     pTxtAttr( 0 ),
     nNumber( 0 ),
-    bEndNote( bEN )
+    m_bEndNote( bEndNote )
 {
 }
 
@@ -76,7 +73,7 @@ int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return nNumber  == ((SwFmtFtn&)rAttr).nNumber &&
            aNumber  == ((SwFmtFtn&)rAttr).aNumber &&
-           bEndNote == ((SwFmtFtn&)rAttr).bEndNote;
+           m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
 }
 
 
@@ -85,17 +82,19 @@ SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
     SwFmtFtn* pNew  = new SwFmtFtn;
     pNew->aNumber   = aNumber;
     pNew->nNumber   = nNumber;
-    pNew->bEndNote  = bEndNote;
+    pNew->m_bEndNote = m_bEndNote;
     return pNew;
 }
 
-void SwFmtFtn::SetEndNote( BOOL b )
+void SwFmtFtn::SetEndNote( bool b )
 {
-    if ( b != bEndNote )
+    if ( b != m_bEndNote )
     {
         if ( GetTxtFtn() )
+        {
             GetTxtFtn()->DelFrms();
-        bEndNote = b;
+        }
+        m_bEndNote = b;
     }
 }
 
@@ -173,13 +172,14 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
  *                      class SwTxt/FmtFnt
  *************************************************************************/
 
-SwTxtFtn::SwTxtFtn( const SwFmtFtn& rAttr, xub_StrLen nStartPos )
-    : SwTxtAttr( rAttr, nStartPos ),
-    pStartNode( 0 ),
-    pMyTxtNd( 0 ),
-    nSeqNo( USHRT_MAX )
+SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStartPos )
+    : SwTxtAttr( rAttr, nStartPos )
+    , m_pStartNode( 0 )
+    , m_pTxtNode( 0 )
+    , m_nSeqNo( USHRT_MAX )
 {
-    ((SwFmtFtn&)rAttr).pTxtAttr = this;
+    rAttr.pTxtAttr = this;
+    SetHasDummyChar(true);
 }
 
 
@@ -194,19 +194,25 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
 {
     if( pNewNode )
     {
-        if( !pStartNode )
-            pStartNode = new SwNodeIndex( *pNewNode );
+        if ( !m_pStartNode )
+        {
+            m_pStartNode = new SwNodeIndex( *pNewNode );
+        }
         else
-            *pStartNode = *pNewNode;
+        {
+            *m_pStartNode = *pNewNode;
+        }
     }
-    else if( pStartNode )
+    else if ( m_pStartNode )
     {
         // Zwei Dinge muessen erledigt werden:
         // 1) Die Fussnoten muessen bei ihren Seiten abgemeldet werden
         // 2) Die Fussnoten-Sektion in den Inserts muss geloescht werden.
         SwDoc* pDoc;
-        if( pMyTxtNd )
-            pDoc = pMyTxtNd->GetDoc();
+        if ( m_pTxtNode )
+        {
+            pDoc = m_pTxtNode->GetDoc();
+        }
         else
         {
             //JP 27.01.97: der sw3-Reader setzt einen StartNode aber das
@@ -214,7 +220,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
             //              Wird es geloescht (z.B. bei Datei einfuegen mit
             //              Ftn in einen Rahmen), muss auch der Inhalt
             //              geloescht werden
-            pDoc = pStartNode->GetNodes().GetDoc();
+            pDoc = m_pStartNode->GetNodes().GetDoc();
         }
 
         // Wir duerfen die Fussnotennodes nicht loeschen
@@ -226,7 +232,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
             {
                 // 1) Die Section fuer die Fussnote wird beseitigt
                 // Es kann sein, dass die Inserts schon geloescht wurden.
-                pDoc->DeleteSection( &pStartNode->GetNode() );
+                pDoc->DeleteSection( &m_pStartNode->GetNode() );
             }
             else
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
@@ -234,7 +240,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
                 // stehen (Undo loescht sie nicht!)
                 DelFrms();
         }
-        DELETEZ( pStartNode );
+        DELETEZ( m_pStartNode );
 
         // loesche die Fussnote noch aus dem Array am Dokument
         for( USHORT n = 0; n < pDoc->GetFtnIdxs().Count(); ++n )
@@ -264,16 +270,15 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
         rFtn.aNumber = aEmptyStr;
     }
 
-    ASSERT( pMyTxtNd, "wo ist mein TextNode?" );
-    SwNodes &rNodes = pMyTxtNd->GetDoc()->GetNodes();
-    pMyTxtNd->Modify( 0, &rFtn );
-    if( pStartNode )
+    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    SwNodes &rNodes = m_pTxtNode->GetDoc()->GetNodes();
+    m_pTxtNode->Modify( 0, &rFtn );
+    if ( m_pStartNode )
     {
-        // Wir muessen ueber alle TxtNodes iterieren, wegen der
-        // Fussnoten, die auf anderen Seiten stehen.
+        // must iterate over all TxtNodes because of footnotes on other pages
         SwNode* pNd;
-        ULONG nSttIdx = pStartNode->GetIndex() + 1,
-              nEndIdx = pStartNode->GetNode().EndOfSectionIndex();
+        ULONG nSttIdx = m_pStartNode->GetIndex() + 1;
+        ULONG nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
         for( ; nSttIdx < nEndIdx; ++nSttIdx )
         {
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
@@ -284,46 +289,52 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
 }
 
 // Die Fussnoten duplizieren
-void SwTxtFtn::CopyFtn( SwTxtFtn *pDest )
+void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
 {
-    if( pStartNode && pDest->GetStartNode() )
+    if (m_pStartNode && !rDest.GetStartNode())
     {
-        // die Fussnoten koennen in unterschiedlichen Dokumenten stehen !!
-        SwDoc* pDstDoc = pDest->pMyTxtNd->GetDoc();
+        // dest missing node section? create it here!
+        // (happens in SwTxtNode::CopyText if pDest == this)
+        rDest.MakeNewTextSection( rDestNode.GetNodes() );
+    }
+    if (m_pStartNode && rDest.GetStartNode())
+    {
+        // footnotes not necessarily in same document!
+        SwDoc *const pDstDoc = rDestNode.GetDoc();
         SwNodes &rDstNodes = pDstDoc->GetNodes();
 
-        // Wir kopieren nur den Inhalt der Sektion
-        SwNodeRange aRg( *pStartNode, 1,
-                    *pStartNode->GetNode().EndOfSectionNode() );
+        // copy only the content of the section
+        SwNodeRange aRg( *m_pStartNode, 1,
+                    *m_pStartNode->GetNode().EndOfSectionNode() );
 
-        // Wir fuegen auf dem Ende von pDest ein, d.h. die Nodes
-        // werden angehaengt. nDestLen haelt die Anzahl der CntNodes
-        // in pDest _vor_ dem Kopieren.
-        SwNodeIndex aStart( *(pDest->GetStartNode()) );
+        // insert at the end of rDest, i.e., the nodes are appended.
+        // nDestLen contains number of CntntNodes in rDest _before_ copy.
+        SwNodeIndex aStart( *(rDest.GetStartNode()) );
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         ULONG  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        pMyTxtNd->GetDoc()->CopyWithFlyInFly( aRg, aEnd, TRUE );
+        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, TRUE );
 
-        // Wenn die Dest-Sektion nicht leer war, so muessen die alten
-        // Nodes geloescht werden:
-        // Vorher:   Src: SxxxE,  Dst: SnE
-        // Nachher:  Src: SxxxE,  Dst: SnxxxE
-        // und       Src: SxxxE,  Dst: SxxxE
+        // in case the destination section was not empty, delete the old nodes
+        // before:   Src: SxxxE,  Dst: SnE
+        // now:      Src: SxxxE,  Dst: SnxxxE
+        // after:    Src: SxxxE,  Dst: SxxxE
         aStart++;
         rDstNodes.Delete( aStart, nDestLen );
     }
 
-    // Der benutzerdefinierte String muss auch uebertragen werden.
+    // also copy user defined number string
     if( GetFtn().aNumber.Len() )
-        ((SwFmtFtn&)pDest->GetFtn()).aNumber = GetFtn().aNumber;
+    {
+        const_cast<SwFmtFtn &>(rDest.GetFtn()).aNumber = GetFtn().aNumber;
+    }
 }
 
 
     // lege eine neue leere TextSection fuer diese Fussnote an
 void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 {
-    if( pStartNode )
+    if ( m_pStartNode )
         return;
 
     // Nun verpassen wir dem TxtNode noch die Fussnotenvorlage.
@@ -347,20 +358,20 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 
     SwStartNode* pSttNd = rNodes.MakeTextSection( SwNodeIndex( rNodes.GetEndOfInserts() ),
                                         SwFootnoteStartNode, pFmtColl );
-    pStartNode = new SwNodeIndex( *pSttNd );
+    m_pStartNode = new SwNodeIndex( *pSttNd );
 }
 
 
 void SwTxtFtn::DelFrms()
 {
-    // loesche die Ftn-Frames aus den Seiten
-    ASSERT( pMyTxtNd, "wo ist mein TextNode?" );
-    if( !pMyTxtNd )
-        return ;
+    // delete the FtnFrames from the pages
+    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    if ( !m_pTxtNode )
+        return;
 
     BOOL bFrmFnd = FALSE;
     {
-        SwClientIter aIter( *pMyTxtNd );
+        SwClientIter aIter( *m_pTxtNode );
         for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
                 pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
         {
@@ -374,10 +385,10 @@ void SwTxtFtn::DelFrms()
     }
     //JP 13.05.97: falls das Layout vorm loeschen der Fussnoten entfernt
     //              wird, sollte man das ueber die Fussnote selbst tun
-    if( !bFrmFnd && pStartNode )
+    if ( !bFrmFnd && m_pStartNode )
     {
-        SwNodeIndex aIdx( *pStartNode );
-        SwCntntNode* pCNd = pMyTxtNd->GetNodes().GoNext( &aIdx );
+        SwNodeIndex aIdx( *m_pStartNode );
+        SwCntntNode* pCNd = m_pTxtNode->GetNodes().GoNext( &aIdx );
         if( pCNd )
         {
             SwClientIter aIter( *pCNd );
@@ -415,10 +426,10 @@ void SwTxtFtn::DelFrms()
 
 USHORT SwTxtFtn::SetSeqRefNo()
 {
-    if( !pMyTxtNd )
+    if( !m_pTxtNode )
         return USHRT_MAX;
 
-    SwDoc* pDoc = pMyTxtNd->GetDoc();
+    SwDoc* pDoc = m_pTxtNode->GetDoc();
     if( pDoc->IsInReading() )
         return USHRT_MAX;
 
@@ -431,20 +442,33 @@ USHORT SwTxtFtn::SetSeqRefNo()
     // bestimmt werden muss.
     SwTxtFtn* pTxtFtn;
     for( n = 0; n < nFtnCnt; ++n )
-        if( (pTxtFtn = pDoc->GetFtnIdxs()[ n ]) != this )
-            aArr.Insert( pTxtFtn->nSeqNo );
+    {
+        pTxtFtn = pDoc->GetFtnIdxs()[ n ];
+        if ( pTxtFtn != this )
+        {
+            aArr.Insert( pTxtFtn->m_nSeqNo );
+        }
+    }
 
-    // teste erstmal ob die Nummer schon vorhanden ist:
-    if( USHRT_MAX != nSeqNo )
+    // test if number is already in use
+    if ( USHRT_MAX != m_nSeqNo )
     {
         for( n = 0; n < aArr.Count(); ++n )
-            if( aArr[ n ] > nSeqNo )
-                return nSeqNo;          // nicht vorhanden -> also benutzen
-            else if( aArr[ n ] == nSeqNo )
-                break;                  // schon vorhanden -> neue erzeugen
+        {
+            if ( aArr[ n ] > m_nSeqNo )
+            {
+                return m_nSeqNo;    // free -> use
+            }
+            else if ( aArr[ n ] == m_nSeqNo )
+            {
+                break;              // used -> create new one
+            }
+        }
 
-        if( n == aArr.Count() )
-            return nSeqNo;          // nicht vorhanden -> also benutzen
+        if ( n == aArr.Count() )
+        {
+            return m_nSeqNo;        // free -> use
+        }
     }
 
     // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
@@ -452,7 +476,7 @@ USHORT SwTxtFtn::SetSeqRefNo()
         if( n != aArr[ n ] )
             break;
 
-    return nSeqNo = n;
+    return m_nSeqNo = n;
 }
 
 void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
@@ -465,29 +489,45 @@ void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
     // dann alle Nummern zusammensammeln die schon existieren
     SwTxtFtn* pTxtFtn;
     for( n = 0; n < nFtnCnt; ++n )
-        if( USHRT_MAX != (pTxtFtn = rDoc.GetFtnIdxs()[ n ])->nSeqNo )
-            aArr.Insert( pTxtFtn->nSeqNo );
+    {
+        pTxtFtn = rDoc.GetFtnIdxs()[ n ];
+        if ( USHRT_MAX != pTxtFtn->m_nSeqNo )
+        {
+            aArr.Insert( pTxtFtn->m_nSeqNo );
+        }
+    }
 
 
     for( n = 0; n < nFtnCnt; ++n )
-        if( USHRT_MAX == (pTxtFtn = rDoc.GetFtnIdxs()[ n ])->nSeqNo )
+    {
+        pTxtFtn = rDoc.GetFtnIdxs()[ n ];
+        if ( USHRT_MAX == pTxtFtn->m_nSeqNo )
         {
             for( ; nStt < aArr.Count(); ++nStt )
-                if( nStt != aArr[ nStt ] )
+            {
+                if ( nStt != aArr[ nStt ] )
                 {
-
-                    pTxtFtn->nSeqNo = nStt;
+                    pTxtFtn->m_nSeqNo = nStt;
                     break;
                 }
+            }
 
-            if( USHRT_MAX == pTxtFtn->nSeqNo )
-                break;  // nichts mehr gefunden
+            if ( USHRT_MAX == pTxtFtn->m_nSeqNo )
+            {
+                break; // found nothing
+            }
         }
+    }
 
     // alle Nummern schon vergeben, also mit nStt++ weitermachen
     for( ; n < nFtnCnt; ++n )
-        if( USHRT_MAX == (pTxtFtn = rDoc.GetFtnIdxs()[ n ])->nSeqNo )
-            pTxtFtn->nSeqNo = nStt++;
+    {
+        pTxtFtn = rDoc.GetFtnIdxs()[ n ];
+        if ( USHRT_MAX == pTxtFtn->m_nSeqNo )
+        {
+            pTxtFtn->m_nSeqNo = nStt++;
+        }
+    }
 }
 
 void SwTxtFtn::CheckCondColl()

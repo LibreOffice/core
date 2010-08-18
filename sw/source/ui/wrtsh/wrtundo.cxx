@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtundo.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <swdtflvr.hxx>

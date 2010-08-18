@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5.198.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,8 +36,8 @@ PACKAGE = complex$/writer
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = CheckIndexedPropertyValues.java CheckNamedPropertyValues.java CheckCrossReferences.java CheckBookmarks.java
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JAVAFILES       = CheckIndexedPropertyValues.java CheckNamedPropertyValues.java CheckCrossReferences.java CheckBookmarks.java CheckFlies.java TextPortionEnumerationTest.java
 JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
@@ -85,6 +81,9 @@ run: \
     CheckCrossReferences \
     CheckIndexedPropertyValues \
     CheckNamedPropertyValues \
+    CheckFlies \
+    TextPortionEnumerationTest \
+
 
 RUN: run
 
@@ -100,4 +99,10 @@ CheckCrossReferences:
 
 CheckBookmarks:
     +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) -tdoc $(PWD)$/testdocuments $(CT_PACKAGE).CheckBookmarks
+
+CheckFlies:
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) -tdoc $(PWD)$/testdocuments $(CT_PACKAGE).CheckFlies
+
+TextPortionEnumerationTest:
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) -tdoc $(PWD)$/testdocuments $(CT_PACKAGE).TextPortionEnumerationTest
 

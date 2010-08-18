@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <ndole.hxx>
 #include <docary.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>
@@ -46,9 +43,7 @@
 #include <ftninfo.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 #include "viewimp.hxx"
 #include "pagefrm.hxx"
@@ -76,7 +71,7 @@
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <swfntcch.hxx> // SwFontAccess
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
@@ -305,7 +300,7 @@ SwPageFrm::~SwPageFrm()
                     pImp->GetLayAction().SetAgain();
                 // OD 12.02.2003 #i9719#, #105645# - retouche area of page
                 // including border and shadow area.
-                const bool bRightSidebar = !MarginSide();
+                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aRetoucheRect;
                 SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
@@ -408,7 +403,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
         {
             if( rAnch.GetCntntAnchor() )
             {
-                if( FLY_PAGE == rAnch.GetAnchorId() )
+                if (FLY_AT_PAGE == rAnch.GetAnchorId())
                 {
                     SwFmtAnchor aAnch( rAnch );
                     aAnch.SetAnchor( 0 );
@@ -660,7 +655,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             {
                 // OD 12.02.2003 #i9719#, #105645# - consider border and shadow of
                 // page frame for determine 'old' rectangle - it's used for invalidating.
-                const bool bRightSidebar = !MarginSide();
+                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aOldRectWithBorderAndShadow;
                 SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow, bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
@@ -1196,7 +1191,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                 if ( pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 ASSERT( FALSE, "CheckPageDescs, missing solution" );
@@ -1239,7 +1234,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Ein paar Pruefungen muessen schon erlaubt sein.
 
     //1. Keine zwei EmptyPages hintereinander.
@@ -1390,18 +1385,24 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     return pPage;
 }
 
-// false = right, true = left
-bool SwPageFrm::MarginSide() const
+sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
-    if (!GetShell() || GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
-        return false;
+    if ( !GetShell() ||
+         GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    {
+        // --> OD 2010-06-03 #i111964# - provide default sidebar position
+        return sw::sidebarwindows::SIDEBAR_RIGHT;
+        // <--
+    }
     else
     {
         const bool bLTR = GetUpper() ? static_cast<const SwRootFrm*>(GetUpper())->IsLeftToRightViewLayout() : true;
         const bool bBookMode = GetShell()->GetViewOptions()->IsViewLayoutBookMode();
         const bool bRightSidebar = bLTR ? (!bBookMode || OnRightPage()) : (bBookMode && !OnRightPage());
 
-        return !bRightSidebar;
+        return bRightSidebar
+               ? sw::sidebarwindows::SIDEBAR_RIGHT
+               : sw::sidebarwindows::SIDEBAR_LEFT;
     }
 }
 
@@ -1659,7 +1660,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                 SwFrmFmt& rFmt = (*pPage->GetSortedObjs())[i]->GetFrmFmt();
                 const SwFmtAnchor &rAnch = rFmt.GetAnchor();
                 const USHORT nPg = rAnch.GetPageNum();
-                if ( rAnch.GetAnchorId() == FLY_PAGE &&
+                if ((rAnch.GetAnchorId() == FLY_AT_PAGE) &&
                      nPg != pPage->GetPhyPageNum() )
                 {
                     //Das er auf der falschen Seite steht muss noch nichts
@@ -1670,7 +1671,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     {
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                         rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
 #else
                         const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
@@ -1834,11 +1835,11 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 long nWidth = 0;
                 switch ( rFmt.GetAnchor().GetAnchorId() )
                 {
-                    case FLY_IN_CNTNT:
+                    case FLY_AS_CHAR:
                         nWidth = bFly ? rFmt.GetFrmSize().GetWidth() :
                                         pAnchoredObj->GetObjRect().Width();
                         break;
-                    case FLY_AT_CNTNT:
+                    case FLY_AT_PARA:
                         {
                             // --> FME 2004-09-13 #i33170#
                             // Reactivated old code because
@@ -2007,7 +2008,7 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
 
         // all except from the as character anchored objects are moved
         // when processing the page frame:
-        const bool bAsChar = rAnchor.GetAnchorId() == FLY_IN_CNTNT;
+        const bool bAsChar = (rAnchor.GetAnchorId() == FLY_AS_CHAR);
         if ( !bPage && !bAsChar )
             continue;
 
@@ -2062,6 +2063,10 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
         }
+        // --> OD 2009-08-20 #i92511#
+        // cache for object rectangle inclusive spaces has to be invalidated.
+        pAnchoredObj->InvalidateObjRectWithSpaces();
+        // <--
     }
 }
 
@@ -2311,7 +2316,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
                 const SwTwips nCurrentPageWidth = pFormatPage->Frm().Width() + (pFormatPage->IsEmptyPage() ? 0 : nSidebarWidth);
                 const Point aOldPagePos = pPageToAdjust->Frm().Pos();
-                const bool bLeftSidebar = pPageToAdjust->MarginSide();
+                const bool bLeftSidebar = pPageToAdjust->SidebarPosition() == sw::sidebarwindows::SIDEBAR_LEFT;
                 const SwTwips nLeftPageAddOffset = bLeftSidebar ?
                                                    nSidebarWidth :
                                                    0;

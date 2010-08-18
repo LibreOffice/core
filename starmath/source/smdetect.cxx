@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: smdetect.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,10 +57,10 @@
 
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -171,7 +168,7 @@ SmFilterDetect::~SmFilterDetect()
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
             lDescriptor[nProperty].Value >>= xInteraction;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")) )
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
             nIndexOfDocumentTitle = nProperty;
@@ -220,13 +217,13 @@ SmFilterDetect::~SmFilterDetect()
             if ( bIsStorage )
             {
                 //TODO/LATER: factor this out!
-                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since unpossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState() );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;

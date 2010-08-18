@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accportions.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,6 +173,17 @@ void SwAccessiblePortionData::Special(
             sDisplay = aTmpBuffer.makeStringAndClear();
             break;
         }
+        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
+        // Include the control characters.
+        case POR_CONTROLCHAR:
+        {
+            OUStringBuffer aTmpBuffer( rText.Len() + 1 );
+            aTmpBuffer.append( rText );
+            aTmpBuffer.append( pTxtNode->GetTxt().GetChar(nModelPosition) );
+            sDisplay = aTmpBuffer.makeStringAndClear();
+            break;
+        }
+        // <--
         default:
             sDisplay = rText;
             break;
@@ -261,12 +269,6 @@ sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
 }
-
-sal_Bool SwAccessiblePortionData::IsGrayPortion( size_t nPortionNo ) const
-{
-    return IsPortionAttrSet(nPortionNo, PORATTR_GRAY);
-}
-
 
 sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType ) const
 {
@@ -489,8 +491,8 @@ void SwAccessiblePortionData::GetSentenceBoundary(
     if( pSentences == NULL )
     {
          DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-         DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-         if( pBreakIt->xBreak.is() )
+         DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+         if( pBreakIt->GetBreakIter().is() )
          {
              pSentences = new Positions_t();
              pSentences->reserve(10);
@@ -505,7 +507,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
                  USHORT nModelPos = GetModelPosition( nCurrent );
 
-                 sal_Int32 nNew = pBreakIt->xBreak->endOfSentence(
+                 sal_Int32 nNew = pBreakIt->GetBreakIter()->endOfSentence(
                      sAccessibleString, nCurrent,
                      pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
 

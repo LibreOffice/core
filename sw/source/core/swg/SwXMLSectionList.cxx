@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwXMLSectionList.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sw.hxx"
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <SwXMLSectionList.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -71,18 +68,22 @@ SvXMLImportContext *SwXMLSectionList::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if  (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY ) ||
-         nPrefix == XML_NAMESPACE_TEXT &&
-        (IsXMLToken ( rLocalName, XML_P ) ||
-         IsXMLToken ( rLocalName, XML_H ) ||
-         IsXMLToken ( rLocalName, XML_A ) ||
-         IsXMLToken ( rLocalName, XML_SPAN ) ||
-         IsXMLToken ( rLocalName, XML_SECTION ) ||
-         IsXMLToken ( rLocalName, XML_INDEX_BODY ) ||
-         IsXMLToken ( rLocalName, XML_INDEX_TITLE )||
-         IsXMLToken ( rLocalName, XML_INSERTION ) ||
-         IsXMLToken ( rLocalName, XML_DELETION ) ) )
+    if(( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY )) ||
+        ( nPrefix == XML_NAMESPACE_TEXT &&
+            (IsXMLToken ( rLocalName, XML_P ) ||
+            IsXMLToken ( rLocalName, XML_H ) ||
+            IsXMLToken ( rLocalName, XML_A ) ||
+            IsXMLToken ( rLocalName, XML_SPAN ) ||
+            IsXMLToken ( rLocalName, XML_SECTION ) ||
+            IsXMLToken ( rLocalName, XML_INDEX_BODY ) ||
+            IsXMLToken ( rLocalName, XML_INDEX_TITLE )||
+            IsXMLToken ( rLocalName, XML_INSERTION ) ||
+            IsXMLToken ( rLocalName, XML_DELETION ) )
+        )
+      )
+    {
         pContext = new SvXMLSectionListContext (*this, nPrefix, rLocalName, xAttrList);
+    }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
     return pContext;

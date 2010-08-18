@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docstat.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,10 +42,10 @@ SwDocStat::SwDocStat() :
     nOLE(0),
     nPage(1),
     nPara(1),
+    nAllPara(1),
     nWord(0),
     nChar(0),
-    bModified(TRUE),
-    pInternStat(0)
+    bModified(TRUE)
 {}
 
 /************************************************************************
@@ -62,9 +59,9 @@ void SwDocStat::Reset()
     nOLE    = 0;
     nPage   = 1;
     nPara   = 1;
+    nAllPara= 1;
     nWord   = 0;
     nChar   = 0;
     bModified = TRUE;
-    pInternStat = 0;
 }
 

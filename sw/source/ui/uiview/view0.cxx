@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view0.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,22 +33,22 @@
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/templdlg.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <uivwimp.hxx>
-#ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>
@@ -92,7 +89,7 @@
 #define WebListInText
 #define WebListInTable
 #define TextPage
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>
@@ -101,7 +98,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 
@@ -120,6 +117,7 @@ SFX_IMPL_VIEWFACTORY(SwView, SW_RES(STR_NONAME))
 SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 {
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
+    SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SwSpellDialogChildWindow::GetChildWindowId());
@@ -497,14 +495,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 {
                     SwDocShell *pDocSh = GetDocShell();
                     SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
-                    SwRootFrm *pRootFrm = pDoc ? pDoc->GetRootFrm() : NULL;
 
                     // right now we don't have view options for automatic grammar checking. Thus...
                     sal_Bool bIsAutoGrammar = sal_False;
                     aCfg.GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
-                    if (pDoc && pRootFrm && bIsAutoGrammar)
-                        StartGrammarChecking( *pDoc, *pRootFrm );
+                    if (pDoc && bIsAutoGrammar)
+                        StartGrammarChecking( *pDoc );
                 }
             }
         break;
@@ -557,3 +554,9 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     rReq.Done();
 }
 
+IMPL_LINK( SwView, HtmlOptionsHdl, void*, EMPTYARG )
+{
+    // Invalidierung, falls blinkender Text erlaubt/verboten wurde
+    GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
+    return 0;
+}

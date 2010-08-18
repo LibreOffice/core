@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtdrop.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,9 +47,9 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <com/sun/star/i18n/WordType.hpp>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <charatr.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -152,19 +149,7 @@ SwDropPortion::~SwDropPortion()
 
 sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos )
 {
-    const SwpHints *pHints = pTxtNode->GetpSwpHints();
-    if( !pHints )
-        return sal_False;
-    for( MSHORT i = 0; i < pHints->Count(); ++i )
-    {
-        const SwTxtAttr *pPos = (*pHints)[i];
-        xub_StrLen nStart = *pPos->GetStart();
-        if( nPos < nStart )
-            return sal_False;
-        if( nPos == nStart && !pPos->GetEnd() )
-            return sal_True;
-    }
-    return sal_False;
+    return 0 != pTxtNode->GetTxtAttrForCharAt(nPos);
 }
 
 /*************************************************************************
@@ -179,7 +164,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     if( nWishLen && nWishLen < nEnd )
         nEnd = nWishLen;
 
-    if ( ! nWishLen && pBreakIt->xBreak.is() )
+    if ( ! nWishLen && pBreakIt->GetBreakIter().is() )
     {
         // find first word
         const SwAttrSet& rAttrSet = GetSwAttrSet();
@@ -201,7 +186,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
         }
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( GetTxt(), 0,
+            pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), 0,
             pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
 
         nEnd = (xub_StrLen)aBound.endPos;

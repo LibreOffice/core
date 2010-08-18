@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.cxx,v $
- * $Revision: 1.94.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,99 +30,89 @@
 
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Any.h>
+
+#include <comphelper/accessibletexthelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustring.hxx>
-#include <ucbhelper/content.hxx>
-#include <sot/formats.hxx>
-#include <sot/storage.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/pathoptions.hxx>
-#ifndef _SO_CLSIDS_HXX //autogen
-#include <sot/clsids.hxx>
-#endif
-#include <sot/exchange.hxx>
-#include <vcl/msgbox.hxx>
-
-#include <vcl/mapunit.hxx>
-#include <vcl/mapmod.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/accessibletexthelper.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/fstathelper.hxx>
-#include <svtools/transfer.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svtools/sfxecode.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/slstitm.hxx>
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/lang/Locale.hpp>
-
-#ifndef STARMATH_HRC
-#include <starmath.hrc>
-#endif
-#include <document.hxx>
-#include <unomodel.hxx>
-#include <config.hxx>
-#include <symbol.hxx>
-#include <toolbox.hxx>
-#include <dialog.hxx>
-#include <action.hxx>
-#include <view.hxx>
-#include <utility.hxx>
-#include <format.hxx>
-#include <mathtype.hxx>
-#include <mathml.hxx>
-
-#include <smdll.hxx>
-
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sot/clsids.hxx>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+#include <sot/storage.hxx>
+#include <svl/eitem.hxx>
+#include <svl/fstathelper.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/ptitem.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/stritem.hxx>
+#include <svtools/transfer.hxx>
+#include <svl/undo.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <ucbhelper/content.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/mapunit.hxx>
+#include <vcl/msgbox.hxx>
+#include <sfx2/sfx.hrc>
+#include <document.hxx>
+#include <action.hxx>
+#include <config.hxx>
+#include <dialog.hxx>
+#include <format.hxx>
+#include <smdll.hxx>
+#include <starmath.hrc>
+#include <symbol.hxx>
+#include <toolbox.hxx>
+#include <unomodel.hxx>
+#include <utility.hxx>
+#include <view.hxx>
+#include "mathtype.hxx"
+#include "mathmlimport.hxx"
+#include "mathmlexport.hxx"
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
 
-#define A2OU(x)        rtl::OUString::createFromAscii( x )
 
 #define DOCUMENT_BUFFER_SIZE    (USHORT)32768
 
 static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 
-
-/**************************************************************************/
-/*
-**
-**  CLASS IMPLEMENTATION
-**
-**/
-
 #define SmDocShell
 #include "smslots.hxx"
+
+////////////////////////////////////////////////////////////
+
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
 
@@ -144,9 +131,9 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
     {
         case HINT_FORMATCHANGED:
             SetFormulaArranged(FALSE);
-            nModifyCount++;     //! merkwuerdig...
-                                // ohne dies wird die Grafik letztlich
-                                // nicht geupdatet
+
+            nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+
             Repaint();
             break;
     }
@@ -156,8 +143,8 @@ void SmDocShell::LoadSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::LoadSymbols" );
 
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager().Load();
+    SmModule *pp = SM_MOD();
+    pp->GetSymbolManager().Load();
 }
 
 
@@ -224,11 +211,19 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetFormat" );
 
     aFormat = rFormat;
-    SetFormulaArranged(FALSE);
-    SmViewShell *pViewSh = SmGetActiveView();
-    if (pViewSh)
-        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_GAPHIC_SM);
-    SetModified(TRUE);
+    SetFormulaArranged( FALSE );
+    SetModified( TRUE );
+
+    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+
+    // don't use SmGetActiveView since the view shell might not be active (0 pointer)
+    // if for example the Basic Macro dialog currently has the focus. Thus:
+    SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
+    while (pFrm)
+    {
+        pFrm->GetBindings().Invalidate(SID_GAPHIC_SM);
+        pFrm = SfxViewFrame::GetNext( *pFrm, this );
+    }
 }
 
 String SmDocShell::GetAccessibleText()
@@ -254,7 +249,7 @@ void SmDocShell::Parse()
         delete pTree;
     ReplaceBadChars();
     pTree = aInterpreter.Parse(aText);
-    nModifyCount++;
+    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( FALSE );
 }
 
@@ -266,7 +261,7 @@ void SmDocShell::ArrangeFormula()
     if (IsFormulaArranged())
         return;
 
-    //! Nur für die Dauer der Existenz dieses Objekts sind am Drucker die
+    //! Nur fï¿½r die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
 //  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
@@ -279,7 +274,7 @@ void SmDocShell::ArrangeFormula()
 #endif
     }
 
-    // falls nötig ein anderes OutputDevice holen für das formatiert wird
+    // falls nï¿½tig ein anderes OutputDevice holen fï¿½r das formatiert wird
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();
@@ -287,7 +282,7 @@ void SmDocShell::ArrangeFormula()
             pOutDev = &pView->GetGraphicWindow();
         else
         {
-            pOutDev = &SM_MOD1()->GetDefaultVirtualDev();
+            pOutDev = &SM_MOD()->GetDefaultVirtualDev();
             pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
         }
     }
@@ -472,7 +467,7 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
     ULONG nOldDrawMode = DRAWMODE_DEFAULT;
     BOOL bRestoreDrawMode = FALSE;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
-        ((Window &) rDev).GetDisplayBackground().GetColor().IsDark())
+        ((Window &) rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         nOldDrawMode = rDev.GetDrawMode();
         rDev.SetDrawMode( DRAWMODE_DEFAULT );
@@ -621,7 +616,7 @@ Printer* SmDocShell::GetPrt()
                            SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                            0);
 
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         pPrinter = new SfxPrinter(pOptions);
         pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -689,8 +684,8 @@ void SmDocShell::Repaint()
 }
 
 
-SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport) :
-    SfxObjectShell(eMode),
+SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell( i_nSfxCreationFlags ),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
@@ -703,18 +698,13 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport)
 
     SetPool(&SFX_APP()->GetPool());
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     aFormat = pp->GetConfig()->GetStandardFormat();
 
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
-
-    SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
-                                    //! im Destruktor nicht explizit geloescht werden.
-                                    //! Dies erledigt das Sfx.
+    SetBaseModel( new SmModel(this) );
 }
 
 
@@ -723,7 +713,7 @@ SmDocShell::~SmDocShell()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::~SmDocShell" );
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     EndListening(aFormat);
     EndListening(*pp->GetConfig());
@@ -761,7 +751,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
             pTree = 0;
         }
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
+        SmXMLImportWrapper aEquation(xModel);
         bSuccess = 0 == aEquation.Import(rMedium);
     }
     else
@@ -820,7 +810,7 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
     BOOL bRet = FALSE;
     if( SfxObjectShell::Load( rMedium ))
     {
-        uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
+        uno::Reference < embed::XStorage > xStorage = GetMedium()->GetStorage();
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if (
             (
@@ -835,10 +825,10 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
+            SmXMLImportWrapper aEquation(xModel);
             ULONG nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
-            SetError( nError );
+            SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
     }
 
@@ -870,7 +860,7 @@ BOOL SmDocShell::Save()
             ArrangeFormula();
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
+        SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(sal_False);
         return aEquation.Export(*GetMedium());
     }
@@ -943,7 +933,7 @@ BOOL SmDocShell::SaveAs( SfxMedium& rMedium )
             ArrangeFormula();
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
+        SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(sal_False);
         bRet = aEquation.Export(rMedium);
     }
@@ -967,14 +957,14 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
         if(rFltName.EqualsAscii( STAROFFICE_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
+            SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(sal_False);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName.EqualsAscii( MATHML_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
+            SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(sal_True);
             bRet = aEquation.Export(rMedium);
         }
@@ -1019,7 +1009,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_AUTO_REDRAW :
         {
-            SmModule *pp = SM_MOD1();
+            SmModule *pp = SM_MOD();
             BOOL bRedraw = pp->GetConfig()->IsAutoRedraw();
             pp->GetConfig()->SetAutoRedraw(!bRedraw);
         }
@@ -1038,7 +1028,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             // get device used to retrieve the FontList
             OutputDevice *pDev = GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+                pDev = &SM_MOD()->GetDefaultVirtualDev();
             DBG_ASSERT (pDev, "device for font list missing" );
 
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog( NULL, pDev );
@@ -1122,7 +1112,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pAlignDialog->WriteTo(aNewFormat);
 
-                SmModule *pp = SM_MOD1();
+                SmModule *pp = SM_MOD();
                 SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
                 pAlignDialog->WriteTo( aFmt );
                 pp->GetConfig()->SetStandardFormat( aFmt );
@@ -1141,13 +1131,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_TEXT:
         {
-            const SfxStringItem& rItem =
-                (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
-
+            const SfxStringItem& rItem = (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
             if (GetText() != rItem.GetValue())
-            {
                 SetText(rItem.GetValue());
-            }
         }
         break;
 
@@ -1181,9 +1167,21 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     (pTmpUndoMgr->*fnDo)( 0 );
             }
             Repaint();
+            SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
+            while( pFrm )
+            {
+                SfxBindings& rBind = pFrm->GetBindings();
+                rBind.Invalidate(SID_UNDO);
+                rBind.Invalidate(SID_REDO);
+                rBind.Invalidate(SID_REPEAT);
+                rBind.Invalidate(SID_CLEARHISTORY);
+                pFrm = SfxViewFrame::GetNext( *pFrm, this );
+            }
         }
         break;
     }
+
+    rReq.Done();
 }
 
 
@@ -1207,7 +1205,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
         case SID_AUTO_REDRAW :
             {
-                SmModule  *pp = SM_MOD1();
+                SmModule  *pp = SM_MOD();
                 BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
@@ -1228,6 +1226,10 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_GAPHIC_SM:
+            //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
+            //! If nModifyCount gets changed then the call below will implicitly notify
+            //! SmGraphicController::StateChanged and there the window gets invalidated.
+            //! Thus all the 'nModifyCount++' before invalidating this slot.
             rSet.Put(SfxInt16Item(SID_GAPHIC_SM, nModifyCount));
             break;
 
@@ -1296,8 +1298,8 @@ void SmDocShell::SaveSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
 
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager().Save();
+    SmModule *pp = SM_MOD();
+    pp->GetSymbolManager().Save();
 }
 
 

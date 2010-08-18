@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: index.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@ class SwIndex;
 class SwIndexReg;
 struct SwPosition;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define INLINE inline
 #else
 #define INLINE
@@ -53,7 +50,7 @@ class SW_DLLPUBLIC SwIndex
 {
     friend class SwIndexReg;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nSerial;
     int MySerial;
 #endif
@@ -66,7 +63,7 @@ class SW_DLLPUBLIC SwIndex
     void Remove();                  // Ausketten
 
 public:
-    SwIndex( SwIndexReg * pReg, xub_StrLen nIdx = 0 );
+    explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
     SwIndex( const SwIndex & );
     SwIndex( const SwIndex &, short nDiff );
     ~SwIndex() { Remove(); }
@@ -132,8 +129,8 @@ class SwIndexReg
     static SwIndexReg* pEmptyIndexArray;
 
 protected:
-    virtual void Update( const SwIndex & aPos, xub_StrLen nLen,
-                         BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
+    virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
+                 const bool bNegative = false, const bool bDelete = false );
 
     void ChkArr();
 
@@ -150,7 +147,7 @@ public:
     void MoveTo( SwIndexReg& rArr );
 };
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
 inline xub_StrLen SwIndex::operator++()
 {

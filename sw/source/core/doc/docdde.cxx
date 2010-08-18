@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docdde.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
-#include <svx/linkmgr.hxx>          // LinkManager
+#include <svl/svstdarr.hxx>
+#include <sfx2/linkmgr.hxx>         // LinkManager
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
@@ -62,17 +59,24 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* const lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
-        const String sNameLc = GetAppCharClass().lower(rName);
+        const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
         for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getMarksBegin();
             ppMark != rMarkAccess.getMarksEnd();
             ppMark++)
         {
-            ::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get());
-            if(pBkmk && GetAppCharClass().lower(pBkmk->GetName()) == sNameLc)
-                return pBkmk;
+            if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get()))
+            {
+                if (
+                    (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
+                    (!bCaseSensitive && GetAppCharClass().lower(pBkmk->GetName()) == String(sNameLc))
+                   )
+                {
+                    return pBkmk;
+                }
+            }
         }
         return NULL;
     }
@@ -80,22 +84,28 @@ namespace
 
 struct _FindItem
 {
-    const String& rItem;
+    const String m_Item;
     SwTableNode* pTblNd;
     SwSectionNode* pSectNd;
 
     _FindItem(const String& rS)
-        : rItem(rS), pTblNd(0), pSectNd(0)
+        : m_Item(rS), pTblNd(0), pSectNd(0)
     {}
 };
 
-BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
+BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseSensitive )
 {
+    _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
     SwSection* pSect = rpSectFmt->GetSection();
     if( pSect )
     {
-        String sNm( GetAppCharClass().lower( pSect->GetName() ));
-        if( sNm.Equals( ((_FindItem*)pArgs)->rItem ))
+        String sNm( (bCaseSensitive)
+                ? pSect->GetSectionName()
+                : GetAppCharClass().lower( pSect->GetSectionName() ));
+        String sCompare( (bCaseSensitive)
+                ? pItem->m_Item
+                : GetAppCharClass().lower( pItem->m_Item ) );
+        if( sNm == sCompare )
         {
             // gefunden, als erfrage die Daten
             const SwNodeIndex* pIdx;
@@ -103,7 +113,7 @@ BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
                 &rpSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
             {
                 // eine Tabelle im normalen NodesArr
-                ((_FindItem*)pArgs)->pSectNd = pIdx->GetNode().GetSectionNode();
+                pItem->pSectNd = pIdx->GetNode().GetSectionNode();
                 return FALSE;
             }
 //nein!!            // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
@@ -112,13 +122,22 @@ BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
     }
     return TRUE;        // dann weiter
 }
+BOOL lcl_FindSectionCaseSensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
+{
+    return lcl_FindSection( rpSectFmt, pArgs, true );
+}
+BOOL lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
+{
+    return lcl_FindSection( rpSectFmt, pArgs, false );
+}
 
 
 
 BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 {
+    _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
     String sNm( GetAppCharClass().lower( rpTableFmt->GetName() ));
-    if( sNm.Equals( ((_FindItem*)pArgs)->rItem ))
+    if (sNm.Equals( pItem->m_Item ))
     {
         SwTable* pTmpTbl;
         SwTableBox* pFBox;
@@ -128,7 +147,7 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
             &rpTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
         {
             // eine Tabelle im normalen NodesArr
-            ((_FindItem*)pArgs)->pTblNd = (SwTableNode*)
+            pItem->pTblNd = (SwTableNode*)
                                         pFBox->GetSttNd()->FindTableNode();
             return FALSE;
         }
@@ -143,20 +162,30 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 bool SwDoc::GetData( const String& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
 {
-    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem);
-    if(pBkmk) return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
-
-    // haben wir ueberhaupt das Item vorraetig?
-    String sItem(GetAppCharClass().lower(rItem));
-    _FindItem aPara( sItem );
-    ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
-                                                lcl_FindSection, &aPara );
-    if( aPara.pSectNd )
+    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    bool bCaseSensitive = true;
+    while( true )
     {
-        // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pSectNd ).GetData( rValue, rMimeType );
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
+        if(pBkmk)
+            return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
+
+        // haben wir ueberhaupt das Item vorraetig?
+        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
+        _FindItem aPara( sItem );
+        ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
+                                                    bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
+        if( aPara.pSectNd )
+        {
+            // gefunden, als erfrage die Daten
+            return SwServerObject( *aPara.pSectNd ).GetData( rValue, rMimeType );
+        }
+        if( !bCaseSensitive )
+            break;
+        bCaseSensitive = false;
     }
 
+    _FindItem aPara( GetAppCharClass().lower( rItem ));
     ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
                                             lcl_FindTable, &aPara );
     if( aPara.pTblNd )
@@ -172,19 +201,30 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
 bool SwDoc::SetData( const String& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
-    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem);
-    if(pBkmk) return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
-
-    // haben wir ueberhaupt das Item vorraetig?
-    String sItem(GetAppCharClass().lower(rItem));
-    _FindItem aPara( sItem );
-    pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), lcl_FindSection, &aPara );
-    if( aPara.pSectNd )
+    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    bool bCaseSensitive = true;
+    while( true )
     {
-        // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
+        if(pBkmk)
+            return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
+
+        // haben wir ueberhaupt das Item vorraetig?
+        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
+        _FindItem aPara( sItem );
+        pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
+        if( aPara.pSectNd )
+        {
+            // gefunden, als erfrage die Daten
+            return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
+        }
+        if( !bCaseSensitive )
+            break;
+        bCaseSensitive = false;
     }
 
+    String sItem(GetAppCharClass().lower(rItem));
+    _FindItem aPara( sItem );
     pTblFrmFmtTbl->ForEach( 0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara );
     if( aPara.pTblNd )
     {
@@ -200,31 +240,42 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
 {
     SwServerObject* pObj = NULL;
 
-    // bookmarks
-    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem);
-    if(pBkmk && pBkmk->IsExpanded()
-        && (0 == (pObj = pBkmk->GetRefObject())))
+    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    bool bCaseSensitive = true;
+    while( true )
     {
-        // mark found, but no link yet -> create hotlink
-        pObj = new SwServerObject(*pBkmk);
-        pBkmk->SetRefObject(pObj);
-        GetLinkManager().InsertServer(pObj);
-    }
-    if(pObj) return pObj;
+        // bookmarks
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
+        if(pBkmk && pBkmk->IsExpanded()
+            && (0 == (pObj = pBkmk->GetRefObject())))
+        {
+            // mark found, but no link yet -> create hotlink
+            pObj = new SwServerObject(*pBkmk);
+            pBkmk->SetRefObject(pObj);
+            GetLinkManager().InsertServer(pObj);
+        }
+        if(pObj)
+            return pObj;
 
-    _FindItem aPara(GetAppCharClass().lower(rItem));
-    // sections
-    ((SwSectionFmts&)*pSectionFmtTbl).ForEach(0, pSectionFmtTbl->Count(), lcl_FindSection, &aPara);
-    if(aPara.pSectNd
-        && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
-    {
-        // section found, but no link yet -> create hotlink
-        pObj = new SwServerObject( *aPara.pSectNd );
-        aPara.pSectNd->GetSection().SetRefObject( pObj );
-        GetLinkManager().InsertServer(pObj);
+        _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
+        // sections
+        ((SwSectionFmts&)*pSectionFmtTbl).ForEach(0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara);
+        if(aPara.pSectNd
+            && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
+        {
+            // section found, but no link yet -> create hotlink
+            pObj = new SwServerObject( *aPara.pSectNd );
+            aPara.pSectNd->GetSection().SetRefObject( pObj );
+            GetLinkManager().InsertServer(pObj);
+        }
+        if(pObj)
+            return pObj;
+        if( !bCaseSensitive )
+            break;
+        bCaseSensitive = false;
     }
-    if(pObj) return pObj;
 
+    _FindItem aPara( GetAppCharClass().lower(rItem) );
     // tables
     ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach(0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara);
     if(aPara.pTblNd
@@ -329,31 +380,39 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             return FALSE;
     }
 
-    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, sItem);
-    if(pBkmk)
+    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    bool bCaseSensitive = true;
+    while( true )
     {
-        if(pBkmk->IsExpanded())
-            rpPam = new SwPaM(
-                pBkmk->GetMarkPos(),
-                pBkmk->GetOtherMarkPos());
-        return static_cast<bool>(rpPam);
-    }
-
-    // alte "Mechanik"
-    rCC.toLower( sItem );
-    _FindItem aPara( sItem );
-
-    if( pSectionFmtTbl->Count() )
-    {
-        ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
-                                                lcl_FindSection, &aPara );
-        if( aPara.pSectNd )
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, sItem, bCaseSensitive);
+        if(pBkmk)
         {
-            rpRange = new SwNodeRange( *aPara.pSectNd, 1,
-                                    *aPara.pSectNd->EndOfSectionNode() );
-            return TRUE;
-
+            if(pBkmk->IsExpanded())
+                rpPam = new SwPaM(
+                    pBkmk->GetMarkPos(),
+                    pBkmk->GetOtherMarkPos());
+            return static_cast<bool>(rpPam);
         }
+
+        //
+        _FindItem aPara( bCaseSensitive ? sItem : rCC.lower( sItem ) );
+
+        if( pSectionFmtTbl->Count() )
+        {
+            ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
+                                                    bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
+            if( aPara.pSectNd )
+            {
+                rpRange = new SwNodeRange( *aPara.pSectNd, 1,
+                                        *aPara.pSectNd->EndOfSectionNode() );
+                return TRUE;
+
+            }
+        }
+        if( !bCaseSensitive )
+            break;
+        bCaseSensitive = false;
     }
     return FALSE;
 }
+

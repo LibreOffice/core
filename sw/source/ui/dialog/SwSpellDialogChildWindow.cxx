@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwSpellDialogChildWindow.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,40 +27,38 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <SwSpellDialogChildWindow.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/acorrcfg.hxx>
-#ifndef _SVX_SVXIDS_HRC
+#include <editeng/svxacorr.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <wrtsh.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <docary.hxx>
 #include <frmfmt.hxx>
 #include <dcontact.hxx>
 #include <edtwin.hxx>
 #include <pam.hxx>
 #include <drawbase.hxx>
-#include <unoobj.hxx>
-#ifndef _DIALOG_HXX
+#include <unotextrange.hxx>
 #include <dialog.hrc>
-#endif
 #include <cmdid.h>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -205,12 +200,19 @@ SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
 
 
   -----------------------------------------------------------------------*/
-svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
+svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
 {
     svx::SpellPortions aRet;
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(pWrtShell)
     {
+        if (!bRecheck)
+        {
+            // first set continuation point for spell/grammar check to the
+            // end of the current sentence
+            pWrtShell->MoveContinuationPosToEndOfCheckedSentence();
+        }
+
         ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
         bool bDrawText = SHELL_MODE_DRAWTEXT == eSelMode;
         bool bNormalText =
@@ -242,7 +244,10 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 if(!pWrtShell->HasSelection())
                     pWrtShell->GoStartSentence();
                 else
+                {
+                    pWrtShell->ExpandToSentenceBorders();
                     m_pSpellState->m_bStartedInSelection = true;
+                }
                 //determine if the selection is outside of the body text
                 bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
                 m_pSpellState->m_SpellStartPosition = bOtherText ? SPELL_START_OTHER : SPELL_START_BODY;
@@ -258,8 +263,10 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     //mark the start position only if not at start of doc
                     if(!pWrtShell->IsStartOfDoc())
                     {
-                        m_pSpellState->m_xStartRange = SwXTextRange::CreateTextRangeFromPosition(
-                                pWrtShell->GetDoc(), *pCrsr->Start(), pCrsr->End());
+                        m_pSpellState->m_xStartRange =
+                            SwXTextRange::CreateXTextRange(
+                                *pWrtShell->GetDoc(),
+                                *pCrsr->Start(), pCrsr->End());
                     }
                     pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR, FALSE );
                 }
@@ -270,7 +277,24 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 m_pSpellState->m_SpellStartPosition = SPELL_START_DRAWTEXT;
                 m_pSpellState->m_pStartDrawing = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-                m_pSpellState->m_aStartDrawingSelection = pOLV->GetSelection();
+                // start checking at the top of the drawing object
+                pOLV->SetSelection( ESelection() );
+                m_pSpellState->m_aStartDrawingSelection = ESelection();
+/*
+Note: spelling in a selection only, or starting in a mid of a drawing object requires
+further changes elsewhere. (Especially if it should work in sc and sd as well.)
+The code below would only be part of the solution.
+(Keeping it a as a comment for the time being)
+                ESelection aCurSel( pOLV->GetSelection() );
+                ESelection aSentenceSel( pOLV->GetEditView().GetEditEngine()->SelectSentence( aCurSel ) );
+                if (!aCurSel.HasRange())
+                {
+                    aSentenceSel.nEndPara = aSentenceSel.nStartPara;
+                    aSentenceSel.nEndPos  = aSentenceSel.nStartPos;
+                }
+                pOLV->SetSelection( aSentenceSel );
+                m_pSpellState->m_aStartDrawingSelection = aSentenceSel;
+*/
             }
 
             m_pSpellState->m_bInitialCall = false;
@@ -317,60 +341,65 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
             //spell inside of the Writer text
             if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
             {
-                //find out which text has been spelled body or other
-                bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
-                if(bOtherText && m_pSpellState->m_bStartedInOther && m_pSpellState->pOtherCursor)
+                // if there is a selection (within body or header/footer text)
+                // then spell/grammar checking should not move outside of it.
+                if (!m_pSpellState->m_bStartedInSelection)
                 {
-                    m_pSpellState->m_bStartedInOther = false;
-                    pWrtShell->SetSelection(*m_pSpellState->pOtherCursor);
-                    pWrtShell->SpellEnd();
-                    delete m_pSpellState->pOtherCursor;
-                    m_pSpellState->pOtherCursor = 0;
-                    pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART, FALSE );
-                    pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
-                }
-                if(!aRet.size())
-                {
-                    //end spelling
-                    pWrtShell->SpellEnd();
-                    if(bOtherText)
+                    //find out which text has been spelled body or other
+                    bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
+                    if(bOtherText && m_pSpellState->m_bStartedInOther && m_pSpellState->pOtherCursor)
                     {
-                        m_pSpellState->m_bOtherSpelled = true;
-                        //has the body been spelled?
-                        if(!m_pSpellState->m_bBodySpelled)
+                        m_pSpellState->m_bStartedInOther = false;
+                        pWrtShell->SetSelection(*m_pSpellState->pOtherCursor);
+                        pWrtShell->SpellEnd();
+                        delete m_pSpellState->pOtherCursor;
+                        m_pSpellState->pOtherCursor = 0;
+                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART, FALSE );
+                        pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
+                    }
+                    if(!aRet.size())
+                    {
+                        //end spelling
+                        pWrtShell->SpellEnd();
+                        if(bOtherText)
                         {
-                            pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START, FALSE );
-                            if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
+                            m_pSpellState->m_bOtherSpelled = true;
+                            //has the body been spelled?
+                            if(!m_pSpellState->m_bBodySpelled)
                             {
-                                m_pSpellState->m_bBodySpelled = true;
-                                pWrtShell->SpellEnd();
+                                pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START, FALSE );
+                                if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
+                                {
+                                    m_pSpellState->m_bBodySpelled = true;
+                                    pWrtShell->SpellEnd();
+                                }
                             }
                         }
+                        else
+                        {
+                             m_pSpellState->m_bBodySpelled = true;
+                             if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
+                             {
+                                pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART, FALSE );
+                                if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
+                                {
+                                    pWrtShell->SpellEnd();
+                                    m_pSpellState->m_bOtherSpelled = true;
+                                }
+                             }
+                             else
+                                 m_pSpellState->m_bOtherSpelled = true;
+                        }
                     }
-                    else
-                    {
-                         m_pSpellState->m_bBodySpelled = true;
-                         if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
-                         {
-                            pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART, FALSE );
-                            if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
-                            {
-                                pWrtShell->SpellEnd();
-                                m_pSpellState->m_bOtherSpelled = true;
-                            }
-                         }
-                         else
-                             m_pSpellState->m_bOtherSpelled = true;
-                    }
-                }
 
-                //search for a draw text object that contains error and spell it
-                if(!aRet.size() &&
-                        (m_pSpellState->m_bDrawingsSpelled ||
-                        !FindNextDrawTextError_Impl(*pWrtShell) || !SpellDrawText_Impl(*pWrtShell, aRet)))
-                {
-                    lcl_LeaveDrawText(*pWrtShell);
-                    m_pSpellState->m_bDrawingsSpelled = true;
+                    //search for a draw text object that contains error and spell it
+                    if(!aRet.size() &&
+                            (m_pSpellState->m_bDrawingsSpelled ||
+                            !FindNextDrawTextError_Impl(*pWrtShell) || !SpellDrawText_Impl(*pWrtShell, aRet)))
+                    {
+                        lcl_LeaveDrawText(*pWrtShell);
+                        m_pSpellState->m_bDrawingsSpelled = true;
+                    }
                 }
             }
         }
@@ -390,7 +419,8 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 if(RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
-                    if(SwXTextRange::XTextRangeToSwPaM(aPam, m_pSpellState->m_xStartRange))
+                    if (::sw::XTextRangeToSwPaM(aPam,
+                                m_pSpellState->m_xStartRange))
                     {
                         pWrtShell->SetSelection(aPam);
                         pWrtShell->SpellStart(DOCPOS_START, DOCPOS_CURR, DOCPOS_START);
@@ -430,7 +460,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
 /*-- 09.09.2003 10:39:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rChanged)
+void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck)
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     DBG_ASSERT(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume");
@@ -443,13 +473,19 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
             SHELL_MODE_LIST_TEXT == eSelMode ||
             SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
             SHELL_MODE_TEXT == eSelMode;
+
+        // evaluate if the same sentence should be rechecked or not.
+        // Sentences that got grammar checked should always be rechecked in order
+        // to detect possible errors that get introduced with the changes
+        bRecheck |= pWrtShell->HasLastSentenceGotGrammarChecked();
+
         if(bNormalText)
-            pWrtShell->ApplyChangedSentence(rChanged, m_bIsGrammarCheckingOn);
+            pWrtShell->ApplyChangedSentence(rChanged, bRecheck);
         else if(bDrawText )
         {
             SdrView* pDrView = pWrtShell->GetDrawView();
             SdrOutliner *pOutliner = pDrView->GetTextEditOutliner();
-            pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged, m_bIsGrammarCheckingOn);
+            pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged, bRecheck);
         }
     }
 }
@@ -847,7 +883,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     Point aTmp( 0,0 );
                     rSh.SelectObj( aTmp, 0, pTextObj );
                     SdrPageView* pPV = pDrView->GetSdrPageView();
-                    rView.BeginTextEdit( pTextObj, pPV, &rView.GetEditWin(), FALSE );
+                    rView.BeginTextEdit( pTextObj, pPV, &rView.GetEditWin(), FALSE, TRUE );
                     rView.AttrChangedNotify(&rSh);
                     bNextDoc = true;
                 }

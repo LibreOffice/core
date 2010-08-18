@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewdraw.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,27 +30,27 @@
 
 
 #include "hintids.hxx"
-#include <svtools/aeitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/editview.hxx>
-#include <svx/editeng.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/fmview.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <doc.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/fontworkgallery.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
@@ -174,7 +171,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
                     // TODO: unmark all other
                     pWrtShell->EnterStdMode();
-                    pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aStartPos );
+                    pWrtShell->SwFEShell::InsertDrawObj( *pObj, aStartPos );
                 }
             }
         }
@@ -221,7 +218,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     aSize = Size( 2835, 2835 );
 
                 pWrtShell->EnterStdMode();
-                pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aPos );
+                pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
                 rReq.Ignore ();
             }
         }
@@ -501,7 +498,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
     if( pSdrView->IsMarkedHit( aDocPos ) &&
         !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
-        pSdrView->PickObj( aDocPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
+        pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
 
         // #108784#
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
@@ -523,7 +520,8 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, sal_Bool bIsNewObj)
+sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+        bool bIsNewObj, bool bSetSelectionToStart)
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
@@ -609,7 +607,11 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
             Color aBackground(pSh->GetShapeBackgrd());
             pView->SetBackgroundColor(aBackground);
         }
+
+        // editing should start at the end of text, spell checking at the beginning ...
         ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+        if (bSetSelectionToStart)
+            aNewSelection = ESelection();
         pView->SetSelection(aNewSelection);
     }
 

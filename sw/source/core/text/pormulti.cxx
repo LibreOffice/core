@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pormulti.cxx,v $
- * $Revision: 1.89.112.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,9 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#include <svx/twolinesitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>      // SwField
@@ -194,13 +189,11 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     if( !pRot )
     {
         const SwTxtAttr& rAttr = *rCreate.pAttr;
-        if( RES_CHRATR_ROTATE == rAttr.Which() )
-            pRot = &rAttr.GetCharRotate();
-        else
+        const SfxPoolItem *const pItem =
+                CharFmt::GetItem(rAttr, RES_CHRATR_ROTATE);
+        if ( pItem )
         {
-            const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
-            if ( pItem )
-                pRot = (SvxCharRotateItem*)pItem;
+            pRot = static_cast<const SvxCharRotateItem*>(pItem);
         }
     }
     if( pRot )
@@ -319,13 +312,11 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
         const SwTxtAttr& rAttr = *rCreate.pAttr;
         pBracket->nStart = *rAttr.GetStart();
 
-        if( RES_CHRATR_TWO_LINES == rAttr.Which() )
-            pTwo = &rAttr.Get2Lines();
-        else
+        const SfxPoolItem * const pItem =
+            CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
+        if ( pItem )
         {
-            const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
-            if ( pItem )
-                pTwo = (SvxTwoLinesItem*)pItem;
+            pTwo = static_cast<const SvxTwoLinesItem*>(pItem);
         }
     }
     if( pTwo )
@@ -916,7 +907,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         // for 99% of all cases
         XubString aTxt = GetTxtFrm()->GetTxtNode()->GetExpandTxt( rPos, 1 );
 
-        if ( pBreakIt->xBreak.is() && aTxt.Len() )
+        if ( pBreakIt->GetBreakIter().is() && aTxt.Len() )
         {
             sal_Bool bFldDir = ( i18n::ScriptType::COMPLEX ==
                                  pBreakIt->GetRealScriptOfText( aTxt, 0 ) );

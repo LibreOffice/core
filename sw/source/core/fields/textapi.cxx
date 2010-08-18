@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textapi.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 #include <textapi.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -43,9 +40,9 @@
 
 using namespace com::sun::star;
 
-const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap()
+static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
 {
-    static const SfxItemPropertyMap aSvxTextPortionPropertyMap[] =
+    static const SfxItemPropertyMapEntry aSvxTextPortionPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -57,12 +54,12 @@ const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap()
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {0,0,0,0,0,0}
     };
-
-    return aSvxTextPortionPropertyMap;
+    static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap, EditEngine::GetGlobalItemPool() );
+    return &aSvxTextPortionPropertySet;
 }
 
 SwTextAPIObject::SwTextAPIObject( SwTextAPIEditSource* p )
-: SvxUnoText( p, ImplGetSvxTextPortionPropertyMap(), uno::Reference < text::XText >() )
+: SvxUnoText( p, ImplGetSvxTextPortionPropertySet(), uno::Reference < text::XText >() )
 , pSource(p)
 {
 }

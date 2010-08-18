@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langhelper.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,31 +31,37 @@ class SwWrtShell;
 class SwView;
 class EditEngine;
 class EditView;
+class OutlinerView;
 class SfxItemSet;
 struct ESelection;
 
 namespace SwLangHelper
 {
-    extern USHORT GetLanguageStatus(OutlinerView* pOLV,SfxItemSet& rSet);
-    extern bool SetLanguageStatus(OutlinerView* pOLV,SfxRequest &rReq,SwView &rView,SwWrtShell &rSh);
+    extern USHORT GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
+    extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView &rView, SwWrtShell &rSh );
 
-    extern void SetLanguage(SwWrtShell &rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet);
-    extern void SetLanguage(SwWrtShell &rWrtSh, EditEngine* pEditEngine,ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet);
-    extern void SetLanguage_None(SwWrtShell &rWrtSh, EditEngine* pEditEngine,ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage_None(SwWrtShell &rWrtSh,bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+//  extern void SetLanguage( SwWrtShell &rWrtSh, EditEngine* pEditEngine, ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet );
+//  extern void SetLanguage_None( SwWrtShell &rWrtSh, EditEngine* pEditEngine, ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
+    extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
+    extern void ResetLanguages( SwWrtShell &rWrtSh, bool bIsForSelection );
+//  extern void ResetLanguages( SwWrtShell &rWrtSh, EditEngine* pEditEngine, ESelection aSelection, bool bIsForSelection );
+    extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, bool bIsForSelection );
 
     // document
     extern void SelectCurrentPara( SwWrtShell &rWrtSh );
     // EditView
     extern void SelectPara( EditView &rEditView, const ESelection &rCurSel );
 
-    extern String GetTextForLanguageGuessing(EditEngine* rEditEngine, ESelection aDocSelection );
+    extern String GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection );
     extern String GetTextForLanguageGuessing( SwWrtShell &rSh );
 
     extern LanguageType GetLanguage( SfxItemSet aSet, USHORT nLangWhichId );
     extern LanguageType GetLanguage( SwWrtShell &rSh, USHORT nLangWhichId );
 
-    extern LanguageType GetCurrentLanguage(SfxItemSet aSet,USHORT nScriptType );
+    extern LanguageType GetCurrentLanguage( SfxItemSet aSet, USHORT nScriptType );
     extern LanguageType GetCurrentLanguage( SwWrtShell &rSh );
 }
 

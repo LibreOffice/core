@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndhints.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,11 @@
 #include "ndhints.hxx"
 #include <txtatr.hxx>
 
+#ifndef PRODUCT
+#include <pam.hxx>
+#endif
+
+
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 
@@ -45,7 +47,7 @@ _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 void DumpHints( const SwpHtStart &rHtStart,
                 const SwpHtEnd &rHtEnd )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aDbstream << "DumpHints:" << endl;
     (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
     for( USHORT i = 0; i < rHtStart.Count(); ++i )
@@ -99,15 +101,15 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
-        xub_StrLen nHt1 = *rHt1.GetAnyEnd();
-        xub_StrLen nHt2 = *rHt2.GetAnyEnd();
+        const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
+        const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
-            nHt1 = rHt1.Which();
-            nHt2 = rHt2.Which();
-            if ( nHt1 == nHt2 )
+            const USHORT nWhich1 = rHt1.Which();
+            const USHORT nWhich2 = rHt2.Which();
+            if ( nWhich1 == nWhich2 )
             {
-                if ( RES_TXTATR_CHARFMT == nHt1 )
+                if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
@@ -118,6 +120,8 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 < (long)&rHt2;
             }
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 > nWhich2 );
         }
         return ( nHt1 > nHt2 );
     }
@@ -131,18 +135,17 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 // Zuerst nach Ende danach nach Ptr
 static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
-    xub_StrLen nHt1 = *rHt1.GetAnyEnd();
-    xub_StrLen nHt2 = *rHt2.GetAnyEnd();
+    const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
+    const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
     {
         if ( *rHt1.GetStart() == *rHt2.GetStart() )
         {
-            nHt1 = rHt1.Which();
-            nHt2 = rHt2.Which();
-
-            if ( nHt1 == nHt2 )
+            const USHORT nWhich1 = rHt1.Which();
+            const USHORT nWhich2 = rHt2.Which();
+            if ( nWhich1 == nWhich2 )
             {
-                if ( RES_TXTATR_CHARFMT == nHt1 )
+                if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
@@ -153,7 +156,8 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 > (long)&rHt2;
             }
-            // else return nHt1 < nHt2, see below
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 < nWhich2 );
         }
         else
             return ( *rHt1.GetStart() > *rHt2.GetStart() );
@@ -237,47 +241,49 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
  *                      class SwpHintsArr
  *************************************************************************/
 
-void SwpHintsArr::Insert( const SwTxtAttr *pHt )
+void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nPos;
-    ASSERT(!SwpHtStart::Seek_Entry( pHt, &nPos ), "Insert: hint already in HtStart");
-    ASSERT(!aHtEnd.Seek_Entry( pHt, &nPos ), "Insert: hint already in HtEnd");
+    ASSERT(!m_HintStarts.Seek_Entry( pHt, &nPos ),
+            "Insert: hint already in HtStart");
+    ASSERT(!m_HintEnds.Seek_Entry( pHt, &nPos ),
+            "Insert: hint already in HtEnd");
 #endif
-    SwpHtStart::Insert( pHt );
-    aHtEnd.Insert( pHt );
-#ifndef PRODUCT
+    m_HintStarts.Insert( pHt );
+    m_HintEnds.Insert( pHt );
+#ifdef DBG_UTIL
 #ifdef NIE
-    (aDbstream << "Insert: " ).WriteNumber( long( pHt ) )<< endl;
-    DumpHints( *this, aHtEnd );
+    (aDbstream << "Insert: " ).WriteNumber( long( pHt ) ) << endl;
+    DumpHints( m_HintStarts, m_HintEnds );
 #endif
 #endif
 }
 
-void SwpHintsArr::DeleteAtPos( const USHORT nPos )
+void SwpHintsArray::DeleteAtPos( const USHORT nPos )
 {
-    // Optimierung: nPos bezieht sich auf die Position im StartArray, also:
-    const SwTxtAttr *pHt = SwpHtStart::operator[]( nPos );
-    SwpHtStart::Remove( nPos );
+    // optimization: nPos is the position in the Starts array
+    const SwTxtAttr *pHt = m_HintStarts[ nPos ];
+    m_HintStarts.Remove( nPos );
 
     Resort();
 
     USHORT nEndPos;
-    aHtEnd.Seek_Entry( pHt, &nEndPos );
-    aHtEnd.Remove( nEndPos );
-#ifndef PRODUCT
+    m_HintEnds.Seek_Entry( pHt, &nEndPos );
+    m_HintEnds.Remove( nEndPos );
+#ifdef DBG_UTIL
 #ifdef NIE
-    (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) )<< endl;
-    DumpHints( *this, aHtEnd );
+    (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) ) << endl;
+    DumpHints( m_HintStarts, m_HintEnds );
 #endif
 #endif
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 /*************************************************************************
- *                      SwpHintsArr::Check()
+ *                      SwpHintsArray::Check()
  *************************************************************************/
 
 
@@ -285,14 +291,15 @@ void SwpHintsArr::DeleteAtPos( const USHORT nPos )
         if(!(cond)) \
         { \
             ASSERT(!this, text); \
-            DumpHints(*(SwpHtStart*)this,aHtEnd); \
-            return !((SwpHintsArr*)this)->Resort(); \
+            DumpHints(m_HintStarts, m_HintEnds); \
+            return !(const_cast<SwpHintsArray*>(this))->Resort(); \
         }
 
-BOOL SwpHintsArr::Check() const
+bool SwpHintsArray::Check() const
 {
     // 1) gleiche Anzahl in beiden Arrays
-    CHECK_ERR( Count() == aHtEnd.Count(), "HintsCheck: wrong sizes" );
+    CHECK_ERR( m_HintStarts.Count() == m_HintEnds.Count(),
+        "HintsCheck: wrong sizes" );
     xub_StrLen nLastStart = 0;
     xub_StrLen nLastEnd   = 0;
 
@@ -304,7 +311,7 @@ BOOL SwpHintsArr::Check() const
         // --- Start-Kontrolle ---
 
         // 2a) gueltiger Pointer? vgl. DELETEFF
-        const SwTxtAttr *pHt = (*this)[i];
+        const SwTxtAttr *pHt = m_HintStarts[i];
         CHECK_ERR( 0xFF != *(unsigned char*)pHt, "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
@@ -321,7 +328,7 @@ BOOL SwpHintsArr::Check() const
         // --- End-Kontrolle ---
 
         // 2b) gueltiger Pointer? vgl. DELETEFF
-        const SwTxtAttr *pHtEnd = aHtEnd[i];
+        const SwTxtAttr *pHtEnd = m_HintEnds[i];
         CHECK_ERR( 0xFF != *(unsigned char*)pHtEnd, "HintsCheck: end ptr was deleted" );
 
         // 3b) Stimmt die End-Sortierung?
@@ -339,47 +346,87 @@ BOOL SwpHintsArr::Check() const
         // --- Ueberkreuzungen ---
 
         // 5) gleiche Pointer in beiden Arrays
-        if( !Seek_Entry( pHt, &nIdx ) )
+        if( !m_HintStarts.Seek_Entry( pHt, &nIdx ) )
             nIdx = STRING_LEN;
 
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
-        if( !aHtEnd.Seek_Entry( pHt, &nIdx ) )
+        if( !m_HintEnds.Seek_Entry( pHt, &nIdx ) )
             nIdx = STRING_LEN;
 
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
 
         // 7a) character attributes in array?
         USHORT nWhich = pHt->Which();
-        CHECK_ERR( nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END,
-                   "HintsCheck: Character attribute in start array" )
+        CHECK_ERR( !isCHRATR(nWhich),
+                   "HintsCheck: Character attribute in start array" );
 
         // 7b) character attributes in array?
         nWhich = pHtEnd->Which();
-        CHECK_ERR( nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END,
-                   "HintsCheck: Character attribute in end array" )
+        CHECK_ERR( !isCHRATR(nWhich),
+                   "HintsCheck: Character attribute in end array" );
 
-        // 8) portion check
+        // 8) style portion check
 #if OSL_DEBUG_LEVEL > 1
-        const SwTxtAttr* pHtThis = (*this)[i];
-        const SwTxtAttr* pHtLast = i > 0 ? (*this)[i-1] : 0;
+        const SwTxtAttr* pHtThis = m_HintStarts[i];
+        const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
         CHECK_ERR( 0 == i ||
                     ( RES_TXTATR_CHARFMT != pHtLast->Which() && RES_TXTATR_AUTOFMT != pHtLast->Which() ) ||
                     ( RES_TXTATR_CHARFMT != pHtThis->Which() && RES_TXTATR_AUTOFMT != pHtThis->Which() ) ||
                     ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
-                    ( *pHtThis->GetStart() == *pHtLast->GetStart() && *pHtThis->GetEnd() == *pHtLast->GetEnd() ) ||
-                    ( *pHtThis->GetStart() == *pHtThis->GetEnd() ),
-                   "HintsCheck: Portion inconsistency. This can be temporarily ok during undo operations" )
+                    (   (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
+                            &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
+                            ) // same range
+                        ||  (*pHtThis->GetStart() == *pHtThis->GetEnd())
+                        )
+                    &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
+                        ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
+                        ) // never two AUTOFMT on same range
+                    ),
+                   "HintsCheck: Portion inconsistency. "
+                   "This can be temporarily ok during undo operations" );
+
+        // 9) nesting portion check
+        if (pHtThis->IsNesting())
+        {
+            for ( USHORT j = 0; j < Count(); ++j )
+            {
+                SwTxtAttr const * const pOther( m_HintStarts[j] );
+                if ( pOther->IsNesting() &&  (i != j) )
+                {
+                    SwComparePosition cmp = ComparePosition(
+                        *pHtThis->GetStart(), *pHtThis->GetEnd(),
+                        *pOther->GetStart(), *pOther->GetEnd());
+                    CHECK_ERR( (POS_OVERLAP_BEFORE != cmp) &&
+                               (POS_OVERLAP_BEHIND != cmp),
+                        "HintsCheck: overlapping nesting hints!!!" );
+                }
+            }
+        }
+
+        // 10) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
+        if (pHtThis->HasDummyChar())
+        {
+            for ( USHORT j = 0; j < i; ++j )
+            {
+                SwTxtAttr const * const pOther( m_HintStarts[j] );
+                if (pOther->HasDummyChar())
+                {
+                    CHECK_ERR( (*pOther->GetStart() != *pHtThis->GetStart()),
+                        "HintsCheck: multiple hints claim same CH_TXTATR!");
+                }
+            }
+        }
 #endif
     }
-    return TRUE;
+    return true;
 }
 
 #endif      /* PRODUCT */
 
 /*************************************************************************
- *                          SwpHintsArr::Resort()
+ *                          SwpHintsArray::Resort()
  *************************************************************************/
 
 // Resort() wird vor jedem Insert und Delete gerufen.
@@ -387,61 +434,61 @@ BOOL SwpHintsArr::Check() const
 // ndtxt.cxx angepasst. Leider erfolgt noch keine Neusortierung
 // auf gleichen Positionen.
 
-BOOL SwpHintsArr::Resort()
+bool SwpHintsArray::Resort()
 {
-    BOOL bResort = FALSE;
+    bool bResort = false;
     const SwTxtAttr *pLast = 0;
     USHORT i;
 
-    for( i = 0; i < SwpHtStart::Count(); ++i )
+    for ( i = 0; i < m_HintStarts.Count(); ++i )
     {
-        const SwTxtAttr *pHt = (*this)[i];
+        const SwTxtAttr *pHt = m_HintStarts[i];
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 //            ASSERT( bResort, "!Resort/Start: correcting hints-array" );
             aDbstream << "Resort: Starts" << endl;
-            DumpHints( *this, aHtEnd );
+            DumpHints( m_HintStarts, m_HintEnds );
 #endif
 #endif
-            SwpHtStart::Remove( i );
-            SwpHtStart::Insert( pHt );
-            pHt = (*this)[i];
+            m_HintStarts.Remove( i );
+            m_HintStarts.Insert( pHt );
+            pHt = m_HintStarts[i];
             if ( pHt != pLast )
                 --i;
-            bResort = TRUE;
+            bResort = true;
         }
         pLast = pHt;
     }
 
     pLast = 0;
-    for( i = 0; i < aHtEnd.Count(); ++i )
+    for ( i = 0; i < m_HintEnds.Count(); ++i )
     {
-        const SwTxtAttr *pHt = aHtEnd[i];
+        const SwTxtAttr *pHt = m_HintEnds[i];
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             aDbstream << "Resort: Ends" << endl;
-            DumpHints( *this, aHtEnd );
+            DumpHints( m_HintStarts, m_HintEnds );
 #endif
 #endif
-            aHtEnd.Remove( i );
-            aHtEnd.Insert( pHt );
-            pHt = aHtEnd[i]; // normalerweise == pLast
+            m_HintEnds.Remove( i );
+            m_HintEnds.Insert( pHt );
+            pHt = m_HintEnds[i]; // normalerweise == pLast
             // Wenn die Unordnung etwas groesser ist (24200),
             // muessen wir Position i erneut vergleichen.
             if ( pLast != pHt )
                 --i;
-            bResort = TRUE;
+            bResort = true;
         }
         pLast = pHt;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     aDbstream << "Resorted:" << endl;
-    DumpHints( *this, aHtEnd );
+    DumpHints( m_HintStarts, m_HintEnds );
 #endif
 #endif
     return bResort;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: convert.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 
 
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <modcfg.hxx>
 #include <svx/htmlmode.hxx>
@@ -141,14 +138,14 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     aRepeatHeaderAfterFT    (this),
     aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
 
+    aOptionsFL      (this, SW_RES(FL_OPTIONS)),
     aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
     aBorderCB       (this, SW_RES(CB_BORDER)),
-    aOptionsFL      (this, SW_RES(FL_OPTIONS)),
+    aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
 
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP)),
-    aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif

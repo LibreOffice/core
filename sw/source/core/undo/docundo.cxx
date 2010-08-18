@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docundo.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <svx/svdmodel.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <doc.hxx>
@@ -112,6 +110,10 @@ bool SwDoc::IsUndoNoResetModified() const
 void SwDoc::DoUndo(bool bUn)
 {
     mbUndo = bUn;
+
+    SdrModel* pSdrModel = GetDrawModel();
+    if( pSdrModel )
+        pSdrModel->EnableUndo(bUn);
 }
 
 bool SwDoc::DoesUndo() const
@@ -198,7 +200,7 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     USHORT nEnde = UNDO_ACTION_LIMIT;
 
 // nur zum Testen der neuen DOC-Member
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 {
     SwUndoId nId = UNDO_EMPTY;
     USHORT nUndosCnt = 0, nSttEndCnt = 0;
@@ -546,7 +548,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
     pUndoEnd->SetSttOffset( nSize );
 
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         USHORT nEndCnt = 1, nCnt = pUndos->Count();
         SwUndoId nTmpId = UNDO_EMPTY;
@@ -674,22 +676,27 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
                 int nTmpPos = nPos + pUndoStart->GetEndOffset();
                 int nSubstitute = -1;
 
-                SwUndo * pTmpUndo;
-                do
+                // --> OD 2009-09-30 #i105457#
+                if ( nTmpPos > 0 )
+                // <--
                 {
-                    nTmpPos--;
-                    pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
+                    SwUndo * pTmpUndo;
+                    do
+                    {
+                        nTmpPos--;
+                        pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
 
-                    if (pTmpUndo->GetEffectiveId() > UNDO_END)
-                        nSubstitute = nTmpPos;
-                }
-                while (nSubstitute < 0 && nTmpPos > nPos);
+                        if (pTmpUndo->GetEffectiveId() > UNDO_END)
+                            nSubstitute = nTmpPos;
+                    }
+                    while (nSubstitute < 0 && nTmpPos > nPos);
 
-                if (nSubstitute >= 0)
-                {
-                    SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
-                    nId = pSubUndo->GetEffectiveId();
-                    sStr = pSubUndo->GetComment();
+                    if (nSubstitute >= 0)
+                    {
+                        SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
+                        nId = pSubUndo->GetEffectiveId();
+                        sStr = pSubUndo->GetComment();
+                    }
                 }
             }
             else

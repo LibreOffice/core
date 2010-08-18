@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chardlg.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +38,11 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/flstitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -244,8 +241,8 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     ::FillCharStyleListBox(aNotVisitedLB, pView->GetDocShell());
 
     TargetList* pList = new TargetList;
-    const SfxFrame* pFrame = pView->GetViewFrame()->GetTopFrame();
-    pFrame->GetTargetList(*pList);
+    const SfxFrame& rFrame = pView->GetViewFrame()->GetTopFrame();
+    rFrame.GetTargetList(*pList);
     USHORT nCount = (USHORT)pList->Count();
     if( nCount )
     {
@@ -322,9 +319,16 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
 
 BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
-    String sURL = aURLED.GetText();
-    if(sURL.Len())
+   ::rtl::OUString sURL = aURLED.GetText();
+   if(sURL.getLength())
+    {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
+        // #i100683# file URLs should be normalized in the UI
+        static const sal_Char* pFile = "file:";
+       sal_Int32 nLength = ((sal_Int32)sizeof(pFile)-1);
+       if( sURL.copy(0, nLength ).equalsAsciiL( pFile, nLength ))
+            sURL = URIHelper::simpleNormalizedMakeRelative(::rtl::OUString(), sURL);
+    }
 
     SwFmtINetFmt aINetFmt(sURL, aTargetFrmLB.GetText());
     aINetFmt.SetName(aNameED.GetText());

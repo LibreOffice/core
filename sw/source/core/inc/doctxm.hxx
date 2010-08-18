@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doctxm.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _DOCTXM_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 #include <tox.hxx>
 #include <section.hxx>
@@ -99,7 +96,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     SwTxtFmtColl* GetTxtFmtColl( USHORT nLevel );
 
 public:
-    SwTOXBaseSection( const SwTOXBase& rBase );
+    SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
     virtual ~SwTOXBaseSection();
 
     // OD 19.03.2003 #106329# - add parameter <_bNewTOX> in order to distinguish

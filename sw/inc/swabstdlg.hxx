@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swabstdlg.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +73,7 @@ class SwForm;
 struct CurTOXType;
 class SwTOXDescription;
 class SwTOXBase;
-class SwSection;
+class SwSectionData;
 struct SwDBData;
 class SwField;
 class Printer;
@@ -197,7 +194,7 @@ public:
 class AbstractInsertSectionTabDialog : public VclAbstractDialog  //add for SwInsertSectionTabDialog
 {
 public:
-    virtual void     SetSection(const SwSection& rSect) = 0;
+    virtual void     SetSectionData(SwSectionData const& rSect) = 0;
 };
 
 class AbstractSwWordCountDialog : public VclAbstractDialog

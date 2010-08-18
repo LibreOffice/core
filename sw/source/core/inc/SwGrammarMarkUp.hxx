@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwGrammarMarkUp.hxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,8 +69,6 @@ public:
     /* getSentenceEnd returns the first start position of a sentence
        which is greater than the given parameter */
     xub_StrLen getSentenceEnd( xub_StrLen nPos );
-    /* removeSentence removes all start positions in the given range */
-    void removeSentence(xub_StrLen nStart, xub_StrLen nLength );
 };
 
 #endif

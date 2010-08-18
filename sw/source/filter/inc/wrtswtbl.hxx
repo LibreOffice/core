@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtswtbl.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,9 @@
 
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
+
+#include <swdllapi.h>
 
 class Color;
 class SwTableBox;
@@ -260,7 +259,7 @@ protected:
 
     BOOL bRelWidths : 1;        // Breiten relativ ausgeben?
     BOOL bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BOOL bGetLineHeightCalled : 1;
 #endif
 
@@ -299,6 +298,13 @@ protected:
 
 public:
     static long GetBoxWidth( const SwTableBox *pBox );
+
+    USHORT GetRawWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetAbsWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetRelWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetPrcWidth( USHORT nCol, USHORT nColSpan ) const;
+
+    long GetAbsHeight( long nRawWidth, USHORT nRow, USHORT nRowSpan ) const;
 protected:
 
     long GetLineHeight( const SwTableLine *pLine );
@@ -309,12 +315,6 @@ protected:
     USHORT GetLeftSpace( USHORT nCol ) const;
     USHORT GetRightSpace( USHORT nCol, USHORT nColSpan ) const;
 
-    USHORT GetRawWidth( USHORT nCol, USHORT nColSpan ) const;
-    USHORT GetAbsWidth( USHORT nCol, USHORT nColSpan ) const;
-    USHORT GetRelWidth( USHORT nCol, USHORT nColSpan ) const;
-    USHORT GetPrcWidth( USHORT nCol, USHORT nColSpan ) const;
-
-    long GetAbsHeight( long nRawWidth, USHORT nRow, USHORT nRowSpan ) const;
 
 public:
     SwWriteTable( const SwTableLines& rLines, long nWidth, USHORT nBWidth,

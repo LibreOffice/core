@@ -8,9 +8,9 @@
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltLeft" toolbar:helpid="10963"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltRight" toolbar:helpid="10964"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionDepthFloater" toolbar:helpid="10965"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionDirectionFloater" toolbar:helpid="10966"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionLightingFloater" toolbar:helpid="10967"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionSurfaceFloater" toolbar:helpid="10968"/>
- <toolbar:toolbaritem xlink:href=".uno:Extrusion3DColor" toolbar:helpid="10969"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionDepthFloater" toolbar:helpid="10965" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionDirectionFloater" toolbar:helpid="10966" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionLightingFloater" toolbar:helpid="10967" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionSurfaceFloater" toolbar:helpid="10968" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:Extrusion3DColor" toolbar:helpid="10969" toolbar:style="dropdownonly"/>
 </toolbar:toolbar>

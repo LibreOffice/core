@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.74 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,16 +39,12 @@ USE_DEFFILE=TRUE
 
 # --- Allgemein -----------------------------------------------------------
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=40
-.ENDIF
-
 sw_res_files= \
     $(SRS)$/app.srs          \
     $(SRS)$/dialog.srs       \
     $(SRS)$/chrdlg.srs       \
     $(SRS)$/config.srs       \
-    $(SRS)$/dbui.srs	    \
+    $(SRS)$/dbui.srs         \
     $(SRS)$/dochdl.srs       \
     $(SRS)$/docvw.srs        \
     $(SRS)$/envelp.srs       \
@@ -68,7 +60,7 @@ sw_res_files= \
     $(SRS)$/smartmenu.srs    \
     $(SRS)$/table.srs        \
     $(SRS)$/uiview.srs       \
-    $(SRS)$/undo.srs        \
+    $(SRS)$/undo.srs         \
     $(SRS)$/unocore.srs      \
     $(SRS)$/utlui.srs        \
     $(SRS)$/web.srs          \
@@ -102,11 +94,12 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 # dynamic libraries
 SHL1STDLIBS+= \
     $(LNGLIB) \
+    $(SVXCORELIB) \
+    $(EDITENGLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
     $(BASICLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(SVTOOLLIB) \
@@ -125,7 +118,8 @@ SHL1STDLIBS+= \
     $(SALLIB) \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
-    $(I18NUTILLIB)	\
+    $(I18NUTILLIB)
+SHL1STDLIBS+= \
     $(AVMEDIALIB)
 
 .IF "$(GUI)"=="WNT"
@@ -140,13 +134,14 @@ DEFLIB1NAME=swall $(SWLIBFILES:b)
 
 SHL2TARGET= swd$(DLLPOSTFIX)
 SHL2IMPLIB= swdimp
-SHL2VERSIONMAP= swd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=       $(SHL2TARGET)
 
 SHL2STDLIBS= \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
             $(SOTLIB) \
@@ -162,7 +157,7 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/detreg.obj \
         $(SLO)$/iodetect.obj
 
-.IF "$(product)"==""
+.IF "$(dbgutil)"!=""
 SHL2OBJS+=  \
         $(SLO)$/errhdl.obj
 .ENDIF
@@ -179,6 +174,8 @@ DEF3NAME=       $(SHL3TARGET)
 
 SHL3STDLIBS= \
         $(ISWLIB) \
+            $(SVXCORELIB) \
+            $(EDITENGLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -188,6 +185,7 @@ SHL3STDLIBS= \
             $(SVLLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
+            $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\
@@ -255,7 +253,6 @@ LIB3OBJFILES = \
     $(SLO)$/glossary.obj \
     $(SLO)$/inpdlg.obj \
     $(SLO)$/insfnote.obj \
-    $(SLO)$/insrc.obj \
     $(SLO)$/instable.obj \
     $(SLO)$/insrule.obj \
     $(SLO)$/javaedit.obj \
@@ -318,9 +315,10 @@ DEF4NAME=$(SHL4TARGET)
 
 SHL4STDLIBS= \
     $(ISWLIB) \
-    $(SVXLIB) \
+    $(SVXCORELIB) \
+       $(EDITENGLIB) \
+    $(MSFILTERLIB) \
     $(SFXLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -336,6 +334,43 @@ SHL4STDLIBS= \
     $(CPPUHELPERLIB) \
     $(SALLIB) \
     $(ICUUCLIB) \
+    $(BASICLIB)     \
     $(I18NUTILLIB)
+
+.IF "$(ENABLE_VBA)" == "YES"
+#target vba
+TARGET_VBA=vbaswobj
+SHL5TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
+SHL5IMPLIB=     i$(TARGET_VBA)
+
+SHL5VERSIONMAP=$(SOLARENV)/src/component.map
+SHL5DEF=$(MISC)$/$(SHL5TARGET).def
+DEF5NAME=$(SHL5TARGET)
+SHL5STDLIBS= \
+                $(ISWLIB) \
+                $(CPPUHELPERLIB) \
+                $(VCLLIB) \
+                $(CPPULIB) \
+                $(COMPHELPERLIB) \
+                $(SVLIB) \
+                $(UNOTOOLSLIB) \
+                $(TOOLSLIB) \
+                $(SALLIB)\
+                $(VBAHELPERLIB) \
+                $(BASICLIB)     \
+                $(SFXLIB)       \
+                $(SVXLIB)       \
+                $(SVTOOLLIB)    \
+                $(SVLLIB) \
+                $(VCLLIB) \
+                $(TKLIB) \
+                $(I18NISOLANGLIB) \
+                $(EDITENGLIB) \
+                $(SVXCORELIB) \
+                $(MSFILTERLIB)
+
+SHL5DEPN=$(SHL1TARGETN)
+SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib
+.ENDIF # .IF "$(ENABLE_VBA)" == "YES"
 
 .INCLUDE :  target.mk

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: regionsw.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,38 +30,26 @@
 #include <hintids.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/svtreebx.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
-#ifndef _CONDEDIT_HXX
 #include <condedit.hxx>
-#endif
 #include <section.hxx>
 #include <fmtclds.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
 #include <numberingtypelistbox.hxx>
-#include "svx/frmdiritem.hxx"
+#include <editeng/frmdiritem.hxx>
 #include <vcl/image.hxx>
 #include <svx/paraprev.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 
 class SwWrtShell;
@@ -76,91 +61,11 @@ namespace sfx2
     class FileDialogHelper;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-class SectRepr
-{
-    SwSection               aSection;
-    SwFmtCol                aCol;
-    SvxBrushItem            aBrush;
-    SwFmtFtnAtTxtEnd        aFtnNtAtEnd;
-    SwFmtEndAtTxtEnd        aEndNtAtEnd;
-    SwFmtNoBalancedColumns  aBalance;
-    SvxFrameDirectionItem   aFrmDirItem;
-    SvxLRSpaceItem          aLRSpaceItem;
-    USHORT                  nArrPos;
-    USHORT                  nColumn;
-    BOOL                    bContent    : 1; //zeigt an, ob evtl. Textinhalt im Bereich ist
-    BOOL                    bSelected   : 1; //fuer Multiselektion erst markieren, dann mit der TreeListBox arbeiten!
-    ::com::sun::star::uno::Sequence <sal_Int8 >     aTempPasswd;
-public:
-    SectRepr(USHORT nPos, SwSection& rSect);
-    BOOL    operator ==(SectRepr& rSectRef) const
-            {return nArrPos==rSectRef.GetArrPos();}
-
-    BOOL    operator <(SectRepr& rSectRef) const
-            {return nArrPos<rSectRef.GetArrPos();}
-
-    SwSection&          GetSection()        { return aSection; }
-    SwFmtCol&           GetCol()            { return aCol; }
-    SvxBrushItem&       GetBackground()     { return aBrush; }
-    SwFmtFtnAtTxtEnd&   GetFtnNtAtEnd()     { return aFtnNtAtEnd; }
-    SwFmtEndAtTxtEnd&   GetEndNtAtEnd()     { return aEndNtAtEnd; }
-    SwFmtNoBalancedColumns& GetBalance()        { return aBalance; }
-    SvxFrameDirectionItem&  GetFrmDir()         { return aFrmDirItem; }
-    SvxLRSpaceItem&         GetLRSpace()        { return aLRSpaceItem; }
-
-    USHORT              GetArrPos() const {return nArrPos;}
-    const String&       GetCondition() const {return aSection.GetCondition();}
-    const String&       GetName() const { return aSection.GetName(); }
-    String              GetFile() const;
-    String              GetSubRegion() const;
-    void                SetFile( const String& rFile );
-    void                SetFilter( const String& rFilter );
-    void                SetSubRegion( const String& rSubRegion );
-
-    void                SetFilePasswd( const String& rPasswd )
-                        { aSection.SetLinkFilePassWd( rPasswd ); }
-    void                SetCondition( const String& rString )
-                        {aSection.SetCondition( rString);}
-    BOOL                IsCondHidden()const
-                        {return aSection.IsCondHidden();}
-    BOOL                IsHidden()const
-                        {return aSection.IsHidden();}
-    BOOL                IsProtect()const
-                        {return aSection.IsProtect();}
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    BOOL                 IsEditInReadonly()const
-                        {return aSection.IsEditInReadonly();}
-    void                SetEditInReadonly(BOOL bFlag = TRUE)
-                        {aSection.SetEditInReadonly(bFlag);}
-    // <--
-    void                SetHidden(BOOL bFlag = TRUE)
-                        {aSection.SetHidden(bFlag);}
-    void                SetCondHidden(BOOL bFlag = TRUE)
-                        {aSection.SetCondHidden(bFlag);}
-    void                SetProtect(BOOL bFlag = TRUE)
-                        {aSection.SetProtect(bFlag);}
-    BOOL                IsContent(){return bContent;}
-    void                SetContent(BOOL bValue){bContent = bValue;}
-    void                SetSectionType(SectionType eSectionType) {aSection.SetType(eSectionType);}
-    SectionType         GetSectionType(){return aSection.GetType();}
-
-    void                SetSelected(){bSelected = TRUE;}
-    BOOL                IsSelected() const {return bSelected;}
-
-
-    const ::com::sun::star::uno::Sequence <sal_Int8 >& GetPasswd() const {return aSection.GetPasswd();}
-    ::com::sun::star::uno::Sequence <sal_Int8 >&    GetTempPasswd() {return aTempPasswd;}
-    void                                            SetTempPasswd(const ::com::sun::star::uno::Sequence <sal_Int8 >& aPasswd)    {aTempPasswd = aPasswd;}
-};
-
 /*************************************************************************
     Dialog "Bereiche bearbeiten"
 *************************************************************************/
 
+class SectRepr;
 typedef SectRepr* SectReprPtr;
 SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0, 4 )
 
@@ -179,6 +84,7 @@ class SwEditRegionDlg : public SfxModalDialog
     PushButton      aFilePB;
     FixedText       aSubRegionFT;
     ComboBox        aSubRegionED;
+    bool            bSubRegionsFilled;
 
     FixedLine       aProtectFL;
     TriStateBox     aProtectCB;
@@ -239,6 +145,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( FileNameHdl, Edit* );
     DECL_LINK( DDEHdl, CheckBox* );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
 
     BOOL CheckPasswd(CheckBox* pBox = 0);
 
@@ -307,8 +214,6 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( FileSearchHdl, PushButton* );
     DECL_LINK( DDEHdl, CheckBox* );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
-
-    void            FillList(  const SwSectionFmt* pFmt = 0 );
 
 public:
     SwInsertSectionTabPage(Window *pParent, const SfxItemSet &rAttrSet);
@@ -400,7 +305,8 @@ public:
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
     SwWrtShell&     rWrtSh;
-    SwSection*      pToInsertSection;
+    ::std::auto_ptr<SwSectionData> m_pSectionData;
+
 protected:
     virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short   Ok();
@@ -408,8 +314,8 @@ public:
     SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog();
 
-    void        SetSection(const SwSection& rSect);
-    SwSection*  GetSection() { return pToInsertSection;}
+    void        SetSectionData(SwSectionData const& rSect);
+    SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
 /* -----------------21.05.99 13:07-------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optpage.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,8 +116,8 @@ class SwAddPrinterTabPage : public SfxTabPage
 {
     FixedLine       aFL1;
     CheckBox        aGrfCB;
-    CheckBox        aTabCB;
-    CheckBox        aDrawCB;
+//  CheckBox        aTabCB;
+//  CheckBox        aDrawCB;
     CheckBox        aCtrlFldCB;
     CheckBox        aBackgroundCB;
     CheckBox        aBlackFontCB;
@@ -132,7 +129,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     FixedLine       aFL2;
     CheckBox        aLeftPageCB;
     CheckBox        aRightPageCB;
-    CheckBox        aReverseCB;
+//  CheckBox        aReverseCB;
     CheckBox        aProspectCB;
     CheckBox        aProspectCB_RTL;
 
@@ -145,7 +142,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     FixedLine        aFL3;
     FixedLine        aFL4;
     CheckBox        aPrintEmptyPagesCB;
-    CheckBox        aSingleJobsCB;
+//    CheckBox        aSingleJobsCB;
     CheckBox        aPaperFromSetupCB;
     FixedText       aFaxFT;
     ListBox         aFaxLB;
@@ -466,7 +463,7 @@ public:
  TabPage Testeinstellungen fuer SW
 --------------------------------------------------------- */
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 class SwTestTabPage : public SfxTabPage
 {

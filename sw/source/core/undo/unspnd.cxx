@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unspnd.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include "swtable.hxx"
 #include "ndtxt.hxx"
 #include "swundo.hxx"           // fuer die UndoIds
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include "undobj.hxx"
@@ -66,7 +63,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     {
         pHistory = new SwHistory;
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nNode, 0,
-                            pTxtNd->GetTxt().Len(), FALSE );
+                            pTxtNd->GetTxt().Len(), false );
         if( !pHistory->Count() )
             DELETEZ( pHistory );
     }
@@ -155,7 +152,7 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
                 rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
 
                 pDoc->RstTxtAttrs( rPam, TRUE );
-                pHistory->TmpRollback( pDoc, 0, FALSE );
+                pHistory->TmpRollback( pDoc, 0, false );
             }
         }
     }

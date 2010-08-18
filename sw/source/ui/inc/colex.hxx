@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: colex.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #define _COLEX_HXX
 
 #include <svx/pagectrl.hxx>
+#include <editeng/paperinf.hxx>
 #include "swdllapi.h"
 #include <fmtclds.hxx>
 #include "frmatr.hxx"
@@ -46,7 +44,7 @@ class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 public:
     SwPageExample(Window* pPar, const ResId& rResId ) :
                                 SvxPageWindow(pPar, rResId )
-                                {SetSize(Size(11907, 16433));/*DIN A4*/}
+                                {SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));/*DIN A4*/}
 
     void UpdateExample( const SfxItemSet& rSet );
 };

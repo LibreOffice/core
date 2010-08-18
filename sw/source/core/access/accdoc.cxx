@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accdoc.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,8 +155,10 @@ uno::Reference< XAccessible> SAL_CALL
     if( mpChildWin  )
     {
         CHECK_FOR_DEFUNC( XAccessibleContext )
-        if( nIndex == GetChildCount() )
+        if ( nIndex == GetChildCount( *(GetMap()) ) )
+        {
             return mpChildWin->GetAccessible();
+        }
     }
 
     return SwAccessibleContext::getAccessibleChild( nIndex );

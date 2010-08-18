@@ -2,7 +2,7 @@
 -o sw.ConditionalParagraphStyle
 -o sw.PageStyle
 -o sw.ParagraphStyle
--o sw.SwAccessibleDocumentPageView
+#i111197 -o sw.SwAccessibleDocumentPageView
 #i86751 -o sw.SwAccessibleDocumentView
 -o sw.SwAccessibleEndnoteView
 -o sw.SwAccessibleFooterView
@@ -12,8 +12,8 @@
 -o sw.SwAccessibleParagraphView
 -o sw.SwAccessibleTableCellView
 #i85634 -o sw.SwAccessibleTableView
--o sw.SwAccessibleTextEmbeddedObject
--o sw.SwAccessibleTextFrameView
+#i111178 -o sw.SwAccessibleTextEmbeddedObject
+#i111178 -o sw.SwAccessibleTextFrameView
 -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
 -o sw.SwXAutoTextEntry
@@ -41,14 +41,14 @@
 #i85640 -o sw.SwXMailMerge
 -o sw.SwXModule
 -o sw.SwXNumberingRules
--o sw.SwXParagraph
+#i103696 -o sw.SwXParagraph
 -o sw.SwXParagraphEnumeration
 -o sw.SwXPrintSettings
 -o sw.SwXPropertySet
 -o sw.SwXPropertySetInfo
 -o sw.SwXReferenceMark
 -o sw.SwXReferenceMarks
--o sw.SwXShape
+#i111190 -o sw.SwXShape
 -o sw.SwXStyleFamilies
 -o sw.SwXStyleFamily
 -o sw.SwXTableCellText
@@ -67,7 +67,7 @@
 -o sw.SwXTextFrameText
 -o sw.SwXTextGraphicObject
 -o sw.SwXTextGraphicObjects
--o sw.SwXTextPortion
+#i103696 -o sw.SwXTextPortion
 -o sw.SwXTextPortionEnumeration
 -o sw.SwXTextRange
 -o sw.SwXTextRanges
@@ -83,7 +83,7 @@
 -o sw.SwXViewSettings
 -o sw.XMLContentExporter
 #i23394 -o sw.XMLContentImporter
--o sw.XMLExporter
+#i111194-o sw.XMLExporter
 -o sw.XMLImporter
 #i23394 -o sw.XMLMetaExporter
 -o sw.XMLMetaImporter

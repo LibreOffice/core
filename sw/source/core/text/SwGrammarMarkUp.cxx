@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwGrammarMarkUp.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,21 +134,6 @@ void SwGrammarMarkUp::setSentence( xub_StrLen nStart )
         ++pIter;
     if( pIter == maSentence.end() || *pIter > nStart )
         maSentence.insert( pIter, nStart );
-}
-
-void SwGrammarMarkUp::removeSentence(xub_StrLen nStart, xub_StrLen nLength )
-{
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter < nStart )
-        ++pIter;
-    if( nLength == STRING_LEN )
-        nStart = STRING_LEN;
-    else
-        nStart += nLength;
-    std::vector< xub_StrLen >::iterator pLast = pIter;
-    while( pLast != maSentence.end() && *pLast < nStart )
-        ++pLast;
-    maSentence.erase( pIter, pLast );
 }
 
 xub_StrLen SwGrammarMarkUp::getSentenceStart( xub_StrLen nPos )

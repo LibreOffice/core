@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
         access.src \
-        docvw.src
+                docvw.src \
+                annotation.src
 
 SLOFILES =  \
         $(SLO)$/edtdd.obj \
@@ -55,8 +52,16 @@ SLOFILES =  \
         $(SLO)$/edtwin3.obj \
         $(SLO)$/romenu.obj \
         $(SLO)$/srcedtw.obj \
-        $(SLO)$/postit.obj \
-        $(SLO)$/PostItMgr.obj 
+                $(SLO)$/PostItMgr.obj \
+                $(SLO)$/frmsidebarwincontainer.obj \
+                $(SLO)$/AnchorOverlayObject.obj \
+                $(SLO)$/ShadowOverlayObject.obj \
+                $(SLO)$/SidebarWin.obj \
+                $(SLO)$/SidebarWinAcc.obj \
+                $(SLO)$/AnnotationWin.obj \
+                $(SLO)$/AnnotationMenuButton.obj \
+                $(SLO)$/SidebarTxtControl.obj \
+                $(SLO)$/SidebarTxtControlAcc.obj
 
 # --- Tagets -------------------------------------------------------
 

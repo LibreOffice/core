@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pardlg.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,15 +35,15 @@
 
 #include "hintids.hxx"
 #include <svx/htmlmode.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #ifndef _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include "docsh.hxx"
 #include "wrtsh.hxx"
 #include "frmatr.hxx"
@@ -62,8 +59,8 @@
 #include "chrdlg.hrc"
 #include "poolfmt.hrc"
 #include <svx/svxids.hrc>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>

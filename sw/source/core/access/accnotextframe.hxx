@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accnotextframe.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,10 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public ::com::sun::star::accessibility::XAccessibleImage
 {
     SwDepend        aDepend;
-    ::rtl::OUString sDesc;
+    // --> OD 2009-07-14 #i73249#
+    ::rtl::OUString msTitle;
+    // <--
+    ::rtl::OUString msDesc;
 
 protected:
 
@@ -56,6 +56,13 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XAccessibleContext  ==============================================
+
+    // --> OD 2009-07-14 #i73249#
+    /// Return the object's current name.
+    virtual ::rtl::OUString SAL_CALL
+        getAccessibleName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+    // <--
 
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL

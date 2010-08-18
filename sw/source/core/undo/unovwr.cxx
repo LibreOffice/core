@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unovwr.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +94,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
             pHistory = new SwHistory;
         SwRegHistory aRHst( *pTxtNd, pHistory );
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
-                            nTxtNdLen, FALSE );
+                            nTxtNdLen, false );
         rPos.nContent++;
         bInsChar = FALSE;
     }
@@ -105,13 +102,14 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
     pTxtNd->SetIgnoreDontExpand( TRUE );
 
-    pTxtNd->Insert( cIns, rPos.nContent );
+    pTxtNd->InsertText( cIns, rPos.nContent,
+            IDocumentContentOperations::INS_EMPTYEXPAND );
     aInsStr.Insert( cIns );
 
     if( !bInsChar )
     {
         const SwIndex aTmpIndex( rPos.nContent, -2 );
-        pTxtNd->Erase( aTmpIndex, 1 );
+        pTxtNd->EraseText( aTmpIndex, 1 );
     }
     pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
@@ -143,7 +141,7 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     CharClass& rCC = GetAppCharClass();
 
     // befrage das einzufuegende Charakter
-    if( ( CH_TXTATR_BREAKWORD == cIns && CH_TXTATR_INWORD == cIns ) ||
+    if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( String( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
         return FALSE;
@@ -183,13 +181,14 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     BOOL bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
     pDelTxtNd->SetIgnoreDontExpand( TRUE );
 
-    pDelTxtNd->Insert( cIns, rPos.nContent );
+    pDelTxtNd->InsertText( cIns, rPos.nContent,
+            IDocumentContentOperations::INS_EMPTYEXPAND );
     aInsStr.Insert( cIns );
 
     if( !bInsChar )
     {
         const SwIndex aTmpIndex( rPos.nContent, -2 );
-        pDelTxtNd->Erase( aTmpIndex, 1 );
+        pDelTxtNd->EraseText( aTmpIndex, 1 );
     }
     pDelTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
@@ -225,7 +224,7 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
     if( aInsStr.Len() > aDelStr.Len() )
     {
         rIdx += aDelStr.Len();
-        pTxtNd->Erase( rIdx, aInsStr.Len() - aDelStr.Len() );
+        pTxtNd->EraseText( rIdx, aInsStr.Len() - aDelStr.Len() );
         rIdx = nSttCntnt;
     }
 
@@ -242,9 +241,9 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
         {
             // einzeln, damit die Attribute stehen bleiben !!!
             *pTmpStr = aDelStr.GetChar( n );
-            pTxtNd->Insert( aTmpStr, rIdx /*???, SETATTR_NOTXTATRCHR*/ );
+            pTxtNd->InsertText( aTmpStr, rIdx /*???, SETATTR_NOTXTATRCHR*/ );
             rIdx -= 2;
-            pTxtNd->Erase( rIdx, 1 );
+            pTxtNd->EraseText( rIdx, 1 );
             rIdx += 2;
         }
         pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
@@ -254,7 +253,7 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
     {
         if( pTxtNd->GetpSwpHints() )
             pTxtNd->ClearSwpHintsArr( false );
-        pHistory->TmpRollback( pDoc, 0, FALSE );
+        pHistory->TmpRollback( pDoc, 0, false );
     }
 
     if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
@@ -312,11 +311,12 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
         // einzeln, damit die Attribute stehen bleiben !!!
-        pTxtNd->Insert( aInsStr.GetChar( n ), rIdx );
+        pTxtNd->InsertText( aInsStr.GetChar( n ), rIdx,
+                IDocumentContentOperations::INS_EMPTYEXPAND );
         if( n < aDelStr.Len() )
         {
             rIdx -= 2;
-            pTxtNd->Erase( rIdx, 1 );
+            pTxtNd->EraseText( rIdx, 1 );
             rIdx += n+1 < aDelStr.Len() ? 2 : 1;
         }
     }
@@ -420,7 +420,7 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.pLastUndoObj = this;
 }
 
-void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
+void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
                     xub_StrLen nStart, xub_StrLen nLen,
                     uno::Sequence <sal_Int32>& rOffsets )
 {
@@ -485,7 +485,7 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
                 pNew->pHistory = new SwHistory;
                 SwRegHistory aRHst( rTNd, pNew->pHistory );
                 pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
-                        pNew->nNdIdx, 0, rTNd.GetTxt().Len(), FALSE );
+                        pNew->nNdIdx, 0, rTNd.GetTxt().Len(), false );
             }
             break;
         }
@@ -511,7 +511,7 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         {
             if( pTNd->GetpSwpHints() )
                 pTNd->ClearSwpHintsArr( false );
-            pHistory->TmpRollback( &rDoc, 0, FALSE );
+            pHistory->TmpRollback( &rDoc, 0, false );
             pHistory->SetTmpEnd( pHistory->Count() );
         }
     }

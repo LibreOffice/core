@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writer.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +30,14 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <shellio.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
@@ -62,19 +58,22 @@ DECLARE_TABLE( SwBookmarkNodeTable, SvPtrarr* )
 
 struct Writer_Impl
 {
+    SvStream * m_pStream;
+
     SvStringsSortDtor *pSrcArr, *pDestArr;
     SvPtrarr* pFontRemoveLst, *pBkmkArr;
     SwBookmarkNodeTable* pBkmkNodePos;
 
-    Writer_Impl( const SwDoc& rDoc );
+    Writer_Impl();
     ~Writer_Impl();
 
     void RemoveFontList( SwDoc& rDoc );
     void InsertBkmk( const ::sw::mark::IMark& rBkmk );
 };
 
-Writer_Impl::Writer_Impl( const SwDoc& /*rDoc*/ )
-    : pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
+Writer_Impl::Writer_Impl()
+    : m_pStream(0)
+    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
 {
 }
 
@@ -145,7 +144,8 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
  */
 
 Writer::Writer()
-    : pImpl(0), pStrm(0), pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
+    : m_pImpl(new Writer_Impl)
+    , pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -168,9 +168,11 @@ const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { re
 
 void Writer::ResetWriter()
 {
-    if( pImpl && pImpl->pFontRemoveLst )
-        pImpl->RemoveFontList( *pDoc );
-    delete pImpl, pImpl = 0;
+    if (m_pImpl->pFontRemoveLst)
+    {
+        m_pImpl->RemoveFontList( *pDoc );
+    }
+    m_pImpl.reset(new Writer_Impl);
 
     if( pCurPam )
     {
@@ -181,7 +183,6 @@ void Writer::ResetWriter()
     pCurPam = 0;
     pOrigFileName = 0;
     pDoc = 0;
-    pStrm = 0;
 
     bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -223,7 +224,7 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 
 
 SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
-                        BOOL bNodesArray ) const
+                        BOOL bNodesArray )
 {
     SwNodes* pNds = bNodesArray ? &rDoc.GetNodes() : (SwNodes*)rDoc.GetUndoNds();
 
@@ -231,7 +232,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
     {
-        ASSERT( !this, "An StartPos kein ContentNode mehr" );
+        ASSERT( false, "An StartPos kein ContentNode mehr" );
     }
 
     SwPaM* pNew = new SwPaM( aStt );
@@ -240,7 +241,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
     {
-        ASSERT( !this, "An StartPos kein ContentNode mehr" );
+        ASSERT( false, "An StartPos kein ContentNode mehr" );
     }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -250,13 +251,14 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 /////////////////////////////////////////////////////////////////////////////
 
 // Stream-spezifisches
-#ifndef PRODUCT
 SvStream& Writer::Strm()
 {
-    ASSERT( pStrm, "Oh-oh. Dies ist ein Storage-Writer. Gleich knallts!" );
-    return *pStrm;
+    ASSERT( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
+    return *m_pImpl->m_pStream;
 }
-#endif
+
+void Writer::SetStream(SvStream *const pStream)
+{ m_pImpl->m_pStream = pStream; }
 
 
 SvStream& Writer::OutHex( SvStream& rStrm, ULONG nHex, BYTE nLen )
@@ -318,10 +320,9 @@ ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
         return nResult;
     }
 
-    pStrm = &rStrm;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
-    pImpl = new Writer_Impl( *pDoc );
+    m_pImpl->m_pStream = &rStrm;
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
@@ -340,10 +341,6 @@ ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
     // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
     return Write( rPam, *rMed.GetOutStream(), pFileName );
-
-    // return IsStgWriter()
-    //            ? Write( rPam, rMed.GetStorage(), pFileName )
-    //          : Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
 ULONG Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
@@ -376,20 +373,20 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
             INET_PROT_NEWS >= aTargetUrl.GetProtocol() ) )
         return bRet;
 
-    if( pImpl->pSrcArr )
+    if (m_pImpl->pSrcArr)
     {
         // wurde die Datei schon verschoben
         USHORT nPos;
-        if( pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
+        if (m_pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
         {
-            rFileNm = *(*pImpl->pDestArr)[ nPos ];
+            rFileNm = *(*m_pImpl->pDestArr)[ nPos ];
             return TRUE;
         }
     }
     else
     {
-        pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
-        pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
+        m_pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
+        m_pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
     }
 
     String *pSrc = new String( rFileNm );
@@ -408,8 +405,8 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 
     if( bRet )
     {
-        pImpl->pSrcArr->Insert( pSrc );
-        pImpl->pDestArr->Insert( pDest );
+        m_pImpl->pSrcArr->Insert( pSrc );
+        m_pImpl->pDestArr->Insert( pDest );
         rFileNm = *pDest;
     }
     else
@@ -423,9 +420,6 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 
 void Writer::PutNumFmtFontsInAttrPool()
 {
-    if( !pImpl )
-        pImpl = new Writer_Impl( *pDoc );
-
     // dann gibt es noch in den NumRules ein paar Fonts
     // Diese in den Pool putten. Haben sie danach einen RefCount > 1
     // kann es wieder entfernt werden - ist schon im Pool
@@ -465,9 +459,6 @@ void Writer::PutNumFmtFontsInAttrPool()
 
 void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 {
-    if( !pImpl )
-        pImpl = new Writer_Impl( *pDoc );
-
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
     {
@@ -482,9 +473,6 @@ void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 
 void Writer::PutCJKandCTLFontsInAttrPool()
 {
-    if( !pImpl )
-        pImpl = new Writer_Impl( *pDoc );
-
     SfxItemPool& rPool = pDoc->GetAttrPool();
     _AddFontItems( rPool, RES_CHRATR_CJK_FONT );
     _AddFontItems( rPool, RES_CHRATR_CTL_FONT );
@@ -521,11 +509,13 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
         rPool.Remove( *pItem );
     else
     {
-        if( !pImpl->pFontRemoveLst )
-            pImpl->pFontRemoveLst = new SvPtrarr( 0, 10 );
+        if (!m_pImpl->pFontRemoveLst)
+        {
+            m_pImpl->pFontRemoveLst = new SvPtrarr( 0, 10 );
+        }
 
         void* p = (void*)pItem;
-        pImpl->pFontRemoveLst->Insert( p, pImpl->pFontRemoveLst->Count() );
+        m_pImpl->pFontRemoveLst->Insert( p, m_pImpl->pFontRemoveLst->Count() );
     }
 }
 
@@ -537,7 +527,9 @@ void Writer::CreateBookmarkTbl()
     for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getBookmarksBegin();
         ppBkmk != pMarkAccess->getBookmarksEnd();
         ++ppBkmk)
-            pImpl->InsertBkmk(**ppBkmk);
+    {
+        m_pImpl->InsertBkmk(**ppBkmk);
+    }
 }
 
 
@@ -548,7 +540,8 @@ USHORT Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     ASSERT( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
     ULONG nNd = rNd.GetIndex();
-    SvPtrarr* pArr = pImpl->pBkmkNodePos ? pImpl->pBkmkNodePos->Get( nNd ) : 0;
+    SvPtrarr* pArr = (m_pImpl->pBkmkNodePos) ?
+        m_pImpl->pBkmkNodePos->Get( nNd ) : 0;
     if( pArr )
     {
         // there exist some bookmarks, search now all which is in the range
@@ -594,11 +587,10 @@ ULONG StgWriter::WriteStream()
 
 ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 {
-    pStrm = 0;
+    SetStream(0);
     pStg = &rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
-    pImpl = new Writer_Impl( *pDoc );
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
@@ -615,12 +607,11 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
 ULONG StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
 {
-    pStrm = 0;
+    SetStream(0);
     pStg = 0;
     xStg = rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
-    pImpl = new Writer_Impl( *pDoc );
 
     // PaM kopieren, damit er veraendert werden kann
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );

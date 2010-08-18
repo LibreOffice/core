@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: init.cxx,v $
- * $Revision: 1.66.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,68 +30,61 @@
 #include <hintids.hxx>
 #include <tools/globname.hxx>
 #include <vcl/mapmod.hxx>
-#include <svx/xmlcnitm.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/nlbkitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/prszitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/brkitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/langitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/nhypitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/akrnitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
-#endif
-#include <svx/twolinesitem.hxx>
-#ifndef _SVX_SCRIPSPACEITEM_HXX
-#include <svx/scriptspaceitem.hxx>
-#endif
-#include <svx/hngpnctitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/xmlcnitm.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/nlbkitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/prszitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/nhypitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svx/swafopt.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/swafopt.hxx>
+#include <editeng/svxacorr.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/pgrditem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/transliterationwrapper.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <vcl/svapp.hxx>
-#include <fmthbsh.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -116,9 +106,7 @@
 #include <fmtautofmt.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcnct.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <fmtftntx.hxx>
 #include <fmtruby.hxx>
 #include <fmtautofmt.hxx>
@@ -137,9 +125,7 @@
 #include <doc.hxx>
 #include <acmplwrd.hxx>
 #include <fmtclbl.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <breakit.hxx>
 #include <checkit.hxx>
 #include <swcalwrp.hxx>
@@ -149,6 +135,9 @@
 #include <fmtfollowtextflow.hxx>
 // OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
+
+#include <fmtmeta.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -319,22 +308,22 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
-    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
+    { 0, 0 },                                           // RES_TXTATR_META
+    { 0, 0 },                                           // RES_TXTATR_METAFIELD
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
+    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
+    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
-    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY6,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY7,
 
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
     { 0, 0 },                                           // RES_TXTATR_FTN
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_SOFTHYPH
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_HARDBLANK
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY2
 
@@ -467,14 +456,18 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
-SwCalendarWrapper* pCalendarWrapper = 0;
+
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
 ::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
  *  void _InitCore()
  ******************************************************************************/
-
+salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
+{
+    static salhelper::SingletonRef<SwCalendarWrapper> aCalendarWrapper;
+    return &aCalendarWrapper;
+}
 void _InitCore()
 {
     SfxPoolItem* pItem;
@@ -540,19 +533,19 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
+    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
+    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] = new SwFmtFld;
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] = new SwFmtFlyCnt( 0 );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] = new SwFmtFtn;
-    aAttrTab[ RES_TXTATR_SOFTHYPH- POOLATTR_BEGIN ] = new SwFmtSoftHyph;
-    aAttrTab[ RES_TXTATR_HARDBLANK- POOLATTR_BEGIN ] = new SwFmtHardBlank( ' ', FALSE );
 
 // TextAttr - Dummies
+    aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY4 );
+    aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY3 );
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY1 );
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
-    aAttrTab[ RES_TXTATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY6 );
-    aAttrTab[ RES_TXTATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY7 );
 // TextAttr - Dummies
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
@@ -740,9 +733,9 @@ void _InitCore()
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
-    pAppCharClass = new CharClass(
-        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
-    pCalendarWrapper = new SwCalendarWrapper( xMSF );
+    /*pAppCharClass = new CharClass(
+        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));*/
+    //pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();
@@ -773,7 +766,6 @@ void _FinitCore()
     SwBreakIt::_Delete();
     delete pCheckIt;
     delete pAppCharClass;
-    delete pCalendarWrapper;
     delete pCollator;
     delete pCaseCollator;
 
@@ -785,7 +777,7 @@ void _FinitCore()
 
     delete SwEditShell::pAutoFmtFlags;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);
@@ -856,15 +848,14 @@ void _FinitCore()
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 CharClass& GetAppCharClass()
 {
+    if ( !pAppCharClass )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        pAppCharClass = new CharClass(
+            xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
+    }
     return *pAppCharClass;
 }
-
-LocaleDataWrapper& GetAppLocaleData()
-{
-    SvtSysLocale aSysLocale;
-    return (LocaleDataWrapper&)aSysLocale.GetLocaleData();
-}
-
 
 void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
 {

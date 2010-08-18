@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrform2.cxx,v $
- * $Revision: 1.107.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
 #include <viewsh.hxx>
 #include <viewopt.hxx>      // SwViewOptions
@@ -66,7 +63,7 @@
 #include <doc.hxx>          // SwDoc
 #include <pormulti.hxx>     // SwMultiPortion
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -101,12 +98,14 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     pMulti = NULL;
 
     bOnceMore = sal_False;
+    bFlyInCntBase = sal_False;
     bChanges = sal_False;
     bTruncLines = sal_False;
     nCntEndHyph = 0;
     nCntMidHyph = 0;
     nLeftScanIdx = STRING_LEN;
     nRightScanIdx = 0;
+    m_nHintEndIndex = 0;
 
     if( nStart > GetInfo().GetTxt().Len() )
     {
@@ -313,7 +312,14 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         }
     }
     pPor->Truncate();
-    delete rInf.GetRest();
+    SwLinePortion *const pRest( rInf.GetRest() );
+    if (pRest && pRest->InFldGrp() &&
+        static_cast<SwFldPortion*>(pRest)->IsNoLength())
+    {
+        // HACK: decrement again, so we pick up the suffix in next line!
+        --m_nHintEndIndex;
+    }
+    delete pRest;
     rInf.SetRest(0);
     return pPor;
 }
@@ -329,8 +335,14 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     // bei dem LineLayout ist allerdings alles anders...
     if( pPor == pCurr )
     {
-        if( pCurr->GetPortion() )
+        if ( pCurr->GetPortion() )
+        {
             pPor = pCurr->GetPortion();
+        }
+
+        // --> OD 2010-07-07 #i112181#
+        rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
+        // <--
     }
     else
     {
@@ -342,6 +354,8 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
             rInf.SetLast( pLast );
         }
         pLast->Insert( pPor );
+
+        rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
 
         // Maxima anpassen:
         if( pCurr->Height() < pPor->Height() )
@@ -820,6 +834,34 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
 }
 
 /*************************************************************************
+ *                      class SwMetaPortion
+ *************************************************************************/
+
+class SwMetaPortion : public SwTxtPortion
+{
+public:
+    inline  SwMetaPortion() { SetWhichPor( POR_META ); }
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+//    OUTPUT_OPERATOR
+};
+
+//CLASSIO( SwMetaPortion )
+
+/*************************************************************************
+ *               virtual SwMetaPortion::Paint()
+ *************************************************************************/
+
+void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+    if ( Width() )
+    {
+        rInf.DrawViewOpt( *this, POR_META );
+        SwTxtPortion::Paint( rInf );
+    }
+}
+
+
+/*************************************************************************
  *                      SwTxtFormatter::WhichTxtPor()
  *************************************************************************/
 
@@ -832,6 +874,10 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
     {
         if( GetFnt()->IsRef() )
             pPor = new SwRefPortion;
+        else if (GetFnt()->IsMeta())
+        {
+            pPor = new SwMetaPortion;
+        }
         else
         {
             // Erst zum Schluss !
@@ -1066,6 +1112,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
              GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) )
         {
             pPor = NewTabPortion( rInf, true );
+        }
+
+        // 11) suffix of meta-field
+        if (!pPor)
+        {
+            pPor = TryNewNoLengthPortion(rInf);
         }
 
     return pPor;
@@ -1489,6 +1541,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     while( bBuild )
     {
         GetInfo().SetFtnInside( sal_False );
+        GetInfo().SetOtherThanFtnInside( sal_False );
 
         // These values must not be reset by FormatReset();
         sal_Bool bOldNumDone = GetInfo().IsNumDone();
@@ -1973,6 +2026,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         nReformat -= 2;
 
 #ifndef QUARTZ
+#ifndef ENABLE_GRAPHITE
         // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
         // step back six(!) more characters for complex scripts
         // this is required e.g., for Khmer (thank you, Javier!)
@@ -1980,6 +2034,10 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         xub_StrLen nMaxContext = 0;
         if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
             nMaxContext = 6;
+#else
+        // Some Graphite fonts need context for scripts not marked as complex
+        static const xub_StrLen nMaxContext = 10;
+#endif
 #else
         // some fonts like Quartz's Zapfino need more context
         // TODO: query FontInfo for maximum unicode context
@@ -2055,7 +2113,10 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
 bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
 {
     // Only if hidden text should not be shown:
-    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+//    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+    const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
+    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
+    if (bShowInDocView || bShowForPrinting)
         return false;
 
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();

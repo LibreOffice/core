@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosett.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,13 +41,12 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <tools/string.hxx>
+#include <svl/itemprop.hxx>
 
 class SwDoc;
 class SwFmtCol;
 class SwDocShell;
 class SwNumRule;
-struct SfxItemPropertyMap;
-
 /******************************************************************************
  *
  ******************************************************************************/
@@ -64,7 +60,7 @@ class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 >
 {
     SwDoc*                      pDoc;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXFootnoteProperties();
 public:
@@ -98,7 +94,7 @@ class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
 >
 {
     SwDoc*                      pDoc;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXEndnoteProperties();
 public:
@@ -132,7 +128,7 @@ class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
 >
 {
     SwDoc*                      pDoc;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXLineNumberingProperties();
 public:
@@ -175,7 +171,7 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     SwDoc*                      pDoc; // wird nur fuers anmelden gebraucht
     SwDocShell*                 pDocShell; //nur, wenn als ChapterNumbering verwendet
     SwNumRule*                  pNumRule;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropertySet;
     sal_Bool                    bOwnNumRuleCreated;
     static String               sInvalidStyle;
 protected:
@@ -275,7 +271,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     sal_Bool                    bIsAutomaticWidth;
     sal_Int32                   nAutoDistance;
 
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropSet;
 
     //separator line
     sal_Int32                   nSepLineWidth;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfly.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -67,6 +64,10 @@
 #include <undobj.hxx>
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
+
+// --> OD 2009-07-20 #i73249#
+#include <undoflystrattr.hxx>
+// <--
 
 extern USHORT GetHtmlMode( const SwDocShell* );
 
@@ -120,6 +121,7 @@ USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
 /*-----------------17.02.98 08:35-------------------
 
 --------------------------------------------------*/
+// If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 {
     SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
@@ -176,7 +178,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
     if( rDoc.GetRootFrm() )
         switch( rAnch.GetAnchorId() )
         {
-        case FLY_IN_CNTNT:
+        case FLY_AS_CHAR:
             if( pFlyFmt && rAnch.GetCntntAnchor() )
             {
                 const SwFrm* pOld = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aRet, FALSE );
@@ -185,8 +187,8 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             }
             break;
 
-        case FLY_AT_CNTNT:
-        case FLY_AUTO_CNTNT: // LAYER_IMPL
+        case FLY_AT_PARA:
+        case FLY_AT_CHAR: // LAYER_IMPL
             if( rAnch.GetCntntAnchor() )
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
@@ -208,7 +210,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             }
             break;
 
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
             {
                 USHORT nPgNum = rAnch.GetPageNum();
                 const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
@@ -244,9 +246,11 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
 
     // ist der neue ein gueltiger Anker?
     if( !aNewAnch.GetCntntAnchor() && (FLY_AT_FLY == nNew ||
-        FLY_AT_CNTNT == nNew || FLY_IN_CNTNT == nNew ||
-        FLY_AUTO_CNTNT == nNew ))
+        (FLY_AT_PARA == nNew) || (FLY_AS_CHAR == nNew) ||
+        (FLY_AT_CHAR == nNew) ))
+    {
         return IGNOREANCHOR;
+    }
 
     if( nOld == nNew )
         return DONTMAKEFRMS;
@@ -259,7 +263,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
     //doppeltes hiden waere so eine art Show!
     rFmt.DelFrms();
 
-    if( FLY_IN_CNTNT == nOld )
+    if ( FLY_AS_CHAR == nOld )
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
         //werden. Leider reisst dies neben den Frms auch noch das Format mit
@@ -269,18 +273,17 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
-        SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
-#ifndef PRODUCT
+        SwTxtAttr * const  pHnt =
+            pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
         ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == &rFmt,
                     "Wrong TxtFlyCnt-Hint." );
-#endif
-        ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+        const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
         //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
         //werden.
-        pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+        pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
     }
 
     //Endlich kann das Attribut gesetzt werden. Es muss das erste Attribut
@@ -291,7 +294,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
     const SfxPoolItem* pItem;
     switch( nNew )
     {
-    case FLY_IN_CNTNT:
+    case FLY_AS_CHAR:
             //Wenn keine Positionsattribute hereinkommen, dann muss dafuer
             //gesorgt werden, das keine unerlaubte automatische Ausrichtung
             //bleibt.
@@ -300,8 +303,8 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             SwTxtNode *pNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
 
-            pNd->InsertItem( SwFmtFlyCnt( (SwFlyFrmFmt*)&rFmt ),
-                                       pPos->nContent.GetIndex(), 0 );
+            SwFmtFlyCnt aFmt( static_cast<SwFlyFrmFmt*>(&rFmt) );
+            pNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
         }
 
         if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ))
@@ -322,10 +325,10 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
         }
         break;
 
-    case FLY_AT_CNTNT:
-    case FLY_AUTO_CNTNT: // LAYER_IMPL
+    case FLY_AT_PARA:
+    case FLY_AT_CHAR: // LAYER_IMPL
     case FLY_AT_FLY: // LAYER_IMPL
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         {
             //Wenn keine Positionsattribute hereinschneien korrigieren wir
             //die Position so, dass die Dokumentkoordinaten des Flys erhalten
@@ -341,7 +344,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
                 aOldH.GetPos() == ((SwFmtHoriOrient*)pItem)->GetPos() ))
             {
-                SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldH.GetPos();
+                SwTwips nPos = (FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
                 nPos += aOldAnchorPos.X() - aNewAnchorPos.X();
 
                 if( pItem )
@@ -363,7 +366,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
                 aOldV.GetPos() == ((SwFmtVertOrient*)pItem)->GetPos() ) )
             {
-                SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldV.GetPos();
+                SwTwips nPos = (FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
                 nPos += aOldAnchorPos.Y() - aNewAnchorPos.Y();
                 if( pItem )
                 {
@@ -391,13 +394,13 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( !rSet.Count() )
         return FALSE;
 
-    _UndoFmtAttr* pSaveUndo = 0;
+    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
     const bool bDoesUndo = DoesUndo();
 
     if( DoesUndo() )
     {
         ClearRedo();
-        pSaveUndo = new _UndoFmtAttr( rFlyFmt );
+        pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the frame causes MakeFrmFmt to put two
         // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
@@ -451,15 +454,16 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( MAKEFRMS == nMakeFrms )
         rFlyFmt.MakeFrms();
 
-    if( pSaveUndo )
+    if ( pSaveUndo.get() )
     {
         // --> FME 2004-10-13 #i32968#
         DoUndo( bDoesUndo );
         // <--
 
-        if( pSaveUndo->pUndo )
-            AppendUndo( pSaveUndo->pUndo );
-        delete pSaveUndo;
+        if ( pSaveUndo->GetUndo() )
+        {
+            AppendUndo( pSaveUndo->ReleaseUndo() );
+        }
     }
 
     SetModified();
@@ -467,6 +471,61 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
+// --> OD 2009-07-20 #i73249#
+void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
+                            const String& sNewTitle )
+{
+    if ( rFlyFrmFmt.GetObjTitle() == sNewTitle )
+    {
+        return;
+    }
+
+    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
+    SetNoDrawUndoObj( true );
+
+    if ( DoesUndo() )
+    {
+        ClearRedo();
+        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+                                          UNDO_FLYFRMFMT_TITLE,
+                                          rFlyFrmFmt.GetObjTitle(),
+                                          sNewTitle ) );
+    }
+
+    rFlyFrmFmt.SetObjTitle( sNewTitle, true );
+
+    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
+
+    SetModified();
+}
+
+void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
+                                  const String& sNewDescription )
+{
+    if ( rFlyFrmFmt.GetObjDescription() == sNewDescription )
+    {
+        return;
+    }
+
+    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
+    SetNoDrawUndoObj( true );
+
+    if ( DoesUndo() )
+    {
+        ClearRedo();
+        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+                                          UNDO_FLYFRMFMT_DESCRIPTION,
+                                          rFlyFrmFmt.GetObjDescription(),
+                                          sNewDescription ) );
+    }
+
+    rFlyFrmFmt.SetObjDescription( sNewDescription, true );
+
+    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
+
+    SetModified();
+}
+// <--
 
 /***************************************************************************
  *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
@@ -617,7 +676,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // Continue with next selected object and assert, if this isn't excepted.
             if ( !pContact )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 bool bNoUserCallExcepted =
                         pObj->ISA(SwDrawVirtObj) &&
                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();
@@ -638,7 +697,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 //            xub_StrLen nIndx = STRING_NOTFOUND;
             const SwPosition* pOldAsCharAnchorPos( 0L );
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
-            if ( !_bSameOnly && eOldAnchorType == FLY_IN_CNTNT )
+            if ( !_bSameOnly && eOldAnchorType == FLY_AS_CHAR )
             {
                 pOldAsCharAnchorPos = new SwPosition( pContact->GetCntntAnchor() );
             }
@@ -653,8 +712,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
             switch ( _eAnchorType )
             {
-            case FLY_AT_CNTNT:
-            case FLY_AUTO_CNTNT:
+            case FLY_AT_PARA:
+            case FLY_AT_CHAR:
                 {
                     const Point aNewPoint = pOldAnchorFrm &&
                                             ( pOldAnchorFrm->IsVertical() ||
@@ -708,10 +767,10 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         break;
                     }
 
-                    aNewAnch.SetType( FLY_PAGE );
+                    aNewAnch.SetType( FLY_AT_PAGE );
                     // no break
                 }
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
                 {
                     pNewAnchorFrm = GetRootFrm()->Lower();
                     while ( pNewAnchorFrm && !pNewAnchorFrm->Frm().IsInside( aPt ) )
@@ -722,7 +781,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     aNewAnch.SetPageNum( ((SwPageFrm*)pNewAnchorFrm)->GetPhyPageNum());
                 }
                 break;
-            case FLY_IN_CNTNT:
+            case FLY_AS_CHAR:
                 if( _bSameOnly )    // Positions/Groessenaenderung
                 {
                     if( !pOldAnchorFrm )
@@ -745,7 +804,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     bUnmark = ( 0 != i );
                     Point aPoint( aPt );
                     aPoint.X() -= 1;    // nicht im DrawObj landen!!
-                    aNewAnch.SetType( FLY_IN_CNTNT );
+                    aNewAnch.SetType( FLY_AS_CHAR );
                     SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
                     if ( pNewAnchorFrm->Frm().IsInside( aPoint ) )
                     {
@@ -769,17 +828,17 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // 'center to baseline'
                     SetAttr( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFmt() );
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
-                    ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
+                    ASSERT( pNd, "Cursor not positioned at TxtNode." );
 
-                    pNd->InsertItem( SwFmtFlyCnt( pContact->GetFmt() ),
-                                    aPos.nContent.GetIndex(), 0 );
+                    SwFmtFlyCnt aFmt( pContact->GetFmt() );
+                    pNd->InsertItem( aFmt, aPos.nContent.GetIndex(), 0 );
                 }
                 break;
             default:
                 ASSERT( !this, "unexpected AnchorId." );
             }
 
-            if ( (FLY_IN_CNTNT != _eAnchorType) &&
+            if ( (FLY_AS_CHAR != _eAnchorType) &&
                  pNewAnchorFrm &&
                  ( !_bSameOnly || pNewAnchorFrm != pOldAnchorFrm ) )
             {
@@ -819,12 +878,13 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
                 ASSERT( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
                 ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-                SwTxtAttr* pHnt = pTxtNode->GetTxtAttr( nIndx, RES_TXTATR_FLYCNT );
-                ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+                SwTxtAttr * const pHnt =
+                    pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
+                const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
                 //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
                 //werden.
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIndx, nIndx );
+                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIndx, nIndx );
                 delete pOldAsCharAnchorPos;
             }
             // <--
@@ -888,8 +948,8 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
         const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
         ULONG nTstSttNd;
         // OD 11.12.2003 #i20622# - to-frame anchored objects are allowed.
-        if ( ( rAnchor.GetAnchorId() == FLY_AT_CNTNT ||
-               rAnchor.GetAnchorId() == FLY_AUTO_CNTNT ) &&
+        if ( ((rAnchor.GetAnchorId() == FLY_AT_PARA) ||
+              (rAnchor.GetAnchorId() == FLY_AT_CHAR)) &&
              0 != rAnchor.GetCntntAnchor() &&
              nFlySttNd <= ( nTstSttNd =
                          rAnchor.GetCntntAnchor()->nNode.GetIndex() ) &&
@@ -910,9 +970,9 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
                       &rDstAnchor = rDest.GetAnchor();
     ULONG nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
     BOOL bAllowed = FALSE;
-    if( FLY_PAGE == rSrcAnchor.GetAnchorId() )
+    if ( FLY_AT_PAGE == rSrcAnchor.GetAnchorId() )
     {
-        if( FLY_PAGE == rDstAnchor.GetAnchorId() ||
+        if ( (FLY_AT_PAGE == rDstAnchor.GetAnchorId()) ||
             ( rDstAnchor.GetCntntAnchor() &&
               rDstAnchor.GetCntntAnchor()->nNode.GetIndex() > nEndOfExtras ))
             bAllowed = TRUE;

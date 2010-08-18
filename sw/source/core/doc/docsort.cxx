@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsort.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -48,9 +45,7 @@
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <sortopt.hxx>
-#ifndef _DOCSORT_HXX
 #include <docsort.hxx>
-#endif
 #include <undobj.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
@@ -341,18 +336,13 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
     // Index auf den Start der Selektion
 
-    SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
-    USHORT n;
-
-    for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+    for ( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
-        pFmt = (SwFrmFmt*)(*GetSpzFrmFmts())[n];
-        pAnchor = &pFmt->GetAnchor();
+        SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>((*GetSpzFrmFmts())[n]);
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
 
-        if( FLY_AT_CNTNT == pAnchor->GetAnchorId() &&
-            0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
+        if (pAPos && (FLY_AT_PARA == pAnchor->GetAnchorId()) &&
             pStart->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode )
             return FALSE;
     }
@@ -386,7 +376,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         {
             if( bUndo )
             {
-                pRedlUndo = new SwUndoRedlineSort( rPaM, rOpt );
+                pRedlUndo = new SwUndoRedlineSort( *pRedlPam,rOpt );
                 DoUndo( FALSE );
             }
             // erst den Bereich kopieren, dann
@@ -444,7 +434,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     DoUndo( FALSE );
 
-    for( n = 0; n < aSortArr.Count(); ++n )
+    for ( USHORT n = 0; n < aSortArr.Count(); ++n )
     {
         SwSortTxtElement* pBox = (SwSortTxtElement*)aSortArr[n];
         aStart      = nBeg + n;
@@ -452,7 +442,8 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
         // Nodes verschieben
-        Move( aRg, aStart, IDocumentContentOperations::DOC_MOVEDEFAULT );
+        MoveNodeRange( aRg, aStart,
+            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
         // Undo Verschiebungen einpflegen
         if(pUndoSort)
@@ -470,18 +461,34 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             AppendUndo( pRedlUndo );
         }
 
-        // nBeg ist der Start vom sortierten Bereich
+        // nBeg is start of sorted range
         SwNodeIndex aSttIdx( GetNodes(), nBeg );
 
-        // der Kopierte Bereich ist das Geloeschte
-        AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ), true);
+        // the copied range is deleted
+        SwRedline *const pDeleteRedline(
+            new SwRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ));
 
-        // das sortierte ist das Eingefuegte
+        // pRedlPam points to nodes that may be deleted (hidden) by
+        // AppendRedline, so adjust it beforehand to prevent ASSERT
         pRedlPam->GetPoint()->nNode = aSttIdx;
         SwCntntNode* pCNd = aSttIdx.GetNode().GetCntntNode();
         pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
+        AppendRedline(pDeleteRedline, true);
+
+        // the sorted range is inserted
         AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
+
+        if( pRedlUndo )
+        {
+            SwNodeIndex aInsEndIdx( pRedlPam->GetMark()->nNode, -1 );
+            pRedlPam->GetMark()->nNode = aInsEndIdx;
+            SwCntntNode *const pPrevNode =
+                pRedlPam->GetMark()->nNode.GetNode().GetCntntNode();
+            pRedlPam->GetMark()->nContent.Assign( pPrevNode, pPrevNode->Len() );
+
+            pRedlUndo->SetValues( *pRedlPam );
+        }
 
         if( pRedlUndo )
             pRedlUndo->SetOffset( aSttIdx );
@@ -777,7 +784,8 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
     // Einfuegen der Source
     SwNodeIndex aIns( *pTar->GetSttNd()->EndOfSectionNode() );
-    pDoc->Move( aRg, aIns, IDocumentContentOperations::DOC_MOVEDEFAULT );
+    pDoc->MoveNodeRange( aRg, aIns,
+        IDocumentContentOperations::DOC_MOVEDEFAULT );
 
     // Falls erster Node leer -> weg damit
     if(bDelFirst)

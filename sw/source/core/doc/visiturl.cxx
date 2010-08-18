@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: visiturl.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <sfx2/docfile.hxx>
-#include <svtools/inethist.hxx>
+#include <svl/inethist.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <doc.hxx>
@@ -41,9 +38,7 @@
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <editsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 
 SwURLStateChanged::SwURLStateChanged( const SwDoc* pD )
@@ -92,7 +87,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                     bUnLockView = !pESh->IsViewLocked();
                     pESh->LockView( TRUE );
                 }
-                ((SwTxtINetFmt*)pTxtAttr)->SetValidVis( FALSE );
+                const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
                 const SwTxtAttr* pAttr = pTxtAttr;
                 SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
                                           *pAttr->GetEnd(),

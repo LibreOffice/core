@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textsh.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,48 +32,41 @@
 #define _SW_FRMVALID_HXX
 #include <hintids.hxx>
 
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
 
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <svx/svdview.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/moduleoptions.hxx>
-#ifndef _MSGBOX_HXX //autogen
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
+#include <svl/urihelper.hxx>
 #include <basic/sbxvar.hxx>
-#endif
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
-#include <svx/htmlcfg.hxx>
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
-#include <com/sun/star/i18n/TransliterationModules.hdl>
-#endif
+#include <svtools/htmlcfg.hxx>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <sot/clsids.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <wdocsh.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtclds.hxx>
@@ -84,24 +74,16 @@
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
 #include <frmmgr.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <frmfmt.hxx>
 #include <tablemgr.hxx>
 #include <swundo.hxx>       // fuer Undo-IDs
@@ -124,9 +106,7 @@
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #include <SwAppletImpl.hxx>
 #include <unochart.hxx>
 
@@ -137,12 +117,8 @@
 #define HyphenZone
 #define TextFont
 #define DropCap
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #ifndef _COMCORE_HRC
@@ -218,7 +194,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                ChgFractionSymbol | ChgOrdinalNumber |
+                                AddNonBrkSpace | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
             else
@@ -582,7 +558,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
                 aMgr.SetCol( aCol );
             }
-            aMgr.InsertFlyFrm(FLY_AT_CNTNT, aStartPos, aSize);
+            aMgr.InsertFlyFrm(FLY_AT_PARA, aStartPos, aSize);
             GetShell().EndAllAction();
             GetShell().UnlockPaint();
         }
@@ -616,7 +592,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(aMgr.GetSize());
             aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
             Point aPos = aMgr.GetPos();
-            RndStdIds eAnchor = FLY_AT_CNTNT;
+            RndStdIds eAnchor = FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, FALSE, &pItem) == SFX_ITEM_SET)
                 eAnchor = (RndStdIds)((SfxUInt16Item *)pItem)->GetValue();
             if(pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem)  == SFX_ITEM_SET)
@@ -780,7 +756,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SwFlyFrmAttrMgr aFrmMgr( TRUE, &rSh, FRMMGR_TYPE_GRF );
             // am FrmMgr muessen die richtigen Parameter eingestellt werden
 
-            aFrmMgr.SetAnchor(FLY_IN_CNTNT);
+            aFrmMgr.SetAnchor(FLY_AS_CHAR);
 
             rSh.SplitNode( FALSE, FALSE );
             rSh.SplitNode( FALSE, FALSE );
@@ -835,7 +811,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
     rSh.Push();
     const BOOL bCrsrInHidden = rSh.SelectHiddenRange();
-    rSh.Pop(FALSE);
+    // --> OD 2009-08-05 #i103839#, #b6855246#
+    // Do not call method <SwCrsrShell::Pop(..)> with 1st parameter = <FALSE>
+    // in order to avoid that the view jumps to the visible cursor.
+    rSh.Pop();
+    // <--
 
     while ( nWhich )
     {
@@ -843,8 +823,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         {
             case SID_INSERT_SOUND:
             case SID_INSERT_VIDEO:
+                /*!SvxPluginFileDlg::IsAvailable( nWhich ) ||
+
+                discussed with mba: for performance reasons we skip the IsAvailable call here
+                */
                 if ( GetShell().IsSelFrmMode() ||
-                     !SvxPluginFileDlg::IsAvailable( nWhich ) ||
                      SFX_CREATE_MODE_EMBEDDED == eCreateMode || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
@@ -1045,6 +1028,15 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 
         switch( rReq.GetSlot() )
         {
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+            nMode = TransliterationModulesExtra::SENTENCE_CASE;
+            break;
+        case SID_TRANSLITERATE_TITLE_CASE:
+            nMode = TransliterationModulesExtra::TITLE_CASE;
+            break;
+        case SID_TRANSLITERATE_TOGGLE_CASE:
+            nMode = TransliterationModulesExtra::TOGGLE_CASE;
+            break;
         case SID_TRANSLITERATE_UPPER:
             nMode = TransliterationModules_LOWERCASE_UPPERCASE;
             break;
@@ -1158,7 +1150,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aAllSet,
-            GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
+            GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pDlg->Execute() )
         {
             SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );

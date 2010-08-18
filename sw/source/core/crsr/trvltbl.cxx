@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: trvltbl.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,8 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>
@@ -53,6 +48,7 @@
 #include <cellatr.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
+
 
 // setze Crsr in die naechsten/vorherigen Celle
 BOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
@@ -308,7 +304,7 @@ BOOL SwCrsrShell::SelTblBox()
     const SwStartNode* pStartNode =
         pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // the old code checks whether we're in a table by asking the
     // frame. This should yield the same result as searching for the
     // table box start node, right?
@@ -653,7 +649,7 @@ BOOL GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 BOOL SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
     BOOL bRet = FALSE;
-    SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
+    SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
 
     if( pTblCrsr || !HasMark() )    // nur wenn kein Mark oder ein TblCrsr
     {

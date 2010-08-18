@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swhtml.hxx,v $
- * $Revision: 1.18.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,12 +41,12 @@
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
 #endif
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #include <sfx2/sfxhtml.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/svxenum.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -453,7 +450,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
                         JUMPTO_REGION, JUMPTO_GRAPHIC } eJumpTo;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_uInt16  nContinue;          // Tiefe der Continue-Aufrufe
 #endif
 
@@ -499,6 +496,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool bInFootEndNoteAnchor : 1;
     sal_Bool bInFootEndNoteSymbol : 1;
     sal_Bool bIgnoreHTMLComments : 1;
+    sal_Bool bRemoveHidden : 1; // the filter implementation might set the hidden flag
+
+    /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
+    ::rtl::OUString m_InfoNames[4];
 
     SfxViewFrame* pTempViewFrame;
 
@@ -778,7 +779,7 @@ private:
     void AddScriptSource();
 
     // ein Event in die SFX-Konfiguation eintragen (htmlbas.cxx)
-    void InsertBasicDocEvent( sal_uInt16 nEvent, const String& rName,
+    void InsertBasicDocEvent( rtl::OUString aEventName, const String& rName,
                               ScriptType eScrType, const String& rScrType );
 
     // ein Event an ein VC-Control anhaengen (htmlform.cxx)
@@ -925,6 +926,8 @@ protected:
     // wird das Dok geloescht, ist auch der Parser zu loeschen
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
+    virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
+
 public:
 
     SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
@@ -941,6 +944,10 @@ public:
 
     // fuers asynchrone lesen aus dem SvStream
     virtual void Continue( int nToken );
+
+    virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>&,
+            SvKeyValueIterator* );
 };
 
 

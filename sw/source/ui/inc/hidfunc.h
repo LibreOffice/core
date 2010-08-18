@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hidfunc.h,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,6 +206,7 @@
 #define HID_SET_STANDARD_FONTS  1442
 #define HID_COPY    1102
 #define HID_PASTE   1113
+#define HID_PASTEUNFORMATTED    1115
 #define HID_PASTESPECIAL    1114
 #define HID_CUT 1103
 #define HID_FLIP_HORZ_GRAFIC    1425

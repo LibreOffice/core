@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: parasc.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +34,10 @@
 #include <hintids.hxx>
 #include <rtl/tencinfo.h>
 #include <sfx2/printer.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <swtypes.hxx>
@@ -261,7 +258,7 @@ ULONG SwASCIIParser::CallParser()
 
                 // !!!!!
                 ASSERT( !this, "Have to change - hard attr. to para. style" );
-                pDoc->Insert( *pInsPam, *pItemSet, 0 );
+                pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
         }
         delete pItemSet, pItemSet = 0;
@@ -467,7 +464,7 @@ ULONG SwASCIIParser::ReadChars()
                             InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );
-                        pDoc->Insert( *pPam, SvxFmtBreakItem(
+                        pDoc->InsertPoolItem( *pPam, SvxFmtBreakItem(
                                     SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
                         pLastStt = pStt;
                         nLineLen = 0;
@@ -528,7 +525,7 @@ ULONG SwASCIIParser::ReadChars()
 
 void SwASCIIParser::InsertText( const String& rStr )
 {
-    pDoc->Insert( *pPam, rStr, true );
+    pDoc->InsertString( *pPam, rStr );
     if( pItemSet && pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
                                              SCRIPTTYPE_ASIAN |
                                              SCRIPTTYPE_COMPLEX ) )

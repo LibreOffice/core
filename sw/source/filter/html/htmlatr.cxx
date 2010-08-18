@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlatr.cxx,v $
- * $Revision: 1.41.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,41 +32,39 @@
 #include <hintids.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <tools/urlobj.hxx>
-
+#include <sfx2/sfx.hrc>
 #if !defined _SVSTDARR_XUB_STRLEN_DECL || !defined _SVSTDARR_USHORTS_DECL
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtfsize.hxx>
@@ -81,7 +76,6 @@
 #include <txatbase.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
-#include <fmthbsh.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -1801,8 +1795,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     xub_StrLen nPos = 0;
     while( nPos < nEndPos )
     {
-        sal_uInt16 nScript = pBreakIt->xBreak->getScriptType( rText, nPos );
-        nPos = (xub_StrLen)pBreakIt->xBreak->endOfScript( rText, nPos, nScript );
+        sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
+        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
         aScriptChgLst.Insert( nPos, aScriptChgLst.Count() );
         aScriptLst.Insert( nScript, aScriptLst.Count() );
     }
@@ -2495,7 +2489,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( RES_TXTATR_FIELD == pHt->Which() )      // Felder nicht
                 continue;                               // ausgeben
 
-            if( pHt->GetEnd() )
+            if ( pHt->GetEnd() && !pHt->HasDummyChar() )
             {
                 xub_StrLen nHtEnd = *pHt->GetEnd(),
                        nHtStt = *pHt->GetStart();
@@ -2555,7 +2549,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 && nStrPos != nEnde )
             {
                 do {
-                    if( pHt->GetEnd() )
+                    if ( pHt->GetEnd() && !pHt->HasDummyChar() )
                     {
                         if( RES_CHRATR_KERNING == pHt->Which() &&
                             rHTMLWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) &&
@@ -3041,15 +3035,6 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutHTML_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt )
-{
-    HTMLOutContext aContext ( ((SwHTMLWriter&)rWrt).eDestEnc );
-    HTMLOutFuncs::Out_Char( rWrt.Strm(), ((SwFmtHardBlank&)rHt).GetChar(),
-                            aContext,
-                            &((SwHTMLWriter&)rWrt).aNonConvertableCharacters);
-    HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
-    return rWrt;
-}
 
 // Das ist jetzt unser Blink-Item. Blinkend wird eingeschaltet, indem man
 // das Item auf TRUE setzt!
@@ -3401,22 +3386,22 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
 
-/* RES_TXTATR_DUMMY4    */          0,
-/* RES_TXTATR_INETFMT   */          OutHTML_SwFmtINetFmt,
-/* RES_TXTATR_REFMARK*/             0,
+/* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
-/* RES_TXTATR_CHARFMT   */          OutHTML_SwTxtCharFmt,
-/* RES_TXTATR_TWO_LINES */          0,
+/* RES_TXTATR_META */               0,
+/* RES_TXTATR_METAFIELD */          0,
+/* RES_TXTATR_AUTOFMT */            0,
+/* RES_TXTATR_INETFMT */            OutHTML_SwFmtINetFmt,
+/* RES_TXTATR_CHARFMT */            OutHTML_SwTxtCharFmt,
 /* RES_TXTATR_CJK_RUBY */           0,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
-/* RES_TXTATR_DUMMY6 */             0,
 
 /* RES_TXTATR_FIELD */              OutHTML_SwFmtFld,
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
 /* RES_TXTATR_FTN */                OutHTML_SwFmtFtn,
-/* RES_TXTATR_SOFTHYPH */           0,
-/* RES_TXTATR_HARDBLANK*/           OutHTML_SwHardBlank,
+/* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

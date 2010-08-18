@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: format.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #define FORMAT_HXX
 
 
-#include <svtools/smplhint.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/brdcst.hxx>
 #include "utility.hxx"
 #include <types.hxx>
 
@@ -112,6 +109,7 @@ class SmFormat : public SfxBroadcaster
     USHORT      vSize[SIZ_END + 1];
     USHORT      vDist[DIS_END + 1];
     SmHorAlign  eHorAlign;
+    INT16       nGreekCharStyle;
     BOOL        bIsTextmode,
                 bScaleNormalBrackets;
 
@@ -140,6 +138,9 @@ public:
 
     BOOL            IsTextmode() const     { return bIsTextmode; }
     void            SetTextmode(BOOL bVal) { bIsTextmode = bVal; }
+
+    INT16           GetGreekCharStyle() const     { return nGreekCharStyle; }
+    void            SetGreekCharStyle(INT16 nVal) { nGreekCharStyle = nVal; }
 
     BOOL            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
     void            SetScaleNormalBrackets(BOOL bVal) { bScaleNormalBrackets = bVal; }

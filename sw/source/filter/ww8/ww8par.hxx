@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.159.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,34 +30,25 @@
 #define _WW8PAR_HXX
 
 #include <tools/string.hxx>
-#include <svx/msdffimp.hxx>
-#include <svx/msocximex.hxx>
-#include <svx/frmdir.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/msocximex.hxx>
+#include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef __SGI_STL_STACK
 #include <stack>
-#endif
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
-#ifndef __SGI_STL_UTILITY
 #include <utility>
-#endif
 
-#ifndef SW_TRACER
 #include "tracer.hxx"
-#endif
 #include "ww8struc.hxx"     // WW8_BRC
 #include "ww8scan.hxx"  // WW8Fib
 #include "ww8glsy.hxx"
+#include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
+#include <xmloff/odffields.hxx>
+#include <IMark.hxx>
 
 class SwDoc;
 class SwPaM;
@@ -363,43 +351,35 @@ namespace sw
             Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
+            SwNodeIndex GetPtNode() { return maPtNode; };
+            xub_StrLen GetPtCntnt() { return mnPtCntnt; };
         };
     }
 }
 
 class FieldEntry
 {
-public:
-    sw::hack::Position maStartPos;
-    sal_uInt16 mnFieldId;
-    FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
-    FieldEntry(const FieldEntry &rOther) throw();
-    FieldEntry &operator=(const FieldEntry &rOther) throw();
-    void Swap(FieldEntry &rOther) throw();
-};
+    private:
+        ::rtl::OUString msBookmarkName;
+        ::rtl::OUString msMarkType;
+        ::sw::mark::IFieldmark::parameter_map_t maParams;
 
-class WW8NewFieldCtx
-{
-private:
-    SwNodeIndex maPtNode;
-    xub_StrLen mnPtCntnt;
-    ::rtl::OUString msBookmarkName;
-    ::rtl::OUString msMarkType;
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> Param_t;
-    typedef ::std::vector< Param_t > Params_t;
-    Params_t maParams;
-  SwPaM * mpPaM;
+    public:
+        sw::hack::Position maStartPos;
+        sal_uInt16 mnFieldId;
+        FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
+        FieldEntry(const FieldEntry &rOther) throw();
+        FieldEntry &operator=(const FieldEntry &rOther) throw();
+        void Swap(FieldEntry &rOther) throw();
 
-public:
-    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType);
-    ~WW8NewFieldCtx();
+        SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
+        xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
-    SwNodeIndex GetPtNode() { return maPtNode; };
-    xub_StrLen GetPtCntnt() { return mnPtCntnt; };
-    ::rtl::OUString GetBookmarkName();
-    ::rtl::OUString GetMarkType();
-    void AddParam(::rtl::OUString name, ::rtl::OUString value);
-    void SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark);
+        ::rtl::OUString GetBookmarkName();
+        ::rtl::OUString GetBookmarkType();
+        void SetBookmarkName(::rtl::OUString bookmarkName);
+        void SetBookmarkType(::rtl::OUString bookmarkType);
+        ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
 
@@ -435,7 +415,6 @@ private:
     bool mbWasParaEnd;
     bool mbHasBorder;
     bool mbFirstPara;
-    std::deque<WW8NewFieldCtx *> maFieldCtxStack;
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
@@ -576,7 +555,7 @@ public:
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape,BOOL bFloatingCtrl);
-    bool ExportControl(Writer &rWrt, const SdrObject *pObj);
+    bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
 };
 
 class SwMSDffManager : public SvxMSDffManager
@@ -890,9 +869,6 @@ private:
     std::deque<FieldEntry> maFieldStack;
     typedef std::deque<FieldEntry>::const_iterator mycFieldIter;
 
-    typedef std::deque<WW8NewFieldCtx *> WW8NewFieldCtxStack_t;
-    WW8NewFieldCtxStack_t maNewFieldCtxStack;
-
     /*
     A stack of open footnotes. Should only be one in it at any time.
     */
@@ -934,6 +910,7 @@ private:
      Stack of textencoding being used as we progress through the document text
     */
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
+    std::stack<rtl_TextEncoding> maFontSrcCJKCharSets;
 
     /*
      Winword numbering gets imported as SwNumRules, there is a problem that
@@ -969,6 +946,13 @@ private:
     WW8PLCFMan* pPlcxMan;
     std::map<short, String> aLinkStringMap;
 
+    // --> OD 2010-05-06 #i103711#
+    std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet;
+    // <--
+    // --> OD 2010-05-11 #i105414#
+    std::set<const SwNode*> maTxtNodesHavingLeftIndentSet;
+    // <--
+
     WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
     SwFmt* pAktColl;        // gerade zu erzeugende Collection
                             // ( ist ausserhalb einer Style-Def immer 0 )
@@ -990,7 +974,7 @@ private:
     ANLDRuleMap maANLDRules;
     WW8_OLST* pNumOlst;         // Gliederung im Text
 
-    SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
+    SwNode* pNode_FLY_AT_PARA; // set: WW8SwFlyPara()   read: CreateSwTable()
 
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;
@@ -1099,7 +1083,7 @@ private:
                             //     the very 1st Line Numbering and ignore the rest)
 
     bool bFirstPara;        // first paragraph?
-
+    bool bFirstParaOfPage;//cs2c--xushanchuan add for bug11210
     bool bParaAutoBefore;
     bool bParaAutoAfter;
 
@@ -1124,6 +1108,8 @@ private:
     void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
     void Read_HdFtTextAsHackedFrame(long nStart, long nLen,
         SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth);
+
+    bool isValid_HdFt_CP(WW8_CP nHeaderCP) const;
 
     bool HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt, int nSect);
 
@@ -1168,12 +1154,19 @@ private:
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( USHORT nId );
-    void NewAttr( const SfxPoolItem& rAttr );
+    // --> OD 2010-05-06 #i103711#
+    // --> OD 2010-05-11 #i105414#
+    void NewAttr( const SfxPoolItem& rAttr,
+                  const bool bFirstLineOfStSet = false,
+                  const bool bLeftIndentSet = false );
+    // <--
 
     bool GetFontParams(USHORT, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
     bool SetNewFontAttr(USHORT nFCode, bool bSetEnums, USHORT nWhich);
+    USHORT CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich);
     void ResetCharSetVars();
+    void ResetCJKCharSetVars();
 
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
@@ -1616,6 +1609,7 @@ public:     // eigentlich private, geht aber leider nur public
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
+    CharSet GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
 };
@@ -1623,7 +1617,13 @@ public:     // eigentlich private, geht aber leider nur public
 bool CanUseRemoteLink(const String &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
-void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
+// --> OD 2010-05-06 #i103711#
+// --> OD 2010-05-11 #i105414#
+void SyncIndentWithList( SvxLRSpaceItem &rLR,
+                         const SwNumFmt &rFmt,
+                         const bool bFirstLineOfStSet,
+                         const bool bLeftIndentSet );
+// <--
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,

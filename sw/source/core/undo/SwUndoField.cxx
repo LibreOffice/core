@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwUndoField.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,12 +63,14 @@ SwPosition SwUndoField::GetPosition()
 }
 
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
-                                       const SwField & _aOldField,
-                         const SwField & _aNewField,
+                         const SwField & rOldField,
+                         const SwField & rNewField,
                          SwMsgPoolItem * _pHnt, BOOL _bUpdate, SwUndoId _nId)
-    : SwUndoField(rPos,_nId), pOldField(_aOldField.Copy()),
-      pNewField(_aNewField.Copy()), pHnt(_pHnt),
-      bUpdate(_bUpdate)
+    : SwUndoField(rPos,_nId)
+    , pOldField(rOldField.CopyField())
+    , pNewField(rNewField.CopyField())
+    , pHnt(_pHnt)
+    , bUpdate(_bUpdate)
 {
     ASSERT(pOldField, "No old field!");
     ASSERT(pNewField, "No new field!");

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrfld.cxx,v $
- * $Revision: 1.16.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <docufld.hxx>
+#include <doc.hxx>
 
 #include "reffld.hxx"
 #include "ddefld.hxx"
@@ -46,7 +44,7 @@
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);
@@ -71,7 +69,7 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
     SwClient( rFld.GetTyp() ),
     pTxtAttr( 0 )
 {
-    pField = rFld.Copy();
+    pField = rFld.CopyField();
 }
 
 // #i24434#
@@ -86,7 +84,7 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     if(rAttr.GetFld())
     {
         rAttr.GetFld()->GetTyp()->Add(this);
-        pField = rAttr.GetFld()->Copy();
+        pField = rAttr.GetFld()->CopyField();
     }
 }
 
@@ -160,6 +158,10 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( !pTxtAttr )
         return;
 
+    // don't do anything, especially not expand!
+    if( pNew && pNew->Which() == RES_OBJECTDYING )
+        return;
+
     SwTxtNode* pTxtNd = (SwTxtNode*)&pTxtAttr->GetTxtNode();
     ASSERT( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
@@ -190,6 +192,8 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_FMT_CHG:
                 pTxtNd->Modify( pOld, pNew );
                 return;
+        default:
+                break;
         }
     }
 
@@ -255,16 +259,23 @@ BOOL SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld( const SwFmtFld& rAttr, xub_StrLen nStartPos )
-    : SwTxtAttr( rAttr, nStartPos ),
-    aExpand( rAttr.GetFld()->Expand() ),
-    pMyTxtNd( 0 )
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
+        bool const bInClipboard)
+    : SwTxtAttr( rAttr, nStartPos )
+    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
+    , m_pTxtNode( 0 )
 {
-    ((SwFmtFld&)rAttr).pTxtAttr = this;
+    rAttr.pTxtAttr = this;
+    SetHasDummyChar(true);
 }
 
 SwTxtFld::~SwTxtFld( )
 {
+    SwFmtFld & rFmtFld( static_cast<SwFmtFld &>(GetAttr()) );
+    if (this == rFmtFld.pTxtAttr)
+    {
+        rFmtFld.pTxtAttr = 0; // #i110140# invalidate!
+    }
 }
 
 /*************************************************************************
@@ -280,12 +291,13 @@ SwTxtFld::~SwTxtFld( )
 void SwTxtFld::Expand() const
 {
     // Wenn das expandierte Feld sich nicht veraendert hat, wird returnt
-    ASSERT( pMyTxtNd, "wo ist denn mein Node?" );
+    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
-    XubString aNewExpand( pFld->Expand() );
+    XubString aNewExpand(
+        pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
-    if( aNewExpand == aExpand )
+    if( aNewExpand == m_aExpand )
     {
         // Bei Seitennummernfeldern
         const USHORT nWhich = pFld->GetTyp()->Which();
@@ -301,16 +313,18 @@ void SwTxtFld::Expand() const
             // BP: das muesste man noch optimieren!
             //JP 12.06.97: stimmt, man sollte auf jedenfall eine Status-
             //              aenderung an die Frames posten
-            if( pMyTxtNd->CalcHiddenParaField() )
-                pMyTxtNd->Modify( 0, 0 );
+            if( m_pTxtNode->CalcHiddenParaField() )
+            {
+                m_pTxtNode->Modify( 0, 0 );
+            }
             return;
         }
     }
 
-    aExpand = aNewExpand;
+    m_aExpand = aNewExpand;
 
-    // 0, this fuer Formatieren
-    pMyTxtNd->Modify( 0, (SfxPoolItem*)&GetFld() );
+    // 0, this for formatting
+    m_pTxtNode->Modify( 0, const_cast<SwFmtFld*>( &GetFld() ) );
 }
 
 /*************************************************************************
@@ -319,11 +333,11 @@ void SwTxtFld::Expand() const
 
 void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
 {
-    ASSERT( pMyTxtNd, "wo ist denn mein Node?" );
-    ASSERT( pDest->pMyTxtNd, "wo ist denn mein Node?" );
+    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
+    ASSERT( pDest->m_pTxtNode, "SwTxtFld: where is pDest's TxtNode?" );
 
-    IDocumentFieldsAccess* pIDFA = pMyTxtNd->getIDocumentFieldsAccess();
-    IDocumentFieldsAccess* pDestIDFA = pDest->pMyTxtNd->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pIDFA = m_pTxtNode->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
 
     SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
     const USHORT nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
@@ -366,9 +380,21 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
         ((SwTblField*)rFmtFld.GetFld())->IsIntrnlName() )
     {
         // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
-        const SwTableNode* pTblNd = pMyTxtNd->FindTableNode();
+        const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
         if( pTblNd )        // steht in einer Tabelle
             ((SwTblField*)rFmtFld.GetFld())->PtrToBoxNm( &pTblNd->GetTable() );
+    }
+}
+
+/* -----------------26.06.2003 13:54-----------------
+
+ --------------------------------------------------*/
+void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
+{
+    //if not in undo section notify the change
+    if (m_pTxtNode && m_pTxtNode->GetNodes().IsDocNodes())
+    {
+        m_pTxtNode->Modify(0, &rFmtFld);
     }
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drpcps.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <hintids.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "cmdid.h"
 #include "swmodule.hxx"
@@ -51,24 +48,24 @@
 #ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svx/fontitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/printer.hxx>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "charatr.hxx"
 #include "viewopt.hxx"

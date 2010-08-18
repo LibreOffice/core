@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrong.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,13 @@ public:
         : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList) {}
 };
 
-enum WrongListType  { WRONGLIST_SPELL, WRONGLIST_GRAMMAR, WRONGLIST_SMARTTAG };
+enum WrongListType
+{
+    WRONGLIST_SPELL,
+    WRONGLIST_GRAMMAR,
+    WRONGLIST_SMARTTAG,
+    WRONGLIST_CHANGETRACKING
+};
 
 class SwWrongList
 {

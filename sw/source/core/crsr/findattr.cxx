@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: findattr.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +35,11 @@
 #include <i18npool/mslangid.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
 #include <fmtpdsc.hxx>
 #include <txatbase.hxx>
 #include <fchrfmt.hxx>
@@ -888,7 +885,7 @@ BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
 {
     // stelle fest welches Attribut gesucht wird:
     USHORT nWhich = rAttr.Which();
-    int bCharAttr = RES_CHRATR_BEGIN <= nWhich && nWhich < RES_TXTATR_END;
+    int bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
@@ -931,7 +928,7 @@ BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
                 bFound = TRUE;
                 break;
             }
-            else if( RES_TXTATR_BEGIN < nWhich )   // TextAttribut
+            else if (isTXTATR(nWhich))
                 continue;               // --> also weiter
         }
 
@@ -1189,7 +1186,8 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
     if( bReplaceTxt )
     {
-        int bRegExp = SearchAlgorithms_REGEXP == pSearchOpt->algorithmType;
+        const bool bRegExp(
+                SearchAlgorithms_REGEXP == pSearchOpt->algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
 
@@ -1202,12 +1200,11 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        String *pRepl = bRegExp ? ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0;
-        if( pRepl )
-            rCursor.GetDoc()->Replace( *pCrsr, *pRepl, bRegExp );
-        else
-            rCursor.GetDoc()->Replace( *pCrsr, pSearchOpt->replaceString, bRegExp );
-        delete pRepl;
+        ::std::auto_ptr<String> pRepl( (bRegExp) ?
+                ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0 );
+        rCursor.GetDoc()->ReplaceRange( *pCrsr,
+            (pRepl.get()) ? *pRepl : String(pSearchOpt->replaceString),
+            bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -1235,7 +1232,9 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         //              ReplaceSet angegeben, auf Default zurueck gesetzt
 
         if( !pSet->Count() )
-            pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet, 0 );
+        {
+            pCrsr->GetDoc()->InsertItemSet( *pCrsr, *pReplSet, 0 );
+        }
         else
         {
             SfxItemPool* pPool = pReplSet->GetPool();
@@ -1255,7 +1254,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 pItem = aIter.NextItem();
             }
             aSet.Put( *pReplSet );
-            pCrsr->GetDoc()->Insert( *pCrsr, aSet, 0 );
+            pCrsr->GetDoc()->InsertItemSet( *pCrsr, aSet, 0 );
         }
 #endif
         return FIND_NO_RING;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtbl.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,21 +35,18 @@
 #endif
 #include <hintids.hxx>
 
-
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
 // OD 06.08.2003 #i17174#
-#include <svx/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtfordr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
-#ifndef _FMTLSPLT_HXX
 #include <fmtlsplt.hxx>
-#endif
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <cellfrm.hxx>
@@ -92,12 +86,8 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-#ifndef _DOCSH_HXX
 #include "docsh.hxx"
-#endif
-#ifdef LINUX
 #include <tabcol.hxx>
-#endif
 #include <unochart.hxx>
 
 #include <node.hxx>
@@ -108,7 +98,10 @@
 // --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
 // <--
-#ifdef PRODUCT
+#include <fldupde.hxx>
+
+
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -117,7 +110,6 @@
 #define CHECK_TABLE(t)
 #endif
 #endif
-#include <fldupde.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1038,7 +1030,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                             nChPos + 1 );
 
                     // Trennzeichen loeschen und SuchString korrigieren
-                    pTxtNd->Erase( aCntPos.nContent, 1 );
+                    pTxtNd->EraseText( aCntPos.nContent, 1 );
                     pTxt = pTxtNd->GetTxt().GetBuffer();
                     nChPos = 0;
                     --nChPos, --pTxt;           // for the ++ in the for loop !!!
@@ -1273,10 +1265,72 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     return pNdTbl;
 }
 
+SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
+{
+    SwNodeRange * pResult = NULL;
+    bool bChanged = false;
+
+    SwNodeIndex aNewStart = rRange.aStart;
+    SwNodeIndex aNewEnd = rRange.aEnd;
+
+    SwNodeIndex aEndIndex = rRange.aEnd;
+    SwNodeIndex aIndex = rRange.aStart;
+
+    while (aIndex < aEndIndex)
+    {
+        SwNode& rNode = aIndex.GetNode();
+
+        if (rNode.IsStartNode())
+        {
+            // advance aIndex to the end node of this start node
+            SwNode * pEndNode = rNode.EndOfSectionNode();
+            aIndex = *pEndNode;
+
+            if (aIndex > aNewEnd)
+            {
+                aNewEnd = aIndex;
+                bChanged = true;
+            }
+        }
+        else if (rNode.IsEndNode())
+        {
+            SwNode * pStartNode = rNode.StartOfSectionNode();
+            SwNodeIndex aStartIndex = *pStartNode;
+
+            if (aStartIndex < aNewStart)
+            {
+                aNewStart = aStartIndex;
+                bChanged = true;
+            }
+        }
+
+        if (aIndex < aEndIndex)
+            ++aIndex;
+    }
+
+    SwNode * pNode = &aIndex.GetNode();
+    while (pNode->IsEndNode())
+    {
+        SwNode * pStartNode = pNode->StartOfSectionNode();
+        SwNodeIndex aStartIndex(*pStartNode);
+        aNewStart = aStartIndex;
+        aNewEnd = aIndex;
+        bChanged = true;
+
+        ++aIndex;
+        pNode = &aIndex.GetNode();
+    }
+
+    if (bChanged)
+        pResult = new SwNodeRange(aNewStart, aNewEnd);
+
+    return pResult;
+}
+
 /*-- 18.05.2006 08:23:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,
                                     SwTableBoxFmt* pBoxFmt,
@@ -1326,7 +1380,8 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
                 SwTxtNode& rTxtNode = static_cast<SwTxtNode&>(rNode);
                 // setze den bei allen TextNode in der Tabelle den TableNode
                 // als StartNode
-                rTxtNode.pStartOfSection = pTblNd;
+// FIXME: this is setting wrong node StartOfSections in nested tables.
+//                rTxtNode.pStartOfSection = pTblNd;
                 // remove PageBreaks/PageDesc/ColBreak
                 const SwAttrSet* pSet = rTxtNode.GetpSwAttrSet();
                 if( pSet )
@@ -1404,7 +1459,6 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
                     if( aCellNodeIdx.GetNode().IsStartNode() )
                         aCellNodeIdx = SwNodeIndex( *aCellNodeIdx.GetNode().EndOfSectionNode() );
                 }
-
 
                 // Section der Box zuweisen
                 pBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
@@ -1549,20 +1603,21 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
             0 != ( pCurTxtNd = aDelRg.aStart.GetNode().GetTxtNode() ))
         {
             // Join the current text node with the last from the previous box if possible
-            aDelRg.aStart--;
             ULONG nNdIdx = aDelRg.aStart.GetIndex();
+            aDelRg.aStart--;
             if( pDelPara->pLastNd == &aDelRg.aStart.GetNode() )
             {
                 // Inserting the seperator
                 SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
-                pDelPara->pLastNd->Insert( pDelPara->cCh, aCntIdx );
+                pDelPara->pLastNd->InsertText( pDelPara->cCh, aCntIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
                 if( pDelPara->pUndo )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
                 SvULongs aBkmkArr( 4, 4 );
                 xub_StrLen nOldTxtLen = aCntIdx.GetIndex();
-                _SaveCntntIdx( pDoc, nNdIdx + 1, pCurTxtNd->GetTxt().Len(),
+                _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().Len(),
                                 aBkmkArr );
 
                 pDelPara->pLastNd->JoinNext();
@@ -1575,7 +1630,6 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
             else if( pDelPara->pUndo )
             {
                 aDelRg.aStart++;
-                nNdIdx = aDelRg.aStart.GetIndex();
                 pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex() );
             }
         }
@@ -1688,17 +1742,19 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
     const SwSpzFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
-    const SwPosition* pAPos;
     for( USHORT n = 0; n < rFlyArr.Count(); ++n )
     {
-        SwFrmFmt* pFmt = (SwFrmFmt*)rFlyArr[n];
+        SwFrmFmt *const pFmt = (SwFrmFmt*)rFlyArr[n];
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-              FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-            0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
+        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+             (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
             nStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nEnd )
+        {
             pFmt->MakeFrms();
+        }
     }
 
     return TRUE;
@@ -2544,7 +2600,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
             return ;
 
         Point aPt;
-        const SwShellCrsr *pShCrsr = *pCrsr;
+        const SwShellCrsr *pShCrsr = dynamic_cast<const SwShellCrsr*>(pCrsr);
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
@@ -2769,7 +2825,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
             return ;
 
         Point aPt;
-        const SwShellCrsr *pShCrsr = *pCrsr;
+        const SwShellCrsr *pShCrsr = dynamic_cast<const SwShellCrsr*>(pCrsr);
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 

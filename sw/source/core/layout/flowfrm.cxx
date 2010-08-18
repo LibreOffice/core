@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: flowfrm.cxx,v $
- * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,16 +38,16 @@
 #include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <tgrditem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <paratr.hxx>
 
 #include "ftnfrm.hxx"
@@ -366,7 +363,7 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
                 //denn dann weiche ich ihm nicht aus.
                 if ( ::IsFrmInSameKontext( pAnchor, &rThis ) )
                 {
-                    if ( rFmt.GetAnchor().GetAnchorId() == FLY_AT_CNTNT )
+                    if ( rFmt.GetAnchor().GetAnchorId() == FLY_AT_PARA )
                     {
                         // Den Index des anderen erhalten wir immer ueber das Ankerattr.
                         ULONG nTmpIndex = rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex();
@@ -513,10 +510,10 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
             pParent->pLower = pStart;
         else
         //Modified for #i100782#,04/03/2009
-        //If the pParent has more than 1 child nodes, former design will 
-        //ignore them directly without any collection work. It will make some 
+        //If the pParent has more than 1 child nodes, former design will
+        //ignore them directly without any collection work. It will make some
         //dangling pointers. This lead the crash...
-        //The new design will find the last child of pParent in loop way, and 
+        //The new design will find the last child of pParent in loop way, and
         //add the pStart after the last child.
         //  pParent->Lower()->pNext = pStart;
         {
@@ -1514,7 +1511,12 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             // values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
-            GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+            // --> OD 2009-08-28 #i102458#
+            bool bPrevLineSpacingPorportional = false;
+            GetSpacingValuesOfFrm( (*pPrevFrm),
+                                   nPrevLowerSpace, nPrevLineSpacing,
+                                   bPrevLineSpacingPorportional );
+            // <--
             if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) )
             {
                 nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
@@ -1539,7 +1541,22 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     //      building its maximum.
                     if ( pOwn->IsTxtFrm() )
                     {
-                        nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        // --> OD 2009-08-28 #i102458#
+                        // Correction:
+                        // A proportional line spacing of the previous text frame
+                        // is added up to a own leading line spacing.
+                        // Otherwise, the maximum of the leading line spacing
+                        // of the previous text frame and the own leading line
+                        // spacing is built.
+                        if ( bPrevLineSpacingPorportional )
+                        {
+                            nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        }
+                        else
+                        {
+                            nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
+                        }
+                        // <--
                     }
                     nUpper += nAdd;
                 }
@@ -1571,7 +1588,22 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     SwTwips nAdd = nPrevLineSpacing;
                     if ( pOwn->IsTxtFrm() )
                     {
-                        nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        // --> OD 2009-08-28 #i102458#
+                        // Correction:
+                        // A proportional line spacing of the previous text frame
+                        // is added up to a own leading line spacing.
+                        // Otherwise, the maximum of the leading line spacing
+                        // of the previous text frame and the own leading line
+                        // spacing is built.
+                        if ( bPrevLineSpacingPorportional )
+                        {
+                            nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        }
+                        else
+                        {
+                            nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
+                        }
+                        // <--
                     }
                     nUpper += nAdd;
                 }
@@ -1675,7 +1707,10 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
     {
         SwTwips nPrevLowerSpace = 0;
         SwTwips nPrevLineSpacing = 0;
-        GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+        // --> OD 2009-08-28 #i102458#
+        bool bDummy = false;
+        GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing, bDummy );
+        // <--
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
             const IDocumentSettingAccess* pIDSA = rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess();
@@ -2092,13 +2127,15 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
         if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
-            //Bei Sections kann es passieren, das wir gleich  in den Follow geflutscht
-            //sind. Dadurch wird nicht vom GetLeaf fuer die richtige Seite gesorgt.
-            //Das muessen wir fuer diesen Fall pruefen.
-            if ( !bSamePage && pNewUpper->IsInSct() &&
+            // --> OD 2009-12-31 #i106452#
+            // check page description not only in situation with sections.
+            if ( !bSamePage &&
                  ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
                    pOldPage->GetPageDesc()->GetFollow() != pNewPage->GetPageDesc() ) )
+            {
                 SwFrm::CheckPageDescs( pNewPage, FALSE );
+            }
+            // <--
         }
     }
     return bSamePage;
@@ -2160,7 +2197,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         // --> FME 2004-11-15 #i37084# FindLastCntnt does not necessarily
         // have to have a result != 0
         SwFrm* pRef = 0;
-        const BOOL bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
+        const bool bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
         if( bEndnote && pFtn->IsInSct() )
         {
             SwSectionFrm* pSect = pFtn->FindSctFrm();
@@ -2697,8 +2734,3 @@ const SwFlowFrm *SwFlowFrm::CastFlowFrm( const SwFrm *pFrm )
         return (SwSectionFrm*)pFrm;
     return 0;
 }
-
-
-
-
-

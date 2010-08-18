@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.142.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 
 
 #include <functional>
+#include <algorithm>
 
 #include <string.h>         // memset()
 #include <rtl/tencinfo.h>
@@ -1498,8 +1496,15 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             }
             INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
+            {
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
                                                                 bIsUnicode );
+            }
+            else
+            {
+                if (pWw8Fib->fExtChar)
+                    bIsUnicode=true;
+            }
             INT32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
             /*
@@ -1581,7 +1586,10 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-            *pIsUnicode = false;
+        if (pWw8Fib->fExtChar)
+                *pIsUnicode=true;
+            else
+                    *pIsUnicode = false;
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 
@@ -2114,7 +2122,7 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
 
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
 WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
-    long nStruct, long nStartPos, bool bNoEnd)
+    long nStruct, long nStartPos)
     : nIdx(0), nStru(nStruct)
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
@@ -2130,8 +2138,6 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
         pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
     nIdx = 0;
 #endif // OSL_BIGENDIAN
-    if( bNoEnd )
-        nIMax++;
     if( nStruct ) // Pointer auf Inhalts-Array
         pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     else
@@ -2271,22 +2277,48 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
 
 void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF )
 {
+    bool failure = false;
+
     // Pointer auf Pos-Array
     pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
 
     sal_Size nOldPos = pSt->Tell();
 
     pSt->Seek( nFilePos );
-    pSt->Read( pPLCF_PosArray, nPLCF );
+    failure = pSt->GetError();
+
+    if (!failure)
+    {
+        pSt->Read( pPLCF_PosArray, nPLCF );
+        failure = pSt->GetError();
+    }
+
+    if (!failure)
+    {
 #ifdef OSL_BIGENDIAN
-    for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
-    nIdx = 0;
+        for( nIdx = 0; nIdx <= nIMax; nIdx++ )
+            pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
+        nIdx = 0;
 #endif // OSL_BIGENDIAN
-    // Pointer auf Inhalts-Array
-    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
+        // Pointer auf Inhalts-Array
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
+    }
 
     pSt->Seek( nOldPos );
+
+    ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
+
+    if (failure)
+        MakeFailedPLCF();
+}
+
+void WW8PLCF::MakeFailedPLCF()
+{
+    nIMax = 0;
+    delete[] pPLCF_PosArray;
+    pPLCF_PosArray = new INT32[2];
+    pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 }
 
 void WW8PLCF::GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN )
@@ -2349,13 +2381,7 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN )
     ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
 
     if (failure)
-    {
-        nIMax = 0;
-        delete[] pPLCF_PosArray;
-        pPLCF_PosArray = new INT32[2];
-        pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
-        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
-    }
+        MakeFailedPLCF();
 }
 
 bool WW8PLCF::SeekPos(WW8_CP nPos)
@@ -3977,8 +4003,7 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
     {
         pBook[0] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkf,rFib.lcbPlcfbkf,4);
 
-        pBook[1] = new WW8PLCFspecial( pTblSt, rFib.fcPlcfbkl, rFib.lcbPlcfbkl,
-            0, -1, true);
+        pBook[1] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkl,rFib.lcbPlcfbkl,0);
 
         rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.chseTables);
 
@@ -4380,15 +4405,16 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pBkm = &aD[1];
         pEdn = &aD[2];
         pFtn = &aD[3];
+        pAnd = &aD[4];
 
-
-        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[4] : 0;
+        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
         //pPcdA index == pPcd index + 1
-        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[5] : 0;
-        pChp = &aD[6];
-        pAnd = &aD[7];
+        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[6] : 0;
+
+        pChp = &aD[7];
         pPap = &aD[8];
         pSep = &aD[9];
+
         pSep->pPLCFx = pBase->pSepPLCF;
         pFtn->pPLCFx = pBase->pFtnPLCF;
         pEdn->pPLCFx = pBase->pEdnPLCF;
@@ -5478,7 +5504,8 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
         cQuickSaves = ( aBits1 & 0xf0 ) >> 4;
         fEncrypted  =   aBits2 & 0x01       ;
         fWhichTblStm= ( aBits2 & 0x02 ) >> 1;
-        // dummy    = ( aBits2 & 0x0e ) >> 1;
+        fReadOnlyRecommended = (aBits2 & 0x4) >> 2;
+        fWriteReservation = (aBits2 & 0x8) >> 3;
         fExtChar    = ( aBits2 & 0x10 ) >> 4;
         // dummy    = ( aBits2 & 0x20 ) >> 5;
         fFarEast    = ( aBits2 & 0x40 ) >> 6; // #i90932#
@@ -5624,13 +5651,14 @@ WW8Fib::WW8Fib(BYTE nVer)
     // <-- #i90932#
 }
 
-bool WW8Fib::Write(SvStream& rStrm)
+bool WW8Fib::WriteHeader(SvStream& rStrm)
 {
-    BYTE *pDataPtr = new BYTE[ fcMin ];
-    BYTE *pData = pDataPtr;
-    memset( pData, 0, fcMin );
-
     bool bVer8 = 8 == nVersion;
+
+    size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
+    BYTE *pDataPtr = new BYTE[ nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
+    memset( pData, 0, nUnencryptedHdr );
 
     ULONG nPos = rStrm.Tell();
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
@@ -5650,8 +5678,15 @@ bool WW8Fib::Write(SvStream& rStrm)
     nBits16 |= (0xf0 & ( cQuickSaves << 4 ));
     if( fEncrypted )    nBits16 |= 0x0100;
     if( fWhichTblStm )  nBits16 |= 0x0200;
+
+    if (fReadOnlyRecommended)
+        nBits16 |= 0x0400;
+    if (fWriteReservation)
+        nBits16 |= 0x0800;
+
     if( fExtChar )      nBits16 |= 0x1000;
     if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
+    if( fObfuscated )   nBits16 |= 0x8000;
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
@@ -5696,6 +5731,27 @@ bool WW8Fib::Write(SvStream& rStrm)
 
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, cbMac );
+
+    rStrm.Write( pDataPtr, nUnencryptedHdr );
+    delete[] pDataPtr;
+    return 0 == rStrm.GetError();
+}
+
+bool WW8Fib::Write(SvStream& rStrm)
+{
+    bool bVer8 = 8 == nVersion;
+
+    WriteHeader( rStrm );
+
+    size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
+
+    BYTE *pDataPtr = new BYTE[ fcMin - nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
+    memset( pData, 0, fcMin - nUnencryptedHdr );
+
+    ULONG nPos = rStrm.Tell();
+    cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
+    rStrm.Seek( nPos );
 
     // 2 Longs uebergehen, da unwichtiger Quatsch
     pData += 2 * sizeof( INT32);
@@ -5905,7 +5961,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, 0);
     }
 
-    rStrm.Write( pDataPtr, fcMin );
+    rStrm.Write( pDataPtr, fcMin - nUnencryptedHdr );
     delete[] pDataPtr;
     return 0 == rStrm.GetError();
 }
@@ -6200,8 +6256,11 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
     rSt.Seek( rFib.fcSttbfffn );
 
+    INT32 nFFn = rFib.lcbSttbfffn - 2;
+
     // allocate Font Array
-    BYTE* pA   = new BYTE[ rFib.lcbSttbfffn - 2 ];
+    BYTE* pA   = new BYTE[ nFFn ];
+    memset(pA, 0, nFFn);
     WW8_FFN* p = (WW8_FFN*)pA;
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
@@ -6218,13 +6277,13 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     rSt.SeekRel( 2 );
 
     // read all font information
-    rSt.Read( pA, rFib.lcbSttbfffn - 2 );
+    nFFn = rSt.Read( pA, nFFn );
 
     if( eVersion < ww::eWW8 )
     {
         // try to figure out how many fonts are defined here
         nMax = 0;
-        long nLeft = rFib.lcbSttbfffn - 2;
+        long nLeft = nFFn;
         for(;;)
         {
             short nNextSiz;
@@ -6339,8 +6398,10 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 #ifdef __WW8_NEEDS_COPY
                 {
                     BYTE nLen = 0x28;
+                    BYTE nLength = sizeof( pVer8->szFfn ) / sizeof( SVBT16 );
+                    nLength = std::min( nLength, BYTE( pVer8->cbFfnM1+1 ) );
                     for( UINT16* pTmp = pVer8->szFfn;
-                        nLen < pVer8->cbFfnM1 + 1 ; ++pTmp, nLen+=2 )
+                        nLen < nLength; ++pTmp, nLen+=2 )
                     {
                         *pTmp = SVBT16ToShort( *(SVBT16*)pTmp );
                     }
@@ -7283,7 +7344,7 @@ SEPr::SEPr() :
     dttmPropRMark(0), dxtCharSpace(0), dyaLinePitch(0), clm(0), reserved1(0),
     dmOrientPage(0), iHeadingPgn(0), pgnStart(1), lnnMin(0), wTextFlow(0),
     reserved2(0), pgbApplyTo(0), pgbPageDepth(0), pgbOffsetFrom(0),
-    xaPage(12240), yaPage(15840), xaPageNUp(12240), yaPageNUp(15840),
+    xaPage(lLetterWidth), yaPage(lLetterHeight), xaPageNUp(lLetterWidth), yaPageNUp(lLetterHeight),
     dxaLeft(1800), dxaRight(1800), dyaTop(1440), dyaBottom(1440), dzaGutter(0),
     dyaHdrTop(720), dyaHdrBottom(720), ccolM1(0), fEvenlySpaced(1),
     reserved3(0), fBiDi(0), fFacingCol(0), fRTLGutter(0), fRTLAlignment(0),

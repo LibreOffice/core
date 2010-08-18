@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtflcnt.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@ class SwTxtFlyCnt : public SwTxtAttr
     SwFlyInCntFrm  *_GetFlyFrm( const SwFrm *pCurrFrm );
 
 public:
-    SwTxtFlyCnt( const SwFmtFlyCnt& rAttr, xub_StrLen nStart );
+    SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStart );
 
     // Setzt den Anker im pFmt und
     void    SetAnchor( const SwTxtNode *pNode );
@@ -64,7 +61,7 @@ inline SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm )
 
 inline const SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm ) const
 {
-    return ((SwTxtFlyCnt*)this)->_GetFlyFrm( pCurrFrm );
+    return (const_cast<SwTxtFlyCnt*>(this))->_GetFlyFrm( pCurrFrm );
 }
 
 #endif

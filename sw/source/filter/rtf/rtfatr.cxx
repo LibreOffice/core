@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.75.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,61 +35,53 @@
  */
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <vcl/cvtgrf.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/rtfkeywd.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/rtfout.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/hyznitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/lspcitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/crsditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
-#endif
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
-#endif
-#include <svx/twolinesitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <svl/itemiter.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <unotools/charclass.hxx>
 #include <reffld.hxx>
 #include <frmatr.hxx>
@@ -102,7 +91,6 @@
 #include <fmtfld.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtcntnt.hxx>
@@ -128,9 +116,7 @@
 #include <flddat.hxx>
 #include <pagedesc.hxx>     // fuer SwPageDesc ...
 #include <swtable.hxx>      // fuer SwPageDesc ...
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swrect.hxx>
 #include <section.hxx>
 #include <wrtswtbl.hxx>
@@ -230,6 +216,8 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
                 ( *pItem != rPool.GetDefaultItem( nWhich )
                     || ( rSet.GetParent() &&
                         *pItem != rSet.GetParent()->Get( nWhich ) )
+                    || ( rWrt.GetAttrSet() &&
+                        *pItem != rWrt.GetAttrSet()->Get( nWhich ) )
               ) )
                 ;
             else
@@ -522,14 +510,14 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
         // ueberhaupt eigene Attribute gibt !
         SvMemoryStream aTmpStrm;
         SvStream* pSaveStrm = &rRTFWrt.Strm();
-        rRTFWrt.SetStrm( aTmpStrm );
+        rRTFWrt.SetStream( &aTmpStrm );
 
         rRTFWrt.bRTFFlySyntax = false;
         OutRTF_SwFmt( rRTFWrt, *rRTFWrt.pFlyFmt );
 
-        rRTFWrt.SetStrm( *pSaveStrm );  // Stream-Pointer wieder zurueck
+        rRTFWrt.SetStream( pSaveStrm );   // Stream-Pointer wieder zurueck
 
-        if( aTmpStrm.GetSize() )            // gibt es SWG spezifische Attribute ??
+        if ( aTmpStrm.GetEndOfData() ) // gibt es SWG spezifische Attribute?
         {
             aTmpStrm.Seek( 0L );
             rRTFWrt.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << aTmpStrm << '}';
@@ -1328,8 +1316,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             nChrCnt = nStrPos & 0xff00;
         }
 
-        HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
-
         if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
             && nStrPos != nEnde )
         {
@@ -1360,6 +1346,8 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
         else
             aEndPosLst.OutScriptChange( nStrPos );
+
+        HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
 
         if( rRTFWrt.bOutFmtAttr )
             rRTFWrt.Strm() << ' ';
@@ -1760,17 +1748,29 @@ static void OutSwTblBorder(SwRTFWriter& rWrt, const SvxBoxItem& rBox,
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
+#ifdef __MINGW32__
+    static const char* aBorderNames[] __attribute__((section(".data"))) =
+#else
     static const char* aBorderNames[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL, OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR
     };
     //Yes left and top are swapped with eachother for cell padding! Because
     //that's what the thunderingly annoying rtf export/import word xp does.
+#ifdef __MINGW32__
+    static const char* aCellPadNames[] __attribute__((section(".data"))) =
+#else
     static const char* aCellPadNames[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT, OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR
     };
+#ifdef __MINGW32__
+    static const char* aCellPadUnits[] __attribute__((section(".data"))) =
+#else
     static const char* aCellPadUnits[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLPADFL, OOO_STRING_SVTOOLS_RTF_CLPADFT, OOO_STRING_SVTOOLS_RTF_CLPADFB, OOO_STRING_SVTOOLS_RTF_CLPADFR
     };
@@ -1895,7 +1895,12 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         const SwWriteTableCells& rCells = pRow->GetCells();
 
         BOOL bFixRowHeight = false;
-        for( nColCnt = 0, nBox = 0; nBox < rCells.Count(); ++nColCnt )
+
+        USHORT nBoxes = rCells.Count();
+        if (nColCnt < nBoxes)
+            nBoxes = nColCnt;
+
+        for( nColCnt = 0, nBox = 0; nBox < rCells.Count() && nColCnt < nBoxes; ++nColCnt )
         {
             SwWriteTableCell* pCell = rCells[ nBox ];
             const bool bProcessCoveredCell = bNewTableModel && 0 == pCell->GetRowSpan();
@@ -1972,7 +1977,11 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
             {
                 BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
             };
+#ifdef __MINGW32__
+            static const char* aRowPadNames[] __attribute__((section(".data"))) =
+#else
             static const char* aRowPadNames[] =
+#endif
             {
                 OOO_STRING_SVTOOLS_RTF_TRPADDT, OOO_STRING_SVTOOLS_RTF_TRPADDL, OOO_STRING_SVTOOLS_RTF_TRPADDB, OOO_STRING_SVTOOLS_RTF_TRPADDR
             };
@@ -1994,7 +2003,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         for( nBox = 0; nBox < nColCnt; ++nBox )
         {
             SwWriteTableCell* pCell = pBoxArr[ nBox ];
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || (pCell == NULL) )
                 continue;
 
             const SwFrmFmt& rFmt = *pCell->GetBox()->GetFrmFmt();
@@ -2045,15 +2054,17 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
 
         // Inhalt der Boxen ausgeben
         rWrt.Strm() << SwRTFWriter::sNewLine << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
-        for( nBox = 0; nBox < nColCnt; ++nBox )
+        for( nBox = 0; nBox < nBoxes; ++nBox )
         {
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            SwWriteTableCell * pCell = pBoxArr[nBox];
+
+            if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || pCell == NULL)
                 continue;
 
-            if( pBoxArr[ nBox ]->GetRowSpan() == pRowSpans[ nBox ] )
+            if( pCell->GetRowSpan() == pRowSpans[ nBox ] )
             {
                 // new Box
-                const SwStartNode* pSttNd = pBoxArr[ nBox ]->GetBox()->GetSttNd();
+                const SwStartNode* pSttNd = pCell->GetBox()->GetSttNd();
                 RTFSaveData aSaveData( rRTFWrt,
                         pSttNd->GetIndex()+1, pSttNd->EndOfSectionIndex() );
                 rRTFWrt.bOutTable = TRUE;
@@ -2765,8 +2776,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             */
             const String& rFldPar1 = pFld->GetPar1();
             USHORT nScript;
-            if( pBreakIt->xBreak.is() )
-                nScript = pBreakIt->xBreak->getScriptType( rFldPar1, 0);
+            if( pBreakIt->GetBreakIter().is() )
+                nScript = pBreakIt->GetBreakIter()->getScriptType( rFldPar1, 0);
             else
                 nScript = i18n::ScriptType::ASIAN;
 
@@ -2891,7 +2902,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
 
     case RES_HIDDENTXTFLD:
             if( TYP_CONDTXTFLD == ((SwHiddenTxtField*)pFld)->GetSubType() )
-                RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
+                RTFOutFuncs::Out_String( rWrt.Strm(),
+                    pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
                                         rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
             else
             {
@@ -2947,7 +2959,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() >> cCh;
             if( ' ' != cCh )            // vorweg immer einen Trenner
                 rWrt.Strm() << ' ';
-            RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
+            RTFOutFuncs::Out_String( rWrt.Strm(),
+                pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
                                         rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
         }
         break;
@@ -2956,7 +2969,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     if( aFldStt.Len() )
     {
         rWrt.Strm() << "}{" << OOO_STRING_SVTOOLS_RTF_FLDRSLT << ' ';
-        RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
+        RTFOutFuncs::Out_String( rWrt.Strm(),
+                pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
                                         rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
         rWrt.Strm() << "}}";
         rRTFWrt.bOutFmtAttr = FALSE;
@@ -3023,14 +3037,6 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
-{
-    RTFOutFuncs::Out_String(rWrt.Strm(),
-        String(((SwFmtHardBlank&)rHt).GetChar()), ((SwRTFWriter&)rWrt).eDefaultEncoding,
-        ((SwRTFWriter&)rWrt).bWriteHelpFmt);
-    return rWrt;
-}
-
 static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rHt;
@@ -3085,8 +3091,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         defaulting to asian.
         */
     USHORT nScript;
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
     else
         nScript = i18n::ScriptType::ASIAN;
 
@@ -3128,8 +3134,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm() << "\\\\a" << cDirective;
     rWrt.Strm() << "(\\\\s\\\\up ";
 
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( pNd->GetTxt(),
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( pNd->GetTxt(),
                                                    *pRubyTxt->GetStart() );
     else
         nScript = i18n::ScriptType::ASIAN;
@@ -3576,7 +3582,7 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
         const char* pOrient;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
         sal_Int16 eOrient = rFlyVert.GetRelationOrient();
-        if( FLY_PAGE == eAnchor )
+        if (FLY_AT_PAGE == eAnchor)
         {
             if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pOrient = OOO_STRING_SVTOOLS_RTF_PVPG;
@@ -3632,7 +3638,7 @@ static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
         const char* pS;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
         sal_Int16 eOrient = rFlyHori.GetRelationOrient();
-        if( FLY_PAGE == eAnchor )
+        if (FLY_AT_PAGE == eAnchor)
         {
             if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pS = OOO_STRING_SVTOOLS_RTF_PHPG;
@@ -3686,12 +3692,12 @@ static Writer& OutRTF_SwFmtAnchor( Writer& rWrt, const SfxPoolItem& rHt )
         rRTFWrt.bOutFmtAttr = TRUE;
         switch( nId )
         {
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
                 rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FLYPAGE;
                 rWrt.OutULong( rAnchor.GetPageNum() );
             break;
-        case FLY_AT_CNTNT:
-        case FLY_IN_CNTNT:
+        case FLY_AT_PARA:
+        case FLY_AS_CHAR:
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FLYCNTNT;
             break;
         }
@@ -3770,11 +3776,7 @@ static Writer& OutRTF_SwFmtBox( Writer& rWrt, const SfxPoolItem& rHt )
 
     static USHORT __READONLY_DATA aBorders[] = {
             BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
-#ifdef __MINGW32__ // for runtime pseudo reloc
-    static const sal_Char* aBorderNames[] = {
-#else
     static const sal_Char* __READONLY_DATA aBorderNames[] = {
-#endif
             OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL, OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };
 
     USHORT nDist = rBox.GetDistance();
@@ -4235,22 +4237,22 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
 
-/* RES_TXTATR_AUTOFMT   */          OutRTF_SwTxtAutoFmt,
-/* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy
-/* RES_TXTATR_REFMARK*/             0, // NOT USED!! OutRTF_SwRefMark,
+/* RES_TXTATR_REFMARK */            0, // NOT USED!! OutRTF_SwRefMark,
 /* RES_TXTATR_TOXMARK */            0, // NOT USED!! OutRTF_SwTOXMark,
-/* RES_TXTATR_CHARFMT   */          OutRTF_SwTxtCharFmt,
-/* RES_TXTATR_TWO_LINES */          0,
+/* RES_TXTATR_META */               0,
+/* RES_TXTATR_METAFIELD */          0,
+/* RES_TXTATR_AUTOFMT */            OutRTF_SwTxtAutoFmt,
+/* RES_TXTATR_INETFMT */            OutRTF_SwTxtINetFmt,
+/* RES_TXTATR_CHARFMT */            OutRTF_SwTxtCharFmt,
 /* RES_TXTATR_CJK_RUBY */           OutRTF_SwTxtRuby,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
-/* RES_TXTATR_DUMMY6 */             0,
 
 /* RES_TXTATR_FIELD */              OutRTF_SwField,
 /* RES_TXTATR_FLYCNT */             OutRTF_SwFlyCntnt,
 /* RES_TXTATR_FTN */                OutRTF_SwFtn,
-/* RES_TXTATR_SOFTHYPH */           0,  // old attr. - coded now by character
-/* RES_TXTATR_HARDBLANK*/           OutRTF_SwHardBlank,
+/* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swdlgfact.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,7 +377,7 @@ class SwInsertSectionTabDialog;
 class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialog
 {
     DECL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl,SwInsertSectionTabDialog)
-    virtual void        SetSection(const SwSection& rSect);
+    virtual void        SetSectionData(SwSectionData const& rSect);
 };
 //for SwInsertSectionTabDialog end
 

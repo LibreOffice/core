@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docstat.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +30,6 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
-///////////////////////////////////////////////////////////////////////////
-// PRODUCT: struct SwInternStat ist nur fuer CORE Interne Statistics und
-//          hat nichts in einer ProductVersion zu suchen.
-///////////////////////////////////////////////////////////////////////////
-
-struct SwInternStat;
 
 struct SW_DLLPUBLIC SwDocStat
 {
@@ -46,11 +37,14 @@ struct SW_DLLPUBLIC SwDocStat
     USHORT          nGrf;
     USHORT          nOLE;
     ULONG           nPage;
+    /// paragraphs for document statistic: non-empty and non-hidden ones
     ULONG           nPara;
+    /// all paragraphs, including empty/hidden ones
+    ULONG           nAllPara;
     ULONG           nWord;
     ULONG           nChar;
     BOOL            bModified;
-    SwInternStat*   pInternStat;
+
     SwDocStat();
     void Reset();
 };

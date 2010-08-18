@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibility.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,14 +48,14 @@
 #include <vcl/unohelp2.hxx>
 #include <tools/gen.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
-#include <svx/editobj.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoedhlp.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoedhlp.hxx>
 
 
 #include "accessibility.hxx"
@@ -72,7 +69,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+#define A2OU(cChar)  rtl::OUString::createFromAscii(cChar)
 
 //////////////////////////////////////////////////////////////////////
 
@@ -824,7 +821,7 @@ OUString SAL_CALL SmGraphicAccessible::getImplementationName()
     throw (RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
-    return C2U("SmGraphicAccessible");
+    return A2OU("SmGraphicAccessible");
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
@@ -832,10 +829,10 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
     throw (RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
-    return  rServiceName == C2U( "com::sun::star::accessibility::Accessible" ) ||
-            rServiceName == C2U( "com::sun::star::accessibility::AccessibleComponent" ) ||
-            rServiceName == C2U( "com::sun::star::accessibility::AccessibleContext" ) ||
-            rServiceName == C2U( "com::sun::star::accessibility::AccessibleText" );
+    return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
+            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
+            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" ) ||
+            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleText" );
 }
 
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
@@ -844,10 +841,10 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
-    pNames[0] = C2U( "com::sun::star::accessibility::Accessible" );
-    pNames[1] = C2U( "com::sun::star::accessibility::AccessibleComponent" );
-    pNames[2] = C2U( "com::sun::star::accessibility::AccessibleContext" );
-    pNames[3] = C2U( "com::sun::star::accessibility::AccessibleText" );
+    pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
+    pNames[1] = A2OU( "com::sun::star::accessibility::AccessibleComponent" );
+    pNames[2] = A2OU( "com::sun::star::accessibility::AccessibleContext" );
+    pNames[3] = A2OU( "com::sun::star::accessibility::AccessibleText" );
     return aNames;
 }
 
@@ -1161,6 +1158,10 @@ XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nP
     return aTxt;
 }
 
+void SmTextForwarder::FieldClicked(const SvxFieldItem&, USHORT, USHORT)
+{
+}
+
 USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich )
 {
     EECharAttribArray aAttribs;
@@ -1442,6 +1443,18 @@ USHORT SmTextForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLineLen(nPara, nLine) : 0;
+}
+
+void SmTextForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
+{
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    pEditEngine->GetLineBoundaries(rStart, rEnd, nPara, nLine);
+}
+
+USHORT SmTextForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    return pEditEngine ? pEditEngine->GetLineNumberAtIndex(nPara, nIndex) : 0;
 }
 
 sal_Bool SmTextForwarder::QuickFormatDoc( BOOL /*bFull*/ )
@@ -2026,7 +2039,7 @@ OUString SAL_CALL SmEditAccessible::getImplementationName()
     throw (RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
-    return C2U("SmEditAccessible");
+    return A2OU("SmEditAccessible");
 }
 
 sal_Bool SAL_CALL SmEditAccessible::supportsService(
@@ -2034,9 +2047,9 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
     throw (RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
-    return  rServiceName == C2U( "com::sun::star::accessibility::Accessible" ) ||
-            rServiceName == C2U( "com::sun::star::accessibility::AccessibleComponent" ) ||
-            rServiceName == C2U( "com::sun::star::accessibility::AccessibleContext" );
+    return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
+            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
+            rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" );
 }
 
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
@@ -2045,9 +2058,9 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(3);
     OUString *pNames = aNames.getArray();
-    pNames[0] = C2U( "com::sun::star::accessibility::Accessible" );
-    pNames[1] = C2U( "com::sun::star::accessibility::AccessibleComponent" );
-    pNames[2] = C2U( "com::sun::star::accessibility::AccessibleContext" );
+    pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
+    pNames[1] = A2OU( "com::sun::star::accessibility::AccessibleComponent" );
+    pNames[2] = A2OU( "com::sun::star::accessibility::AccessibleContext" );
     return aNames;
 }
 

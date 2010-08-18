@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par2.hxx,v $
- * $Revision: 1.47.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #ifndef WW8SCAN_HXX
 #include "ww8scan.hxx"  // class WW8Style
@@ -224,6 +221,7 @@ public:
         return pOutlineNumrule;
     }
     CharSet GetCharSet() const;
+    CharSet GetCJKCharSet() const;
 };
 
 class WW8RStyle: public WW8Style
@@ -287,7 +285,6 @@ public:
         const WW8SwFlyPara* pFS, bool bGraf);
     WW8FlySet(SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
         long nWidth, long nHeight);
-    WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM);
 };
 
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};

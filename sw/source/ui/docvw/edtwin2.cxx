@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.31.130.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,39 +31,28 @@
 #include <hintids.hxx>
 
 #include <doc.hxx>
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #include <stdio.h>
 #endif
 
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#include <svtools/stritem.hxx>
-#include <svtools/securityoptions.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
-#include <svx/flditem.hxx>
-#include <svtools/urihelper.hxx>
+#include <editeng/flditem.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
-#ifndef _OUTLINER_HXX //autogen
-#define _EEITEMID_HXX
-#include <svx/outliner.hxx>
-#endif
-#include <svtools/itemiter.hxx>
+#include <editeng/outliner.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <edtwin.hxx>
 #include <dpage.hxx>
 #include <shellres.hxx>
@@ -83,16 +69,16 @@
 #include <txttxmrk.hxx>
 #include <uitool.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 
-#include <postit.hxx>
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
+
+// --> OD 2009-08-18 #i104300#
+#include <IDocumentMarkAccess.hxx>
+#include <ndtxt.hxx>
+// <--
 
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
@@ -157,7 +143,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
                                     SwContentAtPos::SW_SMARTTAG |
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
@@ -171,7 +157,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = UniString(
@@ -205,6 +191,38 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix.EqualsAscii( pMarkToOLE ))
                     sTxt = sTxt.Copy( 0, nFound - 1);
                 }
+                // --> OD 2009-08-18 #i104300#
+                // special handling if target is a cross-reference bookmark
+                {
+                    String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
+                    IDocumentMarkAccess* const pMarkAccess =
+                                                rSh.getIDocumentMarkAccess();
+                    IDocumentMarkAccess::const_iterator_t ppBkmk =
+                                    pMarkAccess->findBookmark( sTmpSearchStr );
+                    if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
+                         IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                            == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK )
+                    {
+                        SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
+                        if ( pTxtNode )
+                        {
+                            sTxt = pTxtNode->GetExpandTxt( 0, pTxtNode->Len(), true, true );
+
+                            if( sTxt.Len() )
+                            {
+                                sTxt.EraseAllChars( 0xad );
+                                for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                                {
+                                    if( *p < 0x20 )
+                                        *p = 0x20;
+                                    else if(*p == 0x2011)
+                                        *p = '-';
+                                }
+                            }
+                        }
+                    }
+                }
+                // <--
                 // --> OD 2007-07-26 #i80029#
                 BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
@@ -286,7 +304,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             USHORT nOldSubType = pFld->GetSubType();
                             ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sTxt = pFld->Expand();
+                            sTxt =
+                                pFld->ExpandField(rSh.GetDoc()->IsClipBoard());
                             ((SwField*)pFld)->SetSubType(nOldSubType);
                         }
                         break;

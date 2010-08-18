@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dview.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +29,9 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpagv.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 
 #include "swtypes.hxx"
 #include "pagefrm.hxx"
@@ -58,11 +53,9 @@
 #include "shellres.hxx"
 
 // #i7672#
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
-
-using namespace com::sun::star;
 
 // OD 18.06.2003 #108784#
 //#ifndef _SVDVMARK_HXX //autogen
@@ -73,6 +66,10 @@ using namespace com::sun::star;
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 // <--
+
+
+using namespace com::sun::star;
+
 
 class SwSdrHdl : public SdrHdl
 {
@@ -153,6 +150,81 @@ sal_Bool SwDrawView::IsAntiAliasing() const
 }
 // <--
 
+//////////////////////////////////////////////////////////////////////////////
+
+SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT nTol, const SdrMarkList &rMrkList)
+{
+    if(!nTol)
+    {
+        // the old method forced back to outer bounds test when nTol == 0, so
+        // do not try to correct when nTol is not set (used from HelpContent)
+    }
+    else
+    {
+        // rebuild logic from former SwVirtFlyDrawObj::CheckSdrObjectHit. This is needed since
+        // the SdrObject-specific CheckHit implementations are now replaced with primitives and
+        // 'tricks' like in the old implementation (e.g. using a view from a model-data class to
+        // detect if object is selected) are no longer valid.
+        // The standard primitive hit-test for SwVirtFlyDrawObj now is the outer bound. The old
+        // implementation reduced this excluding the inner bound when the object was not selected.
+        SwVirtFlyDrawObj* pSwVirtFlyDrawObj = dynamic_cast< SwVirtFlyDrawObj* >(pRetval);
+
+        if(pSwVirtFlyDrawObj)
+        {
+            if(pSwVirtFlyDrawObj->GetFlyFrm()->Lower() && pSwVirtFlyDrawObj->GetFlyFrm()->Lower()->IsNoTxtFrm())
+            {
+                // the old method used IsNoTxtFrm (should be for SW's own OLE and
+                // graphic's) to accept hit only based on outer bounds; nothing to do
+            }
+            else
+            {
+                // check if the object is selected in this view
+                const sal_uInt32 nMarkCount(rMrkList.GetMarkCount());
+                bool bSelected(false);
+
+                for(sal_uInt32 a(0); !bSelected && a < nMarkCount; a++)
+                {
+                    if(pSwVirtFlyDrawObj == rMrkList.GetMark(a)->GetMarkedSdrObj())
+                    {
+                        bSelected = true;
+                    }
+                }
+
+                if(!bSelected)
+                {
+                    // when not selected, the object is not hit when hit position is inside
+                    // inner range. Get and shrink inner range
+                    basegfx::B2DRange aInnerBound(pSwVirtFlyDrawObj->getInnerBound());
+
+                    aInnerBound.grow(-1.0 * nTol);
+
+                    if(aInnerBound.isInside(basegfx::B2DPoint(rPnt.X(), rPnt.Y())))
+                    {
+                        // exclude this hit
+                        pRetval = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    return pRetval;
+}
+
+SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
+{
+    // call parent
+    SdrObject* pRetval = FmFormView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);
+
+    if(pRetval)
+    {
+        // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
+        pRetval = impLocalHitCorrection(pRetval, rPnt, nTol, GetMarkedObjectList());
+    }
+
+    return pRetval;
+}
+
 /*************************************************************************
 |*
 |*  SwDrawView::AddCustomHdl()
@@ -183,7 +255,7 @@ void SwDrawView::AddCustomHdl()
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
     // <--
 
-    if(FLY_IN_CNTNT == rAnchor.GetAnchorId())
+    if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
 
     const SwFrm* pAnch;
@@ -192,7 +264,7 @@ void SwDrawView::AddCustomHdl()
 
     Point aPos(aAnchorPoint);
 
-    if ( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+    if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
     {
         // --> OD 2004-06-24 #i28701# - use last character rectangle saved at object
         // in order to avoid a format of the anchor frame
@@ -932,10 +1004,6 @@ void SwDrawView::CheckPossibilities()
         }
         if ( pFrm )
             bProtect = pFrm->IsProtected(); //Rahmen, Bereiche usw.
-        // --> OD 2006-11-06 #130889# - make code robust
-//        if ( FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() &&
-//             rMrkList.GetMarkCount() > 1 )
-//            bProtect = TRUE;
         {
             SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
             if ( !pFrmFmt )
@@ -944,13 +1012,12 @@ void SwDrawView::CheckPossibilities()
                         "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = TRUE;
             }
-            else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() &&
+            else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&
                       rMrkList.GetMarkCount() > 1 )
             {
                 bProtect = TRUE;
             }
         }
-        // <--
     }
     bMoveProtect    |= bProtect;
     bResizeProtect  |= bProtect | bSzProtect;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: calc.cxx,v $
- * $Revision: 1.44.174.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,16 +39,16 @@
 #include <cfloat>
 #include <hintids.hxx>
 #include <rtl/math.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <viewsh.hxx>
@@ -273,7 +270,7 @@ SwCalc::SwCalc( SwDoc& rD )
     :
     aErrExpr( aEmptyStr, SwSbxValue(), 0 ),
     rDoc( rD ),
-    pLclData( &GetAppLocaleData() ),
+    pLclData( &SvtSysLocale().GetLocaleData() ),
     pCharClass( &GetAppCharClass() ),
     nListPor( 0 ),
     eError( CALC_NOERR )
@@ -422,7 +419,7 @@ SwCalc::~SwCalc()
 {
     for( USHORT n = 0; n < TBLSZ; ++n )
         delete VarTable[n];
-    if( pLclData != &GetAppLocaleData() )
+    if( pLclData != &SvtSysLocale().GetLocaleData() )
         delete pLclData;
     if( pCharClass != &GetAppCharClass() )
         delete pCharClass;
@@ -1622,7 +1619,7 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
 {
     const LocaleDataWrapper* pLclD = pLclData;
     if( !pLclD )
-        pLclD = &GetAppLocaleData();
+        pLclD = &SvtSysLocale().GetLocaleData();
 
     const xub_Unicode nCurrCmdPos = rCommandPos;
     rtl_math_ConversionStatus eStatus;
@@ -1634,7 +1631,7 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             &eStatus, &pEnd );
     rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 
-    if( !pLclData && pLclD != &GetAppLocaleData() )
+    if( !pLclData && pLclD != &SvtSysLocale().GetLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
     return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
@@ -1643,7 +1640,7 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
 BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, SwDoc* pDoc )
 {
-    const LocaleDataWrapper* pLclD = &GetAppLocaleData();
+    const LocaleDataWrapper* pLclD = &SvtSysLocale().GetLocaleData();
     if( pDoc )
     {
 
@@ -1664,7 +1661,7 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             &eStatus, &pEnd );
     rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 
-    if( pLclD != &GetAppLocaleData() )
+    if( pLclD != &SvtSysLocale().GetLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
     return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appopt.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,25 +32,28 @@
 #include <cmdid.h>          // Funktion-Ids
 #endif
 
+#include <com/sun/star/i18n/ScriptType.hpp>
+
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <i18npool/mslangid.hxx>
 #include <fontcfg.hxx>
 #include <optload.hxx>
 #include <optcomp.hxx>
@@ -83,15 +83,15 @@
 #endif
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/langitem.hxx>
+#include <unotools/lingucfg.hxx>
+#include <editeng/unolingu.hxx>
 
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
 #include <globals.h>        // globale Konstanten z.B.
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>
 
@@ -148,7 +148,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
                                     SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
                                     0);
@@ -191,16 +191,25 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));*/
 
         SvtLinguConfig aLinguCfg;
+        Locale aLocale;
+        LanguageType nLang;
+
+        using namespace ::com::sun::star::i18n::ScriptType;
 
         Any aLang = aLinguCfg.GetProperty(C2U("DefaultLocale"));
-        Locale aLocale;
         aLang >>= aLocale;
-        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_LANGUAGE));
+        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), LATIN);
+        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CJK"));
         aLang >>= aLocale;
-        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_CHAR_CJK_LANGUAGE));
+        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), ASIAN);
+        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CJK_LANGUAGE));
 
+        aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CTL"));
+        aLang >>= aLocale;
+        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), COMPLEX);
+        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CTL_LANGUAGE));
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
@@ -273,7 +282,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     /*-----------------01.02.97 13.02-------------------
         Test-Optionen
     --------------------------------------------------*/
@@ -479,7 +488,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     /*--------------------------------------------------------------------------
                 Writer Testseite auswerten
     ----------------------------------------------------------------------------*/
@@ -602,7 +611,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             }
         }
         break;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         case  RID_SW_TP_OPTTEST_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

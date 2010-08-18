@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pview.hxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,8 +219,6 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = TRUE );
 
 
-    SW_DLLPRIVATE virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI,
-                                   PrintDialog *pPrintDialog = 0 );
     SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
     SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,

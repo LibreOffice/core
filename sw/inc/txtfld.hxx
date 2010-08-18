@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfld.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,20 +37,22 @@ class SwTxtNode;
 
 class SwTxtFld : public SwTxtAttr
 {
-    mutable     String     aExpand;
-    SwTxtNode              *pMyTxtNd;
+    mutable   String m_aExpand;
+    SwTxtNode * m_pTxtNode;
+
 public:
-    SwTxtFld( const SwFmtFld& rAttr, xub_StrLen nStart );
-    ~SwTxtFld();
+    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart,
+            bool const bInClipboard);
+    virtual ~SwTxtFld();
 
     void CopyFld( SwTxtFld *pDest ) const;
     void Expand() const;
     inline void ExpandAlways();
 
-    // erfrage und setze den TxtNode Pointer
-    SwTxtNode* GetpTxtNode() const { return pMyTxtNd; }
+    // get and set TxtNode pointer
+    SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
     inline SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
     // enable notification that field content has changed and needs reformatting
     void NotifyContentChange(SwFmtFld& rFmtFld);
 
@@ -63,18 +62,18 @@ public:
 
        @return position of this field. Has to be deleted explicitly.
     */
-    SwPosition * GetPosition() const;
+//    SwPosition * GetPosition() const;
 };
 
 inline SwTxtNode& SwTxtFld::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtFld:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 inline void SwTxtFld::ExpandAlways()
 {
-    aExpand += ' ';
+    m_aExpand += ' ';
     Expand();
 }
 

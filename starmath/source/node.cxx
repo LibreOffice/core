@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+#include "node.hxx"
+#include "rect.hxx"
+#include "symbol.hxx"
+#include "smmod.hxx"
+#include "document.hxx"
+#include "view.hxx"
+#include "mathtype.hxx"
+
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -41,22 +45,13 @@
 #include <vcl/outdev.hxx>
 #include <sfx2/module.hxx>
 
-
-#include "node.hxx"
-#include <rect.hxx>
-#include "symbol.hxx"
-#include "smmod.hxx"
-#include <document.hxx>
-#include <view.hxx>
-#ifndef _MATHTYPE_HXX
-#include "mathtype.hxx"
-#endif
-
 #include <math.h>
 #include <float.h>
 
 // define this to draw rectangles for debugging
 //#define SM_RECT_DEBUG
+
+#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
 ////////////////////////////////////////
 // SmTmpDevice
@@ -118,7 +113,7 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
             if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
                 aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
 
-            nNewCol = SM_MOD1()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+            nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
             Color aTmpColor( nNewCol );
             if (aBgCol.IsDark() && aTmpColor.IsDark())
@@ -579,16 +574,16 @@ SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     SmNode( rNode.GetType(), rNode.GetToken() )
 {
     ULONG i;
-    for (i = 0;  i < aSubNodes.GetSize();  i++)
-        delete aSubNodes.Get(i);
-    aSubNodes.Clear();
+    for (i = 0;  i < aSubNodes.size();  i++)
+        delete aSubNodes[i];
+    aSubNodes.resize(0);
 
-    ULONG nSize = rNode.aSubNodes.GetSize();
-    aSubNodes.SetSize( nSize );
+    ULONG nSize = rNode.aSubNodes.size();
+    aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
-        SmNode *pNode = rNode.aSubNodes.Get(i);
-        aSubNodes.Put( i, pNode ? new SmNode( *pNode ) : 0 );
+        SmNode *pNode = rNode.aSubNodes[i];
+        aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
     }
 }
 
@@ -608,16 +603,16 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
     SmNode::operator = ( rNode );
 
     ULONG i;
-    for (i = 0;  i < aSubNodes.GetSize();  i++)
-        delete aSubNodes.Get(i);
-    aSubNodes.Clear();
+    for (i = 0;  i < aSubNodes.size();  i++)
+        delete aSubNodes[i];
+    aSubNodes.resize(0);
 
-    ULONG nSize = rNode.aSubNodes.GetSize();
-    aSubNodes.SetSize( nSize );
+    ULONG nSize = rNode.aSubNodes.size();
+    aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
-        SmNode *pNode = rNode.aSubNodes.Get(i);
-        aSubNodes.Put( i, pNode ? new SmNode( *pNode ) : 0 );
+        SmNode *pNode = rNode.aSubNodes[i];
+        aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
     }
 
     return *this;
@@ -626,12 +621,14 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
 
 void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird)
 {
+    size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
+    aSubNodes.resize( nSize );
     if (pFirst)
-        aSubNodes.Put(0, pFirst);
+        aSubNodes[0] = pFirst;
     if (pSecond)
-        aSubNodes.Put(1, pSecond);
+        aSubNodes[1] = pSecond;
     if (pThird)
-        aSubNodes.Put(2, pThird);
+        aSubNodes[2] = pThird;
 }
 
 
@@ -649,13 +646,13 @@ BOOL SmStructureNode::IsVisible() const
 
 USHORT SmStructureNode::GetNumSubNodes() const
 {
-    return (USHORT) aSubNodes.GetSize();
+    return (USHORT) aSubNodes.size();
 }
 
 
 SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
 {
-    return aSubNodes.Get(nIndex);
+    return aSubNodes[nIndex];
 }
 
 
@@ -832,8 +829,9 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         return;
 
     // make distance depend on font size
-    long  nDist = +(rFormat.GetDistance(DIS_HORIZONTAL)
-                    * GetFont().GetSize().Height()) / 100L;
+    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
+    if (!IsUseExtraSpaces())
+        nDist = 0;
 
     Point   aPos;
     for (i = 0;  i < nSize;  i++)
@@ -857,8 +855,6 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 void SmExpressionNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // as 'SmLineNode::Arrange' but keeps alignment of leftmost subnode
 {
-    DBG_ASSERT(GetNumSubNodes() > 0, "Sm: keine subnodes");
-
     SmLineNode::Arrange(rDev, rFormat);
 
     //  copy alignment of leftmost subnode if any
@@ -1651,7 +1647,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                     "Sm : unterschiedliche Fontgroessen");
         aTmpSize.Width() = Min((long) nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
-        // correction factor since change from StarMath to StarSymbol font
+        // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
         aTmpSize.Width() *= 182;
         aTmpSize.Width() /= 267;
@@ -2357,6 +2353,20 @@ void SmRectangleNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 /**************************************************************************/
 
 
+SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP ) :
+    SmVisibleNode(eNodeType, rNodeToken)
+{
+    nFontDesc = nFontDescP;
+}
+
+
+SmTextNode::SmTextNode( const SmToken &rNodeToken, USHORT nFontDescP ) :
+    SmVisibleNode(NTEXT, rNodeToken)
+{
+    nFontDesc = nFontDescP;
+}
+
+
 void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
@@ -2694,7 +2704,7 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
 
     DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL  ||
                GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
-        "incorrect charset for character from StarMath/StarSymbol font");
+        "incorrect charset for character from StarMath/OpenSymbol font");
 
     Flags() |= FLG_FONT | FLG_ITALIC;
 };
@@ -2800,15 +2810,46 @@ void SmAttributNode::CreateTextFromNode(String &rText)
 
 /**************************************************************************/
 
+bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
+{
+    bool bRes = false;
+
+    // valid symbol name needs to have a '%' at pos 0 and at least an additonal char
+    if (rTokenText.Len() > 2 && rTokenText.GetBuffer()[0] == (sal_Unicode)'%')
+    {
+        String aName( rTokenText.Copy(1) );
+        SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
+        if (pSymbol && GetExportSymbolSetName( pSymbol->GetSymbolSetName() ).EqualsAscii( "Greek" ) )
+            bRes = true;
+    }
+
+    return bRes;
+}
+
+
+SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc) :
+    SmTextNode(eNodeType, rNodeToken, _nFontDesc)
+{
+    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
+}
+
+
+SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken) :
+    SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  //! default Font nicht immer richtig
+{
+    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
+}
+
 
 void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
 
     const SmSym   *pSym;
-    SmModule  *pp = SM_MOD1();
+    SmModule  *pp = SM_MOD();
 
-    if (NULL != (pSym = pp->GetSymSetManager().GetSymbolByName(GetToken().aText)))
+    String aName( GetToken().aText.Copy(1) );
+    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
         SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();
@@ -2834,6 +2875,33 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         SetAttribut(ATTR_BOLD);
 
     Flags() |= FLG_FONT;
+
+    if (bIsFromGreekSymbolSet)
+    {
+        DBG_ASSERT( GetText().Len() == 1, "a symbol should only consist of 1 char!" );
+        bool bItalic = false;
+        INT16 nStyle = rFormat.GetGreekCharStyle();
+        DBG_ASSERT( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
+        if (nStyle == 1)
+            bItalic = true;
+        else if (nStyle == 2)
+        {
+            String aTmp( GetText() );
+            if (aTmp.Len() > 0)
+            {
+                const sal_Unicode cUppercaseAlpha = 0x0391;
+                const sal_Unicode cUppercaseOmega = 0x03A9;
+                sal_Unicode cChar = aTmp.GetBuffer()[0];
+                // uppercase letters should be straight and lowercase letters italic
+                bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
+            }
+        }
+
+        if (bItalic)
+            Attributes() |= ATTR_ITALIC;
+        else
+            Attributes() &= ~ATTR_ITALIC;;
+    }
 };
 
 

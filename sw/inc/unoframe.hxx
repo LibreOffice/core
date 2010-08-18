@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoframe.hxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,19 +27,35 @@
 #ifndef _UNOFRAME_HXX
 #define _UNOFRAME_HXX
 
-#include <unoobj.hxx>
-#include <sfx2/objsh.hxx>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
- /*
-#include <com/sun/star/container/XNameAccess.hpp>
- */
 
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase6.hxx>
+
+#include <sfx2/objsh.hxx>
+
+#include <flyenum.hxx>
+#include <frmfmt.hxx>
+#include <unoevtlstnr.hxx>
+#include <unotext.hxx>
+
+
+class SfxItemPropertSet;
+class SdrObject;
 class SwDoc;
+class SwFmt;
+class SwFlyFrmFmt;
+
+
 /*-----------------12.02.98 11:21-------------------
 
 --------------------------------------------------*/
@@ -59,9 +72,8 @@ class SwXFrame : public cppu::WeakImplHelper6
     public SwClient
 {
     SwEventListenerContainer        aLstnrCntnr;
-    SfxItemPropertySet              aPropSet;
-    const SfxItemPropertyMap*       _pMap;
-    SwDoc*                          mpDoc;
+    const SfxItemPropertySet*       m_pPropSet;
+    SwDoc*                          m_pDoc;
 
     const FlyCntType                eType;
 
@@ -79,10 +91,10 @@ protected:
     virtual ~SwXFrame();
 public:
     SwXFrame(FlyCntType eSet,
-                const SfxItemPropertyMap*   pMap,
+                const SfxItemPropertySet*    pPropSet,
                 SwDoc *pDoc ); //Descriptor-If
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
-                const SfxItemPropertyMap*   pMap);
+                const SfxItemPropertySet*    pPropSet);
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -166,17 +178,23 @@ class SwXTextFrame : public SwXTextFrameBaseClass,
     public SwXText,
     public SwXFrame
 {
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertSet*    _pPropSet;
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextCursor >
+        CreateCursor()
+        throw (::com::sun::star::uno::RuntimeException);
+
     virtual ~SwXTextFrame();
 public:
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrmFmt& rFmt);
 
+    // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
+    void SetDoc(SwDoc *const pDoc) { SwXText::SetDoc(pDoc); };
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();

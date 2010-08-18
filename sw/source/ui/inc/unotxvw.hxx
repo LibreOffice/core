@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotxvw.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #include <cppuhelper/implbase8.hxx> // helper for implementations
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include "calbck.hxx"
 #include "TextCursorHelper.hxx"
 #include <comphelper/uno3.hxx>
@@ -76,8 +73,8 @@ class SwXTextView :
 {
     SelectionChangeListenerArr aSelChangedListeners;
 
-    SwView*                     pView;
-    const SfxItemPropertyMap*   pMap;   // property map for SwXTextView properties
+    SwView*                     m_pView;
+    const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
                                         // (not related to pxViewSettings!)
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxViewSettings;
@@ -109,7 +106,7 @@ public:
     virtual void SAL_CALL removeSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener) throw( ::com::sun::star::uno::RuntimeException );
 
     // XFormLayerAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& Form ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& Form ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isFormDesignMode(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFormDesignMode( ::sal_Bool DesignMode ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -155,7 +152,7 @@ public:
     void                    NotifySelChanged();
     void                    NotifyDBChanged();
 
-    SwView*                 GetView() {return pView;}
+    SwView*                 GetView() {return m_pView;}
     void                    Invalidate();
 
     // temporary document used for PDF export of selections/multi-selections
@@ -181,8 +178,8 @@ class SwXTextViewCursor : public SwXTextViewCursor_Base,
 public SwClient,
 public OTextCursorHelper
 {
-    SwView*             pView;
-    SfxItemPropertySet  aPropSet;
+    SwView*                         m_pView;
+    const SfxItemPropertySet*       m_pPropSet;
 protected:
     sal_Bool    IsTextSelection( sal_Bool bAllowTables = sal_True ) const;
     virtual     ~SwXTextViewCursor();
@@ -264,7 +261,7 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    void    Invalidate(){pView = 0;}
+    void    Invalidate(){m_pView = 0;}
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const;

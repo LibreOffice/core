@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edsect.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,9 @@
 #include <rootfrm.hxx>      // SwRootFrm
 
 
-    // SS fuer Bereiche
-const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
-                                             const SfxItemSet* pAttr )
+SwSection const*
+SwEditShell::InsertSection(
+        SwSectionData & rNewData, SfxItemSet const*const pAttr)
 {
     const SwSection* pRet = 0;
     if( !IsTableMode() )
@@ -56,8 +53,8 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
         GetDoc()->StartUndo( UNDO_INSSECTION, NULL );
 
         FOREACHPAM_START(this)
-            const SwSection* pNew = GetDoc()->Insert( *PCURCRSR,
-                                                        rNew, pAttr );
+            SwSection const*const pNew =
+                GetDoc()->InsertSwSection( *PCURCRSR, rNewData, 0, pAttr );
             if( !pRet )
                 pRet = pNew;
         FOREACHPAM_END()
@@ -72,8 +69,10 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
 
 BOOL SwEditShell::IsInsRegionAvailable() const
 {
-    SwPaM* pCrsr;
-    if( IsTableMode() || ( pCrsr = GetCrsr() )->GetNext() != pCrsr )
+    if( IsTableMode() )
+        return FALSE;
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr->GetNext() != pCrsr )
         return FALSE;
     if( pCrsr->HasMark() )
         return 0 != GetDoc()->IsInsRegionAvailable( *pCrsr );
@@ -179,11 +178,11 @@ void SwEditShell::DelSectionFmt( USHORT nFmt )
 }
 
 
-void SwEditShell::ChgSection( USHORT nSect, const SwSection& rSect,
-                                const SfxItemSet* pAttr )
+void SwEditShell::UpdateSection(sal_uInt16 const nSect,
+        SwSectionData & rNewData, SfxItemSet const*const pAttr)
 {
     StartAllAction();
-    GetDoc()->ChgSection( nSect, rSect, pAttr );
+    GetDoc()->UpdateSection( nSect, rNewData, pAttr );
     // rufe das AttrChangeNotify auf der UI-Seite.
     CallChgLnk();
     EndAllAction();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formatclipboard.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 // header for class SwWrtShell
 #include <wrtsh.hxx>
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 // header for class SfxStyleSheetBasePool
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 //-----------------------------------------------------------------------------
 /** This class acts as data container and execution class for the format paintbrush feature in writer.

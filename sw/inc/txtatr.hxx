@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtatr.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,95 +26,93 @@
  ************************************************************************/
 #ifndef _TXTATR_HXX
 #define _TXTATR_HXX
-#include <tools/gen.hxx>
-#include <tools/color.hxx>
+
 #include <txatbase.hxx>     // SwTxtAttr/SwTxtAttrEnd
 #include <calbck.hxx>
 
+
 class SwTxtNode;    // fuer SwTxtFld
 class SwCharFmt;
-class SvxTwoLinesItem;
 
 // ATT_CHARFMT *********************************************
 
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
-    SwTxtNode* pMyTxtNd;
-    USHORT mnSortNumber;
+    SwTxtNode * m_pTxtNode;
+    USHORT m_nSortNumber;
 
 public:
-    SwTxtCharFmt( const SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-    ~SwTxtCharFmt( );
+    SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    virtual ~SwTxtCharFmt( );
 
     // werden vom SwFmtCharFmt hierher weitergeleitet
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    // erfrage und setze den TxtNode Pointer
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    // get and set TxtNode pointer
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
-    void SetSortNumber( USHORT nSortNumber ) { mnSortNumber = nSortNumber; }
-    USHORT GetSortNumber() const { return mnSortNumber; }
+    void SetSortNumber( USHORT nSortNumber ) { m_nSortNumber = nSortNumber; }
+    USHORT GetSortNumber() const { return m_nSortNumber; }
 };
 
-// ATT_HARDBLANK ******************************
-
-class SwTxtHardBlank : public SwTxtAttr
-{
-    sal_Unicode cChar;
-public:
-    SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart );
-    inline sal_Unicode GetChar() const  { return cChar; }
-};
-
-// ATT_XNLCONTAINERITEM ******************************
-
-class SwTxtXMLAttrContainer : public SwTxtAttrEnd
-{
-public:
-    SwTxtXMLAttrContainer( const SvXMLAttrContainerItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-};
 
 // ******************************
 
-class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrEnd, public SwClient
+class SwTxtAttrNesting : public SwTxtAttrEnd
 {
-    SwTxtNode* pMyTxtNd;
+public:
+    SwTxtAttrNesting( SfxPoolItem & i_rAttr,
+        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+    virtual ~SwTxtAttrNesting();
+};
+
+class SwTxtMeta : public SwTxtAttrNesting
+{
+private:
+    SwTxtNode * m_pTxtNode;
 
 public:
-    SwTxtRuby( const SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtMeta( SwFmtMeta & i_rAttr,
+        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+    virtual ~SwTxtMeta();
+
+    void ChgTxtNode(SwTxtNode * const pNode);
+    SwTxtNode * GetTxtNode() const { return m_pTxtNode; }
+
+};
+
+
+// ******************************
+
+class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
+{
+    SwTxtNode* m_pTxtNode;
+
+public:
+    SwTxtRuby( SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtRuby();
     TYPEINFO();
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    // erfrage und setze den TxtNode Pointer
-    const SwTxtNode* GetpTxtNode() const            { return pMyTxtNd; }
+    /// get and set TxtNode pointer
+           const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
     inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
           SwCharFmt* GetCharFmt();
     const SwCharFmt* GetCharFmt() const
-            { return ((SwTxtRuby*)this)->GetCharFmt(); }
-};
-
-// ******************************
-
-class SwTxt2Lines : public SwTxtAttrEnd
-{
-public:
-    SwTxt2Lines( const SvxTwoLinesItem& rAttr,
-                    xub_StrLen nStart, xub_StrLen nEnd );
+            { return (const_cast<SwTxtRuby*>(this))->GetCharFmt(); }
 };
 
 // --------------- Inline Implementierungen ------------------------
 
 inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtRuby:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtRuby: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 #endif

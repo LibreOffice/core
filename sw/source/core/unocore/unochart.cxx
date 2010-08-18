@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unochart.cxx,v $
- * $Revision: 1.18.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,18 +31,13 @@
 #include <memory>
 #include <algorithm>
 
-
-#ifndef _COM_SUN_STAR_CHART_DATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_DATAROWSOURCE_HPP_
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>     // SvNumberFormatter
+#include <svl/zforlist.hxx>     // SvNumberFormatter
 #include <svtools/chartprettypainter.hxx>
 
 #include <tools/link.hxx>
@@ -55,7 +47,7 @@
 #include <swtable.hxx>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unocrsr.hxx>
 #include <unotbl.hxx>
 #include <doc.hxx>
@@ -283,11 +275,9 @@ static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
 
     //!! see also SwXTextTableCursor::getRangeName
 
-    SwUnoTableCrsr* pUnoTblCrsr = rTblCrsr;
-#if OSL_DEBUG_LEVEL > 1
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(&rTblCrsr);
     if (!pUnoTblCrsr)
         return String();
-#endif
     pUnoTblCrsr->MakeBoxSels();
 
     const SwStartNode*  pStart;
@@ -491,7 +481,8 @@ static void GetFormatAndCreateCursorFromRangeRep(
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    SwUnoTableCrsr* pCrsr =
+                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
 
                     if (ppUnoCrsr)
@@ -2032,7 +2023,7 @@ SwChartDataSequence::SwChartDataSequence(
     pDataProvider( &rProvider ),
     pTblCrsr( pTableCursor ),
     aCursorDepend( this, pTableCursor ),
-    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
+    _pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
     bDisposed = sal_False;
 
@@ -2064,9 +2055,9 @@ SwChartDataSequence::SwChartDataSequence(
 
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
-    if (!pUnoTblCrsr)
-        pUnoTblCrsr = *pTblCrsr;
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
+    DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
+    (void) pUnoTblCrsr;
 #endif
 }
 
@@ -2083,7 +2074,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     pDataProvider( rObj.pDataProvider ),
     pTblCrsr( rObj.pTblCrsr->Clone() ),
     aCursorDepend( this, pTblCrsr ),
-    pMap( rObj.pMap )
+    _pPropSet( rObj._pPropSet )
 {
     bDisposed = sal_False;
 
@@ -2115,9 +2106,9 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
-    if (!pUnoTblCrsr)
-        pUnoTblCrsr = *pTblCrsr;
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
+    DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
+    (void) pUnoTblCrsr;
 #endif
 }
 
@@ -2398,7 +2389,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPrope
     if (bDisposed)
         throw lang::DisposedException();
 
-    static uno::Reference< beans::XPropertySetInfo > xRes = new SfxItemPropertySetInfo( pMap );
+    static uno::Reference< beans::XPropertySetInfo > xRes = _pPropSet->getPropertySetInfo();
     return xRes;
 }
 
@@ -2779,7 +2770,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
 {
     bool bChanged = false;
 
-    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
     //pUnoTblCrsr->MakeBoxSels();
 
     const SwStartNode *pStartNd  = 0;

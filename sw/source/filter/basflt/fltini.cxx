@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fltini.cxx,v $
- * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,15 +36,15 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -61,7 +58,7 @@
 #include <fmtfsize.hxx>
 #include <swtable.hxx>
 #include <fmtcntnt.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>
@@ -69,10 +66,17 @@
 #include <swfltopt.hxx>
 #include <swerror.h>
 #include <osl/module.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
+#include <rtl/uri.hxx>
+#include <tools/svlibrary.hxx>
 
 using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 
 SwRead ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
         ReadHTML = 0, ReadXML = 0;
@@ -418,6 +422,9 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
             pValues[ n ] = 0;
 }
 
+void SwFilterOptions::Commit() {}
+void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 /*  */
 
 
@@ -670,13 +677,13 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                     // if the first node dont contained any content, then
                     // insert one char in it calc again and delete once again
                     SwIndex aNdIdx( pFirstTxtNd );
-                    pFirstTxtNd->Insert( String::CreateFromAscii(
+                    pFirstTxtNd->InsertText( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "MM" )), aNdIdx );
                     ULONG nAbsMinCnts;
                     pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
                                             nMinFrm, nMaxFrm, nAbsMinCnts );
                     aNdIdx -= 2;
-                    pFirstTxtNd->Erase( aNdIdx, 2 );
+                    pFirstTxtNd->EraseText( aNdIdx, 2 );
                 }
 
                 // Umrandung und Abstand zum Inhalt beachten
@@ -959,13 +966,12 @@ extern "C" { static void SAL_CALL thisModule() {} }
 static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
 {
     static ::osl::Module aModule;
-    if ( aModule.is() ||
-         aModule.loadRelative( &thisModule,
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) ) ) )
-    {
+    static sal_Bool bLoaded = sal_False;
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
+    if (!bLoaded)
+        bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule );
+    if (bLoaded)
         return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
-    }
-
     return NULL;
 }
 
@@ -1008,3 +1014,24 @@ void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xR
     else
         xRet = WriterRef(0);
 }
+
+typedef ULONG ( __LOADONCALLAPI *SaveOrDel )( SfxObjectShell&, SotStorage&, BOOL, const String& );
+typedef ULONG ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
+
+ULONG SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+{
+    SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
+    if( pFunction )
+        return pFunction( rDoc, rStor, bSaveInto, rStorageName );
+    return ERRCODE_NONE;
+}
+
+ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
+{
+    GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
+    if( pFunction )
+            return pFunction( rDocS );
+    return ERRCODE_NONE;
+}
+
+

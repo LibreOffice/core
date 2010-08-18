@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tblsel.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
@@ -210,11 +208,7 @@ void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
     if ( !rShell.IsTableMode() )
         rShell.GetCrsr();
 
-    const SwShellCrsr *pCrsr = rShell.GetTableCrsr();
-    if( !pCrsr )
-        pCrsr = (SwShellCrsr*)*rShell.GetSwCrsr( FALSE );
-
-    GetTblSel( *pCrsr, rBoxes, eSearchType );
+    GetTblSel( *rShell.getShellCrsr(false), rBoxes, eSearchType );
 }
 
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
@@ -287,7 +281,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
     else
     {
         Point aPtPos, aMkPos;
-        const SwShellCrsr* pShCrsr = rCrsr;
+        const SwShellCrsr* pShCrsr = dynamic_cast<const SwShellCrsr*>(&rCrsr);
         if( pShCrsr )
         {
             aPtPos = pShCrsr->GetPtPos();
@@ -988,11 +982,11 @@ BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 
         for( USHORT n = 0; n < rFmts.Count(); ++n )
         {
-            const SwPosition* pAPos;
             const SwFmtAnchor& rAnchor = rFmts[n]->GetAnchor();
-            if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                  FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
+            const SwPosition* pAPos = rAnchor.GetCntntAnchor();
+            if (pAPos &&
+                ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
                 nSttIdx <= ( nIdx = pAPos->nNode.GetIndex() ) &&
                 nIdx < nEndIdx )
             {
@@ -1466,7 +1460,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             if( pUndo )
                 pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
             else
-                pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            {
+                pDoc->MoveNodeRange( aRg, rInsPosNd,
+                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+            }
             // wo steht jetzt aInsPos ??
 
             if( bCalcWidth )
@@ -2066,11 +2063,7 @@ BOOL CheckSplitCells( const SwCrsrShell& rShell, USHORT nDiv,
     if( !rShell.IsTableMode() )
         rShell.GetCrsr();
 
-    const SwShellCrsr *pCrsr = rShell.GetTableCrsr();
-    if( !pCrsr )
-        pCrsr = (SwShellCrsr*)*rShell.GetSwCrsr( FALSE );
-
-    return CheckSplitCells( *pCrsr, nDiv, eSearchType );
+    return CheckSplitCells( *rShell.getShellCrsr(false), nDiv, eSearchType );
 }
 
 BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
@@ -2083,7 +2076,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
 
     //Start- und Endzelle besorgen und den naechsten fragen.
     Point aPtPos, aMkPos;
-    const SwShellCrsr* pShCrsr = rCrsr;
+    const SwShellCrsr* pShCrsr = dynamic_cast<const SwShellCrsr*>(&rCrsr);
     if( pShCrsr )
     {
         aPtPos = pShCrsr->GetPtPos();

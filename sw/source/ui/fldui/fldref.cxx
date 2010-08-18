@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldref.cxx,v $
- * $Revision: 1.12.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,7 +262,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     }
 
     // Endnoten:
-    if( pSh->HasFtns(TRUE) )
+    if ( pSh->HasFtns(true) )
     {
         nPos = aTypeLB.InsertEntry(sEndnoteTxt);
         aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_ENDNOTE);
@@ -576,7 +573,7 @@ void SwFldRefPage::UpdateSubType()
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            USHORT nCnt = pSh->GetSeqFtnList( aArr, TRUE );
+            USHORT nCnt = pSh->GetSeqFtnList( aArr, true );
 
             for( USHORT n = 0; n < nCnt; ++n )
             {
@@ -936,7 +933,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             nSubType = REF_ENDNOTE;
             aName.Erase();
 
-            if (pSh->GetSeqFtnList(aArr, TRUE) && aArr.SeekEntry(aElem, &nPos))
+            if (pSh->GetSeqFtnList(aArr, true) && aArr.SeekEntry(aElem, &nPos))
             {
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 

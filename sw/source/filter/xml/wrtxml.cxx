@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtxml.cxx,v $
- * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,27 +43,26 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>
-#ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
-#endif
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <errhdl.hxx>
 #include <swerror.h>
 #include <wrtxml.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <rtl/logfile.hxx>
 
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/makesequence.hxx>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -365,6 +361,35 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     // export sub streams for package, else full stream into a file
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
+
+    // RDF metadata: export if ODF >= 1.2
+    // N.B.: embedded documents have their own manifest.rdf!
+    if ( bOASIS )
+    {
+        const uno::Reference<beans::XPropertySet> xPropSet(xStg,
+            uno::UNO_QUERY_THROW);
+        const ::rtl::OUString VersionProp(
+            ::rtl::OUString::createFromAscii("Version"));
+        try
+        {
+            ::rtl::OUString Version;
+            // ODF >= 1.2
+            if ((xPropSet->getPropertyValue(VersionProp) >>= Version)
+                && !Version.equals(ODFVER_010_TEXT)
+                && !Version.equals(ODFVER_011_TEXT))
+            {
+                const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
+                    xModelComp, uno::UNO_QUERY_THROW);
+                xDMA->storeMetadataToStorage(xStg);
+            }
+        }
+        catch (beans::UnknownPropertyException &)
+        { /* ignore */ }
+        catch (uno::Exception &)
+        {
+            bWarn = sal_True;
+        }
+    }
 
     sal_Bool bStoreMeta = ( SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
     if ( !bStoreMeta )

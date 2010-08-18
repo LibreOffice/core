@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mn.src,v $
- * $Revision: 1.53.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -441,26 +438,26 @@
     {\
         Identifier = FN_DELETE_NOTE ;\
         HelpID = FN_DELETE_NOTE ;\
-        Text [ en-US ] = "Delete ~Note" ;\
+        Text [ en-US ] = "Delete ~Comment" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_NOTE_AUTHOR ;\
         HelpID = FN_DELETE_NOTE_AUTHOR ;\
-        Text [ en-US ] = "Delete ~All Notes by $1" ;\
+        Text [ en-US ] = "Delete ~All Comments by $1" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_ALL_NOTES ;\
         HelpID = FN_DELETE_ALL_NOTES ;\
-        Text [ en-US ] = "~Delete All Notes" ;\
+        Text [ en-US ] = "~Delete All Comments" ;\
     };\
     /*
     MenuItem\
     {\
         Identifier = FN_HIDE_NOTE ;\
         HelpID = FN_HIDE_NOTE ;\
-        Text [ en-US ] = "~Hide note" ;\
+        Text [ en-US ] = "~Hide comment" ;\
     };\
     MenuItem\
     {\
@@ -472,7 +469,7 @@
     {\
         Identifier = FN_HIDE_ALL_NOTES ;\
         HelpID = FN_HIDE_ALL_NOTES ;\
-        Text [ en-US ] = "Hide all ~notes" ;\
+        Text [ en-US ] = "Hide all ~comments" ;\
     };
     */
 
@@ -600,6 +597,7 @@ Menu MN_TAB_POPUPMENU
                 MN_EDIT_CONTOUR\
                 MenuItem\
                 {\
+                    Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
@@ -664,6 +662,7 @@ String MN_DRAW_POPUPMENU
                 MN_WRAP_CONTOUR_1\
                 MenuItem\
                 {\
+                    Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
@@ -689,6 +688,7 @@ String MN_DRAW_POPUPMENU
 #define MN_AT_FRAME \
     MenuItem\
     {\
+        RadioCheck = TRUE ; \
         Identifier = FN_TOOL_ANKER_FRAME ; \
         HelpID = FN_TOOL_ANKER_FRAME ; \
         Text [ en-US ] = "To ~Frame" ; \
@@ -707,24 +707,28 @@ String MN_DRAW_POPUPMENU
             {\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_PAGE ; \
                     HelpID = FN_TOOL_ANKER_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_PARAGRAPH ; \
                     HelpID = FN_TOOL_ANKER_PARAGRAPH ; \
                     Text [ en-US ] = "To ~Paragraph" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_AT_CHAR ; \
                     HelpID = FN_TOOL_ANKER_AT_CHAR ; \
                     Text [ en-US ] = "To ~Character" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_CHAR ; \
                     HelpID = FN_TOOL_ANKER_CHAR ; \
                     Text [ en-US ] = "As C~haracter" ; \
@@ -956,6 +960,10 @@ Menu MN_GRF_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITH_CONTOUR
+        // --> OD 2009-07-14 #i73249#
+        SEPARATOR ;
+        MN_TITLE_DESCRIPTION_SHAPE
+        // <--
         SEPARATOR ;
         MenuItem
         {
@@ -989,6 +997,10 @@ Menu MN_OLE_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITH_CONTOUR
+        // --> OD 2009-07-14 #i73249#
+        SEPARATOR ;
+        MN_TITLE_DESCRIPTION_SHAPE
+        // <--
         SEPARATOR ;
         MenuItem
         {
@@ -1013,6 +1025,10 @@ Menu MN_FRM_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITHOUT_CONTOUR
+        // --> OD 2009-07-07 #i73249#
+        SEPARATOR ;
+        MN_TITLE_DESCRIPTION_SHAPE
+        // <--
         SEPARATOR ;
         MN_FRM
         MN_FRM_CAPTION_ITEM
@@ -1052,12 +1068,6 @@ Menu MN_PPREVIEW_POPUPMENU
             Identifier = FN_PRINT_PAGEPREVIEW ;
             HelpID = FN_PRINT_PAGEPREVIEW ;
             Text [ en-US ] = "Print" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_PREVIEW_PRINT_OPTIONS;
-            HelpID = FN_PREVIEW_PRINT_OPTIONS;
-            Text [ en-US ] = "Print Options";
         };
         SEPARATOR ;
         MenuItem

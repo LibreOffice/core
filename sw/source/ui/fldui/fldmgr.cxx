@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldmgr.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -47,37 +42,31 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/macitem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/macitem.hxx>
 #include <basic/sbmod.hxx>
 #include <fmtrfmrk.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>        // Actives Fenster
 #include <doc.hxx>      // Actives Fenster
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Actives Fenster
-#endif
 #include <swmodule.hxx>
 #include <charatr.hxx>
 #include <fmtinfmt.hxx>
 #include <cellatr.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <shellres.hxx>
 #include <fldbas.hxx>
 #include <docufld.hxx>
@@ -92,9 +81,8 @@
 #include <fldmgr.hxx>
 #include <crsskip.hxx>
 #include <flddropdown.hxx>
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
+#include <tox.hxx>
 
 using rtl::OUString;
 using namespace com::sun::star::uno;
@@ -1447,7 +1435,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     }
     else
     {
-        pTmpFld = pCurFld->Copy();
+        pTmpFld = pCurFld->CopyField();
         bDelete = true;
     }
 
@@ -1552,6 +1540,27 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
             bSetPar1 = bSetPar2 = FALSE;
         }
         break;
+        case TYP_AUTHORITY :
+        {
+            //#i99069# changes to a bibliography field should change the field type
+            SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpFld);
+            SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
+            SwAuthEntry aTempEntry;
+            for( USHORT i = 0; i < AUTH_FIELD_END; ++i )
+                aTempEntry.SetAuthorField( (ToxAuthorityField)i,
+                                rPar1.GetToken( i, TOX_STYLE_DELIMITER ));
+            if( pAuthorityType->ChangeEntryContent( &aTempEntry ) )
+            {
+                pType->UpdateFlds();
+                pSh->SetModified();
+            }
+
+            if( aTempEntry.GetAuthorField( AUTH_FIELD_IDENTIFIER ) ==
+                pAuthorityField->GetFieldText( AUTH_FIELD_IDENTIFIER ) )
+                bSetPar1 = FALSE; //otherwise it's a new or changed entry, the field needs to be updated
+            bSetPar2 = FALSE;
+        }
+        break;
     }
 
     // Format setzen
@@ -1603,7 +1612,7 @@ USHORT SwFldMgr::GetCurrLanguage() const
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if( pSh )
         return pSh->GetCurLang();
-    return SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
+    return SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
 }
 
 void SwFieldType::_GetFldName()

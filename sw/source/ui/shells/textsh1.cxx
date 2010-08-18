@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textsh1.cxx,v $
- * $Revision: 1.70.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+
 #include <comphelper/processfactory.hxx>
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
@@ -38,33 +38,33 @@
 #include <helpid.h>
 
 #include <i18npool/mslangid.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svx/langitem.hxx>
+#include <svl/languageoptions.hxx>
+#include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <string.h>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <charfmt.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/SmartTagItem.hxx>
 #include <svx/dialmgr.hxx>
 #include <fmtinfmt.hxx>
@@ -109,20 +109,20 @@
 
 #include <SwSmartTagMgr.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 #include "chrdlg.hrc"
 #include <IDocumentStatistics.hxx>
 
 #include <sfx2/sfxdlg.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/languageoptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <editeng/unolingu.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <doc.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
@@ -341,6 +341,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
                     const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
                     const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
+                    const String aStrResetLangs( String::CreateFromAscii("RESET_LANGUAGES") );
 
                     SfxItemSet aCoreSet( GetPool(),
                             RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -379,10 +380,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.SelAll();
                         rWrtSh.ExtendedSelectAll();
                     }
-                    if (aNewLangTxt != aStrNone)
-                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
-                    else
+                    if (aNewLangTxt == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
+                    else if (aNewLangTxt == aStrResetLangs)
+                        SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
+                    else
+                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
                 }
 
                 // restore selection...
@@ -398,6 +401,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Done();
             break;
         }
+
+        case SID_THES:
+        {
+            // replace word/selection with text from selected sub menu entry
+            String aReplaceText;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+            if (pItem2)
+                aReplaceText = pItem2->GetValue();
+            if (aReplaceText.Len() > 0)
+            {
+                SwView &rView2 = rWrtSh.GetView();
+                const bool bSelection = rWrtSh.HasSelection();
+                const String aLookUpText = rView2.GetThesaurusLookUpText( bSelection );
+                rView2.InsertThesaurusSynonym( aReplaceText, aLookUpText, bSelection );
+            }
+        }
+        break;
 
         case SID_CHARMAP:
         {
@@ -488,9 +508,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
                 RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
                 RES_PARATR_BEGIN, RES_PARATR_END-1,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                 RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0
             };
@@ -1044,7 +1065,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // --> OD 2008-03-18 #refactorlists#
             String sContinuedListId;
             const SwNumRule* pRule =
-                rWrtSh.SearchNumRule( FALSE, TRUE, FALSE, -1, sContinuedListId );
+                rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
+            // --> OD 2009-08-26 #i86492#
+            // Search also for bullet list
+            if ( !pRule )
+            {
+                pRule = rWrtSh.SearchNumRule( false, false, false, -1, sContinuedListId );
+            }
+            // <--
             if ( pRule )
             {
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
@@ -1370,6 +1398,38 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             }
         break;
 
+        case SID_THES:
+        {
+            // is there a valid selection to get text from?
+            String aText;
+            sal_Bool bValid = !rSh.HasSelection() ||
+                    (rSh.IsSelOnePara() && !rSh.IsMultiSelection());
+            // prevent context menu from showing when cursor is not in or at the end of a word
+            // (GetCurWord will return the next word if there is none at the current position...)
+            const sal_Int16 nWordType = ::i18n::WordType::DICTIONARY_WORD;
+            bool bWord = rSh.IsInWord( nWordType ) || rSh.IsStartWord( nWordType ) || rSh.IsEndWord( nWordType );
+            if (bValid && bWord)
+               aText = rSh.HasSelection()? rSh.GetSelTxt() : rSh.GetCurWord();
+
+            LanguageType nLang = rSh.GetCurLang();
+            lang::Locale aLocale = SvxCreateLocale( nLang );
+            String aLangText( MsLangId::convertLanguageToIsoString( nLang ) );
+
+            // set word and locale to look up as status value
+            String aStatusVal( aText );
+            aStatusVal.AppendAscii( "#" );
+            aStatusVal += aLangText;
+
+            rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+            // disable "Thesaurus" context menu entry if there is nothing to look up
+            uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+            if (aText.Len() == 0 ||
+                !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                rSet.DisableItem( SID_THES );
+        }
+        break;
+
         case FN_NUMBER_NEWSTART :
             if(!rSh.GetCurNumRule())
                     rSet.DisableItem(nWhich);
@@ -1623,14 +1683,23 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
-                if ( rSh.GetCurNumRule() )
-                    rSet.DisableItem(nWhich);
-                else
+                // --> OD 2009-08-26 #i86492#
+                // Allow continuation of previous list, even if at current cursor
+                // a list is active.
+//                if ( rSh.GetCurNumRule() )
+//                    rSet.DisableItem(nWhich);
+//                else
+                // <--
                 {
-                    // --> OD 2008-03-18 #refactorlists#
+                    // --> OD 2009-08-26 #i86492#
+                    // Search also for bullet list
                     String aDummy;
                     const SwNumRule* pRule =
-                            rSh.SearchNumRule( FALSE, TRUE, FALSE, -1, aDummy );
+                            rSh.SearchNumRule( false, true, false, -1, aDummy );
+                    if ( !pRule )
+                    {
+                        pRule = rSh.SearchNumRule( false, false, false, -1, aDummy );
+                    }
                     // <--
                     if ( !pRule )
                         rSet.DisableItem(nWhich);

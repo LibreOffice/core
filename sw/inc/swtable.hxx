@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swtable.hxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +30,17 @@
 #ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tblenum.hxx>
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <swrect.hxx>
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #include <node.hxx>         // fuer StartNode->GetMyIndex
 #else
 class SwStartNode;
+#include <memory>
+#include <boost/noncopyable.hpp>
 #endif
 
 class Color;
@@ -111,7 +110,7 @@ protected:
 
     BOOL        bModifyLocked   :1;
     BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
@@ -210,7 +209,7 @@ public:
     BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
@@ -219,7 +218,7 @@ public:
     BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
                    BOOL bSameHeight = FALSE )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
@@ -299,7 +298,7 @@ public:
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
         // suche im Format nach der angemeldeten Tabelle
-    static SwTable* FindTable( SwFrmFmt* pFmt );
+    static SwTable * FindTable( SwFrmFmt const*const pFmt );
 
         // Struktur ein wenig aufraeumen
     void GCLines();
@@ -323,7 +322,7 @@ public:
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     BOOL SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void CheckConsistency() const;
 #endif
 };
@@ -412,7 +411,7 @@ public:
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
     ULONG GetSttIdx() const
-#ifdef PRODUCT
+#ifndef DBG_UTIL
         { return pSttNd ? pSttNd->GetIndex() : 0; }
 #else
         ;
@@ -469,6 +468,23 @@ public:
     const SwTableBox& FindEndOfRowSpan( const SwTable& rTable,
         USHORT nMaxStep = USHRT_MAX ) const
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
+};
+
+class SwCellFrm;
+class SW_DLLPUBLIC SwTableCellInfo : public ::boost::noncopyable
+{
+    struct Impl;
+    ::std::auto_ptr<Impl> m_pImpl;
+
+    const SwCellFrm * getCellFrm() const ;
+
+public:
+    SwTableCellInfo(const SwTable * pTable);
+    ~SwTableCellInfo();
+
+    bool getNext();
+    SwRect getRect() const;
+    const SwTableBox * getTableBox() const;
 };
 
 #endif  //_SWTABLE_HXX

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mathtype.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1801,8 +1798,8 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 rRet.Erase();
                                 newline--;
                             }
-                            else if ((nPart == 2) || (((nPart == 1) &&
-                                    (nVariation == 0) || (nVariation == 1))))
+                            else if ((nPart == 2) || ((((nPart == 1) &&
+                                    (nVariation == 0)) || (nVariation == 1))))
                             {
                                 sPush+=rRet;
                                 rRet = sPush;

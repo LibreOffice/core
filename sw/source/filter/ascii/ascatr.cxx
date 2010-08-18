@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ascatr.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 #include <tools/stream.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
@@ -88,20 +85,16 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        USHORT i;
-        xub_StrLen nPos;
-        const xub_StrLen * pPos;
-
 // kann noch optimiert werden, wenn ausgenutzt wird, dass die TxtAttrs
 // nach der Anfangsposition geordnet sind. Dann muessten
 // allerdings noch 2 Indices gemerkt werden
-        for( i = 0; i < pTxtAttrs->Count(); i++ )
+        for ( USHORT i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            nPos = *pHt->GetStart();    // gibt erstes Attr-Zeichen
-            pPos = pHt->GetEnd();
-            if( !pPos )
+            if (pHt->HasDummyChar())
             {
+                xub_StrLen nPos = *pHt->GetStart();
+
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
 
@@ -124,19 +117,15 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            const xub_StrLen * pEnd = pHt->GetEnd();
-            if( !pEnd && nSwPos == *pHt->GetStart() )
+            if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
             {
                 bRet = TRUE;
                 String sOut;
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
-                    sOut = ((SwTxtFld*)pHt)->GetFld().GetFld()->Expand();
-                    break;
-
-                case RES_TXTATR_HARDBLANK:
-                    sOut = ((SwTxtHardBlank*)pHt)->GetChar();
+                    sOut = static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
+                            ->ExpandField(rWrt.pDoc->IsClipBoard());
                     break;
 
                 case RES_TXTATR_FTN:
@@ -181,7 +170,14 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
 
     if( !nStrPos && rWrt.bExportPargraphNumbering )
-        rWrt.Strm().WriteUnicodeOrByteText( rNd.GetNumString() );
+    {
+        String numString( rNd.GetNumString() );
+        if (numString.Len())
+        {
+            numString.Append(' ');
+            rWrt.Strm().WriteUnicodeOrByteText(numString);
+        }
+    }
 
     String aStr( rNd.GetTxt() );
     if( rWrt.bASCII_ParaAsBlanc )

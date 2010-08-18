@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocoll.hxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 #include <flyenum.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <tools/string.hxx>
@@ -41,6 +39,8 @@
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <IMark.hxx>
+#include <unobaseclass.hxx>
+#include "swdllapi.h"
 /***************************************************
  ***************************************************
  *
@@ -161,11 +161,11 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY               73
 #define SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS        74
 #define SW_SERVICE_FIELDTYPE_DROPDOWN                   75
-#define SW_SERVICE_FIELDTYPE_DUMMY_4                    76
-#define SW_SERVICE_FIELDTYPE_DUMMY_5                    77
-#define SW_SERVICE_FIELDTYPE_DUMMY_6                    78
-#define SW_SERVICE_FIELDTYPE_DUMMY_7                    79
-#define SW_SERVICE_FIELDTYPE_DUMMY_8                    80
+#define SW_SERVICE_FIELDTYPE_METAFIELD                  76
+#define SW_SERVICE_FIELDTYPE_DUMMY_4                    77
+#define SW_SERVICE_FIELDTYPE_DUMMY_5                    78
+#define SW_SERVICE_FIELDTYPE_DUMMY_6                    79
+#define SW_SERVICE_FIELDTYPE_DUMMY_7                    80
 #define SW_SERVICE_FIELDMASTER_USER                     81
 #define SW_SERVICE_FIELDMASTER_DDE                      82
 #define SW_SERVICE_FIELDMASTER_SET_EXP                  83
@@ -194,8 +194,9 @@ class SwUnoCollection
 #define SW_SERVICE_CHART2_DATA_PROVIDER                 106
 #define SW_SERVICE_TYPE_FIELDMARK                       107
 #define SW_SERVICE_TYPE_FORMFIELDMARK                   108
+#define SW_SERVICE_TYPE_META                            109
 
-#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_FORMFIELDMARK
+#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_META
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
@@ -281,7 +282,7 @@ cppu::WeakImplHelper3
     ::com::sun::star::lang::XServiceInfo
 >
 SwCollectionBaseClass;
-class SwXTextTables : public SwCollectionBaseClass,
+class SW_DLLPUBLIC SwXTextTables : public SwCollectionBaseClass,
     public SwUnoCollection
 {
 protected:
@@ -304,17 +305,23 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
+virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     static ::com::sun::star::text::XTextTable*          GetObject( SwFrmFmt& rFmt );
 };
 
-/*-----------------11.12.97 10:14-------------------
+typedef
+cppu::WeakImplHelper4
+<
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::container::XNameAccess,
+    ::com::sun::star::container::XIndexAccess,
+    ::com::sun::star::lang::XServiceInfo
+> SwXFramesBaseClass;
 
---------------------------------------------------*/
-class SwXFrames : public SwCollectionBaseClass,
+class SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
     const FlyCntType    eType;
@@ -322,6 +329,9 @@ protected:
     virtual ~SwXFrames();
 public:
     SwXFrames(SwDoc* pDoc, FlyCntType eSet);
+
+    //XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -468,7 +478,6 @@ class SwXBookmarks : public SwCollectionBaseClass,
         virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-        static SwXBookmark* GetObject( ::sw::mark::IMark& rBkm, SwDoc* pDoc);
 };
 
 class SwXNumberingRulesCollection : public cppu::WeakImplHelper1
@@ -507,7 +516,8 @@ SwSimpleIndexAccessBaseClass;
 class SwXFootnotes : public SwSimpleIndexAccessBaseClass,
                      public SwUnoCollection
 {
-    sal_Bool                bEndnote;
+    const bool m_bEndnote;
+
 protected:
     virtual ~SwXFootnotes();
 public:

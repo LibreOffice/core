@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlfmte.cxx,v $
- * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,16 +35,11 @@
 #include "xmlexpit.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
-#ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT
 #include <xmloff/XMLTextMasterPageExport.hxx>
-#endif
 
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/ProgressBarHelper.hxx>
 #include <format.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
@@ -57,6 +49,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "xmlexp.hxx"
 #include <SwStyleNameMapper.hxx>
+
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::beans;
@@ -87,7 +80,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default
@@ -209,17 +202,8 @@ void SwXMLExport::_ExportAutoStyles()
             // only master pages are exported => styles for frames bound
             // to frames (but none for frames bound to pages) need to be
             // collected.
-            GetTextParagraphExport()->collectFramesBoundToFrameAutoStyles();
+            // TODO: exclude PageBoundFrames on export
         }
-        else
-        {
-            // content (and optional master pages) are exported => styles
-            // for frames bound to frame or to pages need to be
-            // collected.
-            GetTextParagraphExport()->collectFramesBoundToPageOrFrameAutoStyles(
-                                                bShowProgress );
-        }
-
     }
 
     // exported in _ExportMasterStyles

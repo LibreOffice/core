@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomodel.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,31 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
+
 #include <sfx2/sfxbasemodel.hxx>
 #include <comphelper/propertysethelper.hxx>
+#include <vcl/print.hxx>
 
 class SmFormat;
+
+////////////////////////////////////////////////////////////
+
+#define PRTUIOPT_TITLE_ROW          "TitleRow"
+#define PRTUIOPT_FORMULA_TEXT       "FormulaText"
+#define PRTUIOPT_BORDER             "Border"
+#define PRTUIOPT_PRINT_FORMAT       "PrintFormat"
+#define PRTUIOPT_PRINT_SCALE        "PrintScale"
+
+class SmPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+public:
+    SmPrintUIOptions();
+};
+
+
+////////////////////////////////////////////////////////////
+
+#define A2OU(pText)     rtl::OUString::createFromAscii(pText)
 
 //-----------------------------------------------------------------------------
 class SmModel : public SfxBaseModel,
@@ -46,6 +64,7 @@ class SmModel : public SfxBaseModel,
                 public com::sun::star::lang::XServiceInfo,
                 public com::sun::star::view::XRenderable
 {
+    SmPrintUIOptions* m_pPrintUIOptions;
 protected:
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
@@ -74,18 +93,17 @@ public:
     virtual void SAL_CALL render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& rSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rxOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName)
-            throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
-            throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent )
-            throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent ) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
     static ::rtl::OUString getImplementationName_Static();
 };
 
+////////////////////////////////////////////////////////////
+
 #endif
+

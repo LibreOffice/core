@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtanchr.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <format.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 struct SwPosition;
 class IntlWrapper;
@@ -55,7 +52,7 @@ class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
     static sal_uInt32 mnOrderCounter;
 
 public:
-    SwFmtAnchor( RndStdIds eRnd = FLY_PAGE, USHORT nPageNum = 0 );
+    SwFmtAnchor( RndStdIds eRnd = FLY_AT_PAGE, USHORT nPageNum = 0 );
     SwFmtAnchor( const SwFmtAnchor &rCpy );
     ~SwFmtAnchor();
 
@@ -86,7 +83,7 @@ public:
 };
 
 inline const SwFmtAnchor &SwAttrSet::GetAnchor(BOOL bInP) const
-     { return (const SwFmtAnchor&)Get( RES_ANCHOR,bInP); }
+    { return static_cast<const SwFmtAnchor&>(Get(RES_ANCHOR, bInP)); }
 
  inline const SwFmtAnchor &SwFmt::GetAnchor(BOOL bInP) const
      { return aSet.GetAnchor(bInP); }

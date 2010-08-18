@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmgreetingspage.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,7 +122,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 
     virtual void    UpdatePreview();
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage( CommitPageReason _eReason );
+    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 public:
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeGreetingsPage();

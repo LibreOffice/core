@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edglbldc.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,7 +146,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 }
 
 BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
-                                            const SwSection& rNew )
+        SwSectionData & rNew)
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         return FALSE;
@@ -343,7 +340,10 @@ BOOL SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     else
         aInsPos  = pMyDoc->GetNodes().GetEndOfContent();
 
-    BOOL bRet = pMyDoc->Move( aRg, aInsPos, IDocumentContentOperations::DOC_MOVEALLFLYS );
+    bool bRet = pMyDoc->MoveNodeRange( aRg, aInsPos,
+        static_cast<IDocumentContentOperations::SwMoveFlags>(
+              IDocumentContentOperations::DOC_MOVEALLFLYS
+            | IDocumentContentOperations::DOC_CREATEUNDOOBJ ));
 
     EndAllAction();
     return bRet;

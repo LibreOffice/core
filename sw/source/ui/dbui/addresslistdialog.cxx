@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: addresslistdialog.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,8 +64,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <swunohelper.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/urihelper.hxx>
 #include <addresslistdialog.hrc>
 #include <dbui.hrc>
 
@@ -583,7 +580,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
 
             uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             uno::Reference< XInteractionHandler > xHandler(
-                xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
+                xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
             pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }
         if(pUserData->xConnection.is())

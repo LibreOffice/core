@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewsh.hxx,v $
- * $Revision: 1.65.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,13 +29,14 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/rtti.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
 #include <errhdl.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/print.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -70,6 +68,7 @@ class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
 class SwPrtOptions;
+class SwPrintData;
 class SwPagePreViewPrtData;
 class Window;
 class OutputDevice;
@@ -78,25 +77,28 @@ struct ShellResource;
 class SwRegionRects;
 class SwFrm;
 class SvtAccessibilityOptions;
-// OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
-// --> OD 2005-12-01 #i27138#
 class SwTxtFrm;
-// <--
 class BitmapEx;
 
 struct SwAccessibilityOptions;
 class Region;
 class SwPostItMgr;
-
-// #i74769#
 class SdrPaintWindow;
+class SwAccessibleMap;
+
+namespace vcl
+{
+    class OldStylePrintAdaptor;
+}
+
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
 // benoetigt werden.
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
+
 
 class SW_DLLPUBLIC ViewShell : public Ring
 {
@@ -183,10 +185,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );//Direkt Paint oder lieber
                                                 //eine Aktion ausloesen.
 
-    SW_DLLPRIVATE void Scroll();    //Scrollen wenn sich aus der LayAction Scrollmoeglichkeiten
-                    //ergaben.
-
-    SW_DLLPRIVATE void PrepareForPrint( const SwPrtOptions &rOptions );
+    SW_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
 
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
@@ -209,8 +208,7 @@ public:
     const SwNodes& GetNodes() const;
 
     //Nach Druckerwechsel, vom Doc
-    //pPDFOut != NULL is used for PDF export.
-    void            InitPrt( SfxPrinter * , OutputDevice *pPDFOut = NULL );
+    void            InitPrt( OutputDevice *pOutDev );
 
     //Klammerung von zusammengehoerenden Aktionen.
     inline void StartAction();
@@ -233,11 +231,7 @@ public:
     void ChgHyphenation() { Reformat(); }
     void ChgNumberDigits();
 
-    //Methoden fuer Paint- und Scrollrects, die auf allen Shells im
-    //Ring arbeiten.
     sal_Bool AddPaintRect( const SwRect &rRect );
-    void AddScrollRect( const SwFrm *pFrm, const SwRect &rRect, long nOffs );
-    void SetNoNextScroll();
 
     void InvalidateWindows( const SwRect &rRect );
 
@@ -266,7 +260,7 @@ public:
     sal_Bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
     void EnableSmooth( sal_Bool b ) { bEnableSmooth = b; }
 
-    const SwRect &VisArea() const { return aVisArea; }
+    const SwRect& VisArea() const { return aVisArea; }
         //Es wird, wenn notwendig, soweit gescrollt, dass das
         //uebergebene Rect im sichtbaren Ausschnitt liegt.
     void MakeVisible( const SwRect & );
@@ -361,22 +355,25 @@ public:
     void   ChgAllPageOrientation( sal_uInt16 eOri );
     void   ChgAllPageSize( Size &rSz );
 
-    //Druckauftrag abwickeln.
-    // pPDFOut != Null is: do PDF Export (no printing!)
-    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
-                  OutputDevice* pPDFOut = NULL );
+    // printing of one page.
+    // bIsPDFExport == true is: do PDF Export (no printing!)
+    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
+            sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
-    //"Drucken" fuer OLE 2.0
-    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
+    // printing of one brochure page
+    void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
+            sal_Int32 nRenderer /* offset in vector of page pairs for prospect printing */ );
+
+    // printing for OLE 2.0
+    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef& );
+    SwDoc * CreatePrtDoc( SfxObjectShellRef& );
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
-    void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0,
-        const String* pStr = NULL, ULONG nMergeAct = 0, ULONG nMergeCnt = 0 );
+    void CalcPagesForPrint( sal_uInt16 nMax );
 
     //All about fields.
     void UpdateFlds(sal_Bool bCloseDB = sal_False);
@@ -397,9 +394,6 @@ public:
 
     // compatible behaviour of tabs
     void SetTabCompat( bool bNew );
-
-    //#i24363# tab stops relative to indent
-    void SetTabsRelativeToIndent( bool bNew );
 
     // font metric attribute "External Leading" should be considered
     void SetAddExtLeading( bool bNew );
@@ -474,14 +468,6 @@ public:
         view option will be adjusted.
     */
     void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
-
-    // print page/print preview
-    void PrintPreViewPage( SwPrtOptions& rOptions, sal_uInt16 nRowCol,
-                           SfxProgress& rProgress,
-                           const SwPagePreViewPrtData* = 0 );
-
-    // Prospekt-Format drucken
-    void PrintProspect( SwPrtOptions&, SfxProgress& , BOOL bRTL);
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }
@@ -564,9 +550,11 @@ public:
     */
     void InvalidateAccessibleParaTextSelection();
 
-    /** invalidate attributes for paragraphs
+    /** invalidate attributes for paragraphs and paragraph's characters
 
         OD 2009-01-06 #i88069#
+        OD 2010-02-16 #i104008# - usage also for changes of the attributes of
+        paragraph's characters.
 
         @author OD
 
@@ -574,6 +562,8 @@ public:
         input parameter - paragraph frame, whose attributes have changed
     */
     void InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
+
+    SwAccessibleMap* GetAccessibleMap();
 
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );

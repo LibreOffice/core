@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrtxt.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include "paratr.hxx"
 #include "errhdl.hxx"
 #include <vcl/outdev.hxx>
-#include <svx/paravertalignitem.hxx>
+#include <editeng/paravertalignitem.hxx>
 
 #include "pormulti.hxx"
 #include <pagefrm.hxx>
@@ -450,7 +447,7 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
                 // examine hints in range nEnd - (nEnd + nRangeChar)
                 for( USHORT i = 0; i < pTmpHints->Count(); i++ )
                 {
-                    const SwTxtAttr* pHt = pTmpHints->GetHt( i );
+                    const SwTxtAttr* pHt = pTmpHints->GetTextHint( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
                         // check, if hint is in our range

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drwtxtsh.sdi,v $
- * $Revision: 1.20.82.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,6 @@ interface TextDrawText
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -51,7 +47,6 @@ interface TextDrawText
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
     ]
 
     SID_PASTE   // api:
@@ -61,7 +56,7 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_PASTESPECIAL  // api:
+    SID_PASTE_SPECIAL  // api:
     [
         StateMethod = StateClpbrd ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
@@ -429,7 +424,7 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_THESAURUS_DLG // api:
+    SID_THESAURUS // api:
     [
         ExecMethod = ExecDrawLingu ;
         StateMethod = GetState ;
@@ -483,6 +478,24 @@ interface TextDrawText
     [
         StateMethod = StateInsert ;
     ]
+    SID_TRANSLITERATE_SENTENCE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_TITLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_TOGGLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_TRANSLITERATE_UPPER
     [
         ExecMethod = ExecTransliteration;
@@ -519,7 +532,15 @@ interface TextDrawText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
     SID_LANGUAGE_STATUS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
+
+    SID_THES
     [
         ExecMethod = Execute;
         StateMethod = GetState;

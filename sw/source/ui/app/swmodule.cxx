@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swmodule.cxx,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,13 +59,13 @@
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
-#include <svx/extrusioncontrols.hxx>
 #include <svx/hyprlink.hxx>
 #include <svx/tbxcustomshapes.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
+#include <svx/extrusioncolorcontrol.hxx>
+#include <svx/fontworkgallery.hxx>
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <comphelper/processfactory.hxx>
@@ -141,6 +138,7 @@
 #include <mailmergechildwindow.hxx>
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
+#include <sfx2/taskpane.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/appuno.hxx>
 #include <swatrset.hxx>
@@ -153,8 +151,8 @@
 // OD 14.02.2003 #107424#
 #include <svtools/colorcfg.hxx>
 
-#include <svx/acorrcfg.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
@@ -209,7 +207,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pView(0),
     bAuthorInitialised(sal_False),
     bEmbeddedLoadSave( sal_False ),
-    pClipboard( 0 ),
     pDragDrop( 0 ),
     pXSelection( 0 )
 {
@@ -221,11 +218,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                                      ERRCODE_AREA_SW_END,
                                      pSwResMgr );
 
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMerge"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE_END, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMergeFinished"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_FIELD_MERGE, String(), String::CreateFromAscii("OnFieldMerge"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_FIELD_MERGE_FINISHED, String(), String::CreateFromAscii("OnFieldMergeFinished"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO), String::CreateFromAscii("OnPageCountChange"));
     pModuleConfig = new SwModuleOptions;
 
     //Die brauchen wie sowieso
@@ -386,15 +378,8 @@ void SwDLL::RegisterControls()
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
 
-    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
-    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
-    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
-    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
-    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
-    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
@@ -477,18 +462,13 @@ void SwDLL::RegisterControls()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
-    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
-    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
-    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
-    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
-    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-
     GalleryChildWindow::RegisterChildWindow(0, pMod);
 
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
 
     SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pMod );
 }
 
 

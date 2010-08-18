@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,50 +29,51 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <rtl/logfile.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/msgbox.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/poolitem.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svx/zoomitem.hxx>
-#include <svx/editeng.hxx>
-#include <vcl/wrkwin.hxx>
-#include <svtools/transfer.hxx>
-
-#include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
-
+#include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
-#include <mathml.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/request.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
+#include <svtools/transfer.hxx>
+#include <svl/undo.hxx>
+#include <svl/whiter.hxx>
+#include <svx/dialogs.hrc>
+#include <editeng/editeng.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/zoomitem.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/wrkwin.hxx>
+
+#include "unomodel.hxx"
 #include "view.hxx"
-#include "document.hxx"
 #include "config.hxx"
-#include "toolbox.hxx"
 #include "dialog.hxx"
-#ifndef _STARMATH_HRC
+#include "document.hxx"
 #include "starmath.hrc"
-#endif
+#include "toolbox.hxx"
+#include "mathmlimport.hxx"
 
 
 #define MINWIDTH        200
@@ -89,12 +87,8 @@
 #define SmViewShell
 #include "smslots.hxx"
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-
-
-using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
+using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
 //////////////////////////////////////////////////////////////////////
@@ -113,7 +107,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     const Fraction aFraction (1,1);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     SetTotalSize();
 
@@ -151,7 +145,7 @@ void SmGraphicWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColor
 
 void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
 {
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     ScrollableWindow::DataChanged( rEvt );
 }
@@ -276,7 +270,7 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     if (IsCursorVisible())
         ShowCursor(FALSE);      // clean up remainings of old cursor
@@ -330,7 +324,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
         nCol++;
         const SmNode *pFound = SetCursorPos(nRow, nCol);
 
-        SmModule  *pp = SM_MOD1();
+        SmModule  *pp = SM_MOD();
         if (pFound && pp->GetConfig()->IsShowFormulaCursor())
             ShowCursor(TRUE);
     }
@@ -356,7 +350,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 {
     BOOL bCallBase = TRUE;
-    if ( !pViewShell->GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !pViewShell->GetViewFrame()->GetFrame().IsInPlace() )
     {
         switch ( rCEvt.GetCommand() )
         {
@@ -749,6 +743,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 //  SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_SERVER,
 //                              SmResId(RID_DRAW_OBJECTBAR) );
 
+    SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SmCmdBoxWrapper::GetChildWindowId());
 }
@@ -1012,18 +1007,25 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
 }
 
 void SmViewShell::Impl_Print(
-        OutputDevice &rOutDev, const SmPrintSize ePrintSize,
+        OutputDevice &rOutDev,
+        const SmPrintUIOptions &rPrintUIOptions,
         Rectangle aOutRect, Point aZeroPoint )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Impl_Print" );
 
-    SmModule *pp = SM_MOD1();
+    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, sal_True );
+    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, sal_True );
+    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, sal_True );
+    SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL ) ));
+    const USHORT nZoomFactor = static_cast< USHORT >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
+// IsIgnoreSpacesRight is a parser option! Thus it does not get evaluated here anymore (too late).
+//    const bool bNoRightSpaces = rPrintUIOptions.getBoolValue( PRTUIOPT_NO_RIGHT_SPACE, sal_True );
 
     rOutDev.Push();
     rOutDev.SetLineColor( Color(COL_BLACK) );
 
     // output text on top
-    if (pp->GetConfig()->IsPrintTitle())
+    if (bIsPrintTitle)
     {
         Size aSize600 (0, 600);
         Size aSize650 (0, 650);
@@ -1043,7 +1045,7 @@ void SmViewShell::Impl_Print(
 
         Size aDescSize (GetTextSize(rOutDev, GetDoc()->GetComment(), aOutRect.GetWidth() - 200));
 
-        if (pp->GetConfig()->IsPrintFrame())
+        if (bIsPrintFrame)
             rOutDev.DrawRect(Rectangle(aOutRect.TopLeft(),
                                Size(aOutRect.GetWidth(), 100 + aTitleSize.Height() + 200 + aDescSize.Height() + 100)));
         aOutRect.Top() += 200;
@@ -1070,11 +1072,9 @@ void SmViewShell::Impl_Print(
     }
 
     // output text on bottom
-    if (pp->GetConfig()->IsPrintFormulaText())
+    if (bIsPrintFormulaText)
     {
-//        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
-        Font aFont;
-
+        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetColor( Color(COL_BLACK) );
 
@@ -1085,7 +1085,7 @@ void SmViewShell::Impl_Print(
 
         aOutRect.Bottom() -= aSize.Height() + 600;
 
-        if (pp->GetConfig()->IsPrintFrame())
+        if (bIsPrintFrame)
             rOutDev.DrawRect(Rectangle(aOutRect.BottomLeft(),
                                Size(aOutRect.GetWidth(), 200 + aSize.Height() + 200)));
 
@@ -1096,7 +1096,7 @@ void SmViewShell::Impl_Print(
         aOutRect.Bottom() -= 200;
     }
 
-    if (pp->GetConfig()->IsPrintFrame())
+    if (bIsPrintFrame)
         rOutDev.DrawRect(aOutRect);
 
     aOutRect.Top()    += 100;
@@ -1107,6 +1107,9 @@ void SmViewShell::Impl_Print(
     Size aSize (GetDoc()->GetSize());
 
     MapMode    OutputMapMode;
+    // PDF export should always use PRINT_SIZE_NORMAL ...
+    if (!rPrintUIOptions.getBoolValue( "IsPrinter", sal_False ) )
+        ePrintSize = PRINT_SIZE_NORMAL;
     switch (ePrintSize)
     {
         case PRINT_SIZE_NORMAL:
@@ -1131,7 +1134,7 @@ void SmViewShell::Impl_Print(
 
         case PRINT_SIZE_ZOOMED:
         {
-            Fraction aFraction (pp->GetConfig()->GetPrintZoomFactor(), 100);
+            Fraction aFraction( nZoomFactor, 100 );
 
             OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             break;
@@ -1157,44 +1160,10 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-USHORT SmViewShell::Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog)
+USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
-
-    SmPrinterAccess aPrinterAccess( *GetDoc() );
-    Printer *pPrinter = aPrinterAccess.GetPrinter();
-    //OutputDevice *pOutDev = pPrinter;
-
-    SfxViewShell::Print (rProgress, bIsAPI, pPrintDialog);
-
-    pPrinter->StartPage();
-
-    Point     aZeroPoint;
-    Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
-
-    Point   aPrtPageOffset( pPrinter->GetPageOffset() );
-    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
-
-    // set minimum top and bottom border
-    if (aPrtPageOffset.Y() < 2000)
-        OutputRect.Top() += 2000 - aPrtPageOffset.Y();
-    if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
-        OutputRect.Bottom() -= 2000 - (aPrtPaperSize.Height() -
-                                       (aPrtPageOffset.Y() + OutputRect.Bottom()));
-
-    // set minimum left and right border
-    if (aPrtPageOffset.X() < 2500)
-        OutputRect.Left() += 2500 - aPrtPageOffset.X();
-    if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
-        OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
-                                      (aPrtPageOffset.X() + OutputRect.Right()));
-
-    SmModule *pp = SM_MOD1();
-    Impl_Print( *pPrinter, pp->GetConfig()->GetPrintSize(),
-                 OutputRect, aZeroPoint );
-
-    pPrinter->EndPage();
-
+    DBG_ASSERT( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
 
@@ -1213,13 +1182,16 @@ SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
 USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetPrinter" );
+    SfxPrinter *pOld = GetDoc()->GetPrinter();
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
 
     if ((nDiffFlags & SFX_PRINTER_PRINTER) == SFX_PRINTER_PRINTER)
         GetDoc()->SetPrinter( pNewPrinter );
 
     if ((nDiffFlags & SFX_PRINTER_OPTIONS) == SFX_PRINTER_OPTIONS)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         pp->GetConfig()->ItemSetToConfig(pNewPrinter->GetOptions());
     }
     return 0;
@@ -1318,7 +1290,7 @@ BOOL SmViewShell::Insert( SfxMedium& rMedium )
             bChkOldVersion = FALSE;
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
-            SmXMLWrapper aEquation(xModel); //!! modifies the result of pDoc->GetText() !!
+            SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bRet = 0 == aEquation.Import(rMedium);
         }
     }
@@ -1363,7 +1335,7 @@ BOOL SmViewShell::InsertFrom(SfxMedium &rMedium)
         if ( rFltName.EqualsAscii(MATHML_XML) )
         {
             Reference<com::sun::star::frame::XModel> xModel( pDoc->GetModel() );
-            SmXMLWrapper aEquation(xModel); //!! modifies the result of pDoc->GetText() !!
+            SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bSuccess = 0 == aEquation.Import(rMedium);
         }
         else
@@ -1407,7 +1379,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
     {
         case SID_FORMULACURSOR:
         {
-            SmModule *pp = SM_MOD1();
+            SmModule *pp = SM_MOD();
 
             const SfxItemSet  *pArgs = rReq.GetArgs();
             const SfxPoolItem *pItem;
@@ -1573,8 +1545,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_INSERTTEXT:
         {
             const SfxStringItem& rItem =
-                (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
-
+                    (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
             if (pWin)
                 pWin->InsertText(rItem.GetValue());
             break;
@@ -1588,7 +1559,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             pImpl->pDocInserter =
                 new ::sfx2::DocumentInserter( 0, GetDoc()->GetFactory().GetFactoryName(), 0 );
             pImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
-            return;
+            break;
         }
 
         case SID_NEXTERR:
@@ -1639,7 +1610,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_ATTR_ZOOM:
         {
-            if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+            if ( !GetViewFrame()->GetFrame().IsInPlace() )
             {
                 //CHINA001 SvxZoomDialog *pDlg = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
@@ -1652,7 +1623,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet, RID_SVXDLG_ZOOM);
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -1709,15 +1680,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
             SmDocShell *pDoc = GetDoc();
             OutputDevice *pDev = pDoc->GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+                pDev = &SM_MOD()->GetDefaultVirtualDev();
             DBG_ASSERT (pDev, "device for font list missing" );
 
-            SmModule *pp = SM_MOD1();
-            SmSymbolDialog( NULL, pDev, pp->GetSymSetManager(), *this ).Execute();
+            SmModule *pp = SM_MOD();
+            SmSymbolDialog( NULL, pDev, pp->GetSymbolManager(), *this ).Execute();
         }
         break;
-
-
     }
     rReq.Done();
 }
@@ -1744,7 +1713,6 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_PASTE:
             if( !xClipEvtLstnr.is()  &&  pEditWin)
             {
-                AddRemoveClipboardListener( TRUE );
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                                         pEditWin) );
@@ -1769,7 +1737,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_FITINWINDOW:
-            if ( GetViewFrame()->GetFrame()->IsInPlace() )
+            if ( GetViewFrame()->GetFrame().IsInPlace() )
                 rSet.DisableItem( nWh );
             break;
 
@@ -1791,7 +1759,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_FORMULACURSOR:
             {
-                SmModule *pp = SM_MOD1();
+                SmModule *pp = SM_MOD();
                 rSet.Put(SfxBoolItem(nWh, pp->GetConfig()->IsShowFormulaCursor()));
             }
             break;
@@ -1813,7 +1781,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
-    SfxViewShell(pFrame_, SFX_VIEW_DISABLE_ACCELS | SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
+    SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
     aGraphic(this),
     aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings()),
     pImpl( new SmViewShell_Impl )
@@ -1833,8 +1801,6 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
 SmViewShell::~SmViewShell()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::~SmViewShell" );
-
-    AddRemoveClipboardListener( FALSE );
 
     //!! this view shell is not active anymore !!
     // Thus 'SmGetActiveView' will give a 0 pointer.
@@ -1910,5 +1876,21 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     pImpl->pRequest->SetReturnValue( SfxBoolItem( pImpl->pRequest->GetSlot(), TRUE ) );
     pImpl->pRequest->Done();
     return 0;
+}
+
+void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
+{
+    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    {
+        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        {
+            case SFX_HINT_MODECHANGED:
+            case SFX_HINT_DOCCHANGED:
+                GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+                break;
+            default:
+                break;
+        }
+    }
 }
 

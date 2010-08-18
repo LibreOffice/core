@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swthreadmanager.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,35 +36,29 @@
 
     @author OD
 */
-SwThreadManager* SwThreadManager::mpThreadManager = 0;
-osl::Mutex* SwThreadManager::mpGetManagerMutex = new osl::Mutex();
+bool SwThreadManager::mbThreadManagerInstantiated = false;
 
 SwThreadManager::SwThreadManager()
     : mpThreadManagerImpl( new ThreadManager( SwThreadJoiner::GetThreadJoiner() ) )
 {
     mpThreadManagerImpl->Init();
+    mbThreadManagerInstantiated = true;
 }
 
 SwThreadManager::~SwThreadManager()
 {
-    delete mpThreadManagerImpl;
 }
+
+struct InitInstance : public rtl::Static<SwThreadManager, InitInstance> {};
 
 SwThreadManager& SwThreadManager::GetThreadManager()
 {
-    osl::MutexGuard aGuard(*mpGetManagerMutex);
-
-    if ( mpThreadManager == 0 )
-    {
-        mpThreadManager = new SwThreadManager();
-    }
-
-    return *mpThreadManager;
+    return InitInstance::get();
 }
 
 bool SwThreadManager::ExistsThreadManager()
 {
-    return (mpThreadManager != 0);
+    return mbThreadManagerInstantiated;
 }
 
 oslInterlockedCount SwThreadManager::AddThread( const rtl::Reference< ObservableThread >& rThread )

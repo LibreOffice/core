@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doc.hxx,v $
- * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,45 +29,23 @@
 
 /** SwDoc interfaces */
 
-#ifndef IINTERFACE_HXX_INCLUDED
 #include <IInterface.hxx>
-#endif
 #include <IDocumentSettingAccess.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <IDocumentMarkAccess.hxx>
-#ifndef IREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
-#endif
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 #include <IDocumentContentOperations.hxx>
-#endif
-#ifndef IDOCUMENTSTYLEPOOLACCESS_HXX_INCLUDED
 #include <IDocumentStylePoolAccess.hxx>
-#endif
-#ifndef IDOCUMENTLINENUMBERACCESS_HXX_INCLUDED
 #include <IDocumentLineNumberAccess.hxx>
-#endif
-#ifndef IDOCUMENTSTATISTICS_HXX_INCLUDED
 #include <IDocumentStatistics.hxx>
-#endif
-#ifndef IDOCUMENTSTATE_HXX_INCLUDED
 #include <IDocumentState.hxx>
-#endif
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
 #include <IDocumentLayoutAccess.hxx>
-#ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
 #include <IDocumentTimerAccess.hxx>
-#endif
-#ifndef IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
 #include <IDocumentChartDataProviderAccess.hxx>
-#endif
 // --> OD 2007-10-26 #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
@@ -80,8 +55,9 @@
 #include <IDocumentListsAccess.hxx>
 class SwList;
 // <--
+#include <IDocumentExternalData.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
@@ -92,27 +68,29 @@ class SwList;
 #include <toxe.hxx>             // enums
 #include <flyenum.hxx>
 #include <itabenum.hxx>
-#ifndef _SWDBDATA_HXXnLinkCt
 #include <swdbdata.hxx>
-#endif
 #include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#ifndef _VOS_REF_HXX
 #include <vos/ref.hxx>
-#endif
 #include <svx/svdtypes.hxx>
-#include <svtools/style.hxx>
-#include <svx/numitem.hxx>
+#include <svl/style.hxx>
+#include <editeng/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#ifdef FUTURE_VBA
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#endif
 
 #include <hash_map>
 #include <stringhash.hxx>
 
 #include <svtools/embedhlp.hxx>
 #include <vector>
+#include <set>
+#include <map>
+#include <memory>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -138,7 +116,6 @@ class SvNumberFormatter;
 class SvStringsSort;
 class SvUShorts;
 class SvUShortsSort;
-class SvxLinkManager;
 class SvxMacro;
 class SvxMacroTableDtor;
 class SvxBorderLine;
@@ -190,6 +167,7 @@ class SwRubyList;
 class SwRubyListEntry;
 class SwSectionFmt;
 class SwSectionFmts;
+class SwSectionData;
 class SwSelBoxes;
 class SwSpzFrmFmts;
 class SwTOXBase;
@@ -223,7 +201,6 @@ class SwLayouter;
 class SdrView;
 class SdrMarkList;
 class SwAuthEntry;
-class SwUnoCallBack;
 class SwLayoutCache;
 class IStyleAccess;
 struct SwCallMouseEvent;
@@ -231,7 +208,8 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
-struct SwPrintData;
+class SwPrintData;
+class SwPrintUIOptions;
 class SdrPageView;
 struct SwConversionArgs;
 class SwRewriter;
@@ -239,10 +217,17 @@ class SwMsgPoolItem;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
+class SwPrintData;
+class SwRenderData;
+class SwPageFrm;
+class SwViewOption;
 
 namespace sw { namespace mark {
     class MarkManager;
 }}
+namespace sw {
+    class MetaFieldManager;
+}
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -258,6 +243,8 @@ namespace container {
 
 namespace sfx2 {
     class SvLinkSource;
+    class IXmlIdRegistry;
+    class LinkManager;
 }
 
 //PageDescriptor-Schnittstelle, Array hier wegen inlines.
@@ -268,7 +255,7 @@ SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
 // global function to start grammar checking in the document
-void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame );
+void StartGrammarChecking( SwDoc &rDoc );
 
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
@@ -292,8 +279,9 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentOutlineNodes,
     // <--
     // --> OD 2008-03-12 #refactorlists#
-    public IDocumentListsAccess
+    public IDocumentListsAccess,
     // <--
+    public IDocumentExternalData
 {
 
     friend void _InitCore();
@@ -322,6 +310,7 @@ class SW_DLLPUBLIC SwDoc :
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> pMarkManager;
+    const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -372,7 +361,7 @@ class SW_DLLPUBLIC SwDoc :
     SfxObjectShellRef* pDocShRef;     // fuers Kopieren von OLE-Nodes (wenn keine
                                         // DocShell gesetzt ist, muss dieser
                                         // Ref-Pointer gesetzt sein!!!!)
-    SvxLinkManager  *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
+    sfx2::LinkManager   *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
 
     SwAutoCorrExceptWord *pACEWord;     // fuer die automatische Uebernahme von
                                         // autokorrigierten Woertern, die "zurueck"
@@ -409,7 +398,7 @@ class SW_DLLPUBLIC SwDoc :
     SwLayoutCache   *pLayoutCache;  // Layout cache to read and save with the
                                     // document for a faster formatting
 
-    SwUnoCallBack   *pUnoCallBack;
+    SwModify *pUnoCallBack;
     IGrammarContact *mpGrammarContact;   // for grammar checking in paragraphs during editing
 
     mutable  comphelper::ImplementationReference< SwChartDataProvider
@@ -419,7 +408,9 @@ class SW_DLLPUBLIC SwDoc :
 
     // table of forbidden characters of this document
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
-
+#ifdef FUTURE_VBA
+    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
+#endif
     // --> OD 2007-10-26 #i83479#
 public:
     struct lessThanNodeNum
@@ -432,6 +423,8 @@ public:
 private:
     tImplSortedNodeNumList* mpListItemsList;
     // <--
+
+    ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
     // -------------------------------------------------------------------
     // sonstige
@@ -502,14 +495,13 @@ private:
     bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
     bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
-    bool mbWinEncryption         : 1;    // imported document password encrypted?
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
@@ -637,8 +629,8 @@ private:
         // nur fuer den internen Gebrauch deshalb privat.
         // Kopieren eines Bereiches im oder in ein anderes Dokument !
         // Die Position darf nicht im Bereich liegen !!
-    sal_Bool _Copy( SwPaM&, SwPosition&,
-                sal_Bool MakeNewFrms = sal_True, SwPaM* pCpyRng = 0 ) const;    // in ndcopy.cxx
+    bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,
+            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
 
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
@@ -650,8 +642,10 @@ private:
                                 const SfxItemSet* pGrfAttrSet,
                                 SwFrmFmt* = 0 );
 
-    void _CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
-                        sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
+    void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
+                            const xub_StrLen nEndContentIndex,
+                            const SwNodeIndex& rStartIdx,
+                            const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
     // --> OD 2005-01-13 #i40550#
@@ -661,7 +655,7 @@ private:
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SvPtrarr& rSourceArr, SvPtrarr& rDestArr,
                         FNCopyFmt fnCopyFmt, SwFmt& rDfltFmt );
-    void _CopyPageDescHeaderFooter( sal_Bool bCpyHeader,
+    void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
     SwFmt* FindFmtByName( const SvPtrarr& rFmtArr,
                                     const String& rName ) const;
@@ -721,6 +715,14 @@ private:
      SwFmt *_MakeCharFmt(const String &, SwFmt *, BOOL, BOOL );
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, BOOL, BOOL );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
+
+     void InitTOXTypes();
+     void   Paste( const SwDoc& );
+     bool DeleteAndJoinImpl(SwPaM&, const bool);
+     bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
+     bool DeleteRangeImpl(SwPaM&, const bool unused = false);
+     bool DeleteRangeImplImpl(SwPaM &);
+     bool ReplaceRangeImpl(SwPaM&, String const&, const bool);
 
 public:
 
@@ -845,8 +847,8 @@ public:
     */
     virtual bool IsVisibleLinks() const;
     virtual void SetVisibleLinks(bool bFlag);
-    virtual SvxLinkManager& GetLinkManager();
-    virtual const SvxLinkManager& GetLinkManager() const;
+    virtual sfx2::LinkManager& GetLinkManager();
+    virtual const sfx2::LinkManager& GetLinkManager() const;
     virtual void UpdateLinks(BOOL bUI);
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
@@ -898,18 +900,22 @@ public:
 
     /** IDocumentContentOperations
     */
-    virtual bool Copy(SwPaM&, SwPosition&) const;
+    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll) const;
     virtual void DeleteSection(SwNode* pNode);
-    virtual bool Delete(SwPaM&);
+    virtual bool DeleteRange(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
-    virtual bool DeleteAndJoin(SwPaM&);
-    virtual bool Move(SwPaM&, SwPosition&, SwMoveFlags);
-    virtual bool Move(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
+    // --> OD 2009-08-20 #i100466#
+    // Add optional parameter <bForceJoinNext>, default value <false>
+    // Needed for hiding of deletion redlines
+    virtual bool DeleteAndJoin( SwPaM&,
+                                const bool bForceJoinNext = false );
+    // <--
+    virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
+    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
-    virtual bool Overwrite(const SwPaM &rRg, sal_Unicode c);
     virtual bool Overwrite(const SwPaM &rRg, const String& rStr);
-    virtual bool Insert(const SwPaM &rRg, sal_Unicode c);
-    virtual bool Insert(const SwPaM &rRg, const String&, bool bHintExpand);
+    virtual bool InsertString(const SwPaM &rRg, const String&,
+              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
@@ -917,8 +923,10 @@ public:
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
-    virtual bool Insert(const SwPaM &rRg, const SfxPoolItem&, sal_uInt16 nFlags);
-    virtual bool Insert(const SwPaM &rRg, const SfxItemSet&, sal_uInt16 nFlags);
+    virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
+                                const SetAttrMode nFlags);
+    virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
+                                const SetAttrMode nFlags);
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
     virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&);
     virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
@@ -926,7 +934,8 @@ public:
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart);
     virtual bool AppendTxtNode(SwPosition& rPos);
         virtual void SetModified(SwPaM &rPaM);
-    virtual bool Replace(SwPaM& rPam, const String& rNewStr, bool bRegExpRplc);
+    virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
+                              const bool bRegExReplace);
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos );
 
     /** IDocumentStylePoolAccess
@@ -1049,6 +1058,12 @@ public:
                                              const String sNewListStyleName );
     // <--
 
+    /** IDocumentExternalData */
+    virtual void setExternalData(::sw::tExternalDataType eType,
+                                 ::sw::tExternalDataPointer pPayload);
+    virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType);
+
+
     /** INextInterface here
     */
 
@@ -1061,7 +1076,7 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
@@ -1101,6 +1116,7 @@ public:
                                 SwFrmFmt *pParent = 0 );
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
+                            const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
@@ -1110,7 +1126,12 @@ public:
 
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
-
+    // --> OD 2009-07-20 #i73249#
+    void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
+                         const String& sNewTitle );
+    void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
+                               const String& sNewDescription );
+    // <--
 
     /** Footnotes
     */
@@ -1121,9 +1142,9 @@ public:
     void SetEndNoteInfo(const SwEndNoteInfo& rInfo);
           SwFtnIdxs& GetFtnIdxs()       { return *pFtnIdxs; }
     const SwFtnIdxs& GetFtnIdxs() const { return *pFtnIdxs; }
-    // Fussnoten im Bereich aendern
-    sal_Bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
-                        sal_uInt16 nNumber, sal_Bool bIsEndNote );
+    // change footnotes in area
+    bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
+                    sal_uInt16 nNumber, bool bIsEndNote );
 
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
@@ -1350,6 +1371,15 @@ public:
     sal_Bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
 
+    // get the set of printable pages for the XRenderable API by
+    // evaluating the respective settings (see implementation)
+    void CalculatePagesForPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void CalculatePagePairsForProspectPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions,
+            sal_Int32 nDocPageCount );
+
     sal_uInt16 GetPageCount() const;
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
@@ -1367,11 +1397,11 @@ public:
         // kopiere die Kopzeile (mit dem Inhalt!) aus dem SrcFmt
         // ins DestFmt ( auch ueber Doc grenzen hinaus!)
     void CopyHeader( const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
-        { _CopyPageDescHeaderFooter( sal_True, rSrcFmt, rDestFmt ); }
+        { CopyPageDescHeaderFooterImpl( true, rSrcFmt, rDestFmt ); }
         // kopiere die Fusszeile (mit dem Inhalt!) aus dem SrcFmt
         // ins DestFmt ( auch ueber Doc grenzen hinaus!)
     void CopyFooter( const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
-        { _CopyPageDescHeaderFooter( sal_False, rSrcFmt, rDestFmt ); }
+        { CopyPageDescHeaderFooterImpl( false, rSrcFmt, rDestFmt ); }
 
         //fuer Reader
 
@@ -1403,7 +1433,7 @@ public:
         // Methoden fuer die Verzeichnisse:
         // - Verzeichnismarke einfuegen loeschen travel
     sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
-    void Delete( SwTOXMark* pTOXMark );
+    void DeleteTOXMark( const SwTOXMark* pTOXMark );
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                 SwTOXSearch eDir, sal_Bool bInReadOnly );
 
@@ -1437,6 +1467,7 @@ public:
     void SetInReading( bool bNew )              { mbInReading = bNew; }
 
     bool IsClipBoard() const                    { return mbClipBoard; }
+    // N.B.: must be called right after constructor! (@see GetXmlIdRegistry)
     void SetClipBoard( bool bNew )              { mbClipBoard = bNew; }
 
     bool IsColumnSelection() const              { return mbColumnSelection; }
@@ -1518,13 +1549,16 @@ public:
     // <--
     void SetCounted( const SwPaM&, bool bCounted);
 
-    /**
-       Replace numbering rules in a PaM by another numbering rule.
+    // --> OD 2009-08-25 #i86492#
+    // no longer needed.
+    // SwDoc::SetNumRule( rPaM, rNumRule, false, <ListId>, sal_True, true ) have to be used instead.
+//    /**
+//       Replace numbering rules in a PaM by another numbering rule.
 
-       \param rPaM         PaM to replace the numbering rules in
-       \param rNumRule     numbering rule to replace the present numbering rules
-     */
-    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
+//       \param rPaM         PaM to replace the numbering rules in
+//       \param rNumRule     numbering rule to replace the present numbering rules
+//     */
+//    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
@@ -1584,8 +1618,8 @@ public:
                            - FALSE: search backward
        \param bNum         - TRUE:  search for enumeration
                            - FALSE: search for itemize
-       \param bOutline     - TRUE:  search for non-outline numbering rule
-                           - FALSE: search for outline numbering rule
+       \param bOutline     - TRUE:  search for outline numbering rule
+                           - FALSE: search for non-outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
 
@@ -1597,13 +1631,13 @@ public:
         input parameter - boolean, indicating, if start node, determined by given
         start position has to be investigated or not.
      */
-    const SwNumRule * SearchNumRule(SwPosition & rPos,
-                                    BOOL bForward,
-                                    BOOL bNum,
-                                    BOOL bOutline,
+    const SwNumRule * SearchNumRule(const SwPosition & rPos,
+                                    const bool bForward,
+                                    const bool bNum,
+                                    const bool bOutline,
                                     int nNonEmptyAllowed,
                                     String& sListId,
-                                    bool bInvestigateStartNode = false );
+                                    const bool bInvestigateStartNode = false );
 
         // Absaetze ohne Numerierung, aber mit Einzuegen
     sal_Bool NoNum( const SwPaM& );
@@ -1775,9 +1809,10 @@ public:
     inline       void  SetOle2Link(const Link& rLink) {aOle2Link = rLink;}
     inline const Link& GetOle2Link() const {return aOle2Link;}
 
-    // SS fuer Bereiche
-    SwSection* Insert( const SwPaM& rRange, const SwSection& rNew,
-                        const SfxItemSet* pAttr = 0, sal_Bool bUpdate = sal_True );
+    // insert section (the ODF kind of section, not the nodesarray kind)
+    SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
+            SwTOXBase const*const pTOXBase = 0,
+            SfxItemSet const*const pAttr = 0, bool const bUpdate = true);
     sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = 0 ) const;
     SwSection* GetCurrSection( const SwPosition& rPos ) const;
@@ -1785,7 +1820,8 @@ public:
     const SwSectionFmts& GetSections() const { return *pSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
     void DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes = sal_False );
-    void ChgSection( sal_uInt16 nSect, const SwSection&, const SfxItemSet* = 0, sal_Bool bPreventLinkUpdate = FALSE);
+    void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
+            SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
     /* @@@MAINTAINABILITY-HORROR@@@
@@ -1975,9 +2011,6 @@ public:
     USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         USHORT nMode );
 
-    inline void SetWinEncryption(const bool bImportWinEncryption) {mbWinEncryption = bImportWinEncryption; }
-    inline bool IsWinEncrypted() const         { return mbWinEncryption; }
-
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
     SwLayoutCache* GetLayoutCache() const { return pLayoutCache; }
@@ -2100,6 +2133,12 @@ public:
     {
         return n32DummyCompatabilityOptions2;
     }
+#ifdef FUTURE_VBA
+    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
+#endif
+    ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
+    ::sw::MetaFieldManager & GetMetaFieldManager();
+    SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sw3convert.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,18 +35,18 @@
 #include <stdio.h>
 #include "hintids.hxx"
 #include <tools/resid.hxx>
-#include <svtools/macitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/macitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #ifndef _SVSTDARR_USHORTS_DECL
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtfld.hxx>
 #include <frmatr.hxx>

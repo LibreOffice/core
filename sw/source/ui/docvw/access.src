@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: access.src,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,5 +82,21 @@ String STR_ACCESS_PAGE_NAME
 String STR_ACCESS_PAGE_DESC
 {
     Text [ en-US ] = "Page: $(ARG1)";
+};
+String STR_ACCESS_ANNOTATION_AUTHOR_NAME
+{
+    Text [ en-US ] = "Author";
+};
+String STR_ACCESS_ANNOTATION_DATE_NAME
+{
+    Text [ en-US ] = "Date";
+};
+String STR_ACCESS_ANNOTATION_BUTTON_NAME
+{
+    Text [ en-US ] = "Actions";
+};
+String STR_ACCESS_ANNOTATION_BUTTON_DESC
+{
+    Text [ en-US ] = "Activate this button to open a list of actions which can be performed on this comment and other comments";
 };
 

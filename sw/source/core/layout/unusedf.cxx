@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unusedf.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@ void SwFrm::Format( const SwBorderAttrs * )
     ASSERT( FALSE, "Format() der Basisklasse gerufen." );
 }
 
-void SwFrm::Paint(const SwRect &) const
+void SwFrm::Paint(const SwRect &, const SwPrtOptions * ) const
 {
     ASSERT( FALSE, "Paint() der Basisklasse gerufen." );
 }
@@ -67,7 +64,7 @@ BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
     return FALSE;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwRootFrm::Cut()
 {

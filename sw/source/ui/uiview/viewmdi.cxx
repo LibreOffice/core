@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewmdi.cxx,v $
- * $Revision: 1.24.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +36,8 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <swmodule.hxx>
 #ifndef _VIEW_HXX
@@ -85,7 +82,6 @@
 
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 
 USHORT  SwView::nMoveType = NID_PGE;
 sal_Int32 SwView::nActMark = 0;
@@ -181,7 +177,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     nFac = Max( long( MINZOOM ), nFac );
 
     SwViewOption aOpt( *pOpt );
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
         //View updaten.
@@ -244,12 +240,12 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     if( bUnLockView )
         pWrtShell->LockView( FALSE );
 
-    if ( mpPostItMgr )
-    {
-        mpPostItMgr->Rescale();
-        mpPostItMgr->CalcRects();
-        mpPostItMgr->LayoutPostIts();
-    }
+//    if ( mpPostItMgr )
+//    {
+//        mpPostItMgr->Rescale();
+//        mpPostItMgr->CalcRects();
+//        mpPostItMgr->LayoutPostIts();
+//    }
 
 //  eZoom = eZoomType;
 }
@@ -264,7 +260,7 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
 
     ACT_KONTEXT(pWrtShell);
 
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() && !bViewOnly )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
         const BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
@@ -350,7 +346,7 @@ void SwView::CreatePageButtons(BOOL bShow)
     pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
     pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
     pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
-    Reference< XFrame > xFrame = GetViewFrame()->GetFrame()->GetFrameInterface();
+    Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
     pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
     pNaviBtn->SetHelpId(HID_SCRL_NAVI);
     Link aLk( LINK( this, SwView, BtnPage ) );
@@ -492,15 +488,15 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_POSTIT:
         {
-            SwMarginWin* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
+            sw::sidebarwindows::SwSidebarWin* pPostIt = pThis->GetPostItMgr()->GetActiveSidebarWin();
             if (pPostIt)
-                pThis->GetPostItMgr()->SetActivePostIt(0);
+                pThis->GetPostItMgr()->SetActiveSidebarWin(0);
             SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
             if (rSh.MoveFldType(pFldType, bNext))
                 pThis->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
             else
                 //first/last item
-                pThis->GetPostItMgr()->SetActivePostIt(pPostIt);
+                pThis->GetPostItMgr()->SetActiveSidebarWin(pPostIt);
         }
         break;
         case NID_SRCH_REP:

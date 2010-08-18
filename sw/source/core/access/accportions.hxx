@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accportions.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +90,6 @@ class SwAccessiblePortionData : public SwPortionHandler
     sal_Bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
     sal_Bool IsSpecialPortion( size_t nPortionNo ) const;
     sal_Bool IsReadOnlyPortion( size_t nPortionNo ) const;
-    sal_Bool IsGrayPortion( size_t nPortionNo ) const;
     sal_Bool IsGrayPortionType( USHORT nType ) const;
 
     // helper method for GetEditableRange(...):

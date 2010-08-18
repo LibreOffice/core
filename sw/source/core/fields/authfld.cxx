@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: authfld.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,9 @@
 #define _SVSTDARR_ULONGS
 #include <hintids.hxx>
 
-#include <svtools/svstdarr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
 #include <swtypes.hxx>
 #include <tools/resid.hxx>
 #ifndef _COMCORE_HRC
@@ -288,8 +285,9 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
 /* -----------------------------21.12.99 13:20--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
+bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 {
+    bool bChanged = false;
     for( USHORT j = 0; j < m_pDataArr->Count(); ++j )
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
@@ -299,9 +297,11 @@ void SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
             for(USHORT i = 0; i < AUTH_FIELD_END; i++)
                 pTemp->SetAuthorField((ToxAuthorityField) i,
                     pNewEntry->GetAuthorField((ToxAuthorityField)i));
+            bChanged = true;
             break;
         }
     }
+    return bChanged;
 }
 /*-- 11.10.99 08:49:22---------------------------------------------------
     Description:    appends a new entry (if new) and returns the array position

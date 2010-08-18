@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfld.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,14 +36,10 @@
 #include <tools/datetime.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
@@ -69,14 +62,13 @@
 #include <chpfld.hxx>
 #include <reffld.hxx>
 #include <flddropdown.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <section.hxx>
 #include <cellatr.hxx>
 #include <docary.hxx>
 #include <authfld.hxx>
 #include <txtinet.hxx>
+#include <fmtcntnt.hxx>
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #endif
@@ -601,7 +593,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFld->CalcField( aPara );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         else
                         {
                             // mind. ein ASSERT
@@ -669,7 +661,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFml->Calc( aPara, nValue );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         else
                         {
                             // mind. ein ASSERT
@@ -907,7 +899,7 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
 #else
         ::GetBodyTxtNode( rDoc, aPos, rFrm );
@@ -1249,13 +1241,18 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
                 // Eintrag in den HashTable eintragen
                 // Eintrag vorhanden ?
                 pFnd = Find( rName, ppHashTbl, rTblSize, &nPos );
+                String const value(pFld->ExpandField(IsClipBoard()));
                 if( pFnd )
+                {
                     // Eintrag in der HashTabelle aendern
-                    ((_HashStr*)pFnd)->aSetStr = pFld->Expand();
+                    static_cast<_HashStr*>(pFnd)->aSetStr = value;
+                }
                 else
+                {
                     // neuen Eintrag einfuegen
                     *(ppHashTbl + nPos ) = new _HashStr( rName,
-                                pFld->Expand(), (_HashStr*)*(ppHashTbl + nPos));
+                        value, static_cast<_HashStr *>(*(ppHashTbl + nPos)));
+                }
             }
             break;
         }
@@ -1421,13 +1418,18 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             // Eintrag vorhanden ?
             USHORT nPos;
             SwHash* pFnd = Find( rName, pHashStrTbl, nStrFmtCnt, &nPos );
+            String const value(pFld->ExpandField(IsClipBoard()));
             if( pFnd )
+            {
                 // Eintrag in der HashTabelle aendern
-                ((_HashStr*)pFnd)->aSetStr = pFld->Expand();
+                static_cast<_HashStr*>(pFnd)->aSetStr = value;
+            }
             else
+            {
                 // neuen Eintrag einfuegen
                 *(pHashStrTbl + nPos ) = new _HashStr( rName,
-                            pFld->Expand(), (_HashStr*)*(pHashStrTbl + nPos));
+                    value, static_cast<_HashStr *>(*(pHashStrTbl + nPos)));
+            }
         }
         break;
         case RES_GETEXPFLD:
@@ -2551,7 +2553,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
     {
         // einen Index fuers bestimmen vom TextNode anlegen
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
         GetBodyTxtNode( rDoc, aPos, *pFrm );
@@ -2599,7 +2601,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             if( !pFrm )
                 break;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
             GetBodyTxtNode( rDoc, aPos, *pFrm );
@@ -2721,21 +2723,18 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
     {
         if (DoesUndo())
         {
-            SwPosition * pPos =
-                pDstTxtFld->GetPosition();
+            SwPosition aPosition( pDstTxtFld->GetTxtNode() );
+            aPosition.nContent = *pDstTxtFld->GetStart();
 
-            ASSERT(pPos, "SwTxtFld not in its SwTxtNode?");
-
-            AppendUndo(new SwUndoFieldFromDoc(*pPos, *pDstFld, rSrcFld,
+            AppendUndo(new SwUndoFieldFromDoc(aPosition, *pDstFld, rSrcFld,
                                               pMsgHnt, bUpdateFlds));
-            delete pPos;
         }
 
         // Das gefundene Feld wird angepasst ...
         //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
         //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
 
-        SwField * pNewFld = rSrcFld.Copy();
+        SwField * pNewFld = rSrcFld.CopyField();
         pDstFmtFld->SetFld(pNewFld);
 
         switch( nFldWhich )

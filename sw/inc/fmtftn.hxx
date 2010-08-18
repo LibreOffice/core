@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtftn.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _FMTFTN_HXX
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
 class SwDoc;
@@ -45,14 +42,14 @@ class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
     SwTxtFtn* pTxtAttr;     //mein TextAttribut
     String  aNumber;        //Benutzerdefinierte 'Nummer'
     USHORT  nNumber;        //Automatische Nummerierung
-    BOOL    bEndNote;       //Ist es eine Endnote?
+    bool    m_bEndNote;     // is it an End note?
 
     // geschuetzter CopyCtor
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
 public:
-    SwFmtFtn( BOOL bEndNote = FALSE );
+    SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
     // "pure virtual Methoden" vom SfxPoolItem
@@ -61,11 +58,11 @@ public:
 
     const String &GetNumStr() const { return aNumber; }
     const USHORT &GetNumber() const { return nNumber; }
-          BOOL    IsEndNote() const { return bEndNote;}
+          bool    IsEndNote() const { return m_bEndNote;}
 
     void SetNumStr( const String& rStr )    { aNumber = rStr; }
     void SetNumber( USHORT nNo )            { nNumber = nNo; }
-    void SetEndNote( BOOL b );
+    void SetEndNote( bool b );
 
     void SetNumber( const SwFmtFtn& rFtn )
         { nNumber = rFtn.nNumber; aNumber = rFtn.aNumber; }

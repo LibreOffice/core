@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docglbl.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 
 #include <hintids.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -49,12 +46,8 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <shellio.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
 #include <section.hxx>
@@ -307,7 +300,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         pDoc->GetNodes().Delete( aIdx, 1 );
 
                     // alle Flys in dem Bereich
-                    _CopyFlyInFly( aRg, aIdx );
+                    CopyFlyInFlyImpl( aRg, 0, aIdx );
 
 
                     // und noch alle Bookmarks
@@ -326,7 +319,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
                         /* SfxViewFrame* pFrame = */
-                            SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
@@ -371,14 +364,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), TRUE);
 
                             // stehen noch FlyFrames rum, loesche auch diese
-                            const SwPosition* pAPos;
                             for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-                                if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                                        FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-                                    0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+                                SwPosition const*const pAPos =
+                                    pAnchor->GetCntntAnchor();
+                                if (pAPos &&
+                                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {
@@ -406,11 +400,11 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                 default:
                     {
                         String sNm( INetURLObject( sFileName ).GetName() );
-                        SwSection aSect( FILE_LINK_SECTION,
+                        SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFmt* pFmt = MakeSectionFmt( 0 );
-                        aSect.SetLinkFileName(sFileName  );
-                        aSect.SetProtect();
+                        aSectData.SetLinkFileName(sFileName);
+                        aSectData.SetProtectFlag(true);
 
                         aEndIdx--;  // im InsertSection ist Ende inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
@@ -462,11 +456,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         SwNodeIndex aStartIdx(*pSttNd);
 
                         if (aEndIdx >= aStartIdx)
-                            pSectNd = GetNodes().InsertSection
-                                (aStartIdx, *pFmt, aSect, &aEndIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aStartIdx,
+                                *pFmt, aSectData, 0, &aEndIdx, false);
+                        }
                         else
-                            pSectNd = GetNodes().InsertSection
-                                (aEndIdx, *pFmt, aSect, &aStartIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aEndIdx,
+                                *pFmt, aSectData, 0, &aStartIdx, false);
+                        }
                         // <- #i26762#
 
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );
@@ -653,7 +651,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         pDoc->GetNodes().Delete( aIdx, 1 );
 
                     // alle Flys in dem Bereich
-                    _CopyFlyInFly( aRg, aIdx );
+                    CopyFlyInFlyImpl( aRg, 0, aIdx );
 
 
                     // und noch alle Bookmarks
@@ -672,7 +670,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
                         /* SfxViewFrame* pFrame = */
-                            SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
@@ -717,14 +715,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), TRUE);
 
                             // stehen noch FlyFrames rum, loesche auch diese
-                            const SwPosition* pAPos;
                             for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-                                if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                                        FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-                                    0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+                                SwPosition const*const pAPos =
+                                    pAnchor->GetCntntAnchor();
+                                if (pAPos &&
+                                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {
@@ -752,11 +751,11 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                 default:
                     {
                         String sNm( INetURLObject( sFileName ).GetName() );
-                        SwSection aSect( FILE_LINK_SECTION,
+                        SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFmt* pFmt = MakeSectionFmt( 0 );
-                        aSect.SetLinkFileName(sFileName  );
-                        aSect.SetProtect();
+                        aSectData.SetLinkFileName(sFileName);
+                        aSectData.SetProtectFlag(true);
 
                         aEndIdx--;  // im InsertSection ist Ende inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
@@ -804,11 +803,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         SwNodeIndex aStartIdx(*pSttNd);
 
                         if (aEndIdx >= aStartIdx)
-                            pSectNd = GetNodes().InsertSection
-                                (aStartIdx, *pFmt, aSect, &aEndIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aStartIdx,
+                                *pFmt, aSectData, 0, &aEndIdx, false);
+                        }
                         else
-                            pSectNd = GetNodes().InsertSection
-                                (aEndIdx, *pFmt, aSect, &aStartIdx, FALSE );
+                        {
+                            pSectNd = GetNodes().InsertTextSection(aEndIdx,
+                                *pFmt, aSectData, 0, &aStartIdx, false);
+                        }
 
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );
                     }

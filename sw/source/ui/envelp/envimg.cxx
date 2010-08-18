@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: envimg.cxx,v $
- * $Revision: 1.13.176.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 #include <tools/stream.hxx>
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <errhdl.hxx>
@@ -119,8 +116,9 @@ SwEnvItem::SwEnvItem() :
     aSendText       = MakeSender();
     lSendFromLeft   = 566; // 1 cm
     lSendFromTop    = 566; // 1 cm
-    lWidth          = lC65Width;
-    lHeight         = lC65Height;
+    Size aEnvSz     = SvxPaperInfo::GetPaperSize(PAPER_ENV_C65);
+    lWidth          = aEnvSz.Width();
+    lHeight         = aEnvSz.Height();
     eAlign          = ENV_HOR_LEFT;
     bPrintFromAbove = TRUE;
     lShiftRight     = 0;
@@ -292,6 +290,9 @@ void    SwEnvCfgItem::Commit()
     }
     PutProperties(aNames, aValues);
 }
+
+void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 /* -----------------------------26.09.00 14:04--------------------------------
 
  ---------------------------------------------------------------------------*/

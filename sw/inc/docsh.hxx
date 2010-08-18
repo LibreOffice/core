@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.hxx,v $
- * $Revision: 1.48.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <vcl/timer.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
@@ -39,7 +37,7 @@
 #include <swdll.hxx>
 #include <shellid.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/embedhlp.hxx>
 
 class SwDoc;
@@ -151,8 +149,11 @@ public:
 
     static SfxInterface *_GetInterface() { return GetStaticInterface(); }
 
+    static rtl::OUString GetEventName( sal_Int32 nId );
+
     //Das Doc wird fuer SO-Datenaustausch benoetigt!
-    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, sal_Bool _bScriptingSupport = sal_True );
+    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
+    SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
     ~SwDocShell();
 
@@ -181,6 +182,7 @@ public:
 
     // Doc rausreichen aber VORSICHT
     inline SwDoc*                   GetDoc() { return pDoc; }
+    inline const SwDoc*             GetDoc() const { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
@@ -299,10 +301,20 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
+
+    virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
+
+    // passwword protection for Writer (derived from SfxObjectShell)
+    // see also:    FN_REDLINE_ON, FN_REDLINE_ON
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
+    virtual void    SetChangeRecording( bool bActivate );
+    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
 
 class Graphic;
 //implemented in source/ui/docvw/romenu.cxx
-String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName );
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
 
 #endif

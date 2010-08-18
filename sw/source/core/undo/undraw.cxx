@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undraw.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,9 @@
 #include "precompiled_sw.hxx"
 
 #include <rtl/string.h>
-
-#ifndef _RTL_MEMORY_H
 #include <rtl/memory.h>
-#endif
 #include <hintids.hxx>
 
-#ifndef _RTL_STRING_H
-#include <rtl/string.h>
-#endif
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
@@ -60,6 +51,7 @@
 #include <dview.hxx>
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
+
 
 struct SwUndoGroupObjImpl
 {
@@ -142,33 +134,36 @@ void lcl_SendRemoveToUno( SwFmt& rFmt )
 void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
 {
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-    if( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-        FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-        FLY_AT_FLY == rAnchor.GetAnchorId() ||
-        FLY_IN_CNTNT == rAnchor.GetAnchorId() )
+    if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+        (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+        (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
+        (FLY_AS_CHAR == rAnchor.GetAnchorId()))
     {
         rNodePos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
         xub_StrLen nCntntPos = 0;
 
-        if( FLY_IN_CNTNT == rAnchor.GetAnchorId() )
+        if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         {
             nCntntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
 
             // TextAttribut zerstoeren
             SwTxtNode *pTxtNd = pFmt->GetDoc()->GetNodes()[ rNodePos ]->GetTxtNode();
             ASSERT( pTxtNd, "Kein Textnode gefunden" );
-            SwTxtFlyCnt* pAttr = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr( nCntntPos );
+            SwTxtFlyCnt* pAttr = static_cast<SwTxtFlyCnt*>(
+                pTxtNd->GetTxtAttrForCharAt( nCntntPos, RES_TXTATR_FLYCNT ));
             // Attribut steht noch im TextNode, loeschen
             if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFmt )
             {
                 // Pointer auf 0, nicht loeschen
                 ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
                 SwIndex aIdx( pTxtNd, nCntntPos );
-                pTxtNd->Erase( aIdx, 1 );
+                pTxtNd->EraseText( aIdx, 1 );
             }
         }
-        else if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+        else if (FLY_AT_CHAR == rAnchor.GetAnchorId())
+        {
             nCntntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
+        }
 
         pFmt->SetFmtAttr( SwFmtAnchor( rAnchor.GetAnchorId(), nCntntPos ) );
     }
@@ -177,10 +172,10 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
 void lcl_RestoreAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
 {
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-    if( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-        FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-        FLY_AT_FLY == rAnchor.GetAnchorId() ||
-        FLY_IN_CNTNT == rAnchor.GetAnchorId() )
+    if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+        (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+        (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
+        (FLY_AS_CHAR == rAnchor.GetAnchorId()))
     {
         xub_StrLen nCntntPos = rAnchor.GetPageNum();
         SwNodes& rNds = pFmt->GetDoc()->GetNodes();
@@ -189,18 +184,20 @@ void lcl_RestoreAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
         SwPosition aPos( aIdx );
 
         SwFmtAnchor aTmp( rAnchor.GetAnchorId() );
-        if( FLY_IN_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+        if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+            (FLY_AT_CHAR == rAnchor.GetAnchorId()))
+        {
             aPos.nContent.Assign( aIdx.GetNode().GetCntntNode(), nCntntPos );
+        }
         aTmp.SetAnchor( &aPos );
         pFmt->SetFmtAttr( aTmp );
 
-        if( FLY_IN_CNTNT == rAnchor.GetAnchorId() )
+        if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         {
             SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "Kein Textnode gefunden" );
-            pTxtNd->InsertItem( SwFmtFlyCnt( (SwFrmFmt*)pFmt ),
-                                nCntntPos, nCntntPos );
+            ASSERT( pTxtNd, "no Text Node" );
+            SwFmtFlyCnt aFmt( pFmt );
+            pTxtNd->InsertItem( aFmt, nCntntPos, nCntntPos );
         }
     }
 }

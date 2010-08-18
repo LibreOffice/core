@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfly.cxx,v $
- * $Revision: 1.65.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 
 #include "viewsh.hxx"
 #include "pagefrm.hxx"
@@ -61,18 +54,12 @@
 #include "flyfrms.hxx"
 #include "fmtcnct.hxx"  // SwFmtChain
 #include <pormulti.hxx>     // SwMultiPortion
-#ifdef VERT_DISTANCE
-#include <math.h>
-#endif
 #include <svx/obj3d.hxx>
-
-#ifndef _TXTRANGE_HXX //autogen
-#include <svx/txtrange.hxx>
-#endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/txtrange.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 // --> OD 2004-06-16 #i28701#
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 // <--
 #include <txtflcnt.hxx>
 #include <fmtsrnd.hxx>
@@ -83,29 +70,25 @@
 #include <tgrditem.hxx>
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <svx/obj3d.hxx>
-#ifndef _TXTRANGE_HXX //autogen
-#include <svx/txtrange.hxx>
-#endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/txtrange.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <svx/svdoedge.hxx>
+#include "doc.hxx"
 
-
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
-#include "doc.hxx"
 
 #ifdef VERT_DISTANCE
 #include <math.h>
 #endif
+
 
 using namespace ::com::sun::star;
 
@@ -1006,8 +989,8 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                           // --> OD 2006-08-15 #i68520#
                           GetMaster() == pFly->GetAnchorFrm() ||
                           // <--
-                          ( FLY_AT_CNTNT != rAnchor.GetAnchorId() &&
-                              FLY_AUTO_CNTNT != rAnchor.GetAnchorId()
+                          ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
+                           (FLY_AT_CHAR != rAnchor.GetAnchorId())
                           )
                         ) &&
                         // --> OD 2006-08-15 #i68520#
@@ -1176,7 +1159,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             const SwFrmFmt& rFrmFmt = _pAnchoredObj->GetFrmFmt();
             const SwFmtAnchor& rNewA = rFrmFmt.GetAnchor();
             // <--
-            if ( FLY_PAGE == rNewA.GetAnchorId() )
+            if (FLY_AT_PAGE == rNewA.GetAnchorId())
             {
                 if ( bInFtn )
                     return sal_False;
@@ -1225,23 +1208,25 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                     // If <mpCurrAnchoredObj> is anchored as character, its content
                     // does not wrap around pNew
-                    if( FLY_IN_CNTNT == rCurrA.GetAnchorId() )
+                    if (FLY_AS_CHAR == rCurrA.GetAnchorId())
                         return sal_False;
 
                     // If pNew is anchored to page and <mpCurrAnchoredObj is not anchored
                     // to page, the content of <mpCurrAnchoredObj> does not wrap around pNew
                     // If both pNew and <mpCurrAnchoredObj> are anchored to page, we can do
                     // some more checks
-                    if( FLY_PAGE == rNewA.GetAnchorId() )
+                    if (FLY_AT_PAGE == rNewA.GetAnchorId())
                     {
-                        if( FLY_PAGE == rCurrA.GetAnchorId() )
+                        if (FLY_AT_PAGE == rCurrA.GetAnchorId())
+                        {
                             bEvade = sal_True;
+                        }
                         else
                             return sal_False;
                     }
-                    else if( FLY_PAGE == rCurrA.GetAnchorId() )
+                    else if (FLY_AT_PAGE == rCurrA.GetAnchorId())
                         return sal_False; // Seitengebundene weichen nur seitengeb. aus
-                    else if( FLY_AT_FLY == rNewA.GetAnchorId() )
+                    else if (FLY_AT_FLY == rNewA.GetAnchorId())
                         bEvade = sal_True; // Nicht seitengeb. weichen Rahmengeb. aus
                     else if( FLY_AT_FLY == rCurrA.GetAnchorId() )
                         return sal_False; // Rahmengebundene weichen abs.geb. nicht aus
@@ -1285,8 +1270,9 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // --> OD 2004-10-06 #i26945#
             const SwFmtAnchor& rNewA = _pAnchoredObj->GetFrmFmt().GetAnchor();
             // <--
-            ASSERT( FLY_IN_CNTNT != rNewA.GetAnchorId(), "Don't call GetTop with a FlyInCntFrm" );
-            if( FLY_PAGE == rNewA.GetAnchorId() )
+            ASSERT( FLY_AS_CHAR != rNewA.GetAnchorId(),
+                    "Don't call GetTop with a FlyInCntFrm" );
+            if (FLY_AT_PAGE == rNewA.GetAnchorId())
                 return sal_True;  // Seitengebundenen wird immer ausgewichen.
 
             // Wenn absatzgebundene Flys in einem FlyCnt gefangen sind, so
@@ -1817,7 +1803,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
         delete pPolyPolygon;
         // UPPER_LOWER_TEST
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         const SwRootFrm* pTmpRootFrm = pFmt->getIDocumentLayoutAccess()->GetRootFrm();
         if( pTmpRootFrm->GetCurrShell() )
         {
@@ -1890,7 +1876,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
  *                      SwContourCache::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
     const Color& rClosedColor, const Color& rOpenColor )
@@ -1941,7 +1927,7 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
  *                      SwTxtFly::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwTxtFly::ShowContour( OutputDevice* pOut )
 {
@@ -2015,8 +2001,8 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                             // --> OD 2006-08-15 #i68520#
                             GetMaster() == pAnchoredObj->GetAnchorFrm() ||
                             // <--
-                            ( FLY_AT_CNTNT != rAnchor.GetAnchorId() &&
-                              FLY_AUTO_CNTNT != rAnchor.GetAnchorId() ) ) )
+                            ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
+                             (FLY_AT_CHAR != rAnchor.GetAnchorId())) ) )
                         || aRect.Top() == WEIT_WECH )
                         continue;
                 }
@@ -2355,84 +2341,6 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 // Beidseitiger Umfluss bis zu einer Rahmenbreite von maximal 1,5 cm
 #define FRAME_MAX 850
 
-//_FlyCntnt SwTxtFly::CalcSmart( const SdrObject *pObj ) const
-//{
-//  _FlyCntnt eOrder;
-
-//  // 11839: Nur die X-Positionen sind interessant, die Y-Positionen des
-//  // CurrentFrames koennen sich noch aendern (wachsen).
-
-//    SWRECTFN( pCurrFrm )
-//    const long nCurrLeft = (pCurrFrm->*fnRect->fnGetPrtLeft)();
-//    const long nCurrRight = (pCurrFrm->*fnRect->fnGetPrtRight)();
-//  const SwRect aRect( GetBoundRect( pObj ) );
-//    long nFlyLeft = (aRect.*fnRect->fnGetLeft)();
-//    long nFlyRight = (aRect.*fnRect->fnGetRight)();
-
-//  if ( nFlyRight < nCurrLeft || nFlyLeft > nCurrRight )
-//      eOrder = SURROUND_PARALLEL;
-//  else
-//  {
-//      long nLeft = nFlyLeft - nCurrLeft;
-//      long nRight = nCurrRight - nFlyRight;
-//      if( nFlyRight - nFlyLeft > FRAME_MAX )
-//      {
-//          if( nLeft < nRight )
-//              nLeft = 0;
-//          else
-//              nRight = 0;
-//      }
-//      if( nLeft < TEXT_MIN )
-//          nLeft = 0;
-//      if( nRight < TEXT_MIN )
-//          nRight = 0;
-//      if( nLeft )
-//          eOrder = nRight ? SURROUND_PARALLEL : SURROUND_LEFT;
-//      else
-//          eOrder = nRight ? SURROUND_RIGHT: SURROUND_NONE;
-//  }
-
-//  return eOrder;
-//}
-
-/*************************************************************************
- *                      SwTxtFly::GetOrder()
- *************************************************************************/
-
-//_FlyCntnt SwTxtFly::GetOrder( const SdrObject *pObj ) const
-//{
-//  const SwFrmFmt *pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
-//  const SwFmtSurround &rFlyFmt = pFmt->GetSurround();
-//  _FlyCntnt eOrder = rFlyFmt.GetSurround();
-
-//    if( rFlyFmt.IsAnchorOnly() && &lcl_TheAnchor( pObj ) != GetMaster() )
-//  {
-//      const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-//      if( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-//          FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
-//          return SURROUND_NONE;
-//  }
-
-//     Beim Durchlauf und Nowrap wird smart ignoriert.
-//  if( SURROUND_THROUGHT == eOrder || SURROUND_NONE == eOrder )
-//      return eOrder;
-
-//     left is left and right is right
-//    if ( pCurrFrm->IsRightToLeft() )
-//    {
-//        if ( SURROUND_LEFT == eOrder )
-//            eOrder = SURROUND_RIGHT;
-//        else if ( SURROUND_RIGHT == eOrder )
-//            eOrder = SURROUND_LEFT;
-//    }
-
-//     "idealer Seitenumlauf":
-//  if( SURROUND_IDEAL == eOrder )
-//      eOrder = CalcSmart( pObj ); //Bei SMART wird die Order automatisch berechnet:
-
-//  return eOrder;
-//}
-
 SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
 {
     const SwFrmFmt* pFmt = &(pAnchoredObj->GetFrmFmt());
@@ -2442,9 +2350,11 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
     if( rFlyFmt.IsAnchorOnly() && pAnchoredObj->GetAnchorFrm() != GetMaster() )
     {
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-             FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+        if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+            (FLY_AT_CHAR == rAnchor.GetAnchorId()))
+        {
             return SURROUND_NONE;
+        }
     }
 
     // Beim Durchlauf und Nowrap wird smart ignoriert.

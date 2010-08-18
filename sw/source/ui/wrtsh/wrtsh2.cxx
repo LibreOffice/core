@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtsh2.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,15 +27,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>      // define ITEMIDs
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#include <svtools/urihelper.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/dispatch.hxx>
@@ -47,9 +43,7 @@
 #include <frmatr.hxx>
 #include <swtypes.hxx>      // SET_CURR_SHELL
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <fldbas.hxx>       // Felder
 #include <expfld.hxx>
 #include <ddefld.hxx>
@@ -61,9 +55,7 @@
 #include <frmfmt.hxx>       // fuer UpdateTable
 #include <swtable.hxx>      // fuer UpdateTable
 #include <mdiexp.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swevent.hxx>
 #include <poolfmt.hxx>
 #include <section.hxx>
@@ -71,12 +63,8 @@
 #include <navipi.hxx>
 #include <crsskip.hxx>
 #include <txtinet.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "fldui.hrc"
 
@@ -102,10 +90,13 @@ void SwWrtShell::Insert(SwField &rFld)
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
+    bool bDeleted = false;
     if( HasSelection() )
-        DelRight();
+    {
+        bDeleted = DelRight() != 0;
+    }
 
-    SwEditShell::Insert(rFld);
+    SwEditShell::Insert2(rFld, bDeleted);
     EndUndo(UNDO_INSERT);
     EndAllAction();
 }
@@ -248,6 +239,13 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     return bResult;
 }
 
+BOOL SwWrtShell::UpdateField( sw::mark::IFieldmark &fieldBM )
+{
+    return SwEditShell::UpdateField(fieldBM);
+}
+
+
+
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.
 
@@ -355,8 +353,8 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, USHORT nFilter )
     const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
     if( pTxtAttr )
     {
-        ((SwTxtINetFmt*)pTxtAttr)->SetVisited( sal_True );
-        ((SwTxtINetFmt*)pTxtAttr)->SetValidVis( sal_True );
+        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisited( true );
+        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( true );
     }
 
     bIsInClickToEdit = FALSE;
@@ -470,20 +468,20 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     }
     else
     {
-        SwSection aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
+        SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
         String aLinkFile( rBkmk.GetURL().GetToken(0, '#') );
         aLinkFile += sfx2::cTokenSeperator;
         aLinkFile += sfx2::cTokenSeperator;
         aLinkFile += rBkmk.GetURL().GetToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
-        aSection.SetProtect( TRUE );
+        aSection.SetProtectFlag( true );
         const SwSection* pIns = InsertSection( aSection );
         if( EXCHG_IN_ACTION_MOVE == nAction && pIns )
         {
-            aSection = *pIns;
+            aSection = SwSectionData(*pIns);
             aSection.SetLinkFileName( aEmptyStr );
             aSection.SetType( CONTENT_SECTION );
-            aSection.SetProtect( FALSE );
+            aSection.SetProtectFlag( false );
 
             // the update of content from linked section at time delete
             // the undostack. Then the change of the section dont create
@@ -491,7 +489,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             BOOL bDoesUndo = DoesUndo();
             if( UNDO_INSSECTION != GetUndoIds() )
                 DoUndo( FALSE );
-            ChgSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
+            UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
             DoUndo( bDoesUndo );
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlftn.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,11 +225,10 @@ void SwHTMLParser::FinishFootEndNote()
     if( pFootEndNoteImpl->bFixed )
         aFtn.SetNumStr( pFootEndNoteImpl->sContent );
 
-    pDoc->Insert( *pPam, aFtn, 0 );
-    SwTxtFtn *pTxtFtn =
-        (SwTxtFtn *)pPam->GetNode()->GetTxtNode()->GetTxtAttr(
-                                pPam->GetPoint()->nContent.GetIndex() - 1,
-                                RES_TXTATR_FTN );
+    pDoc->InsertPoolItem( *pPam, aFtn, 0 );
+    SwTxtFtn * const pTxtFtn = static_cast<SwTxtFtn *>(
+        pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+            pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
     // In Kopf- und Fusszeilen duerfen keine Fussnoten eingefuegt werden.
     if( pTxtFtn )
     {
@@ -355,7 +351,7 @@ void SwHTMLWriter::OutFootEndNotes()
     if( !pFootEndNotes )
         return;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nFtn = nFootNote, nEn = nEndNote;
 #endif
     nFootNote = 0, nEndNote = 0;
@@ -420,7 +416,7 @@ void SwHTMLWriter::OutFootEndNotes()
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( nFtn == nFootNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
     ASSERT( nEn == nEndNote,

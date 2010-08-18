@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glosdoc.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,17 +35,17 @@
 #define _SVSTDARR_STRINGS
 #include <unotools/transliterationwrapper.hxx>
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
 #include <tools/debug.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
 #include <errhdl.hxx>       // ASSERT

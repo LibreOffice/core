@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dcontact.cxx,v $
- * $Revision: 1.61.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdogrp.hxx>
@@ -43,7 +40,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
-// AW, OD 2004-04-30 #i28501#
+#include <svx/shapepropertynotifier.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <fmtornt.hxx>
@@ -59,38 +56,23 @@
 #include <frmfmt.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
+#include <unodraw.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#endif
 #include <doc.hxx>
 #include <hints.hxx>
 #include <txtfrm.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
-
-// OD 2004-02-11 #110582#-2
 #include <flyfrms.hxx>
-
-// OD 18.06.2003 #108784#
-#include <algorithm>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-// AW: For VCOfDrawVirtObj and stuff
-#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
-#endif
-
 #include <com/sun/star/text/WritingMode2.hpp>
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 
@@ -810,6 +792,10 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     // OD 2004-03-29 #i26791#
     pObj->SetUserCall( this );
     maAnchoredDrawObj.SetDrawObj( *pObj );
+
+    // if there already exists an SwXShape for the object, ensure it knows about us, and the SdrObject
+    // FS 2009-04-07 #i99056#
+    SwXShape::AddExistingShapeToFmt( *pObj );
 }
 
 SwDrawContact::~SwDrawContact()
@@ -1578,6 +1564,25 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
     }
 }
 
+namespace
+{
+    static const SwFmtAnchor* lcl_getAnchorFmt( const SfxPoolItem& _rItem )
+    {
+        USHORT nWhich = _rItem.Which();
+        const SwFmtAnchor* pAnchorFmt = NULL;
+        if ( RES_ATTRSET_CHG == nWhich )
+        {
+            static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
+                GetItemState( RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnchorFmt );
+        }
+        else if ( RES_ANCHOR == nWhich )
+        {
+            pAnchorFmt = &static_cast<const SwFmtAnchor&>(_rItem);
+        }
+        return pAnchorFmt;
+    }
+}
+
 /*************************************************************************
 |*
 |*  SwDrawContact::Modify()
@@ -1587,28 +1592,16 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
 |*
 |*************************************************************************/
 
-void SwDrawContact::Modify( SfxPoolItem *, SfxPoolItem *pNew )
+void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     // OD 10.10.2003 #112299#
     ASSERT( !mbDisconnectInProgress,
             "<SwDrawContact::Modify(..)> called during disconnection.");
 
     USHORT nWhich = pNew ? pNew->Which() : 0;
-    SwFmtAnchor* pAnchorFmt = 0L;
-    if ( RES_ATTRSET_CHG == nWhich )
-    {
-        if ( SFX_ITEM_SET == static_cast<SwAttrSetChg*>(pNew)->GetChgSet()->
-                GetItemState( RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnchorFmt ) )
-        {
-            // <pAnchorFmt> is set and will be handled below
-        }
-    }
-    else if ( RES_ANCHOR == nWhich )
-    {
-        pAnchorFmt = static_cast<SwFmtAnchor*>(pNew);
-    }
+    const SwFmtAnchor* pNewAnchorFmt = pNew ? lcl_getAnchorFmt( *pNew ) : NULL;
 
-    if ( pAnchorFmt )
+    if ( pNewAnchorFmt )
     {
         // JP 10.04.95: nicht auf ein Reset Anchor reagieren !!!!!
         if ( SFX_ITEM_SET ==
@@ -1630,10 +1623,23 @@ void SwDrawContact::Modify( SfxPoolItem *, SfxPoolItem *pNew )
                     // <--
                 }
                 // re-connect to layout due to anchor format change
-                ConnectToLayout( pAnchorFmt );
+                ConnectToLayout( pNewAnchorFmt );
                 // notify background of drawing objects
                 lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
                 NotifyBackgrdOfAllVirtObjs( pOldRect );
+
+                const SwFmtAnchor* pOldAnchorFmt = pOld ? lcl_getAnchorFmt( *pOld ) : NULL;
+                if ( !pOldAnchorFmt || ( pOldAnchorFmt->GetAnchorId() != pNewAnchorFmt->GetAnchorId() ) )
+                {
+                    ASSERT( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
+                    if ( maAnchoredDrawObj.DrawObj() )
+                    {
+                        // --> OD 2009-07-10 #i102752#
+                        // assure that a ShapePropertyChangeNotifier exists
+                        maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange( ::svx::eTextShapeAnchorType );
+                        // <--
+                    }
+                }
             }
         }
         else
@@ -1932,7 +1938,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
     switch ( pAnch->GetAnchorId() )
     {
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
                 {
                 USHORT nPgNum = pAnch->GetPageNum();
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
@@ -1952,12 +1958,12 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                 }
                 break;
 
-        case FLY_AUTO_CNTNT:
-        case FLY_AT_CNTNT:
+        case FLY_AT_CHAR:
+        case FLY_AT_PARA:
         case FLY_AT_FLY:
-        case FLY_IN_CNTNT:
+        case FLY_AS_CHAR:
             {
-                if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
+                if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
                 {
                     ClrContourCache( GetMaster() );
                 }
@@ -2032,7 +2038,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
                         // OD 2004-01-20 #110582# - find correct follow for
                         // as character anchored objects.
-                        if ( pAnch->GetAnchorId() == FLY_IN_CNTNT &&
+                        if ((pAnch->GetAnchorId() == FLY_AS_CHAR) &&
                              pFrm->IsTxtFrm() )
                         {
                             pFrm = lcl_GetFlyInCntntAnchor(
@@ -2050,7 +2056,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         {
                             // append 'virtual' drawing object
                             SwDrawVirtObj* pDrawVirtObj = AddVirtObj();
-                            if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
+                            if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
                             {
                                 ClrContourCache( pDrawVirtObj );
                             }
@@ -2061,7 +2067,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                             pDrawVirtObj->ActionChanged();
                         }
 
-                        if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
+                        if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
                         {
                             pFrm->InvalidatePrt();
                         }
@@ -2300,6 +2306,15 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
+#ifdef DBG_UTIL
+            // #i101734#
+            static bool bCheckOtherThanTranslate(false);
+            static double fShearX(0.0);
+            static double fRotation(0.0);
+            static double fScaleX(0.0);
+            static double fScaleY(0.0);
+#endif
+
             const VCOfDrawVirtObj& rVC = static_cast< const VCOfDrawVirtObj& >(GetViewContact());
             const SdrObject& rReferencedObject = rVC.GetSwDrawVirtObj().GetReferencedObj();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
@@ -2310,8 +2325,20 @@ namespace sdr
 
             if(aLocalOffset.X() || aLocalOffset.Y())
             {
+#ifdef DBG_UTIL
+                // #i101734# added debug code to check more complex transformations
+                // than just a translation
+                if(bCheckOtherThanTranslate)
+                {
+                    aOffsetMatrix.scale(fScaleX, fScaleY);
+                    aOffsetMatrix.shearX(tan(fShearX * F_PI180));
+                    aOffsetMatrix.rotate(fRotation * F_PI180);
+                }
+#endif
+
                 aOffsetMatrix.set(0, 2, aLocalOffset.X());
                 aOffsetMatrix.set(1, 2, aLocalOffset.Y());
+
             }
 
             if(rReferencedObject.ISA(SdrObjGroup))
@@ -2555,22 +2582,10 @@ void SwDrawVirtObj::RecalcBoundRect()
     aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    Point aPnt(rPnt - GetOffset());
-    BOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
-
-    return bRet ? (SdrObject*)this : NULL;
-}
-
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly());
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(GetOffset().X(), GetOffset().Y());
-    aRetval.transform(aMatrix);
+    aRetval.transform(basegfx::tools::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
 
     return aRetval;
 }
@@ -2578,9 +2593,7 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 {
     basegfx::B2DPolyPolygon aRetval(rRefObj.TakeContour());
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(GetOffset().X(), GetOffset().Y());
-    aRetval.transform(aMatrix);
+    aRetval.transform(basegfx::tools::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
 
     return aRetval;
 }

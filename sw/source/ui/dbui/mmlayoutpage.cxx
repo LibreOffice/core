@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmlayoutpage.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,12 +39,10 @@
 #include <unotools/tempfile.hxx>
 #include <uitool.hxx>
 #include <svx/dlgutil.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swundo.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfilt.hxx>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -56,9 +51,7 @@
 #include <fldbas.hxx>
 #include <poolfmt.hxx>
 #include <unotxdoc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <wrtsh.hxx>
 #include <fmtsrnd.hxx>
@@ -66,8 +59,8 @@
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include <svx/boxitem.hxx>
-#include <svtools/urihelper.hxx>
+#include <editeng/boxitem.hxx>
+#include <svl/urihelper.hxx>
 #include <shellio.hxx>
 #include <osl/file.hxx>
 #include <unoprnms.hxx>
@@ -261,11 +254,11 @@ void SwMailMergeLayoutPage::ActivatePage()
 /*-- 11.05.2004 10:41:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeLayoutPage::commitPage( CommitPageReason _eReason )
+sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     //now insert the frame and the greeting
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    if(eTravelForward == _eReason)
+    if(::svt::WizardTypes::eTravelForward == _eReason)
     {
         long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
         long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
@@ -325,7 +318,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_SURROUND, RES_SURROUND,
                         0 );
-    aSet.Put(SwFmtAnchor(FLY_PAGE, 1));
+    aSet.Put(SwFmtAnchor(FLY_AT_PAGE, 1));
     if(bAlignLeft)
         aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else
@@ -614,8 +607,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                             sCondition += String(rFemaleGenderValue);
                             sCondition.AppendAscii("\" OR NOT ");
                             sCondition += String(sNameColumnBase);
-                            sHideParagraphsExpression += '!';
-                            sHideParagraphsExpression += sNameColumnBase;
                         break;
                         case  SwMailMergeConfigItem::NEUTRAL:
                             sCondition = sNameColumnBase;
@@ -802,7 +793,8 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
     bool bDown = pButton == &m_aDownPB;
     BOOL bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
-    m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
+    if (bMoved || bDown)
+        m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)
     {
         //insert a new paragraph before the greeting line

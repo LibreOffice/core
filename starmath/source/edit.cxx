@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edit.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,20 +44,20 @@
 
 
 #include <vcl/menu.hxx>
-#include <svx/editview.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svx/fontitem.hxx>
-
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/fontitem.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include "edit.hxx"
 #include "view.hxx"
@@ -116,14 +113,13 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     // Even RTL languages don't use RTL for math
     rCmdBox.GetEditWindow()->EnableRTL( FALSE );
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
-    aModifyTimer.SetTimeout(2000);
-    aModifyTimer.Start();
+    aModifyTimer.SetTimeout(500);
 
     aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
     aCursorMoveTimer.SetTimeout(500);
@@ -163,6 +159,13 @@ SmEditWindow::~SmEditWindow()
     delete pScrollBox;
 }
 
+void SmEditWindow::InvalidateSlots()
+{
+    SfxBindings& rBind = GetView()->GetViewFrame()->GetBindings();
+    rBind.Invalidate(SID_COPY);
+    rBind.Invalidate(SID_CUT);
+    rBind.Invalidate(SID_DELETE);
+}
 
 SmViewShell * SmEditWindow::GetView()
 {
@@ -212,7 +215,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
     const StyleSettings aSettings( GetSettings().GetStyleSettings() );
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
     SetBackground( aSettings.GetWindowColor() );
 
     // edit fields in other Applications use this font instead of
@@ -246,10 +249,10 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
 IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     if (pp->GetConfig()->IsAutoRedraw())
         Flush();
-    aModifyTimer.Start();
+    aModifyTimer.Stop();
     return 0;
 }
 
@@ -277,6 +280,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
             aOldSelection = aNewSelection;
         }
     }
+    aCursorMoveTimer.Stop();
 
     return 0;
 }
@@ -317,6 +321,7 @@ void SmEditWindow::MouseButtonUp(const MouseEvent &rEvt)
 
     // ggf FormulaCursor neu positionieren
     CursorMoveTimerHdl(&aCursorMoveTimer);
+    InvalidateSlots();
 }
 
 void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
@@ -432,7 +437,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             SmViewShell *pView = GetView();
             if ( pView && !pView->KeyInput(rKEvt) )
             {
-                    /* fuert bei F1 (Hilfe) zum Zerstoeren von this! */
+                /* fuert bei F1 (Hilfe) zum Zerstoeren von this! */
                 Flush();
                 if ( aModifyTimer.IsActive() )
                     aModifyTimer.Stop();
@@ -460,6 +465,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
             aModifyTimer.Start();
         }
+
+        InvalidateSlots();
     }
 }
 
@@ -729,6 +736,9 @@ void SmEditWindow::InsertCommand(USHORT nCommand)
             pEditView->SetSelection(aSelection);
         }
 
+        aModifyTimer.Start();
+        aCursorMoveTimer.Start();
+
         GrabFocus();
     }
 }
@@ -855,6 +865,7 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
     DBG_ASSERT( pEditView, "NULL pointer" );
     if (pEditView)
         pEditView->SetSelection(rSel);
+    InvalidateSlots();
 }
 
 BOOL SmEditWindow::IsEmpty() const
@@ -874,7 +885,10 @@ void SmEditWindow::Cut()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->Cut();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::Copy()
@@ -888,21 +902,31 @@ void SmEditWindow::Paste()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->Paste();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::Delete()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->DeleteSelected();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::InsertText(const String& Text)
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->InsertText(Text);
+        aModifyTimer.Start();
+        aCursorMoveTimer.Start();
+    }
 }
 
 void SmEditWindow::Flush()
@@ -913,9 +937,11 @@ void SmEditWindow::Flush()
         pEditEngine->ClearModifyFlag();
         SmViewShell *pViewSh = rCmdBox.GetView();
         if (pViewSh)
+        {
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                     SID_TEXT, SFX_CALLMODE_STANDARD,
                     new SfxStringItem(SID_TEXT, GetText()), 0L);
+        }
     }
 
     if (aCursorMoveTimer.IsActive())

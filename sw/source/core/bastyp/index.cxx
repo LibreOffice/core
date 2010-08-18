@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: index.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include "index.hxx"
 #include "error.h"              // fuers ASSERT
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 int SwIndex::nSerial = 0;
 #endif
 
@@ -87,7 +84,7 @@ void SwIndexReg::ChkArr()
 
 
 
-SwIndex::SwIndex( SwIndexReg* pArr, xub_StrLen nIdx )
+SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
     : nIndex( nIdx ), pArray( pArr ), pNext( 0 ), pPrev( 0 )
 {
     if( !pArray )
@@ -103,7 +100,7 @@ SwIndex::SwIndex( SwIndexReg* pArr, xub_StrLen nIdx )
     else
         ChgValue( *pArray->pFirst, nIdx );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -115,7 +112,7 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
 {
     ChgValue( rIdx, rIdx.nIndex + nIdx );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -126,7 +123,7 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -302,7 +299,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
             pArr->pFirst = pArr->pLast = this;
             nIndex = nIdx;
         }
-        else if( nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2) )
+        else if( pArr->pLast && (nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2)) )
             ChgValue( *pArr->pLast, nIdx );
         else
             ChgValue( *pArr->pFirst, nIdx );
@@ -328,10 +325,10 @@ SwIndexReg::~SwIndexReg()
 
 
 
-void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
-                         BOOL /* argument is only used in derived class*/ )
+void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
+    const bool bNeg, const bool /* argument is only used in derived class*/ )
 {
-    SwIndex* pStt = (SwIndex*)&rIdx;
+    SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
     xub_StrLen nNewVal = rIdx.nIndex;
     if( bNeg )
     {
@@ -371,7 +368,7 @@ void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
 ARR_CHK_ARRAY
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifndef CFRONT
 
 /*************************************************************************

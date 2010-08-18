@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: trvlfrm.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/bigint.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtpdsc.hxx>
@@ -961,7 +958,7 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
         pCNd->MakeStartIndex( (SwIndex*)&pToSet->GetPoint()->nContent );
         pToSet->GetPoint()->nContent = ((SwTxtFrm*)pCntnt)->GetOfst();
 
-        SwShellCrsr* pSCrsr = (SwShellCrsr*)*pToSet;
+        SwShellCrsr* pSCrsr = dynamic_cast<SwShellCrsr*>(pToSet);
         if( pSCrsr )
         {
             Point &rPt = pSCrsr->GetPtPos();
@@ -1286,7 +1283,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
             break;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( pActual, "Keinen Cntnt gefunden." );
     if ( bBodyOnly )
         ASSERT( pActual->IsInDocBody(), "Cnt nicht im Body." );
@@ -1868,9 +1865,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
     Point aPtPt, aMkPt;
     {
-        SwShellCrsr* pShCrsr =  rTblCrsr.operator SwShellCrsr*();
-        // Aufgrund eines CompilerBugs von Linux muss
-        // der Zeigeroperator explizit gerufen werden
+        SwShellCrsr* pShCrsr = dynamic_cast<SwShellCrsr*>(&rTblCrsr);
 
         if( pShCrsr )
         {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: redline.hxx,v $
- * $Revision: 1.14.180.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,15 @@
 #include <tools/string.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <pam.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 class SfxItemSet;
+class SwView;
 
 class SwRedlineExtraData
 {
@@ -297,16 +295,19 @@ class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 
     const SwRedline* pRedline;
     sal_Int16 nWhich;
+    const SwView* pView;
 
 public:
-    SwRedlineHint( const SwRedline* p, sal_Int16 n )
+    SwRedlineHint( const SwRedline* p, sal_Int16 n, const SwView* pV = 0)
         : pRedline(p)
         , nWhich(n)
-    {}
+        , pView(pV)
+        {}
 
     TYPEINFO();
     const SwRedline* GetRedline() const { return pRedline; }
     sal_Int16 Which() const { return nWhich; }
+        const SwView* GetView() const { return pView; }
 };
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swxml.cxx,v $
- * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,10 +51,11 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include <svtools/svstdarr.hxx>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <svl/svstdarr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
@@ -70,16 +68,12 @@
 #include <errhdl.hxx>
 #include <fltini.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
-#endif
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 
 // --> OD 2005-09-06 #i44177#
 #include <SwStyleNameMapper.hxx>
@@ -102,6 +96,8 @@
 
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
+
+#include <sfx2/DocumentMetadataAccess.hxx>
 
 
 using namespace ::com::sun::star;
@@ -217,6 +213,24 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r )
     {
+        // sax parser sends wrapped exceptions,
+        // try to find the original one
+        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        sal_Bool bTryChild = sal_True;
+
+        while( bTryChild )
+        {
+            xml::sax::SAXException aTmp;
+            if ( aSaxEx.WrappedException >>= aTmp )
+                aSaxEx = aTmp;
+            else
+                bTryChild = sal_False;
+        }
+
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( aSaxEx.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -247,7 +261,10 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXException& r)
     {
-        (void)r;
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( r.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -256,6 +273,7 @@ sal_Int32 ReadThroughComponent(
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+
         return ERR_SWG_READ_ERROR;
     }
     catch( packages::zip::ZipIOException& r)
@@ -516,6 +534,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 }
 // <--
 
+
 ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
@@ -766,9 +785,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     }
     else if( bInsertMode )
     {
-        uno::Reference<XTextRange> xInsertTextRange =
-            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
-                                                           0 );
+        const uno::Reference<text::XTextRange> xInsertTextRange =
+            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
         OUString sTextInsertModeRange(
                 RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
         xInfoSet->setPropertyValue( sTextInsertModeRange,
@@ -810,23 +828,25 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
+    ::rtl::OUString StreamPath;
     if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
     {
-        OUString aName;
         if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
         {
             const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
                 pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
             if ( pDocHierarchItem )
-                aName = pDocHierarchItem->GetValue();
+                StreamPath = pDocHierarchItem->GetValue();
         }
         else
-            aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        {
+            StreamPath = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        }
 
-        if( aName.getLength() )
+        if( StreamPath.getLength() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
-            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+            xInfoSet->setPropertyValue( sPropName, makeAny( StreamPath ) );
         }
     }
 
@@ -869,6 +889,42 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
                 makeAny( bTextDocInOOoFileFormat ) );
     }
     // <--
+
+    sal_uInt32 nWarnRDF = 0;
+    if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+           bInsertMode) )
+    {
+        // RDF metadata - must be read before styles/content
+        // N.B.: embedded documents have their own manifest.rdf!
+        try
+        {
+            const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
+                uno::UNO_QUERY_THROW);
+            const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
+                aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
+            const uno::Reference<task::XInteractionHandler> xHandler(
+                pDocSh->GetMedium()->GetInteractionHandler() );
+            xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+        }
+        catch (lang::WrappedTargetException & e)
+        {
+            ucb::InteractiveAugmentedIOException iaioe;
+            if (e.TargetException >>= iaioe)
+            {
+                // import error that was not ignored by InteractionHandler!
+                nWarnRDF = ERR_SWG_READ_ERROR;
+            }
+            else
+            {
+                nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something wrong?
+            }
+        }
+        catch (uno::Exception &)
+        {
+            nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
+        }
+    }
+
     sal_uInt32 nWarn = 0;
     sal_uInt32 nWarn2 = 0;
     // read storage streams
@@ -924,13 +980,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     else if ( rDoc.IsOLEPrtNotifyPending() )
         rDoc.PrtOLENotify( TRUE );
 
-    if( !nRet )
-    {
-        if( nWarn )
-            nRet = nWarn;
-        else if( nWarn2 )
-            nRet = nWarn2;
-    }
+    nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 
     aOpt.ResetAllFmtsOnly();
 

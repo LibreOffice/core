@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unofield.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,20 +27,23 @@
 #ifndef _UNOFIELD_HXX
 #define _UNOFIELD_HXX
 
-#include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
+
+#include <cppuhelper/implbase5.hxx>
+
 #include <calbck.hxx>
-#include <unoobj.hxx>
 #include <unocoll.hxx>
 #include <RefreshListenerContainer.hxx>
+
 
 class SwFieldType;
 class SwDoc;
 class SwFmtFld;
 class SwField;
 class SwSetExpField;
-class String;
 class SwTextAPIObject;
 
 /* -----------------04.12.98 12:49-------------------
@@ -206,15 +206,13 @@ public:
     const SwField*      GetField() const;
     const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
 
-    // #111840#
-    /**
-       Returns position of this field.
-
-       @return position of this field
-     */
-    SwPosition * GetPosition();
     void Invalidate();
 };
+
+/// @return a SwXTextField, either an already existing one or a new one
+SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
+
+
 /* -----------------21.12.98 10:26-------------------
  *
  * --------------------------------------------------*/

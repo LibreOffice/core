@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: untblk.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +56,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     {
         pTxtFmtColl = pTxtNd->GetTxtColl();
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                            0, pTxtNd->GetTxt().Len(), FALSE );
+                            0, pTxtNd->GetTxt().Len(), false );
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
@@ -69,10 +66,10 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
             for( USHORT n = 0; n < nArrLen; ++n )
             {
                 SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
-                const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                const SwPosition* pAPos;
-                if ( pAnchor->GetAnchorId() == FLY_AT_CNTNT &&
-                     0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
+                SwFmtAnchor const*const  pAnchor = &pFmt->GetAnchor();
+                const SwPosition* pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
                      nSttNode == pAPos->nNode.GetIndex() )
                 {
                     if( !pFrmFmts )
@@ -124,10 +121,10 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
         for( USHORT n = 0; n < nArrLen; ++n )
         {
             SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
-            const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-            const SwPosition* pAPos;
-            if( pAnchor->GetAnchorId() == FLY_AT_CNTNT &&
-                0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
+            SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+            SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+            if (pAPos &&
+                (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
                 nSttNode == pAPos->nNode.GetIndex() )
             {
                 if( !pFrmFmts ||
@@ -158,7 +155,9 @@ SwUndoInserts::~SwUndoInserts()
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
             if( pTxtNd ) // Robust
-                pTxtNd->Erase( pPos->nContent );
+            {
+                pTxtNd->EraseText( pPos->nContent );
+            }
             pPos->nNode++;
         }
         pPos->nContent.Assign( 0, 0 );
@@ -247,7 +246,6 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
         else
         {
-            pDoc->RstTxtAttrs( *pPam, TRUE );
             if( bJoinNext && pTxtNode->CanJoinNext())
             {
                 {
@@ -256,6 +254,9 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
                 }
                 pTxtNode->JoinNext();
             }
+            // reset all text attributes in the paragraph!
+            pTxtNode->RstAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(),
+                                0, 0, true );
 
             // setze alle Attribute im Node zurueck
             pTxtNode->ResetAllAttr();
@@ -264,7 +265,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
                 pTxtFmtColl = (SwTxtFmtColl*)pTxtNode->ChgFmtColl( pTxtFmtColl );
 
             pHistory->SetTmpEnd( nSetPos );
-            pHistory->TmpRollback( pDoc, 0, FALSE );
+            pHistory->TmpRollback( pDoc, 0, false );
         }
     }
 
@@ -288,7 +289,6 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
         pSavTxtFmtColl = ((SwTxtNode*)pCNd)->GetTxtColl();
 
     pHistory->SetTmpEnd( nSetPos );
-    pHistory->TmpRollback( pDoc, 0, FALSE );
 
     // alte Anfangs-Position fuers Rollback zurueckholen
     if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && pPos )
@@ -346,7 +346,7 @@ void SwUndoInserts::Repeat( SwUndoIter& rUndoIter )
 
     SwPaM aPam( *rUndoIter.pAktPam->GetPoint() );
     SetPaM( aPam );
-    aPam.GetDoc()->Copy( aPam, *rUndoIter.pAktPam->GetPoint() );
+    aPam.GetDoc()->CopyRange( aPam, *rUndoIter.pAktPam->GetPoint(), false );
 
     rUndoIter.pLastUndoObj = this;
 }

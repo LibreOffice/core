@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viscrs.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +26,8 @@
  ************************************************************************/
 #ifndef _VISCRS_HXX
 #define _VISCRS_HXX
-#ifndef _CURSOR_HXX //autogen
+
 #include <vcl/cursor.hxx>
-#endif
 #include "swcrsr.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
@@ -96,8 +92,6 @@ class SwSelPaintRects : public SwRects
     // die Shell
     const SwCrsrShell* pCShell;
 
-    void Paint( const SwRect& rRect );
-
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
@@ -145,8 +139,6 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    virtual operator SwShellCrsr* ();
-
     void Show();            // Update und zeige alle Selektionen an
     void Hide();            // verstecke alle Selektionen
     void Invalidate( const SwRect& rRect );
@@ -172,7 +164,7 @@ public:
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
@@ -180,6 +172,8 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 #endif
+
+    virtual bool IsReadOnlyAvailable() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
 };
@@ -200,8 +194,6 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual operator SwShellTableCrsr* ();
-
     virtual void FillRects();   // fuer Table- und normalen Crsr
 
     // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
@@ -209,15 +201,14 @@ public:
 
     virtual void SetMark();
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
-    virtual operator SwShellCrsr* ();
-    virtual operator SwTableCursor* ();
+
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =

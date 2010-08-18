@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +34,12 @@
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/processfactory.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/print.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -51,15 +49,14 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <unotools/moduleoptions.hxx>
+
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
 #include <symbol.hxx>
-#ifndef STARMATH_HRC
 #include <starmath.hrc>
-#endif
 #include <config.hxx>
-
 #include <smdll.hxx>
 
 using namespace ::vos;
@@ -75,12 +72,102 @@ using namespace ::com::sun::star::formula;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::script;
 
+
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+////////////////////////////////////////////////////////////
 
-////////////////////////////////////////
+SmPrintUIOptions::SmPrintUIOptions()
+{
+    ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
+    DBG_ASSERT( aLocalizedStrings.Count() >= 18, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
+        return;
+
+    SmModule *pp = SM_MOD();
+    SmConfig *pConfig = pp->GetConfig();
+    DBG_ASSERT( pConfig, "SmConfig not found" );
+    if (!pConfig)
+        return;
+
+    // create sequence of print UI options
+    // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
+    m_aUIProperties.realloc( 9 );
+
+    // create Section for formula (results in an extra tab page in dialog)
+    SvtModuleOptions aOpt;
+    String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
+    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
+                                    aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+
+    // create subgroup for print options
+    m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
+
+    // create a bool option for title row (matches to SID_PRINTTITLE)
+    m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
+                                                  aLocalizedStrings.GetString( 3 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_TITLE_ROW ) ),
+                                                  pConfig->IsPrintTitle() );
+    // create a bool option for formula text (matches to SID_PRINTTEXT)
+    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+                                                  aLocalizedStrings.GetString( 5 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_FORMULA_TEXT ) ),
+                                                  pConfig->IsPrintFormulaText() );
+    // create a bool option for border (matches to SID_PRINTFRAME)
+    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
+                                                  aLocalizedStrings.GetString( 7 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_BORDER ) ),
+                                                  pConfig->IsPrintFrame() );
+
+    // create subgroup for print format
+    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 8 ), rtl::OUString() );
+
+    // create a radio button group for print format (matches to SID_PRINTSIZE)
+    Sequence< rtl::OUString > aChoices( 3 );
+    aChoices[0] = aLocalizedStrings.GetString( 9 );
+    aChoices[1] = aLocalizedStrings.GetString( 11 );
+    aChoices[2] = aLocalizedStrings.GetString( 13 );
+    Sequence< rtl::OUString > aHelpTexts( 3 );
+    aHelpTexts[0] = aLocalizedStrings.GetString( 10 );
+    aHelpTexts[1] = aLocalizedStrings.GetString( 12 );
+    aHelpTexts[2] = aLocalizedStrings.GetString( 14 );
+    OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_FORMAT ) );
+    m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
+                                                    aHelpTexts,
+                                                    aPrintFormatProp,
+                                                    aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
+                                                    );
+
+    // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
+    vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
+    m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
+                                                     aLocalizedStrings.GetString( 14 ),
+                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
+                                                     pConfig->GetPrintZoomFactor(),    // initial value
+                                                     10,     // min value
+                                                     1000,   // max value
+                                                     aRangeOpt );
+
+    Sequence< PropertyValue > aHintNoLayoutPage( 1 );
+    aHintNoLayoutPage[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HintNoLayoutPage" ) );
+    aHintNoLayoutPage[0].Value = makeAny( sal_True );
+    m_aUIProperties[8].Value <<= aHintNoLayoutPage;
+
+// IsIgnoreSpacesRight is a parser option! Thus we don't add it to the printer UI.
+//
+//    // create subgroup for misc options
+//    m_aUIProperties[8].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 9 ) );
+//
+//    // create a bool option for ignore spacing (matches to SID_NO_RIGHT_SPACES)
+//    m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
+//                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_NO_RIGHT_SPACE ) ),
+//                                                  pConfig->IsIgnoreSpacesRight() );
+}
+
+
+////////////////////////////////////////////////////////////
 //
 // class SmModel
 //
@@ -116,6 +203,7 @@ enum SmModelPropertyHandles
     HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS,
     HANDLE_RELATIVE_FONT_HEIGHT_LIMITS,
     HANDLE_IS_TEXT_MODE,
+    HANDLE_GREEK_CHAR_STYLE,
     HANDLE_ALIGNMENT,
     HANDLE_RELATIVE_SPACING,
     HANDLE_RELATIVE_LINE_SPACING,
@@ -186,6 +274,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "Formula"                           ),    HANDLE_FORMULA                             ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       ,         &::getBooleanCppuType(),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "GreekCharStyle" ),                   HANDLE_GREEK_CHAR_STYLE,    &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "LeftMargin"                        ), HANDLE_LEFT_MARGIN                        ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
         { RTL_CONSTASCII_STRINGPARAM( "PrinterName"                    ), HANDLE_PRINTER_NAME                        ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
         { RTL_CONSTASCII_STRINGPARAM( "PrinterSetup"                       ), HANDLE_PRINTER_SETUP                       ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
@@ -230,11 +319,14 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
 SmModel::SmModel( SfxObjectShell *pObjSh )
 : SfxBaseModel(pObjSh)
 , PropertySetHelper ( lcl_createModelPropertyInfo () )
+, m_pPrintUIOptions( NULL )
+
 {
 }
 //-----------------------------------------------------------------------
 SmModel::~SmModel() throw ()
 {
+    delete m_pPrintUIOptions;
 }
 /*-- 28.03.00 14:18:17---------------------------------------------------
 
@@ -359,8 +451,8 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
-            rServiceName == C2U("com.sun.star.document.OfficeDocument"  ) ||
-            rServiceName == C2U("com.sun.star.formula.FormulaProperties")
+            rServiceName == A2OU("com.sun.star.document.OfficeDocument"  ) ||
+            rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
            );
 }
 /*-- 20.01.04 11:21:00---------------------------------------------------
@@ -377,8 +469,8 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.document.OfficeDocument");
-    pArray[1] = C2U("com.sun.star.formula.FormulaProperties");
+    pArray[0] = A2OU("com.sun.star.document.OfficeDocument");
+    pArray[1] = A2OU("com.sun.star.formula.FormulaProperties");
     return aRet;
 }
 
@@ -503,6 +595,16 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             }
             break;
 
+            case HANDLE_GREEK_CHAR_STYLE                    :
+            {
+                sal_Int16 nVal = 0;
+                *pValues >>= nVal;
+                if (nVal < 0 || nVal > 2)
+                    throw IllegalArgumentException();
+                aFormat.SetGreekCharStyle( nVal );
+            }
+            break;
+
             case HANDLE_ALIGNMENT                          :
             {
                 // SmHorAlign uses the same values as HorizontalAlignment
@@ -594,7 +696,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
-                    SmModule *pp = SM_MOD1();
+                    SmModule *pp = SM_MOD();
                     pp->GetConfig()->ConfigToItemSet(*pItemSet);
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
@@ -611,8 +713,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if ( *pValues >>= aSequence )
                 {
                     sal_uInt32 nSize = aSequence.getLength();
-                    SmModule *pp = SM_MOD1();
-                    SmSymSetManager &rManager = pp->GetSymSetManager();
+                    SmModule *pp = SM_MOD();
+                    SmSymbolManager &rManager = pp->GetSymbolManager();
                     SymbolDescriptor *pDescriptor = aSequence.getArray();
                     for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
                     {
@@ -627,7 +729,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
                         aSymbol.SetDocSymbol( TRUE );
-                        rManager.AddReplaceSymbol ( aSymbol );
+                        rManager.AddOrReplaceSymbol ( aSymbol );
                     }
                 }
                 else
@@ -734,6 +836,10 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             }
             break;
 
+            case HANDLE_GREEK_CHAR_STYLE                    :
+                *pValue <<= (sal_Int16)aFormat.GetGreekCharStyle();
+            break;
+
             case HANDLE_ALIGNMENT                          :
                 // SmHorAlign uses the same values as HorizontalAlignment
                 *pValue <<= (sal_Int16)aFormat.GetHorAlign();
@@ -796,14 +902,15 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_SYMBOLS:
             {
                 // this is get
-                SmModule *pp = SM_MOD1();
-                const SmSymSetManager &rManager = pp->GetSymSetManager();
+                SmModule *pp = SM_MOD();
+                const SmSymbolManager &rManager = pp->GetSymbolManager();
                 vector < const SmSym * > aVector;
 
-                USHORT nCount = 0;
-                for (USHORT i = 0, nEnd = rManager.GetSymbolCount(); i < nEnd; i++)
+                const SymbolPtrVec_t aSymbols( rManager.GetSymbols() );
+                size_t nCount = 0;
+                for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
-                    const SmSym * pSymbol = rManager.GetSymbolByPos( i );
+                    const SmSym * pSymbol = aSymbols[ i ];
                     if (pSymbol && !pSymbol->IsPredefined () )
                     {
                         aVector.push_back ( pSymbol );
@@ -813,12 +920,12 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 Sequence < SymbolDescriptor > aSequence ( nCount );
                 SymbolDescriptor * pDescriptor = aSequence.getArray();
 
-                vector <const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
+                vector < const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
                 for(; aIter != aEnd; pDescriptor++, aIter++)
                 {
                     pDescriptor->sName = (*aIter)->GetName();
                     pDescriptor->sExportName = (*aIter)->GetExportName();
-                    pDescriptor->sSymbolSet = (*aIter)->GetSetName();
+                    pDescriptor->sSymbolSet = (*aIter)->GetSymbolSetName();
                     pDescriptor->nCharacter = static_cast < sal_Int32 > ((*aIter)->GetCharacter());
 
                     Font rFont = (*aIter)->GetFace();
@@ -871,26 +978,25 @@ static Size lcl_GuessPaperSize()
     LocaleDataWrapper aLocWrp( xMgr, AllSettings().GetLocale() );
     if( MEASURE_METRIC == aLocWrp.getMeasurementSystemEnum() )
     {
-        // in Twip
-        aRes.Width()  = lA4Width;
-        aRes.Height() = lA4Height;
+        // in 100th mm
+        PaperInfo aInfo( PAPER_A4 );
+        aRes.Width()  = aInfo.getWidth();
+        aRes.Height() = aInfo.getHeight();
     }
     else
     {
-        // in Twip
-        aRes.Width()  = lLetterWidth;
-        aRes.Height() = lLetterHeight;
+        // in 100th mm
+        PaperInfo aInfo( PAPER_LETTER );
+        aRes.Width()  = aInfo.getWidth();
+        aRes.Height() = aInfo.getHeight();
     }
-    aRes = OutputDevice::LogicToLogic( aRes, MapMode(MAP_TWIP),
-                                             MapMode(MAP_100TH_MM) );
     return aRes;
 }
-
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
-        const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
+        const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -917,6 +1023,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     PropertyValue  &rValue = aRenderer.getArray()[0];
     rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
     rValue.Value <<= aPageSize;
+
+    if (!m_pPrintUIOptions)
+        m_pPrintUIOptions = new SmPrintUIOptions();
+    m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
 
     return aRenderer;
 }
@@ -1004,8 +1114,18 @@ void SAL_CALL SmModel::render(
                     OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
                                                 (aPrtPageOffset.X() + OutputRect.Right()));
 
-                pView->Impl_Print( *pOut, PRINT_SIZE_NORMAL,
-                     Rectangle( OutputRect ), Point() );
+                if (!m_pPrintUIOptions)
+                    m_pPrintUIOptions = new SmPrintUIOptions();
+                m_pPrintUIOptions->processProperties( rxOptions );
+
+                pView->Impl_Print( *pOut, *m_pPrintUIOptions, Rectangle( OutputRect ), Point() );
+
+                // release SmPrintUIOptions when everything is done.
+                // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
+                if (m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False ))
+                {
+                    delete m_pPrintUIOptions;   m_pPrintUIOptions = 0;
+                }
             }
         }
     }

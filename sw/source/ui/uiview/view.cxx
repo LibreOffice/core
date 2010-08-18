@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view.cxx,v $
- * $Revision: 1.112.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,128 +30,78 @@
 
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <unotxvw.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _SWHINTS_HXX
 #include <swhints.hxx>
-#endif
 #include <swmodule.hxx>
 #include <inputwin.hxx>
 #include <chartins.hxx>
 #include <uivwimp.hxx>
 #include <uitool.hxx>
 #include <edtwin.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
-#ifndef _LISTSH_HXX
 #include <listsh.hxx>
-#endif
-#ifndef _TABSH_HXX
 #include <tabsh.hxx>
-#endif
-#ifndef _GRFSH_HXX
 #include <grfsh.hxx>
-#endif
-#ifndef _MEDIASH_HXX
 #include <mediash.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <frmsh.hxx>
-#ifndef _OLESH_HXX
 #include <olesh.hxx>
-#endif
-#ifndef _DRAWSH_HXX
 #include <drawsh.hxx>
-#endif
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
-#ifndef _DRFORMSH_HXX
 #include <drformsh.hxx>
-#endif
-#ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
-#endif
-#ifndef _BEZIERSH_HXX
 #include <beziersh.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <scroll.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <navipi.hxx>
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <doc.hxx>
-#ifndef _WDOCSH_HXX
+#include <drawdoc.hxx>
 #include <wdocsh.hxx>
-#endif
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <workctrl.hxx>
 #include <wrtsh.hxx>
-#ifndef _BARCFG_HXX
 #include <barcfg.hxx>
-#endif
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <swdtflvr.hxx>
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _GLOBDOC_HRC
 #include <globdoc.hrc>
-#endif
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 //#include <sfx2/app.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
 #include <com/sun/star/scanner/XScannerManager.hpp>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
 
@@ -180,13 +127,8 @@ using ::rtl::OUStringBuffer;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-#define SWVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|          \
-                      SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
-                      SFX_VIEW_CAN_PRINT|               \
+#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
-
-//MA 06. Nov. 95: Each raus in Absprache mit MI wg. Bug 21523
-//                    SFX_VIEW_OPTIMIZE_EACH|
 
 /*--------------------------------------------------------------------
     Beschreibung:   Statics
@@ -227,7 +169,7 @@ inline SfxDispatcher &SwView::GetDispatcher()
 void SwView::ImpSetVerb( int nSelType )
 {
     sal_Bool bResetVerbs = bVerbsActive;
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() &&
+    if ( !GetViewFrame()->GetFrame().IsInPlace() &&
          (nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) & nSelType )
     {
         if ( !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
@@ -270,7 +212,7 @@ void SwView::GotFocus() const
         SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
         if ( pAsAnnotationShell )
         {
-            mpPostItMgr->SetActivePostIt(0);
+            mpPostItMgr->SetActiveSidebarWin(0);
             const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
         }
     }
@@ -672,7 +614,8 @@ void SwView::_CheckReadonlyState()
             SID_DELETE,                 FN_BACKSPACE,               FN_SHIFT_BACKSPACE,
             SID_UNDO,
             SID_REDO,                   SID_REPEAT,                 SID_PASTE,
-            FN_PASTESPECIAL,            SID_SBA_BRW_INSERT,
+            SID_PASTE_UNFORMATTED,
+            SID_PASTE_SPECIAL,            SID_SBA_BRW_INSERT,
             SID_BACKGROUND_COLOR,       FN_INSERT_BOOKMARK,
             SID_CHARMAP,                FN_INSERT_SOFT_HYPHEN,
             FN_INSERT_HARDHYPHEN,       FN_INSERT_HARD_SPACE,       FN_INSERT_BREAK,
@@ -808,7 +751,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pFormShell(0),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
@@ -980,10 +923,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( SFX_CREATE_MODE_EMBEDDED != pDocSh->GetCreateMode() )
         aBrwsBorder = GetMargin();
 
-    if( _pFrame->GetFrameType() & SFXFRAME_INTERNAL )
-        pWrtShell->SetFrameView( aBrwsBorder );
-    else
-        pWrtShell->SetBrowseBorder( aBrwsBorder );
+    pWrtShell->SetBrowseBorder( aBrwsBorder );
 
     // Im CTOR duerfen keine Shell wechsel erfolgen, die muessen ueber
     // den Timer "zwischen gespeichert" werden. Sonst raeumt der SFX
@@ -995,7 +935,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pVRuler->SetActive( sal_True );
 
     SfxViewFrame* pViewFrame = GetViewFrame();
-    if( pViewFrame->GetFrame()->GetParentFrame())
+    if( pViewFrame->GetFrame().GetParentFrame())
     {
         aUsrPref.SetViewHRuler(sal_False);
         aUsrPref.SetViewVRuler(sal_False);
@@ -1054,13 +994,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
     pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
-    if( UseObjectSize() )
-    {
-        //Damit der Sfx _rechtzeitig weiss_, wie gross die sheet::Border sind.
-        SvBorder aTmp;
-        CalcAndSetBorderPixel( aTmp, sal_True );
-    }
-
     if( pWrtShell->GetDoc()->IsUpdateExpFld() )
     {
         SET_CURR_SHELL( pWrtShell );
@@ -1109,10 +1042,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 
     /*uno::Reference< awt::XWindow >  aTmpRef;
-    _pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
+    _pFrame->GetFrame().GetFrameInterface()->setComponent( aTmpRef,
                                             pViewImpl->GetUNOObject_Impl());*/
 
-   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
+   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
             OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
@@ -1466,11 +1399,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
-            {
-                pValue->Value >>= bSelectedFrame;
-                bGotIsSelectedFrame = sal_True;
-            }
             pValue++;
         }
         if (bGotVisibleBottom)
@@ -1674,7 +1602,7 @@ void SwView::ShowCursor( FASTBOOL bOn )
 
 ErrCode SwView::DoVerb( long nVerb )
 {
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         SwWrtShell &rSh = GetWrtShell();
         const int nSel = rSh.GetSelectionType();
@@ -1780,7 +1708,18 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         CreateTab();
                     else
                         KillTab();
-                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
+                    bool bReadonly = GetDocShell()->IsReadOnly();
+                    //#i76332# if document is to be opened in alive-mode then this has to be regarded while switching from readonly-mode to edit-mode
+                    if( !bReadonly )
+                    {
+                        SwDrawDocument * pDrawDoc = 0;
+                        if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (GetDocShell()->GetDoc()->GetDrawModel() ) ) )
+                        {
+                            if( !pDrawDoc->GetOpenInDesignMode() )
+                                break;// don't touch the design mode
+                        }
+                    }
+                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadonly);
                     GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
                                                 &aItem, 0L );
                 }
@@ -1957,53 +1896,6 @@ void SwView::NotifyDBChanged()
     Beschreibung:   Drucken
  --------------------------------------------------------------------*/
 
-void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-         BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
-{
-    SwAddPrinterItem* pAddPrinterAttr;
-    if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
-        FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
-    {
-        pData = pAddPrinterAttr;
-    }
-    else if(!pData)
-    {
-        pData = SW_MOD()->GetPrtOptions(bWeb);
-    }
-    rOpts = *pData;
-    if( pPrtProspect )
-        *pPrtProspect = pData->bPrintProspect;
-    if( pPrtProspect_RTL )
-        *pPrtProspect_RTL = pData->bPrintProspect_RTL;
-    rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    rOpts.aMulti.SelectAll( FALSE );
-    rOpts.nCopyCount = 1;
-    rOpts.bCollate = FALSE;
-    rOpts.bPrintSelection = FALSE;
-    rOpts.bJobStartet = FALSE;
-
-    if ( pDlg )
-    {
-        rOpts.nCopyCount = pDlg->GetCopyCount();
-        rOpts.bCollate = pDlg->IsCollateChecked();
-        if ( pDlg->GetCheckedRange() == PRINTDIALOG_SELECTION )
-        {
-            rOpts.aMulti.SelectAll();
-            rOpts.bPrintSelection = TRUE;
-        }
-        else if ( PRINTDIALOG_ALL == pDlg->GetCheckedRange() )
-            rOpts.aMulti.SelectAll();
-        else
-        {
-            rOpts.aMulti = MultiSelection( pDlg->GetRangeText() );
-            rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-        }
-    }
-    else
-        rOpts.aMulti.SelectAll();
-    rOpts.aMulti.Select( 0, FALSE );
-}
-
 /* -----------------------------28.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2032,3 +1924,20 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
 {
     GetViewImpl()->AddTransferable(rTransferable);
 }
+
+/* --------------------------------------------------*/
+
+void SwPrtOptions::MakeOptions( BOOL bWeb )
+{
+    *this = *SW_MOD()->GetPrtOptions(bWeb);
+
+    nCopyCount = 1;
+    bCollate = FALSE;
+    bPrintSelection = FALSE;
+    bJobStartet = FALSE;
+
+    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
+    aMulti.SelectAll();
+    aMulti.Select( 0, FALSE );
+}
+

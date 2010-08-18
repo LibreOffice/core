@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: GetMetricVal.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 inline USHORT GetMetricVal( int n )
 {
 #ifdef USE_MEASUREMENT
-    USHORT nVal = MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum()
+    USHORT nVal = MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                     ? 567       // 1 cm
                     : 770;      // 1/2 Inch
 #else

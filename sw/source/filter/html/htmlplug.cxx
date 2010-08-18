@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlplug.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,22 +30,18 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
-
 #include "hintids.hxx"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <SwAppletImpl.hxx>
@@ -59,7 +52,7 @@
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 #include "pam.hxx"
 #include "doc.hxx"
 #include "ndtxt.hxx"
@@ -465,7 +458,7 @@ void SwHTMLParser::InsertEmbed()
     }
     else
     {
-        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFrmSet.Put( aAnchor );
         aFrmSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
@@ -491,7 +484,7 @@ void SwHTMLParser::InsertEmbed()
     SwNoTxtNode *pNoTxtNd =
         pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                           ->GetIndex()+1 ]->GetNoTxtNode();
-    pNoTxtNd->SetAlternateText( aAlt );
+    pNoTxtNd->SetTitle( aAlt );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     if( !bHidden )
@@ -665,7 +658,7 @@ void SwHTMLParser::EndObject()
         SwNoTxtNode *pNoTxtNd =
             pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                               ->GetIndex()+1 ]->GetNoTxtNode();
-        pNoTxtNd->SetAlternateText( pAppletImpl->GetAltText() );
+        pNoTxtNd->SetTitle( pAppletImpl->GetAltText() );
 
         // Ggf Frames anlegen und auto-geb. Rahmen registrieren
         RegisterFlyFrm( pFlyFmt );
@@ -798,7 +791,7 @@ void SwHTMLParser::EndApplet()
     SwNoTxtNode *pNoTxtNd =
         pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                           ->GetIndex()+1 ]->GetNoTxtNode();
-    pNoTxtNd->SetAlternateText( pAppletImpl->GetAltText() );
+    pNoTxtNd->SetTitle( pAppletImpl->GetAltText() );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
@@ -975,7 +968,7 @@ void SwHTMLParser::InsertFloatingFrame()
     SwNoTxtNode *pNoTxtNd =
         pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                           ->GetIndex()+1 ]->GetNoTxtNode();
-    pNoTxtNd->SetAlternateText( aAlt );
+    pNoTxtNd->SetTitle( aAlt );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
@@ -1167,7 +1160,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             sOut = '\"';
         }
 
-        if( FLY_AT_CNTNT == rFrmFmt.GetAnchor().GetAnchorId() &&
+        if ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) &&
             SURROUND_THROUGHT == rFrmFmt.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN
@@ -1254,7 +1247,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         nFrmOpts |= HTML_FRMOPTS_OLE_CSS1;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetAlternateText(),
+    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetTitle(),
                                aEndTags, nFrmOpts );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
@@ -1398,7 +1391,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         ULONG nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
         OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
-                       pOLENd->GetAlternateText(), pOLENd->GetTwipSize(),
+                       pOLENd->GetTitle(), pOLENd->GetTwipSize(),
                        nFlags, pMarkToOLE );
     }
 

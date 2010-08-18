@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pggrid.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,11 +46,11 @@
 #endif
 #include <svx/xtable.hxx>
 #include <uitool.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <pggrid.hxx>
 #include <tgrditem.hxx>
 #include <pggrid.hrc>
@@ -245,6 +242,7 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
             default:                pButton = &aCharsGridRB;
         }
         pButton->Check();
+        aDisplayCB.Check(rGridItem.IsDisplayGrid());
         GridTypeHdl(pButton);
         aSnapToCharsCB.Check(rGridItem.IsSnapToChars());
         aLinesPerPageNF.SetValue(rGridItem.GetLines());
@@ -254,7 +252,6 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
         aRubySizeMF.SetValue(aRubySizeMF.Normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
         aCharWidthMF.SetValue(aCharWidthMF.Normalize(rGridItem.GetBaseWidth()), FUNIT_TWIP);
         aRubyBelowCB.Check(rGridItem.IsRubyTextBelow());
-        aDisplayCB.Check(rGridItem.IsDisplayGrid());
         aPrintCB.Check(rGridItem.IsPrintGrid());
         aColorLB.SelectEntry(rGridItem.GetColor());
     }

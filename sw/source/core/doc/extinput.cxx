@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extinput.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace ::com::sun::star;
@@ -57,6 +54,9 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
 
 SwExtTextInput::~SwExtTextInput()
 {
+    SwDoc *const pDoc = GetDoc();
+    if (pDoc->IsInDtor()) { return; /* #i58606# */ }
+
     SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTNd )
     {
@@ -72,7 +72,6 @@ SwExtTextInput::~SwExtTextInput()
 
             // damit Undo / Redlining usw. richtig funktioniert,
             // muss ueber die Doc-Schnittstellen gegangen werden !!!
-            SwDoc* pDoc = GetDoc();
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
                 // --> FME 2005-02-11 #i41974# Only set language attribute
@@ -89,7 +88,7 @@ SwExtTextInput::~SwExtTextInput()
                 if ( bLang )
                 {
                     SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                    pDoc->Insert(*this, aLangItem, 0 );
+                    pDoc->InsertPoolItem(*this, aLangItem, 0 );
                 }
             }
             rIdx = nSttCnt;
@@ -100,9 +99,9 @@ SwExtTextInput::~SwExtTextInput()
                 if( nLen > sOverwriteText.Len() )
                 {
                     rIdx += sOverwriteText.Len();
-                    pTNd->Erase( rIdx, nLen - sOverwriteText.Len() );
+                    pTNd->EraseText( rIdx, nLen - sOverwriteText.Len() );
                     rIdx = nSttCnt;
-                    pTNd->Replace( rIdx, sOverwriteText.Len(),
+                    pTNd->ReplaceText( rIdx, sOverwriteText.Len(),
                                             sOverwriteText );
                     if( bInsText )
                     {
@@ -110,13 +109,15 @@ SwExtTextInput::~SwExtTextInput()
                         pDoc->StartUndo( UNDO_OVERWRITE, NULL );
                         pDoc->Overwrite( *this, sTxt.Copy( 0,
                                                     sOverwriteText.Len() ));
-                        pDoc->Insert( *this, sTxt.Copy( sOverwriteText.Len() ), true);
+                        pDoc->InsertString( *this,
+                            sTxt.Copy( sOverwriteText.Len() ) );
                         pDoc->EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
                 else
                 {
-                    pTNd->Replace( rIdx, nLen, sOverwriteText.Copy( 0, nLen ));
+                    pTNd->ReplaceText( rIdx, nLen,
+                            sOverwriteText.Copy( 0, nLen ));
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
@@ -126,10 +127,12 @@ SwExtTextInput::~SwExtTextInput()
             }
             else
             {
-                pTNd->Erase( rIdx, nEndCnt - nSttCnt );
+                pTNd->EraseText( rIdx, nEndCnt - nSttCnt );
 
                 if( bInsText )
-                    pDoc->Insert( *this, sTxt, true );
+                {
+                    pDoc->InsertString( *this, sTxt );
+                }
             }
         }
     }
@@ -159,7 +162,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
                 // some characters
                 nReplace = nReplace - rNewStr.Len();
                 aIdx += rNewStr.Len();
-                pTNd->Replace( aIdx, nReplace,
+                pTNd->ReplaceText( aIdx, nReplace,
                             sOverwriteText.Copy( rNewStr.Len(), nReplace ));
                 aIdx = nSttCnt;
                 nReplace = rNewStr.Len();
@@ -168,14 +171,14 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             {
                 nReplace = nReplace - sOverwriteText.Len();
                 aIdx += sOverwriteText.Len();
-                pTNd->Erase( aIdx, nReplace );
+                pTNd->EraseText( aIdx, nReplace );
                 aIdx = nSttCnt;
                 nReplace = sOverwriteText.Len();
             }
             else if( (nReplace = sOverwriteText.Len()) > rNewStr.Len() )
                 nReplace = rNewStr.Len();
 
-            pTNd->Replace( aIdx, nReplace, rNewStr );
+            pTNd->ReplaceText( aIdx, nReplace, rNewStr );
             if( !HasMark() )
                 SetMark();
             GetMark()->nContent = aIdx;
@@ -183,9 +186,12 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         else
         {
             if( nSttCnt < nEndCnt )
-                pTNd->Erase( aIdx, nEndCnt - nSttCnt );
+            {
+                pTNd->EraseText( aIdx, nEndCnt - nSttCnt );
+            }
 
-            pTNd->Insert( rNewStr, aIdx, INS_EMPTYEXPAND );
+            pTNd->InsertText( rNewStr, aIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
             if( !HasMark() )
                 SetMark();
         }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writerhelper.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,12 +39,12 @@
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
-#   include <svtools/itemiter.hxx>  //SfxItemIter
+#   include <svl/itemiter.hxx>  //SfxItemIter
 #   include <svx/svdobj.hxx>        //SdrObject
 #   include <svx/svdoole2.hxx>      //SdrOle2Obj
 #   include <svx/fmglob.hxx>        //FmFormInventor
-#   include <svx/brkitem.hxx>       //SvxFmtBreakItem
-#   include <svx/tstpitem.hxx>      //SvxTabStopItem
+#   include <editeng/brkitem.hxx>       //SvxFmtBreakItem
+#   include <editeng/tstpitem.hxx>      //SvxTabStopItem
 #   include <ndtxt.hxx>             //SwTxtNode
 #    include <ndnotxt.hxx>          //SwNoTxtNode
 #    include <fmtcntnt.hxx>         //SwFmtCntnt
@@ -164,20 +161,6 @@ namespace
         return aRet;
     }
 
-    /*
-     Utility to extract flyfmts from a document, potentially from a
-     selection, and with bAll off ignores the drawing objects
-    */
-    sw::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM, bool /*bAll*/)
-    {
-        SwPosFlyFrms aFlys;
-        rDoc.GetAllFlyFmts(aFlys, pPaM, true);
-        sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
-        for (USHORT i = aFlys.Count(); i > 0;)
-            delete aFlys[--i];
-        return aRet;
-    }
-
     //Utility to test if a frame is anchored at a given node index
     class anchoredto: public std::unary_function<const sw::Frame&, bool>
     {
@@ -204,7 +187,7 @@ namespace sw
           meWriterType(eTxtBox),
           mpStartFrameContent(0),
           // --> OD 2007-04-19 #i43447# - move to initialization list
-          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT) )
+          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
           // <--
     {
         switch (rFmt.Which())
@@ -570,16 +553,21 @@ namespace sw
         }
         // <--
 
-        Frames GetAllFrames(const SwDoc &rDoc, SwPaM *pPaM)
+        /*
+           Utility to extract flyfmts from a document, potentially from a
+           selection.
+           */
+        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
         {
-            return GetFrames(rDoc, pPaM, true);
+            SwPosFlyFrms aFlys;
+            rDoc.GetAllFlyFmts(aFlys, pPaM, true);
+            sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
+            for (USHORT i = aFlys.Count(); i > 0;)
+                delete aFlys[--i];
+            return aRet;
         }
 
-        Frames GetNonDrawingFrames(const SwDoc &rDoc, SwPaM *pPaM)
-        {
-            return GetFrames(rDoc, pPaM, false);
-        }
-
+#if 0
         Frames GetFramesBetweenNodes(const Frames &rFrames,
             const SwNode &rStart, const SwNode &rEnd)
         {
@@ -593,7 +581,7 @@ namespace sw
             return aRet;
 
         }
-
+#endif
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
         {
             Frames aRet;

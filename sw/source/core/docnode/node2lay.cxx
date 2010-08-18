@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node2lay.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -236,8 +233,8 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             {
                 // #137684#: pFrm could be a "dummy"-section
                 if( ((SwSectionFrm*)pFrm)->GetSection() &&
-                    ((SwSectionNode*)pNode)->GetSection() ==
-                    *((SwSectionFrm*)pFrm)->GetSection() )
+                    (&((SwSectionNode*)pNode)->GetSection() ==
+                     ((SwSectionFrm*)pFrm)->GetSection()) )
                 {
                     // OD 2004-06-02 #i22922# - consider columned sections
                     // 'Go down' the section frame as long as the layout frame

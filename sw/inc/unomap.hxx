@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomap.hxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef _UNOMAP_HXX
 #define _UNOMAP_HXX
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #define PROPERTY_NONE 0
 
@@ -131,20 +128,9 @@
 #define PROPERTY_MAP_RUBY_AUTO_STYLE                    95
 #define PROPERTY_MAP_PARA_AUTO_STYLE                    96
 #define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
+#define PROPERTY_MAP_METAFIELD                          98
 
-#define PROPERTY_MAP_END                                98
-
-#define PROPERTY_SET_CHAR_STYLE             1
-#define PROPERTY_SET_PARA_STYLE             2
-#define PROPERTY_SET_FRAME_STYLE            3
-#define PROPERTY_SET_PAGE_STYLE             4
-#define PROPERTY_SET_NUM_STYLE              5
-// basically the same as PROPERTY_SET_PARA_STYLE with additional property
-// that is only available for conditional para styles
-#define PROPERTY_SET_CONDITIONAL_PARA_STYLE 6
-#define PROPERTY_SET_CHAR_AUTO_STYLE        7
-#define PROPERTY_SET_RUBY_AUTO_STYLE        8
-#define PROPERTY_SET_PARA_AUTO_STYLE        9
+#define PROPERTY_MAP_END                                99
 
 //S&E
 #define WID_WORDS                0
@@ -262,6 +248,7 @@
 #define WID_DOC_LOCK_UPDATES                    1016
 #define WID_DOC_HAS_VALID_SIGNATURES            1017
 #define WID_DOC_BUILDID                         1024
+#define WID_DOC_ISTEMPLATEID                        1025
 // --> OD 2006-03-21 #b6375613#
 #define WID_APPLY_WORKAROUND_FOR_B6375613       1070
 // <--
@@ -306,6 +293,7 @@
 
 #define WID_LAYOUT_SIZE                         1104
 #define WID_DOC_DIALOG_LIBRARIES                1105
+#define WID_DOC_VBA_DOCOBJ                      1106
 
 
 //AutoText
@@ -337,7 +325,7 @@ class SwItemPropertySet : public SfxItemPropertySet
 protected:
     virtual sal_Bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
 public:
-    SwItemPropertySet( const SfxItemPropertyMap *pMap ) :
+    SwItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
         SfxItemPropertySet( pMap ){}
 };
 /* -----------------04.07.98 11:41-------------------
@@ -345,26 +333,16 @@ public:
  * --------------------------------------------------*/
 class SwUnoPropertyMapProvider
 {
-    SfxItemPropertyMap* aMapArr[PROPERTY_MAP_END];
+    SfxItemPropertyMapEntry*        aMapEntriesArr[PROPERTY_MAP_END];
+    SfxItemPropertySet*             aPropertySetArr[PROPERTY_MAP_END];
 
-    SfxItemPropertySet* pCharStyleMap;
-    SfxItemPropertySet* pParaStyleMap;
-    SfxItemPropertySet* pFrameStyleMap;
-    SfxItemPropertySet* pPageStyleMap;
-    SfxItemPropertySet* pNumStyleMap;
-    SfxItemPropertySet* pConditionalParaStyleMap;
-    SfxItemPropertySet* pCharAutoStyleMap;
-    SfxItemPropertySet* pParaAutoStyleMap;
-    SfxItemPropertySet* pRubyAutoStyleMap;
-
-    void            Sort(sal_uInt16 nId);
 public:
     SwUnoPropertyMapProvider();
     ~SwUnoPropertyMapProvider();
 
-    const SfxItemPropertyMap*       GetPropertyMap(sal_uInt16 PropertyId);
+    const SfxItemPropertyMapEntry*  GetPropertyMapEntries(sal_uInt16 PropertyId);
+    const SfxItemPropertySet*       GetPropertySet( sal_uInt16 PropertyId );
 
-    SfxItemPropertySet&             GetPropertySet(sal_Int8 nPropSetId);
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;

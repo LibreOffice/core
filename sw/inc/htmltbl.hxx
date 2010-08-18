@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmltbl.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <vcl/timer.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
 #include "node.hxx"     // Fuer SwStartNode
@@ -270,6 +267,7 @@ class SwHTMLTableLayout
 
     DECL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void* );
 
+    static USHORT GetBrowseWidthByVisArea( const SwDoc& rDoc );
 public:
 
     SwHTMLTableLayout( const SwTable *pSwTbl,
@@ -351,7 +349,6 @@ public:
     // oder eine ViewShell vorhanden ist. Sonst wird 0 zurueckgegeben.
     // (Wird vom HTML-Filter benoetigt, da der nicht an das Layout kommt.)
     static USHORT GetBrowseWidth( const SwDoc& rDoc );
-    static USHORT GetBrowseWidthByVisArea( const SwDoc& rDoc );
 
     // Ermitteln der verfuegbaren Breite uber den Tabellen-Frame
     USHORT GetBrowseWidthByTabFrm( const SwTabFrm& rTabFrm ) const;

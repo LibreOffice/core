@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolbox.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,9 @@
 
 
 #include <rtl/logfile.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/imgdef.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imgmgr.hxx>
@@ -222,7 +219,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
 
 void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 {
-    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // set image list for toolbox 'catalog'
     const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: parse.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +36,8 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18npool/lang.h>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/syslocale.hxx>
+#include <editeng/unolingu.hxx>
+#include <unotools/syslocale.hxx>
 #include "parse.hxx"
 #ifndef _STARMATH_HRC
 #include "starmath.hrc"
@@ -245,12 +242,13 @@ static const SmTokenTableEntry aTokenTable[] =
     { "ni", TNI, MS_NI, TGRELATION, 0},
     { "nitalic", TNITALIC, '\0', TGFONTATTR, 5},
     { "none", TNONE, '\0', TGLBRACES | TGRBRACES, 0},
+    { "nospace", TNOSPACE, '\0', TGSTANDALONE, 5},
     { "notin", TNOTIN, MS_NOTIN, TGRELATION, 0},
+    { "nroot", TNROOT, MS_SQRT, TGUNOPER, 5},
     { "nsubset", TNSUBSET, MS_NSUBSET, TGRELATION, 0 },
     { "nsupset", TNSUPSET, MS_NSUPSET, TGRELATION, 0 },
     { "nsubseteq", TNSUBSETEQ, MS_NSUBSETEQ, TGRELATION, 0 },
     { "nsupseteq", TNSUPSETEQ, MS_NSUPSETEQ, TGRELATION, 0 },
-    { "nroot", TNROOT, MS_SQRT, TGUNOPER, 5},
     { "odivide", TODIVIDE, MS_ODIVIDE, TGPRODUCT, 0},
     { "odot", TODOT, MS_ODOT, TGPRODUCT, 0},
     { "ominus", TOMINUS, MS_OMINUS, TGSUM, 0},
@@ -383,7 +381,7 @@ BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
 
     BOOL bIsDelim = *pDelim != 0;
 
-    INT16 nTypJp = SM_MOD1()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
+    INT16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
     bIsDelim |= nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
                 nTypJp == com::sun::star::i18n::UnicodeType::CONTROL;
 
@@ -441,7 +439,7 @@ void SmParser::NextToken()
     xub_StrLen  nRealStart;
     BOOL        bCont;
     BOOL        bNumStart = FALSE;
-    CharClass   aCC(SM_MOD1()->GetSysLocale().GetCharClass().getLocale());
+    CharClass   aCC(SM_MOD()->GetSysLocale().GetCharClass().getLocale());
     do
     {
         // skip white spaces
@@ -734,7 +732,7 @@ void SmParser::NextToken()
                         xub_StrLen nTmpStart = sal::static_int_cast< xub_StrLen >(rnEndPos +
                                                     aTmpRes.LeadingWhiteSpace);
 
-                        // default setting fo the case that no identifier
+                        // default setting for the case that no identifier
                         // i.e. a valid symbol-name is following the '%'
                         // character
                         CurToken.eType      = TTEXT;
@@ -743,14 +741,14 @@ void SmParser::NextToken()
                         CurToken.nLevel     = 5;
                         CurToken.aText      = String();
                         CurToken.nRow       = sal::static_int_cast< xub_StrLen >(Row);
-                        CurToken.nCol       = nTmpStart - ColOff + 1;
+                        CurToken.nCol       = nTmpStart - ColOff;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
 
                             xub_StrLen n = sal::static_int_cast< xub_StrLen >(aTmpRes.EndPos - nTmpStart);
                             CurToken.eType      = TSPECIAL;
-                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart), n );
+                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart-1), n+1 );
 
                             DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );
@@ -1037,10 +1035,10 @@ void SmParser::Table()
 
     ULONG n = NodeStack.Count();
 
-    LineArray.SetSize(n);
+    LineArray.resize(n);
 
     for (ULONG i = 0; i < n; i++)
-        LineArray.Put(n - (i + 1), NodeStack.Pop());
+        LineArray[n - (i + 1)] = NodeStack.Pop();
 
     SmStructureNode *pSNode = new SmTableNode(CurToken);
     pSNode->SetSubNodes(LineArray);
@@ -1107,15 +1105,15 @@ void SmParser::Line()
     USHORT  n = 0;
     SmNodeArray  ExpressionArray;
 
-    ExpressionArray.SetSize(n);
+    ExpressionArray.resize(n);
 
     // start with single expression that may have an alignment statement
     // (and go on with expressions that must not have alignment
     // statements in 'while' loop below. See also 'Expression()'.)
     if (CurToken.eType != TEND  &&  CurToken.eType != TNEWLINE)
     {   Align();
-        ExpressionArray.SetSize(++n);
-        ExpressionArray.Put(n - 1, NodeStack.Pop());
+        ExpressionArray.resize(++n);
+        ExpressionArray[n - 1] = NodeStack.Pop();
     }
 
     while (CurToken.eType != TEND  &&  CurToken.eType != TNEWLINE)
@@ -1123,8 +1121,8 @@ void SmParser::Line()
             Expression();
         else
             Align();
-        ExpressionArray.SetSize(++n);
-        ExpressionArray.Put(n - 1, NodeStack.Pop());
+        ExpressionArray.resize(++n);
+        ExpressionArray[n - 1] = NodeStack.Pop();
     }
 
     SmStructureNode *pSNode = new SmLineNode(CurToken);
@@ -1135,23 +1133,34 @@ void SmParser::Line()
 
 void SmParser::Expression()
 {
+    BOOL bUseExtraSpaces = TRUE;
+    SmNode *pNode = NodeStack.Pop();
+    if (pNode)
+    {
+        if (pNode->GetToken().eType == TNOSPACE)
+            bUseExtraSpaces = FALSE;
+        else
+            NodeStack.Push(pNode);  // push the node from above again (now to be used as argument to this current 'nospace' node)
+    }
+
     USHORT       n = 0;
     SmNodeArray  RelationArray;
 
-    RelationArray.SetSize(n);
+    RelationArray.resize(n);
 
     Relation();
-    RelationArray.SetSize(++n);
-    RelationArray.Put(n - 1, NodeStack.Pop());
+    RelationArray.resize(++n);
+    RelationArray[n - 1] = NodeStack.Pop();
 
     while (CurToken.nLevel >= 4)
     {   Relation();
-        RelationArray.SetSize(++n);
-        RelationArray.Put(n - 1, NodeStack.Pop());
+        RelationArray.resize(++n);
+        RelationArray[n - 1] = NodeStack.Pop();
     }
 
-    SmStructureNode *pSNode = new SmExpressionNode(CurToken);
+    SmExpressionNode *pSNode = new SmExpressionNode(CurToken);
     pSNode->SetSubNodes(RelationArray);
+    pSNode->SetUseExtraSpaces(bUseExtraSpaces);
     NodeStack.Push(pSNode);
 }
 
@@ -1273,7 +1282,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
         return;
 
     SmSubSupNode *pNode = new SmSubSupNode(CurToken);
-    //! Of course 'CurToken' ist just the first sub-/supscript token.
+    //! Of course 'CurToken' is just the first sub-/supscript token.
     //! It should be of no further interest. The positions of the
     //! sub-/supscripts will be identified by the corresponding subnodes
     //! index in the 'aSubNodes' array (enum value from 'SmSubSup').
@@ -1282,10 +1291,10 @@ void SmParser::SubSup(ULONG nActiveGroup)
 
     // initialize subnodes array
     SmNodeArray  aSubNodes;
-    aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
-    aSubNodes.Put(0, NodeStack.Pop());
-    for (USHORT i = 1;  i < aSubNodes.GetSize();  i++)
-        aSubNodes.Put(i, NULL);
+    aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
+    aSubNodes[0] = NodeStack.Pop();
+    for (USHORT i = 1;  i < aSubNodes.size();  i++)
+        aSubNodes[i] = NULL;
 
     // process all sub-/supscripts
     int  nIndex = 0;
@@ -1321,9 +1330,9 @@ void SmParser::SubSup(ULONG nActiveGroup)
                    "SmParser::Power() : sub-/supscript index falsch");
 
         // set sub-/supscript if not already done
-        if (aSubNodes.Get(nIndex) != NULL)
+        if (aSubNodes[nIndex] != NULL)
             Error(PE_DOUBLE_SUBSUPSCRIPT);
-        aSubNodes.Put(nIndex, NodeStack.Pop());
+        aSubNodes[nIndex] = NodeStack.Pop();
     }
 
     pNode->SetSubNodes(aSubNodes);
@@ -1365,7 +1374,7 @@ void SmParser::Blank()
 
     // Blanks am Zeilenende ignorieren wenn die entsprechende Option gesetzt ist
     if ( CurToken.eType == TNEWLINE ||
-             (CurToken.eType == TEND && SM_MOD1()->GetConfig()->IsIgnoreSpacesRight()) )
+             (CurToken.eType == TEND && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()) )
     {
         pBlankNode->Clear();
     }
@@ -1377,30 +1386,51 @@ void SmParser::Blank()
 void SmParser::Term()
 {
     switch (CurToken.eType)
-    {   case TESCAPE :
+    {
+        case TESCAPE :
             Escape();
             break;
 
+        case TNOSPACE :
         case TLGROUP :
-            NextToken();
-
-            // allow for empty group
-            if (CurToken.eType == TRGROUP)
-            {   SmStructureNode *pSNode = new SmExpressionNode(CurToken);
-                pSNode->SetSubNodes(NULL, NULL);
-                NodeStack.Push(pSNode);
-
+        {
+            bool bNoSpace = CurToken.eType == TNOSPACE;
+            if (bNoSpace)   // push 'no space' node and continue to parse expression
+            {
+                NodeStack.Push(new SmExpressionNode(CurToken));
                 NextToken();
             }
-            else    // go as usual
-            {   Align();
-                if (CurToken.eType != TRGROUP)
-                    Error(PE_RGROUP_EXPECTED);
-                else
-                {   NextToken();
+            if (CurToken.eType != TLGROUP)
+            {
+                NodeStack.Pop();    // get rid of the 'no space' node pushed above
+                Term();
+            }
+            else
+            {
+                NextToken();
+
+                // allow for empty group
+                if (CurToken.eType == TRGROUP)
+                {
+                    if (bNoSpace)   // get rid of the 'no space' node pushed above
+                        NodeStack.Pop();
+                    SmStructureNode *pSNode = new SmExpressionNode(CurToken);
+                    pSNode->SetSubNodes(NULL, NULL);
+                    NodeStack.Push(pSNode);
+
+                    NextToken();
+                }
+                else    // go as usual
+                {
+                    Align();
+                    if (CurToken.eType != TRGROUP)
+                        Error(PE_RGROUP_EXPECTED);
+                    else
+                        NextToken();
                 }
             }
-            break;
+        }
+        break;
 
         case TLEFT :
             Brace();
@@ -1501,7 +1531,7 @@ void SmParser::Term()
                 USHORT  n = 0;
                 while (TRUE == (bIsAttr = TokenInGroup(TGATTRIBUT))
                        ||  TokenInGroup(TGFONTATTR))
-                {   aArray.SetSize(n + 1);
+                {   aArray.resize(n + 1);
 
                     if (bIsAttr)
                         Attribut();
@@ -1511,7 +1541,7 @@ void SmParser::Term()
                     // check if casting in following line is ok
                     DBG_ASSERT(!NodeStack.Top()->IsVisible(), "Sm : Ooops...");
 
-                    aArray.Put(n, (SmStructureNode *) NodeStack.Pop());
+                    aArray[n] = (SmStructureNode *) NodeStack.Pop();
                     n++;
                 }
 
@@ -1519,8 +1549,8 @@ void SmParser::Term()
 
                 SmNode *pFirstNode = NodeStack.Pop();
                 while (n > 0)
-                {   aArray.Get(n - 1)->SetSubNodes(0, pFirstNode);
-                    pFirstNode = aArray.Get(n - 1);
+                {   aArray[n - 1]->SetSubNodes(0, pFirstNode);
+                    pFirstNode = aArray[n - 1];
                     n--;
                 }
                 NodeStack.Push(pFirstNode);
@@ -2113,9 +2143,9 @@ void SmParser::Bracebody(BOOL bIsLeftRight)
     }
 
     // build argument vector in parsing order
-    aNodes.SetSize(nNum);
+    aNodes.resize(nNum);
     for (USHORT i = 0;  i < nNum;  i++)
-        aNodes.Put(nNum - 1 - i, NodeStack.Pop());
+        aNodes[nNum - 1 - i] = NodeStack.Pop();
 
     pBody->SetSubNodes(aNodes);
     pBody->SetScaleMode(bIsLeftRight ? SCALE_HEIGHT : SCALE_NONE);
@@ -2170,10 +2200,10 @@ void SmParser::Binom()
     Sum();
     Sum();
 
-    ExpressionArray.SetSize(2);
+    ExpressionArray.resize(2);
 
     for (int i = 0;  i < 2;  i++)
-        ExpressionArray.Put(2 - (i + 1), NodeStack.Pop());
+        ExpressionArray[2 - (i + 1)] = NodeStack.Pop();
 
     pSNode->SetSubNodes(ExpressionArray);
     NodeStack.Push(pSNode);
@@ -2196,10 +2226,10 @@ void SmParser::Stack()
         }
         while (CurToken.eType == TPOUND);
 
-        ExpressionArray.SetSize(n);
+        ExpressionArray.resize(n);
 
         for (USHORT i = 0; i < n; i++)
-            ExpressionArray.Put(n - (i + 1), NodeStack.Pop());
+            ExpressionArray[n - (i + 1)] = NodeStack.Pop();
 
         if (CurToken.eType != TRGROUP)
             Error(PE_RGROUP_EXPECTED);
@@ -2256,10 +2286,10 @@ void SmParser::Matrix()
 
         long nRC = r * c;
 
-        ExpressionArray.SetSize(nRC);
+        ExpressionArray.resize(nRC);
 
         for (USHORT i = 0; i < (nRC); i++)
-            ExpressionArray.Put((nRC) - (i + 1), NodeStack.Pop());
+            ExpressionArray[(nRC) - (i + 1)] = NodeStack.Pop();
 
         if (CurToken.eType != TRGROUP)
             Error(PE_RGROUP_EXPECTED);
@@ -2289,13 +2319,13 @@ void SmParser::Special()
         // UI uses localized names XML file format does not.)
         if (IsImportSymbolNames())
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
             aNewName = rLSD.GetUiSymbolName( rName );
             bReplace = TRUE;
         }
         else if (IsExportSymbolNames())
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
             aNewName = rLSD.GetExportSymbolName( rName );
             bReplace = TRUE;
         }
@@ -2303,7 +2333,7 @@ void SmParser::Special()
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
         LanguageType nLanguage = GetLanguage();
-        SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+        SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
         const ResStringArray *pFrom = 0;
         const ResStringArray *pTo   = 0;
         if (CONVERT_50_TO_60 == GetConversion())

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosrch.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 /******************************************************************************
  *
  ******************************************************************************/
-struct SfxItemPropertyMap;
+class SfxItemPropertySet;
 class SwXTextDocument;
 class SwSearchProperties_Impl;
 class SfxItemSet;
@@ -68,7 +65,7 @@ class SwXTextSearch : public cppu::WeakImplHelper3
     SwSearchProperties_Impl*    pReplaceProperties;
 
 
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropSet;
     sal_Bool                    bAll  : 1;
     sal_Bool                    bWord : 1;
     sal_Bool                    bBack : 1;

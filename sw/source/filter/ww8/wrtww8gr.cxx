@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtww8gr.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,31 +30,30 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#if OSL_DEBUG_LEVEL > 0
+#   include <cstdio>
+#endif
+
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemiter.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/itemiter.hxx>
+#include "svl/urihelper.hxx"
 
 #include <svtools/embedhlp.hxx>
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-
 
 #include <hintids.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/msoleexp.hxx>
-#include <svx/lrspitem.hxx> // SvxLRSpaceItem
-#include <svx/ulspitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <filter/msfilter/msoleexp.hxx>
+#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
@@ -70,6 +66,8 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 
+#include <writerfilter/doctok/sprmids.hxx>
+
 #include <doc.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
@@ -79,6 +77,7 @@
 #include "escher.hxx"
 
 #include "docsh.hxx"
+#include <cstdio>
 
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
@@ -98,20 +97,18 @@ using namespace nsFieldFlags;
 // in der Graf-Klasse der GrfNode-Ptr gemerkt ( fuers spaetere Ausgeben der
 // Grafiken und Patchen der PicLocFc-Attribute )
 
-Writer& OutWW8_SwGrfNode( Writer& rWrt, SwCntntNode& /*rNode*/ )
+void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
-    SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
-    ASSERT(rWW8Wrt.mpParentFrame, "frame not set!");
-    if (rWW8Wrt.mpParentFrame)
+    OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )\n" );
+    ASSERT( mpParentFrame, "frame not set!" );
+    if ( mpParentFrame )
     {
-        rWW8Wrt.OutGrf(*rWW8Wrt.mpParentFrame);
-        rWW8Wrt.pFib->fHasPic = 1;
+        OutGrf( *mpParentFrame );
+        pFib->fHasPic = 1;
     }
-
-    return rWrt;
 }
 
-bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
+bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
     SwOLENode *pOLENd)
 {
@@ -220,9 +217,9 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 #endif
 }
 
-Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
+void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 {
-    SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
+    OSL_TRACE("WW8Export::OutputOLENode( const SwOLENode& rOLENode )\n" );
     BYTE *pSpecOLE;
     BYTE *pDataAdr;
     short nSize;
@@ -237,7 +234,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
             118, 1                  // sprmCFObj
         };
 
-    if( rWW8Wrt.bWrtWW8 )
+    if ( bWrtWW8 )
     {
         pSpecOLE = aSpecOLE_WW8;
         nSize = sizeof( aSpecOLE_WW8 );
@@ -248,15 +245,14 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
         nSize = sizeof( aSpecOLE_WW6 );
     }
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
-    SwOLENode *pOLENd = rNode.GetOLENode();
 
-    SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenSotStorage(
+    SvStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
         CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL );
 
     if( xObjStg.Is()  )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj(pOLENd->GetOLEObj().GetOleRef());
+        uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
         if( xObj.is() )
         {
             embed::XEmbeddedObject *pObj = xObj.get();
@@ -265,7 +261,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
 
             WW8OleMap *pMap = new WW8OleMap(nPictureId);
             bool bDuplicate = false;
-            WW8OleMaps &rOleMap = rWW8Wrt.GetOLEMap();
+            WW8OleMaps &rOleMap = GetOLEMap();
             USHORT nPos;
             if ( rOleMap.Seek_Entry(pMap, &nPos) )
             {
@@ -287,9 +283,9 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 */
                 if (!bDuplicate)
                 {
-                    sal_Int64 nAspect = pOLENd->GetAspect();
+                    sal_Int64 nAspect = rOLENode.GetAspect();
                     svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-                    rWW8Wrt.GetOLEExp().ExportOLEObject( aObjRef, *xOleStg );
+                    GetOLEExp().ExportOLEObject( aObjRef, *xOleStg );
                     if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
                         ::rtl::OUString aObjInfo( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) );
@@ -312,10 +308,10 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 sServer += xOleStg->GetUserName();
                 sServer += ' ';
 
-                rWW8Wrt.OutField(0, ww::eEMBED, sServer, WRITEFIELD_START |
+                OutputField(0, ww::eEMBED, sServer, WRITEFIELD_START |
                     WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
 
-                rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+                pChpPlc->AppendFkpEntry( Strm().Tell(),
                         nSize, pSpecOLE );
 
                 bool bEndCR = true;
@@ -330,22 +326,22 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 */
                 bool bGraphicNeeded = false;
 
-                if (rWW8Wrt.mpParentFrame)
+                if (mpParentFrame)
                 {
                     bGraphicNeeded = true;
 
-                    if (rWW8Wrt.mpParentFrame->IsInline())
+                    if (mpParentFrame->IsInline())
                     {
                         const SwAttrSet& rSet =
-                            rWW8Wrt.mpParentFrame->GetFrmFmt().GetAttrSet();
+                            mpParentFrame->GetFrmFmt().GetAttrSet();
                         bEndCR = false;
-                        bGraphicNeeded = rWW8Wrt.TestOleNeedsGraphic(rSet,
-                            xOleStg, xObjStg, sStorageName, pOLENd);
+                        bGraphicNeeded = TestOleNeedsGraphic(rSet,
+                            xOleStg, xObjStg, sStorageName, const_cast<SwOLENode*>(&rOLENode));
                     }
                 }
 
                 if (!bGraphicNeeded)
-                    rWW8Wrt.WriteChar(0x1);
+                    WriteChar(0x1);
                 else
                 {
                     /*
@@ -355,26 +351,25 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     has no place to find the dimensions of the ole
                     object, and will not be able to draw it
                     */
-                    rWW8Wrt.OutGrf(*rWW8Wrt.mpParentFrame);
+                    OutGrf(*mpParentFrame);
                 }
 
-                rWW8Wrt.OutField(0, ww::eEMBED, aEmptyStr,
+                OutputField(0, ww::eEMBED, aEmptyStr,
                     WRITEFIELD_END | WRITEFIELD_CLOSE);
 
                 if (bEndCR) //No newline in inline case
-                    rWW8Wrt.WriteCR();
+                    WriteCR();
             }
         }
     }
-    return rWrt;
 }
 
-void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
+void WW8Export::OutGrf(const sw::Frame &rFrame)
 {
     // GrfNode fuer spaeteres rausschreiben der Grafik merken
     pGrf->Insert(rFrame);
 
-    pChpPlc->AppendFkpEntry( pStrm->Tell(), pO->Count(), pO->GetData() );
+    pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
     pO->Remove( 0, pO->Count() );                   // leeren
 
     // --> OD 2007-06-06 #i29408#
@@ -395,7 +390,7 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
         }
         sStr.APPEND_CONST_ASC("\" \\d");
 
-        OutField( 0, ww::eINCLUDEPICTURE, sStr,
+        OutputField( 0, ww::eINCLUDEPICTURE, sStr,
                    WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
     }
     // <--
@@ -407,7 +402,7 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
 
     const SwFrmFmt &rFlyFmt = rFrame.GetFrmFmt();
     const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
-    if( eAn == FLY_IN_CNTNT )
+    if (eAn == FLY_AS_CHAR)
     {
         sal_Int16 eVert = rFlyFmt.GetVertOrient().GetVertOrient();
         if ((eVert == text::VertOrientation::CHAR_CENTER) || (eVert == text::VertOrientation::LINE_CENTER))
@@ -431,7 +426,7 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
                 nHeight-=nFontHeight/20;
 
                 if (bWrtWW8)
-                    Set_UInt16( pArr, 0x4845 );
+                    Set_UInt16( pArr, NS_sprm::LN_CHpsPos );
                 else
                     Set_UInt8( pArr, 101 );
                 Set_UInt16( pArr, -((INT16)nHeight));
@@ -448,7 +443,7 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
 
     // sprmCPicLocation
     if( bWrtWW8 )
-        Set_UInt16( pArr, 0x6a03 );
+        Set_UInt16( pArr, NS_sprm::LN_CPicLocation );
     else
     {
         Set_UInt8( pArr, 68 );
@@ -461,15 +456,15 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
     static BYTE nAttrMagicIdx = 0;
     --pArr;
     Set_UInt8( pArr, nAttrMagicIdx++ );
-    pChpPlc->AppendFkpEntry( pStrm->Tell(), static_cast< short >(pArr - aArr), aArr );
+    pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 
     // --> OD 2007-04-23 #i75464#
     // Check, if graphic isn't exported as-character anchored.
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ( eAn == FLY_AT_CNTNT && ( bWrtWW8 || !bIsInTable ) ) ||
-           eAn == FLY_PAGE ) )
+         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !bIsInTable )) ||
+           (eAn == FLY_AT_PAGE)) )
     // <--
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
@@ -479,17 +474,17 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
         bool bOldGrf = bOutGrf;
         bOutGrf = true;
 
-        Out_SwFmt(rFrame.GetFrmFmt(), false, false, true); // Fly-Attrs
+        OutputFormat( rFrame.GetFrmFmt(), false, false, true ); // Fly-Attrs
 
         bOutGrf = bOldGrf;
-        pPapPlc->AppendFkpEntry( pStrm->Tell(), pO->Count(), pO->GetData() );
+        pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
     // --> OD 2007-06-06 #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
-        OutField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
+        OutputField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
     }
     // <--
 }
@@ -608,7 +603,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.
     */
-    if ( (aGrTwipSz.Width() > USHRT_MAX) || (aGrTwipSz.Height() > USHRT_MAX)
+    if ( (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX)
         || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
     {
         aGrTwipSz.Width() = nWidth;

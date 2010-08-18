@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doccomp.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <vcl/vclenum.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -428,7 +425,7 @@ Compare::Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 )
         SetDiscard( rData2, pDiscard2, pCount1 );
 
         // die Arrays koennen wir wieder vergessen
-        delete pCount1; delete pCount2;
+        delete [] pCount1; delete [] pCount2;
 
         CheckDiscard( rData1.GetLineCount(), pDiscard1 );
         CheckDiscard( rData2.GetLineCount(), pDiscard2 );
@@ -437,7 +434,7 @@ Compare::Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 )
         pMD2 = new MovedData( rData2, pDiscard2 );
 
         // die Arrays koennen wir wieder vergessen
-        delete pDiscard1; delete pDiscard2;
+        delete [] pDiscard1; delete [] pDiscard2;
     }
 
     {
@@ -969,6 +966,29 @@ BOOL SwCompareLine::Compare( const CompareLine& rLine ) const
     return CompareNode( rNode, ((SwCompareLine&)rLine).rNode );
 }
 
+namespace
+{
+    static String SimpleTableToText(const SwNode &rNode)
+    {
+        String sRet;
+        const SwNode* pEndNd = rNode.EndOfSectionNode();
+        SwNodeIndex aIdx( rNode );
+        while (&aIdx.GetNode() != pEndNd)
+        {
+            if (aIdx.GetNode().IsTxtNode())
+            {
+                if (sRet.Len())
+                {
+                    sRet.Append( '\n' );
+                }
+                sRet.Append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
+            }
+            aIdx++;
+        }
+        return sRet;
+    }
+}
+
 BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 {
     if( rSrcNd.GetNodeType() != rDstNd.GetNodeType() )
@@ -989,6 +1009,13 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 
             bRet = ( rTSrcNd.EndOfSectionIndex() - rTSrcNd.GetIndex() ) ==
                    ( rTDstNd.EndOfSectionIndex() - rTDstNd.GetIndex() );
+
+            // --> #i107826#: compare actual table content
+            if (bRet)
+            {
+                bRet = (SimpleTableToText(rSrcNd) == SimpleTableToText(rDstNd));
+            }
+            // <--
         }
         break;
 
@@ -1043,6 +1070,15 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     case ND_ENDNODE:
         bRet = rSrcNd.StartOfSectionNode()->GetNodeType() ==
                rDstNd.StartOfSectionNode()->GetNodeType();
+
+        // --> #i107826#: compare actual table content
+        if (bRet && rSrcNd.StartOfSectionNode()->GetNodeType() == ND_TABLENODE)
+        {
+            bRet = CompareNode(
+                *rSrcNd.StartOfSectionNode(), *rDstNd.StartOfSectionNode());
+        }
+        // <--
+
         break;
     }
     return bRet;
@@ -1059,18 +1095,7 @@ String SwCompareLine::GetText() const
 
     case ND_TABLENODE:
         {
-            const SwNode* pEndNd = rNode.EndOfSectionNode();
-            SwNodeIndex aIdx( rNode );
-            while( &aIdx.GetNode() != pEndNd )
-            {
-                if( aIdx.GetNode().IsTxtNode() )
-                {
-                    if( sRet.Len() )
-                        sRet.Append( '\n' );
-                    sRet.Append( ((SwTxtNode&)rNode).GetExpandTxt() );
-                }
-                aIdx++;
-            }
+            sRet = SimpleTableToText(rNode);
             sRet.InsertAscii( "Tabelle: ", 0 );
         }
         break;
@@ -1196,7 +1221,8 @@ BOOL SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                     SwPaM aCpyPam( rSrcNd, nStt );
                     aCpyPam.SetMark();
                     aCpyPam.GetPoint()->nContent = nSEnd;
-                    aCpyPam.GetDoc()->Copy( aCpyPam, *aPam.GetPoint() );
+                    aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
+                            false );
                     pDoc->DoUndo( bUndo );
                 }
 
@@ -1367,7 +1393,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
     SwNodeIndex aInsPos( *pLineNd, nOffset );
     SwNodeIndex aSavePos( aInsPos, -1 );
 
-    ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, aInsPos );
+    ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, 0, aInsPos );
     rDoc.SetModified();
     aSavePos++;
 
@@ -1386,7 +1412,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
             SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
-            *pCorr->GetPoint() = SwPosition( aTmpPos, 0 );
+            *pCorr->GetPoint() = SwPosition( aTmpPos );
         }
     }
 }
@@ -1454,6 +1480,17 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
+            // --> mst 2010-05-17 #i101009#
+            // prevent redlines that end on structural end node
+            if (& rDoc.GetNodes().GetEndOfContent() ==
+                & pTmp->GetPoint()->nNode.GetNode())
+            {
+                pTmp->GetPoint()->nNode--;
+                SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
+                pTmp->GetPoint()->nContent.Assign( pContentNode,
+                        (pContentNode) ? pContentNode->Len() : 0 );
+            }
+            // <--
 
             rDoc.DeleteRedline( *pTmp, false, USHRT_MAX );
 
@@ -1473,6 +1510,17 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
+            // --> mst 2010-05-17 #i101009#
+            // prevent redlines that end on structural end node
+            if (& rDoc.GetNodes().GetEndOfContent() ==
+                & pTmp->GetPoint()->nNode.GetNode())
+            {
+                pTmp->GetPoint()->nNode--;
+                SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
+                pTmp->GetPoint()->nContent.Assign( pContentNode,
+                        (pContentNode) ? pContentNode->Len() : 0 );
+            }
+            // <--
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
@@ -1624,7 +1672,9 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-        pSrcRedl->GetDoc()->Copy( *(SwPaM*)pSrcRedl, *pDestRedl->GetPoint() );
+        pSrcRedl->GetDoc()->CopyRange(
+                *const_cast<SwPaM*>(static_cast<const SwPaM*>(pSrcRedl)),
+                *pDestRedl->GetPoint(), false );
 
         pDoc->SetRedlineMode_intern( eOld );
         pDoc->DoUndo( bUndo );

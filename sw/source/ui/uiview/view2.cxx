@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view2.cxx,v $
- * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,25 +30,15 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-
-// #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-// #include <com/sun/star/lang/Locale.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-// #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-// #endif
+#include <svtools/filter.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 
-
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/aeitem.hxx>
 
-// #ifndef _FILTER_HXX
-// #include <svtools/filter.hxx>
-// #endif
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
 #include <hintids.hxx>
@@ -59,44 +46,37 @@
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <caption.hxx>
-#include <svtools/PasswordHelper.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/lrspitem.hxx>
-#include  <svx/impgrf.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svtools/txtcmp.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <vcl/msgbox.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/ptitem.hxx>
-#include <svx/linkmgr.hxx>
-#ifndef __RSC //autogen
+#include <svl/whiter.hxx>
+#include <svl/ptitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/errinf.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
@@ -146,11 +126,6 @@
 #include <dbmgr.hxx>
 
 #include <PostItMgr.hxx>
-#include <postit.hxx>
-
-// #ifndef _FRMMGR_HXX
-// #include <frmmgr.hxx>
-// #endif
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
@@ -245,8 +220,8 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     else
     {
         if( !pFlt )
-            pFlt = ::GetGrfFilter();
-        nRes = ::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
+            pFlt = GraphicFilter::GetGraphicFilter();
+        nRes = GraphicFilter::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
     }
 
     if( GRFILTER_OK == nRes )
@@ -437,11 +412,11 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         rSh.StartUndo(UNDO_INSERT, &aRewriter);
 
-        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
+        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, GraphicFilter::GetGraphicFilter() );
 
         // Format ist ungleich Current Filter, jetzt mit auto. detection
         if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, ::GetGrfFilter() );
+            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, GraphicFilter::GetGraphicFilter() );
         if ( rSh.IsFrmSelected() )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );
@@ -564,11 +539,12 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
+                    aPasswdDlg.SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     aPasswdDlg.Execute();
                     String sNewPasswd( aPasswdDlg.GetPassword() );
@@ -584,7 +560,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? nsRedlineMode_t::REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+                pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
             }
         }
         break;
@@ -600,11 +576,12 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             //              message box for wrong password
             Window* pParent;
             const SfxPoolItem* pParentItem;
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
             SfxPasswordDialog aPasswdDlg( pParent );
+            aPasswdDlg.SetMinLen( 1 );
             if(!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
@@ -624,7 +601,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     nOn = 0;
                 }
                 USHORT nMode = pIDRA->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+                pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
                 rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
             }
             else
@@ -641,7 +618,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 if( ((const SfxBoolItem*)pItem)->GetValue() )
                     nMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
 
-                pWrtShell->SetRedlineMode( nMode );
+                pWrtShell->SetRedlineModeAndCheckInsMode( nMode );
             }
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
@@ -1052,7 +1029,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if(bQuery)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
-                SfxHelp::OpenHelpAgent( pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
+                SfxHelp::OpenHelpAgent( &pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
@@ -1233,7 +1210,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (nPageCnt != nCnt)   // Basic benachrichtigen
                 {
                     nPageCnt = nCnt;
-                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, GetViewFrame()->GetObjectShell()), FALSE);
+                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), FALSE);
                 }
             }
             break;
@@ -1246,7 +1223,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_ATTR_ZOOM:
             {
-                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     SvxZoomType eZoom = (SvxZoomType) pVOpt->GetZoomType();
@@ -1268,7 +1245,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_ATTR_VIEWLAYOUT:
             {
-                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     const USHORT nColumns  = pVOpt->GetViewLayoutColumns();
@@ -1282,7 +1259,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_ATTR_ZOOMSLIDER:
             {
-                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     const USHORT nCurrentZoom = pVOpt->GetZoom();
@@ -1394,12 +1371,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 {
                                     ASSERT( !this,
                                         "was ist das fuer ein Verzeichnis?" );
-                                    sStr = pCurrSect->GetName();
+                                    sStr = pCurrSect->GetSectionName();
                                 }
                             }
                             break;
                         default:
-                            sStr = pCurrSect->GetName();
+                            sStr = pCurrSect->GetSectionName();
                             break;
                         }
                     }
@@ -1590,13 +1567,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_ZOOM:
         {
-            if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
             {
                 const SfxItemSet *pSet = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
                 if ( pArgs )
                     pSet = pArgs;
-                else if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                else
                 {
                     const SwViewOption& rViewOptions = *rSh.GetViewOptions();
                     SfxItemSet aCoreSet(pShell->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM, SID_ATTR_VIEWLAYOUT, SID_ATTR_VIEWLAYOUT, 0 );
@@ -1624,7 +1601,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
 
@@ -1661,7 +1638,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case SID_ATTR_VIEWLAYOUT:
         {
             if ( pArgs && !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-                 GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
                 // PAGES01
                 if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, TRUE, &pItem ))
@@ -1684,7 +1661,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case SID_ATTR_ZOOMSLIDER:
         {
-            if ( pArgs && GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            if ( pArgs && ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
                 // PAGES01
                 if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem ))
@@ -1785,8 +1762,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_INSERT:
             SwPostItMgr* pMgr = GetPostItMgr();
-            if (pMgr && pMgr->GetActivePostIt())
-                pMgr->GetActivePostIt()->ToggleInsMode();
+            if ( pMgr && pMgr->HasActiveSidebarWin() )
+            {
+                pMgr->ToggleInsModeOnActiveSidebarWin();
+            }
             else
                 rSh.ToggleInsMode();
             bUp = TRUE;
@@ -1800,9 +1779,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         rBnd.Update(nWhich);
     }
 }
-
-
-
 
 void SwView::InsFrmMode(USHORT nCols)
 {

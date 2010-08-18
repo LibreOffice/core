@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbinsdlg.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,10 @@
 
 #include "dbinsdlg.hxx"
 
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
 
-#ifndef INCLUDED_FLOAT_H
 #include <float.h>
-#define INCLUDED_FLOAT_H
-#endif
+
 #include <hintids.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -63,42 +55,32 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/numuno.hxx>
-#include <svtools/stritem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/numuno.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#ifndef __SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#include <svtools/style.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/style.hxx>
+#include <svl/zformat.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/rulritem.hxx>
 #include <swdbtoolsclient.hxx>
-#ifndef _SWTABLEREP_HXX //autogen
 #include <tabledlg.hxx>
-#endif
 #include <fmtclds.hxx>
 #include <tabcol.hxx>
 #include <uiitems.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <wrtsh.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <tblafmt.hxx>
 #include <cellatr.hxx>
 #include <swtable.hxx>
@@ -111,19 +93,11 @@
 #include <poolfmt.hxx>
 #include <crsskip.hxx>
 
-#ifndef _DBINSDLG_HRC
 #include <dbinsdlg.hrc>
-#endif
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <cfgid.h>
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/uno3.hxx>
@@ -1131,7 +1105,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             for( n = 0; n < nCols; ++n )
             {
                 if( aRbHeadlColnms.IsChecked() )
-                    rSh.SwEditShell::Insert( aColFlds[ n ]->sColumn );
+                {
+                    rSh.SwEditShell::Insert2( aColFlds[ n ]->sColumn );
+                }
                 rSh.GoNextCell();
             }
         }
@@ -1227,7 +1203,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     {
                         rtl::OUString sVal =  xColumn->getString();
                         if(!xColumn->wasNull())
-                            rSh.SwEditShell::Insert( sVal );
+                        {
+                            rSh.SwEditShell::Insert2( sVal );
+                        }
                     }
                 }
                 catch(Exception&
@@ -1379,8 +1357,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                     case _DB_Column::DB_COL_FIELD:
                         {
-                            SwDBField* pFld = (SwDBField*)pDBCol->DB_ColumnData.
-                                                pField->Copy();
+                            SwDBField *const pFld = static_cast<SwDBField *>(
+                                pDBCol->DB_ColumnData.pField->CopyField());
                             double nValue = DBL_MAX;
 
                             Reference< XPropertySet > xColumnProps;
@@ -1647,6 +1625,8 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 /* -----------------------------05.12.00 15:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >&  ) {}
+
 void SwInsertDBColAutoPilot::Commit()
 {
     Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());
@@ -1931,7 +1911,7 @@ void SwInsertDBColAutoPilot::Load()
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
                 for( USHORT m = 0; m < pNewData->aDBColumns.Count() ; ++m )
                 {
-                    const SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
+                    SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
                     if(rGet.sColumn == rSet.sColumn)
                     {
                         if( rGet.bHasFmt && !rGet.bIsDBFmt )
@@ -1943,8 +1923,10 @@ void SwInsertDBColAutoPilot::Load()
                             {
                                 xub_StrLen nCheckPos;
                                 short nType;
-                                rNFmtr.PutEntry( (String&)rGet.sUsrNumFmt, nCheckPos, nType,
+                                String sTmpFmt = rGet.sUsrNumFmt;
+                                rNFmtr.PutEntry( sTmpFmt, nCheckPos, nType,
                                                 rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
+                                rGet.sUsrNumFmt = sTmpFmt;
                             }
                         }
                         break;

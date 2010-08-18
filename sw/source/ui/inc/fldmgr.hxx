@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldmgr.hxx,v $
- * $Revision: 1.16.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _FLDMGR_HXX
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <tools/string.hxx>
 #include "swdllapi.h"
@@ -229,7 +226,7 @@ inline const String& SwFldMgr::GetCurFldPar1() const
 inline const String& SwFldMgr::GetCurFldPar2() const
     { return aCurPar2; }
 
-inline ULONG   SwFldMgr::GetCurFldFmt() const
+inline ULONG SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }
 
 

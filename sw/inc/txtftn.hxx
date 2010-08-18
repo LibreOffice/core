@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtftn.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,26 +38,22 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwTxtFtn : public SwTxtAttr
 {
-    SwNodeIndex *pStartNode;
-    SwTxtNode* pMyTxtNd;
-    USHORT nSeqNo;
-
-    // Zuweisung und Copy-Ctor sind nicht erlaubt.
-    SwTxtFtn& operator=( const SwTxtFtn &rTxtFtn );
-    SwTxtFtn( const SwTxtFtn &rTxtFtn );
+    SwNodeIndex * m_pStartNode;
+    SwTxtNode * m_pTxtNode;
+    USHORT m_nSeqNo;
 
 public:
-    SwTxtFtn( const SwFmtFtn& rAttr, xub_StrLen nStart );
-    ~SwTxtFtn();
+    SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStart );
+    virtual ~SwTxtFtn();
 
-    inline SwNodeIndex *GetStartNode() const { return pStartNode; }
+    inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
     void SetStartNode( const SwNodeIndex *pNode, BOOL bDelNodes = TRUE );
     void SetNumber( const USHORT nNumber, const String* = 0 );
-    void CopyFtn( SwTxtFtn *pDest );
+    void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
 
-    // erfrage und setze den TxtNode Pointer
+    // get and set TxtNode pointer
     inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
         // lege eine neue leere TextSection fuer diese Fussnote an
     void MakeNewTextSection( SwNodes& rNodes );
@@ -72,16 +65,16 @@ public:
 
         // fuer die Querverweise auf Fussnoten
     USHORT SetSeqRefNo();
-    void SetSeqNo( USHORT n )               { nSeqNo = n; } // fuer die Reader
-    USHORT GetSeqRefNo() const              { return nSeqNo; }
+    void SetSeqNo( USHORT n )       { m_nSeqNo = n; }   // for Readers
+    USHORT GetSeqRefNo() const      { return m_nSeqNo; }
 
     static void SetUniqueSeqRefNo( SwDoc& rDoc );
 };
 
 inline const SwTxtNode& SwTxtFtn::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtFtn:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 #endif

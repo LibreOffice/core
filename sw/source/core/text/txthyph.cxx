@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txthyph.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>  // SwViewOptions
@@ -47,7 +44,7 @@
 #include <guess.hxx>    //
 #include <splargs.hxx>  // SwInterHyphInfo
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 extern const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
@@ -89,7 +86,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     ASSERT( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
-    if( !pBreakIt->xBreak.is() )
+    if( !pBreakIt->GetBreakIter().is() )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
     ASSERT( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
@@ -254,7 +251,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         Reference< XHyphenatedWord > xHyphWord;
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nWrdStart,
+            pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
             pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
         nWrdStart = static_cast<xub_StrLen>(aBound.startPos);
         nLen = static_cast<xub_StrLen>(aBound.endPos - nWrdStart);

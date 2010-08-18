@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fltshell.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,9 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <hintids.hxx>
-#ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
-#endif
 #include <tools/datetime.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>
@@ -144,18 +139,36 @@ public:
     void DeleteAndDestroy(Entries::size_type nCnt);
 };
 
+class SwFltAnchorClient;
+
 class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
 {
     SwFrmFmt* pFrmFmt;
+    SwFltAnchorClient * pClient;
+
 public:
     SwFltAnchor(SwFrmFmt* pFlyFmt);
     SwFltAnchor(const SwFltAnchor&);
+    virtual ~SwFltAnchor();
+
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    const SwFrmFmt* GetFrmFmt() const       { return pFrmFmt; }
-          SwFrmFmt* GetFrmFmt()             { return pFrmFmt; }
+    void SetFrmFmt(SwFrmFmt * _pFrmFmt);
+    const SwFrmFmt* GetFrmFmt() const;
+          SwFrmFmt* GetFrmFmt();
 };
+
+class SwFltAnchorClient : public SwClient
+{
+    SwFltAnchor * m_pFltAnchor;
+
+public:
+    SwFltAnchorClient(SwFltAnchor * pFltAnchor);
+
+    virtual void Modify (SfxPoolItem *pOld, SfxPoolItem *pNew);
+};
+
 
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
@@ -242,14 +255,15 @@ public:
 
 class SwFltSection : public SfxPoolItem
 {
-    SwSection* pSection;
+    SwSectionData * m_pSection;
+
 public:
-    SwFltSection( SwSection* pSect );
+    SwFltSection( SwSectionData *const pSect );
     SwFltSection( const SwFltSection& );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    SwSection* GetSection()         { return pSection; }
+    SwSectionData * GetSectionData()    { return m_pSection; }
 };
 // Der WWEndStack verhaelt sich wie der WWControlStck, nur dass die Attribute
 // auf ihm bis ans Ende des Dokuments gehortet werden, falls auf sie noch
@@ -538,7 +552,7 @@ public:
         pOut->EndTable(); }
 // methoden zur verwaltung von Flys
     BOOL IsInFly() { return pOut->IsInFly(); }
-    BOOL BeginFly( RndStdIds eAnchor = FLY_AT_CNTNT, BOOL bAbsolutePos = FALSE );
+    BOOL BeginFly( RndStdIds eAnchor = FLY_AT_PARA, BOOL bAbsolutePos = FALSE );
     void SetFlyAnchor( RndStdIds eAnchor )
         { pOut->SetFlyAnchor( eAnchor ); }
     void SetFlyXPos( short nXPos, sal_Int16 eHRel = com::sun::star::text::RelOrientation::FRAME,

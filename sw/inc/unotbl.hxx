@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotbl.hxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,9 @@
 #ifndef _UNOTBL_HXX
 #define _UNOTBL_HXX
 
-#include <unoobj.hxx>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
@@ -39,17 +38,30 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/table/XAutoFormattable.hpp>
-#include <cppuhelper/implbase10.hxx> // helper for implementations
-#include <cppuhelper/implbase7.hxx> // helper for implementations
-#include <cppuhelper/implbase5.hxx> // helper for implementations
 
-class SwTableBoxFmt;
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase10.hxx>
+
+#include <comphelper/uno3.hxx>
+#include <tools/string.hxx>
+
+#include <calbck.hxx>
+#include <TextCursorHelper.hxx>
+#include <unoevtlstnr.hxx>
+#include <unotext.hxx>
+
+
+class SwUnoCrsr;
+class SwTable;
+class SwTableBox;
 class SwTableLine;
 class SwTableCursor;
 class SwTableBoxFmt;
-class SwTableLine;
-class SwTableCursor;
 class SwChartDataProvider;
+class SwFrmFmt;
 
 
 /* -----------------------------22.09.00 11:10--------------------------------
@@ -84,20 +96,22 @@ class SwXCell : public SwXCellBaseClass,
     friend void   lcl_setValue( SwXCell &rCell, double nVal );
 
 
-    SfxItemPropertySet      aPropSet;
-    SwTableBox*             pBox;       // only set in non-XML import
+    const SfxItemPropertySet*   m_pPropSet;
+    SwTableBox*                 pBox;       // only set in non-XML import
     const SwStartNode*      pStartNode; // only set in XML import
 
     // table position where pBox was found last
     sal_uInt16              nFndPos;
 
-    using SwXText::IsValid;
-
 protected:
     virtual const SwStartNode *GetStartNode() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Bool    IsValid();
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextCursor >
+        CreateCursor()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    bool IsValid() const;
 
     virtual ~SwXCell();
 
@@ -174,7 +188,7 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
 >,
     public SwClient
 {
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
     SwTableLine*            pLine;
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
@@ -214,14 +228,13 @@ typedef cppu::WeakImplHelper3<
                                 ::com::sun::star::lang::XServiceInfo,
                                 ::com::sun::star::beans::XPropertySet
                             > SwXTextTableCursor_Base;
-class SwXTextTableCursor : public SwXTextTableCursor_Base
+class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     ,public SwClient
     ,public OTextCursorHelper
 {
     SwDepend                aCrsrDepend;
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
 
-    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     //  SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
 protected:
@@ -271,6 +284,7 @@ public:
 
     const SwUnoCrsr*            GetCrsr() const;
     SwUnoCrsr*                  GetCrsr();
+    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
 /*-----------------11.12.97 09:38-------------------
@@ -304,8 +318,7 @@ class SwXTextTable : public cppu::WeakImplHelper10
 {
     SwEventListenerContainer        aLstnrCntnr;
     SwChartEventListenerContainer   aChartLstnrCntnr;
-    SfxItemPropertySet          aPropSet;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*       m_pPropSet;
 
     // Descriptor-interface
     SwTableProperties_Impl*     pTableProps;
@@ -431,10 +444,9 @@ class SwXCellRange : public cppu::WeakImplHelper7
     SwChartEventListenerContainer   aChartLstnrCntnr;
 
     SwRangeDescriptor           aRgDesc;
-    SfxItemPropertySet          aPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
 
     SwUnoCrsr*                  pTblCrsr;
-    const SfxItemPropertyMap*   _pMap;
 
     sal_Bool                        bFirstRowAsLabel    :1;
     sal_Bool                        bFirstColumnAsLabel :1;

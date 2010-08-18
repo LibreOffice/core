@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: initui.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +51,7 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
+#include <unotools/syslocale.hxx>
 
 #include <unomid.h>
 
@@ -168,6 +166,7 @@ ShellResource::ShellResource()
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
+    sDurationFormat( SW_RES( STR_DURATION_FORMAT )),
 
     aTOXIndexName(          SW_RES(STR_TOI)),
     aTOXUserName(           SW_RES(STR_TOU)),
@@ -261,7 +260,7 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
             p->SearchAndReplace(C2S("%1"), C2S(",,"));
             p->SearchAndReplace(C2S("%2"), C2S("''"));
 #else
-            LocaleDataWrapper& rLclD = GetAppLocaleData();
+            const LocaleDataWrapper& rLclD = SvtSysLocale().GetLocaleData();
             //unter richtigen Betriebssystemen funktioniert es auch so
             p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
             p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());

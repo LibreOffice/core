@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmoutputpage.cxx,v $
- * $Revision: 1.23.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,10 +48,10 @@
 #include <IDocumentDeviceAccess.hxx>
 #endif
 #include <hintids.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
@@ -68,7 +65,7 @@
 //#include <sfx2/docfilt.hxx>
 //#endif
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
 #endif
@@ -90,7 +87,7 @@
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>
 #include <shellio.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <mmoutputpage.hrc>
@@ -428,6 +425,8 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_aSendAllRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
 
     m_aFromRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
+    //#i63267# printing might be disabled
+    m_aPrintRB.Enable(!Application::GetSettings().GetMiscSettings().GetDisablePrinting());
 }
 
 /*-- 02.04.2004 13:15:44---------------------------------------------------
@@ -693,7 +692,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
     {
         SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
         uno::Reference< frame::XFrame > xFrame =
-                pSourceViewFrm->GetFrame()->GetFrameInterface();
+                pSourceViewFrm->GetFrame().GetFrameInterface();
         xFrame->getContainerWindow()->setVisible(sal_True);
         pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
@@ -856,8 +855,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             //now extract a document from the target document
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
-            SfxViewFrame* pTempFrame = SfxViewFrame::CreateViewFrame( *xTempDocShell, 0, TRUE );
-//            pTempFrame->GetFrame()->Appear();
+            SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
+//            pTempFrame->GetFrame().Appear();
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
@@ -989,6 +988,13 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     rConfigItem.SetPrintRange( (USHORT)nBegin, (USHORT)nEnd );
+    SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
+    SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
+
+    rtl::OUString sPages(rtl::OUString::valueOf( rStartInfo.nStartPageInTarget ));
+    sPages += rtl::OUString::createFromAscii( " - ");
+    sPages += rtl::OUString::valueOf(  rEndInfo.nEndPageInTarget );
+
     SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
     if(m_pTempPrinter)
@@ -998,14 +1004,20 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     }
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
-    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, pObjSh));
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
-    SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
+    //SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
     SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
-    pDis->Execute(SID_PRINTDOCDIRECT,
-            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMergeSilent, 0L);
-    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, pObjSh));
+
+    uno::Sequence < beans::PropertyValue > aProps( 2 );
+    aProps[0]. Name = rtl::OUString::createFromAscii("MonitorVisible");
+    aProps[0].Value <<= sal_True;
+    aProps[1]. Name = rtl::OUString::createFromAscii("Pages");
+    aProps[1]. Value <<= sPages;
+
+    pTargetView->ExecPrint( aProps, false, true );
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_True);
@@ -1242,8 +1254,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         //now extract a document from the target document
         SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
-        SfxViewFrame* pTempFrame = SfxViewFrame::CreateViewFrame( *xTempDocShell, 0, TRUE );
-//        pTempFrame->GetFrame()->Appear();
+        SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
+//        pTempFrame->GetFrame().Appear();
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;

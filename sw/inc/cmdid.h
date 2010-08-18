@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cmdid.h,v $
- * $Revision: 1.84.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,9 +150,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GOTO                 (FN_EDIT + 11)    /* Gehe zu */
 
 #define FN_PASTE                (FN_EDIT + 13)    /* Einfuegen */
-#define FN_PASTESPECIAL         (FN_EDIT + 14)    /* Verknuepfung einfuegen */
 #define FN_PASTESPECIAL_DLG     (FN_EDIT + 15)    /* Verknuepfung einfuegen */
-
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
 #define FN_REPEAT               (FN_EDIT + 22)    /* Letzten Befehl wiederholen */
 #define FN_EDIT_IDX_ENTRY_DLG   (FN_EDIT + 23)    /* Index-Entry bearbeiten */
@@ -325,7 +320,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GLOBAL_OPEN          (FN_VIEW + 47)  /* oeffnen */
 #define FN_GLOBAL_SAVE_CONTENT  (FN_VIEW + 48)  /* Inhalt der Verknuepfung mitspeichern */
 #define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* Navigations-Controller erzeugen */
-#define FN_PREVIEW_PRINT_OPTIONS (FN_VIEW + 50)  /* Optionsdialog Preview drucken */
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* der Tabellencontroller fuer den Zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Zahlenerkennung in Tabellen */
@@ -723,7 +717,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
  --------------------------------------------------------------------*/
 
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* Zeilennumerierung */
-#define FN_THESAURUS_DLG            (FN_EXTRA + 3 )   /* Thesaurus */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* Silbentrennung */
 #define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* Woerter lernen */
 #define FN_DICTIONARY_DLG           (FN_EXTRA + 8 )   /* Woerterbuecher */
@@ -911,6 +904,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_UNO_PARA_CONT_PREV_SUBTREE       (FN_EXTRA2 + 109)
 #define FN_UNO_PARA_NUM_STRING              (FN_EXTRA2 + 110)
+#define FN_UNO_TABLE_NAME                   (FN_EXTRA2 + 111)
+#define FN_UNO_META                         (FN_EXTRA2 + 112)
+#define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
@@ -1258,6 +1254,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_IID_COLRIGHT                 (FN_FRAME + 17)
 
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
+// --> OD 2009-07-13 #i73249#
+#define FN_UNO_TITLE                    (FN_FRAME + 19)
+#define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
+// <--
 
 
 //Member-Ids fuer Fill/SetVariable an Items

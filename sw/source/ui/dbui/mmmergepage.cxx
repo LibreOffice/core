@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmmergepage.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +39,9 @@
 #endif
 #include <dbui.hrc>
 #include <mmmergepage.hrc>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <swabstdlg.hxx>
 
 /*-- 02.04.2004 16:38:45---------------------------------------------------

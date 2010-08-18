@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swdetect.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,10 +50,10 @@
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -70,9 +67,8 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/ihwrapnofilter.hxx>
 
@@ -171,7 +167,7 @@ SwFilterDetect::~SwFilterDetect()
             lDescriptor[nProperty].Value >>= xInteraction;
             nIndexOfInteractionHandler = nProperty;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")) )
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
             nIndexOfDocumentTitle = nProperty;
@@ -217,13 +213,13 @@ SwFilterDetect::~SwFilterDetect()
             BOOL bIsStorage = aMedium.IsStorage();
             if ( bIsStorage )
             {
-                uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage();
+                uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since impossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState() );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;
@@ -299,12 +295,12 @@ SwFilterDetect::~SwFilterDetect()
                                     if ( nIndexOfInteractionHandler != -1 )
                                         lDescriptor[nIndexOfInteractionHandler].Value <<= uno::Reference< XInteractionHandler >( static_cast< task::XInteractionHandler* >( xHandler.get() ) );
 
-                                    aMedium.SetError( ERRCODE_ABORT );
+                                    aMedium.SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                                 }
                             }
                             else
                                 // no interaction, error handling as usual
-                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE );
+                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
                             if ( !bRepairAllowed )
                             {
