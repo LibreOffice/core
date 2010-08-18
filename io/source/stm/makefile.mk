@@ -35,14 +35,14 @@ TARGET = streams.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST = stm
-COMPRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb
+COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
 DLLPRE =
 # --- Files --------------------------------------------------------
-UNOUCRDEP=$(COMPRDB)
-UNOUCRRDB=$(COMPRDB)
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=$(OUT)$/inc$/stm
 INCPRE+= $(UNOUCROUT)
 

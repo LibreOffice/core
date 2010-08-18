@@ -35,7 +35,6 @@ PRJNAME=remotebridges
 TARGET = remotebridge.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = remotebridge
-UNOUCRRDB = $(BUILDSOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk

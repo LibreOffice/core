@@ -36,15 +36,15 @@ TARGET = acceptor.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST = acceptor
-COMPRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb
+COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
 DLLPRE =
 # ------------------------------------------------------------------
 
-UNOUCRDEP=$(COMPRDB)
-UNOUCRRDB=$(COMPRDB)
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=$(OUT)$/inc$/acceptor
 INCPRE+= $(UNOUCROUT)
 

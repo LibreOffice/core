@@ -40,8 +40,8 @@ TARGET=unotypes
 #-------------------------------------------------------------------
 
 CPPUMAKERFLAGS += -C
-UNOUCRDEP=$(BUILDSOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCROUT=$(OUT)$/inc
 
 UNOTYPES = \
