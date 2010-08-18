@@ -157,7 +157,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataPoint::createClone()
 Reference< uno::XInterface > SAL_CALL DataPoint::getParent()
     throw (uno::RuntimeException)
 {
-    return Reference< uno::XInterface >( m_xParentProperties, uno::UNO_QUERY );
+    return Reference< uno::XInterface >( m_xParentProperties.get(), uno::UNO_QUERY );
 }
 
 void SAL_CALL DataPoint::setParent(
@@ -165,7 +165,7 @@ void SAL_CALL DataPoint::setParent(
     throw (lang::NoSupportException,
            uno::RuntimeException)
 {
-    m_xParentProperties.set( Parent, uno::UNO_QUERY );
+    m_xParentProperties = Reference< beans::XPropertySet >( Parent, uno::UNO_QUERY );
 }
 
 // ____ OPropertySet ____
@@ -173,7 +173,7 @@ uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
     // the value set at the data series is the default
-    uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties, uno::UNO_QUERY );
+    uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties.get(), uno::UNO_QUERY );
     if( !xFast.is())
     {
         OSL_ENSURE( m_bNoParentPropAllowed, "data point needs a parent property set to provide values correctly" );

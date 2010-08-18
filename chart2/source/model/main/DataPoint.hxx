@@ -29,6 +29,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -130,7 +131,7 @@ protected:
     void fireModifyEvent();
 
 private:
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::WeakReference<
         ::com::sun::star::beans::XPropertySet >   m_xParentProperties;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
