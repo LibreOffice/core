@@ -231,6 +231,12 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
     double fValue = 0.0;
+    if (mnStringNoValueError == errCellNoValue)
+    {
+        // Requested that all strings result in 0, error handled by caller.
+        SetError( mnStringNoValueError);
+        return fValue;
+    }
     ::rtl::OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
