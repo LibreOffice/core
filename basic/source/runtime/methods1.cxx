@@ -217,14 +217,14 @@ RTLFUNC(CallByName)
 
                 // Setup parameters
                 SbxArrayRef xArray;
-                sal_Int32 nMethParamCount = nParCount - 4;
+                USHORT nMethParamCount = nParCount - 4;
                 if( nMethParamCount > 0 )
                 {
                     xArray = new SbxArray;
-                    for( sal_Int32 i = 0 ; i < nMethParamCount ; i++ )
+                    for( USHORT i = 0 ; i < nMethParamCount ; i++ )
                     {
                         SbxVariable* pPar = rPar.Get( i + 4 );
-                        xArray->Put( pPar, sal::static_int_cast< USHORT >(i+1) );
+                        xArray->Put( pPar, i + 1 );
                     }
                 }
 
