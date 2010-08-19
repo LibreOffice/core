@@ -1150,8 +1150,8 @@ sub get_stand_dir {
         print_error('Found no project to build');
     };
     $initial_module = substr($initial_dir, length($StandDir) + 1);
-    if ($initial_module =~ /\\|\//) {
-        $initial_module = File::Basename::dirname($initial_module);
+    if ($initial_module =~ /(\\|\/)/) {
+        $initial_module = $`;
     };
     $module_paths{$initial_module} = $StandDir . "/$initial_module";
 #    $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
