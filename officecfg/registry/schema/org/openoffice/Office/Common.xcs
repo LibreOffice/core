@@ -4403,8 +4403,13 @@
                   <desc>pixels</desc>
                 </info>
               </enumeration>
+              <enumeration oor:value="-1">
+                <info>
+                  <desc>default (depends to the metric settings in tools/options)</desc>
+                </info>
+              </enumeration>
             </constraints>
-            <value>5</value>
+            <value>-1</value>
           </prop>
           <prop oor:name="PixelExportResolutionUnit" oor:type="xs:int">
             <info>
@@ -4478,8 +4483,13 @@
                   <desc>pica</desc>
                 </info>
               </enumeration>
+              <enumeration oor:value="-1">
+                <info>
+                  <desc>default (depends to the metric settings in tools/options)</desc>
+                </info>
+              </enumeration>
             </constraints>
-            <value>2</value>
+            <value>-1</value>
           </prop>
           <group oor:name="BMP">
 						<info>
