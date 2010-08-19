@@ -3970,5 +3970,10 @@ StackVar ScInterpreter::Interpret()
     while( maxsp-- )
         (*p++)->DecRef();
 
-    return xResult->GetType();
+    StackVar eType = xResult->GetType();
+    if (eType == svMatrix)
+        // Results are immutable in case they would be reused as input for new
+        // interpreters.
+        static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
+    return eType;
 }
