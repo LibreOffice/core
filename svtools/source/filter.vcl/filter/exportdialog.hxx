@@ -156,6 +156,8 @@ private:
     sal_Bool            mbExportSelection;
     sal_Bool            mbPreserveAspectRatio;
 
+    sal_Int32           mnInitialResolutionUnit;
+
     // for pixel graphics it always contains the pixel count
     com::sun::star::awt::Size
                         maResolution;       // it always contains the number of pixels per meter
@@ -197,6 +199,8 @@ private:
 
                         com::sun::star::awt::Size
                             GetOriginalSize();
+
+                        sal_Int32 GetDefaultUnit();
 
 public:
                         ExportDialog( FltCallDialogParameter& rPara,

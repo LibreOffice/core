@@ -76,6 +76,7 @@
 #define FORMAT_SVG      16
 #define FORMAT_SVM      17
 
+#define UNIT_DEFAULT    -1
 #define UNIT_INCH       0
 #define UNIT_CM         1
 #define UNIT_MM         2
@@ -140,6 +141,33 @@ static MapUnit GetMapUnit( sal_Int32 nUnit )
     return aMapUnit;
 }
 
+sal_Int32 ExportDialog::GetDefaultUnit()
+{
+    sal_Int32 nDefaultUnit = UNIT_CM;
+    switch( mrFltCallPara.eFieldUnit )
+    {
+//      case FUNIT_NONE :
+//      case FUNIT_PERCENT :
+//      case FUNIT_CUSTOM :
+        default:                nDefaultUnit = UNIT_CM; break;
+
+        case FUNIT_MILE :       // PASSTHROUGH INTENDED
+        case FUNIT_FOOT :
+        case FUNIT_TWIP :
+        case FUNIT_PICA :       nDefaultUnit = UNIT_INCH; break;
+
+        case FUNIT_KM :         // PASSTHROUGH INTENDED
+        case FUNIT_M :
+        case FUNIT_100TH_MM :   nDefaultUnit = UNIT_CM; break;
+
+        case FUNIT_INCH :       nDefaultUnit = UNIT_INCH; break;
+        case FUNIT_CM :         nDefaultUnit = UNIT_CM; break;
+        case FUNIT_MM :         nDefaultUnit = UNIT_MM; break;
+        case FUNIT_POINT :      nDefaultUnit = UNIT_POINT; break;
+    }
+    return nDefaultUnit;
+}
+
 static basegfx::B2DRange GetShapeRangeForXShape( const uno::Reference< drawing::XShape >& rxShape,
     const uno::Reference< graphic::XPrimitiveFactory2D >& rxPrimitiveFactory2D, const uno::Sequence< beans::PropertyValue >& rViewInformation )
 {
@@ -165,6 +193,9 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
         sal_Int32 nUnit = maLbSizeX.GetSelectEntryPos();
         if ( nUnit < 0 )
             nUnit = UNIT_CM;
+
+        if ( ( mnInitialResolutionUnit == UNIT_DEFAULT ) && ( nUnit == GetDefaultUnit() ) )
+            nUnit = UNIT_DEFAULT;
 
         // updating ui configuration
         if ( mbIsPixelFormat )
@@ -627,6 +658,10 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
     aFilterConfigPath.Append( maExt );
     mpFilterOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
+    mnInitialResolutionUnit = mbIsPixelFormat
+        ? mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportUnit" ) ), UNIT_DEFAULT )
+        : mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "VectorExportUnit" ) ), UNIT_DEFAULT );
+
     mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxFilesizeForRealtimePreview" ) ), 0 );
     maFtEstimatedSize.SetText( String( RTL_CONSTASCII_USTRINGPARAM( " \n " ) ) );
 
@@ -745,9 +780,10 @@ void ExportDialog::createSizeControls( vcl::RowOrColumn& rLayout )
         xColumn->setMinimumSize( nIndex, aLbMax );
     }
 
-    sal_Int32 nUnit = mbIsPixelFormat
-        ? mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportUnit" ) ), UNIT_PIXEL )
-        : mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "VectorExportUnit" ) ), UNIT_CM );
+    sal_Int32 nUnit = mnInitialResolutionUnit;
+    if ( nUnit == UNIT_DEFAULT )
+        nUnit = GetDefaultUnit();
+
     if ( !mbIsPixelFormat )
     {
         maLbSizeX.RemoveEntry( UNIT_PIXEL );        // removing pixel
