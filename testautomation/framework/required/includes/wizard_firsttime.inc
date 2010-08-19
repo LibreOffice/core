@@ -64,10 +64,6 @@ testcase tUpdtWizardFirsttime
         NextBtn.click()
     endif
     
-    
-
-    
-    
     printlog( "Check the license page" )
     kontext "TabFirstStartLicense"
     if ( TabFirstStartLicense.exists( 2 ) ) then
@@ -198,7 +194,7 @@ testcase tUpdtWizardFirsttime
                 LoadQuickstarter.unCheck()
                 printlog( "Closing Tools/Options" )
                 Kontext "OptionenDlg"
-                OptionenDlg.cancel()
+                hCloseDialog( OptionenDlg, "cancel" )
                 printlog( "Restarting program" )
                 call ExitRestartTheOffice()
             else
@@ -218,16 +214,12 @@ testcase tUpdtWizardFirsttime
     endif
         
     Kontext "OptionenDlg"
-    if ( OptionenDlg.exists() ) then
-        OptionenDlg.cancel()
-    endif
+    hCloseDialog( OptionenDlg, "cancel, optional" )
     
     ' due to issue i105248 the Quickstart disabler needs to get called again, because the First Start Wizard resets the veto
     call hDisableQuickstarterAPI()
 
-    do while( getDocumentCount() > 0 )
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
    
 endcase
 

@@ -61,7 +61,6 @@ BOOL bEnableExport;
 BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bUTF8;
-bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -87,7 +86,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     sInputFileName = "";
     sActFileName = "";
     Export::sLanguages = "";
-    bQuiet = false;
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
 
@@ -107,9 +105,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
-        }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-QQ" ) {
-            bQuiet = true;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
@@ -199,10 +194,6 @@ int InitXrmExport( char *pOutput , char* pFilename)
     return 1;
 }
 
-int isQuiet(){
-    if( bQuiet )    return 1;
-    else            return 0;
-}
 /*****************************************************************************/
 int EndXrmExport()
 /*****************************************************************************/
@@ -252,8 +243,6 @@ extern FILE *GetXrmFile()
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 
-            if( !bQuiet )
-                fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 

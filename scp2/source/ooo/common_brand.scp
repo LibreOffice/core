@@ -43,6 +43,8 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_C05_Faq,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extension,
+            gid_Brand_Dir_Share_Extensions,            
+            gid_Brand_Dir_Share_Prereg,    
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Registry,
@@ -97,7 +99,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Printeradmin,
              gid_Brand_File_Share_Xdg_QStart,
              gid_Brand_File_Share_Xdg_StartCenter,
-             gid_Brand_File_Share_Xdg_Writer);
+             gid_Brand_File_Share_Xdg_Writer,
+             gid_Brand_File_Txt_Package);
     Unixlinks = (gid_Brand_Unixlink_BasisLink,
                  gid_Brand_Unixlink_Program,
                  gid_Brand_Unixlink_Unopkg,
@@ -219,6 +222,12 @@ End
 Directory gid_Brand_Dir_Share_Extensions
     ParentID = gid_Brand_Dir_Share;
     DosName = "extensions";
+End
+
+Directory gid_Brand_Dir_Share_Prereg
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "prereg";
+    Styles = (CREATE);
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Install
@@ -641,6 +650,13 @@ File gid_Brand_File_Images_Brand_Zip
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Config;
     Name = "images_brand.zip";
+    Styles = (PACKED);
+End
+
+File gid_Brand_File_Txt_Package
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Extensions;
+    Name = "package.txt";
     Styles = (PACKED);
 End
 

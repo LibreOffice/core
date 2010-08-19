@@ -45,7 +45,7 @@ $(COMMONMISC)$/{$(aux_alllangiso)}$/$(SHELL_PACKAGE)$/%.xhp :| %.xhp
 
 $(COMMONMISC)$/$(TARGET).done : $(HLANGXHPFILES)
 .IF "$(WITH_LANG)"!=""
-    $(AUGMENT_LIBRARY_PATH) $(HELPEX) -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(COMMONMISC) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
+    $(AUGMENT_LIBRARY_PATH) $(HELPEX)  -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(COMMONMISC) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
 .ELSE			# "$(WITH_LANG)"!=""
     cp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES)))) $(COMMONMISC)$/en-US$/$(SHELL_PACKAGE) && $(TOUCH) $@
 .ENDIF			# "$(WITH_LANG)"!=""

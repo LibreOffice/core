@@ -59,7 +59,6 @@ BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bForce;
 BOOL bUTF8;
-bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -83,7 +82,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     bErrorLog       = TRUE;
     bForce          = FALSE;
     bUTF8           = TRUE;
-    bQuiet          = false;
     sPrj            = "";
     sPrjRoot        = "";
     sInputFileName  = "";
@@ -127,9 +125,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( sSwitch == "-F" ) {
             nState = STATE_FORCE;
             bForce = TRUE;
-        }
-        else if ( sSwitch == "-QQ" ) {
-            bQuiet = true;
         }
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -183,10 +178,6 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     // command line is not valid
     return NULL;
-}
-int isQuiet(){
-    if( bQuiet )    return 1;
-    else            return 0;
 }
 /*****************************************************************************/
 int InitCfgExport( char *pOutput , char* pFilename )
@@ -247,7 +238,7 @@ extern FILE *GetCfgFile()
         if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
                 sInputFileName.GetBuffer());
-            exit( 13 );
+            exit( -13 );
         }
         else {
             // this is a valid file which can be opened, so
@@ -264,8 +255,6 @@ extern FILE *GetCfgFile()
 //          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //            printf("sActFileName = %s\n",sActFileName.GetBuffer());
-            if( !bQuiet )
-                fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 
@@ -615,7 +604,7 @@ CfgOutputParser::CfgOutputParser( const ByteString &rOutputFile )
         Error( sError );
         delete pOutputStream;
         pOutputStream = NULL;
-        exit( 13 );
+        exit( -13 );
     }
 }
 
