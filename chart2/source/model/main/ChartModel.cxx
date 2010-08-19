@@ -182,6 +182,16 @@ ChartModel::~ChartModel()
         m_xOldModelAgg->setDelegator( 0 );
 }
 
+void SAL_CALL ChartModel::initialize( const Sequence< Any >& aArguments )
+                throw (uno::Exception, uno::RuntimeException)
+{
+    //#i113722# avoid duplicate creation
+
+    //maybe additional todo?:
+    //support argument "EmbeddedObject"?
+    //support argument "EmbeddedScriptSupport"?
+    //support argument "DocumentRecoverySupport"?
+}
 
 //-----------------------------------------------------------------
 // private methods
