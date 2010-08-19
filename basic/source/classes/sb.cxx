@@ -1143,7 +1143,7 @@ void StarBASIC::DeInitAllModules( void )
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        if( pModule->pImage && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) && !pModule->ISA(SbUserFormModule) )
+        if( pModule->pImage && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
             pModule->pImage->bInit = false;
     }
 
