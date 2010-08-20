@@ -27,23 +27,22 @@
 #*************************************************************************
 
 if [ -z "$TARFILE_LOCATION" ]; then
-    echo "ERROR: no destination defined! please set TARFILE_LOCATION!"
-    exit
+    echo "Error: No destination defined, you probably forgot to source the environment?"
+    exit 1
 fi
 
 if [ ! -d "$TARFILE_LOCATION" ]; then
     mkdir $TARFILE_LOCATION
 fi
 if [ ! -d "$TARFILE_LOCATION" ]; then
-    echo "ERROR: can't create"
-    exit
+    echo "Error: Cannot create $TARFILE_LOCATION."
+    exit 1
 fi
 
-if [ -z "$1" ]; then
-    echo "ERROR: parameter missing!"
-    echo "usage: $0 <fetch list>"
-    echo "first line must define the base url."
-    exit
+FILELIST="$1"
+if [ -z "$FILELIST" ]; then
+    echo "No filelist provided, using the default ooo.lst."
+    FILELIST="ooo.lst"
 fi
 
 # check for wget and md5sum
@@ -106,7 +105,7 @@ start_dir=`pwd`
 logfile=$TARFILE_LOCATION/fetch.log
 date >> $logfile
 
-filelist=`cat $1`
+filelist=`cat $FILELIST`
 mkdir -p $TARFILE_LOCATION/tmp
 cd $TARFILE_LOCATION/tmp
 echo $$ > fetch-running

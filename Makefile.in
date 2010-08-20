@@ -15,3 +15,10 @@ clean:
 	. ./*Env.Set.sh && \
 	dmake clean
 	
+dev-install:
+	. ./*Env.Set.sh && \
+		cd @SRC_ROOT@/instsetoo_native/util && \
+		LOCALINSTALLDIR=@SRC_ROOT@/install dmake openoffice_en-US PKGFORMAT=installed && \
+		$SOLARENV/bin/linkoo @SRC_ROOT@/install @SRC_ROOT@ && \
+		echo && \
+		echo "Developer installation finished in @SRC_ROOT@"

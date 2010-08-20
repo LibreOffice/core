@@ -2097,16 +2097,16 @@ if ( $Warning ne "" )
    print "$newline";
 }
 
-print "*$newline* USAGE: $newline";
-print "* Source $outfile (in tcsh)";
-print " or $outfile.sh (in sh)";
-print "$newline";
-print "* in order to set up the build-environment variables.$newline";
-for ( $tmp = 0; $tmp < 2; $tmp++ ) 
-{  print "* $newline";
-}
 print "*********************************************************".
       "******************* $newline";
+
+print "\nTo build, do:\n";
+print "  \$ source $outfile.sh\n";
+print "  \$ ./bootstrap\n";
+print "  \$ ./fetch_tarballs.sh\n";
+print "  \$ make\n\n";
+print "Developer installation (after you have built):\n";
+print "  \$ make dev-install\n\n";
 
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
@@ -2130,7 +2130,6 @@ if (rename( $bootfile, $tmp ) ne 1)
 }
 
 print "Configure completed\n";
-print "You may now run ./bootstrap in $SRC_ROOT\n";
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
 }
