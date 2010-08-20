@@ -611,7 +611,7 @@ PrinterJob::EndJob ()
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
         if (0 == rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName,
-            maJobTitle, pDestFILE, m_aDocumentJobData ))
+            maJobTitle, pDestFILE, m_aDocumentJobData, true ))
         {
             bSuccess = sal_False;
         }

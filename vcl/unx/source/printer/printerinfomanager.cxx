@@ -328,7 +328,7 @@ void PrinterInfoManager::initialize()
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
+            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", (int)m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
         }
     }
@@ -1105,7 +1105,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     return popen (aShellCommand.getStr(), "w");
 }
 
-int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/ )
+int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
 {
     return (0 == pclose( pFile ));
 }

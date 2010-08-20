@@ -865,7 +865,7 @@ struct less_ppd_key : public ::std::binary_function<double, double, bool>
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
 
-void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const
+void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const
 {
     rNumOptions = 0;
     *rOptions = NULL;
@@ -901,13 +901,19 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
         rtl::OString aVal( rtl::OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
         rNumOptions = m_pCUPSWrapper->cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
     }
+    if( ! bBanner )
+    {
+        rNumOptions = m_pCUPSWrapper->cupsAddOption( "job-sheets", "none", rNumOptions, (cups_option_t**)rOptions );
+    }
 }
 
-int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
+int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
 {
-    OSL_TRACE( "endSpool: %s, %s",
+    OSL_TRACE( "endSpool: %s, %s, copy count = %d",
                rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
-               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
+               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rDocumentJobData.m_nCopies
+               );
 
     int nJobID = 0;
 
@@ -918,7 +924,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
     if( dest_it == m_aCUPSDestMap.end() )
     {
         OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
-        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData );
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner );
     }
 
     #ifdef ENABLE_CUPS
@@ -931,7 +937,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
-        getOptionsFromDocumentSetup( rDocumentJobData, nNumOptions, (void**)&pOptions );
+        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
 
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
         nJobID = m_pCUPSWrapper->cupsPrintFile( pDest->name,

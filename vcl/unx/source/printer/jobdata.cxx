@@ -84,6 +84,21 @@ void JobData::setCollate( bool bCollate )
     }
 }
 
+bool JobData::setPaper( int i_nWidth, int i_nHeight )
+{
+    bool bSuccess = false;
+    if( m_pParser )
+    {
+        rtl::OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
+
+        const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
+
+        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
+    }
+    return bSuccess;
+}
+
 bool JobData::getStreamBuffer( void*& pData, int& bytes )
 {
     // consistency checks
