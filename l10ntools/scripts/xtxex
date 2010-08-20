@@ -32,8 +32,8 @@ exit 1
 fi
 
 if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
-    exec python  $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
+    exec python -B  $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
 else
-    exec python  $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
+    exec python -B $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
 fi
 
