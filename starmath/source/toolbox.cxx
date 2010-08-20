@@ -143,7 +143,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
-    nActiveCategoryRID = sal::static_int_cast< USHORT >(-1);
+    nActiveCategoryRID = USHRT_MAX;
 
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
 
@@ -163,9 +163,6 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     }
 
     FreeResource();
-
-    ApplyImageLists( RID_UNBINOPS_CAT );
-    SetCategory( RID_UNBINOPS_CAT );
 }
 
 SmToolBoxWindow::~SmToolBoxWindow()
@@ -253,7 +250,7 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
         AdjustPosSize( bSetPosition );
         bSetPosition = FALSE;
 
-        SetCategory(RID_UNBINOPS_CAT);
+        SetCategory( nActiveCategoryRID == USHRT_MAX ? RID_UNBINOPS_CAT : nActiveCategoryRID );
     }
     //... otherwise the base class will remember the last position of the window
     SfxFloatingWindow::StateChanged( nStateChange );
@@ -327,63 +324,60 @@ void SmToolBoxWindow::GetFocus()
 void SmToolBoxWindow::SetCategory(USHORT nCategoryRID)
 {
     if (nCategoryRID != nActiveCategoryRID)
-    {
         ApplyImageLists( nCategoryRID );
 
-        USHORT nLines;
-        // check for valid resource id
-        switch (nCategoryRID)
-        {
-            case RID_UNBINOPS_CAT :     nLines = 4; break;
-            case RID_RELATIONS_CAT:     nLines = 5; break;
-            case RID_SETOPERATIONS_CAT: nLines = 5; break;
-            case RID_FUNCTIONS_CAT:     nLines = 5; break;
-            case RID_OPERATORS_CAT:     nLines = 3; break;
-            case RID_ATTRIBUTES_CAT:    nLines = 5; break;
-            case RID_MISC_CAT:          nLines = 4; break;
-            case RID_BRACKETS_CAT:      nLines = 5; break;
-            case RID_FORMAT_CAT:        nLines = 3; break;
-            default:
-                // nothing to be done
-                return;
-        }
-
-        pToolBoxCmd->Hide();
-
-        sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-        DBG_ASSERT( nIdx >= 0, "unkown category" );
-        if (nIdx >= 0)
-            pToolBoxCmd = vToolBoxCategories[nIdx];
-
-        // calculate actual size of window to use
-        Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
-        Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( nLines ) );
-        DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
-        // main window settings
-        Size  aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + aCmdSize.Height() + 3);
-        SetOutputSizePixel( aWndSize );
-
-        if (nActiveCategoryRID)
-            aToolBoxCat.CheckItem(nActiveCategoryRID, FALSE);
-        nActiveCategoryRID = nCategoryRID;
-        aToolBoxCat.CheckItem(nActiveCategoryRID, TRUE);
-
-        pToolBoxCmd->Show();
+    USHORT nLines;
+    // check for valid resource id
+    switch (nCategoryRID)
+    {
+        case RID_UNBINOPS_CAT :     nLines = 4; break;
+        case RID_RELATIONS_CAT:     nLines = 5; break;
+        case RID_SETOPERATIONS_CAT: nLines = 5; break;
+        case RID_FUNCTIONS_CAT:     nLines = 5; break;
+        case RID_OPERATORS_CAT:     nLines = 3; break;
+        case RID_ATTRIBUTES_CAT:    nLines = 5; break;
+        case RID_MISC_CAT:          nLines = 4; break;
+        case RID_BRACKETS_CAT:      nLines = 5; break;
+        case RID_FORMAT_CAT:        nLines = 3; break;
+        default:
+            // nothing to be done
+            return;
     }
+
+    pToolBoxCmd->Hide();
+
+    sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
+    DBG_ASSERT( nIdx >= 0, "unkown category" );
+    if (nIdx >= 0)
+        pToolBoxCmd = vToolBoxCategories[nIdx];
+
+    // calculate actual size of window to use
+    Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
+    Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( nLines ) );
+    DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
+    // main window settings
+    Size  aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + aCmdSize.Height() + 3);
+    SetOutputSizePixel( aWndSize );
+
+    if (nActiveCategoryRID)
+        aToolBoxCat.CheckItem(nActiveCategoryRID, FALSE);
+    nActiveCategoryRID = nCategoryRID;
+    aToolBoxCat.CheckItem(nActiveCategoryRID, TRUE);
+
+    pToolBoxCmd->Show();
 }
 
 
-IMPL_LINK_INLINE_START( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
+IMPL_LINK( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
 {
     int nItemId = pToolBox->GetCurItemId();
     if (nItemId != 0)
         SetCategory( sal::static_int_cast< USHORT >(nItemId) );
     return 0;
 }
-IMPL_LINK_INLINE_END( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
 
 
-IMPL_LINK_INLINE_START( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
+IMPL_LINK( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 {
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
@@ -392,7 +386,6 @@ IMPL_LINK_INLINE_START( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
                 new SfxInt16Item(SID_INSERTCOMMAND, pToolBox->GetCurItemId()), 0L);
     return 0;
 }
-IMPL_LINK_INLINE_END( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 
 
 /**************************************************************************/
