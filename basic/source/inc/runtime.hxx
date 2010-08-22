@@ -276,6 +276,8 @@ struct RefSaveItem
 
 class SbiRuntime
 {
+    friend void SbRtl_CallByName( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+
     typedef void( SbiRuntime::*pStep0 )();
     typedef void( SbiRuntime::*pStep1 )( UINT32 nOp1 );
     typedef void( SbiRuntime::*pStep2 )( UINT32 nOp1, UINT32 nOp2 );

@@ -271,6 +271,7 @@ extern RTLFUNC(AboutStarBasic);
 extern RTLFUNC(LoadPicture);
 extern RTLFUNC(SavePicture);
 
+extern RTLFUNC(CallByName);
 extern RTLFUNC(CBool); // JSM
 extern RTLFUNC(CByte); // JSM
 extern RTLFUNC(CCur); // JSM

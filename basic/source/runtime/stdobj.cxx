@@ -94,6 +94,10 @@ static Methods aMethods[] = {
 { "Blue",        SbxINTEGER,   1 | _FUNCTION, RTLNAME(Blue),0               },
   { "RGB-Value",     SbxLONG, 0,NULL,0 },
 
+{ "CallByName",     SbxVARIANT,   3 | _FUNCTION, RTLNAME(CallByName),0 },
+  { "Object",       SbxOBJECT,  0,NULL,0 },
+  { "ProcedureName",SbxSTRING,  0,NULL,0 },
+  { "CallType",     SbxINTEGER, 0,NULL,0 },
 { "CBool",          SbxBOOL,      1 | _FUNCTION, RTLNAME(CBool),0           },
   { "expression",   SbxVARIANT, 0,NULL,0 },
 { "CByte",          SbxBYTE,      1 | _FUNCTION, RTLNAME(CByte),0           },
