@@ -295,54 +295,7 @@ VbaApplicationBase::getVersion() throw (uno::RuntimeException)
 
 void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const uno::Any& varg1, const uno::Any& varg2, const uno::Any& varg3, const uno::Any& varg4, const uno::Any& varg5, const uno::Any& varg6, const uno::Any& varg7, const uno::Any& varg8, const uno::Any& varg9, const uno::Any& varg10, const uno::Any& varg11, const uno::Any& varg12, const uno::Any& varg13, const uno::Any& varg14, const uno::Any& varg15, const uno::Any& varg16, const uno::Any& varg17, const uno::Any& varg18, const uno::Any& varg19, const uno::Any& varg20, const uno::Any& varg21, const uno::Any& varg22, const uno::Any& varg23, const uno::Any& varg24, const uno::Any& varg25, const uno::Any& varg26, const uno::Any& varg27, const uno::Any& varg28, const uno::Any& varg29, const uno::Any& varg30 ) throw (uno::RuntimeException)
 {
-    ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii("/");
-    ::rtl::OUString sMacroSeparator = ::rtl::OUString::createFromAscii("!");
-    ::rtl::OUString sMacro_only_Name;
-    sal_Int32 Position_MacroSeparator = MacroName.indexOf(sMacroSeparator);
-
-    uno::Reference< frame::XModel > aMacroDocumentModel;
-    if (-1 != Position_MacroSeparator)
-    {
-        uno::Reference< container::XEnumerationAccess > xComponentEnumAccess;
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager = mxContext->getServiceManager();
-        try
-        {
-            uno::Reference< frame::XDesktop > xDesktop (xServiceManager->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )),mxContext ), uno::UNO_QUERY_THROW );
-            xComponentEnumAccess = xDesktop->getComponents();
-        }
-        catch(uno::Exception&)
-        {
-        }
-
-        //rem look for the name of the document in the cmpoonents collection
-        uno::Reference < container::XEnumeration > xEnum = xComponentEnumAccess->createEnumeration();
-
-        // iterate through the collection by name
-        while (xEnum->hasMoreElements())
-        {
-            // get the next element as a UNO Any
-            uno::Any aComponentHelper = xEnum->nextElement();
-            uno::Reference <frame::XModel> xDocModel( aComponentHelper, uno::UNO_QUERY_THROW );
-
-            // get the name of the sheet from its XNamed interface
-            ::rtl::OUString  aName = xDocModel->getURL();
-
-
-            if (aName.match(MacroName.copy(0,Position_MacroSeparator-1),aName.lastIndexOf(sSeparator)+1))
-            {
-                aMacroDocumentModel = xDocModel;
-                sMacro_only_Name = MacroName.copy(Position_MacroSeparator+1);
-            }
-        }
-    }
-    else
-    {
-        aMacroDocumentModel = getCurrentDocument();
-        sMacro_only_Name = MacroName.copy(0);
-    }
-
-
-    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( aMacroDocumentModel ), sMacro_only_Name );
+    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( getCurrentDocument() ), MacroName );
     if( aMacroInfo.IsResolved() )
     {
         // handle the arguments

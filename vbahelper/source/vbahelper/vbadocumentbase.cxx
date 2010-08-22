@@ -74,7 +74,8 @@ VbaDocumentBase::getName() throw (uno::RuntimeException)
         uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
         xProps->getPropertyValue(sTitle ) >>= sName;
         sal_Int32 pos = 0;
-        sName = sName.getToken(0,' ',pos);
+        sName = sName.getToken(0,'-',pos);
+        sName = sName.trim();
     }
     return sName;
 }
