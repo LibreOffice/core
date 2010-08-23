@@ -135,7 +135,7 @@ public class Skeleton
         try
         {
             XComponent aDocument = SOF.loadDocument(sREADME);
-            complex.junitskeleton.helper.justatest.shortWait();
+            complex.junitskeleton.justatest.shortWait();
             XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, aDocument);
             xClose.close(true);
         }

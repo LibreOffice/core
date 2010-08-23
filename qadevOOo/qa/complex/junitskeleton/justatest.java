@@ -3,7 +3,7 @@
  * @copyright: Sun Microsystems Inc. 2010
  */
 
-package complex.junitskeleton.helper;
+package complex.junitskeleton;
 
 public class justatest /* extends *//* implements */ {
     //public static void main( String[] argv ) {
