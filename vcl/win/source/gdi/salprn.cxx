@@ -1798,8 +1798,11 @@ WIN_BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
         MSG aMsg;
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
-            TranslateMessage( &aMsg );
-            ImplDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplDispatchMessage( &aMsg );
+            }
             i++;
             if ( i > 15 )
                 bWhile = FALSE;
@@ -2060,8 +2063,12 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
         MSG aMsg;
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
-            TranslateMessage( &aMsg );
-            ImplDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplDispatchMessage( &aMsg );
+            }
+
             i++;
             if ( i > 15 )
                 bWhile = FALSE;

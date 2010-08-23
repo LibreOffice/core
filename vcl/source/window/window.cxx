@@ -4792,6 +4792,13 @@ void Window::doLazyDelete()
 }
 
 // -----------------------------------------------------------------------
+void Window::InterceptChildWindowKeyDown( sal_Bool bIntercept )
+{
+    if( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->InterceptChildWindowKeyDown( bIntercept );
+}
+
+// -----------------------------------------------------------------------
 
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
