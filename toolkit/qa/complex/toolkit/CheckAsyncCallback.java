@@ -29,7 +29,6 @@ package complex.toolkit;
 
 // import complexlib.ComplexTestCase;
 import util.SOfficeFactory;
-import complex.toolkit.interface_tests._XRequestCallback;
 // import complex.toolkit.CallbackClass;
 import com.sun.star.awt.XRequestCallback;
 import com.sun.star.lang.XMultiServiceFactory;

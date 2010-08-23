@@ -36,13 +36,21 @@ TARGET = qa_complex_toolkit
 .IF "$(OOO_JUNIT_JAR)" != ""
 PACKAGE = complex/toolkit
 
-JAVATESTFILES       = CheckAccessibleStatusBar.java CheckAccessibleStatusBarItem.java CheckAsyncCallback.java CallbackClass.java
-JAVAFILES = $(JAVATESTFILES)
+JAVATESTFILES       = CheckAccessibleStatusBar.java \
+    CheckAccessibleStatusBarItem.java \
+    CheckAsyncCallback.java \
+    CallbackClass.java
+
+JAVAFILES = $(JAVATESTFILES) \
+ _XAccessibleComponent.java \
+ _XAccessibleContext.java \
+ _XAccessibleEventBroadcaster.java \
+ _XAccessibleExtendedComponent.java \
+ _XAccessibleText.java \
+ _XRequestCallback.java
+
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-SUBDIRS		= interface_tests
 
 .END
 

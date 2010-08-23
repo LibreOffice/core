@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.toolkit.interface_tests;
+package complex.toolkit;
 
 // import share.LogWriter;
 import com.sun.star.awt.Point;
