@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.imageManager.interfaces;
+package complex.imageManager;
 
 
 

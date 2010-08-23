@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
-import com.sun.star.beans.XPropertiesChangeListener;
-import com.sun.star.beans.XPropertiesChangeNotifier;
+import com.sun.star.beans.XPropertySetInfoChangeListener;
+import com.sun.star.beans.XPropertySetInfoChangeNotifier;
 import share.LogWriter;
 
 /**
- * Check the XPropertiesChangeNotifier
+ *
  */
-public class _XPropertiesChangeNotifier {
-    public XPropertiesChangeNotifier oObj = null;
+public class _XPropertySetInfoChangeNotifier {
+    public XPropertySetInfoChangeNotifier oObj = null;
     public LogWriter log = null;
 
-    PropertiesChangeListener listener = new PropertiesChangeListener();
+    PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
     String[] args = null;
 
 
     public boolean _addPropertiesChangeListener() {
-        oObj.addPropertiesChangeListener(args, listener);
+        oObj.addPropertySetInfoChangeListener(listener);
         return true;
     }
 
     public boolean _removePropertiesChangeListener() {
-        oObj.removePropertiesChangeListener(args, listener);
+        oObj.removePropertySetInfoChangeListener(listener);
         return true;
     }
 
-    private class PropertiesChangeListener implements XPropertiesChangeListener {
+    private class PropertySetInfoChangeListener implements XPropertySetInfoChangeListener {
         public boolean disposed = false;
         public boolean propChanged = false;
 
@@ -59,9 +59,9 @@ public class _XPropertiesChangeNotifier {
             disposed = true;
         }
 
-        public void propertiesChange(com.sun.star.beans.PropertyChangeEvent[] propertyChangeEvent) {
-            propChanged = true;
+        public void propertySetInfoChange(com.sun.star.beans.PropertySetInfoChangeEvent propertySetInfoChangeEvent) {
         }
 
     }
+
 }

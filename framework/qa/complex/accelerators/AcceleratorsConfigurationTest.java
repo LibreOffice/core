@@ -46,7 +46,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XChangesBatch;
 
-import complex.accelerators.helper.KeyMapping;
+// import complex.accelerators.KeyMapping;
 
 
 // ---------- junit imports -----------------

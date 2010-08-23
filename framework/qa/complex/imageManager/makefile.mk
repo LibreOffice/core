@@ -41,13 +41,16 @@ JAVATESTFILES = \
  CheckImageManager.java
 
 # put here all other files
-JAVAFILES = $(JAVATESTFILES)
+JAVAFILES = $(JAVATESTFILES) \
+ _XComponent.java \
+ _XImageManager.java \
+ _XInitialization.java \
+ _XTypeProvider.java \
+ _XUIConfiguration.java \
+ _XUIConfigurationPersistence.java
 
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-# subdirectories
-SUBDIRS         = interfaces
 
 # Sample how to debug
 # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y

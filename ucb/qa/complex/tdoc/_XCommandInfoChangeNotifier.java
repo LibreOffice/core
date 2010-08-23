@@ -24,44 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
-import com.sun.star.beans.XPropertySetInfoChangeListener;
-import com.sun.star.beans.XPropertySetInfoChangeNotifier;
+import com.sun.star.ucb.XCommandInfoChangeListener;
+import com.sun.star.ucb.XCommandInfoChangeNotifier;
 import share.LogWriter;
 
 /**
  *
  */
-public class _XPropertySetInfoChangeNotifier {
-    public XPropertySetInfoChangeNotifier oObj = null;
+public class _XCommandInfoChangeNotifier {
+    public XCommandInfoChangeNotifier oObj = null;
     public LogWriter log = null;
+    private CommandInfoChangeListener listener = new CommandInfoChangeListener();
 
-    PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
-    String[] args = null;
-
-
-    public boolean _addPropertiesChangeListener() {
-        oObj.addPropertySetInfoChangeListener(listener);
+    public boolean _addCommandInfoChangeListener() {
+        oObj.addCommandInfoChangeListener(listener);
         return true;
     }
 
-    public boolean _removePropertiesChangeListener() {
-        oObj.removePropertySetInfoChangeListener(listener);
+    public boolean _removeCommandInfoChangeListener() {
+        oObj.removeCommandInfoChangeListener(listener);
         return true;
     }
 
-    private class PropertySetInfoChangeListener implements XPropertySetInfoChangeListener {
-        public boolean disposed = false;
-        public boolean propChanged = false;
+    private class CommandInfoChangeListener implements XCommandInfoChangeListener {
+        boolean disposing = false;
+        boolean infoChanged = false;
+
+        public void commandInfoChange(com.sun.star.ucb.CommandInfoChangeEvent commandInfoChangeEvent) {
+            infoChanged = true;
+        }
 
         public void disposing(com.sun.star.lang.EventObject eventObject) {
-            disposed = true;
-        }
-
-        public void propertySetInfoChange(com.sun.star.beans.PropertySetInfoChangeEvent propertySetInfoChangeEvent) {
+            disposing = true;
         }
 
     }
-
 }

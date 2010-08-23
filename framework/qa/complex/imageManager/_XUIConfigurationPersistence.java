@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.imageManager.interfaces;
+package complex.imageManager;
 
 import com.sun.star.embed.XStorage;
 import com.sun.star.ui.XUIConfigurationPersistence;

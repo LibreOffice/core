@@ -42,16 +42,6 @@ import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.uno.UnoRuntime;
-import complex.tdoc.interfaces._XChild;
-import complex.tdoc.interfaces._XCommandInfoChangeNotifier;
-import complex.tdoc.interfaces._XComponent;
-import complex.tdoc.interfaces._XServiceInfo;
-import complex.tdoc.interfaces._XTypeProvider;
-import complex.tdoc.interfaces._XCommandProcessor;
-import complex.tdoc.interfaces._XContent;
-import complex.tdoc.interfaces._XPropertiesChangeNotifier;
-import complex.tdoc.interfaces._XPropertyContainer;
-import complex.tdoc.interfaces._XPropertySetInfoChangeNotifier;
 import util.WriterTools;
 
 import org.junit.After;

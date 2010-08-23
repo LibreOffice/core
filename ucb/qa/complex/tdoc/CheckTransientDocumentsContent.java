@@ -51,6 +51,7 @@ import static org.junit.Assert.*;
  *
  */
 public class CheckTransientDocumentsContent {
+    // TODO: document doesn't exists
     private final String testDocuments[] = new String[]{"sForm.sxw"};//, "chinese.sxw", "Iterator.sxw"};
     private final int countDocs = testDocuments.length;
     private XMultiServiceFactory xMSF = null;

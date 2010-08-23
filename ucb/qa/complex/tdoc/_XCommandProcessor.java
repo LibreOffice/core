@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySetInfo;

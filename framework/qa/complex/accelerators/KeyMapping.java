@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.accelerators.helper;
+package complex.accelerators;
 
 import java.util.HashMap;
 

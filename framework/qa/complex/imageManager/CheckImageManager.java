@@ -1,11 +1,5 @@
 package complex.imageManager;
 
-import complex.imageManager.interfaces._XComponent;
-import complex.imageManager.interfaces._XImageManager;
-import complex.imageManager.interfaces._XInitialization;
-import complex.imageManager.interfaces._XTypeProvider;
-import complex.imageManager.interfaces._XUIConfiguration;
-import complex.imageManager.interfaces._XUIConfigurationPersistence;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -105,12 +99,12 @@ public class CheckImageManager  {
         assertTrue(testObjectName + "::XImageManager.replaceImages", _xImage._replaceImages());
         assertTrue(testObjectName + "::XImageManager.reset", _xImage._reset());
 
-        XTypeProvider xType = (XTypeProvider)UnoRuntime.queryInterface(XTypeProvider.class, xImageManager);
+        XTypeProvider xType = UnoRuntime.queryInterface(XTypeProvider.class, xImageManager);
         _XTypeProvider _xType = new _XTypeProvider(param, xType);
         assertTrue(testObjectName + "::XTypeProvider.getImplementationId", _xType._getImplementationId());
         assertTrue(testObjectName + "::XTypeProvider.getTypes", _xType._getTypes());
 
-        XUIConfiguration xUIConfig = (XUIConfiguration)UnoRuntime.queryInterface(XUIConfiguration.class, xImageManager);
+        XUIConfiguration xUIConfig = UnoRuntime.queryInterface(XUIConfiguration.class, xImageManager);
         _XUIConfiguration _xUIConfig = new _XUIConfiguration(param, xUIConfig);
         _xUIConfig.before();
         assertTrue(testObjectName + "::XUIConfig.addConfigurationListener", _xUIConfig._addConfigurationListener());
@@ -126,7 +120,7 @@ public class CheckImageManager  {
         assertTrue(testObjectName + "::XUIConfigPersistence.store", _xUIConfigPersistence._store());
         assertTrue(testObjectName + "::XUIConfigPersistence.storeToStorage", _xUIConfigPersistence._storeToStorage());
 
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(XComponent.class, xImageManager);
+        XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xImageManager);
         _XComponent _xComp = new _XComponent(param, xComp);
         _xComp.before();
         assertTrue(testObjectName + "::XComponent.addEventListener", _xComp._addEventListener());

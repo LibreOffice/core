@@ -37,7 +37,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
-import complex.dispatches.helper.Interceptor;
+import complex.dispatches.Interceptor;
 import java.util.HashMap;
 
 

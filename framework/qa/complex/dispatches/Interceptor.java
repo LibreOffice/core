@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.dispatches.helper;
+package complex.dispatches;
 
 // __________ Imports __________
 

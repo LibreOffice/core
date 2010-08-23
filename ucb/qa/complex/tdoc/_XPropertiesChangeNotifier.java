@@ -24,40 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
-import com.sun.star.ucb.XCommandInfoChangeListener;
-import com.sun.star.ucb.XCommandInfoChangeNotifier;
+import com.sun.star.beans.XPropertiesChangeListener;
+import com.sun.star.beans.XPropertiesChangeNotifier;
 import share.LogWriter;
 
 /**
- *
+ * Check the XPropertiesChangeNotifier
  */
-public class _XCommandInfoChangeNotifier {
-    public XCommandInfoChangeNotifier oObj = null;
+public class _XPropertiesChangeNotifier {
+    public XPropertiesChangeNotifier oObj = null;
     public LogWriter log = null;
-    private CommandInfoChangeListener listener = new CommandInfoChangeListener();
 
-    public boolean _addCommandInfoChangeListener() {
-        oObj.addCommandInfoChangeListener(listener);
+    PropertiesChangeListener listener = new PropertiesChangeListener();
+    String[] args = null;
+
+
+    public boolean _addPropertiesChangeListener() {
+        oObj.addPropertiesChangeListener(args, listener);
         return true;
     }
 
-    public boolean _removeCommandInfoChangeListener() {
-        oObj.removeCommandInfoChangeListener(listener);
+    public boolean _removePropertiesChangeListener() {
+        oObj.removePropertiesChangeListener(args, listener);
         return true;
     }
 
-    private class CommandInfoChangeListener implements XCommandInfoChangeListener {
-        boolean disposing = false;
-        boolean infoChanged = false;
-
-        public void commandInfoChange(com.sun.star.ucb.CommandInfoChangeEvent commandInfoChangeEvent) {
-            infoChanged = true;
-        }
+    private class PropertiesChangeListener implements XPropertiesChangeListener {
+        public boolean disposed = false;
+        public boolean propChanged = false;
 
         public void disposing(com.sun.star.lang.EventObject eventObject) {
-            disposing = true;
+            disposed = true;
+        }
+
+        public void propertiesChange(com.sun.star.beans.PropertyChangeEvent[] propertyChangeEvent) {
+            propChanged = true;
         }
 
     }

@@ -41,13 +41,13 @@ JAVATESTFILES = \
     CheckGlobalEventBroadcaster_writer1.java
 
 JAVAFILES = $(JAVATESTFILES) \
-    TestDocument.java
+    TestDocument.java \
+    WriterHelper.java \
+    DialogThread.java
 
 
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-SUBDIRS         = DocHelper
 
 # Sample how to debug
 # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y

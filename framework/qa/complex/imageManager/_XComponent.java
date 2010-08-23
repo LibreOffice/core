@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.imageManager.interfaces;
+package complex.imageManager;
 
 import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XDesktop;

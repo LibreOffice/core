@@ -56,7 +56,8 @@ import static org.junit.Assert.*;
  *
  */
 public class CheckTransientDocumentsContentProvider {
-    private final String testDocuments[] = new String[]{"sForm.sxw", "chinese.sxw", "Iterator.sxw"};
+    // TODO: document doesn't exists
+    private final String testDocuments[] = new String[]{/*"sForm.sxw",*/ "chinese.sxw", "Iterator.sxw"};
     private final int countDocs = testDocuments.length;
     private XMultiServiceFactory xMSF = null;
     private XTextDocument[] xTextDoc = null;

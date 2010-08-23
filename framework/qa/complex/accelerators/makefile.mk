@@ -40,15 +40,13 @@ JAVATESTFILES = \
     AcceleratorsConfigurationTest.java
 
 # put here all other files
-JAVAFILES = $(JAVATESTFILES)
+JAVAFILES = $(JAVATESTFILES) \
+    KeyMapping.java
 
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 #JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
 #                  OOoRunner.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-# subdirectories
-SUBDIRS         = helper
 
 # Sample how to debug
 # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y

@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.imageManager.interfaces;
+package complex.imageManager;
 
 import com.sun.star.graphic.XGraphic;
 import com.sun.star.ui.ImageType;

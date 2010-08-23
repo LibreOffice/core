@@ -41,13 +41,11 @@ JAVATESTFILES = \
     checkdispatchapi.java
 
 # put here all other files
-JAVAFILES = $(JAVATESTFILES)
+JAVAFILES = $(JAVATESTFILES) \
+ Interceptor.java
 
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar ConnectivityTools.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-# subdirectories
-SUBDIRS         = helper
 
 # Sample how to debug
 # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y

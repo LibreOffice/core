@@ -25,13 +25,13 @@
  *
  ************************************************************************/
 
-package complex.tdoc.interfaces;
+package complex.imageManager;
 
-import lib.MultiMethodTest;
+
 
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import share.LogWriter;
+import lib.TestParameters;
 
 /**
 * Testing <code>com.sun.star.lang.XTypeProvider</code>
@@ -45,9 +45,16 @@ import share.LogWriter;
 */
 public class _XTypeProvider {
 
+
+    TestParameters tEnv = null;
     public static XTypeProvider oObj = null;
     public static Type[] types = null;
-    public LogWriter log = null;
+
+    public _XTypeProvider(TestParameters tEnv, XTypeProvider oObj) {
+
+        this.tEnv = tEnv;
+        this.oObj = oObj;
+    }
 
     /**
     * Just calls the method.<p>
@@ -55,39 +62,39 @@ public class _XTypeProvider {
     */
     public boolean _getImplementationId() {
         boolean result = true;
-        log.println("testing getImplementationId() ... ");
+        System.out.println("testing getImplementationId() ... ");
 
-        log.println("The ImplementationId is "+oObj.getImplementationId());
+        System.out.println("The ImplementationId is "+oObj.getImplementationId());
         result = true;
 
-        return result;
+        return  result;
 
     } // end getImplementationId()
 
 
     /**
-    * ?alls the method and checks the return value.<p>
+    * Calls the method and checks the return value.<p>
     * Has <b>OK</b> status if one of the return value equals to the
     * type <code>com.sun.star.lang.XTypeProvider</code>.
     */
     public boolean _getTypes() {
         boolean result = false;
-        log.println("getting Types...");
+        System.out.println("getting Types...");
         types = oObj.getTypes();
         for (int i=0;i<types.length;i++) {
             int k = i+1;
-            log.println(k+". Type is "+types[i].toString());
+            System.out.println(k+". Type is "+types[i].toString());
             if (types[i].toString().equals
                     ("Type[com.sun.star.lang.XTypeProvider]")) {
                 result = true;
             }
         }
         if (!result) {
-            log.println("Component must provide Type "
+            System.out.println("Component must provide Type "
                 +"<com.sun.star.lang.XTypeProvider>");
         }
 
-        return result;
+        return  result;
 
     } // end getTypes()
 

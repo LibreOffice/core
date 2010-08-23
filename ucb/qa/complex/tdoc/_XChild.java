@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
 import lib.MultiMethodTest;
 import lib.Status;

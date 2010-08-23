@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
 import com.sun.star.container.XNameContainer;
 import lib.MultiMethodTest;

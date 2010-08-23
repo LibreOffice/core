@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.loadAllDocuments.helper;
+package complex.loadAllDocuments;
 
 import com.sun.star.beans.PropertyValue;
 

@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.tdoc.interfaces;
+package complex.tdoc;
 
 import com.sun.star.beans.XPropertyContainer;
 import share.LogWriter;

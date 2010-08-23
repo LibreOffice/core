@@ -19,5 +19,4 @@ uc ucb\qa\unoapi nmake - all uc_qa_unoapi NULL
 
 uc      ucb\qa\complex\ucb              nmake   -       all     uc_complex_ucb uc_inc NULL
 # fails, please fix
-# uc      ucb\qa\complex\tdoc\interfaces  nmake   -       all     uc_complex_tdoc_interfaces uc_inc NULL
 # uc      ucb\qa\complex\tdoc             nmake   -       all     uc_complex_tdoc uc_complex_tdoc_interfaces uc_inc NULL

@@ -27,8 +27,6 @@ fr framework\qa\unoapi nmake - all fr_qa_unoapi NULL
 # fr framework\qa\complex\ModuleManager          nmake - all fr_qa_complex_modulemanager NULL
 # fr framework\qa\complex\XUserInputInterception nmake - all fr_qa_complex_xuserinputinterception NULL
 
-# subdir has to remove
-# fr framework\qa\complex\accelerators\helper    nmake - all fr_qa_complex_accel_helper NULL
 # fr framework\qa\complex\accelerators           nmake - all fr_qa_complex_accel fr_qa_complex_accel_helper NULL
 
 # unclear should be remove
@@ -38,8 +36,6 @@ fr framework\qa\unoapi nmake - all fr_qa_unoapi NULL
 # fr framework\qa\complex\broken_document          nmake - all fr_qa_complex_broken_doc NULL
 fr framework\qa\complex\desktop                  nmake - all fr_qa_complex_desktop NULL
 
-# subdir has to remove
-# fr framework\qa\complex\dispatches\helper        nmake - all fr_qa_complex_dispatches_helper NULL
 # fr framework\qa\complex\dispatches               nmake - all fr_qa_complex_dispatches fr_qa_complex_dispatches_helper NULL
 # fr framework\qa\complex\disposing                nmake - all fr_qa_complex_disposing NULL
 
@@ -49,12 +45,8 @@ fr framework\qa\complex\desktop                  nmake - all fr_qa_complex_deskt
 # much too complex, will not change to new junit
 # fr framework\qa\complex\framework\recovery     nmake - all fr_qa_complex_framework_recovery NULL
 
-# subdir has to remove
-# fr framework\qa\complex\imageManager\interfaces  nmake - all fr_qa_complex_imageManager_interfaces NULL
 # fr framework\qa\complex\imageManager             nmake - all fr_qa_complex_imageManager fr_qa_complex_imageManager_interfaces NULL
 
-# subdir has to remove
-# fr framework\qa\complex\loadAllDocuments\helper  nmake - all fr_qa_complex_loadAllDocuments_helper NULL
 # fr framework\qa\complex\loadAllDocuments         nmake - all fr_qa_complex_loadAllDocuments fr_qa_complex_loadAllDocuments_helper NULL
 
 # need cleanups

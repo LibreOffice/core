@@ -39,8 +39,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 import com.sun.star.ucb.XSimpleFileAccess;
 
-import complex.loadAllDocuments.helper.InteractionHandler;
-import complex.loadAllDocuments.helper.StatusIndicator;
 
 import helper.URLHelper;
 

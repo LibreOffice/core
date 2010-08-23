@@ -49,9 +49,6 @@ JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 #                  OOoRunner.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-# subdirectories
-# SUBDIRS         = helper
-
 # Sample how to debug
 # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 

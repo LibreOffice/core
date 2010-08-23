@@ -43,14 +43,20 @@ JAVATESTFILES = \
    CheckTransientDocumentsDocumentContent.java
 
 JAVAFILES = $(JAVATESTFILES) \
-    TestDocument.java
+    TestDocument.java \
+    _XChild.java \
+    _XCommandInfoChangeNotifier.java \
+    _XCommandProcessor.java \
+    _XComponent.java \
+    _XContent.java \
+    _XPropertiesChangeNotifier.java \
+    _XPropertyContainer.java \
+    _XPropertySetInfoChangeNotifier.java \
+    _XServiceInfo.java \
+    _XTypeProvider.java
 
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-SUBDIRS		= interfaces
 
 # Sample how to debug
 # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
