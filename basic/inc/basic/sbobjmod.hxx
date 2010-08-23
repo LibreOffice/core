@@ -56,6 +56,10 @@ public:
     TYPEINFO();
     SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
+
+    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                             const SfxHint& rHint, const TypeId& rHintType );
+
     using SbxValue::GetObject;
     SbxVariable* GetObject();
     void SetUnoObject( const com::sun::star::uno::Any& aObj )throw ( com::sun::star::uno::RuntimeException ) ;

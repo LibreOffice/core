@@ -1746,6 +1746,98 @@ BOOL SbModule::LoadCompleted()
     return TRUE;
 }
 
+void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    bool bDone = false;
+
+    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    if( pHint )
+    {
+        SbxVariable* pVar = pHint->GetVar();
+        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
+        if( pProcProperty )
+        {
+            bDone = true;
+
+            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            {
+                String aProcName;
+                aProcName.AppendAscii( "Property Get " );
+                aProcName += pProcProperty->GetName();
+
+                SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
+                if( pMeth )
+                {
+                    SbxValues aVals;
+                    aVals.eType = SbxVARIANT;
+
+                    SbxArray* pArg = pVar->GetParameters();
+                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    if( nVarParCount > 1 )
+                    {
+                        SbxArrayRef xMethParameters = new SbxArray;
+                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
+                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
+                        {
+                            SbxVariable* pPar = pArg->Get( i );
+                            xMethParameters->Put( pPar, i );
+                        }
+
+                        pMeth->SetParameters( xMethParameters );
+                        pMeth->Get( aVals );
+                        pMeth->SetParameters( NULL );
+                    }
+                    else
+                    {
+                        pMeth->Get( aVals );
+                    }
+
+                    pVar->Put( aVals );
+                }
+            }
+            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            {
+                SbxVariable* pMeth = NULL;
+
+                bool bSet = pProcProperty->isSet();
+                if( bSet )
+                {
+                    pProcProperty->setSet( false );
+
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Set " );
+                    aProcName += pProcProperty->GetName();
+                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                }
+                if( !pMeth )    // Let
+                {
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Let " );
+                    aProcName += pProcProperty->GetName();
+                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                }
+
+                if( pMeth )
+                {
+                    // Setup parameters
+                    SbxArrayRef xArray = new SbxArray;
+                    xArray->Put( pMeth, 0 );    // Method as parameter 0
+                    xArray->Put( pVar, 1 );
+                    pMeth->SetParameters( xArray );
+
+                    SbxValues aVals;
+                    pMeth->Get( aVals );
+                    pMeth->SetParameters( NULL );
+                }
+            }
+        }
+    }
+
+    if( !bDone )
+        SbModule::Notify( rBC, rHint );
+}
+
+
 /////////////////////////////////////////////////////////////////////////
 // Implementation SbJScriptModule (Basic-Modul fuer JavaScript-Sourcen)
 SbJScriptModule::SbJScriptModule( const String& rName )
@@ -2011,6 +2103,13 @@ SbObjModule::Find( const XubString& rName, SbxClassType t )
         pVar = SbModule::Find( rName, t );
     return pVar;
 }
+
+void SbObjModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                         const SfxHint& rHint, const TypeId& rHintType )
+{
+    SbModule::handleProcedureProperties( rBC, rHint );
+}
+
 
 typedef ::cppu::WeakImplHelper2< awt::XTopWindowListener, awt::XWindowListener > FormObjEventListener_BASE;
 

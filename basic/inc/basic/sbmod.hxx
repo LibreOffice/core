@@ -92,6 +92,7 @@ protected:
     virtual BOOL LoadCompleted();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
+    void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
