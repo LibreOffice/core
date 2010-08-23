@@ -38,12 +38,14 @@ PACKAGE = complex/dataPilot
 JAVATESTFILES = \
     CheckDataPilot.java
 
-JAVAFILES = $(JAVATESTFILES)
+JAVAFILES = $(JAVATESTFILES) \
+    _XDataPilotDescriptor.java \
+    _XDataPilotTable.java \
+    _XNamed.java \
+    _XPropertySet.java
+
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
-SUBDIRS         = interfaceTests/beans interfaceTests/container interfaceTests/sheet
 
 .END
 

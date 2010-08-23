@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.container;
+package complex.dataPilot;
 
 import com.sun.star.container.XNamed;
 import lib.TestParameters;

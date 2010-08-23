@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.sheet;
+package complex.dataPilot;
 
 import com.sun.star.sheet.XDataPilotTable;
 import com.sun.star.table.CellAddress;

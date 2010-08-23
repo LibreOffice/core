@@ -53,8 +53,5 @@ sc	sc\util							nmake	-	all	sc_util sc_addfu sc_adrot sc_adutil sc_app sc_attr 
 # sc      sc\qa\complex\calcPreview                               nmake   -       all     qa_calcpreview   NULL
 
 sc      sc\qa\complex\cellRanges                                  nmake   -       all     qa_cellranges sc_util NULL
-sc      sc\qa\complex\dataPilot\interfaceTests\beans              nmake   -       all     qa_datapilot_ifacetst_beans sc_util NULL
-sc      sc\qa\complex\dataPilot\interfaceTests\container          nmake   -       all     qa_datapilot_ifacetst_container sc_util NULL
-sc      sc\qa\complex\dataPilot\interfaceTests\sheet              nmake   -       all     qa_datapilot_ifacetst_sheet sc_util NULL
 #sc      sc\qa\complex\dataPilot                                   nmake   -       all     qa_datapilot qa_datapilot_ifacetst_beans  qa_datapilot_ifacetst_container qa_datapilot_ifacetst_sheet sc_util NULL
 sc      sc\qa\complex\sc                                          nmake   -       all     qa_sc sc_util NULL

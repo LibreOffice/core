@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.beans;
+package complex.dataPilot;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;

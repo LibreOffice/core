@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.sheet;
+package complex.dataPilot;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
