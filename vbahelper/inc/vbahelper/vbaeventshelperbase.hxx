@@ -105,10 +105,6 @@ protected:
     };
     typedef ::std::deque< EventQueueEntry > EventQueue;
 
-    /** Derived classes return whether event processing is enabled. Throws if
-        the instance is in an invalid state. */
-    virtual bool implEventsEnabled() throw (css::uno::RuntimeException) = 0;
-
     /** Derived classes do additional prpeparations and return whether the
         event handler has to be called. */
     virtual bool implPrepareEvent(
