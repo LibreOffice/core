@@ -237,3 +237,9 @@ const SystemEnvData* AquaSalObject::GetSystemData() const
     return &maSysData;
 }
 
+// -----------------------------------------------------------------------
+
+void AquaSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
+{
+}
+

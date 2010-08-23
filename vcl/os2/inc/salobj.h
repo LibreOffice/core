@@ -64,6 +64,7 @@ public:
     virtual void                    SetBackground();
     virtual void                    SetBackground( SalColor nSalColor );
     virtual const SystemEnvData*    GetSystemData() const;
+    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 #endif // _SV_SALOBJ_H
