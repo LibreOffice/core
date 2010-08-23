@@ -56,7 +56,7 @@ $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESD
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
-    $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
 

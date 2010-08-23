@@ -827,6 +827,9 @@ LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI)
 .IF  "$(LOCALIZESDF)"==""
 LOCALSDFFILE:=$(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip $(THEN) echo $(LOCALSDFFILE) $(FI)))
+.IF  "$(LOCALIZESDF)"==""
+LOCALSDFFILE!:=
+.ENDIF			# "$(LOCALIZESDF)"==""
 .ENDIF			# "$(LOCALIZESDF)"==""
 # dummy target to keep the build happy.
 .IF  "$(LOCALIZESDF)"==""
@@ -964,9 +967,6 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
     .IF "$(VERBOSE)" == "FALSE"
         VERBOSITY=-quiet
         ZIP_VERBOSITY=-q
-        TRANSEX_VERBOSITY=-QQ
-        CFGEX_VERBOSITY=-QQ
-        ULFEX_VERBOSITY=-QQ
     .ENDIF
 .ENDIF # "$(VERBOSE)" == "TRUE"
 COMPILE_ECHO_SWITCH=
