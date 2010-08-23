@@ -535,6 +535,10 @@ static Methods aMethods[] = {
 { "TimeValue",      SbxDATE,      1 | _FUNCTION, RTLNAME(TimeValue),0       },
   { "String",       SbxSTRING, 0,NULL,0 },
 { "TOGGLE",         SbxINTEGER,       _CPROP,    RTLNAME(TOGGLE),0          },
+#ifdef DBG_TRACE_BASIC
+{ "TraceCommand",   SbxNULL,      1 | _FUNCTION, RTLNAME(TraceCommand),0 },
+  { "Command",      SbxSTRING,  0,NULL,0 },
+#endif
 { "Trim",           SbxSTRING,    1 | _FUNCTION, RTLNAME(Trim),0            },
   { "String",       SbxSTRING, 0,NULL,0 },
 { "True",           SbxBOOL,          _CPROP,    RTLNAME(True),0            },

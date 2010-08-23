@@ -1666,6 +1666,12 @@ RTLFUNC(GetDefaultContext)
     RTL_Impl_GetDefaultContext( pBasic, rPar, bWrite );
 }
 
+#ifdef DBG_TRACE_BASIC
+RTLFUNC(TraceCommand)
+{
+    RTL_Impl_TraceCommand( pBasic, rPar, bWrite );
+}
+#endif
 
 RTLFUNC(Join)
 {

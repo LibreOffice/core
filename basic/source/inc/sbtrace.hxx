@@ -28,15 +28,17 @@
 #ifndef _SBTRACE_HXX
 #define _SBTRACE_HXX
 
-// #define DBG_TRACE_BASIC
+//#define DBG_TRACE_BASIC
 
 #ifdef DBG_TRACE_BASIC
 void dbg_InitTrace( void );
+void dbg_DeInitTrace( void );
 void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl );
 void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, bool bLeave = false );
 void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, INT32 nCallLvl );
 void dbg_RegisterTraceTextForPC( SbModule* pModule, UINT32 nPC,
     const String& aTraceStr_STMNT, const String& aTraceStr_PCode );
+void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 #endif
 
 #endif

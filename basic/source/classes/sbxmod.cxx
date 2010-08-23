@@ -1188,6 +1188,10 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
 
                 GlobalRunDeInit();
+
+#ifdef DBG_TRACE_BASIC
+                dbg_DeInitTrace();
+#endif
             }
         }
         else
