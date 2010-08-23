@@ -441,35 +441,13 @@ void SAL_CALL ScVbaEventsHelper::disposing( const lang::EventObject& rSource ) t
 
 // protected ------------------------------------------------------------------
 
-bool ScVbaEventsHelper::implEventsEnabled() throw (uno::RuntimeException)
-{
-    // document and document shell are needed during event processing
-    if( !mpDocShell || !mpDoc )
-        throw uno::RuntimeException();
-
-    // get Application object and check if events are enabled (this is an Excel-only attribute)
-    uno::Reference< excel::XApplication > xApplication( mxApplication.get(), uno::UNO_QUERY );
-    if( !xApplication.is() && mpShell )
-    {
-        uno::Any aVBAGlobals;
-        mpShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aVBAGlobals );
-        uno::Reference< XHelperInterface > xHelperInterface( aVBAGlobals, uno::UNO_QUERY );
-        if( xHelperInterface.is() )
-        {
-            xApplication.set( xHelperInterface->Application(), uno::UNO_QUERY );
-            mxApplication = xApplication;
-        }
-    }
-    if( !xApplication.is() )
-        throw uno::RuntimeException();
-
-    // return whether event processing is enabled
-    return xApplication->getEnableEvents();
-}
-
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs ) throw (uno::RuntimeException)
 {
+    // document and document shell are needed during event processing
+    if( !mpShell || !mpDoc )
+        throw uno::RuntimeException();
+
     // framework and Calc fire a few events before 'opened', ignore them
     bool bExecuteEvent = mbOpened;
 
@@ -492,12 +470,32 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         break;
     }
 
-    // add workbook event associated to a sheet event
     if( bExecuteEvent )
     {
+        // add workbook event associated to a sheet event
         bool bSheetEvent = false;
         if( (rInfo.maUserData >>= bSheetEvent) && bSheetEvent )
             rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
+
+        /*  For document events: get Application object and check if events are
+            enabled via EnableEvents symbol (this is an Excel-only attribute).
+            Check this again for every event, as the event handler may change
+            the state of the EnableEvents symbol. Global events such as
+            AUTO_OPEN and AUTO_CLOSE are always enabled. */
+        if( rInfo.meType == EVENTHANDLER_DOCUMENT )
+        {
+            // reference to application is held weakly, get application on first try
+            uno::Reference< excel::XApplication > xApplication( mxApplication.get(), uno::UNO_QUERY );
+            if( !xApplication.is() )
+            {
+                uno::Any aVBAGlobals;
+                mpShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aVBAGlobals );
+                uno::Reference< XHelperInterface > xHelperInterface( aVBAGlobals, uno::UNO_QUERY_THROW );
+                xApplication.set( xHelperInterface->Application(), uno::UNO_QUERY_THROW );
+                mxApplication = xApplication;
+            }
+            bExecuteEvent = xApplication->getEnableEvents();
+        }
     }
 
     return bExecuteEvent;

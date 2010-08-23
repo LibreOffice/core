@@ -51,7 +51,6 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw (css::uno::RuntimeException);
 
 protected:
-    virtual bool implEventsEnabled() throw (css::uno::RuntimeException);
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< css::uno::Any > implBuildArgumentList( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException);
     virtual void implPostProcessEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, bool bSuccess, bool bCancel ) throw (css::uno::RuntimeException);
