@@ -45,7 +45,7 @@ XTXMERGEPHONY:=.PHONY
 $(XTX_TARGET_PATH)/%$(L10NEXT) $(XTXMERGEPHONY) : %.xtx
     @@-$(MKDIRHIER) $(@:d)
 .IF "$(WITH_LANG)"==""
-    $(COMMAND_ECHO)$(COPY) $< $(@:f)_en-US$(L10NEXT)
+    $(COMMAND_ECHO)$(COPY) $< $(@:d)$(@:b)_en-US$(L10NEXT)
 .ELSE          # "$(WITH_LANG)"==""
     @@-$(RM) $@
     $(COMMAND_ECHO)@noop $(assign XTXMERGELIST+:=$(<:f))
