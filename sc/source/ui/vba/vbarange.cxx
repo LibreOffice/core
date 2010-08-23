@@ -539,19 +539,22 @@ public:
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         sal_Int16 nType = ::comphelper::getINT16(
-            xNumberProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) );
+            xNumberProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) );
         return nType;
     }
 
-    bool setNumberFormat( const  rtl::OUString& rFormat )
+    bool setNumberFormat( const rtl::OUString& rFormat )
     {
-        lang::Locale aLocale;
-        uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();
-        xNumProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aLocale;
-        sal_Int32 nNewIndex = mxFormats->queryKey(rFormat, aLocale, false );
-        if ( nNewIndex == -1 ) // format not defined
+        // #163288# treat "General" as "Standard" format
+        sal_Int32 nNewIndex = 0;
+        if( !rFormat.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "General" ) ) )
         {
-            nNewIndex = mxFormats->addNew( rFormat, aLocale );
+            lang::Locale aLocale;
+            uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();
+            xNumProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Locale" ) ) ) >>= aLocale;
+            nNewIndex = mxFormats->queryKey( rFormat, aLocale, false );
+            if ( nNewIndex == -1 ) // format not defined
+                nNewIndex = mxFormats->addNew( rFormat, aLocale );
         }
         mxRangeProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberFormat") ), uno::makeAny( nNewIndex ) );
         return true;
@@ -561,7 +564,7 @@ public:
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         lang::Locale aLocale;
-        xNumberProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aLocale;
+        xNumberProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Locale" ) ) ) >>= aLocale;
         uno::Reference<util::XNumberFormatTypes> xTypes( mxFormats, uno::UNO_QUERY );
         if ( xTypes.is() )
         {
