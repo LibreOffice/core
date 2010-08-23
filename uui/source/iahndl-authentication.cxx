@@ -270,7 +270,7 @@ handleAuthenticationRequest_(
     aInfo.SetCanRememberPassword(
         ePreferredRememberMode != eAlternateRememberMode);
     aInfo.SetIsRememberPassword(
-        ePreferredRememberMode != eDefaultRememberMode);
+        ePreferredRememberMode == eDefaultRememberMode);
     aInfo.SetIsRememberPersistent(
         ePreferredRememberMode == ucb::RememberAuthentication_PERSISTENT);
 
