@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
@@ -64,9 +65,25 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 {
     OSL_TRACE("ScVbaUserForm::Show(  )");
     short aRet = 0;
-        mbDispose = true;
+    mbDispose = true;
+
     if ( m_xDialog.is() )
+    {
+        // try to center dialog on model window
+        if( m_xModel.is() ) try
+        {
+            uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_SET_THROW );
+            uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+            uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+            awt::Rectangle aPosSize = xWindow->getPosSize();    // already in pixel
+            setLeft( (aPosSize.Width - getWidth()) / 2.0 );
+            setTop( (aPosSize.Height - getHeight()) / 2.0 );
+        }
+        catch( uno::Exception& )
+        {
+        }
         aRet = m_xDialog->execute();
+    }
     OSL_TRACE("ScVbaUserForm::Show() execute returned %d", aRet);
     if ( mbDispose )
     {
