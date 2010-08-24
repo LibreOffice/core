@@ -692,6 +692,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 {
     FileBase::RC  rc;
     rtl::OUString unresolved_path;
+    static char *allow_symlinks = getenv( "SAL_ALLOW_LINKOO_SYMLINKS" );
 
     rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrRelativeURL), unresolved_path);
 
@@ -713,7 +714,32 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
     }
 
     rtl::OUString resolved_path;
-    rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
+
+    if (!allow_symlinks)
+    {
+        rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
+    }
+    else
+    {
+        // SAL_ALLOW_LINKOO_SYMLINKS environment variable:
+        // for linkoo to work, we need to let the symlinks to the libraries untouched
+        rtl::OUString base;
+        sal_Int32 last_slash = unresolved_path.lastIndexOf( UNICHAR_SLASH );
+
+        if (last_slash >= 0 && last_slash + 1 < unresolved_path.getLength())
+        {
+            base = unresolved_path.copy(last_slash+1);
+            unresolved_path = unresolved_path.copy(0, last_slash);
+        }
+
+        rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
+
+        if (base.getLength() > 0)
+        {
+            resolved_path += rtl::OUString( UNICHAR_SLASH );
+            resolved_path += base;
+        }
+    }
 
     if (FileBase::E_None == rc)
     {
