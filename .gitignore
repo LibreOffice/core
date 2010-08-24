@@ -1,2 +1,11 @@
+# backup and temporary files
+*~
+.*.sw[op]
+
+# the build directories
 /*/unxlng??
 /*/unxlng??.pro
+
+# autoconf generated stuff
+/ChangeLog
+/configure
