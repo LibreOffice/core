@@ -647,28 +647,10 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
     sal_Int32 nCount = Event.Changes.getLength();
     if ( nCount )
     {
+        uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
+        Event.Base >>= xHierNameAccess;
 
-        uno::Reference< lang::XMultiServiceFactory > xConfigProv(
-                m_xSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                uno::UNO_QUERY_THROW );
-
-        uno::Sequence< uno::Any > aArguments( 1 );
-        beans::PropertyValue      aProperty;
-        aProperty.Name
-            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-        aProperty.Value <<= Event.Base;
-        aArguments[ 0 ] <<= aProperty;
-
-        uno::Reference< uno::XInterface > xInterface(
-                xConfigProv->createInstanceWithArguments(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationAccess" ) ),
-                    aArguments ) );
-
-        uno::Reference< container::XHierarchicalNameAccess >
-                                xHierNameAccess( xInterface, uno::UNO_QUERY_THROW );
+        OSL_ASSERT( xHierNameAccess.is() );
 
         const util::ElementChange* pElementChanges
             = Event.Changes.getConstArray();
