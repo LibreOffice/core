@@ -48,6 +48,7 @@ export STAR_RESOURCEPATH=`pwd`/resource
 export OOO_FORCE_SYSALLOC=1
 export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
+export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
 
 $program_dir = 'program';
