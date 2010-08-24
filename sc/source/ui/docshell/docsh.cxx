@@ -72,7 +72,6 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
-#include <vbahelper/vbaaccesshelper.hxx>
 
 #include "scabstdlg.hxx" //CHINA001
 #include <sot/formats.hxx>
@@ -625,15 +624,9 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     {
                         uno::Reference< frame::XModel > xModel( GetModel(), uno::UNO_SET_THROW );
 
-                        // create VBAGlobals object if not yet done (this also creates the "ThisExcelDoc" symbol)
+                        // create VBAGlobals object if not yet done (this also creates the "ThisExcelDoc" symbol and the event processor)
                         uno::Reference< lang::XMultiServiceFactory > xFactory( xModel, uno::UNO_QUERY_THROW );
                         xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
-
-                        // create the VBA document event processor
-                        uno::Sequence< uno::Any > aArgs( 1 );
-                        aArgs[ 0 ] <<= xModel;
-                        xVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( this, "com.sun.star.script.vba.VBASpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY );
-                        aDocument.SetVbaEventProcessor( xVbaEvents );
                     }
                     catch( uno::Exception& )
                     {
