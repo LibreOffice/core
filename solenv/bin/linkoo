@@ -365,6 +365,7 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     print "Creating '$OOO_INSTALL/", $brand_program_dir, "/ooenv'\n";
     open ($ooenv, ">$OOO_INSTALL/" . $brand_program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $brand_program_dir . "/ooenv: $!";
     print $ooenv $env_script;
+    print $ooenv "# testtool\nexport SRC_ROOT=$OOO_BUILD\n";
     close ($ooenv);
 }
 
