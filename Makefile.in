@@ -5,7 +5,7 @@ SHELL=/bin/sh
 all:
 	. ./*Env.Set.sh && \
 	./bootstrap && \
-		cd instsetoo_native && ../solenv/bin/build.pl --all
+		cd instsetoo_native && ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -P@BUILD_MAX_JOBS@
 
 distclean:
 	. ./*Env.Set.sh && \
@@ -17,8 +17,8 @@ clean:
 	
 dev-install:
 	. ./*Env.Set.sh && \
-		cd @SRC_ROOT@/instsetoo_native/util && \
-		LOCALINSTALLDIR=@SRC_ROOT@/install dmake openoffice_en-US PKGFORMAT=installed && \
-		$SOLARENV/bin/linkoo @SRC_ROOT@/install @SRC_ROOT@ && \
+		cd $$SRC_ROOT/instsetoo_native/util && \
+		LOCALINSTALLDIR=$$SRC_ROOT/install dmake openoffice_en-US PKGFORMAT=installed && \
+		$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
 		echo && \
-		echo "Developer installation finished in @SRC_ROOT@"
+		echo "Developer installation finished in $$SRC_ROOT"
