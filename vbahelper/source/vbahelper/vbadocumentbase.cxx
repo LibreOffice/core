@@ -28,6 +28,8 @@
 #include "vbahelper/vbadocumentbase.hxx"
 #include "vbahelper/helperdecl.hxx"
 
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -36,6 +38,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -182,7 +185,22 @@ void
 VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    xModifiable->setModified( !bSave );
+    try
+    {
+        xModifiable->setModified( !bSave );
+    }
+    catch ( lang::DisposedException& )
+    {
+        // impossibility to set the modified state on disposed document should not trigger an error
+    }
+    catch ( beans::PropertyVetoException& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't change modified state of model!" ) ),
+                uno::Reference< uno::XInterface >(),
+                aCaught );
+    }
 }
 
 sal_Bool
