@@ -1349,7 +1349,7 @@ void StarBASIC::ClearAllModuleVars( void )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
         // Nur initialisieren, wenn der Startcode schon ausgefuehrt wurde
-        if( pModule->pImage && pModule->pImage->bInit )
+        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
             pModule->ClearPrivateVars();
     }
 
