@@ -273,6 +273,14 @@ sub link_iso_res()
 }
 
 # Hack for (renamed) types.rdb (types.db)
+sub link_oovbaapi_rdb()
+{
+    print "oovbaapi.rdb case:";
+    my $src  = "$OOO_BUILD/oovbaapi/$TARGET/ucr";
+    my $dest = "$OOO_INSTALL/program";
+    do_link ($src, $dest, 'oovbaapi.db', 'oovbaapi.rdb');
+    print "\n";
+}
 sub link_types_rdb()
 {
     print "Types.rdb case:";
@@ -347,6 +355,7 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_iso_res();
 link_types_rdb();
+link_oovbaapi_rdb();
 link_soffice_bin_files();
 
 if (!-f "$OOO_INSTALL/" . $program_dir . "/ooenv") {
