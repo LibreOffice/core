@@ -38,12 +38,12 @@
 # ends up in program/ooenv
 ( $moz_lib = `pkg-config --variable=libdir mozilla-nss` ) =~ tr/\n/:/;
 $env_script = '
-java_path=`./javaldx`
+java_path=`../basis-link/ure-link/bin/javaldx`
 export LD_LIBRARY_PATH=".:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
 ulimit -c unlimited
-export PATH=".:$PATH"
+export PATH=".:../basis-link/program:../basis-link/ure-link/bin:$PATH"
 export GNOME_DISABLE_CRASH_DIALOG=1
-export STAR_RESOURCEPATH=`pwd`/resource
+export STAR_RESOURCEPATH=`pwd`/../basis-link/program/resource
 # debugging assistance
 export OOO_FORCE_SYSALLOC=1
 export MALLOC_CHECK_=2
@@ -51,8 +51,11 @@ export OOO_DISABLE_RECOVERY=1
 export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
 
-$program_dir = 'program';
-$program_dir = 'MacOS' if ($ENV{OS} eq 'MACOSX');
+$program_dir = 'basis-link/program';
+$brand_program_dir = 'program';
+$ure_misc_dir = 'basis-link/ure-link/share/misc';
+
+$program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FIXME probably wrong
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
@@ -60,7 +63,7 @@ my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 	$program_dir => '\.so',
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
-    'share/config' => '\.zip$',
+    'basis-link/share/config' => '\.zip$',
 #    'share/uno_packages' => '\.zip$'
 );
 
@@ -258,8 +261,8 @@ sub evilness($)
 sub link_iso_res()
 {
     print "Special iso.res case: ";
-    my $ooo_res="$OOO_INSTALL/" . $program_dir . "/resource/ooo".$LIBVER.$LANG.".res";
-    my $star_res="$OOO_INSTALL/" . $program_dir . "/resource/iso".$LIBVER.$LANG.".res";
+    my $ooo_res="$OOO_INSTALL/" . $brand_program_dir . "/resource/ooo".$LIBVER.$LANG.".res";
+    my $star_res="$OOO_INSTALL/" . $brand_program_dir . "/resource/iso".$LIBVER.$LANG.".res";
     if (-l $ooo_res && -l $star_res) {
 	if ($dry_run) {
 	    print "link $ooo_res to $star_res";
@@ -277,7 +280,7 @@ sub link_oovbaapi_rdb()
 {
     print "oovbaapi.rdb case:";
     my $src  = "$OOO_BUILD/oovbaapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/program";
+    my $dest = "$OOO_INSTALL/" . $program_dir;
     do_link ($src, $dest, 'oovbaapi.db', 'oovbaapi.rdb');
     print "\n";
 }
@@ -285,7 +288,7 @@ sub link_types_rdb()
 {
     print "Types.rdb case:";
     my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/" . $program_dir;
+    my $dest = "$OOO_INSTALL/" . $ure_misc_dir;
     do_link ($src, $dest, 'types.db', 'types.rdb');
     print "\n";
 }
@@ -294,7 +297,7 @@ sub link_types_rdb()
 sub link_soffice_bin_files()
 {
     my $dest;
-    my $src = "$OOO_INSTALL/" . $program_dir;
+    my $src = "$OOO_INSTALL/" . $brand_program_dir;
 
     print "soffice files";
     $dest = "$OOO_BUILD/desktop/$TARGET/bin";
@@ -358,9 +361,9 @@ link_types_rdb();
 link_oovbaapi_rdb();
 link_soffice_bin_files();
 
-if (!-f "$OOO_INSTALL/" . $program_dir . "/ooenv") {
-    print "Creating '$OOO_INSTALL/", $program_dir, "/ooenv'\n";
-    open ($ooenv, ">$OOO_INSTALL/" . $program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $program_dir . "/ooenv: $!";
+if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
+    print "Creating '$OOO_INSTALL/", $brand_program_dir, "/ooenv'\n";
+    open ($ooenv, ">$OOO_INSTALL/" . $brand_program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $brand_program_dir . "/ooenv: $!";
     print $ooenv $env_script;
     close ($ooenv);
 }
