@@ -215,7 +215,13 @@ VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xP
 uno::Any SAL_CALL
 VbaDocumentsBase::Add() throw (uno::RuntimeException)
 {
-    uno::Reference< lang::XMultiComponentFactory > xSMgr(
+     uno::Sequence< beans::PropertyValue > aArgs( 1 );
+     beans::PropertyValue aArg;
+     aArg.Name = ::rtl::OUString::createFromAscii("MacroExecutionMode");
+     aArg.Value = uno::Any(com::sun::star::document::MacroExecMode::USE_CONFIG);
+     aArgs[ 0 ] = aArg;
+
+     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
      uno::Reference< frame::XComponentLoader > xLoader(
@@ -231,8 +237,7 @@ VbaDocumentsBase::Add() throw (uno::RuntimeException)
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
                                        sURL ,
-                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
-                                       uno::Sequence< beans::PropertyValue >(0) );
+                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0, aArgs );
     return uno::makeAny( xComponent );
 }
 
