@@ -1667,7 +1667,7 @@ void OKeySet::impl_convertValue_throw(const ORowSetRow& _rInsertRow,const Select
                 sal_Int32 nIndex = sValue.indexOf('.');
                 if ( nIndex != -1 )
                 {
-                    aValue = sValue.copy(0,nIndex + (i_aMetaData.nScale > 0 ? i_aMetaData.nScale + 1 : 0));
+                    aValue = sValue.copy(0,::std::min(sValue.getLength(),nIndex + (i_aMetaData.nScale > 0 ? i_aMetaData.nScale + 1 : 0)));
                 }
             }
             break;
