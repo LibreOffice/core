@@ -45,8 +45,10 @@
 #include <kdiroperator.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
+#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ktempfile.h>
 
 #include <algorithm>
 #include <iostream>
@@ -64,6 +66,7 @@ FileDialog::FileDialog( const QString &startDir, const QString &filter,
       m_pPushButtons( new QVBox( m_pCombosAndButtons ) ),
       m_pCheckBoxes( new QGrid( 2, m_pCustomWidget ) ),
       m_bIsSave( false ),
+      m_bIsExecuting( false ),
       m_bCanNotifySelection( true )
 {
     connect( this, SIGNAL( fileHighlighted( const QString & ) ),
@@ -223,10 +226,16 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                         for ( KURL::List::const_iterator it = qList.begin(); it != qList.end(); ++it )
                         {
                             qString.append( " " );
-                            QString qUrlStr = (*it).url();
+                            QString qUrlStr = addExtension( (*it).url() );
+
+                            if ( !isExecuting() && !isSupportedProtocol( KURL( qUrlStr ).protocol() ) )
+                                qUrlStr = localCopy( qUrlStr );
+
                             if ( qUrlStr.startsWith( "file:/" ) && qUrlStr.mid( 6, 1 ) != "/" )
                                 qUrlStr.replace( "file:/", "file:///" );
-                            appendEscaped( qString, addExtension( qUrlStr ) );
+
+                            if ( !qUrlStr.isEmpty() )
+                                appendEscaped( qString, qUrlStr );
                         }
                     }
                     else
@@ -236,10 +245,16 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                         for ( KFileItemListIterator it( *pItems ); it.current(); ++it )
                         {
                             qString.append( " " );
-                            QString qUrlStr = (*it)->url().url();
+                            QString qUrlStr = addExtension( (*it)->url().url() );
+
+                            if ( !isExecuting() && !isSupportedProtocol( KURL( qUrlStr ).protocol() ) )
+                                qUrlStr = localCopy( qUrlStr );
+
                             if ( qUrlStr.startsWith( "file:/" ) && qUrlStr.mid( 6, 1 ) != "/" )
                                 qUrlStr.replace( "file:/", "file:///" );
-                            appendEscaped( qString, addExtension( qUrlStr ) );
+
+                            if ( !qUrlStr.isEmpty() )
+                                appendEscaped( qString, qUrlStr );
                         }
                     }
 
@@ -289,18 +304,47 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                 {
                     filterWidget->setEditable( false );
                     QString qSelectedURL;
+                    setIsExecuting( true );
+                    bool bCanExit = false;
                     do {
                         setCanNotifySelection( true );
                         exec();
+
                         qSelectedURL = addExtension( selectedURL().url() );
-                    } while ( isSave() &&
-                              result() == QDialog::Accepted &&
-                              ( qSelectedURL.startsWith( "file:" ) && QFile::exists( qSelectedURL.mid( 5 ) ) ) &&
-                              KMessageBox::warningYesNo( 0,
-                                  i18n( "A file named \"%1\" already exists. "
-                                      "Are you sure you want to overwrite it?" ).arg( qSelectedURL ),
-                                  i18n( "Overwrite File?" ),
-                                  i18n( "Overwrite" ), KStdGuiItem::cancel() ) != KMessageBox::Yes );
+                        QString qProtocol( selectedURL().protocol() );
+
+                        if ( isSave() && result() == QDialog::Accepted )
+                        {
+                            if ( qSelectedURL.startsWith( "file:" ) )
+                            {
+                                bCanExit =
+                                    !QFile::exists( qSelectedURL.mid( 5 ) ) ||
+                                    ( KMessageBox::warningYesNo( 0,
+                                                                 i18n( "A file named \"%1\" already exists. "
+                                                                     "Are you sure you want to overwrite it?" ).arg( qSelectedURL ),
+                                                                 i18n( "Overwrite File?" ),
+                                                                 i18n( "Overwrite" ), KStdGuiItem::cancel() ) == KMessageBox::Yes );
+                            }
+                            else if ( !isSupportedProtocol( qProtocol ) )
+                            {
+                                KMessageBox::sorry( 0,
+                                        i18n( "Saving using protocol \"%1\" is not supported." ).arg( qProtocol ) );
+                                bCanExit = false;
+                            }
+                            else
+                                bCanExit = true;
+                        }
+                        else if ( !isSave() && result() == QDialog::Accepted && !isSupportedProtocol( qProtocol ) )
+                        {
+                            KMessageBox::information( 0,
+                                    i18n( "Protocol \"%1\" is supported only partially. "
+                                        "Local copy of the file will be created." ).arg( qProtocol ) );
+                            bCanExit = true;
+                        }
+                        else
+                            bCanExit = true;
+                    } while ( !bCanExit );
+                    setIsExecuting( false );
 
                     if ( result() == QDialog::Accepted )
                         sendCommand( "accept" );
@@ -528,6 +572,50 @@ QString FileDialog::addExtension( const QString &rFileName ) const
         return rFileName;
     else
         return rFileName + qExtension;
+}
+
+bool FileDialog::isSupportedProtocol( const QString &rProtocol ) const
+{
+    // TODO Get this information directly from OOo
+    const char * pOOoProtocols[] = { "", "smb", "ftp", "http", "file", "mailto",
+        "vnd.sun.star.webdav", "news", "private", "vnd.sun.star.help",
+        "https", "slot", "macro", "javascript", "imap", "pop3", "data",
+        "cid", "out", "vnd.sun.star.wfs", "vnd.sun.star.hier", "vim",
+        ".uno", ".component", "vnd.sun.star.pkg", "ldap", "db",
+        "vnd.sun.star.cmd", "vnd.sun.star.script", "vnd.sun.star.odma",
+        "telnet",
+        NULL };
+
+    for ( const char **pIndex = pOOoProtocols; *pIndex != NULL; ++pIndex )
+    {
+        if ( rProtocol == *pIndex )
+            return true;
+    }
+
+    // TODO gnome-vfs bits here
+
+    return false;
+}
+
+QString FileDialog::localCopy( const QString &rFileName ) const
+{
+    int nExtensionPos = rFileName.findRev( '/' );
+    if ( nExtensionPos >= 0 )
+        nExtensionPos = rFileName.find( '.', nExtensionPos );
+    else
+        nExtensionPos = rFileName.find( '.' );
+
+    KTempFile qTempFile( QString::null, ( nExtensionPos < 0 )? QString(): rFileName.mid( nExtensionPos ) );
+    KURL qDestURL;
+    qDestURL.setPath( qTempFile.name() );
+
+    if ( !KIO::NetAccess::file_copy( rFileName, qDestURL, 0600, true, false, NULL ) )
+    {
+        KMessageBox::error( 0, KIO::NetAccess::lastErrorString() );
+        return QString::null;
+    }
+
+    return qDestURL.url();
 }
 
 void FileDialog::fileHighlightedCommand( const QString & )

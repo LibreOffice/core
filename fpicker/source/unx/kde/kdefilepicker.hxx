@@ -62,6 +62,7 @@ protected:
      *  (custom list boxes are under this check box, which looks ugly).
      */
     bool                        m_bIsSave;
+    bool                        m_bIsExecuting;
 
     bool                        m_bCanNotifySelection;
 
@@ -90,6 +91,12 @@ protected:
 
     void                        setIsSave( bool bIsSave ) { m_bIsSave = bIsSave; }
     bool                        isSave( void ) const { return m_bIsSave; }
+
+    void                        setIsExecuting( bool bIsExecuting ) { m_bIsExecuting = bIsExecuting; }
+    bool                        isExecuting( void ) const { return m_bIsExecuting; }
+
+    bool                        isSupportedProtocol( const QString &rProtocol ) const;
+    QString                     localCopy( const QString &rFileName ) const;
 
     void                        setCanNotifySelection( bool bCanNotifySelection ) { m_bCanNotifySelection = bCanNotifySelection; }
     bool                        canNotifySelection( void ) const { return m_bCanNotifySelection; }
