@@ -4,6 +4,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 
 ..\%__SRC%\bin\f*.res %_DEST%\bin%_EXT%\
 ..\%__SRC%\bin\f*.dll %_DEST%\bin%_EXT%\
+..\%__SRC%\bin\kdefilepicker %_DEST%\bin%_EXT%\kdefilepicker
 ..\%__SRC%\lib\f*.so %_DEST%\lib%_EXT%\
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
@@ -12,3 +13,4 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\source\unx\gnome\fps-gnome-ucd.txt %_DEST%\bin%_EXT%\fps-gnome-ucd.txt
 ..\source\unx\kde4\fps-kde4-ucd.txt %_DEST%\bin%_EXT%\fps-kde4-ucd.txt
 ..\source\aqua\fps-aqua-ucd.txt %_DEST%\bin%_EXT%\fps-aqua-ucd.txt
+..\source\unx\kde_unx\fps-kde-ucd.txt %_DEST%\bin%_EXT%\fps-kde-ucd.txt
