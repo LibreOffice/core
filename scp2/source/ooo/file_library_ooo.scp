@@ -572,6 +572,24 @@ File gid_File_Lib_Fps_Kde4
 End
 #endif
 #endif
+#ifdef ENABLE_KDE
+#ifndef MACOSX
+File gid_File_Lib_Fps_Kde
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+    Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde.uno);
+    Regmergefile = "fps-kde-ucd.txt";
+End
+File gid_File_Bin_KdeFilePicker
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "kdefilepicker";
+End
+#endif
+#endif
 #endif
 
 #ifdef MACOSX
