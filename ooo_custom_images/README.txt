@@ -3,15 +3,13 @@ How to add a new image set:
 
 - Create a directory for it here (let's call it e.g. new_set)
 
-- Add its images_ name to ALLTAR in instsetoo_native/packimages/makefile.mk
+- Add its images_ name to CUSTOM_IMAGE_SETS in
+  postprocess/packimages/pack/makefile.mk
 
 - Add its gid to the Files section of gid_Module_Root_Brand in
-  scp2/source/ooo/common_brand.scp and add a corresponding File entry to the
-  brand layer(s) where the image set shall be available (see for example
-  gid_Brand_File_ImagesCrystal_Zip in scp2/source/ooo/ooo_brand.scp)
-
-- Add a SfxSymbolsStyle constant for it in svtools/inc/imgdef.hxx, e.g.
-  SFX_SYMBOLS_STYLE_NEW_SET
+  scp2/source/ooo/module_hidden_ooo.scp and add a corresponding File entry
+  to scp2/source/ooo/file_ooo.scp (see for example
+  gid_Brand_File_ImagesCrystal_Zip)
 
 - Add a vcl constant for it in vcl/inc/settings.hxx, e.g.
   #define STYLE_SYMBOLS_NEW_SET ((ULONG)5)
@@ -26,23 +24,11 @@ How to add a new image set:
     else if ( rName == ::rtl::OUString::createFromAscii( "new_set" ) )
     	return STYLE_SYMBOLS_NEW_SET;
 
-- Enhance the SFX_SYMBOLS_STYLE <-> STYLE_SYMBOLS converting functions
-    static sal_Int16 implSymbolsStyleFromVCL( ULONG nStyle )
-  and
-    static ULONG implSymbolsStyleToVCL( sal_Int16 nStyle )
-  in svtools/source/config/miscopt.cxx.
-
-- Add SFX_SYMBOLS_STYLE constant to 'switch( nStyleLB_NewSelection )' in 
-    BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
-  and to 'switch ( aMiscOptions.GetCurrentSymbolsStyle() )' in
-    void OfaViewTabPage::Reset( const SfxItemSet& rSet )
-  both in svx/source/dialog/optgdlg.cxx.
-
 - Add localized item names to 'ListBox LB_ICONSTYLE' to
     'StringList [ de ]'
   and 'StringList [ en-US ]', e.g.
     < "New set" ; > ;
-  both in svx/source/dialog/optgdlg.src
+  both in cui/source/options/optgdlg.src
 
 - Add all known localizations of the new item to svx/source/dialog/localize.sdf, e.g.
     svx	source\dialog\optgdlg.src	0	stringlist	OFA_TP_VIEW.LB_ICONSTYLE	6			0	cs	New set				2002-02-02 02:02:02
@@ -56,4 +42,4 @@ How to add a new image set:
   vcl/source/app/settings.cxx
 
 - The fallback for particular icons is defined in
-    instsetoo_native/packimages/makefile.mk
+    postprocess/packimages/pack/makefile.mk
