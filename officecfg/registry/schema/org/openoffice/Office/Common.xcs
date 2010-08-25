@@ -5773,11 +5773,11 @@
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc>32x32 pixel icons</desc>
+							<desc>larger icons</desc>
 						</info>
 					</enumeration>
 				</constraints>
-				<value>0</value>
+				<value>1</value>
 			</prop>
 			<prop oor:name="SymbolStyle" oor:type="xs:string">
 				<!-- UIHints: Tools  Options General View -->
