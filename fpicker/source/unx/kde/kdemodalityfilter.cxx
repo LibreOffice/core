@@ -1,0 +1,66 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2010 Novell, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <kdemodalityfilter.hxx>
+
+#include <kapplication.h>
+#include <kdialogbase.h>
+
+#include <netwm.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+//////////////////////////////////////////////////////////////////////////
+// Modality filter
+//////////////////////////////////////////////////////////////////////////
+
+ModalityFilter::ModalityFilter( WId nWinId )
+    : m_nWinId( nWinId )
+{
+    kapp->installEventFilter( this );
+}
+
+ModalityFilter::~ModalityFilter()
+{
+    kapp->removeEventFilter( this );
+}
+
+bool ModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
+{
+    if ( pObject->isWidgetType() && pEvent->type() == QEvent::Show )
+    {
+        KDialogBase* pDlg = ::qt_cast< KDialogBase* >( pObject );
+        if ( pDlg != NULL && m_nWinId != 0 )
+        {
+            XSetTransientForHint( qt_xdisplay(), pDlg->winId(), m_nWinId );
+            NETWinInfo aInfo( qt_xdisplay(), pDlg->winId(), qt_xrootwin(), NET::WMState );
+            aInfo.setState( NET::Modal, NET::Modal );
+            m_nWinId = 0;
+        }
+    }
+    return false;
+}
