@@ -48,9 +48,11 @@
 #include <sfx2/request.hxx>
 #include <svl/globalnameitem.hxx>
 #include <unotools/pathoptions.hxx>
+#include <svtools/miscopt.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/linkmgr.hxx>
+#include <svx/linkwarn.hxx>
 #include <svx/svdetc.hxx>
 #include <avmedia/mediawindow.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
@@ -156,7 +158,15 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {
-                    // store link only?
+                    // really store as link only?
+                    if( SvtMiscOptions().ShowLinkWarningDialog() )
+                    {
+                        SvxLinkWarningDialog aWarnDlg(mpWindow,aDlg.GetPath());
+                        if( aWarnDlg.Execute() != RET_OK )
+                            return; // don't store as link
+                    }
+
+                    // store as link
                     String aFltName(aDlg.GetCurrentFilter());
                     String aPath(aDlg.GetPath());
                     pGrafObj->SetGraphicLink(aPath, aFltName);
