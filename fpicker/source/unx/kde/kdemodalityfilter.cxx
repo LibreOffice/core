@@ -57,8 +57,6 @@ bool ModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
         if ( pDlg != NULL && m_nWinId != 0 )
         {
             XSetTransientForHint( qt_xdisplay(), pDlg->winId(), m_nWinId );
-            NETWinInfo aInfo( qt_xdisplay(), pDlg->winId(), qt_xrootwin(), NET::WMState );
-            aInfo.setState( NET::Modal, NET::Modal );
             m_nWinId = 0;
         }
     }

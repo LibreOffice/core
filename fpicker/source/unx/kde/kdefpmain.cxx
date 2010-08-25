@@ -40,6 +40,12 @@
 // Main
 //////////////////////////////////////////////////////////////////////////
 
+static KCmdLineOptions sOptions[] =
+{
+    { "winid <argument>", I18N_NOOP("Window ID to which is the fpicker modal"), "0" },
+    KCmdLineLastOption
+};
+
 int main( int argc, char* argv[] )
 {
     // we fake the name of the application to have "OpenOffice.org" in the
@@ -54,12 +60,19 @@ int main( int argc, char* argv[] )
     ::std::cerr << "kdefilepicker, an implementation of KDE file dialog for OOo." << ::std::endl
         << "Type 'exit' and press Enter to finish." << ::std::endl;
 
+    KCmdLineArgs::addCmdLineOptions( sOptions );
     KCmdLineArgs::init( argc, argv, &qAboutData );
 
     KLocale::setMainCatalogue( "kdialog" );
 
     KApplication kApplication;
-    //ModalityFilter qFilter( /*winid*/ 79691780 );
+
+    // Setup the modality
+    KCmdLineArgs *pArgs = KCmdLineArgs::parsedArgs();
+    long nWinId = atol( pArgs->getOption( "winid" ) );
+    pArgs->clear();
+
+    ModalityFilter qModalityFilter( nWinId );
 
     FileDialog aFileDialog( NULL, QString(), NULL, "kdefiledialog" );
 

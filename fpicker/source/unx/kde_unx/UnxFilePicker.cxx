@@ -46,9 +46,15 @@
 #include <UnxCommandThread.hxx>
 #include <UnxNotifyThread.hxx>
 
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/syswin.hxx>
+#include <vcl/window.hxx>
+
 #include <sys/wait.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 #include <iostream>
 
@@ -447,7 +453,7 @@ void SAL_CALL UnxFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUStri
     sendCommand( aBuffer.makeStringAndClear() );
 }
 
-rtl::OUString SAL_CALL UnxFilePicker::getLabel(sal_Int16 nControlId)
+rtl::OUString SAL_CALL UnxFilePicker::getLabel(sal_Int16 /*nControlId*/)
     throw ( uno::RuntimeException )
 {
     // FIXME getLabel() is not yet implemented
@@ -703,10 +709,29 @@ void UnxFilePicker::initFilePicker()
         }
 #endif
 
-        // FIXME: window id, etc.
+        // The executable name
         const char *pFname = "kdefilepicker";
 
-        execlp( pFname, pFname, NULL );
+        // ID of the main window
+        const int nIdLen = 20;
+        char pWinId[nIdLen] = "0";
+
+        // TODO pass here the real parent (not possible for system dialogs
+        // yet), and default to GetDefDialogParent() only when the real parent
+        // is NULL
+        Window *pParentWin = Application::GetDefDialogParent();
+        if ( pParentWin )
+        {
+            const SystemEnvData* pSysData = ((SystemWindow *)pParentWin)->GetSystemData();
+            if ( pSysData )
+            {
+                snprintf( pWinId, nIdLen, "%ld", pSysData->aWindow ); // unx only
+                pWinId[nIdLen-1] = 0;
+            }
+        }
+
+        // Execute the fpicker implementation
+        execlp( pFname, pFname, "--winid", pWinId, NULL );
 
         // Error, finish the child
         exit( -1 );
