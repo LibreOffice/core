@@ -36,9 +36,49 @@
 #include <osl/thread.hxx>
 #include <rtl/ustring.hxx>
 
+#include <vcl/svapp.hxx>
+
 #include <list>
 
 class UnxFilePickerNotifyThread;
+
+/** Synchronization for the 'thread-less' version of the fpicker.
+
+    Something like osl::Condition, but calls Application::Yield() while in
+    wait().
+*/
+class YieldingCondition
+{
+    ::osl::Mutex m_aMutex;
+    bool m_bValue;
+
+    bool get()
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return m_bValue;
+    }
+
+public:
+    YieldingCondition() { reset(); }
+
+    void reset()
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_bValue = false;
+    }
+
+    void set()
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_bValue = true;
+    }
+
+    void wait()
+    {
+        while ( !get() )
+            Application::Yield();
+    }
+};
 
 class UnxFilePickerCommandThread : public ::osl::Thread
 {
@@ -48,7 +88,7 @@ protected:
 
     ::osl::Mutex                m_aMutex;
 
-    ::osl::Condition            m_aExecCondition;
+    YieldingCondition           m_aExecCondition;
     sal_Bool                    m_aResult;
 
     ::osl::Condition            m_aGetCurrentFilterCondition;
@@ -67,7 +107,7 @@ public:
     UnxFilePickerCommandThread( UnxFilePickerNotifyThread *pNotifyThread, int nReadFD );
     ~UnxFilePickerCommandThread();
 
-    ::osl::Condition& SAL_CALL  execCondition() { return m_aExecCondition; }
+    YieldingCondition& SAL_CALL execCondition() { return m_aExecCondition; }
     sal_Bool SAL_CALL           result();
 
     ::osl::Condition& SAL_CALL  getCurrentFilterCondition() { return m_aGetCurrentFilterCondition; }

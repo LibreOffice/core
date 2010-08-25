@@ -178,8 +178,12 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
 {
     checkFilePicker();
 
-    sendCommand( ::rtl::OUString::createFromAscii( "exec" ),
-                 m_pCommandThread->execCondition() );
+    // this is _not_ an osl::Condition, see i#93366
+    m_pCommandThread->execCondition().reset();
+
+    sendCommand( ::rtl::OUString::createFromAscii( "exec" ) );
+
+    m_pCommandThread->execCondition().wait();
 
     return m_pCommandThread->result();
 }
