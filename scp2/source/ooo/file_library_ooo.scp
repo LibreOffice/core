@@ -585,7 +585,7 @@ End
 File gid_File_Bin_KdeFilePicker
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "kdefilepicker";
 End
 #endif
