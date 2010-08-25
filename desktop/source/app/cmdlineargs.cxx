@@ -151,6 +151,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
     sal_Bool    bForceOpenEvent = sal_False;
     sal_Bool    bForceNewEvent  = sal_False;
     sal_Bool    bDisplaySpec    = sal_False;
+    sal_Bool    bConversionEvent= sal_False;
+    sal_Bool    bConversionParamsEvent= sal_False;
+    sal_Bool    bBatchPrintEvent= sal_False;
+    sal_Bool    bBatchPrinterNameEvent= sal_False;
+    sal_Bool    bConversionOutEvent   = sal_False;
 
     m_eArgumentCount = NONE;
 
@@ -295,6 +300,27 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bDisplaySpec    = sal_False;
                     }
                     #endif
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-convert-to" ) )
+                    {
+                        bOpenEvent = sal_False;
+                        bConversionEvent = sal_True;
+                        bConversionParamsEvent = sal_True;
+                    }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-print-to-file" ) )
+                    {
+                        bOpenEvent = sal_False;
+                        bBatchPrintEvent = sal_True;
+                    }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-printer-name" ) &&
+                              bBatchPrintEvent )
+                    {
+                        bBatchPrinterNameEvent = sal_True;
+                    }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-outdir" ) &&
+                              (bConversionEvent || bBatchPrintEvent) )
+                    {
+                        bConversionOutEvent = sal_True;
+                    }
                 }
                 else
                 {
@@ -303,6 +329,23 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         // first argument after "-pt" this must be the printer name
                         AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArgStr );
                         bPrinterName = sal_False;
+                    }
+                    else if ( bConversionParamsEvent && bConversionEvent )
+                    {
+                        // first argument must be the the params
+                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONPARAMS, aArgStr );
+                        bConversionParamsEvent = sal_False;
+                    }
+                    else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
+                    {
+                        // first argument is the printer name
+                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArgStr );
+                        bBatchPrinterNameEvent = sal_False;
+                    }
+                    else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
+                    {
+                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONOUT, aArgStr );
+                        bConversionOutEvent = sal_False;
                     }
                     else
                     {
@@ -335,6 +378,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                             bDisplaySpec = sal_False; // only one display, not a lsit
                             bOpenEvent = sal_True;    // set back to standard
                         }
+                        else if ( bConversionEvent || bBatchPrintEvent )
+                            AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONLIST, aArgStr );
                     }
                 }
             }
@@ -890,6 +935,28 @@ sal_Bool CommandLineArgs::GetLanguage( ::rtl::OUString& rPara ) const
     rPara = m_aStrParams[ CMD_STRINGPARAM_LANGUAGE ];
     return m_aStrSetParams[ CMD_STRINGPARAM_LANGUAGE ];
 }
+
+sal_Bool CommandLineArgs::GetConversionList( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
+}
+
+sal_Bool CommandLineArgs::GetConversionParams( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
+}
+sal_Bool CommandLineArgs::GetConversionOut( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
+}
+
+
 
 sal_Bool CommandLineArgs::IsEmpty() const
 {

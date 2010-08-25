@@ -2564,6 +2564,9 @@ void Desktop::OpenClients()
         pArgs->GetPrinterName( aRequest.aPrinterName );
         pArgs->GetForceOpenList( aRequest.aForceOpenList );
         pArgs->GetForceNewList( aRequest.aForceNewList );
+        pArgs->GetConversionList( aRequest.aConversionList );
+        pArgs->GetConversionParams( aRequest.aConversionParams );
+        pArgs->GetConversionOut( aRequest.aConversionOut );
 
         if ( aRequest.aOpenList.getLength() > 0 ||
              aRequest.aViewList.getLength() > 0 ||
@@ -2571,7 +2574,8 @@ void Desktop::OpenClients()
              aRequest.aPrintList.getLength() > 0 ||
              aRequest.aForceOpenList.getLength() > 0 ||
              aRequest.aForceNewList.getLength() > 0 ||
-             ( aRequest.aPrintToList.getLength() > 0 && aRequest.aPrinterName.getLength() > 0 ))
+             ( aRequest.aPrintToList.getLength() > 0 && aRequest.aPrinterName.getLength() > 0 ) ||
+             aRequest.aConversionList.getLength() > 0 )
         {
             bLoaded = sal_True;
 
@@ -2921,7 +2925,8 @@ void Desktop::OpenSplashScreen()
          !pCmdLine->IsNoLogo() &&
          !pCmdLine->IsTerminateAfterInit() &&
          !pCmdLine->GetPrintList( aTmpString ) &&
-         !pCmdLine->GetPrintToList( aTmpString ) )
+         !pCmdLine->GetPrintToList( aTmpString ) &&
+         !pCmdLine->GetConversionList( aTmpString ))
     {
         // Determine application name from command line parameters
         OUString aAppName;

@@ -374,8 +374,8 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
 sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxMedium& rMedium,
     const SfxFilter**ppFilter,
-    SfxFilterFlags /*nMust*/,
-    SfxFilterFlags /*nDont*/ ) const
+    SfxFilterFlags nMust,
+    SfxFilterFlags nDont ) const
 {
     Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
     ::rtl::OUString sTypeName;
@@ -390,7 +390,11 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 
     *ppFilter = NULL;
     if ( sTypeName.getLength() )
-        *ppFilter = GetFilter4EA( sTypeName );
+    {
+        // make sure filter list is initialized
+        pImpl->InitForIterating();
+        *ppFilter = GetFilter4EA( sTypeName, nMust, nDont );
+    }
 
     return *ppFilter ? ERRCODE_NONE : ERRCODE_ABORT;
 }

@@ -51,6 +51,7 @@
 #include "osl/file.hxx"
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
+#include "osl/file.hxx"
 
 using namespace vos;
 using namespace rtl;
@@ -945,6 +946,62 @@ static void AddToDispatchList(
     }
 }
 
+static void AddConversionsToDispatchList(
+    DispatchWatcher::DispatchList& rDispatchList,
+    boost::optional< rtl::OUString > const & cwdUrl,
+    const OUString& rRequestList,
+    const OUString& rParam,
+    const OUString& rPrinterName,
+    const OUString& rFactory,
+    const OUString& rParamOut )
+{
+    DispatchWatcher::RequestType nType;
+    OUString aParam( rParam );
+
+    if( rParam.getLength() )
+    {
+        nType = DispatchWatcher::REQUEST_CONVERSION;
+        aParam = rParam;
+    }
+    else
+    {
+        nType = DispatchWatcher::REQUEST_BATCHPRINT;
+        aParam = rPrinterName;
+    }
+
+    OUString aOutDir( rParamOut.trim() );
+    ::rtl::OUString aPWD;
+    ::tools::getProcessWorkingDir( &aPWD );
+
+    if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
+        ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
+
+    if( rParamOut.trim().getLength() )
+    {
+        aParam += ::rtl::OUString::createFromAscii(";");
+        aParam += aOutDir;
+    }
+    else
+    {
+        ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
+        aParam += ::rtl::OUString::createFromAscii( ";" ) + aPWD;
+    }
+
+    if ( rRequestList.getLength() > 0 )
+    {
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken = rRequestList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            if ( aToken.getLength() > 0 )
+                rDispatchList.push_back(
+                    DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, rFactory ));
+        }
+        while ( nIndex >= 0 );
+    }
+}
+
+
 sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
 {
     // protect the dispatch list
@@ -961,7 +1018,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
-
+    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut );
     sal_Bool bShutdown( sal_False );
 
     if ( pGlobalOfficeIPCThread )

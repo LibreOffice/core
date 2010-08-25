@@ -90,6 +90,9 @@ class CommandLineArgs
             CMD_STRINGPARAM_VERSION,
             CMD_STRINGPARAM_PRINTTOLIST,
             CMD_STRINGPARAM_PRINTERNAME,
+            CMD_STRINGPARAM_CONVERSIONLIST,
+            CMD_STRINGPARAM_CONVERSIONPARAMS,
+            CMD_STRINGPARAM_CONVERSIONOUT,
             CMD_STRINGPARAM_DISPLAY,
             CMD_STRINGPARAM_LANGUAGE,
             CMD_STRINGPARAM_COUNT           // must be last element!
@@ -169,6 +172,9 @@ class CommandLineArgs
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
         sal_Bool                GetLanguage( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetConversionList( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetConversionParams( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetConversionOut( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool                IsPrinting() const;

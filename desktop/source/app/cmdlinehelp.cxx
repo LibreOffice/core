@@ -116,7 +116,17 @@ namespace desktop
         "-unaccept=<accept-string>\n"\
         "      Close an acceptor that was created with -accept=<accept-string>\n"\
         "      Use -unnaccept=all to close all open acceptors\n"\
-        "Remaining arguments will be treated as filenames or URLs of documents to open.\n";
+        "-convert-to output_file_extension[:output_filter_name] [-outdir ouput_dir] files\n"\
+        "      Batch convert files.\n"\
+        "      If -outdir is not specified then current working dir is used as output_dir.\n"\
+        "      Eg. -convert-to pdf *.doc\n"\
+        "          -convert-to pdf:writer_pdf_Export -outdir /home/user *.doc\n"\
+        "-print-to-file [-printer-name printer_name] [-outdir ouput_dir] files\n"\
+        "      Batch print files to file.\n"\
+        "      If -outdir is not specified then current working dir is used as output_dir.\n"\
+        "      Eg. -print-to-file *.doc\n"\
+        "          -print-to-file -printer-name nasty_lowres_printer -outdir /home/user *.doc\n"\
+        "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n";
 
     void ReplaceStringHookProc( UniString& rStr );
 

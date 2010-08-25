@@ -66,6 +66,9 @@ struct ProcessDocumentsRequest
     ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
     ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
     ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
+    ::rtl::OUString aConversionList;
+    ::rtl::OUString aConversionParams;
+    ::rtl::OUString aConversionOut;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
 };
 

@@ -75,7 +75,9 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             REQUEST_PRINT,
             REQUEST_PRINTTO,
             REQUEST_FORCEOPEN,
-            REQUEST_FORCENEW
+            REQUEST_FORCENEW,
+            REQUEST_CONVERSION,
+            REQUEST_BATCHPRINT
         };
 
         struct DispatchRequest
@@ -86,7 +88,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             RequestType     aRequestType;
             rtl::OUString   aURL;
             boost::optional< rtl::OUString > aCwdUrl;
-            rtl::OUString   aPrinterName;
+            rtl::OUString   aPrinterName;  // also conversion params
             rtl::OUString   aPreselectedFactory;
         };
 

@@ -28,6 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
+#include "osl/file.hxx"
+#include <svl/fstathelper.hxx>
+
 #include "dispatchwatcher.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
@@ -48,13 +54,15 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <tools/urlobj.hxx>
 #include <comphelper/mediadescriptor.hxx>
 
 #include <vector>
+#include <osl/thread.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -79,6 +87,42 @@ struct DispatchHolder
     rtl::OUString cwdUrl;
     Reference< XDispatch > xDispatch;
 };
+
+// Temporary code
+static void impl_sleep( sal_uInt32 nSec )
+{
+    TimeValue aTime;
+    aTime.Seconds = nSec;
+    aTime.Nanosec = 0;
+
+    osl::Thread::wait( aTime );
+}
+
+static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
+                                        String aAppl )
+{
+    String aFilter;
+    SfxMedium* pMedium = new SfxMedium( aUrl,
+                                        STREAM_STD_READ, FALSE );
+    const SfxFilter *pSfxFilter = NULL;
+    SfxFilterMatcher aMatcher;
+    if( nFlags == SFX_FILTER_EXPORT )
+        aMatcher = SfxFilterMatcher( aAppl );
+    aMatcher.GuessFilterIgnoringContent( *pMedium, &pSfxFilter, nFlags, 0 );
+    if( pSfxFilter )
+        aFilter = ( nFlags == SFX_FILTER_EXPORT ) ? pSfxFilter->GetFilterName() :
+                                                    pSfxFilter->GetServiceName();
+
+    delete pMedium;
+    return aFilter;
+}
+static OUString impl_GuessFilter( OUString aUrlIn, OUString aUrlOut )
+{
+    /* aAppl can also be set to Factory like scalc, swriter... */
+    String aAppl;
+    aAppl = impl_GetFilterFromExt( aUrlIn, SFX_FILTER_IMPORT, aAppl );
+    return  impl_GetFilterFromExt( aUrlOut, SFX_FILTER_EXPORT, aAppl );
+}
 
 Mutex* DispatchWatcher::pWatcherMutex = NULL;
 
@@ -141,7 +185,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
     for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
     {
-        String                  aPrinterName;
         const DispatchRequest&  aDispatchRequest = *p;
 
         // create parameter array
@@ -151,7 +194,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
         // we need more properties for a print/print to request
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-             aDispatchRequest.aRequestType == REQUEST_PRINTTO  )
+             aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
+             aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
+             aDispatchRequest.aRequestType == REQUEST_CONVERSION)
             nCount++;
 
         Sequence < PropertyValue > aArgs( nCount );
@@ -161,7 +206,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-             aDispatchRequest.aRequestType == REQUEST_PRINTTO )
+             aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
+             aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
+             aDispatchRequest.aRequestType == REQUEST_CONVERSION)
         {
             aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
             aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
@@ -196,7 +243,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-             aDispatchRequest.aRequestType == REQUEST_PRINTTO )
+             aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
+             aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
+             aDispatchRequest.aRequestType == REQUEST_CONVERSION)
         {
             // documents opened for printing are opened readonly because they must be opened as a new document and this
             // document could be open already
@@ -214,7 +263,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             // hidden documents should never be put into open tasks
             aTarget = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") );
         }
-
         // load the document ... if they are loadable!
         // Otherwise try to dispatch it ...
         Reference < XPrintable > xDoc;
@@ -361,24 +409,133 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 OfficeIPCThread::RequestsCompleted( 1 );
             }
             else if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-                      aDispatchRequest.aRequestType == REQUEST_PRINTTO )
+                      aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
+                      aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
+                      aDispatchRequest.aRequestType == REQUEST_CONVERSION )
             {
                 if ( xDoc.is() )
                 {
-                    if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
-                    {
-                        // create the printer
-                        Sequence < PropertyValue > aPrinterArgs( 1 );
-                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
-                        aPrinterArgs[0].Value <<= ::rtl::OUString( aDispatchRequest.aPrinterName );
-                        xDoc->setPrinter( aPrinterArgs );
-                    }
+                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION ) {
+                        Reference< XStorable > xStorable( xDoc, UNO_QUERY );
+                        if ( xStorable.is() ) {
+                            rtl::OUString aParam = aDispatchRequest.aPrinterName;
+                            sal_Int32 nPathIndex =  aParam.lastIndexOfAsciiL( ";", 1 );
+                            sal_Int32 nFilterIndex = aParam.indexOfAsciiL( ":", 1 );
+                            if( nPathIndex < nFilterIndex )
+                                nFilterIndex = -1;
+                            rtl::OUString aFilterOut=aParam.copy( nPathIndex+1 );
+                            rtl::OUString aFilter;
+                            rtl::OUString aFilterExt;
+                            sal_Bool bGuess = sal_False;
 
-                    // print ( also without user interaction )
-                    Sequence < PropertyValue > aPrinterArgs( 1 );
-                    aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Wait");
-                    aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
-                    xDoc->print( aPrinterArgs );
+                            if( nFilterIndex >= 0 )
+                            {
+                                aFilter = aParam.copy( nFilterIndex+1, nPathIndex-nFilterIndex-1 );
+                                aFilterExt = aParam.copy( 0, nFilterIndex );
+                            }
+                            else
+                            {
+                                // Guess
+                                bGuess = sal_True;
+                                aFilterExt = aParam.copy( 0, nPathIndex );
+                            }
+                            INetURLObject aOutFilename( aObj );
+                            aOutFilename.SetExtension( aFilterExt );
+                            FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
+                            rtl::OUString aOutFile = aFilterOut+
+                                                     ::rtl::OUString::createFromAscii( "/" )+
+                                                     aOutFilename.getName();
+                            //FileBase::getFileURLFromSystemPath( aOutFile, aOutFile );
+
+                            if ( bGuess )
+                            {
+                                aFilter = impl_GuessFilter( aName, aOutFile );
+                            }
+
+                            Sequence<PropertyValue> conversionProperties( 2 );
+                            conversionProperties[0].Name = ::rtl::OUString::createFromAscii( "Overwrite" );
+                            conversionProperties[0].Value <<= sal_True;
+
+                            conversionProperties[1].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                            conversionProperties[1].Value <<= aFilter;
+
+                            rtl::OUString aTempName;
+                            FileBase::getSystemPathFromFileURL( aName, aTempName );
+                            rtl::OString aSource8 = ::rtl::OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                            FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
+                            rtl::OString aTargetURL8 = ::rtl::OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
+                            printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
+                                   ::rtl::OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
+                            if( FStatHelper::IsDocument(aOutFile) )
+                                printf("Overwriting: %s\n",::rtl::OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                            try
+                            {
+                                xStorable->storeToURL( aOutFile, conversionProperties );
+                            }
+                            catch ( Exception& )
+                            {
+                                fprintf( stderr, "Error: Please reverify input parameters...\n" );
+                            }
+                        }
+                    } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {
+                        rtl::OUString aParam = aDispatchRequest.aPrinterName;
+                        sal_Int32 nPathIndex =  aParam.lastIndexOfAsciiL( ";", 1 );
+
+                        rtl::OUString aFilterOut;
+                        rtl::OUString aPrinterName;
+                        if( nPathIndex != -1 )
+                            aFilterOut=aParam.copy( nPathIndex+1 );
+                        if( nPathIndex != 0 )
+                            aPrinterName=aParam.copy( 0, nPathIndex );
+
+                        INetURLObject aOutFilename( aObj );
+                        aOutFilename.SetExtension( ::rtl::OUString::createFromAscii("ps") );
+                        FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
+                        rtl::OUString aOutFile = aFilterOut+
+                            ::rtl::OUString::createFromAscii( "/" )+
+                            aOutFilename.getName();
+
+                        rtl::OUString aTempName;
+                        FileBase::getSystemPathFromFileURL( aName, aTempName );
+                        rtl::OString aSource8 = ::rtl::OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                        FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
+                        rtl::OString aTargetURL8 = ::rtl::OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
+                        printf("print %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
+                               aPrinterName.getLength() ?
+                               ::rtl::OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() : "<default_printer>");
+
+                        // create the custom printer, if given
+                        Sequence < PropertyValue > aPrinterArgs( 1 );
+                        if( aPrinterName.getLength() )
+                        {
+                            aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                            aPrinterArgs[0].Value <<= aPrinterName;
+                            xDoc->setPrinter( aPrinterArgs );
+                        }
+
+                        // print ( also without user interaction )
+                        aPrinterArgs.realloc(2);
+                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("FileName");
+                        aPrinterArgs[0].Value <<= aOutFile;
+                        aPrinterArgs[1].Name = ::rtl::OUString::createFromAscii("Wait");
+                        aPrinterArgs[1].Value <<= ( sal_Bool ) sal_True;
+                        xDoc->print( aPrinterArgs );
+                    } else {
+                        if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
+                        {
+                            // create the printer
+                            Sequence < PropertyValue > aPrinterArgs( 1 );
+                            aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                            aPrinterArgs[0].Value <<= ::rtl::OUString( aDispatchRequest.aPrinterName );
+                            xDoc->setPrinter( aPrinterArgs );
+                        }
+
+                        // print ( also without user interaction )
+                        Sequence < PropertyValue > aPrinterArgs( 1 );
+                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Wait");
+                        aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
+                        xDoc->print( aPrinterArgs );
+                    }
                 }
                 else
                 {
@@ -442,9 +599,15 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     // implementation via statusChanged!!
     if ( bEmpty && !bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
+        // Delay give a chance for threads to complete work
+        impl_sleep(2);
+
         // We have to check if we have an open task otherwise we have to shutdown the office.
         Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
         aGuard.clear();
+
+        // Delay give a chance for threads to complete work
+        impl_sleep(1);
 
         Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
 
@@ -470,7 +633,7 @@ throw(::com::sun::star::uno::RuntimeException)
 void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
 {
     osl::ClearableMutexGuard aGuard( GetMutex() );
-    sal_Int16 nCount = --m_nRequestCount;
+    sal_Int16 nCount = m_nRequestCount;
     aGuard.clear();
     OfficeIPCThread::RequestsCompleted( 1 );
 /*
