@@ -32,6 +32,8 @@
 //#endif
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
+#include <tools/prewin.h>
+#include <tools/postwin.h>
 #include "odma_lib.hxx"
 
 
@@ -70,17 +72,18 @@ namespace odma
 
     sal_Bool LoadFunctions(oslModule _pODMA);
 
-    sal_Bool LoadLibrary()
+    sal_Bool DMSsAvailable()
     {
         static sal_Bool bLoaded = sal_False;
-        static oslModule pODMA = NULL;
+        static sal_Bool bBeenHere = sal_False;
+        oslModule pODMA = NULL;
 
-        if (bLoaded)
-            return sal_True;
+        if (bBeenHere)
+            return bLoaded;
+
         ::rtl::OUString sPath;
     #ifdef WIN
         sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA.DLL"));
-
     #endif
     #ifdef WNT
         sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA32.DLL"));
@@ -89,11 +92,21 @@ namespace odma
         sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("libodma.so"));
     #endif
 
+        bBeenHere = sal_True;
+
         pODMA = osl_loadModule( sPath.pData,SAL_LOADMODULE_NOW );
         if( !pODMA)
             return sal_False;
 
-        return bLoaded = LoadFunctions(pODMA);
+        if (!LoadFunctions(pODMA))
+            return sal_False;
+
+        bLoaded = (NODMGetDMSCount() > 0);
+
+        if (getenv ("NO_ODMA"))
+            bLoaded = sal_False;
+
+        return bLoaded;
     }
     // -------------------------------------------------------------------------
 

@@ -32,21 +32,19 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
-#include "odma_lib.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
-                           const OUString & rImplementationName,
-                              Sequence< OUString > const & rServiceNames )
+                           const rtl::OUString & rImplementationName,
+                               Sequence< rtl::OUString > const & rServiceNames )
 {
-    OUString aKeyName( OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
-    aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
     Reference< XRegistryKey > xKey;
     try
@@ -119,10 +117,8 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( ::odma::ContentProvider::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        if(::odma::LoadLibrary())
+        if(::odma::DMSsAvailable())
             xFactory = ::odma::ContentProvider::createServiceFactory( xSMgr );
-        else
-            OSL_ASSERT(!"Could not load library!");
     }
 
     //////////////////////////////////////////////////////////////////////

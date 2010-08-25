@@ -339,6 +339,7 @@ SHL4OBJS=       \
                 $(SLO)$/startmoduledispatcher.obj
 
 SHL4STDLIBS=    \
+         $(ODMA_LIB_LIB)    \
                 $(FWILIB)                           \
                 $(FWELIB)                           \
                 $(SVTOOLLIB)                        \

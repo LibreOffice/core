@@ -5759,6 +5759,13 @@
 				</info>
 				<value>false</value>
 			</prop>
+            <prop oor:name="TryODMADialog" oor:type="xs:boolean">
+                <info>
+                    <author>tml</author>
+                    <desc>Determines whether to show the document creation and selection of the machine's default ODMA (Open Document Management Architecture) DMS (Document Management System). If true, and the machine has a DMS available, the DMS's dialog will be displayed. That dialog then gives the opportunity to use the application's dialog instead, which means the normal system file and folder pickers will be displayed. Relevant only on Windows.</desc>
+                </info>
+                <value>false</value>
+            </prop>
 			<prop oor:name="SymbolSet" oor:type="xs:short">
 				<!-- UIHints: Tools  Options General View -->
 				<info>

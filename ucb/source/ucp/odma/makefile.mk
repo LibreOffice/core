@@ -47,7 +47,7 @@ LIBTARGET=NO
 
 # --- General -----------------------------------------------------
 
-SLOFILES=\
+SLO1FILES=\
     $(SLO)$/odma_lib.obj    		\
     $(SLO)$/odma_services.obj    	\
     $(SLO)$/odma_provider.obj    	\
@@ -58,7 +58,7 @@ SLOFILES=\
     $(SLO)$/odma_contentcaps.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
+LIB1OBJFILES=$(SLO1FILES)
 
 # --- Shared-Library ---------------------------------------------------
 
@@ -90,6 +90,13 @@ APP2STDLIBS=$(SALLIB)			\
             $(CPPUHELPERLIB)
 
 DEF2DES=UCB ODMA URL converter
+
+# --- odma_lib library -----------------------------------------------
+
+SLO3FILES=$(SLO)$/odma_lib.obj
+
+LIB3TARGET=$(SLB)$/odma_lib.lib
+LIB3OBJFILES=$(SLO3FILES)
 
 # --- Targets ----------------------------------------------------------
 

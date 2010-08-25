@@ -434,7 +434,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
         lpszDMSList[strlen(lpszDMSList)+1] = '\0';
 
         ::rtl::OString sTitleText(::rtl::OUStringToOString(_sDocumentName,RTL_TEXTENCODING_ASCII_US));
-        ::rtl::OString sQuery("SELECT ODM_DOCID, ODM_NAME WHERE ODM_TITLETEXT = '");
+        ::rtl::OString sQuery("SELECT ODM_DOCID_LATEST, ODM_NAME WHERE ODM_TITLETEXT = '");
         sQuery += sTitleText;
         sQuery += "'";
 
@@ -520,6 +520,12 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
 {
     ContentPropertiesMemberFunctor aFunc(::std::mem_fun(&ContentProperties::getTitle));
     return getContentProperty(_sTitle,aFunc);
+}
+// -----------------------------------------------------------------------------
+::rtl::Reference<ContentProperties> ContentProvider::getContentPropertyWithDocumentId(const ::rtl::OUString& _sDocumentId) const
+{
+    ContentPropertiesMemberFunctor aFunc(::std::mem_fun(&ContentProperties::getDocumentId));
+    return getContentProperty(_sDocumentId,aFunc);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ContentProvider::openDoc(const ::rtl::Reference<ContentProperties>& _rProp)  throw (uno::Exception)

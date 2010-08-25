@@ -64,6 +64,7 @@ namespace odma
         {}
 
         inline ::rtl::OUString getTitle()       const { return m_sTitle;        }
+        inline ::rtl::OUString getDocumentId()  const { return ::rtl::OStringToOUString( m_sDocumentId, RTL_TEXTENCODING_ASCII_US ); }
         inline ::rtl::OUString getSavedAsName() const { return m_sSavedAsName;  }
     };
     typedef ::std::binary_function< ::rtl::Reference<ContentProperties>, ::rtl::OUString,bool> TContentPropertiesFunctorBase;

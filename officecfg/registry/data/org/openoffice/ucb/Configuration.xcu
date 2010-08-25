@@ -186,6 +186,17 @@
                 <value/>
               </prop>
             </node>
+            <node oor:name="Provider42" oor:op="replace">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.ODMAContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>vnd.sun.star.odma</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
             <!-- We want the Provider to be the final fallback provider -->
             <node oor:name="Provider999" oor:op="replace" install:module="gio">
               <prop oor:name="ServiceName">

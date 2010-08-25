@@ -23,6 +23,11 @@
 ..\%__SRC%\lib\ucp*.uno.dylib %_DEST%\lib%_EXT%\ucp*.uno.dylib
 ..\%__SRC%\misc\ucp*.map %_DEST%\bin%_EXT%\ucp*.map
 ..\%__SRC%\misc\ucp*.sym %_DEST%\bin%_EXT%\ucp*.sym
+
+..\%__SRC%\slb\odma_lib.lib %_DEST%\lib%_EXT%\odma_lib.lib
+..\source\ucp\odma\odma.h %_DEST%\inc%_EXT%\odma.h
+..\source\ucp\odma\odma_lib.hxx %_DEST%\inc%_EXT%\odma_lib.hxx
+
 ..\source\ucp\file\ucpfile.xml %_DEST%\xml%_EXT%\ucpfile.xml
 ..\source\ucp\ftp\ucpftp.xml %_DEST%\xml%_EXT%\ucpftp.xml
 ..\source\ucp\hierarchy\ucphier.xml %_DEST%\xml%_EXT%\ucphier.xml

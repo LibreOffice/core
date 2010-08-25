@@ -11,7 +11,7 @@
             Ocke Janssen
         </author>
         <name>
-            com.sun.star.comp.ucb.OdmaContentProvider
+            com.sun.star.comp.ucb.ODMAContentProvider
         </name>
         <description>
         This component implements a Content Provider for the Universal

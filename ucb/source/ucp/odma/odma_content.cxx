@@ -471,6 +471,12 @@ uno::Any SAL_CALL Content::execute(
     }
     else if( ! aCommand.Name.compareToAscii( "transfer" ) )
     {
+        // So far I have determined that this command is called when
+        // doing "Save As" to copy an already written backup copy of
+        // the document in the file system into the DMS.
+
+        // Maybe also in other situations.
+
         ucb::TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
         {
@@ -486,84 +492,21 @@ uno::Any SAL_CALL Content::execute(
         ::rtl::Reference<ContentProperties> aProp = m_aProps;
         if(aProp->m_bIsFolder)
         {
-            aProp = getContentProvider()->getContentPropertyWithTitle(aTransferInfo.NewTitle);
+            aProp = getContentProvider()->getContentPropertyWithDocumentId(aTransferInfo.NewTitle);
             if(!aProp.is())
                 aProp = getContentProvider()->getContentPropertyWithSavedAsName(aTransferInfo.NewTitle);
             sal_Bool bError = !aProp.is();
-            if(bError)
-            {
-                sal_Char* pExtension = NULL;
-                ::rtl::OString sExt;
-                sal_Int32 nPos = aTransferInfo.NewTitle.lastIndexOf('.');
-                if(nPos != -1)
-                {
-                    sExt = ::rtl::OUStringToOString(aTransferInfo.NewTitle.copy(nPos+1),RTL_TEXTENCODING_ASCII_US);
-                    if(sExt.equalsIgnoreAsciiCase("txt"))
-                        pExtension = ODM_FORMAT_TEXT;
-                    else if(sExt.equalsIgnoreAsciiCase("rtf"))
-                        pExtension = ODM_FORMAT_RTF;
-                    else if(sExt.equalsIgnoreAsciiCase("ps"))
-                        pExtension = ODM_FORMAT_PS;
-                    else
-                        pExtension = const_cast<sal_Char*>(sExt.getStr());
-                }
-                else
-                    pExtension = ODM_FORMAT_TEXT;
 
-                sal_Char* lpszNewDocId = new sal_Char[ODM_DOCID_MAX];
-                void *pData = NULL;
-                DWORD dwFlags = ODM_SILENT;
-                ODMSTATUS odm = NODMSaveAsEx(ContentProvider::getHandle(),
-                                             NULL, // means it is saved the first time
-                                             lpszNewDocId,
-                                             pExtension,
-                                             NULL, // no callback function here
-                                             pData,
-                                             &dwFlags);
+            // There used to be code below that called ODMSaveAsEx,
+            // but that was very broken. We have already called
+            // ODMSaveAsEx in the ODMA file picker when selecting the
+            // name for a new document, or the document already exists
+            // in the DMS and we don't need any ODMSaveAsEx. The ODMA
+            // file picker tells odma::ContentProvider about the new
+            // document's DOCID, so the
+            // getContentPropertyWithDocumentId() call above should
+            // succeed.
 
-                // check if we have to call the DMS dialog
-                if(odm == ODM_E_USERINT)
-                {
-                    dwFlags = 0;
-                    odm = NODMSaveAsEx(ContentProvider::getHandle(),
-                                             NULL, // means it is saved the first time
-                                             lpszNewDocId,
-                                             pExtension,
-                                             NULL, // no callback function here
-                                             pData,
-                                             &dwFlags);
-                }
-                bError = odm != ODM_SUCCESS;
-                if(!bError)
-                {
-                    aProp = new ContentProperties();
-                    aProp->m_sDocumentId    = ::rtl::OString(lpszNewDocId);
-                    aProp->m_sContentType   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_TYPE));
-                    aProp->m_sSavedAsName   = aTransferInfo.NewTitle;
-                    getContentProvider()->append(aProp);
-
-                    // now set the title
-                    WORD nDocInfo = ODM_NAME;
-                    ::rtl::OUString sFileName = aTransferInfo.NewTitle;
-                    sal_Int32 nIndex = aTransferInfo.NewTitle.lastIndexOf( sal_Unicode('.') );
-                    if(nIndex != -1)
-                        sFileName = aTransferInfo.NewTitle.copy(0,nIndex);
-
-                    ::rtl::OString sDocInfoValue = ::rtl::OUStringToOString(sFileName,RTL_TEXTENCODING_ASCII_US);
-                    odm = NODMSetDocInfo(   ContentProvider::getHandle(),
-                                            lpszNewDocId,
-                                            nDocInfo,
-                                            const_cast<sal_Char*>(sDocInfoValue.getStr())
-                                            );
-
-                }
-                else if ( odm == ODM_E_CANCEL)
-                    NODMActivate(ContentProvider::getHandle(),
-                                 ODM_DELETE,
-                                 lpszNewDocId);
-
-                delete [] lpszNewDocId;
-            }
             if(bError)
                 ucbhelper::cancelCommandExecution(
                         uno::makeAny( lang::IllegalArgumentException(
@@ -575,11 +518,22 @@ uno::Any SAL_CALL Content::execute(
         rtl::OUString sFileURL = ContentProvider::openDoc(aProp);
 
         sal_Int32 nLastIndex = sFileURL.lastIndexOf( sal_Unicode('/') );
+        // Create a new Content object for the "shadow" file
+        // corresponding to the opened document from the DMS.
         ::ucbhelper::Content aContent(sFileURL.copy(0,nLastIndex),NULL);
         //  aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
         aTransferInfo.NewTitle = sFileURL.copy( 1 + nLastIndex );
+        // Copy our saved backup copy to the "shadow" file.
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),uno::makeAny(aTransferInfo));
+        // Tell the DMS that the "shadow" file is done and can be
+        // imported.
         getContentProvider()->saveDocument(aProp->m_sDocumentId);
+    }
+    else if ( aCommand.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( "getCasePreservingURL" ) ) )
+    {
+        rtl::OUString CasePreservingURL = openDoc();
+        aRet <<= CasePreservingURL;
     }
     else
     {

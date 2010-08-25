@@ -1,8 +1,9 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2010 Novell, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -28,9 +29,10 @@
 PRJ=..$/..
 
 PRJNAME=fpicker
-TARGET=fpicker.uno
+TARGET=fps_odma
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+GEN_HID=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -39,22 +41,29 @@ DLLPRE=
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	\
-    $(SLO)$/fpicker.obj
+SLOFILES=\
+    $(SLO)$/ODMAFilePicker.obj \
+    $(SLO)$/ODMAFolderPicker.obj \
+    $(SLO)$/fps_odma.obj
 
-SHL1TARGET=	$(TARGET)
+SHL1TARGET=	$(TARGET).uno
 SHL1IMPLIB=	i$(TARGET)
 SHL1OBJS=	$(SLOFILES)
 SHL1STDLIBS=\
     $(ODMA_LIB_LIB) \
+    $(SVTOOLLIB) \
+    $(TKLIB) \
     $(VCLLIB) \
     $(SVLLIB) \
-        $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+SHL1VERSIONMAP=exports.map
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 

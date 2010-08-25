@@ -41,7 +41,6 @@
 #include "odma_content.hxx"
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
-#include "odma_lib.hxx"
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -284,7 +283,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     ODMSTATUS odm = NODMGetDMS(ODMA_ODMA_REGNAME, lpszDMSList);
     lpszDMSList[strlen(lpszDMSList)+1] = '\0';
 
-    ::rtl::OString sQuery("SELECT ODM_DOCID, ODM_NAME");
+    ::rtl::OString sQuery("SELECT ODM_DOCID_LATEST, ODM_NAME");
 
     DWORD dwFlags = ODM_SPECIFIC;
     odm = NODMQueryExecute(ContentProvider::getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );

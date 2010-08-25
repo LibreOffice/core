@@ -34,6 +34,13 @@
 #include "cppuhelper/implementationentry.hxx"
 #endif
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+
+#ifdef WNT
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+#include <odma_lib.hxx>
+#endif
+
 #include "svtools/miscopt.hxx"
 #include "svl/pickerhistoryaccess.hxx"
 
@@ -52,6 +59,7 @@ using rtl::OUString;
  */
 static OUString FilePicker_getSystemPickerServiceName()
 {
+#ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
     if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("gnome"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFilePicker"));
@@ -61,8 +69,14 @@ static OUString FilePicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
-    else
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
+#endif
+#ifdef WNT
+    if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.ODMAFilePicker"));
+    }
+    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.Win32FilePicker"));
+#endif
+    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
 }
 
 static Reference< css::uno::XInterface > FilePicker_createInstance (
@@ -123,14 +137,20 @@ static Sequence< OUString > FilePicker_getSupportedServiceNames()
 static OUString FolderPicker_getSystemPickerServiceName()
 {
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
+#ifdef UNX
     if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("gnome"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFolderPicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFolderPicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFolderPicker"));
-    else
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFolderPicker"));
+#endif
+#ifdef WNT
+    if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.ODMAFolderPicker"));
+    }
+#endif
+    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFolderPicker"));
 }
 
 static Reference< css::uno::XInterface > FolderPicker_createInstance (

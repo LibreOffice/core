@@ -59,7 +59,7 @@ namespace odma
 
 // UNO service name for the content.
 #define ODMA_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.OdmaContent"
+                            "com.sun.star.ucb.ODMAContent"
 
 //=========================================================================
 class ContentProvider;
