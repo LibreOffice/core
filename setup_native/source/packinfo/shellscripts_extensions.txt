@@ -27,7 +27,7 @@ fi
 #
 DISKLESS_SRVC=`echo $$BASEDIR | /usr/bin/grep export/Solaris_[1-9][0-9]/usr_$${ARCH}.all`
 if [  "$$DISKLESS_SRVC" ]; then
-	UNOPKG=/export/Solaris_11/usr_`uname -p`.all/opt/staroffice9/program/unopkg
+	UNOPKG=/export/Solaris_11/usr_`uname -p`.allPRODUCTDIRECTORYNAME/program/unopkg
 	POSTRUN=$$PKG_INSTALL_ROOT/usr_`uname -p`.all/usr/lib/postrun
 	CLIENT_BASEDIR=$$PKG_INSTALL_ROOT/usr_$${ARCH}.all
 else
@@ -38,18 +38,20 @@ fi
 if [ -x $$POSTRUN ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" add --shared --suppress-license --bundled \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo  "find \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" -type f -exec chmod 644 {} \\;"
 ) | $$POSTRUN -b -c UNOPKG
   if [ "$$?" != "0" ]; then
-    echo "\nERROR: Installation of UNO extension ${OXTFILENAME}"
+    echo "\nERROR: Installation of UNO extensions"
     echo " through $$POSTRUN failed."
     exit 1
   fi
 else
   # No postrun available, try running unopkg directly
-  "$$UNOPKG" add --shared --suppress-license --bundled "$$BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$UNOPKG" sync "-env:BUNDLED_EXTENSIONS_USER=file:////////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+ find "$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
   if [ "$$?" != "0" ]; then
-    echo "\nERROR: Installation of UNO extension ${OXTFILENAME} failed."
+    echo "\nERROR: Installation of UNO extensions failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root install requires SUNWpostrun package to be installed"
     echo 'ERROR: Make sure the runtime requirements (operating system, patch level, architecture) are met.'
     exit 1
@@ -63,7 +65,8 @@ fi
 exit 0
 END
 
-%preremove << END
+%postremove << END
+
 if [ -n "$$TMPDIR" ]; then
   UNOPKGTMP="$$TMPDIR"
 elif [ -n "$$TMP" ]; then
@@ -89,15 +92,17 @@ if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "cd \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program\""
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" remove --shared --bundled \"${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo  "find \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" -type f -exec chmod 644 {} \\;"
   echo "rm -rf \"$$INSTDIR\""
 ) | $$PKG_INSTALL_ROOT/usr/lib/postrun -c UNOPKG
 else
   # No postrun available, try running unopkg directly
   test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared --bundled "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  echo  "find \"$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" -type f -exec chmod 644 {} \\;"
   if [ "$$?" != "0" ]; then
-    echo "\nERROR: Removal of UNO extension ${OXTFILENAME} failed."
+    echo "\nERROR: Removal of UNO extension failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root uninstall requires SUNWpostrun package to be installed"
     echo 'ERROR: Make sure the runtime requirements (operating system, patch level, architecture) are met.'
     exit 1
@@ -114,44 +119,6 @@ END
 %system linux
 
 %format rpm
-
-# As remove does not need the oxt file, this could potentially 
-# be done in the postinstall script as well.
-%preinstall << END
-# if this is an update, remove the old package instance first
-test "$$1" = "2" || exit 0
-
-#Find the temp dir
-if [ -n "$$TMPDIR" ]; then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]; then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]; then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/bin/mktemp" ]
-then
-  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
-
-if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared --bundled "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
-fi
-
-if [ -n "$$INSTDIR" ]; then
-  rm -rf "$$INSTDIR"
-fi
-
-exit 0
-END
 
 %postinstall << END
 #Find the temp dir
@@ -176,7 +143,8 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" add --shared --suppress-license --shared "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  find "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -185,13 +153,9 @@ fi
 
 exit 0
 
-
 END
 
-%preremove << END
-# if this is an update, just do nothing
-test "$$1" = "0" || exit 0
-
+%postremove << END
 #Find the temp dir
 if [ -n "$$TMPDIR" ]; then
   UNOPKGTMP="$$TMPDIR"
@@ -214,7 +178,8 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared --bundled "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  find "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -225,53 +190,6 @@ exit 0
 END
 
 %format deb
-
-# As remove does not need the oxt file, this could potentially 
-# be done in the postinstall script as well.
-%preinstall << END
-# if this is an update, remove the old package instance first
-if [ "$$1" != "upgrade" ]
-then
-  exit 0
-fi
- 
-#Find the temp dir
-if [ -n "$$TMPDIR" ]
-then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]
-then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]
-then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-
-#Create the command which creates a temporary directory
-if [ -x "/bin/mktemp" ]
-then
-  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
-
-if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
-then
-  "PRODUCTDIRECTORYNAME/program/unopkg" remove --shared --bundled "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
-fi
-
-if [ -n "$$INSTDIR" ]
-then
-  rm -rf "$$INSTDIR"
-fi
-
-exit 0
-END
 
 %postinstall << END
 #Find the temp dir
@@ -299,7 +217,8 @@ else
 fi
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "PRODUCTDIRECTORYNAME/program/unopkg" add --shared --suppress-license --bundled "PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  find "PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
 if [ -n "$$INSTDIR" ]
@@ -309,18 +228,10 @@ fi
 
 exit 0
 
-
 END
 
-%preremove << END
-# if this is an update, just do nothing
-
-if [ "$$1" = "upgrade" ]
-then
-  exit 0
-fi
- 
-#Find the temp dir
+%postremove << END
+# Find the temp dir
 if [ -n "$$TMPDIR" ]
 then
   UNOPKGTMP="$$TMPDIR"
@@ -346,7 +257,8 @@ fi
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
 then
-  "PRODUCTDIRECTORYNAME/program/unopkg" remove --shared --bundled "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+ find "PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
 if [ -n "$$INSTDIR" ]
