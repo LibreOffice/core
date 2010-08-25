@@ -1,0 +1,6 @@
+[ComponentDescriptor]
+ImplementationName=com.sun.star.ui.dialogs.UnxFilePicker
+ComponentName=fps_kde.uno.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[SupportedServices]
+com.sun.star.ui.dialogs.KDEFilePicker
