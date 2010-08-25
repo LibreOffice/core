@@ -305,7 +305,6 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
             case CommandEvent::Exec:
                 {
                     filterWidget->setEditable( false );
-                    QString qSelectedURL;
                     setIsExecuting( true );
                     bool bCanExit = false;
                     do {
@@ -313,19 +312,18 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                         exec();
 
                         KURL qLocalSelectedURL = mostLocalURL( selectedURL() );
-
-                        qSelectedURL = addExtension( qLocalSelectedURL.url() );
                         QString qProtocol( qLocalSelectedURL.protocol() );
 
                         if ( isSave() && result() == QDialog::Accepted )
                         {
-                            if ( qSelectedURL.startsWith( "file:" ) )
+                            if ( qProtocol == "file" )
                             {
+                                QString qFileName( addExtension( qLocalSelectedURL.path() ) );
                                 bCanExit =
-                                    !QFile::exists( qSelectedURL.mid( 5 ) ) ||
+                                    !QFile::exists( qFileName ) ||
                                     ( KMessageBox::warningYesNo( 0,
                                                                  i18n( "A file named \"%1\" already exists. "
-                                                                     "Are you sure you want to overwrite it?" ).arg( qSelectedURL ),
+                                                                     "Are you sure you want to overwrite it?" ).arg( qFileName ),
                                                                  i18n( "Overwrite File?" ),
                                                                  i18n( "Overwrite" ), KStdGuiItem::cancel() ) == KMessageBox::Yes );
                             }
