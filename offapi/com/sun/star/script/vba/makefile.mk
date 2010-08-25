@@ -25,12 +25,12 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..
+PRJ=..$/..$/..$/..$/..
 
 PRJNAME=offapi
 
-TARGET=cssscript
-PACKAGE=com$/sun$/star$/script
+TARGET=cssscriptvba
+PACKAGE=com$/sun$/star$/script$/vba
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
@@ -38,19 +38,13 @@ PACKAGE=com$/sun$/star$/script
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    DocumentDialogLibraryContainer.idl\
-    DocumentScriptLibraryContainer.idl\
-    LibraryNotLoadedException.idl\
-    XLibraryContainer.idl\
-    XLibraryContainer2.idl\
-        XLibraryContainer3.idl\
-    XLibraryContainerPassword.idl\
-    XLibraryContainerExport.idl\
-    XPersistentLibraryContainer.idl\
-    XStorageBasedLibraryContainer.idl\
-    ModuleSizeExceededRequest.idl\
-    ModuleInfo.idl\
-    ModuleType.idl
+    VBAEventId.idl \
+    VBAEventProcessor.idl \
+    VBASpreadsheetEventProcessor.idl \
+    VBATextEventProcessor.idl \
+    XVBACompatibility.idl \
+    XVBAEventProcessor.idl \
+    XVBAModuleInfo.idl
 
 # ------------------------------------------------------------------
 
