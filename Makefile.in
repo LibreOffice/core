@@ -19,6 +19,7 @@ dev-install:
 	. ./*Env.Set.sh && \
 		cd $$SRC_ROOT/instsetoo_native/util && \
 		LOCALINSTALLDIR=$$SRC_ROOT/install dmake openoffice_en-US PKGFORMAT=installed && \
-		$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
+		$$SOLARENV/bin/linkoo $$SRC_ROOT/install/OpenOffice/installed/install/en-US/openoffice.org3 $$SRC_ROOT && \
 		echo && \
-		echo "Developer installation finished in $$SRC_ROOT"
+		echo "Developer installation finished, you can find it here:" && \
+		echo "$$SRC_ROOT/install/OpenOffice/installed/install/en-US/openoffice.org3"
