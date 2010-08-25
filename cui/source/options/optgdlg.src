@@ -244,7 +244,7 @@ TabPage OFA_TP_VIEW
             < "Automatic" ; > ;
             < "Galaxy (default)" ; > ;
             < "High Contrast" ; > ;
-            < "Industrial" ; > ;
+            < "Industrial" ; > ; // industrial is dead, but we have to keep the entry
             < "Crystal" ; > ;
             < "Tango" ; > ;
             < "Oxygen" ; > ;
