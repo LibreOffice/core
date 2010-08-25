@@ -45,7 +45,6 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\appendunixshellword.hxx %_DEST%\inc%_EXT%\tools\appendunixshellword.hxx
 ..\inc\tools\bigint.hxx %_DEST%\inc%_EXT%\tools\bigint.hxx
 ..\inc\tools\cachestr.hxx %_DEST%\inc%_EXT%\tools\cachestr.hxx
-..\inc\tools\chapi.hxx %_DEST%\inc%_EXT%\tools\chapi.hxx
 ..\inc\tools\color.hxx %_DEST%\inc%_EXT%\tools\color.hxx
 ..\inc\tools\contnr.hxx %_DEST%\inc%_EXT%\tools\contnr.hxx
 ..\inc\tools\date.hxx %_DEST%\inc%_EXT%\tools\date.hxx

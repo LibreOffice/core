@@ -79,7 +79,7 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-#if defined WIN || (defined OS2 && !defined ICC)
+#if (defined OS2 && !defined ICC)
 
 #define IMPORT_FUNCTION_NAME    "_GraphicImport"
 #define EXPORT_FUNCTION_NAME    "_GraphicExport"

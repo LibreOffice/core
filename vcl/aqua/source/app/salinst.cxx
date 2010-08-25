@@ -371,13 +371,13 @@ SalYieldMutex::SalYieldMutex()
 void SalYieldMutex::acquire()
 {
     OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnThreadId = vos::OThread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
@@ -390,7 +390,7 @@ sal_Bool SalYieldMutex::tryToAcquire()
 {
     if ( OMutex::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = vos::OThread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }
@@ -537,7 +537,7 @@ ULONG AquaSalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         vos::OThread::getCurrentIdentifier() )
     {
         ULONG nCount = pYieldMutex->GetAcquireCount();
         ULONG n = nCount;
