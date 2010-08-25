@@ -2976,10 +2976,6 @@ void ScInterpreter::ScMin( BOOL bTextAsZero )
         PushDouble(nMin);
 }
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-
 void ScInterpreter::ScMax( BOOL bTextAsZero )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMax" );
@@ -3100,10 +3096,6 @@ void ScInterpreter::ScMax( BOOL bTextAsZero )
     else
         PushDouble(nMax);
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
-
 
 double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
 {
@@ -5789,10 +5781,6 @@ void ScInterpreter::ScVLookup()
     CalculateLookup(FALSE);
 }
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-
 void ScInterpreter::ScSubTotal()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSubTotal" );
@@ -5832,10 +5820,6 @@ void ScInterpreter::ScSubTotal()
         PushDouble( nVal );
     }
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
-
 
 ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
 {
