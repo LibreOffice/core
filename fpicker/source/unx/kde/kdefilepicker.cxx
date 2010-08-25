@@ -42,6 +42,7 @@
 #define emit
 #endif
 
+#include <kdeversion.h>
 #include <kdiroperator.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
@@ -310,8 +311,13 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                         setCanNotifySelection( true );
                         exec();
 
-                        qSelectedURL = addExtension( selectedURL().url() );
-                        QString qProtocol( selectedURL().protocol() );
+#if KDE_IS_VERSION(3,5,0)
+                        KURL qLocalSelectedURL = KIO::NetAccess::mostLocalURL( selectedURL(), this );
+#else
+                        KURL qLocalSelectedURL( selectedURL() );
+#endif
+                        qSelectedURL = addExtension( qLocalSelectedURL.url() );
+                        QString qProtocol( qLocalSelectedURL.protocol() );
 
                         if ( isSave() && result() == QDialog::Accepted )
                         {
@@ -599,6 +605,12 @@ bool FileDialog::isSupportedProtocol( const QString &rProtocol ) const
 
 QString FileDialog::localCopy( const QString &rFileName ) const
 {
+#if KDE_IS_VERSION(3,5,0)
+    KURL qLocalURL = KIO::NetAccess::mostLocalURL( KURL( rFileName ), const_cast<FileDialog*>( this ) );
+    if ( qLocalURL.isLocalFile() )
+        return qLocalURL.url();
+#endif
+
     int nExtensionPos = rFileName.findRev( '/' );
     if ( nExtensionPos >= 0 )
         nExtensionPos = rFileName.find( '.', nExtensionPos );
