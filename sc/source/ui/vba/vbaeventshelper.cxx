@@ -90,7 +90,6 @@ private:
     uno::Reference< awt::XWindow > getContainerWindow();
     bool isMouseReleased();
     DECL_LINK( fireResizeMacro, void* );
-    void processWindowResizeMacro();
 
 private:
     ::osl::Mutex maMutex;
@@ -271,6 +270,8 @@ void SAL_CALL ScVbaEventsListener::borderWidthsChanged( const uno::Reference< un
 
 void SAL_CALL ScVbaEventsListener::changesOccurred( const util::ChangesEvent& aEvent ) throw (uno::RuntimeException)
 {
+    if( !mrVbaEvents.hasVbaEventHandler( WORKSHEET_CHANGE, aArgs ) )
+
     sal_Int32 nCount = aEvent.Changes.getLength();
     if( nCount == 0 )
         return;
@@ -362,17 +363,16 @@ bool ScVbaEventsListener::isMouseReleased()
 
 IMPL_LINK( ScVbaEventsListener, fireResizeMacro, void*, EMPTYARG )
 {
-    if( !mbDisposed && isMouseReleased() )
-        processWindowResizeMacro();
+    if( !mbDisposed && isMouseReleased() ) try
+    {
+        mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+    }
+    catch( uno::Exception& )
+    {
+        // #163419# do not throw exceptions into application core
+    }
     release();
     return 0;
-}
-
-void ScVbaEventsListener::processWindowResizeMacro()
-{
-    OSL_TRACE( "**** Attempt to FIRE MACRO **** " );
-    if( !mbDisposed )
-        mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
 }
 
 // ============================================================================
