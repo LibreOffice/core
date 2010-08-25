@@ -1049,7 +1049,7 @@ testcase tToolsAutocorrectOptions_8
 
     firstLine   = "1. FirstLine"
     testContent = "Test1"    
-    hopeResult  = "1.Test1"
+    hopeResult  = "2. Test1"
 
     Call wTypeKeys firstLine
     Call wTypeKeys "<Return>"
