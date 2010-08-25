@@ -681,4 +681,18 @@ void FileFilterComboHack::setCurrentFilter( const QString& filter )
 {
     setCurrentText( filter );
     filterChanged();
+
+    // Workaround for 'Filter name (*.blah)' vs. 'Filter name'
+    if ( currentText() != text( currentItem() ) )
+    {
+        int nItem = 0;
+        for ( ; nItem < count() && !text( nItem ).startsWith( filter ); ++nItem );
+
+        if ( nItem < count() )
+            setCurrentItem( nItem );
+        else
+            setCurrentItem( 0 );
+
+        filterChanged();
+    }
 }
