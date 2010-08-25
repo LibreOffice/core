@@ -140,6 +140,10 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         sal_Bool    UseSystemPrintDialog() const;
         void        SetUseSystemPrintDialog( sal_Bool bSet );
 
+        sal_Bool    ShowLinkWarningDialog() const;
+        void        SetShowLinkWarningDialog( sal_Bool bSet );
+        sal_Bool    IsShowLinkWarningDialogReadOnly() const;
+
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------

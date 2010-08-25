@@ -80,8 +80,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG 5
 #define PROPERTYNAME_TRYODMADIALOG  ASCII_STR("TryODMADialog")
 #define PROPERTYHANDLE_TRYODMADIALOG    6
+#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  ASCII_STR("ShowLinkWarningDialog")
+#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 7
 
-#define PROPERTYCOUNT                       7
+#define PROPERTYCOUNT                       8
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -112,6 +114,8 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bIsToolboxStyleRO;
     sal_Bool    m_bUseSystemPrintDialog;
     sal_Bool    m_bIsUseSystemPrintDialogRO;
+    sal_Bool    m_bShowLinkWarningDialog;
+    sal_Bool    m_bIsShowLinkWarningDialogRO;
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -237,6 +241,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsUseSystemPrintDialogReadOnly() const
         { return m_bIsUseSystemPrintDialogRO; }
 
+        inline sal_Bool ShowLinkWarningDialog() const
+        { return m_bShowLinkWarningDialog; }
+
+        void SetShowLinkWarningDialog( sal_Bool bSet )
+        {  m_bShowLinkWarningDialog = bSet; SetModified(); }
+
+        sal_Bool IsShowLinkWarningDialogReadOnly() const
+        { return m_bIsShowLinkWarningDialogRO; }
+
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );
         void CallListeners();
@@ -286,6 +299,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsToolboxStyleRO( sal_False )
     , m_bUseSystemPrintDialog( sal_False )
     , m_bIsUseSystemPrintDialogRO( sal_False )
+    , m_bShowLinkWarningDialog( sal_True )
+    , m_bIsShowLinkWarningDialogRO( sal_False )
 
 {
     // Use our static list of configuration keys to get his values.
@@ -365,6 +380,16 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     DBG_ERROR("Wrong type of \"Misc\\TryODMADialog\"!" );
                 }
                 m_bIsTryODMADialogRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
+                {
+                    DBG_ERROR("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
+                }
+                m_bIsShowLinkWarningDialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -475,6 +500,13 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
                                                             {
                                                                 DBG_ERROR("Wrong type of \"Misc\\TryODMADialog\"!" );
+                                                            }
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG     :   {
+                                                            if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
+                                                            {
+                                                                DBG_ERROR("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -644,6 +676,13 @@ void SvtMiscOptions_Impl::Commit()
                     seqValues[nProperty] <<= m_bUseSystemPrintDialog;
                 break;
             }
+
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
+            {
+                if ( !m_bIsShowLinkWarningDialogRO )
+                    seqValues[nProperty] <<= m_bShowLinkWarningDialog;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -664,7 +703,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_USESYSTEMFILEDIALOG,
         PROPERTYNAME_SYMBOLSTYLE,
         PROPERTYNAME_USESYSTEMPRINTDIALOG,
-        PROPERTYNAME_TRYODMADIALOG
+        PROPERTYNAME_TRYODMADIALOG,
+        PROPERTYNAME_SHOWLINKWARNINGDIALOG
     };
 
     // Initialize return sequence with these list ...
@@ -848,6 +888,21 @@ sal_Bool SvtMiscOptions::UseSystemPrintDialog() const
 void SvtMiscOptions::SetUseSystemPrintDialog( sal_Bool bEnable )
 {
     m_pDataContainer->SetUseSystemPrintDialog( bEnable );
+}
+
+sal_Bool SvtMiscOptions::ShowLinkWarningDialog() const
+{
+    return m_pDataContainer->ShowLinkWarningDialog();
+}
+
+void SvtMiscOptions::SetShowLinkWarningDialog( sal_Bool bSet )
+{
+    m_pDataContainer->SetShowLinkWarningDialog( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
+{
+    return m_pDataContainer->IsShowLinkWarningDialogReadOnly();
 }
 
 //*****************************************************************************************************************
