@@ -270,8 +270,6 @@ void SAL_CALL ScVbaEventsListener::borderWidthsChanged( const uno::Reference< un
 
 void SAL_CALL ScVbaEventsListener::changesOccurred( const util::ChangesEvent& aEvent ) throw (uno::RuntimeException)
 {
-    if( !mrVbaEvents.hasVbaEventHandler( WORKSHEET_CHANGE, aArgs ) )
-
     sal_Int32 nCount = aEvent.Changes.getLength();
     if( nCount == 0 )
         return;
