@@ -704,7 +704,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
     {
         case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString::createFromAscii( "default" );
         case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString::createFromAscii( "hicontrast" );
-        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "industrial" );
+        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "tango" ); // industrial is dead
         case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
         case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString::createFromAscii( "tango" );
         case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString::createFromAscii( "oxygen" );
@@ -723,7 +723,7 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
     else if ( rName == ::rtl::OUString::createFromAscii( "hicontrast" ) )
         return STYLE_SYMBOLS_HICONTRAST;
     else if ( rName == ::rtl::OUString::createFromAscii( "industrial" ) )
-        return STYLE_SYMBOLS_INDUSTRIAL;
+        return STYLE_SYMBOLS_TANGO; // industrial is dead
     else if ( rName == ::rtl::OUString::createFromAscii( "crystal" ) )
         return STYLE_SYMBOLS_CRYSTAL;
     else if ( rName == ::rtl::OUString::createFromAscii( "tango" ) )
