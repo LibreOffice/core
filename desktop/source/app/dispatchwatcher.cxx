@@ -182,6 +182,8 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
     ::rtl::OUString                 aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
+    sal_Bool                        bSetInputFilter = sal_False;
+    ::rtl::OUString                 aForcedInputFilter;
 
     for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
     {
@@ -191,6 +193,15 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         sal_Int32 nCount = 4;
         if ( aDispatchRequest.aPreselectedFactory.getLength() )
             nCount++;
+
+        // Set Input Filter
+        if ( aDispatchRequest.aRequestType == REQUEST_INFILTER )
+        {
+            bSetInputFilter = sal_True;
+            aForcedInputFilter = aDispatchRequest.aURL;
+            OfficeIPCThread::RequestsCompleted( 1 );
+            continue;
+        }
 
         // we need more properties for a print/print to request
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
@@ -378,8 +389,16 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 aArgs[nIndex].Value <<= sal_True;
             }
 
-            // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
+            // Force input filter, if possible
+            if( bSetInputFilter )
+            {
+                sal_Int32 nIndex = aArgs.getLength();
+                aArgs.realloc(nIndex+1);
+                aArgs[nIndex].Name=OUString::createFromAscii("FilterName");
+                aArgs[nIndex].Value <<= aForcedInputFilter;
+            }
 
+            // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
             try
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );

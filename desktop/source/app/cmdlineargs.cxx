@@ -539,6 +539,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         return sal_True;
     }
     #endif
+    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-infilter=" ))
+    {
+        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, aArgStr.Copy( 10 ) );
+        return sal_True;
+    }
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
@@ -934,6 +939,13 @@ sal_Bool CommandLineArgs::GetLanguage( ::rtl::OUString& rPara ) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_LANGUAGE ];
     return m_aStrSetParams[ CMD_STRINGPARAM_LANGUAGE ];
+}
+
+sal_Bool CommandLineArgs::GetInFilter( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_INFILTER ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_INFILTER ];
 }
 
 sal_Bool CommandLineArgs::GetConversionList( ::rtl::OUString& rPara ) const

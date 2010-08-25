@@ -77,6 +77,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             REQUEST_FORCEOPEN,
             REQUEST_FORCENEW,
             REQUEST_CONVERSION,
+            REQUEST_INFILTER,
             REQUEST_BATCHPRINT
         };
 

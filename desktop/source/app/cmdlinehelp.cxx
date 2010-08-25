@@ -116,6 +116,9 @@ namespace desktop
         "-unaccept=<accept-string>\n"\
         "      Close an acceptor that was created with -accept=<accept-string>\n"\
         "      Use -unnaccept=all to close all open acceptors\n"\
+        "-infilter=<filter>\n"\
+        "      Force an input filter type if possible\n"\
+        "      Eg. -infilter=\"Calc Office Open XML\"\n"\
         "-convert-to output_file_extension[:output_filter_name] [-outdir ouput_dir] files\n"\
         "      Batch convert files.\n"\
         "      If -outdir is not specified then current working dir is used as output_dir.\n"\

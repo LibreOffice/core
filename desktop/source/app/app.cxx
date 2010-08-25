@@ -2567,6 +2567,7 @@ void Desktop::OpenClients()
         pArgs->GetConversionList( aRequest.aConversionList );
         pArgs->GetConversionParams( aRequest.aConversionParams );
         pArgs->GetConversionOut( aRequest.aConversionOut );
+        pArgs->GetInFilter( aRequest.aInFilter );
 
         if ( aRequest.aOpenList.getLength() > 0 ||
              aRequest.aViewList.getLength() > 0 ||

@@ -93,6 +93,7 @@ class CommandLineArgs
             CMD_STRINGPARAM_CONVERSIONLIST,
             CMD_STRINGPARAM_CONVERSIONPARAMS,
             CMD_STRINGPARAM_CONVERSIONOUT,
+            CMD_STRINGPARAM_INFILTER,
             CMD_STRINGPARAM_DISPLAY,
             CMD_STRINGPARAM_LANGUAGE,
             CMD_STRINGPARAM_COUNT           // must be last element!
@@ -172,6 +173,7 @@ class CommandLineArgs
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
         sal_Bool                GetLanguage( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetInFilter( ::rtl::OUString& rPara ) const;
         sal_Bool                GetConversionList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetConversionParams( ::rtl::OUString& rPara ) const;
         sal_Bool                GetConversionOut( ::rtl::OUString& rPara ) const;

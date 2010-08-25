@@ -69,6 +69,7 @@ struct ProcessDocumentsRequest
     ::rtl::OUString aConversionList;
     ::rtl::OUString aConversionParams;
     ::rtl::OUString aConversionOut;
+    ::rtl::OUString aInFilter;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
 };
 
