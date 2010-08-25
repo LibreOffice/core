@@ -311,11 +311,8 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                         setCanNotifySelection( true );
                         exec();
 
-#if KDE_IS_VERSION(3,5,0)
-                        KURL qLocalSelectedURL = KIO::NetAccess::mostLocalURL( selectedURL(), this );
-#else
-                        KURL qLocalSelectedURL( selectedURL() );
-#endif
+                        KURL qLocalSelectedURL = mostLocalURL( selectedURL() );
+
                         qSelectedURL = addExtension( qLocalSelectedURL.url() );
                         QString qProtocol( qLocalSelectedURL.protocol() );
 
@@ -603,13 +600,33 @@ bool FileDialog::isSupportedProtocol( const QString &rProtocol ) const
     return false;
 }
 
-QString FileDialog::localCopy( const QString &rFileName ) const
+KURL FileDialog::mostLocalURL( const KURL &rURL ) const
 {
 #if KDE_IS_VERSION(3,5,0)
-    KURL qLocalURL = KIO::NetAccess::mostLocalURL( KURL( rFileName ), const_cast<FileDialog*>( this ) );
+    KURL qMostLocalURL( KIO::NetAccess::mostLocalURL( rURL, const_cast<FileDialog*>( this ) ) );
+    if ( qMostLocalURL.isLocalFile() )
+        return qMostLocalURL;
+    else
+    {
+        // Terrible hack to get even non-existing media:// files right
+        qMostLocalURL.cd( ".." );
+        KURL qMostLocalPath( KIO::NetAccess::mostLocalURL( qMostLocalURL, const_cast<FileDialog*>( this ) ) );
+        if ( qMostLocalPath.isLocalFile() )
+        {
+            qMostLocalPath.addPath( rURL.fileName() );
+            return qMostLocalPath;
+        }
+    }
+#endif
+
+    return rURL;
+}
+
+QString FileDialog::localCopy( const QString &rFileName ) const
+{
+    KURL qLocalURL = mostLocalURL( KURL( rFileName ) );
     if ( qLocalURL.isLocalFile() )
         return qLocalURL.url();
-#endif
 
     int nExtensionPos = rFileName.findRev( '/' );
     if ( nExtensionPos >= 0 )

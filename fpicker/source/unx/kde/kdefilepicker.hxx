@@ -96,6 +96,7 @@ protected:
     bool                        isExecuting( void ) const { return m_bIsExecuting; }
 
     bool                        isSupportedProtocol( const QString &rProtocol ) const;
+    KURL                        mostLocalURL( const KURL &rURL ) const;
     QString                     localCopy( const QString &rFileName ) const;
 
     void                        setCanNotifySelection( bool bCanNotifySelection ) { m_bCanNotifySelection = bCanNotifySelection; }
