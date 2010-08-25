@@ -108,6 +108,7 @@ protected slots:
 
 protected:
     void                        sendCommand( const QString &rCommand );
+    void                        appendURL( QString &rBuffer, const KURL &rURL );
     void                        appendEscaped( QString &rBuffer, const QString &rString );
     QString                     escapeString( const QString &rString );
 };

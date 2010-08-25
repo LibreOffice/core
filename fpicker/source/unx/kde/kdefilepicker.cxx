@@ -226,38 +226,14 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     {
                         KURL::List qList( selectedURLs() );
                         for ( KURL::List::const_iterator it = qList.begin(); it != qList.end(); ++it )
-                        {
-                            qString.append( " " );
-                            QString qUrlStr = addExtension( (*it).url() );
-
-                            if ( !isExecuting() && !isSupportedProtocol( KURL( qUrlStr ).protocol() ) )
-                                qUrlStr = localCopy( qUrlStr );
-
-                            if ( qUrlStr.startsWith( "file:/" ) && qUrlStr.mid( 6, 1 ) != "/" )
-                                qUrlStr.replace( "file:/", "file:///" );
-
-                            if ( !qUrlStr.isEmpty() )
-                                appendEscaped( qString, qUrlStr );
-                        }
+                            appendURL( qString, (*it) );
                     }
                     else
                     {
                         // we have to return the selected files anyway
                         const KFileItemList *pItems = ops->selectedItems();
                         for ( KFileItemListIterator it( *pItems ); it.current(); ++it )
-                        {
-                            qString.append( " " );
-                            QString qUrlStr = addExtension( (*it)->url().url() );
-
-                            if ( !isExecuting() && !isSupportedProtocol( KURL( qUrlStr ).protocol() ) )
-                                qUrlStr = localCopy( qUrlStr );
-
-                            if ( qUrlStr.startsWith( "file:/" ) && qUrlStr.mid( 6, 1 ) != "/" )
-                                qUrlStr.replace( "file:/", "file:///" );
-
-                            if ( !qUrlStr.isEmpty() )
-                                appendEscaped( qString, qUrlStr );
-                        }
+                            appendURL( qString, (*it)->url() );
                     }
 
                     sendCommand( qString );
@@ -627,7 +603,8 @@ KURL FileDialog::mostLocalURL( const KURL &rURL ) const
 
 QString FileDialog::localCopy( const QString &rFileName ) const
 {
-    KURL qLocalURL = mostLocalURL( KURL( rFileName ) );
+    // 106 == MIB enum for UTF-8
+    KURL qLocalURL = mostLocalURL( KURL( rFileName, 106 ) );
     if ( qLocalURL.isLocalFile() )
         return qLocalURL.url();
 
@@ -676,6 +653,28 @@ void FileDialog::sendCommand( const QString &rCommand )
 
     //m_aOutputStream << rCommand << endl;
     ::std::cout << rCommand.utf8() << ::std::endl;
+}
+
+void FileDialog::appendURL( QString &rBuffer, const KURL &rURL )
+{
+    // From Martin Kretzschmar:
+    // file:///path/to/test%E0.odt is not a valid URL from OOo's point of
+    // view. (?Most modern parts of?) OOo assume(s) that the URL contains only
+    // ASCII characters (which test%E0.odt does) and is UTF-8 after unescaping
+    // (which file:///path/test%E0.odt is not).
+    // Cf. the comment in sal/inc/osl/file.h.
+    // 106 == MIB enum for UTF-8
+    QString qUrlStr = addExtension( rURL.url( 0, 106 ) );
+
+    if ( !isExecuting() && !isSupportedProtocol( rURL.protocol() ) )
+        qUrlStr = localCopy( qUrlStr );
+
+    if ( qUrlStr.startsWith( "file:/" ) && qUrlStr.mid( 6, 1 ) != "/" )
+        qUrlStr.replace( "file:/", "file:///" );
+
+    rBuffer.append( " " );
+    if ( !qUrlStr.isEmpty() )
+        appendEscaped( rBuffer, qUrlStr );
 }
 
 void FileDialog::appendEscaped( QString &rBuffer, const QString &rString )
