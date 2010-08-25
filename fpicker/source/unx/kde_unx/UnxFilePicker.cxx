@@ -39,7 +39,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/svtdata.hxx>
+#include <tools/resmgr.hxx>
+
 #include <svtools/svtools.hrc>
 #include <UnxFilePicker.hxx>
 #include <UnxCommandThread.hxx>
@@ -96,7 +97,8 @@ UnxFilePicker::UnxFilePicker( const uno::Reference<lang::XMultiServiceFactory>& 
           m_nFilePickerWrite( -1 ),
           m_nFilePickerRead( -1 ),
           m_pNotifyThread( NULL ),
-          m_pCommandThread( NULL )
+          m_pCommandThread( NULL ),
+          m_pResMgr( CREATEVERSIONRESMGR( fps_office ) )
 {
 }
 
@@ -129,6 +131,8 @@ UnxFilePicker::~UnxFilePicker()
 
     if ( m_nFilePickerRead >= 0 )
         close( m_nFilePickerRead );
+
+    delete m_pResMgr, m_pResMgr = NULL;
 }
 
 void SAL_CALL UnxFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
@@ -888,7 +892,7 @@ void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )
         aBuffer.appendAscii( " ", 1 );
         appendEscaped( aBuffer, aType );
         aBuffer.appendAscii( " ", 1 );
-        appendEscaped( aBuffer, String( SvtResId( nTitleId ) ) );
+        appendEscaped( aBuffer, m_pResMgr? String( ResId( nTitleId, *m_pResMgr ) ): String() );
 
         sendCommand( aBuffer.makeStringAndClear() );
     }

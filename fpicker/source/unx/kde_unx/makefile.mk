@@ -62,8 +62,7 @@ SHL1STDLIBS=$(CPPULIB)\
         $(CPPUHELPERLIB)\
         $(SALLIB)\
         $(VCLLIB)\
-        $(TOOLSLIB)\
-        $(SVTOOLLIB)
+        $(TOOLSLIB)
 
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def

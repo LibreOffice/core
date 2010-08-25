@@ -47,6 +47,7 @@
 
 class UnxFilePickerCommandThread;
 class UnxFilePickerNotifyThread;
+class ResMgr;
 
 class UnxFilePickerDummy
 {
@@ -77,6 +78,8 @@ protected:
 
     UnxFilePickerNotifyThread  *m_pNotifyThread;
     UnxFilePickerCommandThread *m_pCommandThread;
+
+    ResMgr                     *m_pResMgr;
 
 public:
     UnxFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
