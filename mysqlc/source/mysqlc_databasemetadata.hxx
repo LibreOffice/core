@@ -39,9 +39,9 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <cppconn/metadata.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 namespace connectivity
 {
