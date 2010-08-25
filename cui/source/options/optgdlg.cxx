@@ -204,6 +204,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFileDlgFL          ( this, CUI_RES( FL_FILEDLG ) ),
     aFileDlgROImage     ( this, CUI_RES( FI_FILEDLG_RO ) ),
     aFileDlgCB          ( this, CUI_RES( CB_FILEDLG ) ),
+    aODMADlgCB          ( this, CUI_RES( CB_ODMADLG ) ),
     aPrintDlgFL         ( this, CUI_RES( FL_PRINTDLG ) ),
     aPrintDlgCB         ( this, CUI_RES( CB_PRINTDLG ) ),
     aDocStatusFL        ( this, CUI_RES( FL_DOCSTATUS ) ),
@@ -226,6 +227,31 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aPrintDlgFL.Hide();
     aPrintDlgCB.Hide();
     #endif
+
+#ifdef WNT
+    aFileDlgCB.SetToggleHdl( LINK( this, OfaMiscTabPage, OnFileDlgToggled ) );
+#else
+    {
+        aODMADlgCB.Hide();
+        // rearrange the following controls
+        Point aNewPos = aDocStatusFL.GetPosPixel();
+        long nDelta = aNewPos.Y() - aODMADlgCB.GetPosPixel().Y();
+
+        Window* pWins[] =
+        {
+            &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
+            &aInterpretFT, &aYearValueField, &aToYearFT
+        };
+        Window** pCurrent = pWins;
+        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
+        {
+            aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCurrent)->SetPosPixel( aNewPos );
+        }
+    }
+#endif
 
     if ( !aFileDlgCB.IsVisible() )
     {
@@ -316,6 +342,14 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     }
 }
 
+#ifdef WNT
+IMPL_LINK( OfaMiscTabPage, OnFileDlgToggled, CheckBox*, EMPTYARG )
+{
+    aODMADlgCB.Enable( !aFileDlgCB.IsChecked() );
+    return 0;
+}
+#endif
+
 // -----------------------------------------------------------------------
 
 OfaMiscTabPage::~OfaMiscTabPage()
@@ -370,6 +404,13 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
+    if ( aODMADlgCB.IsChecked() != aODMADlgCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetTryODMADialog( aODMADlgCB.IsChecked() );
+        bModified = TRUE;
+    }
+
     if ( aDocStatusCB.IsChecked() != aDocStatusCB.GetSavedValue() )
     {
         SvtPrintWarningOptions aPrintOptions;
@@ -418,6 +459,9 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aFileDlgCB.SaveValue();
     aPrintDlgCB.Check( !aMiscOpt.UseSystemPrintDialog() );
     aPrintDlgCB.SaveValue();
+
+    aODMADlgCB.Check( aMiscOpt.TryODMADialog() );
+    aODMADlgCB.SaveValue();
 
     SvtPrintWarningOptions aPrintOptions;
     aDocStatusCB.Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());

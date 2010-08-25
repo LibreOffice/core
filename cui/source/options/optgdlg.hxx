@@ -56,6 +56,7 @@ private:
     FixedLine           aFileDlgFL;
     ReadOnlyImage       aFileDlgROImage;
     CheckBox            aFileDlgCB;
+    CheckBox            aODMADlgCB;
 
     FixedLine           aPrintDlgFL;
     CheckBox            aPrintDlgCB;
@@ -74,6 +75,9 @@ private:
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
     DECL_LINK( HelpCheckHdl_Impl, CheckBox* );
     DECL_LINK( HelpAgentResetHdl_Impl, PushButton* );
+#ifdef WNT
+    DECL_LINK( OnFileDlgToggled, CheckBox* );
+#endif
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 
