@@ -481,12 +481,6 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
     output.addItem("</attribute>");
 }
 
-bool WW8PropertiesHandler::compare(SprmSharedPointer_t sprm1,
-                                   SprmSharedPointer_t sprm2)
-{
-    return sprm1->getId() < sprm2->getId();
-}
-
 void WW8PropertiesHandler::sprm(Sprm & sprm_)
 {
     string tmpStr = "<sprm id=\"";

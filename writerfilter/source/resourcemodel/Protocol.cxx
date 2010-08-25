@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#ifdef DEBUG
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 #include <resourcemodel/Protocol.hxx>
@@ -214,3 +215,4 @@ void TableProtocol::entry(int pos,
 }
 
 }
+#endif // DEBUG

@@ -25,26 +25,24 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RESOURCEMODEL_UTIL_HXX
-#define INCLUDED_RESOURCEMODEL_UTIL_HXX
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <WriterFilterDllApi.hxx>
-#include <string>
+#include "resourcemodel/ResourceModelHelper.hxx"
 
-namespace writerfilter
+namespace writerfilter {
+namespace resourcemodel {
+
+void resolveSprmProps(Properties & rHandler, Sprm & rSprm)
 {
-    using namespace ::std;
-    using namespace ::com::sun::star;
-
-    string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
-
-#ifdef DEBUG
-    string WRITERFILTER_DLLPUBLIC propertysetToString
-    (uno::Reference<beans::XPropertySet> const & rProps);
-
-    string toString(uno::Reference< text::XTextRange > textRange);
-    string toString(const string & rString);
-#endif
+    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+    if( pProperties.get())
+        pProperties->resolve(rHandler);
 }
-#endif // INCLUDED_RESOURCEMODEL_UTIL_HXX
+
+void resolveAttributeProperties(Properties & rHandler, Value & val)
+{
+    writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+    if( pProperties.get())
+        pProperties->resolve(rHandler);
+}
+
+
+}}
