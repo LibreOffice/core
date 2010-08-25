@@ -113,7 +113,7 @@ class SdfEntity:
     const._TITLE_POS           = 13
     const._DATE_POS            = 14
         
-    def __init__(self, project="", source_file="", dummy1="", resource_type="", gid="", lid="", helpid="", platform="", dummy2="", langid="", 
+    def __init__(self, project="", source_file="", dummy1="0", resource_type="", gid="", lid="", helpid="", platform="", dummy2="0", langid="", 
                        text="", helptext="", quickhelptext="", title="", date="2002-02-02 02:02:02"):
         self.project        = project;
         self.source_file    = source_file;
