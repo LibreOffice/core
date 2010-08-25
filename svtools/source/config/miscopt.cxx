@@ -82,8 +82,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_TRYODMADIALOG    6
 #define PROPERTYNAME_SHOWLINKWARNINGDIALOG  ASCII_STR("ShowLinkWarningDialog")
 #define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 7
+#define PROPERTYNAME_DISABLEUICUSTOMIZATION ASCII_STR("DisableUICustomization")
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION           8
 
-#define PROPERTYCOUNT                       8
+#define PROPERTYCOUNT                       9
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -116,6 +118,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bIsUseSystemPrintDialogRO;
     sal_Bool    m_bShowLinkWarningDialog;
     sal_Bool    m_bIsShowLinkWarningDialogRO;
+    sal_Bool    m_bDisableUICustomization;
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -192,6 +195,9 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsTryUseODMADialogReadOnly() const
         { return m_bIsTryODMADialogRO; }
+
+        inline sal_Bool DisableUICustomization() const
+        { return m_bDisableUICustomization; }
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
@@ -405,6 +411,13 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 m_bIsSymbolsStyleRO = seqRO[nProperty];
                 break;
             }
+
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
+            {
+                if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
+                    DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
+                    break;
+            }
         }
     }
 
@@ -518,6 +531,11 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             {
                                                                 DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
                                                             }
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
                                                         }
                                                     break;
         }
@@ -683,6 +701,12 @@ void SvtMiscOptions_Impl::Commit()
                     seqValues[nProperty] <<= m_bShowLinkWarningDialog;
                 break;
             }
+
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
+            {
+                seqValues[nProperty] <<= m_bDisableUICustomization;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -704,7 +728,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_SYMBOLSTYLE,
         PROPERTYNAME_USESYSTEMPRINTDIALOG,
         PROPERTYNAME_TRYODMADIALOG,
-        PROPERTYNAME_SHOWLINKWARNINGDIALOG
+        PROPERTYNAME_SHOWLINKWARNINGDIALOG,
+        PROPERTYNAME_DISABLEUICUSTOMIZATION
     };
 
     // Initialize return sequence with these list ...
@@ -863,6 +888,11 @@ void SvtMiscOptions::SetSymbolsStyle( sal_Int16 nSet )
 sal_Bool SvtMiscOptions::IsGetSymbolsStyleReadOnly() const
 {
     return m_pDataContainer->IsGetSymbolsStyleReadOnly();
+}
+
+sal_Bool SvtMiscOptions::DisableUICustomization() const
+{
+    return m_pDataContainer->DisableUICustomization();
 }
 
 sal_Int16 SvtMiscOptions::GetToolboxStyle() const

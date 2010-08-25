@@ -114,6 +114,8 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void        SetTryODMADialog( sal_Bool bSet );
         sal_Bool    IsTryUseODMADialogReadOnly() const;
 
+        sal_Bool    DisableUICustomization() const;
+
         sal_Bool    IsPluginsEnabled() const;
         void        SetPluginsEnabled( sal_Bool bEnable );
         sal_Bool    IsPluginsEnabledReadOnly() const;
