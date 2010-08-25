@@ -976,6 +976,9 @@ void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 XubString AquaSalInstance::GetDefaultPrinter()
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     if( ! maDefaultPrinter.getLength() )
     {
         NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
@@ -1000,6 +1003,9 @@ XubString AquaSalInstance::GetDefaultPrinter()
 SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                 ImplJobSetup* pSetupData )
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     SalInfoPrinter* pNewInfoPrinter = NULL;
     if( pQueueInfo )
     {
@@ -1015,6 +1021,9 @@ SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueI
 
 void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     delete pPrinter;
 }
 
