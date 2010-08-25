@@ -1404,6 +1404,26 @@ void UserFormGeometryHelper::setHeight( double nHeight )
         return points;
     }
 
+        uno::Reference< uno::XInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell )
+        {
+            uno::Reference<  uno::XInterface > xIf;
+            if ( pShell )
+            {
+                rtl::OUString sProj( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+                BasicManager* pBasMgr = pShell->GetBasicManager();
+                if ( pBasMgr && pBasMgr->GetName().Len() )
+                    sProj = pShell->GetBasicManager()->GetName();
+                StarBASIC* pBasic = pShell->GetBasicManager()->GetLib( sProj );
+                if ( pBasic )
+                {
+                    SbModule* pMod = pBasic->FindModule( aModName );
+                    if ( pMod )
+                        xIf = pMod->GetUnoModule();
+                }
+            }
+            return xIf;
+        }
+
         SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
         {
             SfxObjectShell* pFoundShell = NULL;

@@ -1009,13 +1009,8 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
             else
                 pExpr = new SbiExpression( pParser );
 
-            if( bByVal )
-            {
-                if( !pExpr->IsLvalue() )
-                    pParser->Error( SbERR_LVALUE_EXPECTED );
-                else
-                    pExpr->SetByVal();
-            }
+            if( bByVal && pExpr->IsLvalue() )
+                pExpr->SetByVal();
 
             //pExpr = bConst ? new SbiConstExpression( pParser )
             //              : new SbiExpression( pParser );
