@@ -177,6 +177,7 @@ interface Application
     SID_AVAILABLE_TOOLBARS
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_HELP_TUTORIALS
     [

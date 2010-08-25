@@ -79,6 +79,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include <rtl/logfile.hxx>
+#include <svtools/miscopt.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -376,6 +377,9 @@ sal_Bool ToolbarsMenuController::isContextSensitiveToolbarNonVisible()
 
 void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
+    if( SvtMiscOptions().DisableUICustomization() )
+        return;
+
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
     resetPopupMenu( rPopupMenu );
 

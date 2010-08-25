@@ -79,6 +79,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
+#include <svtools/miscopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
 #include <unotools/bootstrap.hxx>
@@ -656,6 +657,18 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     else
                         rSet.Put(SfxStringItem(nWhich, String(SfxResId(STR_QUITAPP))));
+                    break;
+                }
+
+                case SID_CONFIG:
+                case SID_TOOLBOXOPTIONS:
+                case SID_CONFIGSTATUSBAR:
+                case SID_CONFIGMENU:
+                case SID_CONFIGACCEL:
+                case SID_CONFIGEVENT:
+                {
+                    if( SvtMiscOptions().DisableUICustomization() )
+                        rSet.DisableItem(nWhich);
                     break;
                 }
 

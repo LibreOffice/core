@@ -5775,6 +5775,13 @@
                 </info>
                 <value>false</value>
             </prop>
+            <prop oor:name="DisableUICustomization" oor:type="xs:boolean">
+                <info>
+                    <author>RSiddhartha</author>
+                    <desc>Disables the customization of the UI elements.</desc>
+                </info>
+                <value>false</value>
+            </prop>
 			<prop oor:name="SymbolSet" oor:type="xs:short">
 				<!-- UIHints: Tools  Options General View -->
 				<info>

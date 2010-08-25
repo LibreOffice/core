@@ -256,7 +256,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_bUpdateControllers( sal_False ),
     m_bImageOrientationRegistered( sal_False ),
     m_bImageMirrored( sal_False ),
-    m_bCanBeCustomized( sal_True ),
+    m_bCanBeCustomized( !SvtMiscOptions().DisableUICustomization() ),
     m_lImageRotation( 0 ),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
@@ -495,6 +495,24 @@ void ToolBarManager::UpdateImageOrientation()
 void ToolBarManager::UpdateControllers()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
+
+    if( !m_bCanBeCustomized )
+    {
+        Any a;
+        Reference< XLayoutManager > xLayoutManager;
+        Reference< XPropertySet > xFramePropSet( m_xFrame, UNO_QUERY );
+        if ( xFramePropSet.is() )
+            a = xFramePropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        a >>= xLayoutManager;
+        Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
+        if ( xLayoutManager.is() && xDockable.is() )
+        {
+            ::com::sun::star::awt::Point aPoint;
+            aPoint.X = aPoint.Y = LONG_MAX;
+            xLayoutManager->dockWindow( m_aResourceName, DockingArea_DOCKINGAREA_DEFAULT, aPoint );
+            xLayoutManager->lockWindow( m_aResourceName );
+        }
+    }
 
     if ( !m_bUpdateControllers )
     {
@@ -1805,6 +1823,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
             // Non-configurable toolbars should disable configuration menu items
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, sal_False );
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
