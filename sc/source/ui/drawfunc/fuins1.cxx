@@ -34,8 +34,10 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
+#include <svx/linkwarn.hxx>
 #include <svtools/filter.hxx>
 #include <svl/stritem.hxx>
+#include <svtools/miscopt.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -288,6 +290,14 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                 String aFileName = aDlg.GetPath();
                 String aFilterName = aDlg.GetCurrentFilter();
                 BOOL bAsLink = aDlg.IsAsLink();
+
+                // really store as link only?
+                if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
+                {
+                    SvxLinkWarningDialog aWarnDlg(pWin,aFileName);
+                    if( aWarnDlg.Execute() != RET_OK )
+                        bAsLink = sal_False; // don't store as link
+                }
 
                 lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, FALSE, pViewSh, pWindow, pView );
 
