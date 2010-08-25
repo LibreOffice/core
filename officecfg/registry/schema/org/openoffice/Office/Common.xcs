@@ -5752,6 +5752,15 @@
 				</info>
 				<value>true</value>
 			</prop>
+            <prop oor:name="ShowLinkWarningDialog" oor:type="xs:boolean">
+                <info>
+                    <author>THB</author>
+                    <desc>Determines if a warning dialog should be
+                    displayed when a user checks the link checkbox in
+                    the insert graphics dialog.</desc>
+                </info>
+                <value>true</value>
+            </prop>
 			<prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean">
 				<info>
 					<author>PL</author>
