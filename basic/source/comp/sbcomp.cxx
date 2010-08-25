@@ -261,7 +261,7 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, 
     {
         aStr.AppendAscii( "Entering " );
     }
-    String aModuleName = pModule->GetName();
+    String aModuleName = pTraceMod->GetName();
     aStr += aModuleName;
     if( pMethod != NULL )
     {
