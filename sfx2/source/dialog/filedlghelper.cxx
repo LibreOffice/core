@@ -2023,11 +2023,7 @@ void FileDialogHelper_Impl::saveConfig()
 
         try
         {
-            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             sal_Bool bValue = sal_False;
-            aValue >>= bValue;
-            aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bValue ) );
-
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bValue = sal_False;
             aValue >>= bValue;
@@ -2167,14 +2163,6 @@ void FileDialogHelper_Impl::loadConfig()
         {
             try
             {
-                // respect the last "insert as link" state
-                sal_Bool bLink = (sal_Bool) aUserData.GetToken( 0, ' ' ).ToInt32();
-                if ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 ).hasValue() )
-                {
-                    aValue <<= bLink;
-                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
-                }
-
                 // respect the last "show preview" state
                 sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken( 1, ' ' ).ToInt32();
                 if  ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 ).hasValue() )
