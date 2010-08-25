@@ -523,7 +523,13 @@ Any OImageControlModel::translateDbColumnToControlValue()
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
     {
-    case ImageStoreBinary:  return makeAny( m_xColumn->getBinaryStream() );
+    case ImageStoreBinary:
+    {
+        Reference< XInputStream > xImageStream( m_xColumn->getBinaryStream() );
+        if ( m_xColumn->wasNull() )
+            xImageStream.clear();
+        return makeAny( xImageStream );
+    }
     case ImageStoreLink:
     {
         ::rtl::OUString sImageLink( m_xColumn->getString() );
@@ -634,10 +640,10 @@ void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException)
 //------------------------------------------------------------------------------
 IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 {
-    ENSURE_OR_RETURN( i_pGraphic, "OImageControlModel::OnImageImportDone: illegal graphic!", 0L );
+    const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : NULL );
     setPropertyValue(
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ),
-        makeAny( Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() )
+        makeAny( xGraphic )
     );
     return 1L;
 }
