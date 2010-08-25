@@ -66,6 +66,10 @@ namespace application
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
+namespace vbaeventshelper
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
 namespace textframe
 {
 extern sdecl::ServiceDecl const serviceDecl;
@@ -87,7 +91,7 @@ extern "C"
 #if 0
     // Component registration
         if ( component_writeInfoHelper( pServiceManager, pRegistryKey,
-        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) )
+        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) && component_writeInfoHelper( pServiceManager, pRegistryKey, vbaeventshelper::serviceDecl ) )
         {
             // Singleton registration
             try
@@ -110,7 +114,7 @@ extern "C"
 #else
     // Component registration
         return component_writeInfoHelper( pServiceManager, pRegistryKey,
-        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) && component_writeInfoHelper( pServiceManager, pRegistryKey, textframe::serviceDecl );
+        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) && component_writeInfoHelper( pServiceManager, pRegistryKey, vbaeventshelper::serviceDecl, textframe::serviceDecl );
 #endif
 
     }
@@ -122,8 +126,8 @@ extern "C"
         OSL_TRACE("In component_getFactory for %s", pImplName );
     void* pRet =  component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
-     if( !pRet )
-        pRet = component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, textframe::serviceDecl );
+    if( !pRet )
+        pRet = component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, vbaeventshelper::serviceDecl, textframe::serviceDecl );
     OSL_TRACE("Ret is 0x%x", pRet);
     return pRet;
     }

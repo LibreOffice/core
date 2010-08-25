@@ -289,7 +289,7 @@ void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
             }
             else
             {
-                GetExtDocOptions().AppendCodeName( aName );
+                GetExtDocOptions().SetCodeName( GetCurrScTab(), aName );
                 GetDoc().SetCodeName( GetCurrScTab(), aName );
             }
         }

@@ -33,12 +33,16 @@
 #include "dpcontrol.hxx"
 #include "dpcontrol.hrc"
 
-#include "vcl/outdev.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/wintypes.hxx"
-#include "vcl/decoview.hxx"
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/wintypes.hxx>
+#include <vcl/decoview.hxx>
 #include "strload.hxx"
 #include "global.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
+#include "docpool.hxx"
+#include "patattr.hxx"
 
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterTopWindow.hxx"
@@ -55,7 +59,8 @@ using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
+    mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
     mbBaseButton(true),
@@ -135,17 +140,28 @@ void ScDPFieldButton::draw()
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
 
         // Field name.
-        Font aTextFont( mpStyle->GetLabelFont() );
-        double fFontHeight = 12.0;
-        fFontHeight *= static_cast<double>(maZoomY.GetNumerator()) / static_cast<double>(maZoomY.GetDenominator());
-        aTextFont.SetHeight(static_cast<long>(fFontHeight));
+        // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
+        Font aTextFont( mpStyle->GetAppFont() );
+        if ( mpDoc )
+        {
+            //  use ScPatternAttr::GetFont only for font size
+            Font aAttrFont;
+            static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+                GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
+            aTextFont.SetSize( aAttrFont.GetSize() );
+        }
         mpOutDev->SetFont(aTextFont);
+        mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());
 
         Point aTextPos = maPos;
-        long nTHeight = static_cast<long>(fFontHeight);
+        long nTHeight = mpOutDev->GetTextHeight();
         aTextPos.setX(maPos.getX() + nMargin);
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
+
+        mpOutDev->Push(PUSH_CLIPREGION);
+        mpOutDev->IntersectClipRegion(aRect);
         mpOutDev->DrawText(aTextPos, maText);
+        mpOutDev->Pop();
     }
 
     if (mbPopupButton)
