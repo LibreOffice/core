@@ -28,6 +28,9 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
+# No ODMA on UNX
+ODMA_LIB_LIB=
+
 #
 #externe libs in plattform.mk
 #
@@ -357,6 +360,7 @@ TESTLIB=-ltest
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
+ODMA_LIB_LIB=odma_lib.lib
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib

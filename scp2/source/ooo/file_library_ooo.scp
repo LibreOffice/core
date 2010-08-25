@@ -621,6 +621,10 @@ End
 #endif
 #endif
 
+#ifdef WNT
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_ODMA, fps_odma.uno )
+#endif
+
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
@@ -1506,6 +1510,10 @@ SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
+
+#ifdef WNT
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpodma1, ucpodma1)
+#endif
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
