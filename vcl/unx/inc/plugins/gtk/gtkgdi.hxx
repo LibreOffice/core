@@ -178,10 +178,6 @@ protected:
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
-
-    BOOL drawNativeMixedStateCheck( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                    ControlState nState, const ImplControlValue& aValue,
-                                    const rtl::OUString& rCaption );
 };
 
 #endif // _VCL_GTKGDI_HXX
