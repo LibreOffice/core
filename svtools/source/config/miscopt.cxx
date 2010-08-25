@@ -78,8 +78,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSTYLE          4
 #define PROPERTYNAME_USESYSTEMPRINTDIALOG   ASCII_STR("UseSystemPrintDialog")
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG 5
+#define PROPERTYNAME_TRYODMADIALOG  ASCII_STR("TryODMADialog")
+#define PROPERTYHANDLE_TRYODMADIALOG    6
 
-#define PROPERTYCOUNT                       6
+#define PROPERTYCOUNT                       7
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -99,6 +101,8 @@ class SvtMiscOptions_Impl : public ConfigItem
     LinkList    aList;
     sal_Bool    m_bUseSystemFileDialog;
     sal_Bool    m_bIsUseSystemFileDialogRO;
+    sal_Bool    m_bTryODMADialog;
+    sal_Bool    m_bIsTryODMADialogRO;
     sal_Bool    m_bPluginsEnabled;
     sal_Bool    m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
@@ -175,6 +179,15 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsUseSystemFileDialogReadOnly() const
         { return m_bIsUseSystemFileDialogRO; }
+
+        inline sal_Bool TryODMADialog() const
+        { return m_bTryODMADialog; }
+
+        inline void SetTryODMADialog( sal_Bool bSet )
+        {  m_bTryODMADialog = bSet; SetModified(); }
+
+        inline sal_Bool IsTryUseODMADialogReadOnly() const
+        { return m_bIsTryODMADialogRO; }
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
@@ -262,6 +275,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
     , m_bUseSystemFileDialog( sal_False )
     , m_bIsUseSystemFileDialogRO( sal_False )
+    , m_bTryODMADialog( sal_False )
+    , m_bIsTryODMADialogRO( sal_False )
     , m_bPluginsEnabled( sal_False )
     , m_bIsPluginsEnabledRO( sal_False )
     , m_nSymbolsSize( 0 )
@@ -340,6 +355,16 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
                 }
                 m_bIsUseSystemPrintDialogRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_TRYODMADIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
+                {
+                    DBG_ERROR("Wrong type of \"Misc\\TryODMADialog\"!" );
+                }
+                m_bIsTryODMADialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -443,6 +468,13 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
                                                             {
                                                                 DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                                                            }
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_TRYODMADIALOG       :   {
+                                                            if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
+                                                            {
+                                                                DBG_ERROR("Wrong type of \"Misc\\TryODMADialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -592,6 +624,13 @@ void SvtMiscOptions_Impl::Commit()
                 break;
             }
 
+            case PROPERTYHANDLE_TRYODMADIALOG :
+            {
+                if ( !m_bIsTryODMADialogRO )
+                    seqValues[nProperty] <<= m_bTryODMADialog;
+                break;
+            }
+
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 if ( !m_bIsSymbolsStyleRO )
@@ -624,7 +663,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_USESYSTEMFILEDIALOG,
         PROPERTYNAME_SYMBOLSTYLE,
-        PROPERTYNAME_USESYSTEMPRINTDIALOG
+        PROPERTYNAME_USESYSTEMPRINTDIALOG,
+        PROPERTYNAME_TRYODMADIALOG
     };
 
     // Initialize return sequence with these list ...
@@ -690,6 +730,21 @@ void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
 sal_Bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
 {
     return m_pDataContainer->IsUseSystemFileDialogReadOnly();
+}
+
+sal_Bool SvtMiscOptions::TryODMADialog() const
+{
+    return m_pDataContainer->TryODMADialog();
+}
+
+void SvtMiscOptions::SetTryODMADialog( sal_Bool bEnable )
+{
+    m_pDataContainer->SetTryODMADialog( bEnable );
+}
+
+sal_Bool SvtMiscOptions::IsTryUseODMADialogReadOnly() const
+{
+    return m_pDataContainer->IsTryUseODMADialogReadOnly();
 }
 
 sal_Bool SvtMiscOptions::IsPluginsEnabled() const
