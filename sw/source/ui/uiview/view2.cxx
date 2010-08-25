@@ -48,6 +48,7 @@
 #include <caption.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <svl/urihelper.hxx>
+#include <svtools/miscopt.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -56,6 +57,7 @@
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svtools/xwindowitem.hxx>
+#include <svx/linkwarn.hxx>
 #include <svx/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -399,6 +401,14 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                     sGraphicFormat = sTmpl;
                 rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
                 rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
+            }
+
+            // really store as link only?
+            if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
+            {
+                SvxLinkWarningDialog aWarnDlg(GetWindow(),pFileDlg->GetPath());
+                if( aWarnDlg.Execute() != RET_OK )
+                    bAsLink=sal_False; // don't store as link
             }
         }
 
