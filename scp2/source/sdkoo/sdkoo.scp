@@ -60,7 +60,7 @@ Directory gid_Dir_Ooo_Openofficeorg_Sdk
   #ifdef WNT
     HostName = "${BASISROOTNAME}";
   #else
-    HostName = "${UNIXBASISROOTNAME}";
+    HostName = ".";
   #endif
 End
 #endif

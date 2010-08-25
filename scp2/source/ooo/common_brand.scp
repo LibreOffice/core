@@ -436,7 +436,7 @@ Unixlink gid_Brand_Unixlink_BasisLink
     // Styles = (LAYERLINK);
     Name = "basis-link";
     Dir = gid_Dir_Brand_Root;
-    Target = "../${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}";
+    Target = "basis${OOOBASEVERSION}";
 End
 #endif
 

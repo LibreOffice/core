@@ -33,7 +33,7 @@ Directory gid_Dir_Brand_Root
   #ifdef WNT
     HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
   #else
-    HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";
+    HostName = ".";
   #endif
     Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION);
 End
