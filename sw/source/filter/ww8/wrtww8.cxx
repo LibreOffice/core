@@ -3804,8 +3804,10 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
 void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 {
+#if 0
 #ifdef DEBUG
     ::std::clog << "<OutWW8_SwStartNode>" << dbg_out(&rNode) << ::std::endl;
+#endif
 #endif
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo =
