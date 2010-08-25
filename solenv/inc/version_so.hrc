@@ -25,7 +25,7 @@
  *
  *************************************************************************/
 
-#define VERSION         9
+#define VERSION         3
 #define SUBVERSION      3
 //#define VERVARIANT    0 // never define this one, will be provided by build environment (BUILD_ID)
 // .0 + VER_CONCEPT
@@ -38,7 +38,7 @@
 #define VER_FINAL       0
 
 #define VER_DAY         1
-#define VER_MONTH       1
+#define VER_MONTH       8
 #define VER_YEAR        2010
 
 #ifndef VER_FIRSTYEAR
