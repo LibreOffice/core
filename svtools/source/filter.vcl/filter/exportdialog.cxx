@@ -1226,23 +1226,23 @@ void ExportDialog::updatePreview()
         Size aSize;
         if ( fXRatio > 1.0 )
         {
-            aSize.Width() = Max( maSize.Width, aFixedBitmapSize.Width() );
+            aSize.Width() =  ::std::max( maSize.Width, aFixedBitmapSize.Width() );
             aSize.Width() /= fXRatio;
         }
         else
         {
-            aSize.Width() = Min( maSize.Width, aFixedBitmapSize.Width() );
+            aSize.Width() =  ::std::min( maSize.Width, aFixedBitmapSize.Width() );
             aSize.Width() /= fXRatio;
         }
 
         if ( fYRatio > 1.0 )
         {
-            aSize.Height() = Max( maSize.Height, aFixedBitmapSize.Height() );
+            aSize.Height() =  ::std::max( maSize.Height, aFixedBitmapSize.Height() );
             aSize.Height() /= fYRatio;
         }
         else
         {
-            aSize.Height() = Min( maSize.Height, aFixedBitmapSize.Height() );
+            aSize.Height() =  ::std::min( maSize.Height, aFixedBitmapSize.Height() );
             aSize.Height() /= fYRatio;
         }
 
