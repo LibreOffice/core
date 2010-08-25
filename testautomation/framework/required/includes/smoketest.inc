@@ -33,6 +33,10 @@
 
 testcase tSmokeTest
 
+    if ( not hCheckForBinfilters() ) then
+        goto endsub
+    endif
+
     printlog( "Smoketest (10er-Test) from Release Engineering" )
     dim sLocation as string
     dim i,x,a as integer

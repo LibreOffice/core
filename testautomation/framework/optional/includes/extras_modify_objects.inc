@@ -41,8 +41,8 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
 
     const CFN = "tModifyObjects::"
     const RESTART = 15
-    const TEMPLATE_COUNT = 236 ' For en-US/StarOffice, numbers may differ for Languages/Brands
-    const SAMPLE_COUNT = 60    ' For en-US/StarOffice, numbers may differ for Languages/Brands
+    const TEMPLATE_COUNT = 236 ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
+    const SAMPLE_COUNT = 56    ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
 
 
     dim iObjectFolder as integer
