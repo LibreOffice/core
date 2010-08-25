@@ -36,6 +36,7 @@
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
 #include <qvbox.h>
 
 #ifdef QT_NO_EMIT
@@ -517,7 +518,11 @@ void FileDialog::appendFilter( const QString &rTitle, const QString &rFilter )
     QString qFilter( rFilter );
     qFilter.replace( QChar( ';' ), QChar( ' ' ) ).replace( "*.*", "*" );
 
-    m_aFilters.push_back( qMakePair( rTitle, qFilter ) );
+    // Workaround for too wide <All formats> (*.bmp;...) entry
+    QString qTitle( rTitle );
+    qTitle.replace( QRegExp( "^<([^>]*)> \\(.*" ), "<\\1>" );
+
+    m_aFilters.push_back( qMakePair( qTitle, qFilter ) );
 }
 
 QString FileDialog::filters() const
