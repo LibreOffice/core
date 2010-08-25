@@ -56,6 +56,7 @@ SRC1FILES =  \
         imapdlg.src \
         langbox.src \
         language.src \
+        linkwarn.src \
         passwd.src \
         prtqry.src \
         rubydialog.src\
@@ -108,6 +109,7 @@ LIB2OBJFILES= \
         $(SLO)$/hyprlink.obj \
         $(SLO)$/imapdlg.obj \
         $(SLO)$/imapwnd.obj \
+        $(SLO)$/linkwarn.obj \
         $(SLO)$/measctrl.obj \
         $(SLO)$/orienthelper.obj \
         $(SLO)$/pagectrl.obj \

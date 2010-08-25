@@ -146,6 +146,11 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\simptabl.hxx %_DEST%\inc%_EXT%\svx\simptabl.hxx
 ..\inc\svx\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
 ..\inc\svx\bmpmask.hxx %_DEST%\inc%_EXT%\svx\bmpmask.hxx
+..\inc\svx\linkwarn.hxx %_DEST%\inc%_EXT%\svx\linkwarn.hxx
+..\inc\svx\borderline.hxx %_DEST%\inc%_EXT%\svx\borderline.hxx
+..\inc\svx\boxitem.hxx %_DEST%\inc%_EXT%\svx\boxitem.hxx
+..\inc\svx\brkitem.hxx %_DEST%\inc%_EXT%\svx\brkitem.hxx
+..\inc\svx\brshitem.hxx %_DEST%\inc%_EXT%\svx\brshitem.hxx
 ..\inc\svx\camera3d.hxx %_DEST%\inc%_EXT%\svx\camera3d.hxx
 ..\inc\svx\charmap.hxx %_DEST%\inc%_EXT%\svx\charmap.hxx
 ..\inc\svx\checklbx.hxx %_DEST%\inc%_EXT%\svx\checklbx.hxx

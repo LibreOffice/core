@@ -35,7 +35,7 @@
 // Resource-Id's ------------------------------------------------------------
 
 // Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
-#define RID_SVX_FIRSTFREE                   305
+#define RID_SVX_FIRSTFREE                   314
 
 // some strings also used in CUI
 #define RID_SVXERRCTX                       (RID_SVX_START + 351)
@@ -379,6 +379,7 @@
 #define RID_SVXDLG_TEXTCONTROL_CHARATTR     (RID_SVX_START + 286)
 #define RID_SVXDLG_TEXTCONTROL_PARAATTR     (RID_SVX_START + 287)
 
+#define RID_SVXDLG_LINK_WARNING             (RID_SVX_START + 313)
 // !!! please update RID_SVX_FIRSTFREE !!! see line 46
 
 // Strings ------------------------------------------------------------------
