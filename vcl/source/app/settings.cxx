@@ -817,7 +817,8 @@ ULONG StyleSettings::GetAutoSymbolsStyle() const
 
     if( bCont )
     {
-        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
+        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) ||
+            rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "windows" ) )
             nRet = STYLE_SYMBOLS_TANGO;
         else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             nRet = STYLE_SYMBOLS_CRYSTAL;
