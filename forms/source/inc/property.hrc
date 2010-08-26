@@ -61,7 +61,7 @@ namespace frm
 #define PROPERTY_ID_WRITING_MODE        (PROPERTY_ID_START + 20)
 #define PROPERTY_ID_CONTEXT_WRITING_MODE    (PROPERTY_ID_START + 21)
 #define PROPERTY_ID_VERTICAL_ALIGN      (PROPERTY_ID_START + 22)
-    // free
+#define PROPERTY_ID_GRAPHIC             (PROPERTY_ID_START + 23)
     // free
     // free
     // free

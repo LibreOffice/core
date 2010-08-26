@@ -152,10 +152,12 @@ OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _r
                     // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
     ,m_bReadOnly( sal_False )
+    ,m_sImageURL()
+    ,m_xGraphic()
 {
     DBG_CTOR( OImageControlModel, NULL );
     m_nClassId = FormComponentType::IMAGECONTROL;
-    initValueProperty( PROPERTY_IMAGE_URL, PROPERTY_ID_IMAGE_URL);
+    initOwnValueProperty( PROPERTY_IMAGE_URL );
 
     implConstruct();
 }
@@ -165,22 +167,19 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
+    ,m_bReadOnly( _pOriginal->m_bReadOnly )
+    ,m_sImageURL( _pOriginal->m_sImageURL )
+    ,m_xGraphic( _pOriginal->m_xGraphic )
 {
     DBG_CTOR( OImageControlModel, NULL );
     implConstruct();
-    m_bReadOnly = _pOriginal->m_bReadOnly;
 
     osl_incrementInterlockedCount( &m_refCount );
     {
         // simulate a propertyChanged event for the ImageURL
         // 2003-05-15 - #109591# - fs@openoffice.org
-        Any aImageURL;
-        getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
-        ::rtl::OUString sImageURL;
-        aImageURL >>= sImageURL;
-
         ::osl::MutexGuard aGuard( m_aMutex );
-        impl_handleNewImageURL_lck( sImageURL, eOther );
+        impl_handleNewImageURL_lck( eOther );
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -244,32 +243,20 @@ sal_Bool OImageControlModel::approveDbColumnType( sal_Int32 _nColumnType )
     return ImageStoreInvalid != lcl_getImageStoreType( _nColumnType );
 }
 
-
-//------------------------------------------------------------------------------
-void OImageControlModel::_propertyChanged( const PropertyChangeEvent& _rEvent )
-                                            throw( RuntimeException )
-{
-    if ( m_xColumnUpdate.is() )
-    {
-        OBoundControlModel::_propertyChanged( _rEvent );
-    }
-    else
-    {   // we're not bound. In this case, we have to manually care for updating the
-        // image producer, since the base class will not do this
-        ::rtl::OUString sImageURL;
-        _rEvent.NewValue >>= sImageURL;
-
-        ::osl::MutexGuard aGuard( m_aMutex );
-        impl_handleNewImageURL_lck( sImageURL, eOther );
-    }
-}
-
 //------------------------------------------------------------------------------
 void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
-        case PROPERTY_ID_READONLY       : rValue <<= (sal_Bool)m_bReadOnly; break;
+        case PROPERTY_ID_READONLY:
+            rValue <<= (sal_Bool)m_bReadOnly;
+            break;
+        case PROPERTY_ID_IMAGE_URL:
+            rValue <<= m_sImageURL;
+            break;
+        case PROPERTY_ID_GRAPHIC:
+            rValue <<= m_xGraphic;
+            break;
         default:
             OBoundControlModel::getFastPropertyValue(rValue, nHandle);
     }
@@ -285,8 +272,24 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
             m_bReadOnly = getBOOL(rValue);
             break;
 
+        case PROPERTY_ID_IMAGE_URL:
+            OSL_VERIFY( rValue >>= m_sImageURL );
+            impl_handleNewImageURL_lck( eOther );
+            {
+                ControlModelLock aLock( *this );
+                    // that's a fake ... onValuePropertyChange expects to receive the only lock to our instance,
+                    // but we're already called with our mutex locked ...
+                onValuePropertyChange( aLock );
+            }
+            break;
+
+        case PROPERTY_ID_GRAPHIC:
+            OSL_VERIFY( rValue >>= m_xGraphic );
+            break;
+
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
+            break;
     }
 }
 
@@ -299,6 +302,12 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
         case PROPERTY_ID_READONLY :
             return tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bReadOnly);
 
+        case PROPERTY_ID_IMAGE_URL:
+            return tryPropertyValue( rConvertedValue, rOldValue, rValue, m_sImageURL );
+
+        case PROPERTY_ID_GRAPHIC:
+            return tryPropertyValue( rConvertedValue, rOldValue, rValue, m_xGraphic );
+
         default:
             return OBoundControlModel::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
     }
@@ -307,10 +316,22 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
 //------------------------------------------------------------------------------
 void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 2, OBoundControlModel )
-        DECL_BOOL_PROP1 ( READONLY,             BOUND );
-        DECL_PROP1      ( TABINDEX, sal_Int16,  BOUND );
+    BEGIN_DESCRIBE_PROPERTIES( 4, OBoundControlModel )
+        DECL_IFACE_PROP2( GRAPHIC,   XGraphic,        BOUND, TRANSIENT );
+        DECL_PROP1      ( IMAGE_URL, ::rtl::OUString, BOUND );
+        DECL_BOOL_PROP1 ( READONLY,                   BOUND );
+        DECL_PROP1      ( TABINDEX,  sal_Int16,       BOUND );
     END_DESCRIBE_PROPERTIES();
+}
+
+//------------------------------------------------------------------------------
+void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [out] */ o_rAggregateProperties ) const
+{
+    OBoundControlModel::describeAggregateProperties( o_rAggregateProperties );
+    // remove ImageULR and Graphic properties, we "overload" them. This is because our aggregate synchronizes those
+    // two, but we have an own sychronization mechanism.
+    RemoveProperty( o_rAggregateProperties, PROPERTY_IMAGE_URL );
+    RemoveProperty( o_rAggregateProperties, PROPERTY_GRAPHIC );
 }
 
 //------------------------------------------------------------------------------
@@ -411,18 +432,18 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const ::rtl::OUString&
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::impl_handleNewImageURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
+sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator )
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
     {
     case ImageStoreBinary:
-        if ( impl_updateStreamForURL_lck( _rURL, _eInstigator ) )
+        if ( impl_updateStreamForURL_lck( m_sImageURL, _eInstigator ) )
             return sal_True;
         break;
 
     case ImageStoreLink:
     {
-        ::rtl::OUString sCommitURL( _rURL );
+        ::rtl::OUString sCommitURL( m_sImageURL );
         if ( m_sDocumentURL.getLength() )
             sCommitURL = URIHelper::simpleNormalizedMakeRelative( m_sDocumentURL, sCommitURL );
         OSL_ENSURE( m_xColumnUpdate.is(), "OImageControlModel::impl_handleNewImageURL_lck: no bound field, but ImageStoreLink?!" );
@@ -435,7 +456,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( const ::rtl::OUString& 
     break;
 
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::impl_handleNewImageURL_lck: invalid current field type!" );
+        OSL_ENSURE( false, "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
         break;
     }
 
@@ -462,10 +483,7 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
     else
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-
-        ::rtl::OUString sImageURL;
-        m_xAggregateSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sImageURL;
-        return impl_handleNewImageURL_lck( sImageURL, eDbColumnBinding );
+        return impl_handleNewImageURL_lck( eDbColumnBinding );
     }
 
     return sal_True;
@@ -545,6 +563,12 @@ Any OImageControlModel::translateDbColumnToControlValue()
 }
 
 //------------------------------------------------------------------------------
+Any OImageControlModel::getControlValue( ) const
+{
+    return makeAny( m_sImageURL );
+}
+
+//------------------------------------------------------------------------------
 void OImageControlModel::doSetControlValue( const Any& _rValue )
 {
     DBG_ASSERT( GetImageProducer() && m_xImageProducer.is(), "OImageControlModel::doSetControlValue: no image producer!" );
@@ -599,11 +623,6 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
 void SAL_CALL OImageControlModel::disposing()
 {
     OBoundControlModel::disposing();
-
-    {
-        ::osl::MutexGuard aGuard( m_aMutex ); // setControlValue expects this
-        setControlValue( Any(), eOther );
-    }
 }
 
 //------------------------------------------------------------------------------
