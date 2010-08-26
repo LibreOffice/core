@@ -41,10 +41,10 @@ namespace xls {
 // ============================================================================
 
 /** Special implementation of the VBA project for the Excel filters. */
-class OOX_DLLPUBLIC VbaProject : public ::oox::ole::VbaProject
+class OOX_DLLPUBLIC ExcelVbaProject : public ::oox::ole::VbaProject
 {
 public:
-    explicit            VbaProject(
+    explicit            ExcelVbaProject(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& rxDocument );
 
@@ -53,7 +53,9 @@ public:
 
 protected:
     /** Adds dummy modules for sheets without imported code name. */
-    virtual void        prepareModuleImport();
+    virtual void        prepareImport();
+    /** Attaches document and sheet events to macros. */
+    virtual void        finalizeImport();
 
 private:
     /** Attaches VBA macros to all supported document events. */

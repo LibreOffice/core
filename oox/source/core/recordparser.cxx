@@ -26,24 +26,25 @@
  ************************************************************************/
 
 #include "oox/core/recordparser.hxx"
+
 #include <vector>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/core/fragmenthandler.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::lang::DisposedException;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::IOException;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XLocator;
+#include "oox/helper/recordinputstream.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -348,4 +349,3 @@ const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
 
 } // namespace core
 } // namespace oox
-

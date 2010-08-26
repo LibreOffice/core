@@ -119,7 +119,7 @@ ContextHandlerRef OoxDataValidationsContext::onCreateContext( sal_Int32 nElement
             {
                 case XLS_TOKEN( formula1 ):
                 case XLS_TOKEN( formula2 ):
-                    return this;    // collect formulas in onEndElement()
+                    return this;    // collect formulas in onCharacters()
             }
         break;
     }
@@ -138,7 +138,7 @@ ApiTokenSequence lclImportDataValFormula( FormulaParser& rParser, const OUString
 
 } // namespace
 
-void OoxDataValidationsContext::onEndElement( const OUString& rChars )
+void OoxDataValidationsContext::onCharacters( const OUString& rChars )
 {
     if( mxValModel.get() ) switch( getCurrentElement() )
     {
@@ -153,10 +153,15 @@ void OoxDataValidationsContext::onEndElement( const OUString& rChars )
             mxValModel->maTokens2 = lclImportDataValFormula(
                 getFormulaParser(), rChars, mxValModel->maRanges.getBaseAddress() );
         break;
-        case XLS_TOKEN( dataValidation ):
-            setValidation( *mxValModel );
-            mxValModel.reset();
-        break;
+    }
+}
+
+void OoxDataValidationsContext::onEndElement()
+{
+    if( isCurrentElement( XLS_TOKEN( dataValidation ) ) && mxValModel.get() )
+    {
+        setValidation( *mxValModel );
+        mxValModel.reset();
     }
 }
 
@@ -252,7 +257,7 @@ ContextHandlerRef OoxWorksheetFragment::onCreateContext( sal_Int32 nElement, con
             case SHEETTYPE_WORKSHEET:   return (nElement == XLS_TOKEN( worksheet )) ? this : 0;
             case SHEETTYPE_CHARTSHEET:  return 0;
             case SHEETTYPE_MACROSHEET:  return (nElement == XM_TOKEN( macrosheet )) ? this : 0;
-            case SHEETTYPE_DIALOGSHEET: return (nElement == XM_TOKEN( dialogsheet )) ? this : 0;
+            case SHEETTYPE_DIALOGSHEET: return (nElement == XLS_TOKEN( dialogsheet )) ? this : 0;
             case SHEETTYPE_MODULESHEET: return 0;
             case SHEETTYPE_EMPTYSHEET:  return 0;
         }
@@ -260,6 +265,7 @@ ContextHandlerRef OoxWorksheetFragment::onCreateContext( sal_Int32 nElement, con
 
         case XLS_TOKEN( worksheet ):
         case XM_TOKEN( macrosheet ):
+        case XLS_TOKEN( dialogsheet ):
             switch( nElement )
             {
                 case XLS_TOKEN( sheetData ):                return new OoxSheetDataContext( *this );
@@ -340,7 +346,7 @@ ContextHandlerRef OoxWorksheetFragment::onCreateContext( sal_Int32 nElement, con
                 case XLS_TOKEN( oddHeader ):
                 case XLS_TOKEN( oddFooter ):
                 case XLS_TOKEN( evenHeader ):
-                case XLS_TOKEN( evenFooter ):       return this;    // collect h/f contents in onEndElement()
+                case XLS_TOKEN( evenFooter ):       return this;    // collect h/f contents in onCharacters()
             }
         break;
 
@@ -354,7 +360,7 @@ ContextHandlerRef OoxWorksheetFragment::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-void OoxWorksheetFragment::onEndElement( const OUString& rChars )
+void OoxWorksheetFragment::onCharacters( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {

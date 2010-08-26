@@ -26,49 +26,42 @@
  ************************************************************************/
 
 #include "oox/core/filterbase.hxx"
+
 #include <set>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
-#include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
-#include "tokens.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::task::XStatusIndicator;
-using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::graphic::XGraphic;
-using ::comphelper::MediaDescriptor;
-using ::comphelper::SequenceAsHashMap;
-using ::oox::ole::OleObjectHelper;
+#include "oox/ole/vbaproject.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::uno;
+
+using ::comphelper::MediaDescriptor;
+using ::comphelper::SequenceAsHashMap;
+using ::oox::ole::OleObjectHelper;
+using ::oox::ole::VbaProject;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -133,6 +126,7 @@ struct FilterBaseImpl
     typedef ::boost::shared_ptr< GraphicHelper >        GraphicHelperRef;
     typedef ::boost::shared_ptr< ModelObjectHelper >    ModelObjHelperRef;
     typedef ::boost::shared_ptr< OleObjectHelper >      OleObjHelperRef;
+    typedef ::boost::shared_ptr< VbaProject >           VbaProjectRef;
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
@@ -143,6 +137,7 @@ struct FilterBaseImpl
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
+    VbaProjectRef       mxVbaProject;           /// VBA project manager.
 
     Reference< XMultiServiceFactory >   mxGlobalFactory;
     Reference< XModel >                 mxModel;
@@ -392,6 +387,13 @@ OleObjectHelper& FilterBase::getOleObjectHelper() const
     return *mxImpl->mxOleObjHelper;
 }
 
+VbaProject& FilterBase::getVbaProject() const
+{
+    if( !mxImpl->mxVbaProject )
+        mxImpl->mxVbaProject.reset( implCreateVbaProject() );
+    return *mxImpl->mxVbaProject;
+}
+
 OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
@@ -563,4 +565,3 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
 
 } // namespace core
 } // namespace oox
-

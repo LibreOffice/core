@@ -68,6 +68,7 @@ public:
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:

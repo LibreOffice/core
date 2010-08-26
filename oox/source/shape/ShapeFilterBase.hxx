@@ -60,12 +60,13 @@ public:
 
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
-    virtual rtl::OUString implGetImplementationName() const;
-
     virtual bool importDocument() { return true; }
     virtual bool exportDocument() { return true; }
 
 private:
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
+    virtual rtl::OUString implGetImplementationName() const;
+
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 };
 

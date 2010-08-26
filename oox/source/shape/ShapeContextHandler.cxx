@@ -68,7 +68,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
         switch (Element & 0xffff)
         {
             case XML_graphic:
-                mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
+                mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
                 mxGraphicShapeContext.set
                 (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape, true));
                 break;

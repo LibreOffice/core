@@ -26,17 +26,20 @@
  ************************************************************************/
 
 #include "oox/core/fasttokenhandler.hxx"
+
 #include <osl/mutex.hxx>
 #include "oox/token/tokenmap.hxx"
 
-using ::rtl::OUString;
-using ::osl::Mutex;
-using ::osl::MutexGuard;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::RuntimeException;
-
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+
+using ::osl::Mutex;
+using ::osl::MutexGuard;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -89,4 +92,3 @@ sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdent
 
 } // namespace core
 } // namespace oox
-

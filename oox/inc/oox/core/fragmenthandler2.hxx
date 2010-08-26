@@ -49,8 +49,6 @@ public:
     virtual void SAL_CALL acquire() throw() { FragmentHandler::acquire(); }
     virtual void SAL_CALL release() throw() { FragmentHandler::release(); }
 
-    virtual ContextHandler& queryContextHandler();
-
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
@@ -94,7 +92,8 @@ public:
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement();
 
     virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
@@ -112,4 +111,3 @@ public:
 } // namespace oox
 
 #endif
-

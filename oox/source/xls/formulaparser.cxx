@@ -439,7 +439,7 @@ public:
                             const ApiTokenSequence& rTokens );
 
     /** Tries to resolve the passed ref-id to an OLE target URL. */
-    OUString            resolveOleTarget( sal_Int32 nRefId ) const;
+    OUString            resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const;
 
 protected:
     typedef ::std::pair< sal_Int32, bool >  WhiteSpace;
@@ -605,9 +605,9 @@ void FormulaParserImpl::setFormula( FormulaContext& rContext, const ApiTokenSequ
     finalizeImport( rTokens );
 }
 
-OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId ) const
+OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const
 {
-    const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
+    const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, bUseRefSheets ).get();
     OSL_ENSURE( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE), "FormulaParserImpl::resolveOleTarget - missing or wrong link" );
     if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE) )
          return getBaseFilter().getAbsoluteUrl( pExtLink->getTargetUrl() );
@@ -2734,6 +2734,29 @@ bool BiffFormulaParserImpl::pushBiffFunction( sal_uInt16 nFuncId, sal_uInt8 nPar
 
 // ============================================================================
 
+namespace {
+
+/** Extracts the reference identifier and the remaining data from a formula in
+    the format '[RefID]Remaining'. */
+bool lclExtractRefId( sal_Int32& rnRefId, OUString& rRemainder, const OUString& rFormulaString )
+{
+    if( (rFormulaString.getLength() >= 4) && (rFormulaString[ 0 ] == '[') )
+    {
+        sal_Int32 nBracketClose = rFormulaString.indexOf( ']', 1 );
+        if( nBracketClose >= 2 )
+        {
+            rnRefId = rFormulaString.copy( 1, nBracketClose - 1 ).toInt32();
+            rRemainder = rFormulaString.copy( nBracketClose + 1 );
+            return rRemainder.getLength() > 0;
+        }
+    }
+    return false;
+}
+
+}
+
+// ----------------------------------------------------------------------------
+
 FormulaParser::FormulaParser( const WorkbookHelper& rHelper ) :
     FormulaProcessorBase( rHelper )
 {
@@ -2808,24 +2831,12 @@ void FormulaParser::convertNumberToHyperlink( FormulaContext& rContext, const OU
 
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
 {
-    // obviously, this would overburden our formula parser, so we parse it manually
-    OUString aTargetLink;
-    sal_Int32 nFmlaLen = rFormulaString.getLength();
-    if( (nFmlaLen >= 8) && (rFormulaString[ 0 ] == '[') )
-    {
-        // passed string is trimmed already
-        sal_Int32 nBracketClose = rFormulaString.indexOf( ']' );
-        sal_Int32 nExclamation = rFormulaString.indexOf( '!' );
-        if( (nBracketClose >= 2) &&
-            (nBracketClose + 1 == nExclamation) &&
-            (rFormulaString[ nExclamation + 1 ] == '\'') &&
-            (rFormulaString[ nFmlaLen - 1 ] == '\'') )
-        {
-            sal_Int32 nRefId = rFormulaString.copy( 1, nBracketClose - 1 ).toInt32();
-            aTargetLink = mxImpl->resolveOleTarget( nRefId );
-        }
-    }
-    return aTargetLink;
+    sal_Int32 nRefId = -1;
+    OUString aRemainder;
+    if( lclExtractRefId( nRefId, aRemainder, rFormulaString ) && (aRemainder.getLength() >= 3) &&
+            (aRemainder[ 0 ] == '!') && (aRemainder[ 1 ] == '\'') && (aRemainder[ aRemainder.getLength() - 1 ] == '\'') )
+        return mxImpl->resolveOleTarget( nRefId, false );
+    return OUString();
 }
 
 OUString FormulaParser::importOleTargetLink( RecordInputStream& rStrm )
@@ -2840,7 +2851,7 @@ OUString FormulaParser::importOleTargetLink( RecordInputStream& rStrm )
         sal_Int32 nNameId;
         rStrm >> nToken >> nRefId >> nNameId;
         if( nToken == (BIFF_TOKCLASS_VAL|BIFF_TOKID_NAMEX) )
-            aTargetLink = mxImpl->resolveOleTarget( nRefId );
+            aTargetLink = mxImpl->resolveOleTarget( nRefId, true );
     }
     rStrm.seek( nFmlaEndPos );
     return aTargetLink;
@@ -2854,8 +2865,60 @@ OUString FormulaParser::importOleTargetLink( BiffInputStream& rStrm, const sal_u
     return aTargetLink;
 }
 
+OUString FormulaParser::importMacroName( const OUString& rFormulaString )
+{
+    /*  Valid macros are either sheet macros or VBA macros. OOXML and all BIFF
+        documents store defined names for sheet macros, but OOXML documents do
+        not store any defined name for VBA macros (while BIFF documents do).
+        Sheet macros may be defined locally to a sheet, or globally to the
+        document. As a result, all of the following macro specifiers are valid:
+
+        1) Macros located in the own document:
+            [0]!MySheetMacro    (global sheet macro 'MySheetMacro')
+            Macro1!MyMacro      (sheet-local sheet macro 'MyMacro')
+            [0]!MyVBAProc       (VBA macro 'MyVBAProc')
+            [0]!Mod1.MyVBAProc  (VBA macro 'MyVBAProc' from code module 'Mod1')
+
+        2) Macros from an external document:
+            [2]!MySheetMacro    (global external sheet macro 'MySheetMacro')
+            [2]Macro1!MyMacro   (sheet-local external sheet macro 'MyMacro')
+            [2]!MyVBAProc       (external VBA macro 'MyVBAProc')
+            [2]!Mod1.MyVBAProc  (external VBA macro from code module 'Mod1')
+
+        This implementation is only interested in VBA macros from the own
+        document, ignoring the valid syntax 'Macro1!MyMacro' for sheet-local
+        sheet macros.
+     */
+    sal_Int32 nRefId = -1;
+    OUString aRemainder;
+    if( lclExtractRefId( nRefId, aRemainder, rFormulaString ) && (aRemainder.getLength() > 1) && (aRemainder[ 0 ] == '!') )
+    {
+        /*  In BIFF12 documents, the reference identifier is always the
+            one-based index of the external link as it is in OOXML documents
+            (it is not an index into the list of reference sheets as used in
+            cell formulas). Index 0 is an implicit placeholder for the own
+            document. In BIFF12 documents, the reference to the own document is
+            stored explicitly, mostly at the top of the list, so index 1 may
+            resolve to the own document too.
+            Passing 'false' to getExternalLink() specifies to ignore the
+            reference sheets list (if existing) and to access the list of
+            external links directly. */
+        const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, false ).get();
+        OSL_ENSURE( pExtLink, "FormulaParser::importMacroName - missing link" );
+        // do not accept macros in external documents (not supported)
+        if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_SELF) )
+        {
+            // ignore sheet macros (defined name for VBA macros may not exist, see above)
+            OUString aMacroName = aRemainder.copy( 1 );
+            const DefinedName* pDefName = getDefinedNames().getByModelName( aMacroName ).get();
+            if( !pDefName || pDefName->isVBName() )
+                return aMacroName;
+        }
+    }
+    return OUString();
+}
+
 // ============================================================================
 
 } // namespace xls
 } // namespace oox
-

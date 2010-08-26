@@ -26,31 +26,31 @@
  ************************************************************************/
 
 #include "oox/xls/workbookhelper.hxx"
-#include <osl/thread.h>
+
+#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include "properties.hxx"
+#include <com/sun/star/table/CellAddress.hpp>
+#include <osl/thread.h>
+#include "oox/drawingml/theme.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/drawingml/theme.hxx"
+#include "oox/ole/vbaproject.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffcodec.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/excelfilter.hxx"
-#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
@@ -66,40 +66,28 @@
 #include "oox/xls/webquerybuffer.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
+#include "properties.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::document::XActionLockable;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::table::XCellRange;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::sheet::XNamedRange;
-using ::com::sun::star::sheet::XNamedRanges;
-using ::com::sun::star::sheet::XDatabaseRanges;
-using ::com::sun::star::sheet::XExternalDocLinks;
-using ::com::sun::star::style::XStyle;
-using ::com::sun::star::style::XStyleFamiliesSupplier;
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
 using ::oox::core::BinaryFilterBase;
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
-
-namespace oox {
-namespace xls {
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -613,6 +601,8 @@ void WorkbookData::finalize()
         aPropSet.setProperty( PROP_IsUndoEnabled, true );
         // disable editing read-only documents (e.g. from read-only files)
         aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, false );
+        // #111099# open forms in alive mode (has no effect, if no controls in document)
+        aPropSet.setProperty( PROP_ApplyFormDesignMode, false );
     }
 }
 
@@ -691,11 +681,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         sheet events. */
     StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
-    {
-        VbaProject aVbaProject( getGlobalFactory(), getDocument() );
-        aVbaProject.importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
-        aVbaProject.attachToEvents();
-    }
+        getBaseFilter().getVbaProject().importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 }
 
 // document model -------------------------------------------------------------
@@ -1004,4 +990,3 @@ bool WorkbookHelperRoot::isValid() const
 
 } // namespace xls
 } // namespace oox
-

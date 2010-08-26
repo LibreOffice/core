@@ -30,6 +30,7 @@
 #include "oox/dump/pptxdumper.hxx"
 #include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
 #include "oox/helper/graphichelper.hxx"
+#include "oox/ole/vbaproject.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -178,6 +179,11 @@ sal_Int32 PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 {
     return new PptGraphicHelper( *this );
+}
+
+::oox::ole::VbaProject* PowerPointImport::implCreateVbaProject() const
+{
+    return new ::oox::ole::VbaProject( getGlobalFactory(), getModel(), CREATE_OUSTRING( "Impress" ) );
 }
 
 OUString PowerPointImport::implGetImplementationName() const

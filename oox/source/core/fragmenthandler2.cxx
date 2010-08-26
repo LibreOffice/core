@@ -27,15 +27,15 @@
 
 #include "oox/core/fragmenthandler2.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XFastAttributeList;
-using ::com::sun::star::xml::sax::XFastContextHandler;
-
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -47,11 +47,6 @@ FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFra
 
 FragmentHandler2::~FragmentHandler2()
 {
-}
-
-ContextHandler& FragmentHandler2::queryContextHandler()
-{
-    return *this;
 }
 
 // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
@@ -77,7 +72,7 @@ Reference< XFastContextHandler > SAL_CALL FragmentHandler2::createFastChildConte
 void SAL_CALL FragmentHandler2::startFastElement(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
 {
-    implStartCurrentContext( nElement, rxAttribs );
+    implStartElement( nElement, rxAttribs );
 }
 
 void SAL_CALL FragmentHandler2::characters( const OUString& rChars ) throw( SAXException, RuntimeException )
@@ -87,7 +82,7 @@ void SAL_CALL FragmentHandler2::characters( const OUString& rChars ) throw( SAXE
 
 void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXException, RuntimeException )
 {
-    implEndCurrentContext( nElement );
+    implEndElement( nElement );
 }
 
 // oox.core.ContextHandler interface ------------------------------------------
@@ -118,7 +113,11 @@ void FragmentHandler2::onStartElement( const AttributeList& )
 {
 }
 
-void FragmentHandler2::onEndElement( const OUString& )
+void FragmentHandler2::onCharacters( const OUString& )
+{
+}
+
+void FragmentHandler2::onEndElement()
 {
 }
 
@@ -149,4 +148,3 @@ void FragmentHandler2::finalizeImport()
 
 } // namespace core
 } // namespace oox
-

@@ -128,14 +128,10 @@ ContextHandlerRef OoxWorkbookFragment::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-void OoxWorkbookFragment::onEndElement( const OUString& rChars )
+void OoxWorkbookFragment::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( definedName ):
-            if( mxCurrName.get() ) mxCurrName->setFormula( rChars );
-        break;
-    }
+    if( isCurrentElement( XLS_TOKEN( definedName ) ) && mxCurrName.get() )
+        mxCurrName->setFormula( rChars );
 }
 
 ContextHandlerRef OoxWorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )

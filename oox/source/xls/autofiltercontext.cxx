@@ -204,7 +204,7 @@ void OoxAutoFilterContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-void OoxAutoFilterContext::onEndElement( const OUString& /*rChars*/ )
+void OoxAutoFilterContext::onEndElement()
 {
     switch( getCurrentElement() )
     {

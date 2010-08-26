@@ -26,33 +26,32 @@
  ************************************************************************/
 
 #include "oox/xls/excelfilter.hxx"
+
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include "oox/dump/biffdumper.hxx"
+#include "oox/dump/xlsbdumper.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelchartconverter.hxx"
+#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/workbookfragment.hxx"
-#include "oox/dump/biffdumper.hxx"
-#include "oox/dump/xlsbdumper.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::xml::sax::XFastDocumentHandler;
-using ::oox::core::BinaryFilterBase;
-using ::oox::core::FragmentHandlerRef;
-using ::oox::core::Relation;
-using ::oox::core::Relations;
-using ::oox::core::XmlFilterBase;
-using ::oox::drawingml::table::TableStyleListPtr;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+using namespace ::oox::core;
+
+using ::rtl::OUString;
+using ::oox::drawingml::table::TableStyleListPtr;
 
 // ============================================================================
 
@@ -160,6 +159,11 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
     return new ExcelGraphicHelper( getWorkbookData() );
 }
 
+::oox::ole::VbaProject* ExcelFilter::implCreateVbaProject() const
+{
+    return new ExcelVbaProject( getGlobalFactory(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+}
+
 OUString ExcelFilter::implGetImplementationName() const
 {
     return ExcelFilter_getImplementationName();
@@ -235,6 +239,11 @@ GraphicHelper* ExcelBiffFilter::implCreateGraphicHelper() const
     return new ExcelGraphicHelper( getWorkbookData() );
 }
 
+::oox::ole::VbaProject* ExcelBiffFilter::implCreateVbaProject() const
+{
+    return new ExcelVbaProject( getGlobalFactory(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+}
+
 OUString ExcelBiffFilter::implGetImplementationName() const
 {
     return ExcelBiffFilter_getImplementationName();
@@ -244,4 +253,3 @@ OUString ExcelBiffFilter::implGetImplementationName() const
 
 } // namespace xls
 } // namespace oox
-

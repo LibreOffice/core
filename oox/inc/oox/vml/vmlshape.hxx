@@ -45,6 +45,19 @@ namespace vml {
 class Drawing;
 struct ShapeParentAnchor;
 class ShapeContainer;
+class TextBox;
+
+// ============================================================================
+
+const sal_Int32 VML_CLIENTDATA_UNCHECKED        = 0;
+const sal_Int32 VML_CLIENTDATA_CHECKED          = 1;
+const sal_Int32 VML_CLIENTDATA_MIXED            = 2;
+
+const sal_Int32 VML_CLIENTDATA_TEXT             = 0;
+const sal_Int32 VML_CLIENTDATA_INTEGER          = 1;
+const sal_Int32 VML_CLIENTDATA_NUMBER           = 2;
+const sal_Int32 VML_CLIENTDATA_REFERENCE        = 3;
+const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
 
 // ============================================================================
 
@@ -52,7 +65,7 @@ class ShapeContainer;
 struct ShapeTypeModel
 {
     ::rtl::OUString     maShapeId;              /// Unique identifier of the shape.
-    ::rtl::OUString     maName;                 /// Name of the shape, if present.
+    ::rtl::OUString     maShapeName;            /// Name of the shape, if present.
     OptValue< sal_Int32 > moShapeType;          /// Builtin shape type identifier.
 
     OptValue< Int32Pair > moCoordPos;           /// Top-left position of coordinate system for children scaling.
@@ -93,6 +106,8 @@ public:
 
     /** Returns the shape identifier (which is unique through the containing drawing). */
     inline const ::rtl::OUString& getShapeId() const { return maTypeModel.maShapeId; }
+    /** Returns the application defined shape type. */
+    sal_Int32           getShapeType() const;
     /** Returns the fragment path to the embedded graphic used by this shape. */
     ::rtl::OUString     getGraphicPath() const;
 
@@ -116,19 +131,39 @@ protected:
 // ============================================================================
 
 /** Excel specific shape client data (such as cell anchor). */
-struct ShapeClientData
+struct ClientData
 {
     ::rtl::OUString     maAnchor;           /// Cell anchor as comma-separated string.
-    ::rtl::OUString     maPictureLink;      /// Target cell range of picture links.
-    ::rtl::OUString     maLinkedCell;       /// Link to value cell associated to the control.
-    ::rtl::OUString     maSourceRange;      /// Link to cell range used as data source for the control.
+    ::rtl::OUString     maFmlaMacro;        /// Link to macro associated to the control.
+    ::rtl::OUString     maFmlaPict;         /// Target cell range of picture links.
+    ::rtl::OUString     maFmlaLink;         /// Link to value cell associated to the control.
+    ::rtl::OUString     maFmlaRange;        /// Link to cell range used as data source for the control.
+    ::rtl::OUString     maFmlaGroup;        /// Link to value cell associated to a group of option buttons.
     sal_Int32           mnObjType;          /// Type of the shape.
+    sal_Int32           mnTextHAlign;       /// Horizontal text alignment.
+    sal_Int32           mnTextVAlign;       /// Vertical text alignment.
     sal_Int32           mnCol;              /// Column index for spreadsheet cell note.
     sal_Int32           mnRow;              /// Row index for spreadsheet cell note.
+    sal_Int32           mnChecked;          /// State for checkboxes and option buttons.
+    sal_Int32           mnDropStyle;        /// Drop down box style (read-only or editable).
+    sal_Int32           mnDropLines;        /// Number of lines in drop down box.
+    sal_Int32           mnVal;              /// Current value of spin buttons and scroll bars.
+    sal_Int32           mnMin;              /// Minimum value of spin buttons and scroll bars.
+    sal_Int32           mnMax;              /// Maximum value of spin buttons and scroll bars.
+    sal_Int32           mnInc;              /// Small increment of spin buttons and scroll bars.
+    sal_Int32           mnPage;             /// Large increment of spin buttons and scroll bars.
+    sal_Int32           mnSelType;          /// Listbox selection type.
+    sal_Int32           mnVTEdit;           /// Data type of the textbox.
     bool                mbPrintObject;      /// True = print the object.
     bool                mbVisible;          /// True = cell note is visible.
+    bool                mbDde;              /// True = object is linked through DDE.
+    bool                mbNo3D;             /// True = flat style, false = 3D style.
+    bool                mbNo3D2;            /// True = flat style, false = 3D style (listboxes and dropdowns).
+    bool                mbMultiLine;        /// True = textbox allows line breaks.
+    bool                mbVScroll;          /// True = textbox has a vertical scrollbar.
+    bool                mbSecretEdit;       /// True = textbox is a password edit field.
 
-    explicit            ShapeClientData();
+    explicit            ClientData();
 };
 
 // ----------------------------------------------------------------------------
@@ -136,16 +171,21 @@ struct ShapeClientData
 struct ShapeModel
 {
     typedef ::std::vector< ::com::sun::star::awt::Point >   PointVector;
-    typedef ::std::auto_ptr< ShapeClientData >              ShapeClientDataPtr;
+    typedef ::std::auto_ptr< TextBox >                      TextBoxPtr;
+    typedef ::std::auto_ptr< ClientData >                   ClientDataPtr;
 
     ::rtl::OUString     maType;             /// Shape template with default properties.
     PointVector         maPoints;           /// Points for the polyline shape.
-    ShapeClientDataPtr  mxClientData;       /// Excel specific shape client data.
+    TextBoxPtr          mxTextBox;          /// Text contents and properties.
+    ClientDataPtr       mxClientData;       /// Excel specific client data.
 
     explicit            ShapeModel();
+                        ~ShapeModel();
 
+    /** Creates and returns a new shape textbox structure. */
+    TextBox&            createTextBox();
     /** Creates and returns a new shape client data structure. */
-    ShapeClientData&    createClientData();
+    ClientData&         createClientData();
 };
 
 // ----------------------------------------------------------------------------
@@ -160,8 +200,16 @@ public:
     /** Returns read access to the shape model structure. */
     inline const ShapeModel& getShapeModel() const { return maShapeModel; }
 
+    /** Returns read access to the shape textbox. */
+    inline const TextBox* getTextBox() const { return maShapeModel.mxTextBox.get(); }
+    /** Returns read access to the shape client data structure. */
+    inline const ClientData* getClientData() const { return maShapeModel.mxClientData.get(); }
+
     /** Final processing after import of the drawing fragment. */
     virtual void        finalizeFragmentImport();
+
+    /** Returns the real shape name if existing, or a generated shape name. */
+    ::rtl::OUString     getShapeName() const;
 
     /** Returns the shape template with the passed identifier from the child shapes. */
     virtual const ShapeType* getChildTypeById( const ::rtl::OUString& rShapeId ) const;

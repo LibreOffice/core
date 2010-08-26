@@ -129,7 +129,7 @@ sal_Int16 SlidePersist::getLayoutFromValueToken()
     return nLayout;
 }
 
-void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
+void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 

@@ -64,7 +64,7 @@ PPTShape::~PPTShape()
 }
 
 void PPTShape::addShape(
-        const oox::core::XmlFilterBase& rFilterBase,
+        oox::core::XmlFilterBase& rFilterBase,
         const SlidePersist& rSlidePersist,
         const oox::drawingml::Theme* pTheme,
         const Reference< XShapes >& rxShapes,

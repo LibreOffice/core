@@ -44,8 +44,7 @@ TableContext::TableContext( ContextHandler& rParent, ShapePtr pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
 , mrTableProperties( *pShapePtr->getTableProperties().get() )
 {
-    pShapePtr->setServiceName( "com.sun.star.drawing.TableShape" );
-    pShapePtr->setSubType( 0 );
+    pShapePtr->setTableType();
 }
 
 TableContext::~TableContext()

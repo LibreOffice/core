@@ -26,14 +26,17 @@
  ************************************************************************/
 
 #include "oox/core/relations.hxx"
+
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -143,4 +146,3 @@ OUString Relations::getFragmentPathFromFirstType( const OUString& rType ) const
 
 } // namespace core
 } // namespace oox
-

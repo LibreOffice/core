@@ -29,6 +29,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include "oox/token/tokenmap.hxx"
 
 namespace oox {
 
@@ -76,6 +77,11 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
 } // namespace
 
 // ----------------------------------------------------------------------------
+
+sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
+{
+    return StaticTokenMap::get().getTokenFromUnicode( rValue );
+}
 
 OUString AttributeConversion::decodeXString( const OUString& rValue )
 {

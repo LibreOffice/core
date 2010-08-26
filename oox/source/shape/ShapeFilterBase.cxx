@@ -27,6 +27,7 @@
 
 #include "ShapeFilterBase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
+#include "oox/ole/vbaproject.hxx"
 
 namespace oox {
 namespace shape {
@@ -63,6 +64,11 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
 ::oox::drawingml::chart::ChartConverter& ShapeFilterBase::getChartConverter()
 {
     return *mxChartConv;
+}
+
+::oox::ole::VbaProject* ShapeFilterBase::implCreateVbaProject() const
+{
+    return new ::oox::ole::VbaProject( getGlobalFactory(), getModel(), CREATE_OUSTRING( "Writer" ) );
 }
 
 ::rtl::OUString ShapeFilterBase::implGetImplementationName() const

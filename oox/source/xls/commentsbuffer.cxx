@@ -115,9 +115,8 @@ void Comment::finalizeImport()
                 // position and formatting
                 pNoteShape->convertFormatting( xAnnoShape );
                 // visibility
-                const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
-                bool bVisible = rxClientData.get() && rxClientData->mbVisible;
-                xAnno->setIsVisible( bVisible );
+                const ::oox::vml::ClientData* pClientData = pNoteShape->getClientData();
+                xAnno->setIsVisible( pClientData && pClientData->mbVisible );
             }
         }
     }

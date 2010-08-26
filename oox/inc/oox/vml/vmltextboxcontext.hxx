@@ -25,65 +25,58 @@
  *
  ************************************************************************/
 
-#ifndef OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
-#define OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
+#ifndef OOX_VML_VMLTEXTBOXCONTEXT_HXX
+#define OOX_VML_VMLTEXTBOXCONTEXT_HXX
 
-#include "oox/drawingml/chart/chartcontextbase.hxx"
+#include "oox/core/contexthandler2.hxx"
+#include "oox/vml/vmltextbox.hxx"
 
 namespace oox {
-namespace drawingml {
-namespace chart {
+namespace vml {
 
 // ============================================================================
 
-struct TextModel;
-
-/** Handler for a chart text context (c:tx element).
- */
-class TextContext : public ContextBase< TextModel >
+class TextPortionContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            TextContext(  ::oox::core::ContextHandler2Helper& rParent, TextModel& rModel );
-    virtual             ~TextContext();
+    explicit            TextPortionContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            TextBox& rTextBox,
+                            const TextFontModel& rParentFont,
+                            sal_Int32 nElement,
+                            const AttributeList& rAttribs );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement();
+
+private:
+    TextBox&            mrTextBox;
+    TextFontModel       maFont;
+    size_t              mnInitialPortions;
 };
 
 // ============================================================================
 
-struct TitleModel;
-
-/** Handler for a chart title context (c:title element).
- */
-class TitleContext : public ContextBase< TitleModel >
+class TextBoxContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            TitleContext( ::oox::core::ContextHandler2Helper& rParent, TitleModel& rModel );
-    virtual             ~TitleContext();
+    explicit            TextBoxContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            TextBox& rTextBox,
+                            const AttributeList& rAttribs );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    TextBox&            mrTextBox;
 };
 
 // ============================================================================
 
-struct LegendModel;
-
-/** Handler for a chart legend context (c:legend element).
- */
-class LegendContext : public ContextBase< LegendModel >
-{
-public:
-    explicit            LegendContext( ::oox::core::ContextHandler2Helper& rParent, LegendModel& rModel );
-    virtual             ~LegendContext();
-
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-};
-
-// ============================================================================
-
-} // namespace chart
-} // namespace drawingml
+} // namespace vml
 } // namespace oox
 
 #endif

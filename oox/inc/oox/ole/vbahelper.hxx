@@ -59,6 +59,7 @@ const sal_uInt16 VBA_ID_MODULETYPEPROCEDURAL    = 0x0021;
 const sal_uInt16 VBA_ID_PROJECTCODEPAGE         = 0x0003;
 const sal_uInt16 VBA_ID_PROJECTEND              = 0x0010;
 const sal_uInt16 VBA_ID_PROJECTMODULES          = 0x000F;
+const sal_uInt16 VBA_ID_PROJECTNAME             = 0x0004;
 const sal_uInt16 VBA_ID_PROJECTVERSION          = 0x0009;
 
 // ============================================================================

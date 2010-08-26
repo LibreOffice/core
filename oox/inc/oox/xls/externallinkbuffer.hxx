@@ -248,6 +248,9 @@ public:
     /** Imports the EXTERNALNAME record from the passed stream. */
     void                importExternalName( BiffInputStream& rStrm );
 
+    /** Sets the link type to 'self reference'. */
+    inline void         setSelfLinkType() { meLinkType = LINKTYPE_SELF; }
+
     /** Returns the type of this external link. */
     inline ExternalLinkType getLinkType() const { return meLinkType; }
     /** Returns true, if the link refers to the current workbook. */
@@ -368,7 +371,7 @@ public:
                         getLinkInfos() const;
 
     /** Returns the external link for the passed reference identifier. */
-    ExternalLinkRef     getExternalLink( sal_Int32 nRefId ) const;
+    ExternalLinkRef     getExternalLink( sal_Int32 nRefId, bool bUseRefSheets = true ) const;
 
     /** Returns the sheet range for the specified reference (BIFF2-BIFF5 only). */
     LinkSheetRange      getSheetRange( sal_Int32 nRefId, sal_Int16 nTabId1, sal_Int16 nTabId2 ) const;
@@ -386,6 +389,7 @@ private:
     typedef RefVector< ExternalLink >       ExternalLinkVec;
     typedef ::std::vector< RefSheetsModel > RefSheetsModelVec;
 
+    ExternalLinkRef     mxSelfRef;          /// Implicit self reference at index 0.
     ExternalLinkVec     maLinks;            /// List of link structures for all kinds of links.
     ExternalLinkVec     maExtLinks;         /// Real external links needed for formula parser.
     RefSheetsModelVec   maRefSheets;        /// Sheet indexes for reference ids.
@@ -398,4 +402,3 @@ private:
 } // namespace oox
 
 #endif
-

@@ -34,6 +34,7 @@ namespace oox {
     class GraphicHelper;
     class ModelObjectHelper;
     class PropertyMap;
+    namespace drawingml { class Color; }
 }
 
 namespace oox {
@@ -111,6 +112,35 @@ public:
                             sal_Int32 nRefValue,
                             bool bPixelX,
                             bool bDefaultAsPixel );
+
+    /** Converts VML color attributes to a DrawingML color.
+
+        @param roVmlColor  The VML string representation of the color. If
+            existing, this can be a 3-digit or 6-digit hexadecimal RGB value
+            with leading '#' character, a predefined color name (e.g. 'black',
+            'red', etc.), the index into an application defined color palette
+            in brackets with leading color name (e.g. 'red [9]' or
+            'windowColor [64]'), or a color modifier used in one-color
+            gradients (e.g. 'fill darken(128)' or 'fill lighten(0)').
+
+        @param roVmlOpacity  The opacity of the color. If existing, this should
+            be a floating-point value in the range [0.0;1.0].
+
+        @param nDefaultRgb  Deafult RGB color used if the parameter roVmlColor
+            is empty.
+
+        @param nPrimaryRgb  If set to something else than API_RGB_TRANSPARENT,
+            specifies the color to be used to resolve the color modifiers used
+            in one-color gradients.
+
+        @return  The resulting DrawingML color.
+     */
+    static ::oox::drawingml::Color decodeColor(
+                            const GraphicHelper& rGraphicHelper,
+                            const OptValue< ::rtl::OUString >& roVmlColor,
+                            const OptValue< double >& roVmlOpacity,
+                            sal_Int32 nDefaultRgb,
+                            sal_Int32 nPrimaryRgb = API_RGB_TRANSPARENT );
 
 private:
                         ConversionHelper();

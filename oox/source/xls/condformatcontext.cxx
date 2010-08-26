@@ -67,14 +67,10 @@ void OoxCondFormatContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-void OoxCondFormatContext::onEndElement( const OUString& rChars )
+void OoxCondFormatContext::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( formula ):
-            if( mxCondFmt.get() && mxRule.get() ) mxRule->appendFormula( rChars );
-        break;
-    }
+    if( isCurrentElement( XLS_TOKEN( formula ) ) && mxCondFmt.get() && mxRule.get() )
+        mxRule->appendFormula( rChars );
 }
 
 ContextHandlerRef OoxCondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )

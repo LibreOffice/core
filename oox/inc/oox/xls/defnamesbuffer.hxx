@@ -138,6 +138,8 @@ public:
     inline bool         isBuiltinName() const { return mcBuiltinId != OOX_DEFNAME_UNKNOWN; }
     /** Returns true, if this defined name is a macro function call. */
     inline bool         isMacroFunction() const { return maModel.mbMacro && maModel.mbFunction; }
+    /** Returns true, if this defined name is a reference to a VBA macro. */
+    inline bool         isVBName() const { return maModel.mbMacro && maModel.mbVBName; }
     /** Returns true, if this defined name is global in the document. */
     inline bool         isGlobalName() const { return mnCalcSheet < 0; }
 
@@ -218,4 +220,3 @@ private:
 } // namespace oox
 
 #endif
-

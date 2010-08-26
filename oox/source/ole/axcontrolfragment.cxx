@@ -105,7 +105,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
         switch( rAttribs.getToken( AX_TOKEN( persistence ), XML_TOKEN_INVALID ) )
         {
             case XML_persistPropertyBag:
-                if( ControlModelBase* pModel = mrControl.createModel( aClassId ).get() )
+                if( ControlModelBase* pModel = mrControl.createModelFromGuid( aClassId ) )
                     return new AxControlPropertyContext( *this, *pModel );
             break;
 
@@ -121,7 +121,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                         OUString aStrmClassId = OleHelper::importGuid( aInStrm );
                         OSL_ENSURE( aClassId.equalsIgnoreAsciiCase( aStrmClassId ),
                             "AxControlFragment::importBinaryControl - form control class ID mismatch" );
-                        if( ControlModelBase* pModel = mrControl.createModel( aStrmClassId ).get() )
+                        if( ControlModelBase* pModel = mrControl.createModelFromGuid( aStrmClassId ) )
                             pModel->importBinaryModel( aInStrm );
                     }
                 }
@@ -139,7 +139,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                         OleStorage aStorage( getFilter().getGlobalFactory(), xStrgStrm, false );
                         BinaryXInputStream aInStrm( aStorage.openInputStream( CREATE_OUSTRING( "f" ) ), true );
                         if( !aInStrm.isEof() )
-                            if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModel( aClassId ).get() ) )
+                            if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModelFromGuid( aClassId ) ) )
                                 pModel->importBinaryModel( aInStrm );
                     }
                 }

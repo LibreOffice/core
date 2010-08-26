@@ -25,40 +25,58 @@
  *
  ************************************************************************/
 
-#ifndef OOX_CORE_FASTTOKENHANDLER_HXX
-#define OOX_CORE_FASTTOKENHANDLER_HXX
+#include "oox/vml/vmltextbox.hxx"
 
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
-
-namespace oox { class TokenMap; }
+#include <rtl/ustrbuf.hxx>
+#include "tokens.hxx"
 
 namespace oox {
-namespace core {
+namespace vml {
 
 // ============================================================================
 
-/** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
-    that provides access to the tokens generated from the internal token name list.
- */
-class FastTokenHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastTokenHandler >
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
+// ============================================================================
+
+TextFontModel::TextFontModel()
 {
-public:
-    explicit            FastTokenHandler();
-    virtual             ~FastTokenHandler();
-
-    virtual sal_Int32 SAL_CALL getToken( const ::rtl::OUString& rIdentifier ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getIdentifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    const TokenMap&     mrTokenMap;     /// Reference to global token map singleton.
-};
+}
 
 // ============================================================================
 
-} // namespace core
-} // namespace oox
+TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& rText ) :
+    maFont( rFont ),
+    maText( rText )
+{
+}
 
-#endif
+// ============================================================================
+
+TextBox::TextBox()
+{
+}
+
+void TextBox::appendPortion( const TextFontModel& rFont, const OUString& rText )
+{
+    maPortions.push_back( TextPortionModel( rFont, rText ) );
+}
+
+const TextFontModel* TextBox::getFirstFont() const
+{
+    return maPortions.empty() ? 0 : &maPortions.front().maFont;
+}
+
+OUString TextBox::getText() const
+{
+    OUStringBuffer aBuffer;
+    for( PortionVector::const_iterator aIt = maPortions.begin(), aEnd = maPortions.end(); aIt != aEnd; ++aIt )
+        aBuffer.append( aIt->maText );
+    return aBuffer.makeStringAndClear();
+}
+
+// ============================================================================
+
+} // namespace vml
+} // namespace oox

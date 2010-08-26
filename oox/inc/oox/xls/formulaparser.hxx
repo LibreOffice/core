@@ -157,6 +157,9 @@ public:
                             BiffInputStream& rStrm,
                             const sal_uInt16* pnFmlaSize = 0 ) const;
 
+    /** Converts the passed formula to a macro name for a drawing shape. */
+    ::rtl::OUString     importMacroName( const ::rtl::OUString& rFormulaString );
+
 private:
     ::std::auto_ptr< FormulaParserImpl > mxImpl;
 };
@@ -167,4 +170,3 @@ private:
 } // namespace oox
 
 #endif
-

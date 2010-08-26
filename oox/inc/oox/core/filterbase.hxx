@@ -29,14 +29,14 @@
 #define OOX_CORE_FILTERBASE_HXX
 
 #include <memory>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include "oox/helper/binarystreambase.hxx"
@@ -44,16 +44,16 @@
 #include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
     namespace awt { struct DeviceInfo; }
-    namespace frame { class XModel; }
-    namespace task { class XStatusIndicator; }
-    namespace task { class XInteractionHandler; }
     namespace frame { class XFrame; }
+    namespace frame { class XModel; }
+    namespace graphic { class XGraphic; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
-    namespace graphic { class XGraphic; }
+    namespace lang { class XMultiServiceFactory; }
+    namespace task { class XInteractionHandler; }
+    namespace task { class XStatusIndicator; }
 } } }
 
 namespace comphelper {
@@ -68,6 +68,7 @@ namespace oox {
 
 namespace oox { namespace ole {
     class OleObjectHelper;
+    class VbaProject;
 } }
 
 namespace oox {
@@ -194,6 +195,9 @@ public:
     /** Returns a helper for the handling of OLE obejcts. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
+    /** Returns the VBA project manager. */
+    ::oox::ole::VbaProject& getVbaProject() const;
+
     /** Requests a password from the media descriptor or from the user. On
         success, the password will be inserted into the media descriptor. */
     ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
@@ -271,6 +275,9 @@ private:
         resolving palette colors. */
     virtual GraphicHelper* implCreateGraphicHelper() const;
 
+    /** Derived classes create a VBA project manager object. */
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const = 0;
+
     virtual ::rtl::OUString implGetImplementationName() const = 0;
 
     virtual StorageRef  implCreateStorage(
@@ -288,4 +295,3 @@ private:
 } // namespace oox
 
 #endif
-

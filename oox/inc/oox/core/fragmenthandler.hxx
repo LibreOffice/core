@@ -134,4 +134,3 @@ typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
 } // namespace oox
 
 #endif
-

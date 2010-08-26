@@ -198,7 +198,7 @@ ContextHandlerRef OoxSheetDataContext::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-void OoxSheetDataContext::onEndElement( const OUString& rChars )
+void OoxSheetDataContext::onCharacters( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
@@ -252,44 +252,45 @@ void OoxSheetDataContext::onEndElement( const OUString& rChars )
                     break;
 
                     default:
-                        OSL_ENSURE( false, "OoxSheetDataContext::onEndElement - unknown formula type" );
+                        OSL_ENSURE( false, "OoxSheetDataContext::onCharacters - unknown formula type" );
                 }
             }
             catch( Exception& )
             {
             }
         break;
+    }
+}
 
-        case XLS_TOKEN( c ):
-            if( maCurrCell.mxCell.is() )
+void OoxSheetDataContext::onEndElement()
+{
+    if( isCurrentElement( XLS_TOKEN( c ) ) && maCurrCell.mxCell.is() )
+    {
+        if( maCurrCell.mxCell->getType() == CellContentType_EMPTY )
+        {
+            if( maCurrCell.mbHasValueStr )
             {
-                if( maCurrCell.mxCell->getType() == CellContentType_EMPTY )
-                {
-                    if( maCurrCell.mbHasValueStr )
-                    {
-                        // implemented in WorksheetHelper class
-                        setCell( maCurrCell );
-                    }
-                    else if( (maCurrCell.mnCellType == XML_inlineStr) && mxInlineStr.get() )
-                    {
-                        // convert font settings
-                        mxInlineStr->finalizeImport();
-                        // write string to cell
-                        Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
-                        if( xText.is() )
-                            mxInlineStr->convert( xText, maCurrCell.mnXfId );
-                    }
-                    else
-                    {
-                        // empty cell, update cell type
-                        maCurrCell.mnCellType = XML_TOKEN_INVALID;
-                    }
-                }
-
-                // store the cell formatting data
-                setCellFormat( maCurrCell );
+                // implemented in WorksheetHelper class
+                setCell( maCurrCell );
             }
-        break;
+            else if( (maCurrCell.mnCellType == XML_inlineStr) && mxInlineStr.get() )
+            {
+                // convert font settings
+                mxInlineStr->finalizeImport();
+                // write string to cell
+                Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
+                if( xText.is() )
+                    mxInlineStr->convert( xText, maCurrCell.mnXfId );
+            }
+            else
+            {
+                // empty cell, update cell type
+                maCurrCell.mnCellType = XML_TOKEN_INVALID;
+            }
+        }
+
+        // store the cell formatting data
+        setCellFormat( maCurrCell );
     }
 }
 

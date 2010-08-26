@@ -69,32 +69,30 @@ ContextHandlerRef OoxExternalSheetDataContext::onCreateContext( sal_Int32 nEleme
             if( nElement == XLS_TOKEN( cell ) ) { importCell( rAttribs ); return this; }
         break;
         case XLS_TOKEN( cell ):
-            if( nElement == XLS_TOKEN( v ) ) return this;   // collect characters in onEndElement()
+            if( nElement == XLS_TOKEN( v ) ) return this;   // collect characters in onCharacters()
         break;
     }
     return 0;
 }
 
-void OoxExternalSheetDataContext::onEndElement( const OUString& rChars )
+void OoxExternalSheetDataContext::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
+    if( isCurrentElement( XLS_TOKEN( v ) ) )
     {
-        case XLS_TOKEN( v ):
-            switch( mnCurrType )
-            {
-                case XML_b:
-                case XML_n:
-                    setCellValue( Any( rChars.toDouble() ) );
-                break;
-                case XML_e:
-                    setCellValue( Any( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( rChars ) ) ) );
-                break;
-                case XML_str:
-                    setCellValue( Any( rChars ) );
-                break;
-            }
-            mnCurrType = XML_TOKEN_INVALID;
-        break;
+        switch( mnCurrType )
+        {
+            case XML_b:
+            case XML_n:
+                setCellValue( Any( rChars.toDouble() ) );
+            break;
+            case XML_e:
+                setCellValue( Any( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( rChars ) ) ) );
+            break;
+            case XML_str:
+                setCellValue( Any( rChars ) );
+            break;
+        }
+        mnCurrType = XML_TOKEN_INVALID;
     }
 }
 
@@ -245,7 +243,7 @@ ContextHandlerRef OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, 
             }
         break;
         case XLS_TOKEN( value ):
-            if( nElement == XLS_TOKEN( val ) ) return this; // collect value in onEndElement()
+            if( nElement == XLS_TOKEN( val ) ) return this; // collect value in onCharacters()
         break;
 
         case XLS_TOKEN( oleLink ):
@@ -258,32 +256,30 @@ ContextHandlerRef OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, 
     return false;
 }
 
-void OoxExternalLinkFragment::onEndElement( const OUString& rChars )
+void OoxExternalLinkFragment::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
+    if( isCurrentElement( XLS_TOKEN( val ) ) )
+        maResultValue = rChars;
+}
+
+void OoxExternalLinkFragment::onEndElement()
+{
+    if( isCurrentElement( XLS_TOKEN( value ) ) && mxExtName.get() ) switch( mnResultType )
     {
-        case XLS_TOKEN( val ):
-            maResultValue = rChars;
+        case XML_b:
+            mxExtName->appendResultValue( maResultValue.toDouble() );
         break;
-        case XLS_TOKEN( value ):
-            if( mxExtName.get() ) switch( mnResultType )
-            {
-                case XML_b:
-                    mxExtName->appendResultValue( maResultValue.toDouble() );
-                break;
-                case XML_e:
-                    mxExtName->appendResultValue( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( maResultValue ) ) );
-                break;
-                case XML_n:
-                    mxExtName->appendResultValue( maResultValue.toDouble() );
-                break;
-                case XML_str:
-                    mxExtName->appendResultValue( maResultValue );
-                break;
-                default:
-                    mxExtName->appendResultValue( BiffHelper::calcDoubleFromError( BIFF_ERR_NA ) );
-            }
+        case XML_e:
+            mxExtName->appendResultValue( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( maResultValue ) ) );
         break;
+        case XML_n:
+            mxExtName->appendResultValue( maResultValue.toDouble() );
+        break;
+        case XML_str:
+            mxExtName->appendResultValue( maResultValue );
+        break;
+        default:
+            mxExtName->appendResultValue( BiffHelper::calcDoubleFromError( BIFF_ERR_NA ) );
     }
 }
 

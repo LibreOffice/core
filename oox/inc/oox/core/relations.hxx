@@ -35,6 +35,8 @@
 namespace oox {
 namespace core {
 
+// ============================================================================
+
 /** Expands to an OUString containing an officeDocument relation type created
     from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATIONSTYPE( ascii ) \
@@ -99,4 +101,3 @@ private:
 } // namespace oox
 
 #endif // OOX_CORE_RELATIONS
-

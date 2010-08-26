@@ -28,9 +28,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 
 #include <cstdio>
-
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -38,50 +35,41 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <sax/fshelper.hxx>
-#include "properties.hxx"
-#include "tokens.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/zipstorage.hxx"
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "oox/core/fasttokenhandler.hxx"
 #include "oox/core/filterdetect.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/recordparser.hxx"
 #include "oox/core/relationshandler.hxx"
-
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::beans::StringPair;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::embed::XRelationshipAccess;
-using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::xml::sax::XFastParser;
-using ::com::sun::star::xml::sax::XFastTokenHandler;
-using ::com::sun::star::xml::sax::XFastDocumentHandler;
-using ::com::sun::star::xml::sax::InputSource;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::document::XDocumentProperties;
-using ::com::sun::star::util::DateTime;
-using ::comphelper::MediaDescriptor;
-using ::sax_fastparser::FastSerializerHelper;
-using ::sax_fastparser::FSHelperPtr;
+#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/helper/zipstorage.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::xml::sax;
+
+using ::comphelper::MediaDescriptor;
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::sax_fastparser::FSHelperPtr;
+using ::sax_fastparser::FastSerializerHelper;
 
 // ============================================================================
 
@@ -536,4 +524,3 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 
 } // namespace core
 } // namespace oox
-

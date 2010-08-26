@@ -59,4 +59,3 @@ typedef ::rtl::Reference< BinaryFilterBase > BinaryFilterRef;
 } // namespace oox
 
 #endif
-

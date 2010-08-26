@@ -56,7 +56,7 @@ ContextHandlerRef OoxCommentsFragment::onCreateContext( sal_Int32 nElement, cons
             if( nElement == XLS_TOKEN( commentList ) ) return this;
         break;
         case XLS_TOKEN( authors ):
-            if( nElement == XLS_TOKEN( author ) ) return this;  // collect author in onEndElement()
+            if( nElement == XLS_TOKEN( author ) ) return this;  // collect author in onCharacters()
         break;
         case XLS_TOKEN( commentList ):
             if( nElement == XLS_TOKEN( comment ) ) { importComment( rAttribs ); return this; }
@@ -69,17 +69,16 @@ ContextHandlerRef OoxCommentsFragment::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-void OoxCommentsFragment::onEndElement( const OUString& rChars )
+void OoxCommentsFragment::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( author ):
-            getComments().appendAuthor( rChars );
-        break;
-        case XLS_TOKEN( comment ):
-            mxComment.reset();
-        break;
-    }
+    if( isCurrentElement( XLS_TOKEN( author ) ) )
+        getComments().appendAuthor( rChars );
+}
+
+void OoxCommentsFragment::onEndElement()
+{
+    if( isCurrentElement( XLS_TOKEN( comment ) ) )
+        mxComment.reset();
 }
 
 ContextHandlerRef OoxCommentsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
@@ -109,12 +108,8 @@ ContextHandlerRef OoxCommentsFragment::onCreateRecordContext( sal_Int32 nRecId, 
 
 void OoxCommentsFragment::onEndRecord()
 {
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_COMMENT:
-            mxComment.reset();
-        break;
-    }
+    if( isCurrentElement( OOBIN_ID_COMMENT ) )
+        mxComment.reset();
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------

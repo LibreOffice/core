@@ -56,13 +56,13 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
-VbaProject::VbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XSpreadsheetDocument >& rxDocument ) :
+ExcelVbaProject::ExcelVbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XSpreadsheetDocument >& rxDocument ) :
     ::oox::ole::VbaProject( rxGlobalFactory, Reference< XModel >( rxDocument, UNO_QUERY ), CREATE_OUSTRING( "Calc" ) ),
     mxDocument( rxDocument )
 {
 }
 
-void VbaProject::attachToEvents()
+void ExcelVbaProject::attachToEvents()
 {
     // do nothing is code is not executable
     if( !isImportVbaExecutable() )
@@ -125,7 +125,7 @@ void lclGenerateMissingCodeNames( CodeNameSet& rUsedCodeNames, SheetPropertySetL
 
 } // namespace
 
-void VbaProject::prepareModuleImport()
+void ExcelVbaProject::prepareImport()
 {
     /*  Check if the sheets have imported codenames. Generate new unused
         codenames if not. */
@@ -169,9 +169,14 @@ void VbaProject::prepareModuleImport()
     }
 }
 
+void ExcelVbaProject::finalizeImport()
+{
+    attachToEvents();
+}
+
 // private --------------------------------------------------------------------
 
-void VbaProject::attachToDocumentEvents( const OUString& rCodeName )
+void ExcelVbaProject::attachToDocumentEvents( const OUString& rCodeName )
 {
     if( (rCodeName.getLength() == 0) || !hasModule( rCodeName ) )
         return;
@@ -189,7 +194,7 @@ void VbaProject::attachToDocumentEvents( const OUString& rCodeName )
     attachMacroToDocumentEvent( CREATE_OUSTRING( "OnPrepareUnload" ), rCodeName, CREATE_OUSTRING( "Workbook_BeforeClose" ), OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO False" ) );
 }
 
-void VbaProject::attachToSheetEvents( const Reference< XEventsSupplier >& rxEventsSupp, const OUString& rCodeName )
+void ExcelVbaProject::attachToSheetEvents( const Reference< XEventsSupplier >& rxEventsSupp, const OUString& rCodeName )
 {
     if( !rxEventsSupp.is() || (rCodeName.getLength() == 0) || !hasModule( rCodeName ) )
         return;

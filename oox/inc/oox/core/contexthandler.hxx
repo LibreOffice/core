@@ -29,9 +29,9 @@
 #define OOX_CORE_CONTEXTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <rtl/ref.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }
@@ -114,4 +114,3 @@ private:
 } // namespace oox
 
 #endif
-

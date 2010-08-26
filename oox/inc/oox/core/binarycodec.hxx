@@ -289,4 +289,3 @@ private:
 } // namespace oox
 
 #endif
-

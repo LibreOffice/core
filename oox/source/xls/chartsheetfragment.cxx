@@ -86,14 +86,14 @@ ContextHandlerRef OoxChartsheetFragment::onCreateContext( sal_Int32 nElement, co
                 case XLS_TOKEN( oddHeader ):
                 case XLS_TOKEN( oddFooter ):
                 case XLS_TOKEN( evenHeader ):
-                case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onEndElement()
+                case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onCharacters()
             }
         break;
     }
     return 0;
 }
 
-void OoxChartsheetFragment::onEndElement( const OUString& rChars )
+void OoxChartsheetFragment::onCharacters( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {

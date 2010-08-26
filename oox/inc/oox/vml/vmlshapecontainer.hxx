@@ -59,6 +59,9 @@ public:
     explicit            ShapeContainer( Drawing& rDrawing );
                         ~ShapeContainer();
 
+    /** Returns the drawing this shape container is part of. */
+    inline Drawing&     getDrawing() { return mrDrawing; }
+
     /** Creates and returns a new shape template object. */
     ShapeType&          createShapeType();
     /** Creates and returns a new shape object of the specified type. */

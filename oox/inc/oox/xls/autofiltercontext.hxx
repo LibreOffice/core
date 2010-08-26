@@ -85,7 +85,7 @@ protected:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onEndElement();
 
 private:
     /** Initializes data members to prepare for autofilter parsing.  Call this

@@ -43,16 +43,17 @@ SLOFILES= \
     $(SLO)$/countryid.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/eschesdo.obj    \
-    $(SLO)$/msdffimp.obj	\
-    $(SLO)$/msoleexp.obj	\
-    $(SLO)$/msvbasic.obj	\
-    $(SLO)$/svxmsbas.obj	\
-    $(SLO)$/msocximex.obj	\
     $(SLO)$/mscodec.obj		\
+    $(SLO)$/msdffimp.obj	\
     $(SLO)$/msfiltertracer.obj \
-    $(SLO)$/svdfppt.obj		\
-    $(SLO)$/svxmsbas2.obj \
+    $(SLO)$/msocximex.obj	\
+    $(SLO)$/msoleexp.obj	\
     $(SLO)$/msvbahelper.obj \
+    $(SLO)$/msvbasic.obj	\
+    $(SLO)$/services.obj	\
+    $(SLO)$/svdfppt.obj		\
+    $(SLO)$/svxmsbas.obj	\
+    $(SLO)$/svxmsbas2.obj
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 SHL1IMPLIB=	i$(TARGET)

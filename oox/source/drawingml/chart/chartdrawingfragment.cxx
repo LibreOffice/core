@@ -177,7 +177,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                 case CDR_TOKEN( graphicFrame ):
                     if( !mbOleSupport )
                         return 0;
-                    mxShape.reset( new Shape( "com.sun.star.drawing.OLE2Shape" ) );
+                    mxShape.reset( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) );
                     return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, true );
                 case CDR_TOKEN( grpSp ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.GroupShape" ) );
@@ -206,26 +206,24 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-void ChartDrawingFragment::onEndElement( const OUString& rChars )
+void ChartDrawingFragment::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
-    {
-        case CDR_TOKEN( x ):
-        case CDR_TOKEN( y ):
-            if( mxAnchor.get() ) mxAnchor->setPos( getCurrentElement(), getPreviousElement(), rChars );
-        break;
+    if( isCurrentElement( CDR_TOKEN( x ), CDR_TOKEN( y ) ) && mxAnchor.get() )
+        mxAnchor->setPos( getCurrentElement(), getParentElement(), rChars );
+}
 
-        case CDR_TOKEN( absSizeAnchor ):
-        case CDR_TOKEN( relSizeAnchor ):
-            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
-            {
-                Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartRect );
-                if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
-                    mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aLoc );
-            }
-            mxShape.reset();
-            mxAnchor.reset();
-        break;
+void ChartDrawingFragment::onEndElement()
+{
+    if( isCurrentElement( CDR_TOKEN( absSizeAnchor ), CDR_TOKEN( relSizeAnchor ) ) )
+    {
+        if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
+        {
+            Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartRect );
+            if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
+                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aLoc );
+        }
+        mxShape.reset();
+        mxAnchor.reset();
     }
 }
 

@@ -46,7 +46,7 @@ protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
 
 private:
     RichStringRef       mxString;       /// Processed string.

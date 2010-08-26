@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/core/binarycodec.hxx"
+
 #include <algorithm>
 #include <string.h>
 #include "oox/helper/attributelist.hxx"
@@ -387,4 +388,3 @@ bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
 
 } // namespace core
 } // namespace oox
-

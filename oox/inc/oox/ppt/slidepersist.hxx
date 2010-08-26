@@ -111,7 +111,7 @@ public:
 
     oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
 
-    void createXShapes( const oox::core::XmlFilterBase& rFilterBase );
+    void createXShapes( oox::core::XmlFilterBase& rFilterBase );
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
     void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 

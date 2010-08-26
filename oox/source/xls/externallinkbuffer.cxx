@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/xls/externallinkbuffer.hxx"
-#include <rtl/strbuf.hxx>
+
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XExternalDocLink.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <rtl/strbuf.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -46,31 +47,21 @@
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::Relation;
+using ::oox::core::Relations;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::sheet::ComplexReference;
-using ::com::sun::star::sheet::DDEItemInfo;
-using ::com::sun::star::sheet::DDELinkInfo;
-using ::com::sun::star::sheet::ExternalLinkInfo;
-using ::com::sun::star::sheet::ExternalReference;
-using ::com::sun::star::sheet::SingleReference;
-using ::com::sun::star::sheet::XDDELinks;
-using ::com::sun::star::sheet::XDDELinkResults;
-using ::com::sun::star::sheet::XExternalDocLinks;
-using ::com::sun::star::sheet::XExternalSheetCache;
-using ::oox::core::Relation;
-using ::oox::core::Relations;
-
-namespace oox {
-namespace xls {
 
 // ============================================================================
 
@@ -947,8 +938,10 @@ void RefSheetsModel::readBiff8Data( BiffInputStream& rStrm )
 
 ExternalLinkBuffer::ExternalLinkBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
+    mxSelfRef( new ExternalLink( rHelper ) ),
     mbUseRefSheets( false )
 {
+    mxSelfRef->setSelfLinkType();
 }
 
 ExternalLinkRef ExternalLinkBuffer::importExternalReference( const AttributeList& rAttribs )
@@ -1046,22 +1039,24 @@ void ExternalLinkBuffer::importExternSheet8( BiffInputStream& rStrm )
 Sequence< ExternalLinkInfo > ExternalLinkBuffer::getLinkInfos() const
 {
     ::std::vector< ExternalLinkInfo > aLinkInfos;
-    // dummy entry for index 0
-    aLinkInfos.push_back( ExternalLinkInfo( ::com::sun::star::sheet::ExternalLinkType::UNKNOWN, Any() ) );
+    // should not be used for OOBIN documents
+    OSL_ENSURE( (getFilterType() == FILTER_OOX) && !mbUseRefSheets, "ExternalLinkBuffer::getLinkInfos - unexpected file format" );
+    // add entry for implicit index 0 (self reference to this document)
+    aLinkInfos.push_back( mxSelfRef->getLinkInfo() );
     for( ExternalLinkVec::const_iterator aIt = maExtLinks.begin(), aEnd = maExtLinks.end(); aIt != aEnd; ++aIt )
         aLinkInfos.push_back( (*aIt)->getLinkInfo() );
     return ContainerHelper::vectorToSequence( aLinkInfos );
 }
 
-ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId ) const
+ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId, bool bUseRefSheets ) const
 {
     ExternalLinkRef xExtLink;
     switch( getFilterType() )
     {
         case FILTER_OOX:
-            // OOXML: one-based index
-            if( !mbUseRefSheets )
-                xExtLink = maLinks.get( nRefId - 1 );
+            // OOXML: 0 = this document, otherwise one-based index into link list
+            if( !bUseRefSheets || !mbUseRefSheets )
+                xExtLink = (nRefId == 0) ? mxSelfRef : maLinks.get( nRefId - 1 );
             // OOBIN: zero-based index into ref-sheets list
             else if( const RefSheetsModel* pRefSheets = getRefSheets( nRefId ) )
                 xExtLink = maLinks.get( pRefSheets->mnExtRefId );
@@ -1140,4 +1135,3 @@ const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
 
 } // namespace xls
 } // namespace oox
-

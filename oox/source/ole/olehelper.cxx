@@ -51,10 +51,16 @@ const sal_uInt32 OLE_PALETTECOLOR_MASK      = 0x0000FFFF;
 const sal_uInt32 OLE_BGRCOLOR_MASK          = 0x00FFFFFF;
 const sal_uInt32 OLE_SYSTEMCOLOR_MASK       = 0x0000FFFF;
 
+/** Swaps the red and blue component of the passed color. */
+inline sal_uInt32 lclSwapRedBlue( sal_uInt32 nColor )
+{
+    return static_cast< sal_uInt32 >( (nColor & 0xFF00FF00) | ((nColor & 0x0000FF) << 16) | ((nColor & 0xFF0000) >> 16) );
+}
+
 /** Returns the UNO RGB color from the passed encoded OLE BGR color. */
 inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
 {
-    return static_cast< sal_Int32 >( ((nOleColor & 0x0000FF) << 16) | (nOleColor & 0x00FF00) | ((nOleColor & 0xFF0000) >> 16) );
+    return static_cast< sal_Int32 >( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
 }
 
 // ----------------------------------------------------------------------------
@@ -159,6 +165,11 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
     }
     OSL_ENSURE( false, "OleHelper::decodeOleColor - unknown color type" );
     return API_RGB_BLACK;
+}
+
+/*static*/ sal_uInt32 OleHelper::encodeOleColor( sal_Int32 nRgbColor )
+{
+    return OLE_COLORTYPE_BGR | lclSwapRedBlue( static_cast< sal_uInt32 >( nRgbColor & 0xFFFFFF ) );
 }
 
 /*static*/ OUString OleHelper::importGuid( BinaryInputStream& rInStrm )

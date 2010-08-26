@@ -31,10 +31,12 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
@@ -63,6 +65,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
 using ::comphelper::ConfigurationHelper;
@@ -127,12 +130,35 @@ bool VbaFilterConfig::isExportVba() const
 
 // ============================================================================
 
+VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
+    maMacroName( rMacroName )
+{
+    OSL_ENSURE( maMacroName.getLength() > 0, "VbaMacroAttacherBase::VbaMacroAttacherBase - empty macro name" );
+}
+
+VbaMacroAttacherBase::~VbaMacroAttacherBase()
+{
+}
+
+void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroResolver >& rxResolver )
+{
+    try
+    {
+        attachMacro( rxResolver->resolveVBAMacroToScriptURL( maMacroName ) );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+// ============================================================================
+
 VbaProject::VbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory,
         const Reference< XModel >& rxDocModel, const OUString& rConfigCompName ) :
     VbaFilterConfig( rxGlobalFactory, rConfigCompName ),
     mxGlobalFactory( rxGlobalFactory ),
     mxDocModel( rxDocModel ),
-    maLibName( CREATE_OUSTRING( "Standard" ) )
+    maPrjName( CREATE_OUSTRING( "Standard" ) )
 {
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
     mxBasicLib = openLibrary( PROP_BasicLibraries, false );
@@ -154,6 +180,12 @@ void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper
         if( isExportVba() )
             copyStorage( rVbaPrjStrg );
     }
+}
+
+void VbaProject::registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher )
+{
+    OSL_ENSURE( rxAttacher.get(), "VbaProject::registerMacroAttacher - unexpected empty reference" );
+    maMacroAttachers.push_back( rxAttacher );
 }
 
 bool VbaProject::hasModules() const
@@ -200,7 +232,7 @@ bool VbaProject::attachMacroToEvent( const Reference< XEventsSupplier >& rxEvent
         // check that the specified macro exists in the module
         VbaHelper::hasMacro( mxBasicLib, rModuleName, rMacroName ) &&
         // attach the macro to the events supplier
-        VbaHelper::attachMacroToEvent( rxEventsSupp, rEventName, maLibName, rModuleName, rMacroName );
+        VbaHelper::attachMacroToEvent( rxEventsSupp, rEventName, CREATE_OUSTRING( "Standard" ) /*maPrjName*/, rModuleName, rMacroName );
 }
 
 bool VbaProject::attachMacroToDocumentEvent( const OUString& rEventName,
@@ -227,7 +259,7 @@ bool VbaProject::attachMacroToEvent( const Reference< XEventsSupplier >& rxEvent
         // insert the new macro into the code module and attach it to the event
         return
             VbaHelper::insertMacro( mxBasicLib, rModuleName, aProxyName, rProxyArgs, rProxyType, aProxyCode ) &&
-            VbaHelper::attachMacroToEvent( rxEventsSupp, rEventName, maLibName, rModuleName, aProxyName );
+            VbaHelper::attachMacroToEvent( rxEventsSupp, rEventName, CREATE_OUSTRING( "Standard" ) /*maPrjName*/, rModuleName, aProxyName );
     }
     return false;
 }
@@ -248,7 +280,11 @@ void VbaProject::addDummyModule( const OUString& rName, sal_Int32 nType )
     maDummyModules[ rName ] = nType;
 }
 
-void VbaProject::prepareModuleImport()
+void VbaProject::prepareImport()
+{
+}
+
+void VbaProject::finalizeImport()
 {
 }
 
@@ -267,9 +303,9 @@ Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId, bool bCr
     try
     {
         Reference< XLibraryContainer > xLibContainer( getLibraryContainer( nPropId ), UNO_SET_THROW );
-        if( bCreateMissing && !xLibContainer->hasByName( maLibName ) )
-            xLibContainer->createLibrary( maLibName );
-        xLibrary.set( xLibContainer->getByName( maLibName ), UNO_QUERY_THROW );
+        if( bCreateMissing && !xLibContainer->hasByName( CREATE_OUSTRING( "Standard" ) /*maPrjName*/ ) )
+            xLibContainer->createLibrary( CREATE_OUSTRING( "Standard" ) /*maPrjName*/ );
+        xLibrary.set( xLibContainer->getByName( CREATE_OUSTRING( "Standard" ) /*maPrjName*/ ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -311,7 +347,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         return;
 
     // virtual call, derived classes may do some preparations
-    prepareModuleImport();
+    prepareImport();
 
     // read all records of the directory
     rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;
@@ -339,6 +375,14 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 OSL_ENSURE( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW, "VbaProject::importVba - unknown text encoding" );
                 if( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW )
                     eTextEnc = eNewTextEnc;
+            }
+            break;
+            case VBA_ID_PROJECTNAME:
+            {
+                OUString aPrjName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
+                OSL_ENSURE( aPrjName.getLength() > 0, "VbaProject::importVba - invalid project name" );
+                if( aPrjName.getLength() > 0 )
+                    maPrjName = aPrjName;
             }
             break;
             case VBA_ID_PROJECTMODULES:
@@ -438,10 +482,10 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     }
 
     /*  Now it is time to load the source code. All modules will be inserted
-        into the Basic library of the document specified by the 'maLibName'
+        into the Basic library of the document specified by the 'maPrjName'
         member. Do not create the Basic library, if there are no modules
         specified. */
-    if( !aModules.empty() && !aDummyModules.empty() ) try
+    if( !aModules.empty() || !aDummyModules.empty() ) try
     {
         // get the basic library
         Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
@@ -515,6 +559,27 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             {
             }
         }
+    }
+
+    // attach macros to registered objects
+    attachMacros();
+    // virtual call, derived classes may do some more processing
+    finalizeImport();
+}
+
+void VbaProject::attachMacros()
+{
+    if( !maMacroAttachers.empty() ) try
+    {
+        Sequence< Any > aArgs( 2 );
+        aArgs[ 0 ] <<= mxDocModel;
+        aArgs[ 1 ] <<= maPrjName;
+        Reference< XVBAMacroResolver > xResolver( mxGlobalFactory->createInstanceWithArguments(
+            CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs ), UNO_QUERY_THROW );
+        maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::boost::cref( xResolver ) );
+    }
+    catch( Exception& )
+    {
     }
 }
 

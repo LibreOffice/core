@@ -48,7 +48,7 @@ public:
     using oox::drawingml::Shape::addShape;
     // addShape is creating and inserting the corresponding XShape.
     void addShape(
-            const oox::core::XmlFilterBase& rFilterBase,
+            oox::core::XmlFilterBase& rFilterBase,
             const SlidePersist& rPersist,
             const oox::drawingml::Theme* pTheme,
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,

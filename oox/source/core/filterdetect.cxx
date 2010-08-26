@@ -26,47 +26,35 @@
  ************************************************************************/
 
 #include "oox/core/filterdetect.hxx"
+
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <rtl/digest.h>
-#include <openssl/evp.h>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <openssl/evp.h>
+#include <rtl/digest.h>
+#include "oox/core/fasttokenhandler.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/zipstorage.hxx"
-#include "oox/core/fasttokenhandler.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/ole/olestorage.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::beans::NamedValue;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::xml::sax::InputSource;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XFastAttributeList;
-using ::com::sun::star::xml::sax::XFastContextHandler;
-using ::com::sun::star::xml::sax::XFastParser;
-using ::com::sun::star::xml::sax::XLocator;
-using ::comphelper::MediaDescriptor;
-using ::comphelper::SequenceAsHashMap;
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::comphelper::MediaDescriptor;
+using ::comphelper::SequenceAsHashMap;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -654,4 +642,3 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
 } // namespace core
 } // namespace oox
-

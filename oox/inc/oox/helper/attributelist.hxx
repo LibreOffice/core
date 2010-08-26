@@ -43,6 +43,9 @@ namespace oox {
 class AttributeConversion
 {
 public:
+    /** Returns the XML token identifier from the passed string. */
+    static sal_Int32    decodeToken( const ::rtl::OUString& rValue );
+
     /** Returns the decoded string value. All characters in the format
         '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
     static ::rtl::OUString decodeXString( const ::rtl::OUString& rValue );

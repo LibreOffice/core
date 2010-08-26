@@ -33,10 +33,12 @@
 namespace oox {
 namespace vml {
 
+class Drawing;
+
 struct ShapeTypeModel;
 class ShapeType;
 
-struct ShapeClientData;
+struct ClientData;
 struct ShapeModel;
 class ShapeBase;
 class GroupShape;
@@ -45,20 +47,38 @@ class ShapeContainer;
 
 // ============================================================================
 
-class ShapeClientDataContext : public ::oox::core::ContextHandler2
+class ShapeLayoutContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ShapeClientDataContext(
+    explicit            ShapeLayoutContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            const AttributeList& rAttribs,
-                            ShapeClientData& rClientData );
+                            Drawing& rDrawing );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
-    ShapeClientData&    mrClientData;
+    Drawing&            mrDrawing;
+};
+
+// ============================================================================
+
+class ClientDataContext : public ::oox::core::ContextHandler2
+{
+public:
+    explicit            ClientDataContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            ClientData& rClientData,
+                            const AttributeList& rAttribs );
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement();
+
+private:
+    ClientData&         mrClientData;
+    ::rtl::OUString     maElementText;
 };
 
 // ============================================================================
@@ -69,9 +89,9 @@ public:
     static ::oox::core::ContextHandlerRef
                         createShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
+                            ShapeContainer& rShapes,
                             sal_Int32 nElement,
-                            const AttributeList& rAttribs,
-                            ShapeContainer& rShapes );
+                            const AttributeList& rAttribs );
 
 protected:
     explicit            ShapeContextBase( ::oox::core::ContextHandler2Helper& rParent );
@@ -84,8 +104,8 @@ class ShapeTypeContext : public ShapeContextBase
 public:
     explicit            ShapeTypeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            const AttributeList& rAttribs,
-                            ShapeType& rShapeType );
+                            ShapeType& rShapeType,
+                            const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -108,8 +128,8 @@ class ShapeContext : public ShapeTypeContext
 public:
     explicit            ShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            const AttributeList& rAttribs,
-                            ShapeBase& rShape );
+                            ShapeBase& rShape,
+                            const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -129,8 +149,8 @@ class GroupShapeContext : public ShapeContext
 public:
     explicit            GroupShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            const AttributeList& rAttribs,
-                            GroupShape& rShape );
+                            GroupShape& rShape,
+                            const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );

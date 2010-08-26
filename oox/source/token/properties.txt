@@ -9,6 +9,7 @@ AdjustLuminance
 AdjustmentValues
 Align
 AnchorPosition
+ApplyFormDesignMode
 ArrangeOrder
 Aspect
 AttachedAxisIndex
@@ -110,6 +111,7 @@ DefaultScrollValue
 DefaultSpinValue
 DefaultState
 DefaultText
+DefaultValue
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
@@ -387,6 +389,7 @@ SortInfo
 Sound
 SoundOn
 Speed
+Spin
 SpinIncrement
 SpinValue
 SpinValueMax
@@ -445,6 +448,7 @@ UseRings
 UseSelectedPage
 VScroll
 Validation
+Value
 VaryColorsByPoint
 VertJustify
 VerticalAlign
