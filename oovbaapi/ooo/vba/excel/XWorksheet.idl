@@ -60,7 +60,7 @@ interface XWorksheet
     interface ::com::sun::star::script::XInvocation;
     interface ::com::sun::star::container::XNamed;
 
-    [attribute] boolean Visible;
+    [attribute] long Visible;
     [attribute, readonly] long StandardHeight;
     [attribute, readonly] long StandardWidth;
     [attribute, readonly] boolean ProtectionMode;
