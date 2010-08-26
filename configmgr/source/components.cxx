@@ -290,6 +290,7 @@ void Components::removeExtensionXcuFile(
     // item->additions records all additions of set members in textual order,
     // the latter check works well when iterating through item->additions in
     // reverse order.
+    OSL_ASSERT(modifications != 0);
     rtl::Reference< Data::ExtensionXcu > item(
         data_.removeExtensionXcuAdditions(fileUri));
     if (item.is()) {
@@ -315,6 +316,7 @@ void Components::removeExtensionXcuFile(
                         node->kind() == Node::KIND_SET);
                     if (hasOnlyEmptySets(node)) {
                         parent->getMembers().erase(i->back());
+                        addModification(*i);
                         modifications->add(*i);
                     }
                 }
