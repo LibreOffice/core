@@ -1935,7 +1935,7 @@ ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 if ($platform !~ m/cygwin|os2/) {
-   if ( $ENV{"TMPDIR"} eq "" ) {
+   if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
       ToFile( "TMPDIR",      "/tmp",               "e" );
    } else {
       ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
@@ -2081,6 +2081,7 @@ if (rename( $outfile_sh, $tmp ) ne 1)
 #--------------------------------------------------------
 #
 #
+print "$newline";
 print "*********************************************************".
       "******************* $newline"."*"."$newline";
 print "* OpenOffice.org $UPD configuration. $newline";
@@ -2231,29 +2232,32 @@ sub ToFile {
          $envvar =~ s/\\/\\\\/g;
          $envvarbash = $envvar;
 
-         printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
+         printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar) if ( '@VERBOSE@' eq 'TRUE' );
          print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
       } else {
-         printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
+         printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") if ( '@VERBOSE@' eq 'TRUE' );
          $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
       }
    }
    elsif ( $_[ 2 ] eq "a" ) 
    {  # Write an alias to file.
-      print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
+      print "The $_[ 0 ] is set to: $_[ 1 ]\n" if ( '@VERBOSE@' eq 'TRUE' );    # to stdout
       print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
    }
    elsif ( $_[ 2 ] eq "c" ) 
    {  # Write a comment to file.
-      print "$newline";
-      print "$comment$newline";
-      print "$comment $_[ 0 ]$newline";
-      print "$comment$newline";
+      if ( '@VERBOSE@' eq 'TRUE' )
+      {
+         print "$newline";
+         print "$comment$newline";
+         print "$comment $_[ 0 ]$newline";
+         print "$comment$newline";
+      }
       print OUT "$newline";
       print OUT "$comment$newline";
       print OUT "$comment $_[ 0 ]$newline";

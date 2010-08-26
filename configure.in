@@ -7014,11 +7014,7 @@ AC_SUBST(BUILD_MAX_JOBS)
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
-echo "********************************************************************"
-echo "*                                                                  *"
-echo "*   Setting up the build environment variables.                    *"
-echo "*                                                                  *"
-echo "********************************************************************"
+echo "setting up the build environment variables..."
 
 if test -z "$COMPATH"; then
    AC_MSG_ERROR([No compiler found.])
