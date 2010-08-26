@@ -657,7 +657,8 @@ SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
 SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
 {
     // Load just sets the filename for GetChunk to read and ignores the mode
-    m_pwszFileName = pszFileName;
+    m_pwszFileName = getShortPathName( pszFileName );
+
     // Open the file previously specified in call to IPersistFile::Load and get content.
     try
     {
