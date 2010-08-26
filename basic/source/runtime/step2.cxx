@@ -589,6 +589,12 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     pCol->CollItem( pPar );
                 }
             }
+            else if( bVBAEnabled )  // !pObj
+            {
+                SbxArray* pPar = pElem->GetParameters();
+                if( pPar != NULL )
+                    Error( SbERR_NO_OBJECT );
+            }
         }
     }
 
