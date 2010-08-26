@@ -327,7 +327,7 @@ void ImportExcel8::AttachDocumentEvents()
         uno::Reference< sheet::XSpreadsheetDocument > xDocument( pShell->GetModel(), uno::UNO_QUERY );
         if( xGlobalFactory.is() && xDocument.is() )
         {
-            ::oox::xls::VbaProject aVbaProject( xGlobalFactory, xDocument );
+            ::oox::xls::ExcelVbaProject aVbaProject( xGlobalFactory, xDocument );
             aVbaProject.attachToEvents();
         }
     }

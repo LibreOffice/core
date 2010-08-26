@@ -695,9 +695,9 @@ const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?languag
 OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
 {
     OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
-    ::ooo::vba::VBAMacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
-    if( aMacroInfo.IsResolved() )
-        return ::ooo::vba::makeMacroURL( aMacroInfo.ResolvedMacro() );
+    ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
+    if( aMacroInfo.mbFound )
+        return ::ooo::vba::makeMacroURL( aMacroInfo.msResolvedMacro );
     return OUString();
 }
 
