@@ -151,9 +151,10 @@ OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _r
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
                     // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
+    ,m_bExternalGraphic( true )
     ,m_bReadOnly( sal_False )
     ,m_sImageURL()
-    ,m_xGraphic()
+    ,m_xGraphicObject()
 {
     DBG_CTOR( OImageControlModel, NULL );
     m_nClassId = FormComponentType::IMAGECONTROL;
@@ -167,9 +168,10 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
+    ,m_bExternalGraphic( true )
     ,m_bReadOnly( _pOriginal->m_bReadOnly )
     ,m_sImageURL( _pOriginal->m_sImageURL )
-    ,m_xGraphic( _pOriginal->m_xGraphic )
+    ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
 {
     DBG_CTOR( OImageControlModel, NULL );
     implConstruct();
@@ -255,7 +257,7 @@ void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
             rValue <<= m_sImageURL;
             break;
         case PROPERTY_ID_GRAPHIC:
-            rValue <<= m_xGraphic;
+            rValue <<= m_xGraphicObject.is() ? m_xGraphicObject->getGraphic() : Reference< XGraphic >();
             break;
         default:
             OBoundControlModel::getFastPropertyValue(rValue, nHandle);
@@ -284,8 +286,35 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
             break;
 
         case PROPERTY_ID_GRAPHIC:
-            OSL_VERIFY( rValue >>= m_xGraphic );
-            break;
+        {
+            Reference< XGraphic > xGraphic;
+            OSL_VERIFY( rValue >>= xGraphic );
+            if ( !xGraphic.is() )
+                m_xGraphicObject.clear();
+            else
+            {
+                m_xGraphicObject = GraphicObject::create( m_aContext.getUNOContext() );
+                m_xGraphicObject->setGraphic( xGraphic );
+            }
+
+            if ( m_bExternalGraphic )
+            {
+                // if that's an external graphic, i.e. one which has not been loaded by ourselves in response to a
+                // new image URL, then also adjust our ImageURL.
+                ::rtl::OUString sNewImageURL;
+                if ( m_xGraphicObject.is() )
+                {
+                    sNewImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+                    sNewImageURL = sNewImageURL + m_xGraphicObject->getUniqueID();
+                }
+                m_sImageURL = sNewImageURL;
+                // TODO: speaking strictly, this would need to be notified, since ImageURL is a bound property. However,
+                // this method here is called with a locked mutex, so we cannot simply call listeners ...
+                // I think the missing notification (and thus clients which potentially cannot observe the change)
+                // is less severe than the potential deadlock ...
+            }
+        }
+        break;
 
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
@@ -306,7 +335,10 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
             return tryPropertyValue( rConvertedValue, rOldValue, rValue, m_sImageURL );
 
         case PROPERTY_ID_GRAPHIC:
-            return tryPropertyValue( rConvertedValue, rOldValue, rValue, m_xGraphic );
+        {
+            const Reference< XGraphic > xGraphic( getFastPropertyValue( PROPERTY_ID_GRAPHIC ), UNO_QUERY );
+            return tryPropertyValue( rConvertedValue, rOldValue, rValue, xGraphic );
+        }
 
         default:
             return OBoundControlModel::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
@@ -660,10 +692,16 @@ void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException)
 IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 {
     const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : NULL );
-    setPropertyValue(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ),
-        makeAny( xGraphic )
-    );
+    m_bExternalGraphic = false;
+    try
+    {
+        setPropertyValue( PROPERTY_GRAPHIC, makeAny( xGraphic ) );
+    }
+    catch ( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    m_bExternalGraphic = true;
     return 1L;
 }
 
@@ -828,12 +866,7 @@ bool OImageControlControl::implInsertGraphics()
             {
                 Graphic aGraphic;
                 aDialog.GetGraphic( aGraphic );
-
-                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_aContext.getUNOContext() );
-                xGrfObj->setGraphic( aGraphic.GetXGraphic() );
-                rtl::OUString sObjectID( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
-                sObjectID = sObjectID + xGrfObj->getUniqueID();
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( sObjectID ) ) );
+                 xSet->setPropertyValue( PROPERTY_GRAPHIC, makeAny( aGraphic.GetXGraphic() ) );
             }
             else
                 xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );

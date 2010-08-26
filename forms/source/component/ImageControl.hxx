@@ -33,7 +33,7 @@
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -58,10 +58,11 @@ class OImageControlModel
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
     ImageProducer*                                  m_pImageProducer;
+    bool                                            m_bExternalGraphic;
     sal_Bool                                        m_bReadOnly;
     ::rtl::OUString                                 m_sImageURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                                                    m_xGraphic;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >
+                                                    m_xGraphicObject;
     ::rtl::OUString                                 m_sDocumentURL;
 
 protected:
