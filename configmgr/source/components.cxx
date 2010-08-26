@@ -120,26 +120,26 @@ rtl::OUString expand(rtl::OUString const & str) {
     return s;
 }
 
-bool hasOnlyEmptySets(rtl::Reference< Node > const & node) {
+bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
     OSL_ASSERT(node.is());
+    if (node->getLayer() > layer && node->getLayer() < Data::NO_LAYER) {
+        return false;
+    }
     switch (node->kind()) {
-    default: // Node::KIND_LOCALIZED_VALUE
-        OSL_ASSERT(false);
-        // fall through
-    case Node::KIND_PROPERTY:
     case Node::KIND_LOCALIZED_PROPERTY:
-        return true;
     case Node::KIND_GROUP:
         for (NodeMap::iterator i(node->getMembers().begin());
              i != node->getMembers().end(); ++i)
         {
-            if (!hasOnlyEmptySets(i->second)) {
+            if (!canRemoveFromLayer(layer, i->second)) {
                 return false;
             }
         }
         return true;
     case Node::KIND_SET:
         return node->getMembers().empty();
+    default: // Node::KIND_PROPERTY, Node::KIND_LOCALIZED_VALUE
+        return true;
     }
 }
 
@@ -282,7 +282,8 @@ void Components::removeExtensionXcuFile(
     // be removed.  However, not enough information is recorded in the in-memory
     // data structures to do so.  So, as a workaround, all those set elements
     // that were freshly added by the xcu and have afterwards been left
-    // unchanged are removed (and nothing else).  The heuristic to determine
+    // unchanged or have only had their properties changed in the user layer are
+    // removed (and nothing else).  The heuristic to determine
     // whether a node has been left unchanged is to check the layer ID (as
     // usual) and additionally to check that the node does not recursively
     // contain any non-empty sets (multiple extension xcu files are merged into
@@ -302,7 +303,7 @@ void Components::removeExtensionXcuFile(
             rtl::Reference< Node > node;
             for (Path::const_iterator j(i->begin()); j != i->end(); ++j) {
                 parent = node;
-                node = Data::findNode(item->layer, *map, *j);
+                node = Data::findNode(Data::NO_LAYER, *map, *j);
                 if (!node.is()) {
                     break;
                 }
@@ -314,14 +315,15 @@ void Components::removeExtensionXcuFile(
                     OSL_ASSERT(
                         node->kind() == Node::KIND_GROUP ||
                         node->kind() == Node::KIND_SET);
-                    if (hasOnlyEmptySets(node)) {
+                    if (canRemoveFromLayer(item->layer, node)) {
                         parent->getMembers().erase(i->back());
-                        addModification(*i);
+                        data_.modifications.remove(*i);
                         modifications->add(*i);
                     }
                 }
             }
         }
+        writeModifications();
     }
 }
 
