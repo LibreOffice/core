@@ -61,6 +61,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <ooo/vba/excel/XlEnableSelection.hpp>
+#include <ooo/vba/excel/XlSheetVisibility.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
@@ -179,18 +180,18 @@ openNewDoc(rtl::OUString aSheetName )
     return xModel;
 }
 
-ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : WorksheetImpl_BASE( xParent, xContext )
+ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : WorksheetImpl_BASE( xParent, xContext ), mbVeryHidden( false )
 {
 }
 
 ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< sheet::XSpreadsheet >& xSheet,
-        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel)
+        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel), mbVeryHidden( false )
 {
 }
 
 ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+    uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
 {
     if ( args.getLength() < 2 )
         throw lang::IllegalArgumentException();
@@ -221,24 +222,40 @@ ScVbaWorksheet::setName(const ::rtl::OUString &rName ) throw (uno::RuntimeExcept
     xNamed->setName( rName );
 }
 
-sal_Bool
+sal_Int32
 ScVbaWorksheet::getVisible() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    uno::Any aValue = xProps->getPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ) );
-    sal_Bool bRet = false;
-    aValue >>= bRet;
-    return bRet;
+    bool bVisible = false;
+    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ) ) >>= bVisible;
+    using namespace ::ooo::vba::excel::XlSheetVisibility;
+    return bVisible ? xlSheetVisible : (mbVeryHidden ? xlSheetVeryHidden : xlSheetHidden);
 }
 
 void
-ScVbaWorksheet::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+ScVbaWorksheet::setVisible( sal_Int32 nVisible ) throw (uno::RuntimeException)
 {
+    using namespace ::ooo::vba::excel::XlSheetVisibility;
+    bool bVisible = true;
+    switch( nVisible )
+    {
+        case xlSheetVisible: case 1:  // Excel accepts -1 and 1 for visible sheets
+            bVisible = true;
+            mbVeryHidden = false;
+        break;
+        case xlSheetHidden:
+            bVisible = false;
+            mbVeryHidden = false;
+        break;
+        case xlSheetVeryHidden:
+            bVisible = false;
+            mbVeryHidden = true;
+        break;
+        default:
+            throw uno::RuntimeException();
+    }
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    uno::Any aValue( bVisible );
-    xProps->setPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), aValue);
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), uno::Any( bVisible ) );
 }
 
 sal_Int16
