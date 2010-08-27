@@ -3053,6 +3053,10 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     // add style name attribute
                                     AddAutoStyleAttribute( aPropertyStates );
+
+                                    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                                    if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
+                                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );//#i114149#
                                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
                                 }
                                 else    // autostyles
