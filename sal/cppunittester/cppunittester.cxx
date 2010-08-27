@@ -31,6 +31,7 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "preextstl.h"
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/TestResult.h"
 #include "cppunit/TestResultCollector.h"
@@ -38,6 +39,7 @@
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/plugin/PlugInManager.h"
 #include "cppunit/portability/Stream.h"
+#include "postextstl.h"
 #include "osl/thread.h"
 #include "rtl/process.h"
 #include "rtl/string.hxx"

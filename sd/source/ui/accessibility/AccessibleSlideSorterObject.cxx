@@ -37,6 +37,8 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsLayouter.hxx"
+#include "view/SlsPageObjectLayouter.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -385,10 +387,11 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
-    Rectangle aBBox (mrSlideSorter.GetView().GetPageBoundingBox (
-        mnPageNumber,
-        ::sd::slidesorter::view::SlideSorterView::CS_SCREEN,
-        ::sd::slidesorter::view::SlideSorterView::BBT_INFO));
+    Rectangle aBBox (
+        mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
+            mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber),
+            ::sd::slidesorter::view::PageObjectLayouter::PageObject,
+            ::sd::slidesorter::view::PageObjectLayouter::WindowCoordinateSystem));
 
     if (mxParent.is())
     {

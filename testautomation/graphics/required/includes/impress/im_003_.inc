@@ -210,12 +210,18 @@ testcase tiViewToolbar_1
 
     Dim NumberOfGraphicModes as integer
     Dim iCurrentGraphicsMode as integer
-
     dim TestFile as string
+    dim i as integer
+    
     TestFile = ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
 
     printlog "open application "
     Call hNewDocument
+    Call sSelectEmptyLayout
+    printlog "delete default content"
+    hUseAsyncSlot( "EditSelectAll" )
+    Kontext "DocumentImpress"
+    DocumentImpress.typeKeys("<DELETE>",true)
 
     printlog "Insert->Graphic... : global\input\graf_inp\desp.bmp "
     hUseAsyncSlot( "InsertGraphicsFromFile" )
@@ -235,8 +241,17 @@ testcase tiViewToolbar_1
         printlog "select graphic "
         hUseAsyncSlot( "EditSelectAll" )
 
-        Kontext "GraphicObjectbar"
         printlog "The Graphics Toolbar has to be visible now; If not -> ERROR "
+        ' workaround for i113609; there should have been a style selected without elements on creating the document - what failed; the elements should have been deleted before inserting the grafik in this test - which failed; so the workaround is to use <tab> to travel to the graphic selection here:
+        for i=1 to 3
+        Kontext "GraphicObjectbar"
+        if ( not GraphicObjectbar.Exists( DEFAULT_DELAY ) ) Then
+            hTypeKeys("<tab>")
+            qaerrorlog "delete default content failed"
+        end if
+        next i
+
+        Kontext "GraphicObjectbar"
         if ( GraphicObjectbar.Exists( DEFAULT_DELAY ) ) Then
 
             Printlog "- graphic object toolbar exists"

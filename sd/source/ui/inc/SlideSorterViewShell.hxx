@@ -57,7 +57,8 @@ public:
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
-        FrameView* pFrameView);
+        FrameView* pFrameView,
+        const bool bIsCenterPane);
 
     virtual ~SlideSorterViewShell (void);
 
@@ -106,9 +107,6 @@ public:
     virtual void SetZoom (long int nZoom);
     virtual void SetZoomRect (const Rectangle& rZoomRect);
 
-    /// forward VCLs PrePaint window event to DrawingLayer
-    virtual void PrePaint();
-
     /** This is a callback method used by the active window to delegate its
         Paint() call to.  This view shell itself delegates it to the view.
     */
@@ -119,6 +117,8 @@ public:
         visibility state of the scroll bars.
     */
     virtual void ArrangeGUIElements (void);
+
+    virtual void Activate (BOOL IsMDIActivate);
 
     //===== Drag and Drop =====================================================
 
@@ -196,6 +196,7 @@ protected:
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
+    bool mbIsArrangeGUIElementsPending;
 
     SlideSorterViewShell (
         SfxViewFrame* pFrame,

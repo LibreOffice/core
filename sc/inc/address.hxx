@@ -133,12 +133,6 @@ const SCROW SCROWS64K = 65536;
 
 // === old stuff defines =====================================================
 
-#ifdef WIN
-// Under 16bit Windows rows still had to be limited to 8192.
-// (define manually for testing)
-#define SC_LIMIT_ROWS
-#endif
-
 #define MAXROW_30   8191
 #define MAXROW_40   31999
 

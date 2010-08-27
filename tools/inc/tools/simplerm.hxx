@@ -46,7 +46,7 @@ class InternalResMgr;
 class TOOLS_DLLPUBLIC SimpleResMgr
 {
 protected:
-    NAMESPACE_VOS(OMutex)   m_aAccessSafety;
+    vos::OMutex m_aAccessSafety;
     InternalResMgr*         m_pResImpl;
 
 public:

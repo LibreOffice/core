@@ -39,7 +39,9 @@ namespace doctok
 {
 using namespace ::com::sun::star;
 
-    TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
+#ifdef DEBUG
+TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
+#endif
 
 WW8Stream::~WW8Stream()
 {

@@ -36,14 +36,14 @@
 class TCPIO : public ITransmiter, public IReceiver
 {
 private:
-    NAMESPACE_VOS(OStreamSocket) *pStreamSocket;
+    vos::OStreamSocket *pStreamSocket;
     vos::OMutex aMSocketReadAccess;
     vos::OMutex aMSocketWriteAccess;
 
 public:
 
     ///
-    TCPIO( NAMESPACE_VOS(OStreamSocket) *pSocket ):pStreamSocket( pSocket ){}
+    TCPIO( vos::OStreamSocket *pSocket ):pStreamSocket( pSocket ){}
     virtual ~TCPIO(){}
 
 
@@ -54,7 +54,7 @@ public:
     virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen );
 
     // helper
-    void SetStreamSocket( NAMESPACE_VOS(OStreamSocket) *pSocket );
+    void SetStreamSocket( vos::OStreamSocket *pSocket );
 
 };
 

@@ -401,17 +401,13 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
     }
 
-    long nScrY = ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
-    while ( nScrY <= aPixRect.Top() && nY1 < MAXROW )
-    {
-        ++nY1;
-        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
-    }
+    long nScrY = 0;
+    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
     SCROW nY2 = nY1;
-    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
+    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
     {
         ++nY2;
-        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY2, nTab ), nPPTY );
+        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
@@ -750,6 +746,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( !bLogicText )
         aOutputData.DrawStrings(FALSE);     // in pixel MapMode
 
+    // edit cells and printer-metrics text must be before the buttons
+    // (DataPilot buttons contain labels in UI font)
+
+    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
+    if ( bLogicText )
+        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
+    aOutputData.DrawEdit(TRUE);
+    pContentDev->SetMapMode(MAP_PIXEL);
+
         // Autofilter- und Pivot-Buttons
 
     DrawButtons( nX1, nY1, nX2, nY2, aTabInfo, pContentDev );          // Pixel
@@ -759,14 +764,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks();
 
-        // Edit-Zellen
-
-    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
-    if ( bLogicText )
-        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
-    aOutputData.DrawEdit(TRUE);
-
-    pContentDev->SetMapMode(MAP_PIXEL);
     if ( !bGridFirst && ( bGrid || bPage ) )
     {
         aOutputData.DrawGrid( bGrid, bPage );
@@ -1208,14 +1205,14 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 {
     aComboButton.SetOutputDevice( pContentDev );
 
-    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY());
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc);
 
     SCCOL nCol;
     SCROW nRow;
     SCSIZE nArrY;
     SCSIZE nQuery;
     SCTAB           nTab = pViewData->GetTabNo();
-    ScDocument*     pDoc = pViewData->GetDocument();
     ScDBData*       pDBData = NULL;
     ScQueryParam*   pQueryParam = NULL;
 

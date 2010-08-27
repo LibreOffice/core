@@ -147,7 +147,7 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
-#if !defined(WINDOWS_VISTA_PSDK) && (defined(WIN) || defined(WNT))
+#if !defined(WINDOWS_VISTA_PSDK) && defined(WNT)
 #define _ADO_DATALINK_BROWSE_
 #endif
 

@@ -47,7 +47,7 @@ while (@ARGV) {
 }
 
 my @testpaths = ();
-my $sc = SourceConfig->new();
+my $sc = SourceConfig->new($ENV{'SOLARSRC'});
 my $module;
 foreach $module ($sc->get_active_modules()) {
     my $buildlst = $sc->get_module_build_list($module);

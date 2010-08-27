@@ -28,6 +28,8 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/awt/XCallback.hpp"
+#include "com/sun/star/awt/XRequestCallback.hpp"
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/document/MacroExecMode.hpp"
@@ -40,15 +42,18 @@
 #include "com/sun/star/frame/XModel.hpp"
 #include "com/sun/star/frame/XNotifyingDispatch.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
+#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/URL.hpp"
+#include <preextstl.h>
 #include "cppuhelper/implbase1.hxx"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
+#include <postextstl.h>
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
@@ -94,6 +99,29 @@ void Listener::dispatchFinished(css::frame::DispatchResultEvent const & Result)
     result_->condition.set();
 }
 
+class Callback: public cppu::WeakImplHelper1< css::awt::XCallback > {
+public:
+    Callback(
+        css::uno::Reference< css::frame::XNotifyingDispatch > const & dispatch,
+        css::util::URL const & url,
+        css::uno::Sequence< css::beans::PropertyValue > const & arguments,
+        css::uno::Reference< css::frame::XDispatchResultListener > const &
+            listener):
+        dispatch_(dispatch), url_(url), arguments_(arguments),
+        listener_(listener)
+    { OSL_ASSERT(dispatch.is()); }
+
+private:
+    virtual void SAL_CALL notify(css::uno::Any const &)
+        throw (css::uno::RuntimeException)
+    { dispatch_->dispatchWithNotification(url_, arguments_, listener_); }
+
+    css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
+    css::util::URL url_;
+    css::uno::Sequence< css::beans::PropertyValue > arguments_;
+    css::uno::Reference< css::frame::XDispatchResultListener > listener_;
+};
+
 class Test: public CppUnit::TestFixture {
 public:
     virtual void setUp();
@@ -135,8 +163,7 @@ void Test::test() {
         RTL_CONSTASCII_USTRINGPARAM(
             "vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"
             "language=Basic&location=document"));
-    Result result;
-    css::uno::Reference< css::frame::XNotifyingDispatch >(
+    css::uno::Reference< css::frame::XNotifyingDispatch > disp(
         css::uno::Reference< css::frame::XDispatchProvider >(
             css::uno::Reference< css::frame::XController >(
                 css::uno::Reference< css::frame::XModel >(
@@ -154,9 +181,18 @@ void Test::test() {
                 css::uno::UNO_SET_THROW)->getFrame(),
             css::uno::UNO_QUERY_THROW)->queryDispatch(
                 url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0),
-        css::uno::UNO_QUERY_THROW)->dispatchWithNotification(
-            url, css::uno::Sequence< css::beans::PropertyValue >(),
-            new Listener(&result));
+        css::uno::UNO_QUERY_THROW);
+    Result result;
+    // Shifted to main thread to work around potential deadlocks (i112867):
+    css::uno::Reference< css::awt::XRequestCallback >(
+        connection_.getFactory()->createInstance( //TODO: AsyncCallback ctor
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AsyncCallback"))),
+        css::uno::UNO_QUERY_THROW)->addCallback(
+            new Callback(
+                disp, url, css::uno::Sequence< css::beans::PropertyValue >(),
+                new Listener(&result)),
+            css::uno::Any());
     result.condition.wait();
     CPPUNIT_ASSERT(result.success);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(), result.result);

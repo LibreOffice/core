@@ -60,7 +60,7 @@ struct SVT_DLLPUBLIC HTMLOutContext
 
 struct HTMLOutFuncs
 {
-#if defined(MAC) || defined(UNX)
+#if defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
     static const sal_Char __FAR_DATA sNewLine[];    // \015\012

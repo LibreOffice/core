@@ -461,4 +461,3 @@ ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
     Key = "OOOPackageVersion";
     Value = "${OOOPACKAGEVERSION}";
 End
-

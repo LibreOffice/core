@@ -1230,9 +1230,11 @@ void SlideshowImpl::onFirstPaint()
 {
     if( mpShowWindow )
     {
+        /*
         mpShowWindow->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         mpShowWindow->Erase();
         mpShowWindow->SetBackground();
+        */
     }
 
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );

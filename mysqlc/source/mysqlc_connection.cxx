@@ -35,13 +35,13 @@
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_general.hxx"
 
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <cppconn/driver.h>
 #include <cppconn/connection.h>
 #include <cppconn/statement.h>
 #include <cppconn/metadata.h>
 #include <cppconn/exception.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

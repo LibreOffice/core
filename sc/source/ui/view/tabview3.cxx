@@ -1682,6 +1682,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         }
 
         TabChanged();                                       // DrawView
+
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
         if ( !bUnoRefDialog )
             aViewData.GetViewShell()->DisconnectAllClients();   // important for floating frames

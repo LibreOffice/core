@@ -259,7 +259,7 @@ value in sequence of arguments" );
     if( !mpPlayerWindow && ( rArguments.getLength() > 2 ) )
     {
         SystemChildWindow* pParentWindow = NULL;
-        sal_IntPtr pIntPtr = NULL;
+        sal_IntPtr pIntPtr = 0;
 
         // we are not interested in the first argument, which is a pure X11 window handle;
         // this backend relies on a SystemChildWindow as parent for the PlayerWindow, given

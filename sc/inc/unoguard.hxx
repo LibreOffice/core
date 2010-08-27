@@ -30,7 +30,7 @@
 
 #include <vos/mutex.hxx>
 
-class ScUnoGuard : public NAMESPACE_VOS(OGuard)
+class ScUnoGuard : public vos::OGuard
 {
 public:
             ScUnoGuard();

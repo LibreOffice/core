@@ -63,6 +63,7 @@ namespace ooo
                 throw css::lang::IllegalArgumentException();
             return aSomething;
         }
+        VBAHELPER_DLLPUBLIC css::uno::Reference<  css::uno::XInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell );
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell,  const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException);
 

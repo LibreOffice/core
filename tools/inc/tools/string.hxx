@@ -441,14 +441,6 @@ typedef struct _UniStringData
 #pragma pack()
 #endif
 
-// -------------------
-// - UniString-Types -
-// -------------------
-
-#ifndef NOOLDSTRING
-#define WSTRING_MAXLEN      STRING_MAXLEN
-#endif
-
 // -------------
 // - UniString -
 // -------------

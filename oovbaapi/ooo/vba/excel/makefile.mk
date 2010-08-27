@@ -29,7 +29,7 @@ PRJ=..$/..$/..
 PRJNAME=oovapi
 
 TARGET=excel
-PACKAGE=ooo$/vba$/Excel
+PACKAGE=ooo$/vba$/excel
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk

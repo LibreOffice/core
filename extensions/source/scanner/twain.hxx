@@ -57,7 +57,7 @@ class ImpTwain
     Link                        aNotifyLink;
     Bitmap                      aBitmap;
     DSMENTRYPROC                pDSM;
-    NAMESPACE_VOS( OModule )*   pMod;
+    vos:: OModule * pMod;
     ULONG                       nCurState;
 
     void                        ImplCreate();

@@ -34,7 +34,7 @@
 #define _FLTDEFS_HXX
 
 
-#if defined ( WIN ) || defined ( WNT )
+#if defined ( WNT )
 
 #define RGBQUAD RGBQUADWIN
 
@@ -53,21 +53,6 @@ typedef struct RGBQUAD
 } RGBQUAD;
 
 
-#ifdef WIN
-typedef BYTE huge* PDIBBYTE;
-#define MEMCPY hmemcpy
-#define GLOBALALLOC(nSize) ((PDIBBYTE)GlobalLock(GlobalAlloc(GHND,(nSize))))
-#define GLOBALHANDLE(pPointer) ((HGLOBAL)GlobalHandle((*((size_t*)&(pPointer)+1))))
-#define GLOBALFREE(pPointer) (GlobalUnlock(GLOBALHANDLE((pPointer))))
-#define MEMSET( pDst, cByte, nCount )   \
-{                                       \
-    PDIBBYTE pTmp = (PDIBBYTE) pDst;    \
-    for ( ULONG i = 0; i < nCount; i++ )\
-        *pTmp++ = cByte;                \
-}
-
-#else
-
 typedef BYTE* PDIBBYTE;
 #define MEMCPY memcpy
 #define MEMSET memset
@@ -75,7 +60,6 @@ typedef BYTE* PDIBBYTE;
 #define GLOBALFREE(pPointer) (GlobalFree((HGLOBAL)pPointer))
 #define GLOBALHANDLE(pPointer) ((HGLOBAL)(pPointer))
 
-#endif
 #else
 
 typedef BYTE* PDIBBYTE;

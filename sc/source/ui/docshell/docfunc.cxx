@@ -50,9 +50,9 @@
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 
 #include <list>
 
@@ -2605,7 +2605,6 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
 
 script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 {
-    ::rtl::OUString sVbaOption( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
     script::ModuleInfo sModuleInfo;
     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
     sModuleInfo.ModuleObject = GetDocModuleObject( rDocSh, sModule );
@@ -2648,7 +2647,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         if ( sTmpSource.getLength() == 0 )
             sTmpSource = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
         aSourceAny <<= sTmpSource;
-        uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+        uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
         {
             String sCodeName( genModuleName );
@@ -2679,7 +2678,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
     }
     if( xLib.is() )
     {
-        uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+        uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if( xLib->hasByName( sModuleName ) )
             xLib->removeByName( sModuleName );
         if ( xVBAModuleInfo.is() )

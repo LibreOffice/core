@@ -485,7 +485,7 @@ void OExtCommandLineImpl::init()
 
 namespace
 {
-    struct lclMutex : public rtl::Static< NAMESPACE_VOS(OMutex), lclMutex > {};
+    struct lclMutex : public rtl::Static< vos::OMutex, lclMutex > {};
 }
 
 OExtCommandLineImpl* OExtCommandLine::pExtImpl=0;

@@ -69,6 +69,8 @@
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 
 #include "gridwin.hxx"
 #include "tabvwsh.hxx"
@@ -119,6 +121,7 @@
 #include "tabprotection.hxx"
 #include "postit.hxx"
 #include "dpcontrol.hxx"
+#include "cellsuno.hxx"
 
 #include "drawview.hxx"
 #include <svx/sdrpagewindow.hxx>
@@ -364,6 +367,32 @@ void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, c
         // unlock internal layer (if not protected), will be relocked in ScDrawView::MarkListHasChanged()
         pView->LockInternalLayer( bProtectDoc && bProtectAttr );
     }
+}
+
+sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTAB nTab, ScBaseCell*& rpCell )
+{
+    BOOL bFound = FALSE;
+    do
+    {
+        pDoc->GetCell( rPosX, rPosY, nTab, rpCell );
+        if ( !rpCell || rpCell->GetCellType() == CELLTYPE_NOTE )
+        {
+            if ( rPosX <= 0 )
+                return FALSE;                           // alles leer bis links
+            else
+                --rPosX;                                // weitersuchen
+        }
+                else if ( rpCell->GetCellType() == CELLTYPE_EDIT)
+                    bFound = TRUE;
+                else if (rpCell->GetCellType() == CELLTYPE_FORMULA &&
+                  static_cast<ScFormulaCell*>(rpCell)->IsHyperLinkCell())
+                    bFound = TRUE;
+        else
+            return FALSE;                               // andere Zelle
+    }
+    while ( !bFound );
+
+    return bFound;
 }
 
 // ---------------------------------------------------------------------------
@@ -2100,6 +2129,30 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             nMouseStatus = SC_GM_NONE;              // keinen Doppelklick anfangen
             ScGlobal::OpenURL( aUrl, aTarget );
+
+            // fire worksheet_followhyperlink event
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+            if( xVbaEvents.is() ) try
+            {
+                Point aPos = rMEvt.GetPosPixel();
+                SCsCOL nPosX;
+                SCsROW nPosY;
+                SCTAB nTab = pViewData->GetTabNo();
+                pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+                ScBaseCell* pCell = NULL;
+                if( lcl_GetHyperlinkCell( pDoc, nPosX, nPosY, nTab, pCell ) )
+                {
+                    ScAddress aCellPos( nPosX, nPosY, nTab );
+                    uno::Reference< table::XCell > xCell( new ScCellObj( pViewData->GetDocShell(), aCellPos ) );
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[0] <<= xCell;
+                    xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_FOLLOWHYPERLINK, aArgs );
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+
             return;
         }
     }
@@ -4818,26 +4871,9 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     ScDocument* pDoc = pDocSh->GetDocument();
     ScBaseCell* pCell = NULL;
 
-    BOOL bFound = FALSE;
-    do
-    {
-        pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-        if ( !pCell || pCell->GetCellType() == CELLTYPE_NOTE )
-        {
-            if ( nPosX <= 0 )
-                return FALSE;                           // alles leer bis links
-            else
-                --nPosX;                                // weitersuchen
-        }
-                else if ( pCell->GetCellType() == CELLTYPE_EDIT)
-                    bFound = TRUE;
-                else if (pCell->GetCellType() == CELLTYPE_FORMULA &&
-                  static_cast<ScFormulaCell*>(pCell)->IsHyperLinkCell())
-                    bFound = TRUE;
-        else
-            return FALSE;                               // andere Zelle
-    }
-    while ( !bFound );
+    BOOL bFound = lcl_GetHyperlinkCell( pDoc, nPosX, nPosY, nTab, pCell );
+    if( !bFound )
+        return FALSE;
 
     ScHideTextCursor aHideCursor( pViewData, eWhich );  // before GetEditArea (MapMode is changed)
 

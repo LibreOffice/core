@@ -521,8 +521,8 @@ namespace cairocanvas
             nWidth = aFont.GetHeight();
         } else {
             // any scaling needs to be relative to the platform-dependent definition
-            // of width of the font
-            nWidth = aFont.GetHeight() * aFont.GetWidth() / aMetric.GetWidth();
+            // of height of the font
+            nWidth = aFont.GetWidth() * aFont.GetHeight() / aMetric.GetHeight();
         }
 
         cairo_matrix_init_identity(&m);

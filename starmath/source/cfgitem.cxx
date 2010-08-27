@@ -42,7 +42,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#define A2OU(x)        rtl::OUString::createFromAscii( x )
 
 static const char* aRootName = "Office.Math";
 
@@ -127,6 +126,7 @@ static const char * aMathPropNames[] =
 static const char * aFormatPropNames[] =
 {
     "StandardFormat/Textmode",
+    "StandardFormat/GreekCharStyle",
     "StandardFormat/ScaleNormalBracket",
     "StandardFormat/HorizontalAlignment",
     "StandardFormat/BaseSize",
@@ -994,6 +994,10 @@ void SmMathConfig::LoadFormat()
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pFormat->SetTextmode( bTmp );
         ++pVal;
+        // StandardFormat/GreekCharStyle
+        if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
+            pFormat->SetGreekCharStyle( nTmp16 );
+        ++pVal;
         // StandardFormat/ScaleNormalBracket
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pFormat->SetScaleNormalBrackets( bTmp );
@@ -1069,6 +1073,8 @@ void SmMathConfig::SaveFormat()
 
     // StandardFormat/Textmode
     *pValue++ <<= (BOOL) pFormat->IsTextmode();
+    // StandardFormat/GreekCharStyle
+    *pValue++ <<= (INT16) pFormat->GetGreekCharStyle();
     // StandardFormat/ScaleNormalBracket
     *pValue++ <<= (BOOL) pFormat->IsScaleNormalBrackets();
     // StandardFormat/HorizontalAlignment

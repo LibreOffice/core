@@ -62,7 +62,7 @@
 #include <vcl/salgdi.hxx>
 #include <vcl/menu.hxx>
 
-#include <dndlcon.hxx>
+#include <vcl/dndlcon.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 

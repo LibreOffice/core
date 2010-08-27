@@ -368,13 +368,22 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     ULONG nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFmt, LANGUAGE_SYSTEM );
     ULONG nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );
 
-    if(nDefFmt == nSysNumFmt||
-        nDefFmt == nSysShortDateFmt||
-        nDefFmt == nSysLongDateFmt||
-        bSysLang && (nDefFmt == nNumFormatForLanguage ||
-        nDefFmt == nShortDateFormatForLanguage ||
-        nDefFmt == nLongDateFormatForLanguage ))
+    if (
+         nDefFmt == nSysNumFmt ||
+         nDefFmt == nSysShortDateFmt ||
+         nDefFmt == nSysLongDateFmt ||
+         (
+           bSysLang &&
+           (
+             nDefFmt == nNumFormatForLanguage ||
+             nDefFmt == nShortDateFormatForLanguage ||
+             nDefFmt == nLongDateFormatForLanguage
+           )
+         )
+       )
+    {
         sValue += String(SW_RES(RID_STR_SYSTEM));
+    }
 
     nPos = InsertEntry(sValue, nPos);   // Als ersten numerischen Eintrag einfuegen
     SetEntryData(nPos, (void*)nDefFmt);

@@ -37,13 +37,16 @@ Properties::Properties (void)
       mbIsShowSelection(true),
       mbIsShowFocus(true),
       mbIsCenterSelection(false),
-      mbIsSmoothSelectionScrolling(false),
+      mbIsSmoothSelectionScrolling(true),
       mbIsSuspendPreviewUpdatesDuringFullScreenPresentation(true),
       maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
-      maSelectionColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
+      maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
-      mbIsUIReadOnly(false)
+      mbIsUIReadOnly(false),
+      mbIsOnlyPreviewTriggersMouseOver(true),
+      mbIsHighContrastModeActive(
+          Application::GetSettings().GetStyleSettings().GetHighContrastMode())
 {
 }
 
@@ -52,6 +55,19 @@ Properties::Properties (void)
 
 Properties::~Properties (void)
 {
+}
+
+
+
+
+void Properties::HandleDataChangeEvent (void)
+{
+    maBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+    maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
+    maSelectionColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+    maHighlightColor = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
+    mbIsHighContrastModeActive
+        = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 
@@ -227,6 +243,30 @@ bool Properties::IsUIReadOnly (void) const
 void Properties::SetUIReadOnly (const bool bIsUIReadOnly)
 {
     mbIsUIReadOnly = bIsUIReadOnly;
+}
+
+
+
+
+bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
+{
+    return mbIsOnlyPreviewTriggersMouseOver;
+}
+
+
+
+
+void Properties::SetOnlyPreviewTriggersMouseOver (const bool bFlag)
+{
+    mbIsOnlyPreviewTriggersMouseOver = bFlag;
+}
+
+
+
+
+bool Properties::IsHighContrastModeActive (void) const
+{
+    return mbIsHighContrastModeActive;
 }
 
 

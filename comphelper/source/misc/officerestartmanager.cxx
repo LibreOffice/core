@@ -87,9 +87,9 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
         // if the restart already running there is no need to trigger it again
         if ( m_bRestartRequested )
             return;
-#ifndef MACOSX
+
         m_bRestartRequested = sal_True;
-#endif
+
         // the office is still not initialized, no need to terminate, changing the state is enough
         if ( !m_bOfficeInitialized )
             return;

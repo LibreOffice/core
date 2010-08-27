@@ -2358,9 +2358,9 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                 static const long nOuterClickDiff = 1000000;
 
                 // adjust borders for these special cases:
-                if ( bFirstColumn && !bRTL || bLastColumn && bRTL )
+                if ( (bFirstColumn && !bRTL) || (bLastColumn && bRTL) )
                     aPageRectWithBorders.SubLeft( nOuterClickDiff );
-                if ( bLastColumn && !bRTL || bFirstColumn && bRTL )
+                if ( (bLastColumn && !bRTL) || (bFirstColumn && bRTL) )
                     aPageRectWithBorders.AddRight( nOuterClickDiff );
                 if ( bFirstRow )
                     aPageRectWithBorders.SubTop( nOuterClickDiff );

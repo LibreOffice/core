@@ -1759,7 +1759,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 /*-----------------02.12.96 12:36-------------------
 
 --------------------------------------------------*/
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
 
 void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
 {

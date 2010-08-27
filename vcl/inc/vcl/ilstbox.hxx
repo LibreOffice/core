@@ -396,6 +396,7 @@ private:
                         mbHScroll       : 1,    // HScroll an oder aus
                         mbAutoHScroll   : 1;    // AutoHScroll an oder aus
     Link                maScrollHdl;    // Weil der vom ImplListBoxWindow selbst benoetigt wird.
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
 protected:
     virtual void        GetFocus();
@@ -500,6 +501,7 @@ public:
 
     // pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()   { maLBWindow.EnableMirroring(); }
+    inline void     SetDropTraget(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
 };
 
 // -----------------------------

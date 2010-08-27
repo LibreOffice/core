@@ -129,11 +129,7 @@ enum SvxComboBoxStyle
     SVX_CBS_LOWER       = 0x02,
     SVX_CBS_ALL         = 0x04,
     SVX_CBS_FILENAME    = 0x08,
-#ifdef WIN
-    SVX_CBS_SW_FILENAME = SVX_CBS_FILENAME | SVX_CBS_LOWER
-#else
     SVX_CBS_SW_FILENAME = SVX_CBS_FILENAME
-#endif
 };
 
 // class SvxComboBox -----------------------------------------------------

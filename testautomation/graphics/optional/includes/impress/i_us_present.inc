@@ -52,12 +52,6 @@ testcase i_us_presentation1
     printlog "New master"
     MenuSelect(MenuGetItemID(1))
     sleep (1)
-    ViewMasterPage
-    kontext "Slides"
-    SlidesControl.OpenContextMenu(true)
-    sleep (2)
-    MenuSelect(MenuGetItemID(1)) 'New Master
-    sleep (1)
     printlog "   Inserted second Master-Slide"
 
 
@@ -120,7 +114,6 @@ testcase i_us_presentation1
     if ExportierenDlg.IsVisible(5) then
         printlog "   Gallery-object correctly copied into Slide."
         ExportierenDlg.Close
-        ToolsGallery
         WaitSlot (2000)
     end if
     kontext "GraphicObjectbar"
@@ -128,33 +121,7 @@ testcase i_us_presentation1
         kontext "DocumentImpress"
         ViewToolbarsPicture
     end if
-    Kontext "Gallery"
-    View.TypeKeys "<HOME><RIGHT><RIGHT>"
-    printlog "'OpenContextMenu"
-    View.TypeKeys "<SHIFT F10>"
-    sleep (2)
-    MenuSelect(MenuGetItemID(1))   'Insert
-    sleep (2)
-    MenuSelect(MenuGetItemID(1))   'Copy
-    sleep (2)
-    printlog "Check that we really got a copy of the object "
-    kontext "DocumentImpress"
-    DocumentImpress.OpenContextMenu(true)
-    sleep (2)
-    MenuSelect 27353
-    sleep (2)
-    Kontext "ExportierenDlg"
-    if ExportierenDlg.IsVisible(5) then
-        printlog "   Gallery-object correctly copied into Slide."
-        ExportierenDlg.Close
-    else
-        warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
-    end if
-    kontext "GraphicObjectbar"
-    if GraphicObjectbar.Exists(5) = FALSE then
-        kontext "DocumentImpress"
-        ViewToolbarsPicture
-    end if
+
     kontext "Gallery"
     Gallerys.Select (iPictures)
     printlog " 50% Transparency"
@@ -172,14 +139,7 @@ testcase i_us_presentation1
     Width.SetText "16"
     Height.SetText "16"
     Mosaic.OK
-    kontext "GraphicFilterBar"
-    GraphicFilterBar.Close
-    ToolsGallery
-    WaitSlot (1000)
-    kontext "DocumentImpress"
-    hTypeKeys "<TAB>"
-    sleep (1)
-
+    
     kontext "GraphicFilterBar"
     Mosaic.Click
 
@@ -254,7 +214,7 @@ testcase i_us_presentation2
 
     MenuSelect(MenuGetItemID(1)) 'New Slide  'No 2
     printlog "   Inserted second normal Slide"
-
+    call sSelectEmptyLayout
     printlog "2. Layouts: Text. Bild: Gallery: Animation - Gif"
     Kontext "Tasks"
     printlog "to get to the very first position"
@@ -275,11 +235,16 @@ testcase i_us_presentation2
 
     printlog "   Did the 'mistake' to FadeIn/Out the Slidepane"
 
-    printlog "activating the input picture area"
-    kontext "DocumentImpress"
-    DocumentImpress.TypeKeys "<TAB>",2
-    DocumentImpress.TypeKeys "<RETURN>"
-    sleep (1)
+
+InsertGraphicsFromFile
+Kontext "GrafikEinfuegenDlg"
+if GrafikEinfuegenDlg.exists(5) then
+printlog "   The Insertgraphics-dialogue showed up correctly."
+sleep (5)
+else
+warnlog "   The Insertgraphics-dialogue didn't show up."
+endif
+
 
     printlog "Graphics-Import-dialogue. Select i_us_large.jpg"
     Kontext "GrafikEinfuegenDlg"

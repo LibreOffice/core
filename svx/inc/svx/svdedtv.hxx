@@ -208,7 +208,6 @@ public:
     // verwendet. NotifyNewUndoAction() wird in diesem Fall erst beim letzten
     // EndUndo() gerufen. NotifyNewUndoAction() wird nicht gerufen bei einer
     // leeren Klammerung.
-#ifndef WIN
     void BegUndo()                       { pMod->BegUndo();         } // Undo-Klammerung auf
     void BegUndo(const String& rComment) { pMod->BegUndo(rComment); } // Undo-Klammerung auf
     void BegUndo(const String& rComment, const String& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE) { pMod->BegUndo(rComment,rObjDescr,eFunc); } // Undo-Klammerung auf
@@ -218,17 +217,6 @@ public:
     // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
     void SetUndoComment(const String& rComment) { pMod->SetUndoComment(rComment); }
     void SetUndoComment(const String& rComment, const String& rObjDescr) { pMod->SetUndoComment(rComment,rObjDescr); }
-#else  // ifndef WIN
-    void BegUndo();
-    void BegUndo(const String& rComment);
-    void BegUndo(const String& rComment, const String& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE);
-    void BegUndo(SdrUndoGroup* pUndoGrp);
-    void EndUndo();                                                   // Undo-Klammerung zu (inkl BroadcastEdges)
-    void AddUndo(SdrUndoAction* pUndo);
-    // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
-    void SetUndoComment(const String& rComment);
-    void SetUndoComment(const String& rComment, const String& rObjDescr);
-#endif
     bool IsUndoEnabled() const;
 
     std::vector< SdrUndoAction* > CreateConnectorUndo( SdrObject& rO );

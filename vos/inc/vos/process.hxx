@@ -284,7 +284,7 @@ class OExtCommandLineImpl;
 class OExtCommandLine : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OExtCommandLine, vos));
-    static NAMESPACE_VOS(OExtCommandLineImpl)* pExtImpl;
+    static vos::OExtCommandLineImpl* pExtImpl;
 
 public:
 

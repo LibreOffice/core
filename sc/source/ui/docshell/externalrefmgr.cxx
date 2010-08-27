@@ -2024,7 +2024,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     if (!isFileLoadable(aFile))
         return NULL;
 
-    String aOptions;
+    String aOptions( pFileData->maFilterOptions );
     ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
 
@@ -2039,9 +2039,6 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
 
         setRelativeFileName(nFileId, aStr);
     }
-
-    // Update the filter data now that we are loading it again.
-    setFilterData(nFileId, rFilter, aOptions);
 
     SfxItemSet* pSet = new SfxAllItemSet(SFX_APP()->GetPool());
     if (aOptions.Len())
@@ -2077,6 +2074,13 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     pExtOptNew->GetDocSettings().mnLinkCnt = nLinkCount + 1;
 
     pNewShell->DoLoad(pMedium.release());
+
+    // with UseInteractionHandler, options may be set by dialog during DoLoad
+    String aNew = ScDocumentLoader::GetOptions(*pNewShell->GetMedium());
+    if (aNew.Len() && aNew != aOptions)
+        aOptions = aNew;
+    setFilterData(nFileId, rFilter, aOptions);    // update the filter data, including the new options
+
     return aRef;
 }
 

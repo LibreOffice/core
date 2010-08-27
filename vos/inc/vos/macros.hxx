@@ -149,9 +149,6 @@
 // def. for arbitrary namespace
 #define VOS_NAMESPACE(class_name, name_space) name_space::class_name
 
-// sal_Int16 def. for namespace vos
-#define NAMESPACE_VOS(class_name) vos::class_name
-
 // sal_Int16 def. for namespace std
 #define NAMESPACE_STD(class_name) std::class_name
 

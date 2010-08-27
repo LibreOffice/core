@@ -46,11 +46,6 @@ void WW8StyleSheet::initPayload()
     entryOffsets.push_back(nOffset);
 }
 
-sal_uInt32 WW8StyleSheet::calcPayloadOffset()
-{
-    return 0;
-}
-
 sal_uInt32 WW8StyleSheet::calcSize()
 {
     return getCount();

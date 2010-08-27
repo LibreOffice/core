@@ -30,6 +30,34 @@
 '* short description :
 '*
 '\******************************************************************************
+sub id_004
+
+    printLog Chr(13) + "---------    id_004    ----------"
+
+    call tiInsertSlide
+    call tiInsertDuplicateSlide
+    ' v expand slide
+    '  v summary slide
+    call tiInsertField
+    call tiInsertSpecialCharacter
+    call tiInsertHyperlink
+    call tiInsertScan
+    call tiInsertGraphic
+    call tiInsertObjectSound
+    call tiInsertObjectVideo
+    call tiInsertObjectSound
+    call tiInsertObjectVideo
+    call tiInsertChart
+    call tiInsertObjectOLEObjects
+    call tiInsertSpreadsheet
+    call tiInsertFormula
+    call tiInsertFloatingFrame
+    call tiInsertFile
+    call tiInsertPlugin
+    call tiInsertSnappointLine
+    call tdInsertLayer ' IMPRESS: Edit->Layer->Insert
+end sub
+'------------------------------------------------------------------------------
 testcase tiInsertSlide
 
     printlog "Dateiname.settext Convertpath (gTesttoolPath + global\input\graf_inp\stabler.tif) "

@@ -181,17 +181,6 @@ bool HelpParser::CreateSDF(
 
     ByteString sActFileName = makeAbsolutePath( sHelpFile , rRoot_in );
 
-/*    DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
-    aEntry.ToAbs();
-    String sFullEntry = aEntry.GetFull();
-    aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
-    aEntry += DirEntry( rRoot_in );
-    ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
-    ByteString sActFileName(
-    sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
-
-    sActFileName.SearchAndReplaceAll( "/", "\\" );
-*/
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;

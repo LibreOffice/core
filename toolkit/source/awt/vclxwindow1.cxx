@@ -93,7 +93,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     // create system parent data
     SystemParentData aSysParentData;
     aSysParentData.nSize = sizeof ( SystemParentData );
-#if defined( WIN ) || defined( WNT ) || defined ( OS2 )
+#if defined( WNT ) || defined ( OS2 )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( QUARTZ )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);

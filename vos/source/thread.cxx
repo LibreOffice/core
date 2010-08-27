@@ -34,7 +34,7 @@ using namespace vos;
 
 void vos::threadWorkerFunction_impl(void * pthis)
 {
-    NAMESPACE_VOS(OThread)* pThis= (NAMESPACE_VOS(OThread)*)pthis;
+    vos::OThread* pThis= (vos::OThread*)pthis;
 
     // call Handler-Function of OThread-derived class
     pThis->run();

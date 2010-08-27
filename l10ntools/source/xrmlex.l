@@ -180,10 +180,6 @@ main( int argc, char* argv[])
 	FILE *pFile;
 
 	pOutput = GetOutputFile( argc, argv );
-    if( !isQuiet() ){
-        fprintf( stdout, "\nXrmEx 0.9 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
-	    fprintf( stdout, "===================================================================================\n" );
-    }
 
 	if ( !pOutput ) {
 		fprintf( stdout, "Syntax: XRMEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
@@ -222,7 +218,6 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndXrmExport();
 
-	if( !isQuiet() ) fprintf( stdout, "\n===================================\n\n" );
     removeTempFile();
 	/* return error level */
 	return nRetValue;

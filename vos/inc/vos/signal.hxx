@@ -46,7 +46,7 @@ SignalHandlerFunction_impl signalHandlerFunction_impl;
     @version 1.0
 */
 
-class OSignalHandler : public NAMESPACE_VOS(OObject)
+class OSignalHandler : public vos::OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OSignalHandler, vos));
 

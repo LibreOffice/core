@@ -343,6 +343,11 @@ MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
 MY_FILES_main += $(MY_MOD)/DataAccess/mozab2.xcu
 .END
 .END
+.IF "$(SYSTEM_LIBTEXTCAT_DATA)" != ""
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibtextcatdata.xcu
+.ELSE
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-internallibtextcatdata.xcu
+.END
 
 MY_DEPS_math = main
 MY_FILES_math = \
@@ -469,9 +474,9 @@ MY_FILES_ogltrans = \
 .END
 
 .IF "$(GUIBASE)" == "WIN"
-MY_XCDS += $(MISC)/forcedefaultlanguage.xcd
-MY_DEPS_forcedefaultlanguage = main
-MY_FILES_forcedefaultlanguage = \
+MY_XCDS += $(MISC)/forcedefault.xcd
+MY_DEPS_forcedefault = main
+MY_FILES_forcedefault = \
     $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
 .END
 

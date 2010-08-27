@@ -1324,33 +1324,47 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq)
 
     typelib_TypeDescription* pSeqElementDesc= NULL;
     TYPELIB_DANGER_GET( &pSeqElementDesc, pSeqElementTypeRef);
-    sal_Int32 nElementSize= pSeqElementDesc->nSize;
-    n= punoSeq->nElements;
 
-    SAFEARRAYBOUND rgsabound[1];
-    rgsabound[0].lLbound = 0;
-    rgsabound[0].cElements = n;
-    VARIANT oleElement;
-    long safeI[1];
+    // try to find VARIANT type that is related to the UNO type of the sequence elements
+    // the sequence as a sequence element should be handled in a special way
+    VARTYPE eTargetElementType = VT_EMPTY;
+    if ( pSeqElementDesc->eTypeClass != TypeClass_SEQUENCE )
+        eTargetElementType = mapTypeClassToVartype( static_cast< TypeClass >( pSeqElementDesc->eTypeClass ) );
 
-    pArray = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
+    if ( eTargetElementType != VT_EMPTY )
+        pArray = createUnoSequenceWrapper( rSeq, eTargetElementType );
 
-    Any unoElement;
-    //      sal_uInt8 * pSeqData= (sal_uInt8*) punoSeq->pElements;
-    sal_uInt8 * pSeqData= (sal_uInt8*) punoSeq->elements;
-
-    for (sal_uInt32 i = 0; i < n; i++)
+    if ( !pArray )
     {
-        unoElement.setValue( pSeqData + i * nElementSize, pSeqElementDesc);
-        VariantInit(&oleElement);
+        sal_Int32 nElementSize= pSeqElementDesc->nSize;
+        n= punoSeq->nElements;
 
-        anyToVariant(&oleElement, unoElement);
+        SAFEARRAYBOUND rgsabound[1];
+        rgsabound[0].lLbound = 0;
+        rgsabound[0].cElements = n;
+        VARIANT oleElement;
+        long safeI[1];
 
-        safeI[0] = i;
-        SafeArrayPutElement(pArray, safeI, &oleElement);
+        pArray = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
 
-        VariantClear(&oleElement);
+        Any unoElement;
+        //      sal_uInt8 * pSeqData= (sal_uInt8*) punoSeq->pElements;
+        sal_uInt8 * pSeqData= (sal_uInt8*) punoSeq->elements;
+
+        for (sal_uInt32 i = 0; i < n; i++)
+        {
+            unoElement.setValue( pSeqData + i * nElementSize, pSeqElementDesc);
+            VariantInit(&oleElement);
+
+            anyToVariant(&oleElement, unoElement);
+
+            safeI[0] = i;
+            SafeArrayPutElement(pArray, safeI, &oleElement);
+
+            VariantClear(&oleElement);
+        }
     }
+
     TYPELIB_DANGER_RELEASE( pSeqElementDesc);
 
     return pArray;

@@ -488,5 +488,6 @@ StringArray SV_PRINT_NATIVE_STRINGS
         < "Page number"; >;
         < "Number of pages"; >;
         < "More"; >;
+        < "Print selection only"; >;
     };
 };

@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #include <tools/svwin.h>
 #endif
 
@@ -211,7 +211,7 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
 BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     static BOOL bInWinExec = FALSE;
 #endif
     USHORT nLinkType = pSvLink->GetUpdateMode();
@@ -258,7 +258,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
             // ansonsten unter Win/WinNT die Applikation direkt starten
         }
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
         // Server nicht da, starten und nochmal versuchen
         if( !bInWinExec )
@@ -291,7 +291,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
             }
         }
         else
-#endif  // WIN / WNT
+#endif  // WNT
         {
             nError = DDELINK_ERROR_APP;
         }

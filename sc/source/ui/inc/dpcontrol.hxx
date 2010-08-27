@@ -64,7 +64,8 @@ class ScAccessibleFilterMenu;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL);
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL,
+                    ScDocument* pDoc = NULL);
     ~ScDPFieldButton();
 
     void setText(const ::rtl::OUString& rText);
@@ -86,6 +87,7 @@ private:
     ::rtl::OUString         maText;
     Fraction                maZoomX;
     Fraction                maZoomY;
+    ScDocument*             mpDoc;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;
     bool                    mbBaseButton;

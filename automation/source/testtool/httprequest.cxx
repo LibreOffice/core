@@ -78,7 +78,7 @@ BOOL HttpRequest::Execute()
     Init();
 
     // Open channel to standard redir host
-    NAMESPACE_VOS(OInetSocketAddr) aConnectAddr;
+    vos::OInetSocketAddr aConnectAddr;
 
     if ( aProxyHost.Len() )
     {
@@ -95,8 +95,8 @@ BOOL HttpRequest::Execute()
     aTV.Seconds = 10;       // Warte 10 Sekunden
     aTV.Nanosec = 0;
 
-    pOutSocket = new NAMESPACE_VOS(OConnectorSocket)();
-    if ( pOutSocket->connect( aConnectAddr, &aTV ) == NAMESPACE_VOS(ISocketTypes::TResult_Ok) )
+    pOutSocket = new vos::OConnectorSocket();
+    if ( pOutSocket->connect( aConnectAddr, &aTV ) == vos::ISocketTypes::TResult_Ok )
     {
 //      pOutSocket->setTcpNoDelay( 1 );
     }

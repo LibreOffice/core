@@ -3107,6 +3107,9 @@ namespace xmloff { namespace token {
         TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
         TOKEN( "coordinate-region",    XML_COORDINATE_REGION ),
 
+        TOKEN( "diagonal-bl-tr-widths", XML_DIAGONAL_BL_TR_WIDTHS ),
+        TOKEN( "diagonal-tl-br-widths", XML_DIAGONAL_TL_BR_WIDTHS ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

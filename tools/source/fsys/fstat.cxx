@@ -28,11 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#if defined( WIN)
-#include <stdio.h>
-#include <dos.h>
-#endif
-
 #ifdef UNX
 #include <errno.h>
 #endif

@@ -45,10 +45,6 @@
 |*
 *************************************************************************/
 
-#ifdef WIN
-#pragma optimize ( "", off )
-#endif
-
 TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
     USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr,
     BOOL bVert ) :
@@ -96,10 +92,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
     else
         mpLinePolyPolygon = NULL;
 }
-
-#ifdef WIN
-#pragma optimize ( "", on )
-#endif
 
 /*************************************************************************
 |*

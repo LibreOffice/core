@@ -550,9 +550,6 @@ void SvIconView::EditItemText( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
 
     aRect.Bottom() += 2; // sieht huebscher aus
 
-#ifdef WIN
-    aRect.Bottom() += 4;
-#endif
 #ifdef OS2
 
 #if OS2_SINGLE_LINE_EDIT

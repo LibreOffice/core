@@ -75,7 +75,6 @@
 #include <memory>
 
 #include "mathmlexport.hxx"
-#include "mathtype.hxx"
 #include <starmath.hrc>
 #include <unomodel.hxx>
 #include <document.hxx>

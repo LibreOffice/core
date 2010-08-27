@@ -2255,7 +2255,7 @@ void SalX11Display::Yield()
 
     XEvent aEvent;
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
-                NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
+                vos::OThread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );

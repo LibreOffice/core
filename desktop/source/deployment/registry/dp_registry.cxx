@@ -129,7 +129,9 @@ public:
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
-        throw (deployment::DeploymentException, CommandFailedException,
+        throw (deployment::DeploymentException,
+               deployment::InvalidRemovedParameterException,
+               CommandFailedException,
                lang::IllegalArgumentException, RuntimeException);
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
@@ -461,7 +463,8 @@ void PackageRegistryImpl::update() throw (RuntimeException)
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::DeploymentException, CommandFailedException,
+    throw (deployment::DeploymentException, deployment::InvalidRemovedParameterException,
+           CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
 {
     check();

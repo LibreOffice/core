@@ -216,8 +216,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
     Any aElement = xLib->getByName( aElementName );
     aElement >>= aMod.aCode;
 
-    Reference < script::XVBAModuleInfo > xModInfo( xLib, UNO_QUERY );
-
+    Reference< script::vba::XVBAModuleInfo > xModInfo( xLib, UNO_QUERY );
     if( xModInfo.is() && xModInfo->hasModuleInfo( aElementName ) )
     {
         script::ModuleInfo aModInfo = xModInfo->getModuleInfo( aElementName );
@@ -312,9 +311,9 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     // aMod.aName ignored
     if( aMod.aModuleType.getLength() > 0 )
     {
-        if( !getVBACompatModeOn() )
+        if( !getVBACompatibilityMode() )
         {
-            setVBACompatModeOn( sal_True );
+            setVBACompatibilityMode( sal_True );
 
             Any aGlobs;
             Sequence< Any > aArgs(1);
@@ -381,8 +380,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
             }
         }
 
-        Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib,
-                                                            UNO_QUERY );
+        Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
         if( xVBAModuleInfo.is() )
         {
             if( xVBAModuleInfo->hasModuleInfo( aElementName ) )

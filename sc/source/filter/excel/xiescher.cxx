@@ -98,7 +98,6 @@
 #include "convuno.hxx"
 #include "postit.hxx"
 #include "globstr.hrc"
-#include "chartlis.hxx"
 
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
@@ -4056,9 +4055,8 @@ void XclImpObjectManager::ConvertObjects()
     for( XclImpSheetDrawingMap::iterator aIt = maSheetDrawings.begin(), aEnd = maSheetDrawings.end(); aIt != aEnd; ++aIt )
         aIt->second->ConvertObjects( aDffConv );
 
-    ScChartListenerCollection* pChartListeners = GetDoc().GetChartListenerCollection();
-    if( pChartListeners && (pChartListeners->GetCount() > 0) )
-        pChartListeners->SetDirty();
+    // #i112436# don't call ScChartListenerCollection::SetDirty here,
+    // instead use InterpretDirtyCells in ScDocument::CalcAfterLoad.
 }
 
 String XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const

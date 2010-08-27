@@ -373,6 +373,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_USER_BODO_INDIA:
         case LANGUAGE_USER_DOGRI_INDIA:
         case LANGUAGE_USER_MAITHILI_INDIA:
+        case LANGUAGE_UIGHUR_CHINA:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 

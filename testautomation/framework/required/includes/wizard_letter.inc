@@ -35,10 +35,6 @@ testcase tUpdtWizardLetter
 
     printlog( "Resource test for the letter-wizard" )
 
-    dim iErr as integer
-    dim brc as boolean
-    dim irc as integer
-    
     ' Build the filename we want to save the template as.
     dim cTemplateName as string
         cTemplateName = "FWK-Testtool-Template-letterWizard.ott"
@@ -158,8 +154,9 @@ testcase tUpdtWizardLetter
         printlog( "   * name the template for further usage" )
         TemplateName.setText( cTemplateName )
         hSetTemplateSavePath( cTemplatePath )
-        
-        hFinishWizard( 1 )
+
+        kontext "AutopilotLetter"
+        hClickButton( FinishButton )
 
         if ( gOOo ) then
             kontext "UseOfThisTemplate"
@@ -171,22 +168,19 @@ testcase tUpdtWizardLetter
             endif
         endif
         
-        iErr = hHandleSaveError()
-        if ( iErr = 1 ) then
+        if ( hHandleSaveError() = 1 ) then
             kontext "AutopilotLetter"
-            hFinishWizard( 1 )
+            hClickButton( FinishButton )
         endif
         
-        brc = hDestroyDocument()
-        if ( not brc ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
+        if ( not hDestroyDocument() ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
     else
         warnlog( "Autopilot Letter not open/exceeded timeout" )
     endif
     
     hDeleteFile( cTemplatePath )
     
-    irc = hDeleteUserTemplates()
-    if ( irc <> 0 ) then
+    if ( hDeleteUserTemplates() <> 0 ) then
         printlog( "Unexpectedly deleted user template(s), please check")
     endif
     

@@ -27,7 +27,7 @@ PluginConnector::PluginConnector( int nSocket ) :
 
 PluginConnector::~PluginConnector()
 {
-    NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
+    vos::OGuard aGuard( m_aUserEventMutex );
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
          it != allConnectors.end(); ++it )
     {
@@ -41,7 +41,7 @@ PluginConnector::~PluginConnector()
 
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
-    NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
+    vos::OGuard aGuard( m_aUserEventMutex );
     bool bFound = false;
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
          it != allConnectors.end() && bFound == false; ++it )
@@ -68,7 +68,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         return 0;
 /*
     {
-        NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
+        vos::OGuard aGuard( m_aUserEventMutex );
         m_aUserEventIDs.pop_front();
     }
 */

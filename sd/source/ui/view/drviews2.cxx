@@ -958,7 +958,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 SdPage* DrawViewShell::CreateOrDuplicatePage (
     SfxRequest& rRequest,
     PageKind ePageKind,
-    SdPage* pPage)
+    SdPage* pPage,
+    const sal_Int32 nInsertPosition)
 {
     SdPage* pNewPage = NULL;
     if (ePageKind == PK_STANDARD && meEditMode != EM_MASTERPAGE)
@@ -967,7 +968,7 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
         {
             mpDrawView->SdrEndTextEdit();
         }
-        pNewPage = ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage);
+        pNewPage = ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage, nInsertPosition);
     }
     return pNewPage;
 }

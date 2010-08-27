@@ -39,9 +39,9 @@ typedef Environment::value_type EnvironmentVariable;
 class Process
 {
     // Internal members and methods
-    NAMESPACE_VOS(OArgumentList) *pArgumentList;
-    NAMESPACE_VOS(OEnvironment) *pEnvList;
-    NAMESPACE_VOS(OProcess) *pProcess;
+    vos::OArgumentList *pArgumentList;
+    vos::OEnvironment *pEnvList;
+    vos::OProcess *pProcess;
     BOOL ImplIsRunning();
     long ImplGetExitCode();
     BOOL bWasGPF;

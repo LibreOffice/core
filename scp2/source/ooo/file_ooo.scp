@@ -523,6 +523,7 @@ STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
 #endif
 #endif
 
+#ifndef SYSTEM_LIBTEXTCAT_DATA
 // fingerprint files (lm)
 
 File gid_File_Conf_Fpdb
@@ -1036,7 +1037,7 @@ File gid_File_Lm_Zulu
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End
-
+#endif
 
 
 // mod files

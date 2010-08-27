@@ -1565,7 +1565,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( bDisableEditHyperlink )
         rSet.DisableItem( SID_OPEN_HYPERLINK );
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     if( !mxScannerManager.is() )
     {
         rSet.DisableItem( SID_TWAIN_SELECT );

@@ -489,6 +489,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_SAVEASDOC:
         case SID_SAVEDOC:
         {
+            // derived class may decide to abort this
+            if( !QuerySlotExecutable( nId ) )
+            {
+                rReq.SetReturnValue( SfxBoolItem( 0, FALSE ) );
+                return;
+            }
+
             //!! detaillierte Auswertung eines Fehlercodes
             SfxObjectShellRef xLock( this );
 
@@ -895,7 +902,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     rReq.Done();
 }
 
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 {

@@ -429,18 +429,28 @@ SCCOLROW ScMarkData::GetMarkColumnRanges( SCCOLROW* pRanges )
     if (!bMultiMarked)
         return 0;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    DBG_ASSERT(pMultiSel, "bMultiMarked, but pMultiSel == 0");
+
+    const SCCOLROW nMultiStart = aMultiRange.aStart.Col();
+    const SCCOLROW nMultiEnd = aMultiRange.aEnd.Col();
+    if (nMultiStart == 0 && nMultiEnd == MAXCOL)
+    {
+        // One or more entire rows.
+        pRanges[0] = 0;
+        pRanges[1] = MAXCOL;
+        return 1;
+    }
 
     SCCOLROW nRangeCnt = 0;
-    SCCOLROW nStart = 0;
-    while (nStart<=MAXCOL)
+    SCCOLROW nStart = nMultiStart;
+    while (nStart <= nMultiEnd)
     {
-        while (nStart<MAXCOL && !pMultiSel[nStart].HasMarks())
+        while (nStart < nMultiEnd && !pMultiSel[nStart].HasMarks())
             ++nStart;
         if (pMultiSel[nStart].HasMarks())
         {
             SCCOLROW nEnd = nStart;
-            while (nEnd<MAXCOL && pMultiSel[nEnd].HasMarks())
+            while (nEnd < nMultiEnd && pMultiSel[nEnd].HasMarks())
                 ++nEnd;
             if (!pMultiSel[nEnd].HasMarks())
                 --nEnd;
@@ -450,7 +460,7 @@ SCCOLROW ScMarkData::GetMarkColumnRanges( SCCOLROW* pRanges )
             nStart = nEnd+1;
         }
         else
-            nStart = MAXCOL+1;
+            nStart = nMultiEnd+1;
     }
 
     return nRangeCnt;
@@ -464,37 +474,51 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     if (!bMultiMarked)
         return 0;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    DBG_ASSERT(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
-    //  Welche Zeilen sind markiert?
+    // Which rows are marked?
 
-    BOOL*   bRowMarked = new BOOL[MAXROW+1];
+    // Optimized to not loop over MAXCOL*MAXROW as worst case, i.e. Ctrl+A
+
+    const SCCOLROW nMultiStart = aMultiRange.aStart.Row();
+    const SCCOLROW nMultiEnd = aMultiRange.aEnd.Row();
+
+    BOOL*   bRowMarked = new BOOL[MAXROWCOUNT];
+    memset( bRowMarked, 0, sizeof(BOOL) * MAXROWCOUNT);
     SCROW  nRow;
     SCCOL  nCol;
-    for (nRow=0; nRow<=MAXROW; nRow++)
-        bRowMarked[nRow] = FALSE;
 
-    SCROW nTop, nBottom;
-    for (nCol=0; nCol<=MAXCOL; nCol++)
+    SCROW nTop = -1, nBottom = -1;
+    for (nCol = aMultiRange.aStart.Col(); nCol <= aMultiRange.aEnd.Col(); ++nCol)
     {
         ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
         while (aMarkIter.Next( nTop, nBottom ))
             for (nRow=nTop; nRow<=nBottom; nRow++)
                 bRowMarked[nRow] = TRUE;
+        if (nTop == nMultiStart && nBottom == nMultiEnd)
+            break;  // for, all relevant rows marked
     }
 
-    //  zu Bereichen zusammenfassen
+    if (nTop == nMultiStart && nBottom == nMultiEnd)
+    {
+        pRanges[0] = nTop;
+        pRanges[1] = nBottom;
+        delete[] bRowMarked;
+        return 1;
+    }
+
+    // Combine to ranges of rows.
 
     SCCOLROW nRangeCnt = 0;
-    SCCOLROW nStart = 0;
-    while (nStart<=MAXROW)
+    SCCOLROW nStart = nMultiStart;
+    while (nStart <= nMultiEnd)
     {
-        while (nStart<MAXROW && !bRowMarked[nStart])
+        while (nStart < nMultiEnd && !bRowMarked[nStart])
             ++nStart;
         if (bRowMarked[nStart])
         {
             SCCOLROW nEnd = nStart;
-            while (nEnd<MAXROW && bRowMarked[nEnd])
+            while (nEnd < nMultiEnd && bRowMarked[nEnd])
                 ++nEnd;
             if (!bRowMarked[nEnd])
                 --nEnd;
@@ -504,7 +528,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
             nStart = nEnd+1;
         }
         else
-            nStart = MAXROW+1;
+            nStart = nMultiEnd+1;
     }
 
     delete[] bRowMarked;

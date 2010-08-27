@@ -24,9 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <vbahelper/vbadocumentbase.hxx>
-#include <vbahelper/helperdecl.hxx>
-#include <comphelper/unwrapargs.hxx>
+
+#include "vbahelper/vbadocumentbase.hxx"
+#include "vbahelper/helperdecl.hxx"
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
@@ -35,8 +35,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <ooo/vba/XVBADocService.hpp>
 
+#include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 
@@ -206,39 +206,24 @@ VbaDocumentBase::Activate() throw (uno::RuntimeException)
     xFrame->activate();
 }
 
-// ---- Michael E.Bohn  Start-----
-
 uno::Any SAL_CALL
 VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
-
 {
-    uno::Any aAny;
-    uno::Reference< ::lang::XMultiComponentFactory > xServiceManager = mxContext->getServiceManager();
-    try
-      {
-        uno::Reference < ::uno::XInterface > xInterface =  xServiceManager->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBADocService" )),mxContext);
-        uno::Reference < ::ooo::vba::XVBADocService > xVBADocService (xInterface, ::uno::UNO_QUERY_THROW );
-        if (xVBADocService.is()){
-            uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< document::XEmbeddedScripts > xEnbeddedScripts ( xModel, uno::UNO_QUERY_THROW );
-            uno::Reference< script::XStorageBasedLibraryContainer >  xMacroStorageBasedLibraryContainer =  xEnbeddedScripts->getBasicLibraries();
-            uno::Reference< script::XStorageBasedLibraryContainer >  xDialogStorageBasedLibraryContainer = xEnbeddedScripts->getDialogLibraries();
-            uno::Reference< script::XLibraryContainer > xMacroLibraryContainer ( xMacroStorageBasedLibraryContainer, uno::UNO_QUERY_THROW );
-            uno::Reference< script::XLibraryContainer > xDialogLibraryContainer( xDialogStorageBasedLibraryContainer, uno::UNO_QUERY_THROW );
-
-            return xVBADocService->getVBProject( this, mxContext, xModel, xMacroLibraryContainer, xDialogLibraryContainer );
-          }
-
-        }catch(uno::Exception* e)
-        {
-        }
-    return aAny;
-
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        aArgs[ 1 ] <<= mxModel;
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProject" ) ), aArgs, mxContext );
+        return uno::Any( xVBProjects );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
 }
-
-
-// ---- Michael E.Bohn  End -----
-
 
 rtl::OUString&
 VbaDocumentBase::getServiceImplName()

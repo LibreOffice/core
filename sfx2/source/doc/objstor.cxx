@@ -195,6 +195,13 @@ sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 
 //-------------------------------------------------------------------------
 
+sal_Bool SfxObjectShell::QuerySlotExecutable( USHORT /*nSlotId*/ )
+{
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
+
 sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
 {
     const SfxPoolItem* pItem = NULL;

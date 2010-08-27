@@ -69,7 +69,7 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
                 break;
 
     case 'A':
-#if !defined(WIN) && !defined(WNT)
+#if !defined(WNT)
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
 #endif

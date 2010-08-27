@@ -91,9 +91,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
-#if defined(MAC)
-#define FILTERMASK_ALL "****"
-#elif defined(OW) || defined(MTF)
+#if defined(UNX)
 #define FILTERMASK_ALL "*"
 #elif defined(PM2)
 #define FILTERMASK_ALL ""

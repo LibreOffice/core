@@ -34,7 +34,7 @@ JAVAFLAGSDEBUG=-g
 # SOLAR JAva Unterstuetzung nur fuer wntmsci
 
 ASM=ml
-AFLAGS=/c /Cp /coff
+AFLAGS=/c /Cp /coff /safeseh
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
@@ -82,6 +82,10 @@ COMPILE_ECHO_FILE=
 # lookup":
 # -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800
 CFLAGS+=-Zm500 -Zc:forScope,wchar_t- -GR
+
+# Stack buffer overrun detection.
+CFLAGS+=-GS
+
 CFLAGS+=-c -nologo -Gs $(NOLOGO)
 
 CDEFS+= -D_X86_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
@@ -235,8 +239,17 @@ LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
 LINKFLAGS=/MAP /OPT:NOREF
 .ENDIF
 
+# excetion handling protection
+LINKFLAGS+=-safeseh
+
+# enable DEP
+LINKFLAGS+=-nxcompat
+
+# enable ASLR
+LINKFLAGS+=-dynamicbase
+
 .IF "$(linkinc)" != ""
-LINKFLAGS=-NODEFAULTLIB -INCREMENTAL:YES -DEBUG
+LINKFLAGS+=-NODEFAULTLIB -INCREMENTAL:YES -DEBUG
 MAPFILE=
 _VC_MANIFEST_INC=1
 .ELSE # "$(linkinc)" != ""

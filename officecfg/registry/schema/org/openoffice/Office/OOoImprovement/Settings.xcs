@@ -15,7 +15,7 @@
                 OpenOffice.org Improvement Program. If this is zero the user will get asked.
                 </desc>
         </info>
-        <value>2</value>
+        <value>1</value>
       </prop>
       <prop oor:name="InvitationAccepted" oor:type="xs:boolean">
         <info>

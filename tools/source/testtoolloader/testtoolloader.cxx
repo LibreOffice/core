@@ -56,16 +56,16 @@ static bool bLoggerStarted = false;
 
 sal_uInt32 GetCommandLineParamCount()
 {
-    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
+    vos:: OStartupInfo  aStartInfo;
     return aStartInfo.getCommandArgCount();
 }
 
 String GetCommandLineParam( sal_uInt32 nParam )
 {
-    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
+    vos:: OStartupInfo  aStartInfo;
     ::rtl::OUString aParam;
-    NAMESPACE_VOS( OStartupInfo )::TStartupError eError = aStartInfo.getCommandArg( nParam, aParam );
-    if ( eError == NAMESPACE_VOS( OStartupInfo )::E_None )
+    vos:: OStartupInfo ::TStartupError eError = aStartInfo.getCommandArg( nParam, aParam );
+    if ( eError == vos:: OStartupInfo ::E_None )
         return String( aParam );
     else
     {

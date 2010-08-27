@@ -2576,14 +2576,13 @@ void ScXMLExport::_ExportAutoStyles()
                                 }
                                 sal_Int32 nOld(nRow);
                                 nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow), false);
-                                for (sal_Int32 i = nOld + 1; i < nRow; ++i)
-                                    pRowStyles->AddFieldStyleName(nTable, i, nIndex);
+                                if (nRow > nOld + 1)
+                                    pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
                             }
                             if (aCellAddress.EndRow > nRows)
                             {
                                 sal_Int32 nIndex(pRowStyles->GetStyleNameIndex(nTable, nRows));
-                                for (sal_Int32 i = nRows + 1; i <= aCellAddress.EndRow; ++i)
-                                    pRowStyles->AddFieldStyleName(nTable, i, nIndex);
+                                pRowStyles->AddFieldStyleName(nTable, nRows + 1, nIndex, aCellAddress.EndRow);
                             }
                         }
                     }
@@ -4341,7 +4340,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
 
             uno::Reference <container::XNameAccess> xCodeNameAccess;
             DBG_ASSERT( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
-            if( pDoc )
+            if( pDoc && pDoc->IsInVBAMode() )
             {
                 xCodeNameAccess = new XMLCodeNameProvider( pDoc );
                 if( xCodeNameAccess.is() && xCodeNameAccess->hasElements() )

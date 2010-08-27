@@ -555,7 +555,7 @@ BOOL install (
     String aModule ("module://");
     char   pBuffer[1024];
 
-    NAMESPACE_VOS(ORealDynamicLoader)::computeModuleName (
+    vos::ORealDynamicLoader::computeModuleName (
         prefix, pBuffer, sizeof(pBuffer));
     aModule += pBuffer;
 
@@ -573,7 +573,7 @@ BOOL uninstall (
     String aModule ("module://");
     char   pBuffer[1024];
 
-    NAMESPACE_VOS(ORealDynamicLoader)::computeModuleName (
+    vos::ORealDynamicLoader::computeModuleName (
         prefix, pBuffer, sizeof(pBuffer));
     aModule += pBuffer;
 

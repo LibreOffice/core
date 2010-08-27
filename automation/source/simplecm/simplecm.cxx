@@ -136,7 +136,7 @@ void CommunicationLink::SetApplication( const ByteString& aApp )
 }
 
 
-SimpleCommunicationLinkViaSocket::SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket )
+SimpleCommunicationLinkViaSocket::SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket )
 : CommunicationLink( pMan )
 , aCommunicationPartner()
 , aMyName()
@@ -158,7 +158,7 @@ SimpleCommunicationLinkViaSocket::~SimpleCommunicationLinkViaSocket()
     pStreamSocket = NULL;
 }
 
-void SimpleCommunicationLinkViaSocket::SetStreamSocket( NAMESPACE_VOS(OStreamSocket)* pSocket )
+void SimpleCommunicationLinkViaSocket::SetStreamSocket( vos::OStreamSocket* pSocket )
 {
     if ( pTCPIO )
         pTCPIO->SetStreamSocket( pSocket );
@@ -202,9 +202,9 @@ ByteString SimpleCommunicationLinkViaSocket::GetCommunicationPartner( CM_NameTyp
             case CM_DOTTED:
                 {
                     rtl::OUString aDotted;
-                    NAMESPACE_VOS(OSocketAddr) *pPeerAdr = new NAMESPACE_VOS(OSocketAddr);
+                    vos::OSocketAddr *pPeerAdr = new vos::OSocketAddr;
                     pStreamSocket->getPeerAddr( *pPeerAdr );
-                    ((NAMESPACE_VOS(OInetSocketAddr*))pPeerAdr)->getDottedAddr( aDotted );
+                    ((vos::OInetSocketAddr*)pPeerAdr)->getDottedAddr( aDotted );
                     delete pPeerAdr;
                     return ByteString( UniString(aDotted), RTL_TEXTENCODING_UTF8 );
                 }
@@ -234,9 +234,9 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
             case CM_DOTTED:
                 {
                     rtl::OUString aDotted;
-                    NAMESPACE_VOS(OSocketAddr) *pPeerAdr = new NAMESPACE_VOS(OSocketAddr);
+                    vos::OSocketAddr *pPeerAdr = new vos::OSocketAddr;
                     pStreamSocket->getLocalAddr( *pPeerAdr );
-                    ((NAMESPACE_VOS(OInetSocketAddr*))pPeerAdr)->getDottedAddr( aDotted );
+                    ((vos::OInetSocketAddr*)pPeerAdr)->getDottedAddr( aDotted );
                     delete pPeerAdr;
                     return ByteString( UniString(aDotted), RTL_TEXTENCODING_UTF8 );
                 }
@@ -352,7 +352,7 @@ BOOL SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandshakeTy
     return !bWasError;
 }
 
-SimpleCommunicationLinkViaSocketWithReceiveCallbacks::SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket )
+SimpleCommunicationLinkViaSocketWithReceiveCallbacks::SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, vos::OStreamSocket *pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
 {
 }
@@ -396,7 +396,7 @@ BOOL SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ShutdownCommunication
     if ( GetStreamSocket() )
         GetStreamSocket()->close();
 
-    NAMESPACE_VOS(OStreamSocket) *pTempSocket = GetStreamSocket();
+    vos::OStreamSocket *pTempSocket = GetStreamSocket();
     SetStreamSocket( NULL );
     delete pTempSocket;
 
@@ -437,7 +437,7 @@ BOOL CommunicationManager::StartCommunication( ByteString aHost, ULONG nPort )
 ByteString CommunicationManager::GetMyName( CM_NameType )
 {
     rtl::OUString aHostname;
-    NAMESPACE_VOS(OSocketAddr)::getLocalHostname( aHostname );
+    vos::OSocketAddr::getLocalHostname( aHostname );
     return ByteString( UniString(aHostname), RTL_TEXTENCODING_UTF8 );
 }
 
@@ -672,8 +672,8 @@ SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSo
 
 BOOL CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, ULONG nPort )
 {
-    NAMESPACE_VOS(OInetSocketAddr) Addr;
-    NAMESPACE_VOS(OConnectorSocket) *pConnSocket;
+    vos::OInetSocketAddr Addr;
+    vos::OConnectorSocket *pConnSocket;
 
     Addr.setAddr( rtl::OUString( UniString( aHost, RTL_TEXTENCODING_UTF8 ) ) );
     Addr.setPort( nPort );
@@ -683,9 +683,9 @@ BOOL CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICo
     aTV.Nanosec = 0;
     do
     {
-        pConnSocket = new NAMESPACE_VOS(OConnectorSocket)();
+        pConnSocket = new vos::OConnectorSocket();
         pConnSocket->setTcpNoDelay( 1 );
-        if ( pConnSocket->connect( Addr, &aTV ) == NAMESPACE_VOS(ISocketTypes::TResult_Ok) )
+        if ( pConnSocket->connect( Addr, &aTV ) == vos::ISocketTypes::TResult_Ok )
         {
             pConnSocket->setTcpNoDelay( 1 );
 

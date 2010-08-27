@@ -316,6 +316,11 @@ sub set_important_properties
     {
         my $onepropertyline = "OFFICEDIRHOSTNAME" . "\t" . $installer::globals::officedirhostname . "\n";
         push(@{$propertyfile}, $onepropertyline);
+
+        my $localofficedirhostname = $installer::globals::officedirhostname;
+        $localofficedirhostname =~ s/\//\\/g;
+        $onepropertyline = "OFFICEDIRHOSTNAME_" . "\t" . $localofficedirhostname . "\n";
+        push(@{$propertyfile}, $onepropertyline);
     }
 
     if ( $installer::globals::sundirhostname )

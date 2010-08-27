@@ -48,6 +48,8 @@
         <value>0</value>
       </prop>
     </node>
+
+    <!-- only used for symbols with the 'Greek' symbol set name -->
     <node oor:name="Id2" oor:op="replace">
       <prop oor:name="Name">
         <value>OpenSymbol</value>
@@ -65,10 +67,11 @@
         <value>0</value>
       </prop>
       <prop oor:name="Italic">
-        <value>2</value>
+        <value>0</value>
       </prop>
     </node>
   </node>
+
   <node oor:name="SymbolList">
     <node oor:name="alpha" oor:op="replace">
       <prop oor:name="Char">

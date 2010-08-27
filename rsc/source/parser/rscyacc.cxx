@@ -253,11 +253,7 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #ifdef UNX
 #define YYMAXDEPTH              2000
 #else
-#ifdef W30
-#define YYMAXDEPTH              300
-#else
 #define YYMAXDEPTH              800
-#endif
 #endif
 
 #if defined _MSC_VER

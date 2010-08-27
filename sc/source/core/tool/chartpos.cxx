@@ -175,25 +175,9 @@ void ScChartPositioner::GlueState()
     const BYTE nOccu = 1;
     const BYTE nFree = 2;
     const BYTE nGlue = 3;
-#ifdef WIN
-    // we hate 16bit, don't we?
-    BYTE huge* p;
-    BYTE huge* pA = (BYTE huge*) SvMemAlloc( nCR );
-    if ( nCR > (ULONG)((USHORT)~0) )
-    {   // in 32k Bloecken initialisieren
-        ULONG j;
-        for ( j=0; j<nCR; j+=0x8000 )
-        {
-            memset( pA+j, nHole, Min( (ULONG)0x8000, nCR-j ) );
-        }
-    }
-    else
-        memset( pA, nHole, nCR * sizeof(BYTE) );
-#else
     BYTE* p;
     BYTE* pA = new BYTE[ nCR ];
     memset( pA, 0, nCR * sizeof(BYTE) );
-#endif
 
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
@@ -285,11 +269,7 @@ void ScChartPositioner::GlueState()
         eGlue = SC_CHARTGLUE_NONE;
     }
 
-#ifdef WIN
-    SvMemFree( pA );
-#else
     delete [] pA;
-#endif
 }
 
 void ScChartPositioner::CheckColRowHeaders()
@@ -524,9 +504,6 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         nRowCount( nChartRows )
 {
     DBG_ASSERT( nColCount && nRowCount, "ScChartPositionMap without dimension" );
-#ifdef WIN
-#error ScChartPositionMap not implemented for 16-bit dumdums
-#endif
 
     ScAddress* pPos;
     SCCOL nCol;

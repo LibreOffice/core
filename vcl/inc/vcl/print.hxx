@@ -521,6 +521,7 @@ public:
     SAL_DLLPRIVATE void setPrinter( const boost::shared_ptr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
     SAL_DLLPRIVATE void createProgressDialog();
+    SAL_DLLPRIVATE bool isProgressCanceled() const;
     SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
     SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
     SAL_DLLPRIVATE void setLastPage( sal_Bool i_bLastPage );

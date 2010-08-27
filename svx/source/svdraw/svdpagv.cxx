@@ -580,10 +580,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         rOut.SetLineColor( aColor );
 
         bool bMap0=rOut.IsMapModeEnabled();
-#ifdef WIN // SetPixel-Profiling fuer Windows
-       COLORREF aWinColRef=PALETTERGB(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
-       HDC aWinhDC=Sysdepen::GethDC(rOut);
-#endif
 
         long nWrX=0;//aWriterPageOffset.X();
         long nWrY=0;//aWriterPageOffset.Y();

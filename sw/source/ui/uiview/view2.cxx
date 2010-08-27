@@ -913,7 +913,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GetViewFrame()->GetBindings().Invalidate( nSlot );
         }
         break;
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
         case SID_TWAIN_SELECT:
         case SID_TWAIN_TRANSFER:
             GetViewImpl()->ExecuteScan( rReq );

@@ -48,7 +48,6 @@ class OOXMLValue : public Value
 {
 public:
     typedef boost::shared_ptr<OOXMLValue> Pointer_t;
-    OOXMLValue(const rtl::OUString & rValue);
     OOXMLValue();
     virtual ~OOXMLValue();
 
@@ -220,14 +219,6 @@ public:
     virtual int getInt() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
-};
-
-class OOXMLListValue : public OOXMLIntegerValue
-{
-public:
-    OOXMLListValue();
-    OOXMLListValue(sal_Int32 nValue);
-    virtual ~OOXMLListValue();
 };
 
 class OOXMLShapeValue : public OOXMLValue

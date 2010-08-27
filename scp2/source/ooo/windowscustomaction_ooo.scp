@@ -199,6 +199,25 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll7
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
 End
 
+WindowsCustomAction gid_Customaction_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+End
+
+WindowsCustomAction gid_Customaction_Remove_Extensions
+	Name = "RemoveExtensions";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RemoveExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "FileCost");
+End
+
 WindowsCustomAction gid_Customaction_Set_Admininstall
 	Name = "SetAdminInstallProperty";
 	Typ = "65";
@@ -285,6 +304,16 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "end");
+	Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetFeatureState
@@ -399,6 +428,16 @@ WindowsCustomAction gid_Customaction_MigrateInstallPath
       Inbinarytable = 1;
       Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
       Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+End
+
+WindowsCustomAction gid_Customaction_CompleteInstallPath
+      Name = "CompleteInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "CompleteInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
 End
 
 WindowsCustomAction gid_Customaction_CheckVersions

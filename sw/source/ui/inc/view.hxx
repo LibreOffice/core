@@ -452,7 +452,7 @@ public:
     inline       SwEditWin &GetEditWin()        { return *pEditWin; }
     inline const SwEditWin &GetEditWin () const { return *pEditWin; }
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     void ScannerEventHdl( const ::com::sun::star::lang::EventObject& rEventObject );
 #endif
 

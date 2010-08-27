@@ -36,8 +36,8 @@
 #include "document.hxx"
 #include "xestream.hxx"
 #include "xistream.hxx"
-#include "xltools.hxx"
 #include "xlroot.hxx"
+#include "xltools.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;

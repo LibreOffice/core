@@ -667,7 +667,7 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariablesDDEFieldManual
-    warnlog "#i112079#testcase must be reworked"
+    qaerrorlog "#i112079#testcase must be reworked"
     goto endsub
 
     Dim sDDEFile        as String
@@ -759,7 +759,7 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariablesDDEFieldAutomatic
-    warnlog "#i112079#testcase must be reworked"
+    qaerrorlog "#i112079#testcase must be reworked"
     goto endsub
 
     qaerrorlog "#i102792# - tVariablesDDEFieldAutomatic outcommented. Fields not updated."

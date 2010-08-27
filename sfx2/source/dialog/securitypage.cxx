@@ -245,6 +245,36 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     m_aRecordChangesCB.SetStyle( m_aRecordChangesCB.GetStyle() | WB_EARLYTOGGLE );
     m_aRecordChangesCB.SetToggleHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl ) );
     m_aChangeProtectionPB.SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
+
+
+    // #i112277: for the time being (OOO 3.3) the following options should not
+    // be available. In the long run however it is planned to implement the yet
+    // missing functionality. Thus now we hide them and move the remaining ones up.
+    m_aNewPasswordToOpenFL.Hide();
+    m_aNewPasswordToOpenFT.Hide();
+    m_aNewPasswordToOpenED.Hide();
+    m_aConfirmPasswordToOpenFT.Hide();
+    m_aConfirmPasswordToOpenED.Hide();
+    m_aNewPasswordInfoFT.Hide();
+    m_aNewPasswordToModifyFL.Hide();
+    m_aNewPasswordToModifyFT.Hide();
+    m_aNewPasswordToModifyED.Hide();
+    m_aConfirmPasswordToModifyFT.Hide();
+    m_aConfirmPasswordToModifyED.Hide();
+    const long nDelta = m_aOptionsFL.GetPosPixel().Y() - m_aNewPasswordToOpenFL.GetPosPixel().Y();
+    Point aPos;
+    aPos = m_aOptionsFL.GetPosPixel();
+    aPos.Y() -= nDelta;
+    m_aOptionsFL.SetPosPixel( aPos );
+    aPos = m_aOpenReadonlyCB.GetPosPixel();
+    aPos.Y() -= nDelta;
+    m_aOpenReadonlyCB.SetPosPixel( aPos );
+    aPos = m_aRecordChangesCB.GetPosPixel();
+    aPos.Y() -= nDelta;
+    m_aRecordChangesCB.SetPosPixel( aPos );
+    aPos = m_aChangeProtectionPB.GetPosPixel();
+    aPos.Y() -= nDelta;
+    m_aChangeProtectionPB.SetPosPixel( aPos );
 }
 
 

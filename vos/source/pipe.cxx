@@ -138,7 +138,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName, TPipeOption Options )
 /*****************************************************************************/
 sal_Bool OPipe::create( const rtl::OUString& strName,
                         TPipeOption Options,
-                        const NAMESPACE_VOS(OSecurity)& rSecurity )
+                        const vos::OSecurity& rSecurity )
 {
     // if this was a valid pipe, decrease reference
     if ((m_pPipeRef) && (m_pPipeRef->release() == 0))

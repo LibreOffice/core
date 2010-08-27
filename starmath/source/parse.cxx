@@ -741,14 +741,14 @@ void SmParser::NextToken()
                         CurToken.nLevel     = 5;
                         CurToken.aText      = String();
                         CurToken.nRow       = sal::static_int_cast< xub_StrLen >(Row);
-                        CurToken.nCol       = nTmpStart - ColOff + 1;
+                        CurToken.nCol       = nTmpStart - ColOff;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
 
                             xub_StrLen n = sal::static_int_cast< xub_StrLen >(aTmpRes.EndPos - nTmpStart);
                             CurToken.eType      = TSPECIAL;
-                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart), n );
+                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart-1), n+1 );
 
                             DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );

@@ -41,7 +41,7 @@
 
 class OTimerManagerCleanup;
 
-class NAMESPACE_VOS(OTimerManager) : public NAMESPACE_VOS(OThread)
+class vos::OTimerManager : public vos::OThread
 {
 
 public:
@@ -53,13 +53,13 @@ public:
       ~OTimerManager();
 
       /// register timer
-    sal_Bool SAL_CALL registerTimer(NAMESPACE_VOS(OTimer)* pTimer);
+    sal_Bool SAL_CALL registerTimer(vos::OTimer* pTimer);
 
       /// unregister timer
-    sal_Bool SAL_CALL unregisterTimer(NAMESPACE_VOS(OTimer)* pTimer);
+    sal_Bool SAL_CALL unregisterTimer(vos::OTimer* pTimer);
 
       /// lookup timer
-    sal_Bool SAL_CALL lookupTimer(const NAMESPACE_VOS(OTimer)* pTimer);
+    sal_Bool SAL_CALL lookupTimer(const vos::OTimer* pTimer);
 
     /// retrieves the "Singleton" TimerManager Instance
     static OTimerManager* SAL_CALL getTimerManager();
@@ -77,17 +77,17 @@ protected:
     virtual void SAL_CALL onTerminated();
 
       // sorted-queue data
-      NAMESPACE_VOS(OTimer)*        m_pHead;
+      vos::OTimer*      m_pHead;
     // List Protection
-    NAMESPACE_VOS(OMutex)       m_Lock;
+    vos::OMutex     m_Lock;
     // Signal the insertion of a timer
-    NAMESPACE_VOS(OCondition)   m_notEmpty;
+    vos::OCondition m_notEmpty;
 
     // Synchronize access to OTimerManager
-    static NAMESPACE_VOS(OMutex) m_Access;
+    static vos::OMutex m_Access;
 
     // "Singleton Pattern"
-    static NAMESPACE_VOS(OTimerManager)* m_pManager;
+    static vos::OTimerManager* m_pManager;
 
     friend class OTimerManagerCleanup;
 
@@ -267,8 +267,8 @@ TTimeValue OTimer::getRemainingTime() const
 // Timer manager
 //
 
-OMutex NAMESPACE_VOS(OTimerManager)::m_Access;
-OTimerManager* NAMESPACE_VOS(OTimerManager)::m_pManager=0;
+OMutex vos::OTimerManager::m_Access;
+OTimerManager* vos::OTimerManager::m_pManager=0;
 
 OTimerManager::OTimerManager()
 {

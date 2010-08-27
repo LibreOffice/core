@@ -62,6 +62,14 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility {
 
 
+/** Inner implementation class of the AccessibleSlideSorterView.
+
+    Note that some event broadcasting is done asynchronously because
+    otherwise it could lead to deadlocks on (at least) some Solaris
+    machines.  Probably (but unverified) this can happen on all GTK based
+    systems.  The asynchronous broadcasting is just a workaround for a
+    poorly understood problem.
+*/
 class AccessibleSlideSorterView::Implementation
     : public SfxListener
 {
@@ -72,7 +80,7 @@ public:
         ::Window* pWindow);
     ~Implementation (void);
 
-    void UpdateChildren (void);
+    void RequestUpdateChildren (void);
     void Clear (void);
     sal_Int32 GetVisibleChildCount (void) const;
     AccessibleSlideSorterObject* GetAccessibleChild (sal_Int32 nIndex);
@@ -83,8 +91,9 @@ public:
     void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
     DECL_LINK(WindowEventListener, VclWindowEvent*);
     DECL_LINK(SelectionChangeListener, void*);
+    DECL_LINK(BroadcastSelectionChange, void*);
     DECL_LINK(FocusChangeListener, void*);
-    DECL_LINK(VisibilityChangeListener, void*);
+    DECL_LINK(UpdateChildrenCallback, void*);
 
 private:
     AccessibleSlideSorterView& mrAccessibleSlideSorter;
@@ -97,6 +106,10 @@ private:
     ::Window* mpWindow;
     sal_Int32 mnFocusedIndex;
     bool mbModelChangeLocked;
+    ULONG mnUpdateChildrenUserEventId;
+    ULONG mnSelectionChangeUserEventId;
+
+    void UpdateChildren (void);
 };
 
 
@@ -115,7 +128,6 @@ AccessibleSlideSorterView::AccessibleSlideSorterView(
       mnClientId(0),
       mpContentWindow(pContentWindow)
 {
-    OSL_TRACE("creating AccessibleSlideSorterView");
 }
 
 
@@ -771,6 +783,9 @@ sal_Bool AccessibleSlideSorterView::IsDisposed (void)
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
+
+
+
 //===== AccessibleSlideSorterView::Implementation =============================
 
 AccessibleSlideSorterView::Implementation::Implementation (
@@ -785,7 +800,9 @@ AccessibleSlideSorterView::Implementation::Implementation (
       mbListeningToDocument(false),
       mpWindow(pWindow),
       mnFocusedIndex(-1),
-      mbModelChangeLocked(false)
+      mbModelChangeLocked(false),
+      mnUpdateChildrenUserEventId(0),
+      mnSelectionChangeUserEventId(0)
 {
     ConnectListeners();
     UpdateChildren();
@@ -796,8 +813,23 @@ AccessibleSlideSorterView::Implementation::Implementation (
 
 AccessibleSlideSorterView::Implementation::~Implementation (void)
 {
+    if (mnUpdateChildrenUserEventId != 0)
+        Application::RemoveUserEvent(mnUpdateChildrenUserEventId);
+    if (mnSelectionChangeUserEventId != 0)
+        Application::RemoveUserEvent(mnSelectionChangeUserEventId);
     ReleaseListeners();
     Clear();
+}
+
+
+
+
+void AccessibleSlideSorterView::Implementation::RequestUpdateChildren (void)
+{
+    if (mnUpdateChildrenUserEventId == 0)
+        mnUpdateChildrenUserEventId = Application::PostUserEvent(
+            LINK(this, AccessibleSlideSorterView::Implementation,
+            UpdateChildrenCallback));
 }
 
 
@@ -812,10 +844,9 @@ void AccessibleSlideSorterView::Implementation::UpdateChildren (void)
         return;
     }
 
-    ::sd::slidesorter::view::SlideSorterView::PageRange aRange (
-        mrSlideSorter.GetView().GetVisiblePageRange());
-    mnFirstVisibleChild = aRange.first;
-    mnLastVisibleChild = aRange.second;
+    const Pair aRange (mrSlideSorter.GetView().GetVisiblePageRange());
+    mnFirstVisibleChild = aRange.A();
+    mnLastVisibleChild = aRange.B();
 
     // Release all children.
     Clear();
@@ -854,7 +885,7 @@ void AccessibleSlideSorterView::Implementation::Clear (void)
 
 sal_Int32 AccessibleSlideSorterView::Implementation::GetVisibleChildCount (void) const
 {
-    if (mnFirstVisibleChild <= mnLastVisibleChild)
+    if (mnFirstVisibleChild<=mnLastVisibleChild && mnFirstVisibleChild>=0)
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     else
         return 0;
@@ -929,7 +960,7 @@ void AccessibleSlideSorterView::Implementation::ConnectListeners (void)
     mrSlideSorter.GetController().GetFocusManager().AddFocusChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,FocusChangeListener));
     mrSlideSorter.GetView().AddVisibilityChangeListener(
-        LINK(this,AccessibleSlideSorterView::Implementation,VisibilityChangeListener));
+        LINK(this,AccessibleSlideSorterView::Implementation,UpdateChildrenCallback));
 }
 
 
@@ -942,7 +973,7 @@ void AccessibleSlideSorterView::Implementation::ReleaseListeners (void)
     mrSlideSorter.GetController().GetSelectionManager()->RemoveSelectionChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,SelectionChangeListener));
     mrSlideSorter.GetView().RemoveVisibilityChangeListener(
-        LINK(this,AccessibleSlideSorterView::Implementation,VisibilityChangeListener));
+        LINK(this,AccessibleSlideSorterView::Implementation,UpdateChildrenCallback));
 
     if (mpWindow != NULL)
         mpWindow->RemoveEventListener(
@@ -970,7 +1001,7 @@ void AccessibleSlideSorterView::Implementation::Notify (
         switch (rSdrHint.GetKind())
         {
             case HINT_PAGEORDERCHG:
-                UpdateChildren();
+                RequestUpdateChildren();
                 break;
             default:
                 break;
@@ -987,7 +1018,7 @@ void AccessibleSlideSorterView::Implementation::Notify (
 
             case sd::ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
                 mbModelChangeLocked = false;
-                UpdateChildren();
+                RequestUpdateChildren();
                 break;
             default:
                 break;
@@ -1004,7 +1035,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
     {
         case VCLEVENT_WINDOW_MOVE:
         case VCLEVENT_WINDOW_RESIZE:
-            UpdateChildren();
+            RequestUpdateChildren();
             break;
 
         case VCLEVENT_WINDOW_GETFOCUS:
@@ -1025,6 +1056,18 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
 
 IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, void*, EMPTYARG )
 {
+    if (mnSelectionChangeUserEventId == 0)
+        mnSelectionChangeUserEventId = Application::PostUserEvent(
+            LINK(this, AccessibleSlideSorterView::Implementation, BroadcastSelectionChange));
+    return 1;
+}
+
+
+
+
+IMPL_LINK(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange, void*, EMPTYARG )
+{
+    mnSelectionChangeUserEventId = 0;
     mrAccessibleSlideSorter.FireAccessibleEvent(
         AccessibleEventId::SELECTION_CHANGED,
         Any(),
@@ -1068,8 +1111,9 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, FocusChangeListener, void*,
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, VisibilityChangeListener, void*, EMPTYARG )
+IMPL_LINK(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback, void*, EMPTYARG )
 {
+    mnUpdateChildrenUserEventId = 0;
     UpdateChildren();
 
     return 1;

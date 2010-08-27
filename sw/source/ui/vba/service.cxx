@@ -52,6 +52,11 @@ namespace wrapformat
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
+namespace vbaeventshelper
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
+
 extern "C"
 {
     void SAL_CALL component_getImplementationEnvironment(
@@ -68,7 +73,7 @@ extern "C"
 
     // Component registration
         return component_writeInfoHelper( pServiceManager, pRegistryKey,
-        globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl  );
+        globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
     }
 
     void * SAL_CALL component_getFactory(
@@ -77,7 +82,7 @@ extern "C"
     {
         OSL_TRACE("In component_getFactory for %s", pImplName );
     void* pRet =  component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl );
+            pImplName, pServiceManager, pRegistryKey, globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
     OSL_TRACE("Ret is 0x%x", pRet);
     return pRet;
     }

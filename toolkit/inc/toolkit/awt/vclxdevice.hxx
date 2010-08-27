@@ -58,7 +58,7 @@ class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
     friend class VCLXGraphics;
 
 private:
-    NAMESPACE_VOS(IMutex)&  mrMutex;    // Reference to SolarMutex
+    vos::IMutex&    mrMutex;    // Reference to SolarMutex
     OutputDevice*           mpOutputDevice;
 
 public:
@@ -66,7 +66,7 @@ public:
     sal_uInt32              nFlags;
 
 protected:
-    NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
+    vos::IMutex&    GetMutex() { return mrMutex; }
     void                    DestroyOutputDevice();
 
 public:

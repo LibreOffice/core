@@ -171,10 +171,8 @@ FASTBOOL SdrCircObj::PaintNeedsXPolyCirc() const
     // und wenn nicht WIN dann (erstmal) auch fuer Kreis-/Ellipsenausschnitte
     // und Kreis-/Ellipsenboegen (wg. Genauigkeit)
     FASTBOOL bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
-#ifndef WIN
     // Wenn nicht Win, dann fuer alle ausser Vollkreis (erstmal!!!)
     if (meCircleKind!=OBJ_CIRC) bNeed=TRUE;
-#endif
 
     const SfxItemSet& rSet = GetObjectItemSet();
     if(!bNeed)

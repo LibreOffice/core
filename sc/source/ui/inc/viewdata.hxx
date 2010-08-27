@@ -482,6 +482,24 @@ public:
     BOOL            IsSelCtrlMouseClick() { return bSelCtrlMouseClick; }
 
     static inline long ToPixel( USHORT nTwips, double nFactor );
+
+    /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
+        heights converted with nPPTY to rScrY, optimized for row height
+        segments. Upon return rPosY is the last row evaluated <= nEndRow, rScrY
+        may be > nEndPixels!
+     */
+    static void     AddPixelsWhile( long & rScrY, long nEndPixels,
+                                    SCROW & rPosY, SCROW nEndRow, double nPPTY,
+                                    const ScDocument * pDoc, SCTAB nTabNo );
+
+    /** while (rScrY <= nEndPixels && rPosY >= nStartRow) add pixels of row
+        heights converted with nPPTY to rScrY, optimized for row height
+        segments. Upon return rPosY is the last row evaluated >= nStartRow,
+        rScrY may be > nEndPixels!
+     */
+    static void     AddPixelsWhileBackward( long & rScrY, long nEndPixels,
+                                    SCROW & rPosY, SCROW nStartRow, double nPPTY,
+                                    const ScDocument * pDoc, SCTAB nTabNo );
 };
 
 

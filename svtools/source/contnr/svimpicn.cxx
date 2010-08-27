@@ -1702,11 +1702,6 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
     Point aPos( 0, nRealHeight );
     aPos.Y() -= nHorSBarHeight;
 
-#ifdef WIN
-    // vom linken und unteren Rand ein Pixel abschneiden
-    aPos.Y()++;
-    aPos.X()--;
-#endif
 #ifdef OS2
     aPos.Y()++;
 #endif
@@ -1717,7 +1712,7 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
     aPos.X() = nRealWidth; aPos.Y() = 0;
     aPos.X() -= nVerSBarWidth;
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     aPos.X()++;
     aPos.Y()--;
 #endif
@@ -1809,7 +1804,7 @@ void SvImpIconView::AdjustScrollBars()
     // size ver scrollbar
     long nThumb = aVerSBar.GetThumbPos();
     Size aSize( nVerSBarWidth, nRealHeight );
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     aSize.Height() += 2;
 #endif
 #ifdef OS2
@@ -1834,7 +1829,7 @@ void SvImpIconView::AdjustScrollBars()
     nThumb = aHorSBar.GetThumbPos();
     aSize.Width() = nRealWidth;
     aSize.Height() = nHorSBarHeight;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     aSize.Width()++;
 #endif
 #ifdef OS2
@@ -1842,7 +1837,7 @@ void SvImpIconView::AdjustScrollBars()
     if( nResult & 0x0001 ) // vertikale Scrollbar ?
         aSize.Width()--;
 #endif
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if( nResult & 0x0001 ) // vertikale Scrollbar ?
     {
         aSize.Width()++;
@@ -1868,7 +1863,7 @@ void SvImpIconView::AdjustScrollBars()
     nRealWidth++;
 #endif
     aOutputSize.Width() = nRealWidth;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if( nResult & 0x0002 ) // hor scrollbar ?
         nRealHeight++; // weil unterer Rand geclippt wird
 #endif
