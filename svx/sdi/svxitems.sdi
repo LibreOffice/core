@@ -1,0 +1,698 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//-------------------------------------------------------------------------
+enum SvxCellHorJustifyEnum
+{
+    SVX_HOR_JUSTIFY_STANDARD,
+    SVX_HOR_JUSTIFY_LEFT,
+    SVX_HOR_JUSTIFY_CENTER,
+    SVX_HOR_JUSTIFY_RIGHT,
+    SVX_HOR_JUSTIFY_BLOCK,
+    SVX_HOR_JUSTIFY_REPEAT
+};
+item SvxCellHorJustifyEnum SvxCellHorJustifyEnumItem;
+
+enum SvxCellVerJustifyEnum
+{
+    SVX_VER_JUSTIFY_STANDARD,
+    SVX_VER_JUSTIFY_TOP,
+    SVX_VER_JUSTIFY_CENTER,
+    SVX_VER_JUSTIFY_BOTTOM
+};
+item SvxCellVerJustifyEnum SvxCellVerJustifyEnumItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxCellOrientationEnum
+{
+    SVX_ORIENTATION_STANDARD,
+    SVX_ORIENTATION_TOPBOTTOM,
+    SVX_ORIENTATION_BOTTOMTOP,
+    SVX_ORIENTATION_STACKED
+};
+item SvxCellOrientationEnum SvxCellOrientationEnumItem;
+
+enum SvxChooseControlEnum
+{
+    SVX_SNAP_PUSHBUTTON,
+    SVX_SNAP_CHECKBOX,
+    SVX_SNAP_RADIOBUTTON,
+    SVX_SNAP_SPINBUTTON,
+    SVX_SNAP_FIXEDTEXT,
+    SVX_SNAP_GROUPBOX,
+    SVX_SNAP_LISTBOX,
+    SVX_SNAP_COMBOBOX,
+    SVX_SNAP_EDIT,
+    SVX_SNAP_HSCROLLBAR,
+    SVX_SNAP_VSCROLLBAR,
+    SVX_SNAP_PREVIEW,
+    SVX_SNAP_SELECT,
+    SVX_SNAP_URLBUTTON,
+    SVX_SNAP_IMAGECONTROL,
+    SVX_SNAP_PROGRESSBAR,
+    SVX_SNAP_HFIXEDLINE,
+    SVX_SNAP_VFIXEDLINE,
+    SVX_SNAP_DATEFIELD,
+    SVX_SNAP_TIMEFIELD,
+    SVX_SNAP_NUMERICFIELD,
+    SVX_SNAP_CURRENCYFIELD,
+    SVX_SNAP_FORMATTEDFIELD,
+    SVX_SNAP_PATTERNFIELD,
+    SVX_SNAP_FILECONTROL,
+    SVX_SNAP_TREECONTROL
+}
+item SvxChooseControlEnum SvxChooseControlItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxDrawToolEnum
+{
+    SVX_SNAP_DRAW_SELECT,
+    //
+    SVX_SNAP_DRAW_LINE,
+    SVX_SNAP_DRAW_RECT,
+    SVX_SNAP_DRAW_ELLIPSE,
+    SVX_SNAP_DRAW_POLYGON_NOFILL,
+    SVX_SNAP_DRAW_BEZIER_NOFILL,
+    SVX_SNAP_DRAW_FREELINE_NOFILL,
+    SVX_SNAP_DRAW_ARC,
+    SVX_SNAP_DRAW_PIE,
+    SVX_SNAP_DRAW_CIRCLECUT,
+    SVX_SNAP_DRAW_TEXT,
+    SVX_SNAP_DRAW_TEXT_VERTICAL,
+    SVX_SNAP_DRAW_TEXT_MARQUEE,
+    SVX_SNAP_DRAW_CAPTION,
+    SVX_SNAP_DRAW_CAPTION_VERTICAL
+}
+item SvxDrawToolEnum SvxDrawToolEnumItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxDrawAlignEnum
+{
+    SVX_OBJECT_ALIGN_LEFT,
+    SVX_OBJECT_ALIGN_CENTER,
+    SVX_OBJECT_ALIGN_RIGHT,
+    SVX_OBJECT_ALIGN_UP,
+    SVX_OBJECT_ALIGN_MIDDLE,
+    SVX_OBJECT_ALIGN_DOWN
+}
+item SvxDrawAlignEnum SvxDrawAlignEnumItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxDrawBezierEnum
+{
+    SVX_BEZIER_MOVE,
+    SVX_BEZIER_INSERT,
+    SVX_BEZIER_DELETE,
+    SVX_BEZIER_CUTLINE,
+    SVX_BEZIER_CONVERT,
+    SVX_BEZIER_EDGE,
+    SVX_BEZIER_SMOOTH,
+    SVX_BEZIER_SYMMTR,
+    SVX_BEZIER_CLOSE,
+    SVX_BEZIER_ELIMINATE_POINTS
+}
+item SvxDrawBezierEnum SvxDrawBezierEnumItem;
+
+enum SvxAdjust
+{
+    SVX_ADJUST_LEFT,
+    SVX_ADJUST_RIGHT,
+    SVX_ADJUST_BLOCK,
+    SVX_ADJUST_CENTER,
+    SVX_ADJUST_BLOCKLINE,
+    SVX_ADJUST_END
+};
+
+struct SvxAdjustStruct
+{
+    SvxAdjust   ParagraphAdjustment MID_PARA_ADJUST;
+    SvxAdjust   LastLineAdjustment  MID_LAST_LINE_ADJUST;
+    BOOL        ExpandSingleWord    MID_EXPAND_SINGLE;
+};
+item SvxAdjustStruct SvxAdjustItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxCaseMap
+{
+    SVX_CASEMAP_NOT_MAPPED,
+    SVX_CASEMAP_VERSALIEN,
+    SVX_CASEMAP_GEMEINE,
+    SVX_CASEMAP_TITEL,
+    SVX_CASEMAP_KAPITAELCHEN,
+    SVX_CASEMAP_END
+};
+item SvxCaseMap SvxCaseMapItem;
+
+//-------------------------------------------------------------------------
+
+enum CharSet
+{
+    CHARSET_DONTKNOW,
+    CHARSET_ANSI,
+    CHARSET_MAC,
+    CHARSET_IBMPC_437,
+    CHARSET_IBMPC_850,
+    CHARSET_IBMPC_860,
+    CHARSET_IBMPC_861,
+    CHARSET_IBMPC_863,
+    CHARSET_IBMPC_865,
+    CHARSET_SYSTEM,
+    CHARSET_SYMBOL
+};
+
+//-------------------------------------------------------------------------
+
+enum FontFamily
+{
+    FAMILY_DONTKNOW,
+    FAMILY_DECORATIVE,
+    FAMILY_MODERN,
+    FAMILY_ROMAN,
+    FAMILY_SCRIPT,
+    FAMILY_SWISS,
+    FAMILY_SYSTEM
+};
+
+//-------------------------------------------------------------------------
+
+enum FontPitch
+{
+    PITCH_DONTKNOW,
+    PITCH_FIXED,
+    PITCH_VARIABLE
+};
+
+//-------------------------------------------------------------------------
+
+struct SvxFont
+{
+    String      StyleName   MID_FONT_STYLE_NAME;
+    FontPitch   Pitch       MID_FONT_PITCH;         // INT16
+    CharSet     CharSet     MID_FONT_CHAR_SET;      // INT16
+    FontFamily  Family      MID_FONT_FAMILY;        // INT16
+    String      FamilyName  MID_FONT_FAMILY_NAME;
+};
+item SvxFont SvxFontItem;
+
+//-------------------------------------------------------------------------
+
+enum FontWeight
+{
+    WEIGHT_DONTKNOW,
+    WEIGHT_THIN,
+    WEIGHT_ULTRALIGHT,
+    WEIGHT_LIGHT,
+    WEIGHT_SEMILIGHT,
+    WEIGHT_NORMAL,
+    WEIGHT_MEDIUM,
+    WEIGHT_SEMIBOLD,
+    WEIGHT_BOLD,
+    WEIGHT_ULTRABOLD,
+    WEIGHT_BLACK
+};
+item FontWeight SvxWeightItem;
+
+//-------------------------------------------------------------------------
+
+enum FontUnderline
+{
+    UNDERLINE_NONE,
+    UNDERLINE_SINGLE,
+    UNDERLINE_DOUBLE,
+    UNDERLINE_DOTTED
+};
+
+//-------------------------------------------------------------------------
+
+enum FontStrikeout
+{
+    STRIKEOUT_NONE,
+    STRIKEOUT_SINGLE,
+    STRIKEOUT_DOUBLE
+};
+
+//-------------------------------------------------------------------------
+
+enum FontItalic
+{
+    ITALIC_NONE,
+    ITALIC_OBLIQUE,
+    ITALIC_NORMAL
+};
+item FontItalic SvxPostureItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxDbType
+{
+    DBTYPE_STARBASE,
+    DBTYPE_ODBC,
+    DBTYPE_WATCOM
+};
+item SvxDbType SvxDbTypeItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxLineSpace
+{
+    SVX_LINE_SPACE_AUTO,
+    SVX_LINE_SPACE_MAX,
+    SVX_LINE_SPACE_MIN,
+    SVX_LINE_SPACE_END
+};
+item SvxLineSpace SvxLineSpaceItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxInterLineSpace
+{
+    SVX_INTER_LINE_SPACE_OFF,
+    SVX_INTER_LINE_SPACE_PROP,
+    SVX_INTER_LINE_SPACE_FIX,
+    SVX_INTER_LINE_SPACE_END
+};
+item SvxInterLineSpace SvxInterLineSpaceItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxBreak
+{
+    SVX_BREAK_NONE,
+    SVX_BREAK_COLUMN_BEFORE,
+    SVX_BREAK_COLUMN_AFTER,
+    SVX_BREAK_COLUMN_BOTH,
+    SVX_BREAK_PAGE_BEFORE,
+    SVX_BREAK_PAGE_AFTER,
+    SVX_BREAK_PAGE_BOTH,
+    SVX_BREAK_END
+};
+item SvxBreak SvxBreakItem;
+
+//-------------------------------------------------------------------------
+
+enum BrushStyle
+{
+    BRUSH_NULL,
+    BRUSH_SOLID,
+    BRUSH_HORZ,
+    BRUSH_VERT,
+    BRUSH_CROSS,
+    BRUSH_DIAGCROSS,
+    BRUSH_UPDIAG,
+    BRUSH_DOWNDIAG,
+    BRUSH_25,
+    BRUSH_50,
+    BRUSH_75,
+    BRUSH_BITMAP
+};
+item BrushStyle BrushStyleItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxNumType
+{
+    SVX_CHARS_UPPER_LETTER,
+    SVX_CHARS_LOWER_LETTER,
+    SVX_ROMAN_UPPER,
+    SVX_ROMAN_LOWER,
+    SVX_ARABIC,
+    SVX_NUMBER_NONE,
+    SVX_CHAR_SPECIAL,
+    SVX_PAGEDESC
+};
+item SvxNumType SvxNumTypeItem;
+
+//-------------------------------------------------------------------------
+
+enum SvxShadowLocation
+{
+    SVX_SHADOW_NONE,
+    SVX_SHADOW_TOPLEFT,
+    SVX_SHADOW_TOPRIGHT,
+    SVX_SHADOW_BOTTOMLEFT,
+    SVX_SHADOW_BOTTOMRIGHT,
+    SVX_SHADOW_END
+};
+item SvxShadowLocation      SvxShadowLocationItem;
+
+//-------------------------------------------------------------------------
+
+item INT16                  SvxCharScaleWidthItem;
+item INT16                  SvxParaVertAlignItem;
+item INT16                  SvxCharReliefItem;
+item BOOL                   SvxBlinkItem;
+item BOOL                   SvxAutoKernItem;
+item INT32                  SvxColorItem;
+item BOOL                   SvxContourItem;
+item INT16                  SvxFmtBreakItem;  // enum
+item BOOL                   SvxFmtKeepItem;
+item BOOL                   SvxFmtSplitItem;
+item INT16                  SvxKerningItem;
+item INT16                  SvxLanguageItem;
+item BOOL                   SvxNoHyphenItem;
+item BOOL                   SvxNoLinebreakItem;
+item BOOL                   SvxOpaqueItem;
+item BYTE                   SvxOrphansItem;
+item BYTE                   SvxPaperBinItem;
+item String                 SvxPostItAuthorItem;
+item String                 SvxPostItDateItem;
+item String                 SvxPostItTextItem;
+item FontItalic             SvxPostureItem;  // enum
+item BOOL                   SvxPrintItem;
+item UINT16                 SvxPropSizeItem;        // derived from UInt16Item
+item BOOL                   SvxShadowedItem;
+item SvxDrawBezierEnum      SvxDrawBezierItem;
+item SvxDrawAlignEnum       SvxDrawAlignItem;
+item SvxDrawToolEnum        SvxDrawToolItem;
+item BYTE                   SvxWidowsItem;
+item BOOL                   SvxWordLineModeItem;
+item SvxCellHorJustifyEnum  SvxHorJustifyItem;
+item SvxCellVerJustifyEnum  SvxVerJustifyItem;
+item SvxCellOrientationEnum SvxOrientationItem;
+item BOOL                   SdrShadowItem;
+item INT16                  SdrTextFitToSizeTypeItem;  // enum
+item String                 SfxStringListItem;  // serialized into one concatenated string
+item double                 SvxDoubleItem;
+item String                 OfaPtrItem;  // serialized into one concatenated string
+item String                 SvxDashListItem;
+item String                 SvxLineEndListItem;
+item String                 SvxColorTableItem;
+item String                 SvxGradientListItem;
+item String                 SvxHatchListItem;
+item String                 SvxBitmapListItem;
+item String                 SfxLockBytesItem;
+item String                 SvxFontListItem;
+item String                 avmedia_MediaItem;
+
+item BYTE                   SfxGlobalNameItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxCrossedOut
+{
+    FontStrikeout   Kind        MID_CROSS_OUT;
+};
+item SvxCrossedOut SvxCrossedOutItem;
+
+struct SvxTextLine
+{
+    FontUnderline   LineStyle   MID_TL_STYLE;
+    BOOL            HasColor    MID_TL_HASCOLOR;
+    INT32           Color       MID_TL_COLOR;
+};
+item SvxTextLine SvxTextLineItem;
+
+struct SvxBrush
+{
+    BOOL        Transparent     MID_GRAPHIC_TRANSPARENT;
+    INT32       BackColor       MID_BACK_COLOR;
+    String      URL             MID_GRAPHIC_URL;
+    String      Filtername      MID_GRAPHIC_FILTER;
+    INT16       Position        MID_GRAPHIC_POSITION;
+};
+item SvxBrush SvxBrushItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxEscapement
+{
+    INT16       Escapement      MID_ESC;
+    BYTE        Height          MID_ESC_HEIGHT;
+    BOOL        Auto            MID_AUTO_ESC;
+};
+item SvxEscapement SvxEscapementItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxFontHeight
+{
+    float       Height      MID_FONTHEIGHT;         // may be converted to INT32
+    INT16       Prop        MID_FONTHEIGHT_PROP;
+    float       Diff        MID_FONTHEIGHT_DIFF;    // may be converted to INT32
+};
+item SvxFontHeight SvxFontHeightItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxHyphenZone
+{
+    BOOL        Hyphen      MID_IS_HYPHEN;
+    INT16       MinLead     MID_HYPHEN_MIN_LEAD;
+    INT16       MinTrail    MID_HYPHEN_MIN_TRAIL;
+    INT16       MaxHyphens  MID_HYPHEN_MAX_HYPHENS;
+};
+item SvxHyphenZone SvxHyphenZoneItem;
+
+//-------------------------------------------------------------------------
+struct SvxLine
+{
+    INT32      LineFGColor     MID_FG_COLOR;
+    INT32      LineOutWidth    MID_OUTER_WIDTH;
+    INT32      LineInWidth     MID_INNER_WIDTH;
+    INT32      LineDistance    MID_DISTANCE;
+};
+item SvxLine SvxLineItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxLRSpace
+{
+    INT32       LeftMargin          MID_L_MARGIN;               // % or direct
+    INT32       TextLeftMargin      MID_TXT_LMARGIN
+    INT32       RightMargin         MID_R_MARGIN;               // % or direct
+    INT16       LeftRelMargin       MID_L_REL_MARGIN;
+    INT16       RightRelMargin      MID_R_REL_MARGIN;
+    INT32       FirstLineIndent     MID_FIRST_LINE_INDENT;      // % or direct
+    INT32       FirstLineRelIdent   MID_FIRST_LINE_REL_INDENT;
+    BOOL        AutoFirst           MID_FIRST_AUTO;
+};
+item SvxLRSpace SvxLRSpaceItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxLineSpacing
+{
+    INT16               Mode        MID_LINESPACE;
+    INT16               Height      MID_HEIGHT;
+};
+item SvxLineSpacing SvxLineSpacingItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxPage
+{
+    BOOL                Landscape       MID_PAGE_ORIENTATION;
+    INT16               Layout          MID_PAGE_LAYOUT;
+    INT16               NumType         MID_PAGE_NUMTYPE;
+};
+item SvxPage SvxPageItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxPagePosSize
+{
+    INT32               XPos            MID_X;          // ???
+    INT32               YPos            MID_Y;          // ???
+    INT32               Width           MID_WIDTH;      // ???
+    INT32               Height          MID_HEIGHT;     // ???
+};
+item SvxPagePosSize SvxPagePosSizeItem;
+
+
+//-------------------------------------------------------------------------
+struct SvxShadow
+{
+    SvxShadowLocation   Location        MID_LOCATION;
+    INT16               Width           MID_WIDTH;
+    BOOL                IsTransparent   MID_TRANSPARENT;
+    INT32               Color           MID_BG_COLOR;
+};
+item SvxShadow SvxShadowItem;
+
+
+//-------------------------------------------------------------------------
+
+struct SvxULSpace
+{
+    INT32               TopMargin       MID_UP_MARGIN;  // % or direct
+    INT32               BottomMargin    MID_LO_MARGIN;  // % or direct
+    INT16               TopRelMargin    MID_UP_REL_MARGIN;
+    INT16               BottomRelMargin MID_LO_REL_MARGIN;
+};
+item SvxULSpace SvxULSpaceItem
+
+//-------------------------------------------------------------------------
+
+struct SvxLongLRSpace
+{
+    INT32           Left        MID_LEFT;   // ???
+    INT32           Right       MID_RIGHT;  // ???
+};
+item SvxLongLRSpace SvxLongLRSpaceItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxLongULSpace
+{
+    INT32           Upper       MID_UPPER;  // ???
+    INT32           Lower       MID_LOWER;  // ???
+};
+item SvxLongULSpace SvxLongULSpaceItem;
+
+//-------------------------------------------------------------------------
+
+struct SvxHyperlink
+{
+    String  Text    MID_HLINK_TEXT;
+    String  URL     MID_HLINK_URL;
+    String  Target  MID_HLINK_TARGET;
+    String  Name    MID_HLINK_NAME;
+    INT32   Type    MID_HLINK_TYPE;
+};
+item SvxHyperlink SvxHyperlinkItem;
+
+//-------------------------------------------------------------------------
+
+struct PageModel
+{
+    BOOL   Auto MID_AUTO;
+    String Name MID_NAME;
+};
+item PageModel SvxPageModelItem;
+
+struct SvxProtect
+{
+    BOOL Content    MID_PROTECT_CONTENT;
+    BOOL Size       MID_PROTECT_SIZE;
+    BOOL Position   MID_PROTECT_POSITION;
+};
+item SvxProtect SvxProtectItem;
+
+struct SvxZoom
+{
+    UINT16 Value         MID_VALUE;
+    INT16 ValueSet       MID_VALUESET;
+    INT16 Type           MID_TYPE;
+};
+item SvxZoom SvxZoomItem;
+
+struct SvxRulerObject
+{
+    INT32   StartX  MID_START_X;
+    INT32   StartY  MID_START_Y;
+    INT32   EndX    MID_END_X;
+    INT32   EndY    MID_END_Y;
+    BOOL    Limited MID_LIMIT;
+};
+item SvxRulerObject SvxObjectItem;
+
+item String LineBorder;                 // dummy for sequence
+struct SvxBox
+{
+    LineBorder LeftBorder       MID_LEFT_BORDER;
+    INT32 LeftDistance          LEFT_BORDER_DISTANCE;
+    LineBorder RightBorder      MID_RIGHT_BORDER;
+    INT32 RightDistance         RIGHT_BORDER_DISTANCE;
+    LineBorder TopBorder        MID_TOP_BORDER;
+    INT32 TopDistance           TOP_BORDER_DISTANCE;
+    LineBorder BottomBorder     MID_BOTTOM_BORDER;
+    INT32 BottomDistance        BOTTOM_BORDER_DISTANCE;
+};
+item SvxBox SvxBoxItem;
+
+struct SvxBoxInfo
+{
+    LineBorder Horizontal   MID_HORIZONTAL;
+    LineBorder Vertical     MID_VERTICAL;
+    INT16 Flags             MID_FLAGS;
+    INT16 ValidFlags        MID_VALIDFLAGS;
+    INT32 DefaultDistance   MID_DISTANCE;
+};
+item SvxBoxInfo SvxBoxInfoItem;
+
+item String SvxColumns;                 // dummy for sequence
+struct SvxColumnDescription
+{
+    SvxColumns  Columns     MID_COLUMNARRAY;  // currently not implemented
+    INT32       Left        MID_LEFT;
+    INT32       Right       MID_RIGHT;
+    INT32       Actual      MID_ACTUAL;
+    BOOL        Orthogonal  MID_ORTHO;
+    BOOL        Table       MID_TABLE;
+};
+item SvxColumnDescription SvxColumnItem;
+
+struct SvxTabStop
+{
+    String  TabStops         MID_TABSTOPS; // dummy, will be represented by array of structs
+    //INT32   StandardTabStop  MID_STD_TAB;
+};
+item SvxTabStop SvxTabStopItem;
+
+struct SvxCharRotate
+{
+    INT16  Rotation          MID_ROTATE;
+    BOOL    FitToLine        MID_FITTOLINE;
+};
+item SvxCharRotate SvxCharRotateItem;
+
+item String                 SfxSetItem;  // dummy
+item INT16                  SvxRotateModeItem;  // enum
+item INT16                  SvxOrientationItem;  // enum
+
+struct SvxMargin
+{
+    INT32 LeftMargin MID_MARGIN_L_MARGIN;
+    INT32 RightMargin MID_MARGIN_R_MARGIN;
+    INT32 UpperMargin MID_MARGIN_UP_MARGIN;
+    INT32 LowerMargin MID_MARGIN_LO_MARGIN;
+};
+item SvxMargin SvxMarginItem;
+
+struct SvxEmphasisMark
+{
+    INT32   Emphasis    MID_EMPHASIS;
+};
+item SvxEmphasisMark SvxEmphasisMarkItem;
+
+item String SvxSmartTagItem;                 // dummy for sequence
+
+
+item String Points;                 // dummy for sequence
+struct ZoomSlider
+{
+    INT16  CurrentZoom          MID_ZOOMSLIDER_CURRENTZOOM;
+    Points SnappingPoints       MID_ZOOMSLIDER_SNAPPINGPOINTS;
+    INT16  SvxMinZoom           MID_ZOOMSLIDER_MINZOOM;
+    INT16  SvxMaxZoom           MID_ZOOMSLIDER_MAXZOOM;
+};
+item ZoomSlider SvxZoomSliderItem;

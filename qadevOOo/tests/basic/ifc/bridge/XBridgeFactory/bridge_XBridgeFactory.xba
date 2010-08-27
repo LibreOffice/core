@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="bridge_XBridgeFactory" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'      Global sProtocol As String
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.bridge.XBridgeFactory
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim connectionStr As String
+    Dim oConnector As Object, oAcceptor As Object
+    Dim xConnection As Object
+    Dim oBridge As Object
+    Dim aBridges As Variant, args(1) As Variant
+    oConnector = createUnoService("basichelper.Connector")
+    oAcceptor = createUnoService("com.sun.star.connection.Acceptor")
+
+    Dim iPos1 As Integer, iPos2 As Integer
+
+    iPos1 = inStr(1, CNCSTR, "socket")
+    iPos2 = inStr(iPos1, CNCSTR, "port=")
+
+    connectionStr = mid(CNCSTR, iPos1, iPos2 - iPos1 + 5) + "18888"
+
+    Out.Log("Connection string is '" + connectionStr + "'")
+
+    args(0) = createUnoService("com.sun.star.connection.Connector")
+    args(1) = connectionStr
+
+    ' When call initialize() method, a new thread is created and tries to
+    ' connect to Acceptor after some seconds.
+
+    oConnector.initialize(args())
+
+    xConnection = oAcceptor.accept(connectionStr)
+
+'    wait(5000)
+
+'    xConnection = oConnector.getByName("Connection")
+
+    if (isNull(xConnector)) then
+        Out.Log("Connection was not created !!!")
+    end if
+    Out.Log("State of connector: " + oConnector.getByName("State"))
+
+    Test.StartMethod("createBridge()")
+    bOK = true
+    oBridge = oObj.createBridge("NewBasicBridge", sProtocol, xConnection, NULL_OBJECT)
+    bOK = bOK AND hasUnoInterfaces(oBridge, "com.sun.star.bridge.XBridge")
+    Test.MethodTested("createBridge()", bOK)
+
+    Test.StartMethod("getBridge()")
+    bOK = true
+    oBridge = oObj.getBridge("NewBasicBridge")
+    bOK = bOK AND NOT isNull(oBridge) AND (oBridge.Name = "NewBasicBridge")
+    Test.MethodTested("getBridge()", bOK)
+
+    Test.StartMethod("getExistingBridges()")
+    bOK = true
+    aBridges = oObj.getExistingBridges()
+    bOK = bOK AND NOT isNull(aBridges) AND ubound(aBridges()) > -1
+    Test.MethodTested("getExistingBridges()", bOK)
+
+    Out.Log("Finally the bridge must be disposed ...")
+    xConnection.close()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

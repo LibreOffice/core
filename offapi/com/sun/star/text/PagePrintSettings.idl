@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_PagePrintSettings_idl__
+#define __com_sun_star_text_PagePrintSettings_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::PagePrintSettings
+/** These properties describe the way the <type>XPagePrintable</type> interface
+    prints the page on one printer page.
+ */
+published service PagePrintSettings
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::PageRows
+    /** contains the number of pages per printed column of pages.
+     */
+    [property] short PageRows;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::PageColumns
+    /** contains the number of pages per printed row of pages.
+     */
+    [property] short PageColumns;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::LeftMargin
+    /** contains the left margin of the printer page.
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::RightMargin
+    /** contains the right margin of the printer page.
+     */
+    [property] long RightMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::TopMargin
+    /** contains the top margin of the printer page.
+     */
+    [property] long TopMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::BottomMargin
+    /** contains the right margin of the printer page.
+     */
+    [property] long BottomMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::HoriMargin
+    /** contains the margin between the rows of printed pages.
+     */
+    [property] long HoriMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::VertMargin
+    /** contains the margin between the columns of printed pages.
+     */
+    [property] long VertMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PagePrintSettings::IsLandscape
+    /** defines if the printer page is used in landscape format.
+     */
+    [property] boolean IsLandscape;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

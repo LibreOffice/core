@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+  <script language="BeanShell">
+    <locale lang="en">
+      <displayname value="ShowDialog" />
+      <description>
+        Example of how to show a dialog from BeanShell
+      </description>
+    </locale>
+    <functionname value="ShowDialog.bsh" />
+    <logicalname value="ShowDialog.BeanShell" />
+  </script>
+  <script language="BeanShell">
+    <locale lang="en">
+      <displayname value="ButtonPressHandler" />
+      <description>
+        Example of handle button press events for the Dialog
+      </description>
+    </locale>
+    <functionname value="ButtonPressHandler.bsh" />
+    <logicalname value="ButtonPressHandler.BeanShell" />
+  </script>
+</parcel>
+

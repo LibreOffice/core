@@ -1,0 +1,5 @@
+FileOpenTest IDM_FILE_OPEN_TEST
+FileExit IDM_FILE_EXIT
+FileDialog IDM_TEST_GROSS
+SidWintree IDM_TEST_WINTREE
+SysDialogs IDM_SYS_DLG

@@ -1,0 +1,4 @@
+Main-Class: com.sun.star.lib.loader.Loader
+
+Name: com/sun/star/lib/loader/Loader.class
+Application-Class: SimpleBootstrap_java

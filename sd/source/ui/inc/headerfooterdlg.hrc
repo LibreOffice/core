@@ -1,0 +1,55 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define FL_INCLUDE_ON_PAGE              1
+#define CB_DATETIME                     2
+#define RB_DATETIME_FIXED               3
+#define TB_DATETIME_FIXED               4
+#define RB_DATETIME_AUTOMATIC           5
+#define CB_DATETIME_FORMAT              6
+#define FT_DATETIME_LANGUAGE            7
+#define CB_DATETIME_LANGUAGE            8
+#define FL_FOOTER                       9
+#define CB_FOOTER                       10
+#define FT_FOOTER                       11
+#define TB_FOOTER_FIXED                 12
+#define FL_SLIDENUMBER                  13
+#define CB_SLIDENUMBER                  14
+#define FL_NOTONTITLE                   15
+#define CB_NOTONTITLE                   16
+#define BT_APPLYTOALL                   17
+#define BT_APPLY                        18
+#define BT_CANCEL                       19
+#define BT_HELP                         20
+#define FL_HEADER                       21
+#define CB_HEADER                       22
+#define FT_HEADER                       23
+#define TB_HEADER_FIXED                 24
+#define FL_DATETIME                     25
+#define CT_PREVIEW                      26
+#define STR_PAGE_NUMBER                 27
+#define STR_INCLUDE_ON_PAGE             28

@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _BASCTL_MANAGELANG_HRC
+#define _BASCTL_MANAGELANG_HRC
+
+// Include -----------------------------------------------------------------------
+
+#include <svtools/controldims.hrc>
+
+// Dialog Control Id's -----------------------------------------------------------
+
+#define FT_LANGUAGE         1
+#define LB_LANGUAGE         2
+#define PB_ADD_LANG         3
+#define PB_DEL_LANG         4
+#define PB_MAKE_DEFAULT     5
+#define FT_INFO             6
+#define FL_BUTTONS          7
+#define PB_HELP             8
+#define PB_CLOSE            9
+#define STR_DEF_LANG        10
+#define STR_DELETE          11
+#define STR_CREATE_LANG     12
+
+#define FT_DEF_LANGUAGE     1
+#define LB_DEF_LANGUAGE     2
+#define LB_ADD_LANGUAGE     3
+#define FT_DEF_INFO         4
+#define FL_DEF_BUTTONS      5
+#define PB_DEF_OK           6
+#define PB_DEF_CANCEL       7
+#define PB_DEF_HELP         8
+#define STR_ADDLANG_TITLE   9
+#define STR_ADDLANG_LABEL   10
+#define STR_ADDLANG_INFO    11
+
+// Metrics -----------------------------------------------------------------------
+
+#define MANAGE_DLG_WIDTH    240
+#define MANAGE_DLG_HEIGHT   180
+#define INFO_LINES_COUNT    3
+
+#define MANAGE_COL1         RSC_SP_DLG_INNERBORDER_LEFT
+#define MANAGE_COL2         (MANAGE_DLG_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT - 2*RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_X)
+#define MANAGE_COL3         (MANAGE_COL2 + RSC_CD_PUSHBUTTON_WIDTH + RSC_SP_CTRL_X)
+
+#define MANAGE_ROW1         RSC_SP_DLG_INNERBORDER_TOP
+#define MANAGE_ROW2         (MANAGE_ROW1 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y)
+#define MANAGE_ROW3         (MANAGE_ROW2 + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+
+#define MANAGE_ROW7         (MANAGE_DLG_HEIGHT - RSC_SP_DLG_INNERBORDER_BOTTOM - RSC_CD_PUSHBUTTON_HEIGHT)
+#define MANAGE_ROW6         (MANAGE_ROW7 - RSC_SP_FLGR_SPACE_Y - RSC_CD_FIXEDLINE_HEIGHT)
+#define MANAGE_ROW5         (MANAGE_ROW6 - RSC_SP_FLGR_SPACE_Y - INFO_LINES_COUNT*RSC_CD_FIXEDTEXT_HEIGHT)
+#define MANAGE_ROW4         (MANAGE_ROW5 - RSC_SP_CTRL_GROUP_Y - RSC_CD_PUSHBUTTON_HEIGHT)
+#define MANAGE_ROW4A        (MANAGE_ROW4 + RSC_CD_PUSHBUTTON_HEIGHT)
+
+#define MANAGE_LB_WIDTH     (MANAGE_COL3 - RSC_SP_CTRL_X - RSC_SP_DLG_INNERBORDER_LEFT)
+#define MANAGE_LB_HEIGHT    (MANAGE_ROW4A - MANAGE_ROW2)
+
+#define SETDEF_DLG_WIDTH    180
+#define SETDEF_DLG_HEIGHT   165
+
+#define SETDEF_COL1         RSC_SP_DLG_INNERBORDER_LEFT
+#define SETDEF_COL2         (SETDEF_DLG_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT - 3*RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X - RSC_SP_CTRL_X)
+#define SETDEF_COL3         (SETDEF_COL2 + RSC_CD_PUSHBUTTON_WIDTH + RSC_SP_CTRL_GROUP_X)
+#define SETDEF_COL4         (SETDEF_COL3 + RSC_CD_PUSHBUTTON_WIDTH + RSC_SP_CTRL_X)
+#define SETDEF_COL4A        (SETDEF_COL4 + RSC_CD_PUSHBUTTON_WIDTH)
+
+#define SETDEF_ROW1         RSC_SP_DLG_INNERBORDER_TOP
+#define SETDEF_ROW2         (SETDEF_ROW1 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y)
+
+#define SETDEF_ROW5         (SETDEF_DLG_HEIGHT - RSC_SP_DLG_INNERBORDER_BOTTOM - RSC_CD_PUSHBUTTON_HEIGHT)
+#define SETDEF_ROW4         (SETDEF_ROW5 - RSC_SP_FLGR_SPACE_Y - RSC_CD_FIXEDLINE_HEIGHT)
+#define SETDEF_ROW3         (SETDEF_ROW4 - RSC_SP_FLGR_SPACE_Y - INFO_LINES_COUNT*RSC_CD_FIXEDTEXT_HEIGHT)
+#define SETDEF_ROW3A        (SETDEF_ROW3 - RSC_SP_CTRL_GROUP_Y)
+
+#define SETDEF_LB_WIDTH     (SETDEF_COL4A - SETDEF_COL1)
+#define SETDEF_LB_HEIGHT    (SETDEF_ROW3A - SETDEF_ROW2)
+
+#endif  // _BASCTL_MANAGELANG_HRC
+

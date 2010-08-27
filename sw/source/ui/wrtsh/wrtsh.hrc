@@ -1,0 +1,48 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _WRTSH_HRC
+#define _WRTSH_HRC
+
+#include "rcid.hrc"
+
+#define DLG_GOTO                (RC_WRTSH_BEGIN +  1)
+
+
+#define STR_DDEERROR_APP1       (RC_WRTSH_BEGIN +  2)
+#define STR_DDEERROR_APP2       (RC_WRTSH_BEGIN +  3)
+#define STR_DDEERROR_DATA1      (RC_WRTSH_BEGIN +  4)
+#define STR_DDEERROR_DATA2      (RC_WRTSH_BEGIN +  5)
+#define STR_DDEERROR_LINK1      (RC_WRTSH_BEGIN +  6)
+#define STR_DDEERROR_LINK2      (RC_WRTSH_BEGIN +  7)
+
+#define WRTSH_ACT_END STR_DDEERROR_LINK2
+
+#if WRTSH_ACT_END > RC_WRTSH_END
+#error Resource-Id Ueberlauf
+#endif
+
+#endif

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sd_AccessibleSlideView" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+Global oDP1 As Object
+Global oDP2 As Object
+Global oCntr As Object
+Global multiSelection As Boolean
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sd.AccessibleSlideView
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oDPs As Object
+    Dim oWin As Object, xRoot As Object
+    Dim oSearchedContext As Object
+
+    oDoc = utils.createImpressDocument(cObjectName)
+    Out.Log("Getting drawpages...")
+    oDPs = oDoc.getDrawPages()
+    oDP1 = oDPs.insertNewByIndex(1)
+    oDP2 = oDPs.insertNewByIndex(2)
+    switchOutlineView(oDoc)
+    oWin = utils.at_getCurrentWindow(oDoc)
+    xRoot = utils.at_getAccessibleObject(oWin)
+    oSearchedContext = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT)
+    oObj = oSearchedContext
+    oCntr = oDoc.getCurrentController()
+    multiSelection = true
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub switchOutlineView(xDoc as Object)
+On Error Goto ErrHndl
+
+        Dim Contrl as Variant, disp as Variant, transf as Object
+        Dim URL as new com.sun.star.util.URL
+        Dim noProps()
+        Dim res as Boolean
+        
+        Contrl = xDoc.getCurrentController()
+        URL.Complete = "slot:27011"
+        transf = createUnoService("com.sun.star.util.URLTransformer")
+        res = transf.parseStrict(URL)
+        
+        out.log("URL parsed :" + res)
+        
+        disp = Contrl.queryDispatch(URL, "", 0)
+
+        out.log("disp get.")
+
+        disp.dispatch(URL, noProps())
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+
+
+Sub DisposeObj()
+    utils.closeObject(oDoc)
+End Sub
+
+' This method is used for XAccessibleEventBroadcaster interface
+Sub fireEvent()
+    oCntr.setCurrentPage(oDP1)
+    oCntr.setCurrentPage(oDP2)
+End Sub
+
+</script:module>

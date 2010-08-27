@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_XRelativeTextContentInsert" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.text.XRelativeTextContentInsert
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oEnum As Object
+    Dim oCursor As Object
+    Dim oContent1 As Object
+    Dim oContent2 As Object
+    Dim bFound As Boolean
+    Dim oEl As Object
+
+    Test.StartMethod("insertTextContentBefore()")
+    bOK = true
+    oCursor = oObj.createTextCursor()
+    if (isNULL(oCursor)) then Out.Log("Can't create text cursor!")
+
+    Out.Log("First, mark all existant entries with 0")
+
+    oEnum = oObj.createEnumeration()
+    while (oEnum.hasMoreElements())
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            oEl.String = "0"
+        end if
+    wend
+
+    Out.Log("Inserting TextSection...")
+    oContent1 = oDoc.createInstance("com.sun.star.text.TextSection")
+    oObj.insertTextContent(oCursor, oContent1, false)
+
+    oEnum = oObj.createEnumeration()
+    while (oEnum.hasMoreElements())
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            if (oEl.String = "") then oEl.String = "1"
+        end if
+    wend
+
+    Out.Log("Mark new entry with 1")
+
+    oContent2 = oDoc.createInstance("com.sun.star.text.Paragraph")
+    oObj.insertTextContentBefore(oContent2, oContent1)
+
+    oEnum = oObj.createEnumeration()
+    while (oEnum.hasMoreElements())
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            if (oEl.String = "") then oEl.String = "2"
+        end if
+    wend
+
+    Out.Log("Mark new entry with 2")
+
+    Out.Log("Testing that content was inserted BEFORE. I.e. Label 2 before label 1")
+
+    oEnum = oObj.createEnumeration()
+    bFound = false
+    while (oEnum.hasMoreElements() AND NOT bFound)
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            bFound = oEl.String = "2"
+        end if
+    wend
+
+    oEl = oEnum.NextElement()
+    bOK = bOK AND oEl.String = "1"
+
+    Test.MethodTested("insertTextContentBefore()", bOK)
+
+
+    Test.StartMethod("insertTextContentAfter()")
+    bOK = true
+
+    Out.Log("Inserting TextSection...")
+    oContent1 = oDoc.createInstance("com.sun.star.text.TextSection")
+    oObj.insertTextContent(oCursor, oContent1, false)
+
+    oEnum = oObj.createEnumeration()
+    while (oEnum.hasMoreElements())
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            if (oEl.String = "") then oEl.String = "3"
+        end if
+    wend
+
+    Out.Log("Mark new entry with 3")
+
+    oContent2 = oDoc.createInstance("com.sun.star.text.Paragraph")
+    oObj.insertTextContentAfter(oContent2, oContent1)
+
+    oEnum = oObj.createEnumeration()
+    while (oEnum.hasMoreElements())
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            if (oEl.String = "") then oEl.String = "4"
+        end if
+    wend
+
+    Out.Log("Mark new entry with 4")
+
+    Out.Log("Testing that content was inserted AFTRER. I.e. Label 4 after label 3")
+
+    oEnum = oObj.createEnumeration()
+    bFound = false
+    while (oEnum.hasMoreElements() AND NOT bFound)
+        oEl = oEnum.NextElement()
+        if (oEl.supportsService("com.sun.star.text.Paragraph")) then
+            bFound = oEl.String = "3"
+        end if
+    wend
+
+    oEl = oEnum.NextElement()
+    bOK = bOK AND oEl.String = "4"
+
+    Test.MethodTested("insertTextContentAfter()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

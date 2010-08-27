@@ -1,0 +1,209 @@
+# Format:
+
+# Start
+# scpModule
+# shellscript file (optional)
+# solarispackagename
+# solarisrequires (optional)
+# solarisprovides (optional)
+# packagename
+# linuxreplaces (optional)
+# requires (optional)
+# provides (optional)
+# copyright
+# vendor
+# description
+# destpath
+# End
+
+Start
+module = "gid_Module_Langpack_Basis"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+End
+
+Start
+module = "gid_Module_Langpack_Fonts"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-fonts"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-fonts"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-fonts"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Language fonts module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+End
+
+Start
+module = "gid_Module_Langpack_Resource"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-res"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-res"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-res"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Language resource module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+End
+
+Start
+module = "gid_Module_Langpack_Help"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-help"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-help"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-help"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Language help module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+End
+
+Start
+module = "gid_Module_Langpack_Writer"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-writer"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-writer"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-writer"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Writer language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-writer"
+End
+
+Start
+module = "gid_Module_Langpack_Calc"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-calc"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-calc"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-calc"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Calc language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-calc"
+End
+
+Start
+module = "gid_Module_Langpack_Impress"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-impress"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-impress"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-impress"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Impress language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-impress"
+End
+
+Start
+module = "gid_Module_Langpack_Draw"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-draw"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-draw"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-draw"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Draw language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-draw"
+End
+
+Start
+module = "gid_Module_Langpack_Math"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-math"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-math"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-math"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Math language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-math"
+End
+
+Start
+module = "gid_Module_Langpack_Base"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-base"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-base"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-base"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Base language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
+End
+
+Start
+module = "gid_Module_Langpack_Binfilter"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-binfilter"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Legacy filters (e.g. StarOffice 5.2) for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-binfilter"
+End
+
+Start
+module = "gid_Module_Langpack_Onlineupdate"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-onlineupd"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-onlineupd"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-onlineupd"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Online update language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-onlineupdate"
+End

@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_DictionaryListEventFlags_idl__
+#define __com_sun_star_linguistic2_DictionaryListEventFlags_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** constants representing a single dictionary-list event.
+
+    <P>These flags define the possible types for a
+    dictionary-list event.</P>
+
+    @see    <type scope="com::sun::star::linguistic2">DictionaryListEvent</type>
+    @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+    @see    <type scope="com::sun::star::linguistic2">XDictionaryList</type>
+*/
+published constants DictionaryListEventFlags
+{
+    //-------------------------------------------------------------------------
+    /** A positive entry was added to a dictionary from the
+        dictionary list.
+    */
+    const short ADD_POS_ENTRY = 1;
+
+    //-------------------------------------------------------------------------
+    /** A positive entry was deleted from a dictionary of the
+        dictionary-list or a dictionary with positive entries
+        was cleared.
+    */
+    const short DEL_POS_ENTRY = 2;
+
+    //-------------------------------------------------------------------------
+    /** A negative entry was added to a dictionary from the
+        dictionary-list.
+     */
+    const short ADD_NEG_ENTRY = 4;
+
+    //-------------------------------------------------------------------------
+    /** A negative entry was deleted from a dictionary of the
+        dictionary-list or a dictionary with negative entries
+        was cleared.
+    */
+    const short DEL_NEG_ENTRY = 8;
+
+    //-------------------------------------------------------------------------
+    /** A dictionary with positive entries was activated or
+        has changed its language.
+    */
+    const short ACTIVATE_POS_DIC = 16;
+
+    //-------------------------------------------------------------------------
+    /** A dictionary with positive entries was deactivated or
+        has changed its language.
+    */
+    const short DEACTIVATE_POS_DIC = 32;
+
+    //-------------------------------------------------------------------------
+    /** A dictionary with negative entries was activated or
+        has changed its language.
+    */
+    const short ACTIVATE_NEG_DIC = 64;
+
+    //-------------------------------------------------------------------------
+    /** A dictionary with negative entries was deactivated or
+        has changed its language.
+    */
+    const short DEACTIVATE_NEG_DIC = 128;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

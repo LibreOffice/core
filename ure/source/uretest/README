@@ -1,0 +1,115 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+
+This directory contains test files for the UNO Runtime Environment (URE) as well
+as the Makefile and Makefile.pln makefiles.  To execute the makefiles, you need
+GNU make 3.80 or later.
+
+
+Makefile
+--------
+
+Before you execute Makefile, you need to configure the Software Development Kit
+(SDK) environment to work with a URE installation, a C++ compiler, and a JDK.
+For more information, read the .../docs/install.html file in the SDK
+installation.
+
+NOTE: On Linux x86, if the Makefile accesses a GCC that is incompatible with the
+GCC that was used to build the URE, use the GCCS_COMPAT environment variable as
+a workaround.  For more details, see the UDK README file.
+
+
+Makefile.pln
+------------
+
+You can only run Makefile.pln on Linux x86.  You do not need to configure your
+SDK environment to use this makefile, however, you do need to set the following
+environment variables:
+
+- SDK_HOME
+Points to the base directory of an OpenOffice.org SDK so that you can access UNO
+programming tools and files that are not part of the URE.  For example, idlc,
+cppumaker, javamaker, UNOIDL files, and C++ headers.
+
+- PATH
+Points to a GCC installation (including g++) as well as a JDK installation that
+contains the java, javac, and jar executables.  For the minimum version
+requirements, see the SDK Installation Guide ($SDK_HOME/docs/install.html).
+
+- URE_HOME (optional)
+Overwrites the default URE location, that is, /opt/openoffice.org/ure.
+
+- GXX_INCLUDE_PATH (optional)
+Overwrites the default location of the GCC C++ headers (/usr/include/g++).  This
+information is needed by the STLport included in the URE.
+
+- GCCS_COMPAT (optional)
+Fixes incompatibility issues between the GCC that was used to build the URE and
+the GCC that Makefile.pln accesses.  For more details, see the UDK README file.
+
+
+Tests
+-----
+
+Makefile and Makefile.pln can execute the following tests:
+
+- test-cpptest
+Builds a C++ UNO component, cppmain.uno, and runs the component with the uno
+executable.  The component first attempts to instantiate all the UNO services
+and singletons that are part of the URE installation.  The component then tries
+to instantiate and to call another C++ UNO component (ccptest.uno) as well as a
+Java UNO component (javatest.uno).  The test completes when these components
+throw a special exception that is caught by cppmain.uno.
+
+- test-javatest
+Builds a Java UNO component, javamain.uno, and runs the component with the uno
+executable.  The component tries to instantiate and to call a C++ UNO component
+(cpptest.uno) as well as a Java UNO component (javatest.uno).  The test
+completes when these components throw a special exception that is caught by
+javamain.uno.
+
+- test-javanative
+Builds a Java UNO application, javanative.jar, and runs the application with the
+java executable.  The application bootstraps a native UNO environment, and then
+tries to instantiate and to call a C++ UNO component (cpptest.uno) as well as a
+Java UNO component( javatest.uno).  The test completes when these components
+throw a special exception that is caught by javanative.jar.
+
+- test-clientserver
+Builds a server C++ UNO component, cppserver.uno, and a Java UNO application,
+javaclient.uno.  The uno executable runs the cppserver.uno component which
+listens on a pipe connection.  The java executable runs the javaclient.uno
+component which connects to the server after a five second pause so that the
+server has enough time to start.
+
+- test-regview (Makefile.pln only)
+Checks that the regview executable of the URE installation works reliably.
+
+NOTE: The files that are generated when Makefile and Makefile.pln execute are
+saved to different local directories.  Makefile outputs the generated files to
+./out.sdk whereas Makefile.pln outputs the files to ./out.pln.

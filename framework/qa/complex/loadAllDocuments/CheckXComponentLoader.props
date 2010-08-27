@@ -1,0 +1,3 @@
+FtpAccess=ftp://apitest:apitest@margritte/%2e%2e/share/easyDocTypes
+HttpAccess=http://margritte:8080/share/easyDocTypes
+ThreadTimeOut=600000

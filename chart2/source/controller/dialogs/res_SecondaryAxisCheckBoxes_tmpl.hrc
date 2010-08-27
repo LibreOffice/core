@@ -1,0 +1,59 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _CHART2_SECONDARYAXISCHECKBOXES_HXX
+#define _CHART2_SECONDARYAXISCHECKBOXES_HXX
+
+#define SECONDARYAXISCHECKBOXES_WIDTH 42
+#define SECONDARYAXISCHECKBOXES_HEIGHT 10
+
+#define SECONDARYAXISCHECKBOXES( xpos, ypos, xOffset, yOffset ) \
+CheckBox CB_X_SECONDARY \
+{ \
+    HelpID = HID_SCH_CB_SECONDARY_XAXIS; \
+    Pos = MAP_APPFONT ( xpos , ypos  ); \
+    Size = MAP_APPFONT ( SECONDARYAXISCHECKBOXES_WIDTH , SECONDARYAXISCHECKBOXES_HEIGHT ); \
+    TabStop = TRUE; \
+    Text [ en-US ] = "X ~axis"; \
+}; \
+CheckBox CB_Y_SECONDARY \
+{ \
+    HelpID = HID_SCH_CB_SECONDARY_YAXIS; \
+    Pos = MAP_APPFONT ( xpos+xOffset , ypos+yOffset  ); \
+    Size = MAP_APPFONT ( SECONDARYAXISCHECKBOXES_WIDTH , SECONDARYAXISCHECKBOXES_HEIGHT ); \
+    TabStop = TRUE; \
+    Text [ en-US ] = "Y ax~is"; \
+}; \
+CheckBox CB_Z_SECONDARY \
+{ \
+    HelpID = HID_SCH_CB_SECONDARY_ZAXIS; \
+    Pos = MAP_APPFONT ( xpos+2*xOffset , ypos+2*yOffset  ); \
+    Size = MAP_APPFONT ( SECONDARYAXISCHECKBOXES_WIDTH , SECONDARYAXISCHECKBOXES_HEIGHT ); \
+    TabStop = TRUE; \
+    Text [ en-US ] = "Z axi~s"; \
+};
+
+#endif

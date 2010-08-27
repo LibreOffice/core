@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ............................................................... -->
+<!-- Locale data specification DTD ................................. -->
+<!-- ............................................................... -->
+
+<!--
+    ===========================================================================
+    ATTENTION! PLEASE! HEADS UP! IMPORTANT!
+    ===========================================================================
+
+    Please validate your locale data contribution using a validating parser. A
+    validating parser, for example, may be found at
+    http://unicode.org/cldr/data/tools/java/org/unicode/cldr/util/XMLValidator.java
+    Compile it into a class-jar and call it in the
+    i18npool/source/localedata/data/ directory:
+    java -cp <your_path>/XMLValidator.jar org.unicode.cldr.util.XMLValidator your_data.xml
+
+
+    A second possiblity is:
+
+    - temporarily (!) change the DOCTYPE of your file to read (all on one line)
+      <!DOCTYPE Locale SYSTEM "http://hg.services.openoffice.org/DEV300/raw-file/tip/i18npool/source/localedata/data/locale.dtd">
+
+    - upload it to the form available at http://www.validome.org/
+
+    This will validate the file against the HEAD revision of locale.dtd on the
+    DEV300 development code line, for other revisions you'll have to specify
+    the corresponding tags or cws branch instead. For example, to validate
+    against a modified locale.dtd in CWS locales33 you would use
+
+      <!DOCTYPE Locale SYSTEM "http://hg.services.openoffice.org/cws/locales33/raw-file/tip/i18npool/source/localedata/data/locale.dtd">
+
+
+    Please test locale data files either in a non-product (!) build, which
+    implements some checks and pops up assertion message boxes if the tests
+    fail, or by setting the environment variable OOO_ENABLE_LOCALE_DATA_CHECKS
+    to 'Y' or 'Yes' (or any other string starting with 'Y') or '1' before
+    starting the application, which outputs the same messages to stderr and
+    also works in a product build.
+
+    Then follow this procedure:
+    1. Create a new spreadsheet document.
+    2. On a cell use context menu -> Format Cells -> Numbers.
+    3. Select the locale in the Language list box => MUST be assertion free.
+    3.a. Assertions are only shown at the very first time a number formatter
+         is created, respectively the first time a specific locale data is
+         used.  To repeat steps 1.-3. you'd need to create another spreadsheet
+         document.
+
+    ===========================================================================
+    NOTE the FormatElement comments further down.
+    ===========================================================================
+
+-->
+
+<!-- ............................................................... -->
+<!-- Entities for characters and symbols ........................... -->
+
+<!ENTITY % UNOModule
+        'unoid                  CDATA           #IMPLIED'>
+
+<!ENTITY % MessageID
+        'msgid                  CDATA           #REQUIRED'>
+
+<!ENTITY % RefLocale
+        'ref                    CDATA           #IMPLIED'>
+<!-- Where given, an element can be inherited from another locale, e.g.
+     ref="en_US" -->
+
+<!ENTITY % LIBModule
+        'module                 CDATA           #IMPLIED'>
+<!-- The locale referred to for the sub categories, implementation detail. -->
+
+<!ENTITY % replaceFrom  'replaceFrom    CDATA #IMPLIED'>
+<!ENTITY % replaceTo    'replaceTo      CDATA #IMPLIED'>
+<!-- See below for the LC_FORMAT element. -->
+
+<!ELEMENT DefaultName  (#PCDATA)>
+
+<!-- Locale is made of different sub categories -->
+<!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_FORMAT_1?, LC_COLLATION, LC_SEARCH, LC_INDEX, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
+<!ATTLIST Locale versionDTD CDATA #FIXED "2.0.3">
+<!-- Version identifier to prevent mismatching data files being submitted
+     because of older files being copied as templates. The version should be
+     less than or equal to the OOo release, or the OOo release number plus some
+     extension, like "2.0.enhanced", to be able to easily determine the
+     corresponding OOo version. New versions of the DTD with new required
+     elements SHOULD REALLY result in a new versionDTD here and
+     LOCALE_VERSION_DTD in ../LocaleNode.cxx, and *.xml files MUST be adapted
+     then, otherwise building the data or checking it with a validating parser
+     will throw an error.
+-->
+<!ATTLIST Locale allowUpdateFromCLDR (yes|no) #REQUIRED>
+<!-- Whether some data elements may be (automatically) updated from the Common
+     Locale Data Repository, see http://cldr.unicode.org/
+     Note: This mechanism currently (2010-02-21) is outdated.
+-->
+<!ATTLIST Locale  version CDATA #REQUIRED>
+<!-- Valid number, may designate versioned data -->
+
+
+<!ELEMENT LC_INFO (Language, Country, Platform?, Variant?)>
+
+<!ELEMENT Language (LangID, DefaultName) >
+<!ELEMENT LangID (#PCDATA) >
+<!-- LangID must be a valid two or three letter language identifier defined by
+     ISO 639. Use ISO 639-1 two letter code where available, else ISO 639-2 or
+     639-3 three letter code.
+-->
+
+<!ELEMENT Country (CountryID, DefaultName) >
+<!ELEMENT CountryID (#PCDATA) >
+<!-- CountryID must be a valid two letter country identifier defined by ISO 3166. -->
+
+<!ELEMENT Platform (PlatformID) >
+<!ELEMENT PlatformID (#PCDATA) >
+<!-- Unused, deprecated, can be generic|unix|win32|macos, best Platform element
+     be absent.
+-->
+
+<!ELEMENT Variant (#PCDATA) >
+<!-- Reserved for future use, currently unused. -->
+
+
+<!-- The LC_FORMAT element contains number format codes and may actually appear
+     twice (with the second ocurrence named LC_FORMAT_1). One section is
+     mandatory and MUST contain at least all required format codes
+     formatindex="0" to formatindex="47", MUST NOT contain formatindex 48 and
+     49, and MAY contain other format codes. See below ATTLIST FormatElement
+     formatindex.
+
+     A second LC_FORMAT_1 section may follow containing other format codes. The
+     difference between the two sections is that they are inherited
+     independently if a locale uses the RefLocale mechanism (ref="..."). This
+     may be used to not offer locale dependent format codes to other locales
+     that otherwise inherit the format codes.
+
+-->
+<!ELEMENT LC_FORMAT (FormatElement*) >
+<!-- All FormatElement elements must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST LC_FORMAT %RefLocale;>
+<!ATTLIST LC_FORMAT %replaceFrom;>
+<!-- Define placeholder for currency code, usually "[CURRENCY]" -->
+<!ATTLIST LC_FORMAT %replaceTo;>
+<!-- Currency code to be used to replace the placeholder, e.g. "[$R-1C09]".
+     Note: The brackets and the leading $ character are mandatory, the
+     hyphen-minus separates the currency symbol from the hexagesimal MS-LCID,
+     letters contained in the LCID have to be in upper case, leading zeros are
+     to be omitted. LCIDs are defined in i18npool/inc/i18npool/lang.h
+-->
+
+<!ELEMENT LC_FORMAT_1 (FormatElement*) >
+<!ATTLIST LC_FORMAT_1 %RefLocale;>
+<!ATTLIST LC_FORMAT_1 %replaceFrom;>
+<!ATTLIST LC_FORMAT_1 %replaceTo;>
+
+<!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
+<!ATTLIST FormatElement    %MessageID;>
+<!ATTLIST FormatElement    default  (true|false)        #REQUIRED >
+<!ATTLIST FormatElement    type     (short|medium|long) #REQUIRED >
+<!--
+    There may be up to three groups (type="short", type="medium", type="long")
+    for each usage category defined. Each group, if defined, needs excactly one
+    default. The type roughly determines the display string length, for example
+    short, medium, and long date formats.
+
+    The number formatter determines an ultimate default format of a specific
+    usage category by looking at the medium, long, and short default formats,
+    in that very particular order.
+-->
+<!ATTLIST FormatElement    usage    (FIXED_NUMBER|FRACTION_NUMBER|PERCENT_NUMBER|SCIENTIFIC_NUMBER|CURRENCY|DATE|TIME|DATE_TIME) #REQUIRED >
+<!ATTLIST FormatElement formatindex  CDATA #REQUIRED>
+<!--
+    The following FormatElements must follow specific rules:
+
+    All:
+        The format indices 0..49 are reserved and, for backwards compatibility,
+        MUST be used as stated in
+        offapi/com/sun/star/i18n/NumberFormatIndex.idl.
+        Note that indices 10 ("# ?/?"), 11 ("# ??/??"), 48 (BOOLEAN) and 49 (@
+        Text) are generated internally, as they aren't locale dependent, and
+        must not be used in locale data XML files. All other formats have to be
+        present.
+
+        Note also that "must be used as stated" does not mean that the format
+        codes must be identical, of course the meaning of a format code should
+        match, for example en_US MM/DD/YY matches de_DE DD.MM.YY
+        Just imagine the same index being used with another locale shouldn't
+        change the meaning of representation significantly.
+
+        You'll notice differences of non-matching format codes only if
+        documents use the Default language in number formats and either are
+        stored in old SO5 binary file format and loaded on another system where
+        languages/locales aren't the same, or if the default locale is switched
+        under menu Tools.Options.LanguageSettings.Languages.LocaleSetting
+        dialog, which exchanges formats on the fly in the spreadsheet
+        application. Please check it out! So far only very few locale data file
+        we received got that right, especially not in date formats!
+
+        For easier comparison between locales in future please sort the
+        FormatElements by their formatindex="..." value within a usage group.
+        This isn't necessary to be technically correct and isn't done in many
+        locales yet, but will certainly help.
+
+    Of usage="FIXED_NUMBER":
+        formatindex="0" MUST be the format containing the 'General' keyword.
+        The keyword itself may be localized, it is good practice though to
+        stick with a wording known from another spreadsheet application for
+        better user experience. Like other format codes it may be prepended
+        with a [NatNum1] modifier if values are to be displayed using native
+        numbering if no specific format was applied. The format must have the
+        default="true" and type="medium" attributes.
+
+    Of usage="DATE":
+        formatindex="21" is used to edit already existing date data. In order
+        to always edit the full century the long year YYYY code must be used.
+        Furthermore, the format has to be of an editable type, of course, which
+        means parseable. Therefore it should only contain DD, MM, YYYY and date
+        separators, and the YMD default order is determined from the order
+        encountered in this format.
+        TODO: Future versions should make use of an edit="true" attribute
+        instead of relying on this special requirement.
+
+        Formatindices 32 and 33 are always used for ISO 8601 YY-MM-DD
+        respectively YYYY-MM-DD format codes.
+
+    Of usage="DATE_TIME":
+        formatindex="47" is used to edit already existing combined date/time
+        data. The requirements are the same as for formatindex="21" above.
+
+    Of usage="TIME":
+        formatindices 43, 44, 45 are special in the sense that they are
+        programmatically used to automatically display values that meet certain
+        criteria:
+        Formatindex="43" contains the [HH] format code that displays hour
+        values greater than or equal to 24 (as opposed to a simple HH that
+        displays modulo 24).
+        Formatindex="44" uses no hour code but 100th seconds and the
+        Time100SecSeparator.
+        Formatindex="45" uses both [HH] hour code and 100th seconds to be able
+        to edit such time values without loosing information.
+
+    Of usage="CURRENCY":
+        formatindices 12, 13, 14, 15, 17 with [$xxx-yyy] notation must use the
+        xxx currency symbol that has the attribute
+        usedInCompatibleFormatCodes="true".  The hexadecimal yyy LANGID must be
+        properly set. It can be found in project util module tools file
+        tools/inc/lang.hxx.  You may verify the proper use of the xxx currency
+        symbol with the AWK script
+        i18npool/source/localedata/data/currency-check.awk, it mustn't display
+        any output. If it does, then there's something wrong.
+-->
+<!ELEMENT FormatCode      (#PCDATA)>
+
+
+<!-- The LC_CALENDAR element defines calendars used with a locale. -->
+<!ELEMENT LC_CALENDAR (Calendar* ) >
+<!-- At least one Calendar element must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST LC_CALENDAR %RefLocale;>
+
+<!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
+<!ATTLIST Calendar %UNOModule;>
+<!-- The unoid of a gregorian calendar MUST be lower case "gregorian",
+     calendars MUST match the names defined in the OASIS OpenDocument Format
+     (ODF) 1.2 or later specification. The implementation name registered with
+     the OOo service resgistry MUST match, e.g.
+     com.sun.star.i18n.Calendar_gregorian
+-->
+<!ATTLIST Calendar default (true|false) #REQUIRED >
+<!-- Exactly one Calendar element has to be the default calendar. -->
+
+<!ELEMENT DaysOfWeek (Day*)>
+<!-- All Day elements of a Calendar must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST DaysOfWeek %RefLocale;>
+<!-- Sequence of days is important, MUST start with Sunday. -->
+<!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT DayID (#PCDATA)>
+<!-- Preferably the lower case abbreviated English name like sun for Sunday. -->
+<!ELEMENT DefaultAbbrvName (#PCDATA)>
+<!-- The abbreviated day name, e.g. Sun for Sunday. -->
+<!ELEMENT DefaultFullName (#PCDATA)>
+<!-- The full day name, e.g. Sunday for Sunday. -->
+
+<!ELEMENT MonthsOfYear (Month*)>
+<!-- All Month elements of a Calendar must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST MonthsOfYear %RefLocale;>
+<!-- Sequence of months is important, MUST start with the first month of a
+     year, e.g. January in a Gregorian calendar.
+ -->
+<!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT MonthID (#PCDATA)>
+<!-- Preferably the lower case abbreviated English name like jan for January. -->
+
+<!ELEMENT Eras (Era*)>
+<!-- All Era elements of a Calendar must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST Eras %RefLocale;>
+<!-- The eras MUST be in chronological order, e.g. first BC then AC. -->
+<!ELEMENT Era (EraID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT EraID (#PCDATA)>
+<!-- If a calendar has special eras (like zh_TW ROC or ja_JP Gengou calendar)
+     and a date before those eras is undefined, a leading (first) dummy era
+     with EraID="Dummy" has to be defined to enable the number formatter to
+     fall back to a Gregorian calendar for those date values if the XCalendar
+     implementation returns an era value of 0.
+-->
+
+<!ELEMENT StartDayOfWeek (DayID)>
+<!-- MUST exactly match (case significant!) one of the DayID of DaysOfWeek -->
+
+<!ELEMENT MinimalDaysInFirstWeek (#PCDATA)>
+<!-- The number of days of a week that must reside in the beginning of a year
+     to make a week the first week of the year. For example, a value of 4 means
+     that at least 4 days of a week must be in the new year. So if the week
+     starts on Monday, the first week of a year will be the week where Thursday
+     is in the new year.
+-->
+
+
+<!-- The LC_CURRENCY element defines currencies used with a locale. -->
+<!ELEMENT LC_CURRENCY (Currency* ) >
+<!-- At least one Currency element must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST LC_CURRENCY %RefLocale;>
+<!ELEMENT Currency (CurrencyID, CurrencySymbol, BankSymbol, CurrencyName, DecimalPlaces)>
+<!ATTLIST Currency  default (true|false) #REQUIRED >
+<!-- Exactly one Currency element has to be the default currency. -->
+<!ATTLIST Currency  usedInCompatibleFormatCodes (true|false) #REQUIRED >
+<!-- If this currency is the one used in compatible number format codes with
+     <member>FormatElement::formatIndex</member> values in the range 12..17.
+     Those format codes are used to generate some old style currency format
+     codes for compatibility with StarOffice5 and StarOffice4.
+     Every locale data file MUST contain exactly one currency having this set to "true",
+     and that currency MUST be used in format codes 12..17.
+     For European countries using the EURo it MUST be the old currency, for example, DM.
+-->
+<!ATTLIST Currency  legacyOnly (true|false) #IMPLIED >
+<!-- If this Currency element exists only to be able to correctly load legacy
+     documents and is not selectable in the UI otherwise. Defaults to "false"
+     if not specified. If this attribute is "true", 'default' and
+     'usedInCompatibleFormatCodes' must both be "false".
+-->
+<!ELEMENT CurrencyID (#PCDATA)>
+<!-- The ISO 4217 three letter currency code, e.g. USD or EUR. -->
+<!ELEMENT CurrencySymbol (#PCDATA)>
+<!-- The currency symbol, e.g. $ or €. -->
+<!ELEMENT BankSymbol (#PCDATA)>
+<!-- The ISO 4217 three letter currency code, e.g. USD or EUR. -->
+<!ELEMENT CurrencyName (#PCDATA)>
+<!-- The native currency name, e.g. Dollar or Euro. -->
+<!ELEMENT DecimalPlaces (#PCDATA)>
+<!-- Number of decimal places used with the currency, usually 2 or 0, e.g. 2
+     for cents.
+-->
+
+
+<!ELEMENT LC_CTYPE (Separators?, Markers?, TimeAM?, TimePM?,  MeasurementSystem?)>
+<!-- All elements must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST LC_CTYPE  %RefLocale;>
+<!ATTLIST LC_CTYPE  %UNOModule;>
+
+<!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
+<!ELEMENT DateSeparator (#PCDATA)>
+<!ELEMENT ThousandSeparator (#PCDATA)>
+<!ELEMENT DecimalSeparator (#PCDATA)>
+<!ELEMENT TimeSeparator (#PCDATA)>
+<!ELEMENT Time100SecSeparator (#PCDATA)>
+<!ELEMENT ListSeparator (#PCDATA)>
+<!ELEMENT LongDateDayOfWeekSeparator (#PCDATA)>
+<!ELEMENT LongDateDaySeparator (#PCDATA)>
+<!ELEMENT LongDateMonthSeparator (#PCDATA)>
+<!ELEMENT LongDateYearSeparator (#PCDATA)>
+
+<!ELEMENT Markers (QuotationStart, QuotationEnd, DoubleQuotationStart, DoubleQuotationEnd)>
+<!ELEMENT QuotationStart (#PCDATA)>
+<!ELEMENT QuotationEnd  (#PCDATA)>
+<!ELEMENT DoubleQuotationStart (#PCDATA)>
+<!ELEMENT DoubleQuotationEnd (#PCDATA)>
+
+<!ELEMENT TimeAM (#PCDATA)>
+<!ELEMENT TimePM (#PCDATA)>
+<!ELEMENT MeasurementSystem  (#PCDATA)>
+
+
+<!ELEMENT LC_COLLATION (Collator*, CollationOptions?)>
+<!-- All elements must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST LC_COLLATION %RefLocale;>
+<!--
+	Optional ICU tailoring.
+
+	See Collation Customization in ICU User Guide for syntax,
+	http://www.icu-project.org/userguide/Collate_Customization.html
+
+	There are two ways to add language specific tailoring in OpenOffice.org.
+	For small tailoring, you can directly add it in locale data here. For 
+	large tailoring, it is suggested to put the data under collator/data, so
+	it will be compiled to a binary format in build time and improve performance
+	in run time.
+
+-->
+<!ELEMENT Collator (#PCDATA)>
+<!ATTLIST Collator  %UNOModule;>
+<!ATTLIST Collator  default (true|false) #REQUIRED >
+<!ELEMENT CollationOptions (TransliterationModules+)>
+<!ELEMENT TransliterationModules (#PCDATA)>
+
+
+<!ELEMENT LC_SEARCH (SearchOptions?)>
+<!-- All elements must be given if the RefLocale mechanism is not used! -->
+<!ATTLIST LC_SEARCH %RefLocale;>
+<!ELEMENT SearchOptions (TransliterationModules+)>
+
+
+<!ELEMENT LC_INDEX (IndexKey*, UnicodeScript*, FollowPageWord*)>
+<!ATTLIST LC_INDEX %RefLocale;>
+
+<!--
+    The IndexKey element is optional, but should be given if the locale
+    requires a specific sort order in Writer's index tables or entries are to
+    be combined under keys.
+
+    Index key for the algorithm and language, like >A-Z< for English => A, B,
+    C, ..., Y, Z. The letters specify under which key an entry goes and the
+    order the keys are sorted. Keys may be reordered or letters inserted to
+    form a specific order, for example (ve_ZA) >A-D Ḓ E-L Ḽ M N Ṋ Ṅ O-T Ṱ U-Z<
+    Entries that don't match a defined key are appended to the index list. Used
+    in Writer textprocessor.
+
+    The initial data was setup according to the ICU collation chart at
+    http://oss.software.ibm.com/icu/charts/collation/
+    Note: ICU site was moved to http://www.icu-project.org/ and as ICU per
+    default uses CLDR, collation charts are available at
+    http://unicode.org/cldr/comparison_charts.html#Collation
+
+    Possible notations in the syntax of the IndexKey element are:
+
+    '-' (dash): Ellipsis, all letters elided by the ellipsis are included as
+    index keys in alphabetic order. For example, 'A-Z' includes all ASCII
+    letters A to Z.
+
+    '[]' (square brackets): all letters included in square brackets are
+    skipping letters. It is used for CTL languages, for example in Thai
+    (th_TH), to skip prefix vowels or signs. For example, if ["] double quote
+    is defined as skipping letter, index item '"Index"' will be under 'I', not
+    '"'.
+
+    '{}' (curly brackets): define multiple letters index key, for example
+    '{Cs}' is one of the index keys for Hungarian (hu_HU).
+
+    '()' (parentheses): define optional description for index key. If defined,
+    the description will be shown as index key title, instead of the index key
+    itself. For example, 'E(E, É)' in Hungarian adds entries with 'E' to the
+    description 'E, É'.
+
+-->
+<!ELEMENT IndexKey (#PCDATA)>
+<!ATTLIST IndexKey  %UNOModule;>
+<!ATTLIST IndexKey  %LIBModule;>
+<!ATTLIST IndexKey  default (true|false) #REQUIRED >
+<!ATTLIST IndexKey  phonetic (true|false) #REQUIRED >
+
+<!--
+    The Unicode script types are those of
+    offapi/com/sun/star/i18n/UnicodeScript.idl, they define the code range for
+    the language.
+-->
+<!ELEMENT UnicodeScript (#PCDATA)>
+
+<!--
+    The FollowPageWord entries were originally hard-coded in
+    ../../indexentry/indexentrysupplier.cxx, most locales used the English
+    ``p.'' and ``pp.'', valid data should be provided by native speakers.
+    These words or abbreviations are used in the Writer's index table. The
+    first FollowPageWord element is the abbreviation for "page" (p.), the
+    second FollowPageWord element the abbreviation for "page and following
+    pages" (pp.).
+-->
+<!ELEMENT FollowPageWord (#PCDATA)>
+
+
+<!ELEMENT LC_TRANSLITERATION (Transliteration*)>
+<!ATTLIST LC_TRANSLITERATION %RefLocale;>
+<!ELEMENT Transliteration EMPTY>
+<!ATTLIST Transliteration  %UNOModule;>
+
+<!ELEMENT LC_MISC (ForbiddenCharacters?, BreakIteratorRules?, ReservedWords?)>
+<!ATTLIST LC_MISC %RefLocale;>
+<!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters, LineBreakHangingCharacters)>
+<!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
+<!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
+
+<!-- optional break iterator rules for the languages. 
+     if defined, 5 rules should be all listed, each of them can be blank and default will be used.
+     order of the rules is significant!
+-->
+<!ELEMENT BreakIteratorRules (EditMode, DictionaryMode, WordCountMode, CharacterMode, LineMode)>
+<!ELEMENT EditMode (#PCDATA)>
+<!ELEMENT DictionaryMode (#PCDATA)>
+<!ELEMENT WordCountMode (#PCDATA)>
+<!ELEMENT CharacterMode (#PCDATA)>
+<!ELEMENT LineMode (#PCDATA)>
+
+<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarter1Abbreviation, quarter2Abbreviation, quarter3Abbreviation, quarter4Abbreviation)>
+<!-- order is significant! -->
+<!ELEMENT trueWord (#PCDATA)>
+<!ELEMENT falseWord (#PCDATA)>
+<!ELEMENT quarter1Word (#PCDATA)>
+<!ELEMENT quarter2Word (#PCDATA)>
+<!ELEMENT quarter3Word (#PCDATA)>
+<!ELEMENT quarter4Word (#PCDATA)>
+<!ELEMENT aboveWord (#PCDATA)>
+<!ELEMENT belowWord (#PCDATA)>
+<!-- aboveWord and belowWord are used as reference field content in Writer, it
+     is a "physical" object relative position, not "numerical" relative.
+-->
+<!ELEMENT quarter1Abbreviation (#PCDATA)>    <!-- "Q1" (quarter), "T1" (trimestre), ... -->
+<!ELEMENT quarter2Abbreviation (#PCDATA)>
+<!ELEMENT quarter3Abbreviation (#PCDATA)>
+<!ELEMENT quarter4Abbreviation (#PCDATA)>
+
+
+<!--
+    In numbering levels, the NumType attribute is a value of the constants
+    defined in offapi/com/sun/star/style/NumberingType.idl
+-->
+
+<!ELEMENT LC_NumberingLevel (NumberingLevel* )>
+<!ATTLIST LC_NumberingLevel %RefLocale;>
+<!ELEMENT NumberingLevel EMPTY>
+<!ATTLIST NumberingLevel Prefix CDATA #REQUIRED>
+<!ATTLIST NumberingLevel NumType CDATA #REQUIRED>
+<!ATTLIST NumberingLevel Suffix CDATA  #REQUIRED>
+<!ATTLIST NumberingLevel Transliteration CDATA #IMPLIED>
+<!ATTLIST NumberingLevel NatNum CDATA #IMPLIED>
+
+
+<!ELEMENT LC_OutLineNumberingLevel (OutlineStyle* )>
+<!ATTLIST LC_OutLineNumberingLevel %RefLocale;>
+<!ELEMENT OutlineStyle (OutLineNumberingLevel+)>
+<!ELEMENT OutLineNumberingLevel EMPTY>
+<!ATTLIST OutLineNumberingLevel Prefix CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel NumType CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel Suffix CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel BulletChar CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel BulletFontName CDATA   #REQUIRED>
+<!ATTLIST OutLineNumberingLevel ParentNumbering CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel LeftMargin CDATA   #REQUIRED>
+<!ATTLIST OutLineNumberingLevel SymbolTextDistance CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel FirstLineOffset CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel Transliteration CDATA #IMPLIED >
+<!ATTLIST OutLineNumberingLevel NatNum CDATA #IMPLIED>

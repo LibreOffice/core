@@ -1,0 +1,3 @@
+af	afms : solenv NULL
+af	afms		usr1	-	all	af_mkout NULL
+af	afms		nmake	-	all	af_fonts NULL

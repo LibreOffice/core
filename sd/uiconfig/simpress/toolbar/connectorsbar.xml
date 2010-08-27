@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:Connector" toolbar:helpid="27058"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorArrowStart" toolbar:visible="false" toolbar:helpid="27119"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorArrowEnd" toolbar:helpid="27120"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorArrows" toolbar:helpid="27121"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCircleStart" toolbar:visible="false" toolbar:helpid="27122"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCircleEnd" toolbar:visible="false" toolbar:helpid="27123"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCircles" toolbar:visible="false" toolbar:helpid="27124"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLines" toolbar:helpid="27139"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowStart" toolbar:visible="false" toolbar:helpid="27140"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowEnd" toolbar:helpid="27141"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrows" toolbar:helpid="27142"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleStart" toolbar:visible="false" toolbar:helpid="27143"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleEnd" toolbar:visible="false" toolbar:helpid="27144"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircles" toolbar:visible="false" toolbar:helpid="27145"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLine" toolbar:helpid="27125"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrowStart" toolbar:visible="false" toolbar:helpid="27126"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrowEnd" toolbar:helpid="27127"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrows" toolbar:helpid="27128"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineCircleStart" toolbar:visible="false" toolbar:helpid="27129"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineCircleEnd" toolbar:visible="false" toolbar:helpid="27130"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineCircles" toolbar:visible="false" toolbar:helpid="27131"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurve" toolbar:helpid="27132"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveArrowStart" toolbar:visible="false" toolbar:helpid="27133"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveArrowEnd" toolbar:helpid="27134"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveArrows" toolbar:helpid="27135"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircleStart" toolbar:visible="false" toolbar:helpid="27136"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircleEnd" toolbar:visible="false" toolbar:helpid="27137"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircles" toolbar:visible="false" toolbar:helpid="27138"/>
+</toolbar:toolbar>

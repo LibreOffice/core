@@ -1,0 +1,585 @@
+*PPD-Adobe: "4.1"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.1"
+*FileVersion: "1.1"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "HP1200C1.PPD"
+*Product: "(HP DeskJet 1200C)"
+*PSVersion: "(2014.102) 1"
+*ModelName: "HP DeskJet 1200C/PS"
+*NickName: "HP DeskJet 1200C/PS"
+
+*% ==============Constraints =================
+
+*UIConstraints: *PageSize Legal *MediaType Special
+*UIConstraints: *PageSize Legal *MediaType Glossy
+*UIConstraints: *PageSize Legal *MediaType Transparency
+
+*UIConstraints: *PageSize Comm10 *MediaType Special
+*UIConstraints: *PageSize Comm10 *MediaType Glossy
+*UIConstraints: *PageSize Comm10 *MediaType Transparency
+
+*UIConstraints: *PageSize DL *MediaType Special
+*UIConstraints: *PageSize DL *MediaType Glossy
+*UIConstraints: *PageSize DL *MediaType Transparency
+
+*UIConstraints: *PageSize C5 *MediaType Special
+*UIConstraints: *PageSize C5 *MediaType Glossy
+*UIConstraints: *PageSize C5 *MediaType Transparency
+
+*UIConstraints: *MediaType Glossy *OutputMode Fast 
+*UIConstraints: *MediaType Glossy *OutputMode Normal
+
+*UIConstraints: *MediaType Transparency *OutputMode Fast 
+*UIConstraints: *MediaType Transparency *OutputMode Normal
+
+*UIConstraints: *PageSize Comm10 *InputSlot Cassette
+*UIConstraints: *PageRegion Comm10 *InputSlot Cassette
+
+*UIConstraints: *PageSize DL  *InputSlot Cassette
+*UIConstraints: *PageRegion DL *InputSlot Cassette
+
+*UIConstraints: *PageSize C5 *InputSlot Cassette
+*UIConstraints: *PageRegion C5 *InputSlot Cassette
+
+*% =========== Device Capabilities ===============
+
+*LanguageLevel: "2"
+*Protocols: TBCP PJL
+*FreeVM: "2124600"
+*ColorDevice:  True
+*DefaultColorSpace:  CMYK
+*VariablePaperSize: False
+*FileSystem: False
+*Throughput: "1"
+
+*Password: "()" 
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+ (WARNING: Cannot modify initial VM.) =
+ (Missing or invalid password.) =
+ (Please contact the author of this software.) = flush quit
+ } if "
+*End
+*Reset: "
+  count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+ (WARNING: Cannot reset printer.) =
+ (Missing or invalid password.) =
+ (Please contact the author of this software.) = flush quit
+ } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush "
+*End
+
+*DefaultResolution: 300dpi
+
+*% =============Halftone Information ===============
+
+*ScreenFreq: "60.0"
+*ScreenAngle: "0.0"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*%===================Print Quality====================
+
+*OpenUI *OutputMode/Print Quality: PickOne
+*OrderDependency: 10 AnySetup *OutputMode
+*DefaultOutputMode: Normal
+*OutputMode Fast/Fast: "
+ 1 dict dup /HWResolution [300 300] put setpagedevice
+ 2 dict
+ dup /PostRenderingEnhance true put
+ dup /PostRenderingEnhanceDetails
+ 2 dict 
+ dup /PrintQuality 1 put
+ dup /Type 11 put
+ put 
+ setpagedevice"
+*End
+
+*OutputMode Normal/Normal: "
+ 1 dict dup /HWResolution [300 300] put setpagedevice
+ 2 dict
+ dup /PostRenderingEnhance true put
+ dup /PostRenderingEnhanceDetails
+ 2 dict 
+ dup /PrintQuality 2 put
+ dup /Type 11 put
+ put 
+ setpagedevice"
+*End
+
+*OutputMode HighQuality/High Quality: "
+ 1 dict dup /HWResolution [300 300] put setpagedevice
+ 2 dict
+ dup /PostRenderingEnhance true put
+ dup /PostRenderingEnhanceDetails
+ 2 dict 
+ dup /PrintQuality 3 put
+ dup /Type 11 put
+ put 
+ setpagedevice"
+*End
+
+*?OutputMode: "
+ save
+ 4 dict
+ dup 0 (Unknown) put
+ dup 1 (Fast) put
+ dup 2 (Normal) put
+ dup 3 (HighQuality) put
+ currentpagedevice /PostRenderingEnhanceDetails get
+ /PrintQuality get get = flush 
+ restore "
+*End
+
+*CloseUI: *OutputMode
+
+*%===================Color/Gray Printing====================
+
+*OpenUI *ColorModel/Print Color as Gray: PickOne
+*OrderDependency: 30 AnySetup *ColorModel
+*DefaultColorModel: DeviceCMYK
+*ColorModel DeviceCMYK/No: "
+ 1 dict dup /ProcessColorModel /DeviceCMYK 
+ put setpagedevice"
+*End
+
+*ColorModel DeviceGray/Yes: "
+ 1 dict dup /ProcessColorModel /DeviceGray 
+ put setpagedevice"
+*End
+
+*?ColorModel: "
+ save
+ currentpagedevice /PostRenderingEnhanceDetails get
+ /ColorModel get get = flush 
+ restore "
+*End
+
+*CloseUI: *ColorModel
+
+*%=============== Dither Block ================
+
+*OpenUI *AppHalftoning/Application Halftoning: Boolean 
+*OrderDependency: 80 AnySetup *AppHalftoning 
+*DefaultAppHalftoning: True 
+*AppHalftoning True/Allow: "" 
+*AppHalftoning False/Disallow: "
+ /setscreen { pop pop pop } def
+ /setcolorscreen { pop pop pop pop pop pop pop pop pop pop pop pop } def" 
+*End
+
+*CloseUI: *AppHalftoning
+
+*% ==============Paper Handling ===================
+
+*LandscapeOrientation: Plus90
+
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+
+*%===============Page Size======================
+
+*OpenUI *PageSize/Media Size: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter 8 1/2 x 11 in: "
+   currentpagedevice /InputAttributes get 0 get
+   dup length dict copy
+   dup /PageSize [612 792] put
+   1 dict dup begin exch 0 exch def end
+   3 dict 
+   dup begin exch /InputAttributes exch def end
+   dup /PageSize [612 792] put 
+   dup /ImagingBBox null put 
+   setpagedevice"
+*End
+
+*PageSize Legal/Legal 8 1/2 x 14 in: "
+   currentpagedevice /InputAttributes get 0 get
+   dup length dict copy
+   dup /PageSize [612 1008] put
+   1 dict dup begin exch 0 exch def end
+   3 dict 
+   dup begin exch /InputAttributes exch def end
+   dup /PageSize [612 1008] put 
+   dup /ImagingBBox null put  
+   setpagedevice"
+*End
+
+*PageSize A4/A4 210 x 297 mm: "
+   currentpagedevice /InputAttributes get 0 get
+   dup length dict copy
+   dup /PageSize [595 842]  put
+   1 dict dup begin exch 0 exch def end
+ 3 dict 
+ dup begin exch /InputAttributes exch def end
+ dup /PageSize [595 842] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageSize Comm10/Env Comm10 4 1/8 x 9 1/2 in: "
+   currentpagedevice /InputAttributes get 0 get
+   dup length dict copy
+   dup /PageSize [297 684]  put
+   1 dict dup begin exch 0 exch def end
+ 3 dict 
+ dup begin exch /InputAttributes exch def end
+ dup /PageSize [297 684] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageSize DL/Env DL 110 x 220 mm: "
+   currentpagedevice /InputAttributes get 0 get
+   dup length dict copy
+   dup /PageSize [312 624]  put
+   1 dict dup begin exch 0 exch def end
+ 3 dict 
+ dup begin exch /InputAttributes exch def end
+ dup /PageSize [312 624] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageSize C5/Env C5 162 x 229 mm: "
+   currentpagedevice /InputAttributes get 0 get
+   dup length dict copy
+   dup /PageSize [459 649]  put
+   1 dict dup begin exch 0 exch def end
+ 3 dict 
+ dup begin exch /InputAttributes exch def end
+ dup /PageSize [459 649] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*?PageSize: "
+ save currentpagedevice /PageSize get aload pop 
+ 2 copy gt {exch} if (Unknown)
+ 6 dict
+ dup [612 792] (Letter) put
+ dup [612 1008] (Legal) put
+ dup [595 842] (A4) put
+ dup [297 684] (Comm10) put
+ dup [312 624] (DL) put
+ dup [459 649] (C5) put
+ { exch aload pop 4 index sub abs 5 le exch 5 index sub abs 5 le and 
+ { exch pop exit } { pop } ifelse
+ } bind forall = flush pop pop
+ restore"
+*End
+
+*CloseUI: *PageSize
+
+*%====================Page Region===================
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter 8 1/2 x 11 in: "
+ 2 dict dup /PageSize [612 792] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageRegion Legal/Legal 8 1/2 x 14 in: "
+ 2 dict dup /PageSize [612 1008] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageRegion A4/A4 210 x 297 mm: "
+ 2 dict dup /PageSize [595 842] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageRegion Comm10/Env Comm10 4 1/8 x 9 1/2: "
+ 2 dict dup /PageSize [297 684] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageRegion DL/Env DL 110 x 220 mm: "
+ 2 dict dup /PageSize [312 624] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*PageRegion C5/Env C5 162 x 229 mm: "
+ 2 dict dup /PageSize [459 649] put 
+ dup /ImagingBBox null put 
+ setpagedevice"
+*End
+
+*CloseUI: *PageRegion
+
+*%===================Imageable Area=====================
+
+*% The following entries provide information about specific paper keywords.
+
+*DefaultImageableArea: Letter
+*ImageableArea Letter/Letter 8 1/2 x 11 in: "14 12 598 780"
+*ImageableArea Legal/Legal 8 1/2 x 14 in: "14 12 598 996"
+*ImageableArea A4/A4 210 x 297 mm: "14 13 581 830"
+*ImageableArea Comm10/Env Comm10 4 1/8 x 9 1/2 in: "18 18 278 665"
+*ImageableArea DL/Env DL 110 x 220 mm: "18 19 294 605"
+*ImageableArea C5/Env C5 162 x 229 mm: "18 19 440 630"
+*?ImageableArea: "
+ save /cvp { cvi (            ) cvs print ( ) print } bind def
+ newpath clippath pathbbox
+ 4 -2 roll exch 2 {ceiling cvp} repeat
+ exch 2 {floor cvp} repeat flush
+ restore "
+*End
+
+*%====================Default Paper Dimension=================
+
+*% These provide the physical dimensions of the paper (by keyword)
+
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/Letter 8 1/2 x 11: "612 792"
+*PaperDimension Legal/Legal 8 1/2 x 14 in: "612 1008"
+*PaperDimension A4/A4 210 x 297 mm: "595 842"
+*PaperDimension Comm10/Env Comm10  4 1/8 x 9 1/2 in: "297 684"
+*PaperDimension DL/Env DL 110 x 220 mm: "312 624"
+*PaperDimension C5/Env C5 162 x 229 mm: "459 649"
+*RequiresPageRegion All: True
+
+*%=================Media Type============================
+
+*OpenUI *MediaType/Media Type: PickOne
+*OrderDependency: 50 AnySetup *MediaType
+*DefaultMediaType: Plain
+*MediaType Plain/Plain Paper: "
+ /DefaultColorRendering 
+ /PlainColorRendering 
+ /ColorRendering findresource
+ /ColorRendering defineresource pop
+ currentpagedevice /InputAttributes get 0 get
+ /MediaType (Plain)  put
+ 1 dict dup /MediaType (Plain) put setpagedevice"
+*End
+
+*MediaType Special/HP Special Paper: "
+ /DefaultColorRendering 
+ /SpecialColorRendering 
+ /ColorRendering findresource
+ /ColorRendering defineresource pop
+ currentpagedevice /InputAttributes get 0 get
+ /MediaType (Special)  put
+ 1 dict dup /MediaType (Special) put setpagedevice"
+*End
+
+*MediaType Glossy/HP Glossy Paper: "
+ /DefaultColorRendering 
+ /GlossyColorRendering 
+ /ColorRendering findresource
+ /ColorRendering defineresource pop
+ currentpagedevice /InputAttributes get 0 get
+ /MediaType (Glossy)  put
+ 1 dict dup /MediaType (Glossy) put setpagedevice"
+*End
+
+*MediaType Transparency/HP Transparency: "
+ /DefaultColorRendering 
+ /TransparencyColorRendering 
+ /ColorRendering findresource
+ /ColorRendering defineresource pop
+ currentpagedevice /InputAttributes get 0 get
+ /MediaType (Transparency)  put
+ 1 dict dup /MediaType (Transparency) put setpagedevice"
+*End
+
+*?MediaType: "
+ save
+ currentpagedevice /MediaType get
+ dup null eq {pop (Unknown)} if = flush 
+ restore " 
+*End
+
+*CloseUI: *MediaType
+
+*%==================Input Slot====================
+
+*OpenUI *InputSlot/Media Source: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Cassette
+*InputSlot Cassette/Paper Tray: ""
+*CloseUI: *InputSlot
+
+*%=================Manual Feed====================
+
+*OpenUI *ManualFeed/Manual Feed:  Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True/True: "1 dict dup /ManualFeed true put setpagedevice"
+*ManualFeed False/False: "1 dict dup /ManualFeed false put setpagedevice"
+*?ManualFeed: "
+ save
+ currentpagedevice /ManualFeed get
+ {(True)}{(False)}ifelse = flush
+ restore"
+*End
+
+*CloseUI: *ManualFeed
+
+*%===============Output Order and Bin=================
+
+*DefaultOutputBin: OnlyOne
+*DefaultOutputOrder: Reverse
+
+*% =================Font Information ==================
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.003S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.003S)" Standard ROM
+*Font Bookman-Light: Standard "(001.003S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.003S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+
+*?FontQuery: "
+ save
+ { count 1 gt
+ { exch dup 127 string cvs (/) print print (:) print
+ /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+ } { exit } ifelse 
+ } bind loop
+ (*) = flush
+ restore "
+*End
+
+*?FontList: "
+ save
+ (*) {cvn ==} 128 string /Font resourceforall
+ (*) = flush
+ restore "
+*End
+
+*%==================Printer Error Messages===============
+
+*% Printer Messages (verbatim from printer):
+
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "PrinterError: Out Of Paper"
+*Status: "PrinterError: Cover Open"
+*Status: "PrinterError: Feed Manual"
+*Status: "PrinterError: Paper Jam"
+*Status: "PrinterError: Miscellaneous Error"
+*Status: "PrinterError: Fatal Error"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%%)
+
+*Source: "Serial"
+*Source: "LocalTalk"
+*Source: "Parallel"
+*Source: "OptionalIO"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+
+*PrinterError: "Out Of Paper"
+*PrinterError: "Cover Open"
+*PrinterError: "Feed Manual"
+*PrinterError: "Paper Jam"
+*PrinterError: "Miscellaneous Error"
+*PrinterError: "Fatal Error"
+
+*%============Color Separation Information ==============
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%================For 60 lpi / 300 dpi  ==================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%================For 53 lpi / 300 dpi  =====================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+*% Produced by "bldppd42.ps" version 4.1 edit 2
+*% Last Edit Date: Aug 4 1995
+*% End of PPD file for DeskJet 1200C
+*% The byte count of this file should be exactly 017602 or 018187
+*% depending on the filesystem it resides in.
+*% end of PPD file for HP DeskJet 1200C 

@@ -1,0 +1,584 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+//#pragma CHARSET_ANSI
+
+#include "sections.hrc"
+#include "bibliography.hrc"
+
+#define FT_POS          12
+#define FTSIZE_LEFT     88
+#define ED_POS_LEFT     FT_POS+FTSIZE_LEFT+1
+#define ED_SIZE         70
+#define ED_POS_LEFT2    ED_POS_LEFT + ED_SIZE +1
+#define FT_POS_MIDDLE   ED_POS_LEFT2 + 5
+#define FT_POS_RIGHT    FT_POS_MIDDLE + FT_POS_MIDDLE - FT_POS
+
+#define FL_POS          6
+#define PAGE_WIDTH      FT_POS_RIGHT + FTSIZE_LEFT + (FTSIZE_LEFT * 8 / 10) + FL_POS + 5
+#define FL_WIDTH        PAGE_WIDTH - 2 * FL_POS
+
+TabPage RID_TP_GENERAL
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( PAGE_WIDTH, 209 );
+    HelpId = HID_BIB_CONTROL_PAGE;
+
+    FixedText FT_IDENTIFIER
+    {
+        Pos = MAP_APPFONT( FT_POS, 6 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_AUTHTYPE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 6 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_YEAR
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 6 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_AUTHOR
+    {
+        Pos = MAP_APPFONT( FT_POS, 20 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 20 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_PUBLISHER
+    {
+        Pos = MAP_APPFONT( FT_POS, 34 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_ADDRESS
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 34 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_ISBN
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 34 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_CHAPTER
+    {
+        Pos = MAP_APPFONT( FT_POS, 48 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_PAGE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 48 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedLine FL_1
+    {
+        Pos = MAP_APPFONT( FL_POS, 62 );
+        Size = MAP_APPFONT( FL_WIDTH, 8 );
+    };
+    FixedText FT_EDITOR
+    {
+        Pos = MAP_APPFONT( FT_POS, 73 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_EDITION
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 73 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_BOOKTITLE
+    {
+        Pos = MAP_APPFONT( FT_POS, 87 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_VOLUME
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 87 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_HOWPUBLISHED
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 87 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_ORGANIZATION
+    {
+        Pos = MAP_APPFONT( FT_POS, 101 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_INSTITUTION
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 101 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_SCHOOL
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 101 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_REPORT
+    {
+        Pos = MAP_APPFONT( FT_POS, 115);
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_MONTH
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 115 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedLine FL_2
+    {
+        Pos = MAP_APPFONT( FL_POS, 129 );
+        Size = MAP_APPFONT( FL_WIDTH, 8 );
+    };
+    FixedText FT_JOURNAL
+    {
+        Pos = MAP_APPFONT( FT_POS, 140 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+
+    FixedText FT_NUMBER
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 140 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_SERIES
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 140 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_ANNOTE
+    {
+        Pos = MAP_APPFONT( FT_POS, 154 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_NOTE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 154 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 154 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedLine FL_3
+    {
+        Pos = MAP_APPFONT( FL_POS, 168 );
+        Size = MAP_APPFONT( FL_WIDTH, 8 );
+    };
+    FixedText FT_CUSTOM1
+    {
+        Pos = MAP_APPFONT( FT_POS, 179 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_CUSTOM2
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 179 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_CUSTOM3
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 179 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_CUSTOM4
+    {
+        Pos = MAP_APPFONT( FT_POS, 193 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedText FT_CUSTOM5
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 193 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    String ST_ERROR_PREFIX
+    {
+        Text [ en-US ] = "The following column names could not be assigned:\n";
+    };
+    String ST_TYPE_ARTICLE
+    {
+        Text [ en-US ] = "Article";
+    };
+    String ST_TYPE_BOOK
+    {
+        Text [ en-US ] = "Book";
+    };
+    String ST_TYPE_BOOKLET
+    {
+        Text [ en-US ] = "Brochures";
+    };
+    String ST_TYPE_CONFERENCE
+    {
+        Text [ en-US ] = "Conference proceedings";
+    };
+    String ST_TYPE_INBOOK
+    {
+        Text [ en-US ] = "Book excerpt";
+    };
+    String ST_TYPE_INCOLLECTION
+    {
+        Text [ en-US ] = "Book excerpt with title";
+    };
+    String ST_TYPE_INPROCEEDINGS
+    {
+        Text [ en-US ] = "Conference proceedings";
+    };
+    String ST_TYPE_JOURNAL
+    {
+        Text [ en-US ] = "Journal";
+    };
+    String ST_TYPE_MANUAL
+    {
+        Text [ en-US ] = "Techn. documentation";
+    };
+    String ST_TYPE_MASTERSTHESIS
+    {
+        Text [ en-US ] = "Thesis";
+    };
+    String ST_TYPE_MISC
+    {
+        Text [ en-US ] = "Miscellaneous";
+    };
+    String ST_TYPE_PHDTHESIS
+    {
+        Text [ en-US ] = "Dissertation";
+    };
+    String ST_TYPE_PROCEEDINGS
+    {
+        Text [ en-US ] = "Conference proceedings";
+    };
+    String ST_TYPE_TECHREPORT
+    {
+        Text [ en-US ] = "Research report";
+    };
+    String ST_TYPE_UNPUBLISHED
+    {
+        Text [ en-US ] = "Unpublished";
+    };
+    String ST_TYPE_EMAIL
+    {
+        Text [ en-US ] = "e-mail";
+    };
+    String ST_TYPE_WWW
+    {
+        Text [ en-US ] = "WWW document";
+    };
+    String ST_TYPE_CUSTOM1
+    {
+        Text [ en-US ] = "User-defined1";
+    };
+    String ST_TYPE_CUSTOM2
+    {
+        Text [ en-US ] = "User-defined2";
+    };
+    String ST_TYPE_CUSTOM3
+    {
+        Text [ en-US ] = "User-defined3";
+    };
+    String ST_TYPE_CUSTOM4
+    {
+        Text [ en-US ] = "User-defined4";
+    };
+    String ST_TYPE_CUSTOM5
+    {
+        Text [ en-US ] = "User-defined5";
+    };
+    Text [ en-US ] = "General";
+};
+Menu RID_POPUP_ME_VIEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = PU_INSERT;
+            Text [ en-US ] = "Insert Section...";
+        };
+        MenuItem
+        {
+            Identifier = PU_REMOVE;
+            Text [ en-US ] = "Delete Section...";
+        };
+        MenuItem
+        {
+            Identifier = PU_CHG_NAME;
+            Text [ en-US ] = "Modify Name...";
+        };
+    };
+};
+
+String ST_IDENTIFIER
+{
+    Text [ en-US ] = "~Short name";
+};
+String ST_AUTHTYPE
+{
+    Text [ en-US ] = "~Type";
+};
+String ST_YEAR
+{
+    Text [ en-US ] = "~Year";
+};
+String ST_AUTHOR
+{
+    Text [ en-US ] = "Author(s)";
+};
+String ST_TITLE
+{
+    Text [ en-US ] = "Tit~le";
+};
+String ST_PUBLISHER
+{
+    Text [ en-US ] = "~Publisher";
+};
+String ST_ADDRESS
+{
+    Text [ en-US ] = "A~ddress";
+};
+String ST_ISBN
+{
+    Text [ en-US ] = "~ISBN";
+};
+String ST_CHAPTER
+{
+    Text [ en-US ] = "~Chapter";
+};
+String ST_PAGE
+{
+    Text [ en-US ] = "Pa~ge(s)";
+};
+String ST_EDITOR
+{
+    Text [ en-US ] = "Editor";
+};
+String ST_EDITION
+{
+    Text [ en-US ] = "Ed~ition";
+};
+String ST_BOOKTITLE
+{
+    Text [ en-US ] = "~Book title";
+};
+String ST_VOLUME
+{
+    Text [ en-US ] = "Volume";
+};
+String ST_HOWPUBLISHED
+{
+    Text [ en-US ] = "Publication t~ype";
+};
+String ST_ORGANIZATION
+{
+    Text [ en-US ] = "Organi~zation";
+};
+String ST_INSTITUTION
+{
+    Text [ en-US ] = "Instit~ution";
+};
+String ST_SCHOOL
+{
+    Text [ en-US ] = "University";
+};
+String ST_REPORT
+{
+    Text [ en-US ] = "Type of re~port";
+};
+String ST_MONTH
+{
+    Text [ en-US ] = "~Month";
+};
+String ST_JOURNAL
+{
+    Text [ en-US ] = "~Journal";
+};
+
+String ST_NUMBER
+{
+    Text [ en-US ] = "Numb~er";
+};
+String ST_SERIES
+{
+    Text [ en-US ] = "Se~ries";
+};
+String ST_ANNOTE
+{
+    Text [ en-US ] = "Ann~otation";
+};
+String ST_NOTE
+{
+    Text [ en-US ] = "~Note";
+};
+String ST_URL
+{
+    Text [ en-US ] = "URL";
+};
+String ST_CUSTOM1
+{
+    Text [ en-US ] = "User-defined field ~1";
+};
+String ST_CUSTOM2
+{
+    Text [ en-US ] = "User-defined field ~2";
+};
+String ST_CUSTOM3
+{
+    Text [ en-US ] = "User-defined field ~3";
+};
+String ST_CUSTOM4
+{
+    Text [ en-US ] = "User-defined field ~4";
+};
+String ST_CUSTOM5
+{
+    Text [ en-US ] = "User-defined field ~5";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

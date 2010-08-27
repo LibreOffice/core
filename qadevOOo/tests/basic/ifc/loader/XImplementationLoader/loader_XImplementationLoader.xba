@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="loader_XImplementationLoader" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'   Global cImpLoader As String
+'   Global cImpURL As String
+'   Global cImpName As String
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.loader.XImplementationLoader
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim bRes As Boolean
+    Dim xIfc As Object
+    Dim xReg As Object
+    Dim regKey As Object
+
+    xReg = createUNOService("com.sun.star.registry.SimpleRegistry")
+    xReg.Open(utils.getTempFileURL("XImpLoader.reg"), false, true)
+    regKey = xReg.getRootKey
+
+    Test.StartMethod("writeRegistryInfo()")
+    bOK = true
+    bRes = oObj.writeRegistryInfo(regKey, cImpLoader, cImpURL)
+    Out.Log("writeRegistryInfo() returned " &amp; bRes)
+    bOK = bOK AND bRes
+    Test.MethodTested("writeRegistryInfo()", bOK)
+
+    Test.StartMethod("activate()")
+    bOK = true
+    Out.Log("Activating implementation for " + cImpName)
+    xIfc = oObj.activate(cImpName, cImpLoader, cImpURL, regKey)
+    Out.Log("Returned object supports XServiceInfo : " + _
+        hasUnoInterfaces(xIfc, "com.sun.star.lang.XServiceInfo"))
+    Out.Log("Returned object's implementation name is " + xIfc.getImplementationName())
+
+    bOK = bOK AND xIfc.getImplementationName() = cImpName
+    Test.MethodTested("activate()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

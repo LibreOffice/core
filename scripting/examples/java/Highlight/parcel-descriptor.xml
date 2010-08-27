@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="Java" xmlns:parcel="scripting.dtd">
+    <script language="Java">
+        <locale lang="en">
+            <displayname value="HighlightText.showForm"/>
+            <description>
+                Text highlighting
+            </description>
+        </locale>
+        <functionname value="HighlightText.showForm"/>
+        <logicalname value="HighlightText.showForm"/>
+        <languagedepprops>
+            <prop name="classpath" value="Highlight.jar"/>
+        </languagedepprops>
+    </script>
+</parcel>

@@ -1,0 +1,13 @@
+    <node oor:name="MathType 3.x" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">MathType3.x</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>math_MathType_3x</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.formula.FormulaProperties</value></prop>
+    </node>

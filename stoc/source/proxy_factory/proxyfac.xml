@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   proxyfac.uno    </module-name>
+    <component-description>
+        <author> Daniel Boelzle </author>
+        <name>  com.sun.star.comp.stoc.ProxyFactory </name>
+        <description>
+Specifies a factory object to create proxy objects.
+These proxy object represent a given target object and can be
+be aggregated. The proxy objects act UNO conform and do NOT provide
+original target interfaces on queryInterface() calls.
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  C++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.reflection.ProxyFactory    </supported-service>
+        <service-dependency> ... </service-dependency>
+        <type>  com.sun.star.lang.XTypeProvider                     </type>
+        <type>  com.sun.star.lang.XServiceInfo                      </type>
+        <type>  com.sun.star.lang.XSingleServiceFactory             </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory              </type>
+        <type>  com.sun.star.registry.XSimpleRegistry               </type>
+        <type>  com.sun.star.registry.XRegistryKey                  </type>
+        <type>  com.sun.star.lang.XSingleComponentFactory </type>
+        <type>  com.sun.star.uno.XComponentContext        </type>
+        <type>  com.sun.star.uno.XAggregation                       </type>
+        <type>  com.sun.star.uno.XWeak                              </type>
+        <type>  com.sun.star.reflection.XProxyFactory   </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>

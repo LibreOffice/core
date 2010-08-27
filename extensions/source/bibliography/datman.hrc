@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#define BT_OK               1
+#define BT_CANCEL           2
+#define BT_HELP             3
+#define GB_MAPPING          4
+#define FT_IDENTIFIER       5
+#define LB_IDENTIFIER       6
+#define ST_NONE             7
+
+#define FT_AUTHORITYTYPE    8
+#define LB_AUTHORITYTYPE    9
+#define FT_ADDRESS          10
+#define LB_ADDRESS          11
+#define FT_ANNOTE           12
+#define LB_ANNOTE           13
+#define FT_AUTHOR           14
+#define LB_AUTHOR           15
+#define FT_TITLE            16
+#define LB_TITLE            17
+#define FT_MONTH            18
+#define LB_MONTH            19
+#define FT_YEAR             20
+#define LB_YEAR             21
+#define FT_ISBN             22
+#define LB_ISBN             23
+#define FT_BOOKTITLE        24
+#define LB_BOOKTITLE        25
+#define FT_CHAPTER          26
+#define LB_CHAPTER          27
+#define FT_EDITION          28
+#define LB_EDITION          29
+#define FT_EDITOR           30
+#define LB_EDITOR           31
+#define FT_HOWPUBLISHED     32
+#define LB_HOWPUBLISHED     33
+#define FT_INSTITUTION      34
+#define LB_INSTITUTION      35
+#define FT_JOURNAL          36
+#define LB_JOURNAL          37
+#define FT_NOTE             38
+#define LB_NOTE             39
+#define FT_NUMBER           40
+#define LB_NUMBER           41
+#define FT_ORGANIZATIONS    42
+#define LB_ORGANIZATIONS    43
+#define FT_PAGES            44
+#define LB_PAGES            45
+#define FT_PUBLISHER        46
+#define LB_PUBLISHER        47
+#define FT_SCHOOL           48
+#define LB_SCHOOL           49
+#define FT_SERIES           50
+#define LB_SERIES           51
+#define FT_REPORTTYPE       52
+#define LB_REPORTTYPE       53
+#define FT_VOLUME           54
+#define LB_VOLUME           55
+#define FT_URL              56
+#define LB_URL              57
+#define FT_CUSTOM1          58
+#define LB_CUSTOM1          59
+#define FT_CUSTOM2          60
+#define LB_CUSTOM2          61
+#define FT_CUSTOM3          62
+#define LB_CUSTOM3          63
+#define FT_CUSTOM4          64
+#define LB_CUSTOM4          65
+#define FT_CUSTOM5          66
+#define LB_CUSTOM5          67
+
+#define GB_SELECTION        68
+#define ST_ENTRY            69
+#define LB_SELECTION        71
+#define HB_SELECTION        72
+

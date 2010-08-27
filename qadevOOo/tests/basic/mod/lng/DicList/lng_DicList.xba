@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="lng_DicList" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for  com.sun.star.lang.XComponent:
+  Global oComponentInstance As Object ' it will be disposed
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' lng.DicList
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    Dim oDic As Object
+    Dim oDic2 As Object
+    Dim vLocale As New com.sun.star.lang.Locale
+
+    bOK = true
+
+    vLocale.Language = "en"
+    vLocale.Country = "US"
+    vLocale.Variant = "WIN"
+
+    ' Insert object creation code here...
+
+    oObj = createUnoService("com.sun.star.lingu2.DicList")
+
+    ' creating a user defined dictionary for XSearchableDictionaryList
+
+    oObj.removeDictionary(oObj.getDictionaryByName("MyDictionary"))
+    oDic = oObj.createDictionary("NegativDic",vLocale,_
+                        com.sun.star.linguistic2.DictionaryType.NEGATIVE, "")
+    oDic2 = oObj.createDictionary("PositiveDic",vLocale,_
+                        com.sun.star.linguistic2.DictionaryType.POSITIVE, "")
+    oDic2.add("Positive", false, "")
+    oDic.add("Negative", true, "")
+    oObj.addDictionary(oDic)
+    oObj.addDictionary(oDic2)
+    oDic.setActive(true)
+    oDic2.setActive(true)
+
+    oComponentInstance = oObj
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

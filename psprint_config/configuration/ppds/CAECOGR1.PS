@@ -1,0 +1,591 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*% For "CalComp EcoGrafix/PS" version 2014.106
+*%
+*FormatVersion: "4.3"
+*FileVersion: "1.3"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "CAECOGR1.PPD"
+
+*% General Information ============================
+
+*Product: "(EcoGrafix/PS)"
+*PSVersion: "(2014.106) 12"
+*Manufacturer: "CalComp"
+*ModelName: "CalComp EcoGrafix/PS"
+*ShortNickName: "CalComp EcoGrafix/PS"
+*NickName: "CalComp EcoGrafix/PS   v2014.106"
+
+*% Options and Constraints ========================
+
+*OpenGroup: InstallableOptions/Options Installed
+*OpenUI *InstalledMemory/Memory Configuration: PickOne
+*DefaultInstalledMemory: 16MB
+*InstalledMemory  16MB/16 MB: ""
+*InstalledMemory  24MB/24 MB: ""
+*InstalledMemory  32MB/32 MB: ""
+*InstalledMemory  40MB/40 MB: ""
+*InstalledMemory  48MB/48 MB: ""
+*InstalledMemory  64MB/64 MB: ""
+*InstalledMemory  72MB/72 MB: ""
+*InstalledMemory  80MB/80 MB: ""
+*InstalledMemory  96MB/96 MB: ""
+*InstalledMemory 128MB/128 MB: ""
+*?InstalledMemory: "
+        save
+        currentsystemparams/RamSize get 1048576 idiv (   ) cvs print (MB) = flush
+        restore"
+*End
+*CloseUI: *InstalledMemory
+*CloseGroup: InstallableOptions
+
+*% Device Capabilities ============================
+
+*LanguageLevel: "2"
+*Protocols: TBCP
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*VariablePaperSize: True
+*Throughput: "1"
+
+*FreeVM: "6002624"
+*VMOption  16MB: "6002624"
+*VMOption  24MB: "13006912"
+*VMOption  32MB: "20027456"
+*VMOption  40MB: "26965952"
+*VMOption  48MB: "34019264"
+*VMOption  64MB: "48076736"
+*VMOption  72MB: "55105472"
+*VMOption  80MB: "62117824"
+*VMOption  96MB: "76183488"
+*VMOption 128MB: "103462848"
+
+*% System Management ==============================
+
+*Password: "()"
+*ExitServer: "
+        count 0 ne dup {exch startjob} if
+        not {
+                (WARNING: Cannot modify initial VM.) =
+                (Missing or invalid password.) =
+                (Please contact the author of this software.) = flush
+                quit
+        } if"
+*End
+
+*Reset: "
+        count 0 ne dup {exch startjob} if
+        not {
+                (WARNING: Cannot reset the printer.) =
+                (Missing or invalid password.) =
+                (Please contact the author of this software.) = flush
+                quit
+        } if
+        systemdict/quit get exec
+        (WARNING: Printer Reset failed.) = flush"
+*End
+
+*TTRasterizer: Type42
+*?TTRasterizer: "
+        save
+        42 /FontType resourcestatus {pop pop (Type42)}{(None)} ifelse = flush
+        restore"
+*End
+
+*FileSystem: True
+*?FileSystem: "
+        save
+        false
+        (%disk?%)
+        {currentdevparams dup /Writeable known {/Writeable get or}{pop} ifelse}
+        10 string /IODevice resourceforall {(True)}{(False)} ifelse = flush
+        restore"
+*End
+
+*SuggestedJobTimeout: "0"
+*SuggestedWaitTimeout: "0"
+*PrintPSErrors: True
+
+*% Resolution =====================================
+
+*DefaultResolution: 400x800dpi
+*?Resolution: "
+        save
+        currentpagedevice/HWResolution get aload pop exch
+        (    ) cvs print (x) print (   ) cvs print (dpi) = flush
+        restore"
+*End
+
+*% Halftone Information ===========================
+
+*ScreenFreq: "45.0"
+*ScreenAngle: "45.0"
+*DefaultHalftoneType: 1
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+        {abs exch abs 2 copy add 1 gt
+                {1 sub dup mul exch 1 sub dup mul add 1 sub}
+                {dup mul exch dup mul add 1 exch sub}
+        ifelse}"
+*End
+*ScreenProc Line: "{pop}"
+*ScreenProc Ellipse: "{dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub}"
+*ResScreenFreq 400x400dpi: "45.0"
+*ResScreenAngle 400x400dpi: "45.0"
+*ResScreenFreq 400x800dpi: "45.0"
+*ResScreenAngle 400x800dpi: "45.0"
+
+*DefaultTransfer: Null
+*Transfer Null: "{}"
+*Transfer Null.Inverse: "{1 exch sub}"
+
+*% Print Quality ==================================
+
+*OpenUI *OutputMode/Print Quality: PickOne
+*OrderDependency: 40 AnySetup *OutputMode
+*DefaultOutputMode: Enhanced
+*OutputMode Proof: "
+        (<<) cvx exec
+        /PostRenderingEnhance true
+        /PostRenderingEnhanceDetails
+                2 dict dup/Type 21 put dup/PrintQuality 0 put
+        /HWResolution [400 400]
+        (>>) cvx exec setpagedevice"
+*End
+*OutputMode Standard: "
+        (<<) cvx exec
+        /PostRenderingEnhance true
+        /PostRenderingEnhanceDetails
+                2 dict dup/Type 21 put dup/PrintQuality 1 put
+        /HWResolution [400 400]
+        (>>) cvx exec setpagedevice"
+*End
+*OutputMode Enhanced: "
+        (<<) cvx exec
+        /PostRenderingEnhance true
+        /PostRenderingEnhanceDetails
+                2 dict dup/Type 21 put dup/PrintQuality 2 put
+        /HWResolution [400 800]
+        (>>) cvx exec setpagedevice"
+*End
+*?OutputMode: "
+        save
+        3 dict
+        dup 0 (Proof) put
+        dup 1 (Standard) put
+        dup 2 (Enhanced) put
+        currentpagedevice/PostRenderingEnhanceDetails get
+        /PrintQuality get {get} stopped {pop pop (Unknown)} if = flush
+        restore"
+*End
+*CloseUI: *OutputMode
+
+*% Nesting ========================================
+*OpenUI *CANesting/Nesting: Boolean
+*OrderDependency: 50 AnySetup *CANesting
+*DefaultCANesting: False
+*CANesting True/On: "
+        currentpagedevice/PageSize get dup 0 get 2528 1 index div
+        dup cvi dup 4 1 roll sub 1 index mul 2 index 1 sub div add
+        5 dict
+        dup /PageSize 2529 6 index 1 get 10 add 2 array astore put
+        dup /Orientation 3 put
+        dup /ImagingBBox null put
+        dup /BeginPage [
+                [6 index /mod 8 -1 roll /mul 5 /translate
+                        /userdict (/AGDOrigMtx) /exec /matrix /currentmatrix /put
+                        0 0 21 -1 roll aload pop /rectclip]{cvx}forall
+                ] cvx bind put
+        dup /EndPage [
+                [/exch 1 /add 9 -1 roll /mod 1 /index 0 /eq
+                        {exch pop 0 eq}{1 ne exch 2 eq and} /ifelse]{cvx}forall
+                ] cvx bind put
+        setpagedevice
+        userdict dup /setpagedevice /pop load put /erasepage {} put"
+*End
+*CANesting False/Off: ""
+*CloseUI: *CANesting
+
+*% Paper Handling =================================
+
+*% Code in this section both selects a tray and sets up a frame buffer.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 20 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter: "
+        (<<) cvx exec
+        /PageSize [612 792] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize Tabloid: "
+        (<<) cvx exec
+        /PageSize [792 1224] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize Ledger: "
+        (<<) cvx exec
+        /PageSize [1224 792] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize AnsiC: "
+        (<<) cvx exec
+        /PageSize [1224 1584] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize AnsiD: "
+        (<<) cvx exec
+        /PageSize [1584 2448] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize AnsiE: "
+        (<<) cvx exec
+        /PageSize [2448 3168] /Orientation 0 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize AnsiF: "
+        (<<) cvx exec
+        /PageSize [2016 2880] /Orientation 0 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize A4: "
+        (<<) cvx exec
+        /PageSize [595 842] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize A3: "
+        (<<) cvx exec
+        /PageSize [842 1191] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize A2: "
+        (<<) cvx exec
+        /PageSize [1191 1684] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize A1: "
+        (<<) cvx exec
+        /PageSize [1684 2384] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageSize A0: "
+        (<<) cvx exec
+        /PageSize [2384 3370] /Orientation 0 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*?PageSize: "
+        save
+        currentpagedevice /PageSize get aload pop 2 copy gt {exch} if
+        (Unknown)
+        (<<) cvx exec
+        [612 792] (Letter)
+        [792 1224] (Tabloid)
+        [1224 792] (Ledger)
+        [1224 1584] (AnsiC)
+        [1584 2448] (AnsiD)
+        [2448 3168] (AnsiE)
+        [2016 2880] (AnsiF)
+        [595 842] (A4)
+        [842 1191] (A3)
+        [1191 1684] (A2)
+        [1684 2384] (A1)
+        [2384 3370] (A0)
+        (>>) cvx exec
+        {exch aload pop 4 index sub abs 5 le
+                {4 index sub abs 5 le {exch pop exit} if}
+                {pop} ifelse
+                pop
+        } bind forall
+        = flush pop pop
+        restore"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 30 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter: "
+        (<<) cvx exec
+        /PageSize [612 792] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion Tabloid: "
+        (<<) cvx exec
+        /PageSize [792 1224] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion Ledger: "
+        (<<) cvx exec
+        /PageSize [1224 792] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion AnsiC: "
+        (<<) cvx exec
+        /PageSize [1224 1584] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion AnsiD: "
+        (<<) cvx exec
+        /PageSize [1584 2448] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion AnsiE: "
+        (<<) cvx exec
+        /PageSize [2448 3168] /Orientation 0 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion AnsiF: "
+        (<<) cvx exec
+        /PageSize [2016 2880] /Orientation 0 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion A4: "
+        (<<) cvx exec
+        /PageSize [595 842] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion A3: "
+        (<<) cvx exec
+        /PageSize [842 1191] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion A2: "
+        (<<) cvx exec
+        /PageSize [1191 1684] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion A1: "
+        (<<) cvx exec
+        /PageSize [1684 2384] /Orientation 1 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*PageRegion A0: "
+        (<<) cvx exec
+        /PageSize [2384 3370] /Orientation 0 /ImagingBBox null
+        (>>) cvx exec setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter: "0.09 0.0 612.045 789.12"
+*ImageableArea Tabloid: "0.09 0.0 792.045 1221.12"
+*ImageableArea Ledger: "0.0 0.09 1221.12 792.045"
+*ImageableArea AnsiC: "0.0901 0.0 1224.05 1584.0"
+*ImageableArea AnsiD: "0.09 0.0 1584.05 2448.0"
+*ImageableArea AnsiE: "0.0 0.0 2448.0 3167.82"
+*ImageableArea AnsiF: "0.0 0.0 2016.0 2879.82"
+*ImageableArea A4: "0.0 0.0 594.9 840.96"
+*ImageableArea A3: "0.0 0.0 841.86 1186.56"
+*ImageableArea A2: "0.0901 0.0 1190.97 1681.92"
+*ImageableArea A1: "0.0 0.0 1683.9 2378.88"
+*ImageableArea A0: "0.0 0.0 2378.88 3369.78"
+*?ImageableArea: "
+        save
+        /ur {10000 mul floor 10000 div (          ) cvs} bind def
+        /ll {10000 mul ceiling 10000 div (          ) cvs print ( ) print} bind def
+        newpath clippath pathbbox
+        4 -2 roll exch ll ll exch ur print ( ) print ur = flush
+        restore"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter: "612 792"
+*PaperDimension Tabloid: "792 1224"
+*PaperDimension Ledger: "1224 792"
+*PaperDimension AnsiC: "1224 1584"
+*PaperDimension AnsiD: "1584 2448"
+*PaperDimension AnsiE: "2448 3168"
+*PaperDimension AnsiF: "2016 2880"
+*PaperDimension A4: "595 842"
+*PaperDimension A3: "842 1191"
+*PaperDimension A2: "1191 1684"
+*PaperDimension A1: "1684 2384"
+*PaperDimension A0: "2384 3370"
+
+*% Custom Page Sizes ==============================
+
+*HWMargins: 0 0 0 0
+*CenterRegistered: False
+*DefaultLeadingEdge: PreferLong
+*LeadingEdge PreferLong: ""
+*NonUIOrderDependency: 35 AnySetup *CustomPageSize
+*ParamCustomPageSize Width: 1 points 279 2529
+*ParamCustomPageSize Height: 2 points 279 17280
+*ParamCustomPageSize WidthOffset: 4 points 0 2250
+*ParamCustomPageSize HeightOffset: 5 points 0 0
+*ParamCustomPageSize Orientation: 3 int 0 3
+*CustomPageSize True: "
+        4 dict begin
+        2 copy 0 eq exch 0 eq and {
+                pop pop dup 0 eq {
+                        pop 2 copy gt {1}{0} ifelse index 2520 le {1}{0} ifelse
+                } if
+        }{
+                2 array astore /PageOffset exch def
+        } ifelse
+        /Orientation exch def
+        2 copy gt {
+                1 index 540 lt {exch pop 540 exch} if
+        }{
+                dup 540 lt {pop 540} if
+        } ifelse
+        2 array astore /PageSize exch def
+        /ImagingBBox null def
+        currentdict end setpagedevice"
+*End
+*MaxMediaWidth: "2529"
+*MaxMediaHeight: "17280"
+
+*% Input Slot =====================================
+
+*OpenUI *InputSlot: PickOne
+*DefaultInputSlot: OnlyOne
+*InputSlot OnlyOne/Roll Media: ""
+*?InputSlot: "save (OnlyOne) = flush restore"
+*CloseUI: *InputSlot
+
+*RequiresPageRegion All: True
+
+*% Font Information ===============================
+
+*DefaultFont: Courier
+*Font ACaslon-Italic: Standard "(001.001)" Standard ROM
+*Font ACaslon-Regular: Standard "(001.001)" Standard ROM
+*Font ACaslon-Semibold: Standard "(001.001)" Standard ROM
+*Font ACaslon-SemiboldItalic: Standard "(001.001)" Standard ROM
+*Font AGaramond-Bold: Standard "(001.001)" Standard ROM
+*Font AGaramond-BoldItalic: Standard "(001.001)" Standard ROM
+*Font AGaramond-Italic: Standard "(001.001)" Standard ROM
+*Font AGaramond-Regular: Standard "(001.001)" Standard ROM
+*Font Americana: Standard "(001.000)" Standard ROM
+*Font Americana-ExtraBold: Standard "(001.000)" Standard ROM
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Barmeno-Bold: Standard "(001.000)" Standard ROM
+*Font Barmeno-ExtraBold: Standard "(001.000)" Standard ROM
+*Font Barmeno-Medium: Standard "(001.000)" Standard ROM
+*Font Barmeno-Regular: Standard "(001.000)" Standard ROM
+*Font Blackoak: Standard "(001.001)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Carta: Special "(001.001)" Special ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Formata-Italic: Standard "(001.001)" Standard ROM
+*Font Formata-Medium: Standard "(001.001)" Standard ROM
+*Font Formata-MediumItalic: Standard "(001.001)" Standard ROM
+*Font Formata-Regular: Standard "(001.001)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font Kaufmann: Standard "(001.000)" Standard ROM
+*Font Lithos-Black: Standard "(001.001)" Standard ROM
+*Font Lithos-Regular: Standard "(001.001)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Parisian: Standard "(001.001)" Standard ROM
+*Font ParkAvenue: Standard "(001.005)" Standard ROM
+*Font Poetica-SuppOrnaments: Special "(001.000)" Special ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Tekton: Standard "(001.001)" Standard ROM
+*Font Tekton-Bold: Standard "(001.000)" Standard ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font Trajan-Bold: Standard "(001.000)" Standard ROM
+*Font WoodtypeOrnaments-Two: Special "(001.002)" Special ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+
+*?FontQuery: "
+        save
+        count 1 sub {
+                exch dup 128 string cvs (/) print print (:) print
+                /Font resourcestatus {pop pop (Yes)}{(No)} ifelse =
+        } bind repeat
+        (*) = flush
+        restore"
+*End
+
+*?FontList: "
+        save
+        (*) {cvn ==} bind 128 string /Font resourceforall
+        (*) = flush
+        restore"
+*End
+
+*% Printer Messages ===============================
+
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier."
+
+*% Status (format: %%[ status: <one of these> ] %%)
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "Serial"
+*Source: "Parallel"
+*Source: "LocalTalk"
+*Source: "EtherTalk"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.47lpi.400x800dpi/47 lpi / 400x800 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 47 lpi / 400x400 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.47lpi.400x800dpi/47 lpi / 400x800 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.47lpi.400x800dpi/47 lpi / 400x800 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.47lpi.400x800dpi/47 lpi / 400x800 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.47lpi.400x800dpi/47 lpi / 400x800 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.47lpi.400x800dpi/47 lpi / 400x800 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.47lpi.400x800dpi/47 lpi / 400x800 dpi: "47.1405"
+*ColorSepScreenFreq CustomColor.47lpi.400x800dpi/47 lpi / 400x800 dpi: "47.1405"
+*ColorSepScreenFreq ProcessCyan.47lpi.400x800dpi/47 lpi / 400x800 dpi: "42.1637"
+*ColorSepScreenFreq ProcessMagenta.47lpi.400x800dpi/47 lpi / 400x800 dpi: "42.1637"
+*ColorSepScreenFreq ProcessYellow.47lpi.400x800dpi/47 lpi / 400x800 dpi: "44.4444"
+
+*% Last Edit Date: Dec 5 1996
+*% End of PPD file for EcoGrafix/PS
+*% The byte count of this file should be exactly 019934 or 020525
+*% depending on the filesystem it resides in.
+*% end of PPD file for EcoGrafix/PS 

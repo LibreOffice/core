@@ -1,0 +1,237 @@
+#*************************************************************************
+#
+#  The Contents of this file are made available subject to the terms of
+#  the BSD license.
+#  
+#  Copyright 2000, 2010 Oracle and/or its affiliates.
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of Sun Microsystems, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+#  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+#  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+#  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+#  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+#  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+#  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+#  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+#  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+#  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#     
+#**************************************************************************
+
+# Builds the OfficeDevLinguistic examples of the Developers Guide.
+
+PRJ=../../../..
+SETTINGS=$(PRJ)/settings
+
+include $(SETTINGS)/settings.mk
+include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
+
+# Define non-platform/compiler specific settings
+EXAMPLE_NAME=OfficeDevLinguisticExample
+OUT_COMP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
+
+COMPONENT1_NAME=SampleHyphenator
+COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).$(UNOOXT_EXT)
+COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).$(UNOOXT_EXT)")
+COMPONENT1_JAR_NAME = $(COMPONENT1_NAME).uno.jar
+COMPONENT1_JAR = $(OUT_COMP_CLASS)/$(COMPONENT1_JAR_NAME)
+COMPONENT1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
+COMPONENT1_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME)/META-INF/manifest.xml
+
+COMPONENT2_NAME=SampleSpellChecker
+COMPONENT2_PACKAGE = $(OUT_BIN)/$(COMPONENT2_NAME).$(UNOOXT_EXT)
+COMPONENT2_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT2_NAME).$(UNOOXT_EXT)")
+COMPONENT2_JAR_NAME = $(COMPONENT2_NAME).uno.jar
+COMPONENT2_JAR = $(OUT_COMP_CLASS)/$(COMPONENT2_JAR_NAME)
+COMPONENT2_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME).uno.Manifest
+COMPONENT2_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME)/META-INF/manifest.xml
+
+COMPONENT3_NAME=SampleThesaurus
+COMPONENT3_PACKAGE = $(OUT_BIN)/$(COMPONENT3_NAME).$(UNOOXT_EXT)
+COMPONENT3_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT3_NAME).$(UNOOXT_EXT)")
+COMPONENT3_JAR_NAME = $(COMPONENT3_NAME).uno.jar
+COMPONENT3_JAR = $(OUT_COMP_CLASS)/$(COMPONENT3_JAR_NAME)
+COMPONENT3_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME).uno.Manifest
+COMPONENT3_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME)/META-INF/manifest.xml
+
+APP1_NAME=LinguisticExamples
+APP1_JAR=$(OUT_COMP_CLASS)/$(APP1_NAME).jar
+
+REGISTERFLAG = $(OUT_MISC)/devguide_officedevlinguistic_register_component.flag
+
+JAVAFILES  = \
+	OneInstanceFactory.java \
+	PropChgHelper.java \
+	PropChgHelper_Hyph.java \
+	PropChgHelper_Spell.java \
+	XHyphenatedWord_impl.java \
+	XMeaning_impl.java \
+	XPossibleHyphens_impl.java \
+	XSpellAlternatives_impl.java \
+	SampleHyphenator.java \
+	SampleSpellChecker.java \
+	SampleThesaurus.java
+
+CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+
+$(COMPONENT1_NAME)_CLASSFILES = XHyphenatedWord_impl.class \
+	XPossibleHyphens_impl.class \
+	PropChgHelper.class \
+	PropChgHelper_Hyph.class \
+	OneInstanceFactory.class \
+	$(COMPONENT1_NAME).class
+
+$(COMPONENT2_NAME)_CLASSFILES = XSpellAlternatives_impl.class \
+	PropChgHelper_Spell.class \
+	PropChgHelper.class \
+	OneInstanceFactory.class \
+	$(COMPONENT2_NAME).class
+
+$(COMPONENT3_NAME)_CLASSFILES = XMeaning_impl.class \
+	OneInstanceFactory.class \
+	$(COMPONENT3_NAME).class
+
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
+		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+
+.PHONY: ALL
+ALL : $(EXAMPLE_NAME)
+
+include $(SETTINGS)/stdtarget.mk
+
+$(OUT_COMP_CLASS)/%.Manifest :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
+
+$(CLASSFILES) : $(JAVAFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+
+# NOTE: because of gnu make problems with full qualified paths, the pattern 
+# rules for the component jars and the packages doesn't work proper and we 
+# defined explicit rules
+
+#$(OUT_COMP_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+#	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+#	-$(MKDIR) $(subst /,$(PS),$(@D))
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+#$(OUT_BIN)/%.uno.pkg : $(OUT_COMP_CLASS)/%.uno.jar $(OUT_COMP_CLASS)/%/META-INF/manifest.xml
+#	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+#	-$(MKDIR) $(subst /,$(PS),$(@D))
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR) $(COMPONENT1_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+$(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR) $(COMPONENT2_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+$(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR) $(COMPONENT3_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT2_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT3_PACKAGE_URL)
+	@echo flagged > $(subst /,$(PS),$@)
+else
+	@echo --------------------------------------------------------------------------------
+	@echo  If you want to install your component automatically, please set the environment
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only 
+	@echo  possible if no office instance is running. 
+	@echo --------------------------------------------------------------------------------
+endif
+
+$(OUT_COMP_CLASS)/%.class : %.java
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
+
+$(OUT_COMP_CLASS)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(APP1_NAME).class 
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(basename $(@F)).class $(basename $(@F))$(QUOTE)$$Client.class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+
+$(EXAMPLE_NAME) : $(REGISTERFLAG) $(APP1_JAR) 
+	@echo --------------------------------------------------------------------------------
+	@echo Please use the following command to execute the example!
+	@echo -
+	@echo $(MAKE) $(APP1_NAME).run 
+	@echo --------
+	@echo Before you can run the examples the components "$(QM)$(COMPONENT1_NAME)$(QM)", 
+	@echo "$(QM)$(COMPONENT2_NAME)$(QM)" and "$(QM)$(COMPONENT3_NAME)$(QM)" must be deployed. 
+	@echo The components will be automatically deployed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_COMP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT1_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT2_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT3_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))

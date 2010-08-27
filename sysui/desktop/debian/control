@@ -1,0 +1,6 @@
+Description: %productname desktop integration
+Maintainer: OpenOffice.org
+Architecture: all
+Provides: openoffice.org-desktop-integration, openoffice.org-unbundled
+Conflicts: openofficeorg-desktop-integration, openofficeorg-debian-menus, openoffice.org-bundled
+Replaces: openofficeorg-desktop-integration, openofficeorg-debian-menus

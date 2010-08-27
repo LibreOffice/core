@@ -1,0 +1,11 @@
+[%APP_TITLE%]
+en-US = "Installation Status"
+
+[%MSG_OPTIMIZED_FOR_CLIENT%]
+en-US = "Installation is optimized for clients."
+
+[%MSG_OPTIMIZED_FOR_SERVER%]
+en-US = "Installation is optimized for servers."
+
+[%MSG_NO_INSTALLATION_FOUND%]
+en-US = "Cannot find Office installation."

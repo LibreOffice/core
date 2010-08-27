@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sw_SwAccessibleTextFrameView" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+Global oViewSettings As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sw.SwAccessibleTextFrameView
+'*************************************************************************
+On Error Goto ErrHndl
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    Dim oCursor As Object
+    oCursor = oDoc.Text.createTextCursor()
+
+    Dim oTextFrame As Object
+    oTextFrame = oDoc.createInstance("com.sun.star.text.TextFrame")
+    Dim sSize As Object
+    sSize = createUNOStruct("com.sun.star.awt.Size")
+    sSize.Height = 10000
+    sSize.Width = 10000
+    oTextFrame.Size = sSize
+    oTextFrame.SizeType = 1
+    oTextFrame.Name = cObjectName
+    oTextFrame.HoriOrient = 0
+    oTextFrame.VertOrient = 1
+
+    oDoc.Text.insertTextContent(oCursor, oTextFrame, false)
+
+    Dim xController As Object
+    xController = oDoc.getCurrentController()
+
+    oViewSettings = xController.getViewSettings()
+
+    Dim oWin As Object
+    Dim xRoot As Object
+    oWin = utils.at_getCurrentWindow(oDoc)
+    xRoot = utils.at_getAccessibleObject(oWin)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+                                          com.sun.star.accessibility.AccessibleRole.TEXT_FRAME)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub fireEvent()
+  oViewSettings.ZoomValue = 15
+  oViewSettings.ZoomValue = 10
+End Sub
+</script:module>

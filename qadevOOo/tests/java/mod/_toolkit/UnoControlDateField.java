@@ -1,0 +1,166 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+package mod._toolkit;
+
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XDevice;
+import com.sun.star.awt.XGraphics;
+import com.sun.star.awt.XTextComponent;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XWindowPeer;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.view.XControlAccess;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+import util.utils;
+
+
+public class UnoControlDateField extends TestCase {
+    private static XTextDocument xTextDoc;
+    private static XTextDocument xTD2;
+
+    protected void initialize(TestParameters Param, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) Param.getMSF());
+
+        try {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+            xTD2 = WriterTools.createTextDoc(
+                           (XMultiServiceFactory) Param.getMSF());
+        } catch (com.sun.star.uno.Exception e) {
+            // Some exception occures.FAILED
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
+        }
+    }
+
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        util.DesktopTools.closeDoc(xTextDoc);
+        util.DesktopTools.closeDoc(xTD2);
+    }
+
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
+        XInterface oObj = null;
+        XWindowPeer the_win = null;
+        XToolkit the_kit = null;
+        XDevice aDevice = null;
+        XGraphics aGraphic = null;
+        XWindow anotherWindow = null;
+
+        //Insert a ControlShape and get the ControlModel
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
+                                                               4500, 15000,
+                                                               10000,
+                                                               "DateField",
+                                                               "UnoControlDateField");
+
+        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+
+        XControlModel the_Model = aShape.getControl();
+
+        //Try to query XControlAccess
+        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+                                            XControlAccess.class,
+                                            xTextDoc.getCurrentController());
+
+        //get the DateFieldControl for the needed Object relations
+        try {
+            oObj = the_access.getControl(the_Model);
+            the_win = the_access.getControl(the_Model).getPeer();
+            the_kit = the_win.getToolkit();
+            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
+            aGraphic = aDevice.createGraphics();
+        } catch (Exception e) {
+            log.println("Couldn't get DateFieldControl");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get DateFieldControl", e);
+        }
+
+        log.println(
+                "creating a new environment for UnoControlDateField object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+
+        //Adding ObjRelation for XView
+        tEnv.addObjRelation("GRAPHICS", aGraphic);
+
+
+        //Adding ObjRelation for XControl
+        tEnv.addObjRelation("CONTEXT", xTextDoc);
+        tEnv.addObjRelation("WINPEER", the_win);
+        tEnv.addObjRelation("TOOLKIT", the_kit);
+        tEnv.addObjRelation("MODEL", the_Model);
+
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
+
+        try {
+            XController aController = xTD2.getCurrentController();
+            XFrame aFrame = aController.getFrame();
+            anotherWindow = aFrame.getComponentWindow();
+        } catch (Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create XWindow", e);
+        }
+
+
+        // Object Relation for XWindow
+        tEnv.addObjRelation("XWindow.AnotherWindow", anotherWindow);
+        tEnv.addObjRelation("XWindow.ControlShape", aShape);
+
+        // Adding relation for XTextListener
+        ifc.awt._XTextListener.TestTextListener listener =
+                new ifc.awt._XTextListener.TestTextListener();
+        XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
+                                          XTextComponent.class, oObj);
+        textComp.addTextListener(listener);
+        tEnv.addObjRelation("TestTextListener", listener);
+
+        return tEnv;
+    } // finish method getTestEnvironment
+} // finish class UnoControlDateField

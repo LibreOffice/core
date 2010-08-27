@@ -1,0 +1,9 @@
+InstallPatchedFiles
+UninstallPatchedFiles
+GetUserInstallMode
+SetProductInstallMode
+ShutDownQuickstarter
+IsOfficeRunning
+SetFeatureState
+SetNewFeatureState
+ShowOnlineUpdateDialog

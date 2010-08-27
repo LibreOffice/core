@@ -1,0 +1,62 @@
+### 114044 ###
+dbaccess.ORowSet::com::sun::star::sdbc::XWarningsSupplier
+
+### i38209 ###
+dbaccess.ODatasourceAdministrationDialog::com::sun::star::sdb::DatasourceAdministrationDialog
+
+### i55579 ###
+dbaccess.OQueryDesign::com::sun::star::frame::XController
+
+### i84113 ###
+dbaccess.ConnectionLineAccessibility 
+# -> disabled in dbaccess.sce
+
+### i84114 ###
+dbaccess.JoinViewAccessibility 
+# -> disabled in dbaccess.sce
+
+### i84116 ###
+dbaccess.OQueryDesign 
+# -> disabled in dbaccess.sce
+
+### i84125 ###
+dbaccess.SbaXGridControl::com::sun::star::view::XSelectionSupplier
+
+### i84127 ###
+dbaccess.SbaXGridControl::com::sun::star::awt::XWindow
+
+### i86990 ###
+dbaccess.ODatabaseSource::com::sun::star::beans::XPropertySet
+dbaccess.OCommandDefinition::com::sun::star::beans::XPropertySet
+
+### i84128 ###
+dbaccess.TableWindowAccessibility 
+# -> disabled in dbaccess.sce
+
+### i87247 ###
+dbaccess.DBContentLoader::com::sun::star::frame::XFrameLoader
+
+### i88646 ###
+dbaccess.ODatabaseContext::com::sun::star::uno::XNamingService
+
+### i90358 ###
+dbaccess.SbaXGridControl::com::sun::star::awt::XView
+
+### i90359 ###
+dbaccess.ODatabaseSource::com::sun::star::sdb::DataSource
+
+### i95611 ###
+dbaccess.SbaXGridControl
+# -> disabled in dbaccess.sce
+
+### i95691 ###
+dbaccess.ORowSet::com::sun::star::sdbc::XRowUpdate
+dbaccess.ORowSet::com::sun::star::sdbc::XRow
+
+## i97860 ###
+dbaccess.ORowSet::com::sun::star::sdbcx::XDeleteRows
+dbaccess.ORowSet::com::sun::star::sdbc::XResultSetUpdate
+
+### i98007 ###
+dbaccess.ODatasourceBrowser
+# -> disabled in dbaccess.sce

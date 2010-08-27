@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_Currency_idl__
+#define __com_sun_star_i18n_Currency_idl__
+
+//============================================================================
+
+module com { module sun { module star { module i18n {
+
+//============================================================================
+
+/**
+    Symbols, names, and attributes of a specific currency, returned in a
+    sequence by <member>XLocaleData::getAllCurrencies()</member>.
+
+    @see XLocaleData
+        for links to DTD of XML locale data files.
+ */
+
+published struct Currency
+{
+    /** ISO 4217 currency code identifier, for example, <b>EUR</b> or
+        <b>USD</b>. */
+    string ID;
+
+    /** Currency symbol, for example, <b>$</b>. */
+    string Symbol;
+
+    /** Currency abbreviation used by banks and in money exchange, for
+        example, <b>EUR</b> or <b>USD</b>. This usually should be
+        identical to the ISO 4217 currency code also used in the
+        <member>ID</member>, but doesn't necessarily have to be. */
+    string BankSymbol;
+
+    /** Name of the currency, for example, <b>Euro</b> or <b>US
+        Dollar</b>. Should be the localized name. */
+    string Name;
+
+    /** If this currency is the default currency for a given locale. */
+    boolean Default;
+
+    /** If this currency is the one used in compatible number format codes with
+        <member>FormatElement::formatIndex</member> values in the range 12..17.
+        Those format codes are used to generate some old style currency format
+        codes for compatibility with StarOffice5 and StarOffice4.
+
+        @see com::sun::star::i18n::NumberFormatIndex
+     */
+    boolean UsedInCompatibleFormatCodes;
+
+    /** The number of decimal places, for example, <b>2</b> for US Dollar
+        or <b>0</b> for Italian Lira.  */
+    short DecimalPlaces;
+};
+
+//============================================================================
+}; }; }; };
+
+#endif

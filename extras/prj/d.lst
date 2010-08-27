@@ -1,0 +1,12 @@
+mkdir: %_DEST%\pck%_EXT%
+mkdir: %COMMON_DEST%\pck%_EXT%
+mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
+
+..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\pck%_EXT%\*.zip
+..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ja.zip
+..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ko.zip
+..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-CN.zip
+..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-TW.zip
+..\source\truetype\symbol\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\shellnew\soffice.* %COMMON_DEST%\pck%_EXT%\soffice.*
+..\unx\source\fonts\fonts.dir %COMMON_DEST%\pck%_EXT%\openoffice\fonts.dir

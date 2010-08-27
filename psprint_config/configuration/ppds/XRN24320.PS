@@ -1,0 +1,1696 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*% Internal version 3.6  2/4/98
+
+*% === REQUIRED ENTRIES ===
+*FormatVersion: "4.3"
+*FileVersion: "1.1"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "XRN24320.PPD"
+*PSVersion: "(2016.108) 1"
+*Product:   "(Xerox DocuPrint N24/N32)"
+*ShortNickName: "Xerox DocuPrint N24/N32"
+*NickName:  "Xerox DocuPrint N24/N32, v. 2016.108"
+*ModelName: "Xerox DocuPrint N24/N32"
+*Manufacturer:  "Xerox"
+
+
+*% === INSTALLABLE OPTIONS ===
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *Option1/Duplex Module: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*?Option1: "
+	save
+	currentpagedevice /Duplex known
+	{(True)}{(False)} ifelse
+	= flush
+	restore
+	"
+*End
+*CloseUI: *Option1
+
+*OpenUI *Option2/HCF: Boolean
+*DefaultOption2: False
+*Option2 True/Installed: ""
+*Option2 False/Not Installed: ""
+*?Option2: "
+	save
+	currentpagedevice /InputAttributes known
+		{
+		currentpagedevice /InputAttributes get
+		2 known 
+		{(True)}{(False)} ifelse 
+		}
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option2
+
+*OpenUI *Option3/Mailbox Bins: Boolean
+*DefaultOption3: False
+*Option3 True/Installed: ""
+*Option3 False/Not Installed: ""
+*?Option3: "
+	save
+	currentpagedevice /OutputAttributes known
+		{
+		currentpagedevice /OutputAttributes get
+		2 known {(True)}{(False) } ifelse
+		} 
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+
+*CloseUI: *Option3
+
+*OpenUI *Option4/Hard Disk: Boolean
+*DefaultOption4: False
+*Option4 True/Installed: ""
+*Option4 False/Not Installed: ""
+*?Option4: "
+ save false
+ (%disk?%)
+ { currentdevparams dup /Writeable known
+ { /Writeable get {pop true} if } { pop } ifelse
+ } 10 string /IODevice resourceforall
+ {(True)}{(False)} ifelse = flush
+ restore
+ "
+*End
+*CloseUI: *Option4
+
+*OpenUI *Option5/Envelope Feeder: Boolean
+*DefaultOption5: False
+*Option5 True/Installed: ""
+*Option5 False/Not Installed: ""
+*?Option5: "
+	save
+	currentpagedevice /InputAttributes known
+		{
+		currentpagedevice /InputAttributes get
+		6 known 
+		{(True)}{(False)} ifelse 
+		}
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option5
+
+*OpenUI *Option6/MBF: Boolean
+*DefaultOption6: False
+*Option6 True/Installed: ""
+*Option6 False/Not Installed: ""
+*?Option6: "
+	save
+	currentpagedevice /InputAttributes known
+		{
+		currentpagedevice /InputAttributes get
+		5 known 
+		{(True)}{(False)} ifelse 
+		}
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option6
+
+*OpenUI *Option7/Finisher-Stapler: Boolean
+*DefaultOption7: False
+*Option7 True/Installed: ""
+*Option7 False/Not Installed: ""
+*?Option7: "
+	save
+	currentpagedevice /Staple known
+		{(True)}{(False)} ifelse
+		= flush
+	restore"
+*End
+*CloseUI: *Option7
+
+*OpenUI *InstalledMemory/Total Printer Memory: PickOne
+*DefaultInstalledMemory: 12Meg
+*InstalledMemory 12Meg/12 MB RAM: ""
+*InstalledMemory 20Meg/20 MB RAM: ""
+*InstalledMemory 28Meg/28 MB RAM: ""
+*InstalledMemory 36Meg/36 MB RAM: ""
+*InstalledMemory 44Meg/44 MB RAM: ""
+*InstalledMemory 52Meg/52 MB RAM: ""
+*InstalledMemory 60Meg/60 MB RAM: ""
+*InstalledMemory 68Meg/68 MB RAM: ""
+*InstalledMemory 76Meg/76 MB RAM: ""
+*InstalledMemory 84Meg/84 MB RAM: ""
+*InstalledMemory 92Meg/92 MB RAM: ""
+*InstalledMemory 100Meg/100 MB RAM: ""
+*InstalledMemory 108Meg/108 MB RAM: ""
+*InstalledMemory 116Meg/116 MB RAM: ""
+*InstalledMemory 124Meg/124 MB RAM: ""
+*InstalledMemory 128Meg/128 MB RAM: ""
+*?InstalledMemory: "
+ save
+ 16 dict
+ dup  0 (12Meg) put
+ dup  1 (20Meg) put
+ dup  2 (28Meg) put
+ dup  3 (36Meg) put
+ dup  4 (44Meg) put
+ dup  5 (52Meg) put
+ dup  6 (60Meg) put
+ dup  7 (68Meg) put
+ dup  8 (76Meg) put
+ dup  9 (84Meg) put
+ dup  10 (92Meg) put
+ dup  11 (100Meg) put
+ dup  12 (108Meg) put
+ dup  13 (116Meg) put
+ dup  14 (124Meg) put
+ dup  15 (128Meg) put
+ currentsystemparams dup /RamSize known
+ {/RamSize get 1048576 div floor cvi
+ 8 idiv 1 sub get}
+ {pop (Unknown) } ifelse
+ = flush
+ restore
+ "
+*End
+*CloseUI: *InstalledMemory
+
+*CloseGroup: InstallableOptions
+
+*% === UI CONSTRAINTS ===
+
+*UIConstraints: *Option1 False *Duplex
+*UIConstraints: *Duplex  *Option1 False
+
+*UIConstraints: *Option2 False *InputSlot Tray3
+*UIConstraints: *Option2 False *InputSlot Tray4
+*UIConstraints: *Option2 False *InputSlot Tray5
+*UIConstraints: *InputSlot Tray3 *Option2 False
+*UIConstraints: *InputSlot Tray4 *Option2 False 
+*UIConstraints: *InputSlot Tray5 *Option2 False
+
+*UIConstraints: *Option5 True *InputSlot MBF
+*UIConstraints: *InputSlot MBF *Option5 True
+
+*UIConstraints: *Option5 False *InputSlot Envelope
+*UIConstraints: *InputSlot Envelope *Option5 False
+
+*UIConstraints: *InputSlot Envelope *ManualFeed True
+*UIConstraints: *ManualFeed True *InputSlot Envelope
+
+*UIConstraints: *Option3 True *Option7 True
+*UIConstraints: *Option7 True *Option3 True
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN2 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN3 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN4 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN5 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN6 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN7 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN8 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN9 *Option3 False
+*UIConstraints: *OutputBin MAILBOXBIN10 *Option3 False
+
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN1
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN2
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN3
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN4
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN5
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN6
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN7
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN8
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN9
+*UIConstraints: *Option3 False *OutputBin MAILBOXBIN10
+
+*UIConstraints: *Option7 False *OutputBin FINISHERBIN1
+*UIConstraints: *OutputBin FINISHERBIN1 *Option7 False
+
+*UIConstraints: *Option7 False *OutputBin FINISHERBIN2
+*UIConstraints: *OutputBin FINISHERBIN2 *Option7 False
+
+*UIConstraints: *Option7 False *OutputBin FINISHERBIN3
+*UIConstraints: *OutputBin FINISHERBIN3 *Option7 False
+
+*% -- limits the pagesize A6 and Envelopes with the
+*% --  mailbox bins
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageSize A6
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageSize A6
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN1
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN2
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN3
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN4
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN5
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN6
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN7
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN8
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN9
+*UIConstraints: *PageSize A6 *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageRegion A6
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageRegion A6
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN1
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN2
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN3
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN4
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN5
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN6
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN7
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN8
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN9
+*UIConstraints: *PageRegion A6 *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageSize Env10
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageSize Env10
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN1
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN2
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN3
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN4
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN5
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN6
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN7
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN8
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN9
+*UIConstraints: *PageSize Env10 *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageRegion Env10
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageRegion Env10
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN1
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN2
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN3
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN4
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN5
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN6
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN7
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN8
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN9
+*UIConstraints: *PageRegion Env10 *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageSize EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageSize EnvC5
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN1
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN2
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN3
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN4
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN5
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN6
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN7
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN8
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN9
+*UIConstraints: *PageSize EnvC5 *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageRegion EnvC5
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageRegion EnvC5
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN1
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN2
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN3
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN4
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN5
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN6
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN7
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN8
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN9
+*UIConstraints: *PageRegion EnvC5 *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageSize EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageSize EnvDL
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN1
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN2
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN3
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN4
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN5
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN6
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN7
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN8
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN9
+*UIConstraints: *PageSize EnvDL *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageRegion EnvDL
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageRegion EnvDL
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN1
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN2
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN3
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN4
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN5
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN6
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN7
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN8
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN9
+*UIConstraints: *PageRegion EnvDL *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageSize EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageSize EnvMonarch
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN1
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN2
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN3
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN4
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN5
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN6
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN7
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN8
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN9
+*UIConstraints: *PageSize EnvMonarch *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN2 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN3 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN4 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN5 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN6 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN7 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN8 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN9 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin MAILBOXBIN10 *PageRegion EnvMonarch
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN1
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN2
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN3
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN4
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN5
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN6
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN7
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN8
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN9
+*UIConstraints: *PageRegion EnvMonarch *OutputBin MAILBOXBIN10
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageSize A6
+*UIConstraints: *OutputBin FINISHERBIN2 *PageSize A6
+*UIConstraints: *OutputBin FINISHERBIN3 *PageSize A6
+*UIConstraints: *PageSize A6 *OutputBin FINISHERBIN1
+*UIConstraints: *PageSize A6 *OutputBin FINISHERBIN2
+*UIConstraints: *PageSize A6 *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageRegion A6
+*UIConstraints: *OutputBin FINISHERBIN2 *PageRegion A6
+*UIConstraints: *OutputBin FINISHERBIN3 *PageRegion A6
+*UIConstraints: *PageRegion A6 *OutputBin FINISHERBIN1
+*UIConstraints: *PageRegion A6 *OutputBin FINISHERBIN2
+*UIConstraints: *PageRegion A6 *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageSize EnvDL
+*UIConstraints: *OutputBin FINISHERBIN2 *PageSize EnvDL
+*UIConstraints: *OutputBin FINISHERBIN3 *PageSize EnvDL
+*UIConstraints: *PageSize EnvDL *OutputBin FINISHERBIN1
+*UIConstraints: *PageSize EnvDL *OutputBin FINISHERBIN2
+*UIConstraints: *PageSize EnvDL *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageRegion EnvDL
+*UIConstraints: *OutputBin FINISHERBIN2 *PageRegion EnvDL
+*UIConstraints: *OutputBin FINISHERBIN3 *PageRegion EnvDL
+*UIConstraints: *PageRegion EnvDL *OutputBin FINISHERBIN1
+*UIConstraints: *PageRegion EnvDL *OutputBin FINISHERBIN2
+*UIConstraints: *PageRegion EnvDL *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageSize EnvC5
+*UIConstraints: *OutputBin FINISHERBIN2 *PageSize EnvC5
+*UIConstraints: *OutputBin FINISHERBIN3 *PageSize EnvC5
+*UIConstraints: *PageSize EnvC5 *OutputBin FINISHERBIN1
+*UIConstraints: *PageSize EnvC5 *OutputBin FINISHERBIN2
+*UIConstraints: *PageSize EnvC5 *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageRegion EnvC5
+*UIConstraints: *OutputBin FINISHERBIN2 *PageRegion EnvC5
+*UIConstraints: *OutputBin FINISHERBIN3 *PageRegion EnvC5
+*UIConstraints: *PageRegion EnvC5 *OutputBin FINISHERBIN1
+*UIConstraints: *PageRegion EnvC5 *OutputBin FINISHERBIN2
+*UIConstraints: *PageRegion EnvC5 *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageSize EnvMonarch
+*UIConstraints: *OutputBin FINISHERBIN2 *PageSize EnvMonarch
+*UIConstraints: *OutputBin FINISHERBIN3 *PageSize EnvMonarch
+*UIConstraints: *PageSize EnvMonarch *OutputBin FINISHERBIN1
+*UIConstraints: *PageSize EnvMonarch *OutputBin FINISHERBIN2
+*UIConstraints: *PageSize EnvMonarch *OutputBin FINISHERBIN3
+
+*UIConstraints: *OutputBin FINISHERBIN1 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin FINISHERBIN2 *PageRegion EnvMonarch
+*UIConstraints: *OutputBin FINISHERBIN3 *PageRegion EnvMonarch
+*UIConstraints: *PageRegion EnvMonarch *OutputBin FINISHERBIN1
+*UIConstraints: *PageRegion EnvMonarch *OutputBin FINISHERBIN2
+*UIConstraints: *PageRegion EnvMonarch *OutputBin FINISHERBIN3
+
+
+*% -- limits Envelope Feeder
+
+*UIConstraints: *PageSize Letter *InputSlot Envelope
+*UIConstraints: *PageSize Legal *InputSlot Envelope
+*UIConstraints: *PageSize Tabloid *InputSlot Envelope
+*UIConstraints: *PageSize A3 *InputSlot Envelope
+*UIConstraints: *PageSize A4 *InputSlot Envelope
+*UIConstraints: *PageSize A5 *InputSlot Envelope
+*UIConstraints: *PageSize A6 *InputSlot Envelope
+*UIConstraints: *PageSize FanFoldGermanLegal *InputSlot Envelope
+*UIConstraints: *PageSize Executive *InputSlot Envelope
+*UIConstraints: *PageSize Statement *InputSlot Envelope
+
+*UIConstraints: *InputSlot Envelope *PageSize Letter
+*UIConstraints: *InputSlot Envelope *PageSize Legal
+*UIConstraints: *InputSlot Envelope *PageSize Tabloid
+*UIConstraints: *InputSlot Envelope *PageSize A3
+*UIConstraints: *InputSlot Envelope *PageSize A4
+*UIConstraints: *InputSlot Envelope *PageSize A5
+*UIConstraints: *InputSlot Envelope *PageSize A6
+*UIConstraints: *InputSlot Envelope *PageSize FanFoldGermanLegal
+*UIConstraints: *InputSlot Envelope *PageSize Executive
+*UIConstraints: *InputSlot Envelope *PageSize Statement
+
+*UIConstraints: *PageRegion Letter *InputSlot Envelope
+*UIConstraints: *PageRegion Legal *InputSlot Envelope
+*UIConstraints: *PageRegion Tabloid *InputSlot Envelope
+*UIConstraints: *PageRegion A3 *InputSlot Envelope
+*UIConstraints: *PageRegion A4 *InputSlot Envelope
+*UIConstraints: *PageRegion A5 *InputSlot Envelope
+*UIConstraints: *PageRegion A6 *InputSlot Envelope
+*UIConstraints: *PageRegion FanFoldGermanLegal *InputSlot Envelope
+*UIConstraints: *PageRegion Executive *InputSlot Envelope
+*UIConstraints: *PageRegion Statement *InputSlot Envelope
+
+*UIConstraints: *InputSlot Envelope *PageRegion Letter
+*UIConstraints: *InputSlot Envelope *PageRegion Legal
+*UIConstraints: *InputSlot Envelope *PageRegion Tabloid
+*UIConstraints: *InputSlot Envelope *PageRegion A3
+*UIConstraints: *InputSlot Envelope *PageRegion A4
+*UIConstraints: *InputSlot Envelope *PageRegion A5
+*UIConstraints: *InputSlot Envelope *PageRegion A6
+*UIConstraints: *InputSlot Envelope *PageRegion FanFoldGermanLegal
+*UIConstraints: *InputSlot Envelope *PageRegion Executive
+*UIConstraints: *InputSlot Envelope *PageRegion Statement
+
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Plain
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Transparency
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Labels
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Preprinted
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Letterhead
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Prepunched
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Bond
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Recycled
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Color
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Cardstock
+
+*UIConstraints: *XRXAMediaType Plain *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Transparency *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Labels *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Preprinted *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Letterhead *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Prepunched *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Bond *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Recycled *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Color *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Cardstock *InputSlot Envelope
+
+*% -- limits for Tray1
+
+*UIConstraints: *PageSize A6 *InputSlot Tray1
+*UIConstraints: *PageSize Env10 *InputSlot Tray1
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray1
+*UIConstraints: *PageSize EnvDL *InputSlot Tray1
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *PageSize A6
+*UIConstraints: *InputSlot Tray1 *PageSize Env10
+*UIConstraints: *InputSlot Tray1 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray1 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray1 *PageSize EnvMonarch
+
+*UIConstraints: *PageRegion A6 *InputSlot Tray1
+*UIConstraints: *PageRegion Env10 *InputSlot Tray1
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray1
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray1
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *PageRegion A6
+*UIConstraints: *InputSlot Tray1 *PageRegion Env10
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvMonarch
+
+*% -- limits for Tray2
+
+*UIConstraints: *PageSize A6 *InputSlot Tray2
+*UIConstraints: *PageSize Env10 *InputSlot Tray2
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray2
+*UIConstraints: *PageSize EnvDL *InputSlot Tray2
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray2
+*UIConstraints: *PageSize A5 *InputSlot Tray2
+*UIConstraints: *PageSize Statement *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *PageSize A6
+*UIConstraints: *InputSlot Tray2 *PageSize A5
+*UIConstraints: *InputSlot Tray2 *PageSize Env10
+*UIConstraints: *InputSlot Tray2 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray2 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray2 *PageSize EnvMonarch
+*UIConstraints: *InputSlot Tray2 *PageSize Statement
+
+*UIConstraints: *PageRegion A6 *InputSlot Tray2
+*UIConstraints: *PageRegion Env10 *InputSlot Tray2
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray2
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray2
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray2
+*UIConstraints: *PageRegion A5 *InputSlot Tray2
+*UIConstraints: *PageRegion Statement *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *PageRegion A6
+*UIConstraints: *InputSlot Tray2 *PageRegion A5
+*UIConstraints: *InputSlot Tray2 *PageRegion Env10
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvMonarch
+*UIConstraints: *InputSlot Tray2 *PageRegion Statement
+
+*% -- limits for Tray3
+
+*UIConstraints: *PageSize Env10 *InputSlot Tray3
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray3
+*UIConstraints: *PageSize EnvDL *InputSlot Tray3
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray3
+*UIConstraints: *PageSize A6 *InputSlot Tray3
+*UIConstraints: *PageSize A5 *InputSlot Tray3
+*UIConstraints: *PageSize Statement *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *PageSize A6
+*UIConstraints: *InputSlot Tray3 *PageSize A5
+*UIConstraints: *InputSlot Tray3 *PageSize Env10
+*UIConstraints: *InputSlot Tray3 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray3 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray3 *PageSize EnvMonarch
+*UIConstraints: *InputSlot Tray3 *PageSize Statement
+
+*UIConstraints: *PageRegion A6 *InputSlot Tray3
+*UIConstraints: *PageRegion Env10 *InputSlot Tray3
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray3
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray3
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray3
+*UIConstraints: *PageRegion A5 *InputSlot Tray3
+*UIConstraints: *PageRegion Statement *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *PageRegion A6
+*UIConstraints: *InputSlot Tray3 *PageRegion A5
+*UIConstraints: *InputSlot Tray3 *PageRegion Env10
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvMonarch
+*UIConstraints: *InputSlot Tray3 *PageRegion Statement
+
+*% -- limits for Tray4
+
+*UIConstraints: *PageSize Legal *InputSlot Tray4
+*UIConstraints: *PageSize Tabloid *InputSlot Tray4
+*UIConstraints: *PageSize A3 *InputSlot Tray4
+*UIConstraints: *PageSize A5 *InputSlot Tray4
+*UIConstraints: *PageSize A6 *InputSlot Tray4
+*UIConstraints: *PageSize FanFoldGermanLegal *InputSlot Tray4
+*UIConstraints: *PageSize Statement *InputSlot Tray4
+*UIConstraints: *PageSize Env10 *InputSlot Tray4
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray4
+*UIConstraints: *PageSize EnvDL *InputSlot Tray4
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray4
+*UIConstraints: *InputSlot Tray4 *PageSize Legal
+*UIConstraints: *InputSlot Tray4 *PageSize Tabloid
+*UIConstraints: *InputSlot Tray4 *PageSize A3
+*UIConstraints: *InputSlot Tray4 *PageSize A5
+*UIConstraints: *InputSlot Tray4 *PageSize A6
+*UIConstraints: *InputSlot Tray4 *PageSize FanFoldGermanLegal
+*UIConstraints: *InputSlot Tray4 *PageSize Statement
+*UIConstraints: *InputSlot Tray4 *PageSize Env10
+*UIConstraints: *InputSlot Tray4 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray4 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray4 *PageSize EnvMonarch
+
+*UIConstraints: *PageRegion Legal *InputSlot Tray4
+*UIConstraints: *PageRegion Tabloid *InputSlot Tray4
+*UIConstraints: *PageRegion A3 *InputSlot Tray4
+*UIConstraints: *PageRegion A5 *InputSlot Tray4
+*UIConstraints: *PageRegion A6 *InputSlot Tray4
+*UIConstraints: *PageRegion FanFoldGermanLegal *InputSlot Tray4
+*UIConstraints: *PageRegion Statement *InputSlot Tray4
+*UIConstraints: *PageRegion Env10 *InputSlot Tray4
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray4
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray4
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray4
+*UIConstraints: *InputSlot Tray4 *PageRegion Legal
+*UIConstraints: *InputSlot Tray4 *PageRegion Tabloid
+*UIConstraints: *InputSlot Tray4 *PageRegion A3
+*UIConstraints: *InputSlot Tray4 *PageRegion A5
+*UIConstraints: *InputSlot Tray4 *PageRegion A6
+*UIConstraints: *InputSlot Tray4 *PageRegion FanFoldGermanLegal
+*UIConstraints: *InputSlot Tray4 *PageRegion Statement
+*UIConstraints: *InputSlot Tray4 *PageRegion Env10
+*UIConstraints: *InputSlot Tray4 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray4 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray4 *PageRegion EnvMonarch
+
+*% -- limits for Tray5
+
+*UIConstraints: *PageSize Legal *InputSlot Tray5
+*UIConstraints: *PageSize Tabloid *InputSlot Tray5
+*UIConstraints: *PageSize A3 *InputSlot Tray5
+*UIConstraints: *PageSize A5 *InputSlot Tray5
+*UIConstraints: *PageSize A6 *InputSlot Tray5
+*UIConstraints: *PageSize FanFoldGermanLegal *InputSlot Tray5
+*UIConstraints: *PageSize Statement *InputSlot Tray5
+*UIConstraints: *PageSize Env10 *InputSlot Tray5
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray5
+*UIConstraints: *PageSize EnvDL *InputSlot Tray5
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray5
+*UIConstraints: *InputSlot Tray5 *PageSize Legal
+*UIConstraints: *InputSlot Tray5 *PageSize Tabloid
+*UIConstraints: *InputSlot Tray5 *PageSize A3
+*UIConstraints: *InputSlot Tray5 *PageSize A5
+*UIConstraints: *InputSlot Tray5 *PageSize A6
+*UIConstraints: *InputSlot Tray5 *PageSize FanFoldGermanLegal
+*UIConstraints: *InputSlot Tray5 *PageSize Statement
+*UIConstraints: *InputSlot Tray5 *PageSize Env10
+*UIConstraints: *InputSlot Tray5 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray5 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray5 *PageSize EnvMonarch
+
+*UIConstraints: *PageRegion Legal *InputSlot Tray5
+*UIConstraints: *PageRegion Tabloid *InputSlot Tray5
+*UIConstraints: *PageRegion A3 *InputSlot Tray5
+*UIConstraints: *PageRegion A5 *InputSlot Tray5
+*UIConstraints: *PageRegion A6 *InputSlot Tray5
+*UIConstraints: *PageRegion FanFoldGermanLegal *InputSlot Tray5
+*UIConstraints: *PageRegion Statement *InputSlot Tray5
+*UIConstraints: *PageRegion Env10 *InputSlot Tray5
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray5
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray5
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray5
+*UIConstraints: *InputSlot Tray5 *PageRegion Legal
+*UIConstraints: *InputSlot Tray5 *PageRegion Tabloid
+*UIConstraints: *InputSlot Tray5 *PageRegion A3
+*UIConstraints: *InputSlot Tray5 *PageRegion A5
+*UIConstraints: *InputSlot Tray5 *PageRegion A6
+*UIConstraints: *InputSlot Tray5 *PageRegion FanFoldGermanLegal
+*UIConstraints: *InputSlot Tray5 *PageRegion Statement
+*UIConstraints: *InputSlot Tray5 *PageRegion Env10
+*UIConstraints: *InputSlot Tray5 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray5 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray5 *PageRegion EnvMonarch
+
+*% -- Stapling only if finisher is installed
+*UIConstraints: *Option7 False *XRStaple FrontStaple
+*UIConstraints: *Option7 False *XRStaple RearStaple
+*UIConstraints: *Option7 False *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *Option7 False
+*UIConstraints: *XRStaple RearStaple *Option7 False
+*UIConstraints: *XRStaple DualStaple *Option7 False
+
+*UIConstraints: *OutputBin FACEDOWNBIN *XRStaple FrontStaple
+*UIConstraints: *OutputBin FACEDOWNBIN *XRStaple RearStaple
+*UIConstraints: *OutputBin FACEDOWNBIN *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin FACEDOWNBIN
+*UIConstraints: *XRStaple RearStaple *OutputBin FACEDOWNBIN
+*UIConstraints: *XRStaple DualStaple *OutputBin FACEDOWNBIN
+
+*UIConstraints: *OutputBin FACEUPBIN *XRStaple FrontStaple
+*UIConstraints: *OutputBin FACEUPBIN *XRStaple RearStaple
+*UIConstraints: *OutputBin FACEUPBIN *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin FACEUPBIN
+*UIConstraints: *XRStaple RearStaple *OutputBin FACEUPBIN
+*UIConstraints: *XRStaple DualStaple *OutputBin FACEUPBIN
+
+*UIConstraints: *OutputBin MAILBOXBIN1 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN1 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN1 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN1
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN1
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN1
+
+*UIConstraints: *OutputBin MAILBOXBIN2 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN2 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN2 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN2
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN2
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN2
+
+*UIConstraints: *OutputBin MAILBOXBIN3 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN3 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN3 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN3
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN3
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN3
+
+*UIConstraints: *OutputBin MAILBOXBIN4 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN4 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN4 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN4
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN4
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN4
+
+*UIConstraints: *OutputBin MAILBOXBIN5 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN5 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN5 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN5
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN5
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN5
+
+*UIConstraints: *OutputBin MAILBOXBIN6 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN6 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN6 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN6
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN6
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN6
+
+*UIConstraints: *OutputBin MAILBOXBIN7 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN7 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN7 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN7
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN7
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN7
+
+*UIConstraints: *OutputBin MAILBOXBIN8 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN8 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN8 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN8
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN8
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN8
+
+*UIConstraints: *OutputBin MAILBOXBIN9 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN9 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN9 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN9
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN9
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN9
+
+*UIConstraints: *OutputBin MAILBOXBIN10 *XRStaple FrontStaple
+*UIConstraints: *OutputBin MAILBOXBIN10 *XRStaple RearStaple
+*UIConstraints: *OutputBin MAILBOXBIN10 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *OutputBin MAILBOXBIN10
+*UIConstraints: *XRStaple RearStaple *OutputBin MAILBOXBIN10
+*UIConstraints: *XRStaple DualStaple *OutputBin MAILBOXBIN10
+
+*% -- No Stapling if on Page Sizes A6 or Envelopes
+
+*UIConstraints: *PageSize A6 *XRStaple FrontStaple
+*UIConstraints: *PageSize A6 *XRStaple RearStaple
+*UIConstraints: *PageSize A6 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageSize A6
+*UIConstraints: *XRStaple RearStaple *PageSize A6
+*UIConstraints: *XRStaple DualStaple *PageSize A6
+
+*UIConstraints: *PageRegion A6 *XRStaple FrontStaple
+*UIConstraints: *PageRegion A6 *XRStaple RearStaple
+*UIConstraints: *PageRegion A6 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageRegion A6
+*UIConstraints: *XRStaple RearStaple *PageRegion A6
+*UIConstraints: *XRStaple DualStaple *PageRegion A6
+
+*UIConstraints: *PageSize EnvC5 *XRStaple FrontStaple
+*UIConstraints: *PageSize EnvC5 *XRStaple RearStaple
+*UIConstraints: *PageSize EnvC5 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageSize EnvC5
+*UIConstraints: *XRStaple RearStaple *PageSize EnvC5
+*UIConstraints: *XRStaple DualStaple *PageSize EnvC5
+
+*UIConstraints: *PageRegion EnvC5 *XRStaple FrontStaple
+*UIConstraints: *PageRegion EnvC5 *XRStaple RearStaple
+*UIConstraints: *PageRegion EnvC5 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageRegion EnvC5
+*UIConstraints: *XRStaple RearStaple *PageRegion EnvC5
+*UIConstraints: *XRStaple DualStaple *PageRegion EnvC5
+
+*UIConstraints: *PageSize EnvDL *XRStaple FrontStaple
+*UIConstraints: *PageSize EnvDL *XRStaple RearStaple
+*UIConstraints: *PageSize EnvDL *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageSize EnvDL
+*UIConstraints: *XRStaple RearStaple *PageSize EnvDL
+*UIConstraints: *XRStaple DualStaple *PageSize EnvDL
+
+*UIConstraints: *PageRegion EnvDL *XRStaple FrontStaple
+*UIConstraints: *PageRegion EnvDL *XRStaple RearStaple
+*UIConstraints: *PageRegion EnvDL *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageRegion EnvDL
+*UIConstraints: *XRStaple RearStaple *PageRegion EnvDL
+*UIConstraints: *XRStaple DualStaple *PageRegion EnvDL
+
+*UIConstraints: *PageSize EnvMonarch *XRStaple FrontStaple
+*UIConstraints: *PageSize EnvMonarch *XRStaple RearStaple
+*UIConstraints: *PageSize EnvMonarch *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageSize EnvMonarch
+*UIConstraints: *XRStaple RearStaple *PageSize EnvMonarch
+*UIConstraints: *XRStaple DualStaple *PageSize EnvMonarch
+
+*UIConstraints: *PageRegion EnvMonarch *XRStaple FrontStaple
+*UIConstraints: *PageRegion EnvMonarch *XRStaple RearStaple
+*UIConstraints: *PageRegion EnvMonarch *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageRegion EnvMonarch
+*UIConstraints: *XRStaple RearStaple *PageRegion EnvMonarch
+*UIConstraints: *XRStaple DualStaple *PageRegion EnvMonarch
+
+*UIConstraints: *PageSize Env10 *XRStaple FrontStaple
+*UIConstraints: *PageSize Env10 *XRStaple RearStaple
+*UIConstraints: *PageSize Env10 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageSize Env10
+*UIConstraints: *XRStaple RearStaple *PageSize Env10
+*UIConstraints: *XRStaple DualStaple *PageSize Env10
+
+*UIConstraints: *PageRegion Env10 *XRStaple FrontStaple
+*UIConstraints: *PageRegion Env10 *XRStaple RearStaple
+*UIConstraints: *PageRegion Env10 *XRStaple DualStaple
+*UIConstraints: *XRStaple FrontStaple *PageRegion Env10
+*UIConstraints: *XRStaple RearStaple *PageRegion Env10
+*UIConstraints: *XRStaple DualStaple *PageRegion Env10
+
+*% -- No Face Up Bin if jog is installed
+
+*UIConstraints: *Jog *OutputBin FACEUPBIN
+*UIConstraints: *Jog *OutputBin MAILBOXBIN1
+*UIConstraints: *Jog *OutputBin MAILBOXBIN2
+*UIConstraints: *Jog *OutputBin MAILBOXBIN3
+*UIConstraints: *Jog *OutputBin MAILBOXBIN4
+*UIConstraints: *Jog *OutputBin MAILBOXBIN5
+*UIConstraints: *Jog *OutputBin MAILBOXBIN6
+*UIConstraints: *Jog *OutputBin MAILBOXBIN7
+*UIConstraints: *Jog *OutputBin MAILBOXBIN8
+*UIConstraints: *Jog *OutputBin MAILBOXBIN9
+*UIConstraints: *Jog *OutputBin MAILBOXBIN10
+*UIConstraints: *OutputBin FACEUPBIN *Jog
+*UIConstraints: *OutputBin MAILBOXBIN1 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN2 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN3 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN4 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN5 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN6 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN7 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN8 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN9 *Jog
+*UIConstraints: *OutputBin MAILBOXBIN10 *Jog
+
+*% - Must have *Collate: True for *Jog: EndOfSet
+
+*UIConstraints: *Jog EndOfSet *Collate False
+*UIConstraints: *Collate False *Jog EndOfSet
+
+*% - No Duplex if using A6, or Envelope sized paper
+
+*UIConstraints: *Duplex DuplexNoTumble *PageSize A6
+*UIConstraints: *Duplex DuplexNoTumble *PageSize Env10
+*UIConstraints: *Duplex DuplexNoTumble *PageSize EnvC5
+*UIConstraints: *Duplex DuplexNoTumble *PageSize EnvDL
+*UIConstraints: *Duplex DuplexNoTumble *PageSize EnvMonarch
+*UIConstraints: *PageSize A6 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize Env10 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize EnvC5 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize EnvDL *Duplex DuplexNoTumble
+*UIConstraints: *PageSize EnvMonarch *Duplex DuplexNoTumble
+
+*UIConstraints: *Duplex DuplexNoTumble *PageRegion A6
+*UIConstraints: *Duplex DuplexNoTumble *PageRegion Env10
+*UIConstraints: *Duplex DuplexNoTumble *PageRegion EnvC5
+*UIConstraints: *Duplex DuplexNoTumble *PageRegion EnvDL
+*UIConstraints: *Duplex DuplexNoTumble *PageRegion EnvMonarch
+*UIConstraints: *PageRegion A6 *Duplex DuplexNoTumble
+*UIConstraints: *PageRegion Env10 *Duplex DuplexNoTumble
+*UIConstraints: *PageRegion EnvDL *Duplex DuplexNoTumble
+*UIConstraints: *PageRegion EnvC5 *Duplex DuplexNoTumble
+*UIConstraints: *PageRegion EnvMonarch *Duplex DuplexNoTumble
+
+*UIConstraints: *Duplex DuplexTumble *PageSize A6
+*UIConstraints: *Duplex DuplexTumble *PageSize Env10
+*UIConstraints: *Duplex DuplexTumble *PageSize EnvC5
+*UIConstraints: *Duplex DuplexTumble *PageSize EnvDL
+*UIConstraints: *Duplex DuplexTumble *PageSize EnvMonarch
+*UIConstraints: *PageSize A6 *Duplex DuplexTumble
+*UIConstraints: *PageSize Env10 *Duplex DuplexTumble
+*UIConstraints: *PageSize EnvC5 *Duplex DuplexTumble
+*UIConstraints: *PageSize EnvDL *Duplex DuplexTumble
+*UIConstraints: *PageSize EnvMonarch *Duplex DuplexTumble
+
+*UIConstraints: *Duplex DuplexTumble *PageRegion A6
+*UIConstraints: *Duplex DuplexTumble *PageRegion Env10
+*UIConstraints: *Duplex DuplexTumble *PageRegion EnvC5
+*UIConstraints: *Duplex DuplexTumble *PageRegion EnvDL
+*UIConstraints: *Duplex DuplexTumble *PageRegion EnvMonarch
+*UIConstraints: *PageRegion A6 *Duplex DuplexTumble
+*UIConstraints: *PageRegion Env10 *Duplex DuplexTumble
+*UIConstraints: *PageRegion EnvDL *Duplex DuplexTumble
+*UIConstraints: *PageRegion EnvC5 *Duplex DuplexTumble
+*UIConstraints: *PageRegion EnvMonarch *Duplex DuplexTumble
+
+
+*% === BASIC CAPABILITIES & SYSTEM MANAGEMENT ===
+
+*FreeVM: "2551452"
+*VMOption 12Meg/12 MB RAM: "2551452"
+*VMOption 20Meg/20 MB RAM: "4584664"
+*VMOption 28Meg/28 MB RAM: "6616280"
+*VMOption 36Meg/36 MB RAM: "8647896"
+*VMOption 44Meg/44 MB RAM: "10704088"
+*VMOption 52Meg/52 MB RAM: "12752088"
+*VMOption 60Meg/60 MB RAM: "14767320"
+*VMOption 68Meg/68 MB RAM: "16823512"
+*VMOption 76Meg/76 MB RAM: "18855128"
+*VMOption 84Meg/84 MB RAM: "20919512"
+*VMOption 92Meg/92 MB RAM: "22951128"
+*VMOption 100Meg/100 MB RAM: "24982744"
+*VMOption 108Meg/108 MB RAM: "27014360"
+*VMOption 116Meg/116 MB RAM: "29045976"
+*VMOption 124Meg/124 MB RAM: "31077592"
+*VMOption 128Meg/128 MB RAM: "32089208"
+
+*FCacheSize 12Meg/12 MB RAM: 560000
+*FCacheSize 20Meg/20 MB RAM: 960000
+*FCacheSize 28Meg/28 MB RAM: 1360000
+*FCacheSize 36Meg/36 MB RAM: 1760000
+*FCacheSize 44Meg/44 MB RAM: 2160000
+*FCacheSize 52Meg/52 MB RAM: 2560000
+*FCacheSize 60Meg/60 MB RAM: 2960000
+*FCacheSize 68Meg/68 MB RAM: 3360000
+*FCacheSize 76Meg/76 MB RAM: 3760000
+*FCacheSize 84Meg/84 MB RAM: 4160000
+*FCacheSize 92Meg/92 MB RAM: 4560000
+*FCacheSize 100Meg/100 MB RAM: 4960000
+*FCacheSize 108Meg/108 MB RAM: 5360000
+*FCacheSize 116Meg/116 MB RAM: 5760000
+*FCacheSize 124Meg/124 MB RAM: 6160000
+*FCacheSize 128Meg/128 MB RAM: 6360000
+
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*TTRasterizer: Type42
+*?TTRasterizer:"
+  save
+ 42/FontType resourcestatus
+ {pop pop (Type42)}{(No Type42)} ifelse = flush
+ restore
+ "
+*End
+
+*FileSystem: True
+*?FileSystem: " 
+false
+(*) {
+	/DevDict exch currentdevparams def
+	DevDict /Writeable known {DevDict /Writeable get} {false} ifelse
+	DevDict /Mounted   known {DevDict /Mounted   get} {false} ifelse
+	DevDict /HasNames  known {DevDict /HasNames  get} {false} ifelse
+	and and {pop true} if
+} 128 string /IODevice resourceforall
+{(True)} {(False)} ifelse =
+"
+*End
+*LanguageLevel: "2"
+*Throughput: "32"
+
+*Password: "0"
+*ExitServer: "
+  count 1 ge { true exch startjob } {false} ifelse
+  not {
+    (ERROR: *ExitServer cannot start unencapsulated job.) =
+    (       Password is probably invalid.) =
+ } if
+"
+*End
+
+*Reset: "
+  count 1 ge { true exch startjob } {false} ifelse
+  not {
+    (ERROR: *ExitServer cannot start unencapsulated job.) =
+    (       Password is probably invalid.) =
+ } if
+  systemdict /quit get exec
+"
+*End
+
+
+*% === PROTOCOLS AND EMULATIONS ===
+
+*Protocols: TBCP
+
+*% === MEDIA SELECTION ===
+*% PageSize sets the input Tray and the imageable area
+*OpenUI *PageSize/Paper Size: PickOne
+*OrderDependency: 20.0 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter[8.5 x 11]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal/Legal[8.5 x 14]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Tabloid/Tabloid[11 x 17]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [792 1224] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A3/A3[297mm x 420mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [842 1191] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4/A4[210mm x 297mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A5/A5[148mm x 210mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [420 595] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A6/A6[105mm x 148mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 420] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize FanFoldGermanLegal/Folio[8.5 x 13]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 936] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Executive/Executive[7.25 x 10.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Statement/Statement[5.5 x 8.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [396 612] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Env10/Com10 Envelope[4.125 x 9.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvC5/C5 Envelope[162mm x 229mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvDL/DL Envelope[110mm x 220mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvMonarch/Monarch Envelope[3.87 x 7.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if
+   (Unknown)
+  14 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [792 1224] (Tabloid) put
+   dup [842 1191] (A3) put
+   dup [595 842] (A4) put
+   dup [420 595] (A5) put
+   dup [297 420] (A6) put
+   dup [612 936] (FanFoldGermanLegal) put
+   dup [522 756] (Executive) put
+   dup [396 612] (Statement) put
+   dup [297 684] (Env10) put
+   dup [312 624] (EnvDL) put
+   dup [459 649] (EnvC5) put
+   dup [279 540] (EnvMonarch) put
+ { exch aload pop 4 index sub abs 5 le exch
+   5 index sub abs 5 le and
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore
+"
+*End
+*CloseUI: *PageSize
+
+*% PageRegion sets the imageable area without specifying a given media source.
+*OpenUI *PageRegion/Paper Size: PickOne
+*OrderDependency: 25.0 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter[8.5 x 11]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Legal/Legal[8.5 x 14]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Tabloid/Tabloid[11 x 17]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [792 1224] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A3/A3[297mm x 420mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [842 1191] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A4/A4[210mm x 297mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A5/A5[148mm x 210mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [420 595] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A6/A6[105mm x 148mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 420] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion FanFoldGermanLegal/Folio[8.5 x 13]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 936] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Executive/Executive[7.25 x 10.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Statement/Statement[5.5 x 8.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [396 612] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Env10/Com10 Envelope[4.125 x 9.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvC5/C5 Envelope[162mm x 229mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvDL/DL Envelope[110mm x 220mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvMonarch/Monarch Envelope[3.87 x 7.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% ImageableArea gives the bounding box (llx, lly, urx, ury) in points for each media.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/Letter[8.5 x 11]: "0.0 0.0 612.06 793.92"
+*ImageableArea Legal/Legal[8.5 x 14]: "0.0 0.06 613.92 1009.02"
+*ImageableArea Tabloid/Tabloid[11 x 17]: "0.0 0.06 793.92 1225.02"
+*ImageableArea A3/A3[297mm x 420mm]: "0.0 0.06 843.84 1191.42"
+*ImageableArea A4/A4[210mm x 297mm]: "0.0 0.0 595.38 843.84"
+*ImageableArea A5/A5[148mm x 210mm]: "0.0 0.0 422.46 598.2"
+*ImageableArea A6/A6[105mm x 148mm]: "0.0 0.06 288.0 420.54"
+*ImageableArea FanFoldGermanLegal/Folio[8.5 x 13]: "0.0 0.06 613.92 937.02"
+*ImageableArea Executive/Executive[7.25 x 10.5]: "0.0 0.0 522.18 756.0"
+*ImageableArea Statement/Statement[5.5 x 8.5]: "0.0 00.0 396.06 613.92"
+*ImageableArea Env10/Com10 Envelope[4.125 x 9.5]: "0.06 0.0 297.66 687.36"
+*ImageableArea EnvC5/C5 Envelope[162mm x 229mm]: "0.06 0.0 459.9 652.8"
+*ImageableArea EnvDL/DL Envelope[110mm x 220mm]: "0.06 0.0 312.02 625.92"
+*ImageableArea EnvMonarch/Monarch Envelope[3.87 x 7.5]: "0.06 0.0 279.42 541.44"
+*?ImageableArea: "
+  newpath clippath pathbbox 4 -2 roll
+  exch 2 {10000 mul ceiling 10000 div dup 0 lt {pop 0.0} if 128 string cvs print ( ) print} repeat
+  exch 2 {10000 mul floor   10000 div dup 0 lt {pop 0.0} if 128 string cvs print ( ) print} repeat
+  (\n) print"
+*End
+
+*% PaperDimension gives physical dimensions in points for each media (x-width, y-height)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/Letter[8.5 x 11]: "612 792"
+*PaperDimension Legal/Legal[8.5 x 14]: "612 1008"
+*PaperDimension Tabloid/Tabloid[11 x 17]: "792 1224"
+*PaperDimension A3/A3[297mm x 420mm]: "842 1191"
+*PaperDimension A4/A4[210mm x 297mm]: "595 842"
+*PaperDimension A5/A5[148mm x 210mm]: "420 595"
+*PaperDimension A6/A6[105mm x 148mm]: "297 420"
+*PaperDimension FanFoldGermanLegal/Folio[8.5 x 13]: "612 936"
+*PaperDimension Executive/Executive[7.25 x 10.5]: "522 756"
+*PaperDimension Statement/Statement[5.5 x 8.5]: "396 612"
+*PaperDimension Env10/Com10 Envelope[4.125 x 9.5]: "297 684"
+*PaperDimension EnvC5/C5 Envelope[162mm x 229mm]: "459 649"
+*PaperDimension EnvDL/DL Envelope[110mm x 220mm]: "312 624"
+*PaperDimension EnvMonarch/Monarch Envelope[3.87 x 7.5]: "279 540"
+
+*LandscapeOrientation: Any
+
+
+*% === MEDIA HANDLING OPTIONS ===
+*OpenUI *ManualFeed/Manual Feed: Boolean
+*OrderDependency: 15.0 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: " << /ManualFeed true >> setpagedevice "
+*ManualFeed False: " << /ManualFeed false >> setpagedevice "
+*?ManualFeed:"
+save
+currentpagedevice /ManualFeed get
+{(True)} {(False)} ifelse = flush
+restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*OpenGroup: Stapling
+
+*OpenUI *XRStaple/Staple: PickOne
+*OrderDependency: 30.0 AnySetup *XRStaple
+*DefaultXRStaple: None
+*XRStaple None/Off: "
+  currentpagedevice /Staple known {
+  << /Staple 0 /StapleDetails << /Type 6 /StapleMode 0 >> >> setpagedevice } if
+"
+*End
+*XRStaple FrontStaple/Position 1: "
+  << /Staple 1 /StapleDetails << /Type 6 /StapleMode 0 >> >> setpagedevice
+"
+*End
+*XRStaple RearStaple/Position 2: "
+  << /Staple 1 /StapleDetails << /Type 6 /StapleMode 1 >> >> setpagedevice
+"
+*End
+*XRStaple DualStaple/Dual Staple: "
+  << /Staple 1 /StapleDetails << /Type 6 /StapleMode 2 >> >> setpagedevice
+"
+*End
+*?XRStaple:"
+save
+   currentpagedevice /Staple known
+{currentpagedevice /Staple get 0 eq
+	   {(None)}
+	     {3 dict
+		dup 0 (FrontStaple) put
+		dup 1 (RearStaple) put
+		dup 2 (DualStaple) put
+		currentpagedevice /StapleDetails get /StapleMode get get
+		}ifelse
+	     }{(Unknown)} ifelse
+	   = flush
+	restore"
+*End
+*CloseUI: *XRStaple
+*CloseGroup: Stapling
+
+*OpenUI *InputSlot/Paper Source: PickOne
+*OrderDependency: 15.0 AnySetup *InputSlot
+*DefaultInputSlot: Tray1
+*InputSlot Tray1/Tray 1: "
+   <</DeferredMediaSelection true /MediaPosition 0 >> 
+setpagedevice"
+*End
+*InputSlot Tray2/Tray 2: "
+   <</DeferredMediaSelection true /MediaPosition 1 >> 
+setpagedevice" 
+*End
+*InputSlot Tray3/Tray 3:  "
+   <</DeferredMediaSelection true /MediaPosition 2 >> 
+setpagedevice " 
+*End
+*InputSlot Tray4/Tray 4:  "
+   <</DeferredMediaSelection true /MediaPosition 3 >> 
+setpagedevice " 
+*End 
+*InputSlot Tray5/Tray 5:  "
+   <</DeferredMediaSelection true /MediaPosition 4 >> 
+setpagedevice " 
+*End 
+*InputSlot MBF/MBF:  "
+   <</DeferredMediaSelection true /MediaPosition 5 >> 
+setpagedevice " 
+*End 
+*InputSlot Envelope/Envelope Feeder:  "
+   <</DeferredMediaSelection true /MediaPosition 6 >> 
+setpagedevice " 
+*End 
+
+*?InputSlot: "
+save
+  7 dict
+  dup 0 (Tray1) put
+  dup 1 (Tray2) put
+  dup 2 (Tray3) put
+  dup 3 (Tray4) put
+  dup 4 (Tray5) put
+  dup 5 (MBF) put
+  dup 6 (Envelope) put
+  currentpagedevice /MediaPosition known
+  	{currentpagedevice /MediaPosition get
+    		dup null ne
+    			{get}{pop pop (Unknown)} ifelse}
+		{pop (Unknown)} ifelse
+  = flush
+restore
+"
+*End
+*CloseUI: *InputSlot
+
+*RequiresPageRegion All: True
+
+*OpenUI *TraySwitch/Auto Tray Switch: Boolean
+*OrderDependency: 30.0 AnySetup *TraySwitch
+*TraySwitch True: "<</TraySwitch true>> setpagedevice"
+*TraySwitch False: "<</TraySwitch false>> setpagedevice"
+*DefaultTraySwitch: True
+*?TraySwitch: "save
+  currentpagedevice /TraySwitch get
+  {(True)} {(False)} ifelse = flush
+  restore"
+*End
+*CloseUI: *TraySwitch
+
+*OpenGroup: Output
+
+*OpenUI *Duplex/Duplex: PickOne
+*OrderDependency: 30.0 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
+*Duplex DuplexNoTumble/Normal: "<</Duplex true /Tumble false>> setpagedevice"
+*Duplex DuplexTumble/Tumble: "<</Duplex true /Tumble true>> setpagedevice"
+*?Duplex: "save
+  currentpagedevice /Duplex get
+  {currentpagedevice /Tumble get
+     {(DuplexTumble)} {(DuplexNoTumble)} ifelse}
+  {(None)} ifelse = flush restore"
+*End
+*CloseUI: *Duplex
+
+*OpenUI *Jog/Jog: PickOne
+*OrderDependency: 30.0 AnySetup *Jog
+*DefaultJog: None
+*Jog None/None: "<</Jog 0>> setpagedevice"
+*Jog EndOfJob/End of job: "<</Jog 2>> setpagedevice"
+*Jog EndOfSet/End of set: "<</Jog 3>> setpagedevice"
+*?Jog: "save
+ currentpagedevice /Jog get dup 2 eq 
+ {pop (EndOfJob)} {3 eq {(EndOfSet)} {(None)} ifelse}
+ ifelse = flush
+restore "
+*End
+*CloseUI: *Jog
+
+*OpenUI *Collate: Boolean
+*OrderDependency: 10.0 AnySetup *Collate
+*DefaultCollate: False
+*Collate False: "<</Collate false>> setpagedevice"
+*Collate True: "<</Collate true>> setpagedevice"
+*?Collate: "save
+  currentpagedevice /Collate known
+    {currentpagedevice /Collate get
+      {(True)}{(False)} ifelse}
+    {(Unknown)}
+  ifelse = flush
+restore "
+*End    
+*CloseUI: *Collate
+
+*OpenUI *XRXAMediaType/Media Type:  PickOne
+*OrderDependency: 30.0 AnySetup *XRXAMediaType
+*DefaultXRXAMediaType: AutoSelect
+*XRXAMediaType AutoSelect/AutoSelect: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType null
+put setpagedevice"
+*End
+*XRXAMediaType Plain/Plain: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Plain) put setpagedevice"
+*End
+*XRXAMediaType Transparency/Transparency: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Transparency) put setpagedevice"
+*End 
+*XRXAMediaType Labels/Labels: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Labels) put setpagedevice"
+*End
+*XRXAMediaType Preprinted/Preprinted: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Preprinted) put setpagedevice"
+*End
+*XRXAMediaType Letterhead/Letterhead: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Letterhead) put setpagedevice"
+*End
+*XRXAMediaType Prepunched/Prepunched: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Prepunched) put setpagedevice"
+*End
+*XRXAMediaType Bond/Bond: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Bond) put setpagedevice"
+*End
+*XRXAMediaType Recycled/Recycled: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Recycled) put setpagedevice"
+*End
+*XRXAMediaType Color/Color: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Color) put setpagedevice"
+*End
+*XRXAMediaType Cardstock/Cardstock: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Cardstock) put setpagedevice"
+*End
+
+*?XRXAMediaType: "
+currentpagedevice dup /MediaType known
+{
+/MediaType get dup null eq  { pop (Unknown) } if
+}
+{ pop (Unknown)}
+ifelse = flush
+"
+*End
+*CloseUI: *XRXAMediaType
+
+
+*OpenUI *OutputBin/Output Tray: PickOne
+*OrderDependency: 30.0 AnySetup *OutputBin
+*DefaultOutputBin: FACEDOWNBIN
+*OutputBin FACEDOWNBIN/Face Down Bin: "
+<</OutputType (FACE DOWN TRAY)>> setpagedevice"
+*End
+*OutputBin FACEUPBIN/Face Up Bin: "
+<</OutputType (FACE UP TRAY)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN1/Mailbox Bin 1: "
+<</OutputType (MAILBOX BIN 1)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN2/Mailbox Bin 2: "
+<</OutputType (MAILBOX BIN 2)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN3/Mailbox Bin 3: "
+<</OutputType (MAILBOX BIN 3)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN4/Mailbox Bin 4: "
+<</OutputType (MAILBOX BIN 4)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN5/Mailbox Bin 5: "
+<</OutputType (MAILBOX BIN 5)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN6/Mailbox Bin 6: "
+<</OutputType (MAILBOX BIN 6)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN7/Mailbox Bin 7: "
+<</OutputType (MAILBOX BIN 7)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN8/Mailbox Bin 8: "
+<</OutputType (MAILBOX BIN 8)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN9/Mailbox Bin 9: "
+<</OutputType (MAILBOX BIN 9)>> setpagedevice"
+*End
+*OutputBin MAILBOXBIN10/Mailbox Bin 10: "
+<</OutputType (MAILBOX BIN 10)>> setpagedevice"
+*End
+*OutputBin FINISHERBIN1/Finisher Bin 1: "
+<</OutputType (FINISHER BIN 1)>> setpagedevice"
+*End
+*OutputBin FINISHERBIN2/Finisher Bin 2: "
+<</OutputType (FINISHER BIN 2)>> setpagedevice"
+*End
+*OutputBin FINISHERBIN3/Finisher Bin 3: "
+<</OutputType (FINISHER BIN 3)>> setpagedevice"
+*End
+*?OutputBin: "
+currentpagedevice /OutputType known
+{
+<<
+ (FACE DOWN TRAY) (FACEDOWNBIN) 
+ (FACE UP TRAY) (FACEUPBIN)
+ (MAILBOX BIN 1) (MAILBOXBIN1)
+ (MAILBOX BIN 2) (MAILBOXBIN2)
+ (MAILBOX BIN 3) (MAILBOXBIN3)
+ (MAILBOX BIN 4) (MAILBOXBIN4)
+ (MAILBOX BIN 5) (MAILBOXBIN5) 
+ (MAILBOX BIN 6) (MAILBOXBIN6) 
+ (MAILBOX BIN 7) (MAILBOXBIN7) 
+ (MAILBOX BIN 8) (MAILBOXBIN8) 
+ (MAILBOX BIN 9) (MAILBOXBIN9) 
+ (MAILBOX BIN 10) (MAILBOXBIN10)
+ (FINISHER BIN 1) (FINISHERBIN1) 
+ (FINISHER BIN 2) (FINISHERBIN2) 
+ (FINISHER BIN 3) (FINISHERBIN3)
+>>
+  currentpagedevice /OutputType get 
+  dup null eq  {pop (Unknown)} { get } ifelse
+ } { (Unkown)} ifelse = flush      
+"
+*End
+*CloseUI: *OutputBin
+*CloseGroup: Output
+
+
+
+*% === RESOLUTION AND APPEARANCE CONTROL ===
+
+*DefaultResolution: 600x600dpi
+
+
+*% Halftone Information ===============
+
+*DefaultHalftoneType: 3
+*AccurateScreensSupport: False
+*ScreenFreq: "65"
+*ScreenAngle: "45"
+*DefaultScreenProc: Dot
+*ScreenProc Dot:  "{180 mul cos exch 180 mul cos add 2 div}"
+
+*DefaultTransfer: Null
+*Transfer Null: "{}"
+*Transfer Null.Inverse: "{1 exch sub}"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.85lpi.600x600dpi/85 lpi /600 x 600 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+
+
+*% For 85 lpi /600 x 600 dpi =======================================
+
+*ColorSepScreenAngle ProcessBlack.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "45"
+*ColorSepScreenAngle CustomColor.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq CustomColor.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse 
+   } bind loop
+   (*) = flush
+ restore"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% === PRINTER MESSAGES ===
+
+*% possible unsolicited messages
+*PrinterError: "Cover Open"
+*PrinterError: "Warming up"
+
+*% status field of controller-requested status message
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "warming up"
+*Status: "initializing"
+*Status: "holding"
+*Status: "PrinterError: Cover Open"
+*Status: "PrinterError: Warming up"
+
+*% source field of controller-requested status message
+*Source: "Parallel"
+*Source: "LocalTalk"
+*Source: "Ethernet"
+*Source: "TokenRing"
+
+*% other possible printer messages
+*Message: "%%Flushing: rest of job (to end-of-file) will be ignored]%%"
+*Message: "%%[exitserver: permanent state may be changed]%%"
+*Message: "%%[StatusChange: initializing]%%"
+
+
+*% The byte count of this file should be exactly 067589 or 069286
+*% depending on the filesystem it resides in.
+*% end of PPD file for the Xerox Snowbird
+*% last modification date 2/4/98
+*% Flora Lee

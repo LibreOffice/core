@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
+
+  <title>OpenOffice.org Update Feed</title>
+  <link rel="alternate" type="text/html" href="http://update.services.openoffice.org/ooo/snapshot.html"/>
+  <updated>2006-11-06T18:30:02Z</updated>
+  <author>
+    <name>The OpenOffice.org Project</name>
+    <uri>http://openoffice.org</uri>
+    <email>updatefeed@openoffice.org</email>
+  </author>
+  <id>urn:uuid:a4ccd383-1dd1-11b2-a95c-0003ba566e9d</id>
+  <entry>
+    <title>default1.oxt version 2.0 available</title>
+    <link rel="alternate" type="text/html"
+        href="http://extensions.openoffice.org"/>
+    <id>urn:uuid:a4ccd383-1dd1-11b2-a95c-0003ba566e9f</id>
+    <category term="org.openoffice.legacy.default1.oxt" label="default1.oxt" />
+    <updated>2006-11-06T18:30:02Z</updated>
+    <summary>Click here to go to the download page.</summary>
+    <content type="application/xml" src="http://extensions.openoffice.org/testarea/desktop/default_url/update/default1.update.xml" />
+  </entry>
+  <entry>
+    <title>default2.oxt version 2.0 available</title>
+    <link rel="alternate" type="text/html"
+        href="http://extensions.openoffice.org"/>
+    <id>urn:uuid:a4ccd383-1dd1-11b2-a95c-0003ba566eaf</id>
+    <category term="org.openoffice.legacy.default2.oxt" label="default2.oxt" />
+    <updated>2006-11-06T18:30:02Z</updated>
+    <summary>Click here to go to the download page.</summary>
+    <content type="application/xml" src="http://extensions.openoffice.org/testarea/desktop/default_url/update/default2.update.xml" />
+  </entry>
+</feed>

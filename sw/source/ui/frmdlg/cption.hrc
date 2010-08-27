@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _CPTION_HRC
+#define _CPTION_HRC
+
+#define BTN_OK         1
+#define BTN_CANCEL     2
+#define TXT_SAMPLE     3
+#define TXT_CATEGORY   4
+#define BOX_CATEGORY   5
+#define TXT_FORMAT     6
+#define BOX_FORMAT     7
+#define TXT_TEXT       8
+#define EDT_TEXT       9
+#define TXT_POS       10
+#define BOX_POS       11
+#define FL_SETTINGS  12
+#define BTN_HELP        13
+#define BTN_OPTION    14
+#define FL_HEADER         15
+#define FT_LEVEL      16
+#define LB_LEVEL      17
+#define FT_SEPARATOR  18
+#define ED_SEPARATOR  19
+#define CB_COPY_ATTR  20
+#define FT_OBJECT_NAME 21
+#define ED_OBJECT_NAME 22
+#define BTN_AUTOCAPTION 23
+#define TXT_SEP         24
+#define EDT_SEP         25
+#define WIN_SAMPLE      26
+
+#define FL_CATANDFRAME  27
+#define FT_CHARSTYLE    28
+#define LB_CHARSTYLE    29
+#define CB_APPLYBAS     30
+#define FL_ORDER        31
+#define FT_ORDER        32
+#define LB_ORDER        33
+
+#define FT_NUM_SEP      34
+#define ED_NUM_SEP       35
+
+#define STR_BEGINNING       1
+#define STR_END             2
+#define STR_ABOVE           3
+#define STR_CP_BELOW        4
+#define STR_CATEGORY_NONE   5
+
+#endif
+
+// ********************************************************************** EOF
+

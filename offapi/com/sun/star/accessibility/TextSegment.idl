@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_TextSegment_idl__
+#define __com_sun_star_accessibility_TextSegment_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** This structure describes a text segment that is embedded in a larger
+    portion of text.  It is used for example by the
+    <type>XAccessibleText</type> interface to describe a text portion that
+    was inserted into or deleted from an accessible text.
+
+    <p>The indices <member>TextSegment::SegmentStart</member> and
+    <member>TextSegment::SegmentEnd</member> refer to the enclosing text.
+    The <member>TextSegment::SegmentText</member> member contains the text
+    between these two indices including the start index but not the end
+    index.  With it you can use this structure without having to
+    access the <type>XAccessibleText</type> interface that represents the
+    enclosing text.</p>
+
+    <p>An empty text segment is expressed by
+    <member>TextSegment::SegmentStart</member> and
+    <member>TextSegment::SegmentEnd</member> set to the same value.  While a
+    value of -1 signals an error (like the request for a word after the last
+    character of a text) all other values define the empty string at that
+    position.</p>
+
+    <p>The <member>SegmentText</member> member is a copy of the
+    corresponding text segment of the enclosing text.  Modifying this
+    structure does not alter the enclosing text.</p>
+
+    @see XAccessibleText
+
+    @since OOo 1.1.2
+*/
+
+published struct TextSegment
+{
+    /** A copy of the text segment of the enclosing text delimited by the
+        text indices <member>TextSegment::SegmentStart</member> and
+        <member>TextSegment::SegmentEnd</member>.  Modifying it does not
+        alter the enclosing text.
+    */
+    string SegmentText;
+
+    /** Index of the first character of the text segment represented by this
+        structure.  The index refers to the enclosing text.
+    */
+    long SegmentStart;
+
+    /** Index of the character directly behind the last character of the
+        text segment represented by this structure.  The index refers to the
+        enclosing text.
+    */
+    long SegmentEnd;
+};
+
+}; }; }; };
+
+#endif

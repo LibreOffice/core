@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="svx_SvxShapePolyPolygonBezier" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Requiered for  com.sun.star.lang.XComponent
+ Global oComponentInstance As Object ' it will be disposed
+
+' Requiered for  com.sun.star.drawing.XShapeDescriptor
+ Global cShapeType As String
+
+' Requiered for  com.sun.star.text.XText
+ Global oInstance As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' svx.SvxShapePolyPolygonBezier
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    bOK = true
+
+    oDoc = utils.loadTestDocument("SvxShape.sxd")
+
+    cShapeType = "com.sun.star.drawing.ClosedBezierShape"
+
+    oObj = oDoc.createInstance("com.sun.star.drawing.ClosedBezierShape")
+    oDoc.DrawPages(0).add(oObj)
+    Dim oSize As new com.sun.star.awt.Size
+    Dim oPosition As new com.sun.star.awt.Point
+    oSize.Width = 5000
+    oSize.Height = 5000
+    oPosition.X = 4000
+    oPosition.Y = 4000
+    oObj.Size = oSize
+    oObj.Position = oPosition
+
+    oComponentInstance = oDoc.createInstance("com.sun.star.drawing.ClosedBezierShape")
+    oDoc.DrawPages(0).add(oComponentInstance)
+    oSize.Width = 8000
+    oSize.Height = 8000
+    oPosition.X = 4000
+    oPosition.Y = 4000
+    oComponentInstance.Size = oSize
+    oComponentInstance.Position = oPosition
+
+    Dim ps1(3) As new com.sun.star.awt.Point
+    Dim pf1(3) As Integer
+    with com.sun.star.drawing.PolygonFlags
+
+    ps1(0).X = 5000 : ps1(0).Y = 5000 : pf1(0) = .NORMAL
+    ps1(1).X = 10000 : ps1(1).Y = 5000 : pf1(1) = .CONTROL
+    ps1(2).X = 10000 : ps1(2).Y = 10000 : pf1(2) = .CONTROL
+    ps1(3).X = 5000 : ps1(3).Y = 10000 : pf1(3) = .NORMAL
+
+    Dim ps2(3) As new com.sun.star.awt.Point
+    Dim pf2(3) As Integer
+    ps2(0).X = 6500 : ps2(0).Y = 6500 : pf2(0) = .NORMAL
+    ps2(1).X = 8500 : ps2(1).Y = 6500 : pf2(1) = .CONTROL
+    ps2(2).X = 8500 : ps2(2).Y = 8500 : pf2(2) = .CONTROL
+    ps2(3).X = 6500 : ps2(3).Y = 8500 : pf2(3) = .NORMAL
+    end with
+
+    Dim psA As Variant
+    psA = Array( ps1(), ps2() )
+
+    Dim oFlags As Variant
+    oFlags = Array( pf1(), pf2() )
+
+    Dim oCoords As New com.sun.star.drawing.PolyPolygonBezierCoords
+    oCoords.Coordinates = psA()
+    oCoords.Flags = oFlags()
+
+    oInstance = oDoc.createInstance("com.sun.star.text.TextField.DateTime")
+
+    oObj.PolyPolygonBezier = oCoords
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

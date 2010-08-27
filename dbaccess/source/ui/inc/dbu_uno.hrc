@@ -1,0 +1,56 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBU_UNO_HRC_
+#define _DBU_UNO_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define STR_REMEMBERPASSWORD_PERSISTENT         ( RID_STR_UNO_START +  0 )
+#define STR_CTW_NO_VIEWS_SUPPORT                ( RID_STR_UNO_START +  1 )
+#define STR_CTW_NO_PRIMARY_KEY_SUPPORT          ( RID_STR_UNO_START +  2 )
+#define STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR  ( RID_STR_UNO_START +  3 )
+#define STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT ( RID_STR_UNO_START +  4 )
+#define STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS     ( RID_STR_UNO_START +  5 )
+#define STR_CTW_UNSUPPORTED_COLUMN_TYPE         ( RID_STR_UNO_START +  6 )
+#define STR_CTW_ILLEGAL_PARAMETER_COUNT         ( RID_STR_UNO_START +  7 )
+#define STR_CTW_ERROR_DURING_INITIALIZATION     ( RID_STR_UNO_START +  8 )
+#define STR_CTW_ERROR_UNSUPPORTED_SETTING       ( RID_STR_UNO_START +  9 )
+#define STR_CTW_ERROR_NO_QUERY                  ( RID_STR_UNO_START + 10 )
+#define STR_CTW_ERROR_INVALID_INTERACTIONHANDLER        ( RID_STR_UNO_START + 11 )
+
+// please adjust when inserting new strings:
+#define RID_STR_UNO_LAST_USED                   STR_CTW_ERROR_INVALID_INTERACTIONHANDLER
+
+#if RID_STR_UNO_LAST_USED >= RID_STR_UNO_END
+#error too many resources in uno ....
+#endif
+
+#endif // _DBU_UNO_HRC_
+
+

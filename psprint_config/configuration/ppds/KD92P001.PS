@@ -1,0 +1,1127 @@
+*PPD-Adobe: "4.3"
+
+*% Copyright 1997 Eastman Kodak Co.
+*% All Rights Reserved.
+*% Permission is granted for redistribution of this file as long
+*% as this copyright notice is intact and the contents of the
+*% file is not altered in any way from its original form.
+*%
+*%   KODAK ImageSource 92p Printer (U.S. version)
+*%
+*% End of Copyright statement.
+
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*% Internal Version: "1.04"
+
+*PCFileName: "KD92P001.PPD"
+*Manufacturer: "Kodak"
+*Product: "(Kodak 92p printer)"
+*ModelName: "KODAK 92p PPD"
+*ShortNickName: "KODAK 92p PPD"
+*NickName: "KODAK 92p PPD"
+*PSVersion: "(2015.802) 0"
+
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+
+*% General Information and Defaults
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*DefaultResolution: 600dpi
+*FreeVM: "8177108"
+*LanguageLevel: "2"
+*Protocols: PJL
+*FileSystem: False
+*Throughput: "92"
+*TTRasterizer: Type42
+*?TTRasterizer: "(Type42) = flush"
+*Password: "()"
+
+*DefaultOutputOrder:  Normal
+*OutputOrder Normal: " "
+
+*DefaultHalftoneType: 1
+*ScreenFreq: "71.0"
+*ScreenAngle: "45.0"
+
+*Source: "LionHeart Print Server"
+
+
+*JCLBegin: "%!PS-Adobe-3.0
+%% START OF JCL-BEGIN
+%% COMMENT - %%For: A. User
+%%DocumentMedia:
+"
+*End
+
+*JCLToPSInterpreter: "%% END OF PPD DSC/KDK INSERTION
+"
+*End
+
+*% *% *******************************
+*% *% *                             *
+*% *% *     DSC/KDK alternative     *
+*% *% *                             *
+*% *% *******************************
+*% *JCLToPSInterpreter: "%KDKBody: body on
+*% %KDKActOn:
+*% %% END OF PPD DSC/KDK INSERTION
+*% "
+*% *End
+
+*JCLEnd: ""
+
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 100 AnySetup *InputSlot
+*DefaultInputSlot: AutoSelect
+*InputSlot AutoSelect/Auto Select: " "
+*CloseUI: *InputSlot
+
+
+*OpenUI *PageSize: PickOne
+*DefaultPageSize: Letter
+*OrderDependency: 10 DocumentSetup *PageSize
+*PageSize Letter/US Letter:     " "
+*PageSize Legal/US Legal:       " "
+*PageSize A4/A4:                " "
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*DefaultPageRegion: Letter
+*OrderDependency: 10 DocumentSetup *PageRegion
+*PageRegion Letter/US Letter:     " "
+*PageRegion Legal/US Legal:       " "
+*PageRegion A4/A4:                " "
+*CloseUI: *PageRegion
+
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter:     "612  792"
+*PaperDimension Legal/US Legal:       "612 1008"
+*PaperDimension A4/A4:                "595  842"
+
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter:     "0 0 612  792 "
+*ImageableArea Legal/US Legal:       "0 0 612 1008 "
+*ImageableArea A4/A4:                "0 0 595  842 "
+
+*RequiresPageRegion All: True
+
+
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *KD01Finisher/Finishing Device: PickOne
+*OrderDependency:  5 DocumentSetup *KD01Finisher
+*DefaultKD01Finisher: Finisher
+*KD01Finisher Finisher/Finisher: " "
+*KD01Finisher Stacker/Stacker:   " "
+*KD01Finisher None/None:         " "
+*CloseUI: *KD01Finisher
+
+*CloseGroup: InstallableOptions
+
+
+*OpenUI *OutputBin/Exit: PickOne
+*OrderDependency: 40 DocumentSetup *OutputBin
+*DefaultOutputBin: Finisher
+*OutputBin Finisher/Finisher: "
+  currenttransfer currentscreen
+  1 dict
+  dup /OutputType (A) put
+  setpagedevice setscreen settransfer"
+*End
+*OutputBin Stacker/Stacker:   "
+  currenttransfer currentscreen
+  1 dict
+  dup /OutputType (A) put
+  setpagedevice setscreen settransfer"
+*End
+*OutputBin Top/Top Exit:      "
+  currenttransfer currentscreen
+  1 dict
+  dup /OutputType (top) put
+  setpagedevice setscreen settransfer"
+*End
+*CloseUI: *OutputBin
+
+*% *% *******************************
+*% *% *                             *
+*% *% *     DSC/KDK alternative     *
+*% *% *                             *
+*% *% *******************************
+*% *JCLOpenUI *OutputBin/Exit: PickOne
+*% *OrderDependency: 40 JCLSetup *OutputBin
+*% *DefaultOutputBin: Finisher
+*% *OutputBin Finisher/Finisher: "%KDKOutputMedia: A
+*% "
+*% *End
+*% *OutputBin Stacker/Stacker:   "%KDKOutputMedia: A
+*% "
+*% *End
+*% *OutputBin Top/Top Exit:      "%KDKOutputMedia: top
+*% "
+*% *End
+*% *JCLCloseUI: *OutputBin
+
+*OpenUI *KD05BodyPaper/Body Paper: PickOne
+*DefaultKD05BodyPaper: Plain-11
+*OrderDependency:  10 DocumentSetup *KD05BodyPaper
+*KD05BodyPaper Plain-11/plain-11: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 792]   put
+  dup /MediaWeight 75          put
+  dup /MediaColor  (white)     put
+  dup /MediaType   (plain)     put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Cover-11/cover-11: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 792]   put
+  dup /MediaWeight 200         put
+  dup /MediaColor  (white)     put
+  dup /MediaType   (cover)     put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Trans-11/trans-11: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 792]        put
+  dup /MediaWeight 75               put
+  dup /MediaColor  (clear)          put
+  dup /MediaType   (transparency)   put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Blue-11/blue-11: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 792]   put
+  dup /MediaWeight 75          put
+  dup /MediaColor  (blue)      put
+  dup /MediaType   (color)     put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Punched-11/punched-11: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 792]   put
+  dup /MediaWeight 75          put
+  dup /MediaColor  (white)     put
+  dup /MediaType   (punched)   put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Plain-14/plain-14: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 1008]   put
+  dup /MediaWeight 75           put
+  dup /MediaColor  (white)      put
+  dup /MediaType   (plain)      put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Cover-14/cover-14: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 1008]   put
+  dup /MediaWeight 200          put
+  dup /MediaColor  (white)      put
+  dup /MediaType   (cover)      put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Trans-14/trans-14: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 1008]       put
+  dup /MediaWeight 75               put
+  dup /MediaColor  (clear)          put
+  dup /MediaType   (transparency)   put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Blue-14/blue-14: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 1008]   put
+  dup /MediaWeight 75           put
+  dup /MediaColor  (blue)         put
+  dup /MediaType   (color)      put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Punched-14/punched-14: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 1008]   put
+  dup /MediaWeight 75           put
+  dup /MediaColor  (white)      put
+  dup /MediaType   (punched)    put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Plain-A4/plain-A4: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [595 842]   put
+  dup /MediaWeight 75          put
+  dup /MediaColor  (white)     put
+  dup /MediaType   (plain)     put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Cover-A4/cover-A4: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [595 842]   put
+  dup /MediaWeight 200         put
+  dup /MediaColor  (white)     put
+  dup /MediaType   (cover)     put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Trans-A4/trans-A4: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [595 842]        put
+  dup /MediaWeight 75               put
+  dup /MediaColor  (clear)          put
+  dup /MediaType   (transparency)   put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Blue-A4/blue-A4: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [595 842]   put
+  dup /MediaWeight 75          put
+  dup /MediaColor  (blue)      put
+  dup /MediaType   (color)     put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Punched-A4/punched-A4: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [595 842]   put
+  dup /MediaWeight 75          put
+  dup /MediaColor  (white)     put
+  dup /MediaType   (punched)   put
+  setpagedevice setscreen settransfer"
+*End
+*KD05BodyPaper Recycle-11/recycle-11: "
+  currenttransfer currentscreen
+  4 dict
+  dup /PageSize    [612 792]    put
+  dup /MediaWeight 75           put
+  dup /MediaColor  (white)      put
+  dup /MediaType   (recycled)   put
+  setpagedevice setscreen settransfer"
+*End
+*CloseUI: *KD05BodyPaper
+
+*% *% *******************************
+*% *% *                             *
+*% *% *     DSC/KDK alternative     *
+*% *% *                             *
+*% *% *******************************
+*% *JCLOpenUI *KD05BodyPaper/Body Paper: PickOne
+*% *DefaultKD05BodyPaper: Plain-11
+*% *OrderDependency:  10 JCLSetup *KD05BodyPaper
+*% *KD05BodyPaper Plain-11/plain-11:     "%%+ body 612  792  75 (white)  (plain)
+*% "
+*% *End
+*% *KD05BodyPaper Cover-11/cover-11:     "%%+ body 612  792 200 (white)  (cover)
+*% "
+*% *End
+*% *KD05BodyPaper Trans-11/trans-11:     "%%+ body 612  792  75 (clear)  (transparency)
+*% "
+*% *End
+*% *KD05BodyPaper Blue-11/blue-11:       "%%+ body 612  792  75 (blue)   (color)
+*% "
+*% *End
+*% *KD05BodyPaper Punched-11/punched-11: "%%+ body 612  792  75 (white)  (punched)
+*% "
+*% *End
+*% *KD05BodyPaper Plain-14/plain-14:     "%%+ body 612 1008  75 (white)  (plain)
+*% "
+*% *End
+*% *KD05BodyPaper Cover-14/cover-14:     "%%+ body 612 1008 200 (white   (cover)
+*% "
+*% *End
+*% *KD05BodyPaper Trans-14/trans-14:     "%%+ body 612 1008  75 (clear)  (transparency)
+*% "
+*% *End
+*% *KD05BodyPaper Blue-14/blue-14:       "%%+ body 612 1008  75 (blue)   (color)
+*% "
+*% *End
+*% *KD05BodyPaper Punched-14/punched-14: "%%+ body 612 1008  75 (white)  (punched)
+*% "
+*% *End
+*% *KD05BodyPaper Plain-A4/plain-A4:     "%%+ body 595  842  75 (white)  (plain)
+*% "
+*% *End
+*% *KD05BodyPaper Cover-A4/cover-A4:     "%%+ body 595  842 200 (white)  (cover)
+*% "
+*% *End
+*% *KD05BodyPaper Trans-A4/trans-A4:     "%%+ body 595  842  75 (clear)  (transparency)
+*% "
+*% *End
+*% *KD05BodyPaper Blue-A4/blue-A4:       "%%+ body 595  842  75 (blue)   (color)
+*% "
+*% *End
+*% *KD05BodyPaper Punched-A4/punched-A4: "%%+ body 595  842  75 (white)  (punched)
+*% "
+*% *End
+*% *KD05BodyPaper Recycle-11/recycle-11: "%%+ body 612  792  75 (white)  (recycled)
+*% "
+*% *End
+*% *JCLCloseUI: *KD05BodyPaper
+
+*OpenUI *KD08Duplex/Job Mode:  PickOne
+*DefaultKD08Duplex: None
+*OrderDependency: 20 DocumentSetup *KD08Duplex
+*KD08Duplex None/One-sided: "
+  currenttransfer currentscreen
+  2 dict
+  dup /Duplex false put
+  dup /Tumble false put
+  setpagedevice setscreen settransfer"
+*End
+*KD08Duplex DuplexNoTumble/Two-sided Head-to-head: "
+  currenttransfer currentscreen
+  2 dict
+  dup /Duplex true  put
+  dup /Tumble false put
+  setpagedevice setscreen settransfer"
+*End
+*KD08Duplex DuplexTumble/Two-sided Head-to-foot: "
+  currenttransfer currentscreen
+  2 dict
+  dup /Duplex true  put
+  dup /Tumble true  put
+  setpagedevice setscreen settransfer"
+*End
+*CloseUI: *KD08Duplex
+
+*% *% *******************************
+*% *% *                             *
+*% *% *     DSC/KDK alternative     *
+*% *% *                             *
+*% *% *******************************
+*% *JCLOpenUI *KD08Duplex/Job Mode: PickOne
+*% *DefaultKD08Duplex: None
+*% *OrderDependency: 20 JCLSetup *KD08Duplex
+*% *KD08Duplex None/One-sided: "%%Requirements: duplex(off)"
+*% *KD08Duplex DuplexNoTumble/Two-sided Head-to-head: "%%Requirements: duplex(on)"
+*% *KD08Duplex DuplexTumble/Two-sided Head-to-foot: "%%Requirements: duplex(tumble)"
+*% *JCLCloseUI: *KD08Duplex
+
+*OpenUI *KD11Staple/Stapling:  PickOne
+*DefaultKD11Staple: None
+*OrderDependency: 21 DocumentSetup *KD11Staple
+*KD11Staple None/None: "
+  currenttransfer currentscreen
+  1 dict
+  dup /Staple 0 put
+  setpagedevice setscreen settransfer"
+*End
+*KD11Staple 1.Top.Left.90/Top: "
+  currenttransfer currentscreen
+  2 dict
+  dup /Staple 3  put
+  dup /StapleDetails
+      1 dict
+      dup /StapleLocation (front) put
+      put
+  setpagedevice setscreen settransfer"
+*End
+*KD11Staple 1.Bottom.Left.90/Bottom: "
+  currenttransfer currentscreen
+  2 dict
+  dup /Staple 3  put
+  dup /StapleDetails
+      1 dict
+      dup /StapleLocation (back) put
+      put
+  setpagedevice setscreen settransfer"
+*End
+*KD11Staple 2.Left.90/2 Left Edge: "
+  currenttransfer currentscreen
+  2 dict
+  dup /Staple 3  put
+  dup /StapleDetails
+      1 dict
+      dup /StapleLocation (both) put
+      put
+  setpagedevice setscreen settransfer"
+*End
+*CloseUI: *KD11Staple
+
+*% *% *******************************
+*% *% *                             *
+*% *% *     DSC/KDK alternative     *
+*% *% *                             *
+*% *% *******************************
+*% *JCLOpenUI *KD11Staple/Stapling: PickOne
+*% *DefaultKD11Staple: None
+*% *OrderDependency: 21 JCLSetup *KD11Staple
+*% *KD11Staple None/None: " staple(none)"
+*% *KD11Staple 1.Top.Left.90/Top: " staple(front)"
+*% *KD11Staple 1.Bottom.Left.90/Bottom: " staple(back)"
+*% *KD11Staple 2.Left.90/2 Left Edge: " staple(both)"
+*% *JCLCloseUI: *KD11Staple
+
+*JCLOpenUI *KD14Covers/Covers: PickOne
+*DefaultKD14Covers: None
+*OrderDependency:  30 JCLSetup *KD14Covers
+*KD14Covers None/None:   ""
+*KD14Covers Front/Front: "%KDKCovers: cover front"
+*KD14Covers Back/Back:   "%KDKCovers: cover back"
+*KD14Covers Both/Both:   "%KDKCovers: cover both"
+*JCLCloseUI: *KD14Covers
+
+*JCLOpenUI *KD17CoverMode/Cover Mode: PickOne
+*DefaultKD17CoverMode: NA
+*OrderDependency:  31 JCLSetup *KD17CoverMode
+*KD17CoverMode NA/N.A.: ""
+*KD17CoverMode Simplex/One-sided: " simplex
+"
+*End
+*KD17CoverMode DuplexNoTumble/Two-sided Head-to-head: " duplex
+"
+*End
+*KD17CoverMode DuplexTumble/Two-sided Head-to-foot: " tumble
+"
+*End
+*JCLCloseUI: *KD17CoverMode
+
+*JCLOpenUI *KD20CoverPaper/Cover Paper: PickOne
+*DefaultKD20CoverPaper: NA
+*OrderDependency:  11 JCLSetup *KD20CoverPaper
+*KD20CoverPaper NA/N.A.:               ""
+*KD20CoverPaper Plain-11/plain-11:     "%%+ cover 612  792  75 (white) (plain)
+"
+*End
+*KD20CoverPaper Cover-11/cover-11:     "%%+ cover 612  792 200 (white) (cover)
+"
+*End
+*KD20CoverPaper Trans-11/trans-11:     "%%+ cover 612  792  75 (clear) (transparency)
+"
+*End
+*KD20CoverPaper Blue-11/blue-11:       "%%+ cover 612  792  75 (blue)  (color)
+"
+*End
+*KD20CoverPaper Punched-11/punched-11: "%%+ cover 612  792  75 (white) (punched)
+"
+*End
+*KD20CoverPaper Plain-14/plain-14:     "%%+ cover 612 1008  75 (white) (plain)
+"
+*End
+*KD20CoverPaper Cover-14/cover-14:     "%%+ cover 612 1008 200 (white) (cover)
+"
+*End
+*KD20CoverPaper Trans-14/trans-14:     "%%+ cover 612 1008  75 (clear) (transparency)
+"
+*End
+*KD20CoverPaper Blue-14/blue-14:       "%%+ cover 612 1008  75 (blue)  (color)
+"
+*End
+*KD20CoverPaper Punched-14/punched-14: "%%+ cover 612 1008  75 (white) (punched)
+"
+*End
+*KD20CoverPaper Plain-A4/plain-A4:     "%%+ cover 595  842  75 (white) (plain)
+"
+*End
+*KD20CoverPaper Cover-A4/cover-A4:     "%%+ cover 595  842 200 (white) (cover)
+"
+*End
+*KD20CoverPaper Trans-A4/trans-A4:     "%%+ cover 595  842  75 (clear) (transparency)
+"
+*End
+*KD20CoverPaper Blue-A4/blue-A4:       "%%+ cover 595  842  75 (blue)  (color)
+"
+*End
+*KD20CoverPaper Punched-A4/punched-A4: "%%+ cover 595  842  75 (white) (punched)
+"
+*End
+*KD20CoverPaper Recycle-11/recycle-11: "%%+ cover 612  792  75 (white) (recycled)
+"
+*End
+*JCLCloseUI: *KD20CoverPaper
+
+*JCLOpenUI *KD26Separators/Set Separators: Boolean
+*DefaultKD26Separators: False
+*OrderDependency:  50 JCLSetup *KD26Separators
+*KD26Separators False/No: ""
+*KD26Separators True/Yes: "%KDKSeparator: separator
+"
+*End
+*JCLCloseUI: *KD26Separators
+
+*JCLOpenUI *KD29SeparatorPaper/Separator Paper: PickOne
+*DefaultKD29SeparatorPaper: NA
+*OrderDependency:  12 JCLSetup *KD29SeparatorPaper
+*KD29SeparatorPaper NA/N.A.:               ""
+*KD29SeparatorPaper Plain-11/plain-11:     "%%+ separator 612  792  75 (white) (plain)
+"
+*End
+*KD29SeparatorPaper Cover-11/cover-11:     "%%+ separator 612  792 200 (white) (cover)
+"
+*End
+*KD29SeparatorPaper Trans-11/trans-11:     "%%+ separator 612  792  75 (clear) (transparency)
+"
+*End
+*KD29SeparatorPaper Blue-11/blue-11:       "%%+ separator 612  792  75 (blue)  (color)
+"
+*End
+*KD29SeparatorPaper Punched-11/punched-11: "%%+ separator 612  792  75 (white) (punched)
+"
+*End
+*KD29SeparatorPaper Plain-14/plain-14:     "%%+ separator 612 1008  75 (white) (plain)
+"
+*End
+*KD29SeparatorPaper Cover-14/cover-14:     "%%+ separator 612 1008 200 (white) (cover)
+"
+*End
+*KD29SeparatorPaper Trans-14/trans-14:     "%%+ separator 612 1008  75 (clear) (transparency)
+"
+*End
+*KD29SeparatorPaper Blue-14/blue-14:       "%%+ separator 612 1008  75 (blue)  (color)
+"
+*End
+*KD29SeparatorPaper Punched-14/punched-14: "%%+ separator 612 1008  75 (white) (punched)
+"
+*End
+*KD29SeparatorPaper Plain-A4/plain-A4:     "%%+ separator 595  842  75 (white) (plain)
+"
+*End
+*KD29SeparatorPaper Cover-A4/cover-A4:     "%%+ separator 595  842 200 (white) (cover)
+"
+*End
+*KD29SeparatorPaper Trans-A4/trans-A4:     "%%+ separator 595  842  75 (clear) (transparency)
+"
+*End
+*KD29SeparatorPaper Blue-A4/blue-A4:       "%%+ separator 595  842  75 (blue)  (color)
+"
+*End
+*KD29SeparatorPaper Punched-A4/punched-A4: "%%+ separator 595  842  75 (white) (punched)
+"
+*End
+*KD29SeparatorPaper Recycle-11/recycle-11: "%%+ separator 612  792  75 (white) (recycled)
+"
+*End
+*JCLCloseUI: *KD29SeparatorPaper
+
+*% *% ************************************
+*% *% *                                  *
+*% *% *     Charge Number activation     *
+*% *% *                                  *
+*% *% ************************************
+*% *JCLOpenUI *KD30ChargeNumber/Charge Number: PickOne
+*% *DefaultKD30ChargeNumber: None
+*% *OrderDependency:  65 JCLSetup *KD30ChargeNumber
+*% *KD30ChargeNumber None/None:    ""
+*% *KD30ChargeNumber 1/12345-6789: "%KDKChargeNumber: 12345-6789
+*% "
+*% *End
+*% *KD30ChargeNumber 2/ABC_DEF:    "%KDKChargeNumber: ABC_DEF
+*% "
+*% *End
+*% *JCLCloseUI: *KD30ChargeNumber
+
+
+*OpenUI *KD32Jog/Stacking:  Boolean
+*DefaultKD32Jog: True
+*OrderDependency: 22 DocumentSetup *KD32Jog
+*KD32Jog False/Straight: "
+  currenttransfer currentscreen
+  1 dict
+  dup /Jog 0  put
+  setpagedevice setscreen settransfer"
+*End
+*KD32Jog True/Offset: "
+  currenttransfer currentscreen
+  1 dict
+  dup /Jog 3  put
+  setpagedevice setscreen settransfer"
+*End
+*CloseUI: *KD32Jog
+
+*% *% *******************************
+*% *% *                             *
+*% *% *     DSC/KDK alternative     *
+*% *% *                             *
+*% *% *******************************
+*% *JCLOpenUI *KD32Jog/Stacking: Boolean
+*% *DefaultKD32Jog: True
+*% *OrderDependency: 22 JCLSetup *KD32Jog
+*% *KD32Jog False/Straight: "
+*% "
+*% *End
+*% *KD32Jog True/Offset: " jog
+*% "
+*% *End
+*% *JCLCloseUI: *KD32Jog
+
+*% *% ***************************************
+*% *% *                                     *
+*% *% *     Operator Message activation     *
+*% *% *                                     *
+*% *% ***************************************
+*% *JCLOpenUI *KD33OperatorMessage/Operator Message: PickOne
+*% *DefaultKD33OperatorMessage: None
+*% *OrderDependency:  70 JCLSetup *KD33OperatorMessage
+*% *KD33OperatorMessage None/None:                 ""
+*% *KD33OperatorMessage 1/Sample operator message: "%%OperatorMessage: Sample operator message
+*% "
+*% *End
+*% *KD33OperatorMessage 2/Another message:         "%%OperatorMessage: Another message
+*% "
+*% *End
+*% *JCLCloseUI: *KD33OperatorMessage
+
+*% *% ******************************************
+*% *% *                                        *
+*% *% *     Additional Printers activation     *
+*% *% *                                        *
+*% *% ******************************************
+*JCLOpenUI *KD37PrinterName/Printer Name: PickOne
+*DefaultKD37PrinterName: Any
+*OrderDependency:  15 JCLSetup *KD37PrinterName
+*KD37PrinterName Any/"Any":   "%%DocumentPrinterRequired: () (92p)
+"
+*End
+*% *KD37PrinterName 1/printer_1: "%%DocumentPrinterRequired: (printer_1) (92p)
+*% "
+*% *End
+*% *KD37PrinterName 2/printer_2: "%%DocumentPrinterRequired: (printer_2) (92p)
+*% "
+*% *End
+*JCLCloseUI: *KD37PrinterName
+
+*JCLOpenUI *KD38JobHeaderPage/Job Header Page: Boolean
+*DefaultKD38JobHeaderPage: True
+*OrderDependency:  55 JCLSetup *KD38JobHeaderPage
+*KD38JobHeaderPage True/Yes: "%KDKHeader: on header
+"
+*End
+*KD38JobHeaderPage False/No: "%KDKHeader: off
+"
+*End
+*JCLCloseUI: *KD38JobHeaderPage
+
+*JCLOpenUI *KD41JobHeaderPaper/Job Header Paper: PickOne
+*DefaultKD41JobHeaderPaper: Plain-11
+*OrderDependency:  13 JCLSetup *KD41JobHeaderPaper
+*KD41JobHeaderPaper NA/N.A.:               ""
+*KD41JobHeaderPaper Plain-11/plain-11:     "%%+ header 612  792  75 (white) (plain)
+"
+*End
+*KD41JobHeaderPaper Cover-11/cover-11:     "%%+ header 612  792 200 (white) (cover)
+"
+*End
+*KD41JobHeaderPaper Trans-11/trans-11:     "%%+ header 612  792  75 (clear) (transparency)
+"
+*End
+*KD41JobHeaderPaper Blue-11/blue-11:       "%%+ header 612  792  75 (blue)  (color)
+"
+*End
+*KD41JobHeaderPaper Punched-11/punched-11: "%%+ header 612  792  75 (white) (punched)
+"
+*End
+*KD41JobHeaderPaper Plain-14/plain-14:     "%%+ header 612 1008  75 (white) (plain)
+"
+*End
+*KD41JobHeaderPaper Cover-14/cover-14:     "%%+ header 612 1008 200 (white) (cover)
+"
+*End
+*KD41JobHeaderPaper Trans-14/trans-14:     "%%+ header 612 1008  75 (clear) (transparency)
+"
+*End
+*KD41JobHeaderPaper Blue-14/blue-14:       "%%+ header 612 1008  75 (blue)  (color)
+"
+*End
+*KD41JobHeaderPaper Punched-14/punched-14: "%%+ header 612 1008  75 (white) (punched)
+"
+*End
+*KD41JobHeaderPaper Plain-A4/plain-A4:     "%%+ header 595  842  75 (white) (plain)
+"
+*End
+*KD41JobHeaderPaper Cover-A4/cover-A4:     "%%+ header 595  842 200 (white) (cover)
+"
+*End
+*KD41JobHeaderPaper Trans-A4/trans-A4:     "%%+ header 595  842  75 (clear) (transparency)
+"
+*End
+*KD41JobHeaderPaper Blue-A4/blue-A4:       "%%+ header 595  842  75 (blue)  (color)
+"
+*End
+*KD41JobHeaderPaper Punched-A4/punched-A4: "%%+ header 595  842  75 (white) (punched)
+"
+*End
+*KD41JobHeaderPaper Recycle-11/recycle-11: "%%+ header 612  792  75 (white) (recycled)
+"
+*End
+*JCLCloseUI: *KD41JobHeaderPaper
+
+*JCLOpenUI *KD44StatusPage/Status Page: PickOne
+*DefaultKD44StatusPage: Always
+*OrderDependency:  60 JCLSetup *KD44StatusPage
+*KD44StatusPage None/None:             "%KDKError: off
+"
+*End
+*KD44StatusPage OnError/Only on Error: "%KDKError: onerror status
+"
+*End
+*KD44StatusPage Always/Always:         "%KDKError: on status
+"
+*End
+*JCLCloseUI: *KD44StatusPage
+
+*JCLOpenUI *KD47StatusPaper/Status Paper: PickOne
+*DefaultKD47StatusPaper: Plain-11
+*OrderDependency:  14 JCLSetup *KD47StatusPaper
+*KD47StatusPaper NA/N.A.:               ""
+*KD47StatusPaper Plain-11/plain-11:     "%%+ status 612  792  75 (white) (plain)
+"
+*End
+*KD47StatusPaper Cover-11/cover-11:     "%%+ status 612  792 200 (white) (cover)
+"
+*End
+*KD47StatusPaper Trans-11/trans-11:     "%%+ status 612  792  75 (clear) (transparency)
+"
+*End
+*KD47StatusPaper Blue-11/blue-11:       "%%+ status 612  792  75 (blue)  (color)
+"
+*End
+*KD47StatusPaper Punched-11/punched-11: "%%+ status 612  792  75 (white) (punched)
+"
+*End
+*KD47StatusPaper Plain-14/plain-14:     "%%+ status 612 1008  75 (white) (plain)
+"
+*End
+*KD47StatusPaper Cover-14/cover-14:     "%%+ status 612 1008 200 (white) (cover)
+"
+*End
+*KD47StatusPaper Trans-14/trans-14:     "%%+ status 612 1008  75 (clear) (transparency)
+"
+*End
+*KD47StatusPaper Blue-14/blue-14:       "%%+ status 612 1008  75 (blue)  (color)
+"
+*End
+*KD47StatusPaper Punched-14/punched-14: "%%+ status 612 1008  75 (white) (punched)
+"
+*End
+*KD47StatusPaper Plain-A4/plain-A4:     "%%+ status 595  842  75 (white) (plain)
+"
+*End
+*KD47StatusPaper Cover-A4/cover-A4:     "%%+ status 595  842 200 (white) (cover)
+"
+*End
+*KD47StatusPaper Trans-A4/trans-A4:     "%%+ status 595  842  75 (clear) (transparency)
+"
+*End
+*KD47StatusPaper Blue-A4/blue-A4:       "%%+ status 595  842  75 (blue)  (color)
+"
+*End
+*KD47StatusPaper Punched-A4/punched-A4: "%%+ status 595  842  75 (white) (punched)
+"
+*End
+*KD47StatusPaper Recycle-11/recycle-11: "%%+ status 612  792  75 (white) (recycled)
+"
+*End
+*JCLCloseUI: *KD47StatusPaper
+
+
+*%     ****************************
+*%     *                          *
+*%     *     Font Information     *
+*%     *                          *
+*%     ****************************
+
+*DefaultFont: Courier
+*Font AvantGarde-Book:              Standard  "(001.006)"  Standard  Disk
+*Font AvantGarde-BookOblique:       Standard  "(001.006)"  Standard  Disk
+*Font AvantGarde-Demi:              Standard  "(001.007)"  Standard  Disk
+*Font AvantGarde-DemiOblique:       Standard  "(001.007)"  Standard  Disk
+*Font Bookman-Demi:                 Standard  "(001.003)"  Standard  Disk
+*Font Bookman-DemiItalic:           Standard  "(001.003)"  Standard  Disk
+*Font Bookman-Light:                Standard  "(001.003)"  Standard  Disk
+*Font Bookman-LightItalic:          Standard  "(001.003)"  Standard  Disk
+*Font Courier:                      Standard  "(002.004)"  Standard  ROM
+*Font Courier-Bold:                 Standard  "(002.004)"  Standard  ROM
+*Font Courier-BoldOblique:          Standard  "(002.004)"  Standard  ROM
+*Font Courier-Oblique:              Standard  "(002.004)"  Standard  ROM
+*Font Helvetica:                    Standard  "(001.006)"  Standard  ROM
+*Font Helvetica-Bold:               Standard  "(001.007)"  Standard  ROM
+*Font Helvetica-BoldOblique:        Standard  "(001.007)"  Standard  ROM
+*Font Helvetica-Condensed:          Standard  "(001.001)"  Standard  Disk
+*Font Helvetica-Condensed-Bold:     Standard  "(001.002)"  Standard  Disk
+*Font Helvetica-Condensed-BoldObl:  Standard  "(001.002)"  Standard  Disk
+*Font Helvetica-Condensed-Oblique:  Standard  "(001.001)"  Standard  Disk
+*Font Helvetica-Narrow:             Standard  "(001.006)"  Standard  Disk
+*Font Helvetica-Narrow-Bold:        Standard  "(001.007)"  Standard  Disk
+*Font Helvetica-Narrow-BoldOblique: Standard  "(001.007)"  Standard  Disk
+*Font Helvetica-Narrow-Oblique:     Standard  "(001.006)"  Standard  Disk
+*Font Helvetica-Oblique:            Standard  "(001.006)"  Standard  ROM
+*Font NewCenturySchlbk-Bold:        Standard  "(001.009)"  Standard  Disk
+*Font NewCenturySchlbk-BoldItalic:  Standard  "(001.007)"  Standard  Disk
+*Font NewCenturySchlbk-Italic:      Standard  "(001.006)"  Standard  Disk
+*Font NewCenturySchlbk-Roman:       Standard  "(001.007)"  Standard  Disk
+*Font Palatino-Bold:                Standard  "(001.005)"  Standard  Disk
+*Font Palatino-BoldItalic:          Standard  "(001.005)"  Standard  Disk
+*Font Palatino-Italic:              Standard  "(001.005)"  Standard  Disk
+*Font Palatino-Roman:               Standard  "(001.005)"  Standard  Disk
+*Font Symbol:                       Special   "(001.007)"  Special   ROM
+*Font Times-Bold:                   Standard  "(001.007)"  Standard  ROM
+*Font Times-BoldItalic:             Standard  "(001.009)"  Standard  ROM
+*Font Times-Italic:                 Standard  "(001.007)"  Standard  ROM
+*Font Times-Roman:                  Standard  "(001.007)"  Standard  ROM
+*Font ZapfChancery-MediumItalic:    Standard  "(001.007)"  Standard  Disk
+*Font ZapfDingbats:                 Special   "(001.004)"  Special   Disk
+
+
+*%     **************************************
+*%     *                                    *
+*%     *     User Interface Constraints     *
+*%     *                                    *
+*%     **************************************
+
+*UIConstraints: *KD01Finisher Finisher   *OutputBin Stacker
+*UIConstraints: *KD01Finisher Stacker    *OutputBin Finisher
+*UIConstraints: *KD01Finisher None       *OutputBin Stacker
+*UIConstraints: *KD01Finisher None       *OutputBin Finisher
+
+*UIConstraints: *OutputBin Stacker       *KD01Finisher Finisher
+*UIConstraints: *OutputBin Finisher      *KD01Finisher Stacker
+*UIConstraints: *OutputBin Stacker       *KD01Finisher None
+*UIConstraints: *OutputBin Finisher      *KD01Finisher None
+
+
+*UIConstraints: *OutputBin Stacker             *KD11Staple 1.Top.Left.90
+*UIConstraints: *OutputBin Stacker             *KD11Staple 1.Bottom.Left.90
+*UIConstraints: *OutputBin Stacker             *KD11Staple 2.Left.90
+*UIConstraints: *OutputBin Top                 *KD11Staple 1.Top.Left.90
+*UIConstraints: *OutputBin Top                 *KD11Staple 1.Bottom.Left.90
+*UIConstraints: *OutputBin Top                 *KD11Staple 2.Left.90
+
+*UIConstraints: *KD11Staple 1.Top.Left.90      *OutputBin Stacker
+*UIConstraints: *KD11Staple 1.Bottom.Left.90   *OutputBin Stacker
+*UIConstraints: *KD11Staple 2.Left.90          *OutputBin Stacker
+*UIConstraints: *KD11Staple 1.Top.Left.90      *OutputBin Top
+*UIConstraints: *KD11Staple 1.Bottom.Left.90   *OutputBin Top
+*UIConstraints: *KD11Staple 2.Left.90          *OutputBin Top
+
+
+*UIConstraints: *KD14Covers None                *KD17CoverMode Simplex
+*UIConstraints: *KD14Covers None                *KD17CoverMode DuplexNoTumble
+*UIConstraints: *KD14Covers None                *KD17CoverMode DuplexTumble
+*UIConstraints: *KD14Covers Front               *KD17CoverMode NA
+*UIConstraints: *KD14Covers Back                *KD17CoverMode NA
+*UIConstraints: *KD14Covers Both                *KD17CoverMode NA
+
+*UIConstraints: *KD17CoverMode Simplex          *KD14Covers None
+*UIConstraints: *KD17CoverMode DuplexNoTumble   *KD14Covers None
+*UIConstraints: *KD17CoverMode DuplexTumble     *KD14Covers None
+*UIConstraints: *KD17CoverMode NA               *KD14Covers Front
+*UIConstraints: *KD17CoverMode NA               *KD14Covers Back
+*UIConstraints: *KD17CoverMode NA               *KD14Covers Both
+
+
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Plain-11
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Cover-11
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Trans-11
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Blue-11
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Punched-11
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Plain-14
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Cover-14
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Trans-14
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Blue-14
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Punched-14
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Plain-A4
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Cover-A4
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Trans-A4
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Blue-A4
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Punched-A4
+*UIConstraints: *KD14Covers None             *KD20CoverPaper Recycle-11
+*UIConstraints: *KD14Covers Front            *KD20CoverPaper NA
+*UIConstraints: *KD14Covers Back             *KD20CoverPaper NA
+*UIConstraints: *KD14Covers Both             *KD20CoverPaper NA
+
+*UIConstraints: *KD20CoverPaper Plain-11     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Cover-11     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Trans-11     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Blue-11      *KD14Covers None
+*UIConstraints: *KD20CoverPaper Punched-11   *KD14Covers None
+*UIConstraints: *KD20CoverPaper Plain-14     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Cover-14     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Trans-14     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Blue-14      *KD14Covers None
+*UIConstraints: *KD20CoverPaper Punched-14   *KD14Covers None
+*UIConstraints: *KD20CoverPaper Plain-A4     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Cover-A4     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Trans-A4     *KD14Covers None
+*UIConstraints: *KD20CoverPaper Blue-A4      *KD14Covers None
+*UIConstraints: *KD20CoverPaper Punched-A4   *KD14Covers None
+*UIConstraints: *KD20CoverPaper Recycle-11   *KD14Covers None
+*UIConstraints: *KD20CoverPaper NA           *KD14Covers Front
+*UIConstraints: *KD20CoverPaper NA           *KD14Covers Back
+*UIConstraints: *KD20CoverPaper NA           *KD14Covers Both
+
+
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Plain-11
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Cover-11
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Trans-11
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Blue-11
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Punched-11
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Plain-14
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Cover-14
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Trans-14
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Blue-14
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Punched-14
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Plain-A4
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Cover-A4
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Trans-A4
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Blue-A4
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Punched-A4
+*UIConstraints: *KD17CoverMode NA               *KD20CoverPaper Recycle-11
+*UIConstraints: *KD17CoverMode Simplex          *KD20CoverPaper NA
+*UIConstraints: *KD17CoverMode DuplexNoTumble   *KD20CoverPaper NA
+*UIConstraints: *KD17CoverMode DuplexTumble     *KD20CoverPaper NA
+
+*UIConstraints: *KD20CoverPaper Plain-11        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Cover-11        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Trans-11        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Blue-11         *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Punched-11      *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Plain-14        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Cover-14        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Trans-14        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Blue-14         *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Punched-14      *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Plain-A4        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Cover-A4        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Trans-A4        *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Blue-A4         *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Punched-A4      *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper Recycle-11      *KD17CoverMode NA
+*UIConstraints: *KD20CoverPaper NA              *KD17CoverMode Simplex
+*UIConstraints: *KD20CoverPaper NA              *KD17CoverMode DuplexNoTumble
+*UIConstraints: *KD20CoverPaper NA              *KD17CoverMode DuplexTumble
+
+
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Plain-11
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Cover-11
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Trans-11
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Blue-11
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Punched-11
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Plain-14
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Cover-14
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Trans-14
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Blue-14
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Punched-14
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Plain-A4
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Cover-A4
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Trans-A4
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Blue-A4
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Punched-A4
+*UIConstraints: *KD26Separators False            *KD29SeparatorPaper Recycle-11
+*UIConstraints: *KD26Separators True             *KD29SeparatorPaper NA
+
+*UIConstraints: *KD29SeparatorPaper Plain-11     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Cover-11     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Trans-11     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Blue-11      *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Punched-11   *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Plain-14     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Cover-14     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Trans-14     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Blue-14      *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Punched-14   *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Plain-A4     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Cover-A4     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Trans-A4     *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Blue-A4      *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Punched-A4   *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper Recycle-11   *KD26Separators False
+*UIConstraints: *KD29SeparatorPaper NA           *KD26Separators True
+
+
+*UIConstraints: *KD32Jog True    *OutputBin Top
+
+*UIConstraints: *OutputBin Top   *KD32Jog True
+
+
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Plain-11
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Cover-11
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Trans-11
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Blue-11
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Punched-11
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Plain-14
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Cover-14
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Trans-14
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Blue-14
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Punched-14
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Plain-A4
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Cover-A4
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Trans-A4
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Blue-A4
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Punched-A4
+*UIConstraints: *KD38JobHeaderPage False         *KD41JobHeaderPaper Recycle-11
+*UIConstraints: *KD38JobHeaderPage True          *KD41JobHeaderPaper NA
+
+*UIConstraints: *KD41JobHeaderPaper Plain-11     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Cover-11     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Trans-11     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Blue-11      *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Punched-11   *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Plain-14     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Cover-14     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Trans-14     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Blue-14      *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Punched-14   *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Plain-A4     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Cover-A4     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Trans-A4     *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Blue-A4      *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Punched-A4   *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper Recycle-11   *KD38JobHeaderPage False
+*UIConstraints: *KD41JobHeaderPaper NA           *KD38JobHeaderPage True
+
+
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Plain-11
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Cover-11
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Trans-11
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Blue-11
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Punched-11
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Plain-14
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Cover-14
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Trans-14
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Blue-14
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Punched-14
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Plain-A4
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Cover-A4
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Trans-A4
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Blue-A4
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Punched-A4
+*UIConstraints: *KD44StatusPage None          *KD47StatusPaper Recycle-11
+*UIConstraints: *KD44StatusPage Always        *KD47StatusPaper NA
+*UIConstraints: *KD44StatusPage OnError       *KD47StatusPaper NA
+
+*UIConstraints: *KD47StatusPaper Plain-11     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Cover-11     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Trans-11     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Blue-11      *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Punched-11   *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Plain-14     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Cover-14     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Trans-14     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Blue-14      *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Punched-14   *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Plain-A4     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Cover-A4     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Trans-A4     *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Blue-A4      *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Punched-A4   *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper Recycle-11   *KD44StatusPage None
+*UIConstraints: *KD47StatusPaper NA           *KD44StatusPage Always
+*UIConstraints: *KD47StatusPaper NA           *KD44StatusPage OnError
+
+
+*% Last Edit:  06/23/97    G. Anderson/J. Holtzman, Eastman Kodak Co.
+*% End of PPD (KODAK ImageSource 92p Printer)
+

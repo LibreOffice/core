@@ -1,0 +1,58 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _POPUP_HRC
+#define _POPUP_HRC
+
+#include "rcid.hrc"
+
+#define MN_TEXT_POPUPMENU           (RC_POPUPS_BEGIN + 0)
+#define MN_TAB_POPUPMENU            (RC_POPUPS_BEGIN + 1)
+#define MN_FRM_POPUPMENU            (RC_POPUPS_BEGIN + 2)
+#define MN_DRAW_POPUPMENU           (RC_POPUPS_BEGIN + 3)
+#define MN_DRWTXT_POPUPMENU         (RC_POPUPS_BEGIN + 4)
+#define MN_GRF_POPUPMENU            (RC_POPUPS_BEGIN + 5)
+#define MN_OLE_POPUPMENU            (RC_POPUPS_BEGIN + 6)
+#define MN_PPREVIEW_POPUPMENU       (RC_POPUPS_BEGIN + 7)
+#define MN_SRCVIEW_POPUPMENU        (RC_POPUPS_BEGIN + 8)
+#define MN_DRAWFORM_POPUPMENU       (RC_POPUPS_BEGIN + 9)
+#define MN_MEDIA_POPUPMENU          (RC_POPUPS_BEGIN + 10)
+#define MN_LANGUAGE_FOR_TEXT        (RC_POPUPS_BEGIN + 11)
+#define MN_LANGUAGE_FOR_PARAGRAPH   (RC_POPUPS_BEGIN + 12)
+#define MN_LANGUAGE_FOR_DOCUMENT    (RC_POPUPS_BEGIN + 13)
+#define MN_ANNOTATION_POPUPMENU     (RC_POPUPS_BEGIN + 14)
+#define MN_ANNOTATION_BUTTON        (RC_POPUPS_BEGIN + 15)
+#define MN_REDCOMMENT_POPUPMENU     (RC_POPUPS_BEGIN + 16)
+#define MN_REDCOMMENT_BUTTON        (RC_POPUPS_BEGIN + 17)
+
+#if MN_MEDIA_POPUPMENU > RC_POPUPS_END
+
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+
+#endif // _POPUP_HRC
