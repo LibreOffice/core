@@ -1206,6 +1206,14 @@ inline table::CellRangeAddress lclGetRangeAddress( const uno::Reference< RangeTy
     return uno::Reference< sheet::XCellRangeAddressable >( rxCellRange, uno::UNO_QUERY_THROW )->getRangeAddress();
 }
 
+void lclClearRange( const uno::Reference< table::XCellRange >& rxCellRange ) throw (uno::RuntimeException)
+{
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = VALUE | DATETIME | STRING | ANNOTATION | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED;
+    uno::Reference< sheet::XSheetOperation > xSheetOperation( rxCellRange, uno::UNO_QUERY_THROW );
+    xSheetOperation->clearContents( nFlags );
+}
+
 uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference< table::XCellRange >& rxCellRange, bool bRecursive ) throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XSheetCellRange > xNewCellRange( rxCellRange, uno::UNO_QUERY_THROW );
@@ -1251,15 +1259,27 @@ void lclExpandAndMerge( const uno::Reference< table::XCellRange >& rxCellRange, 
     // Calc cannot merge over merged ranges, always unmerge first
     xMerge->merge( sal_False );
     if( bMerge )
+    {
+        // clear all contents of the covered cells (not the top-left cell)
+        table::CellRangeAddress aRangeAddr = lclGetRangeAddress( rxCellRange );
+        sal_Int32 nLastColIdx = aRangeAddr.EndColumn - aRangeAddr.StartColumn;
+        sal_Int32 nLastRowIdx = aRangeAddr.EndRow - aRangeAddr.StartRow;
+        // clear cells of top row, right of top-left cell
+        if( nLastColIdx > 0 )
+            lclClearRange( rxCellRange->getCellRangeByPosition( 1, 0, nLastColIdx, 0 ) );
+        // clear all rows below top row
+        if( nLastRowIdx > 0 )
+            lclClearRange( rxCellRange->getCellRangeByPosition( 0, 1, nLastColIdx, nLastRowIdx ) );
+        // merge the range
         xMerge->merge( sal_True );
-    // FIXME need to check whether all the cell contents are retained or lost by popping up a dialog
+    }
 }
 
 util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxCellRange ) throw (uno::RuntimeException)
 {
     /*  1) Check if range is completely inside one single merged range. To do
         this, try to extend from top-left cell only (not from entire range).
-        This will excude cases where this range consists of several merged
+        This will exclude cases where this range consists of several merged
         ranges (or parts of them). */
     table::CellRangeAddress aRangeAddr = lclGetRangeAddress( rxCellRange );
     uno::Reference< table::XCellRange > xTopLeft( rxCellRange->getCellRangeByPosition( 0, 0, 0, 0 ), uno::UNO_SET_THROW );
@@ -1508,7 +1528,8 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
 void
 ScVbaRange::Clear() throw (uno::RuntimeException)
 {
-    sal_Int32 nFlags = sheet::CellFlags::VALUE | sheet::CellFlags::STRING | sheet::CellFlags::HARDATTR | sheet::CellFlags::FORMATTED | sheet::CellFlags::EDITATTR | sheet::CellFlags::FORMULA;
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
     ClearContents( nFlags );
 }
 
@@ -2294,8 +2315,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
 void
 ScVbaRange::setMergeCells( const uno::Any& aIsMerged ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    bool bMerge = false;
-    aIsMerged >>= bMerge;
+    bool bMerge = extractBoolFromAny( aIsMerged );
 
     if( mxRanges.is() )
     {
@@ -2496,7 +2516,8 @@ ScVbaRange::setWrapText( const uno::Any& aIsWrapped ) throw (script::BasicErrorE
     }
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTextWrapped" ) ), aIsWrapped );
+    bool bIsWrapped = extractBoolFromAny( aIsWrapped );
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTextWrapped" ) ), uno::Any( bIsWrapped ) );
 }
 
 uno::Any
@@ -2875,13 +2896,11 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
         return;
     }
 
-    sal_Bool bHidden = sal_False;
-    _hidden >>= bHidden;
-
+    bool bHidden = extractBoolFromAny( _hidden );
     try
     {
         uno::Reference< beans::XPropertySet > xProps = getRowOrColumnProps( mxRange, mbIsRows );
-        xProps->setPropertyValue( ISVISIBLE, uno::makeAny( !bHidden ) );
+        xProps->setPropertyValue( ISVISIBLE, uno::Any( !bHidden ) );
     }
     catch( uno::Exception& e )
     {
@@ -2978,7 +2997,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     // return a Range object that represents the first cell where that information is found.
     rtl::OUString sWhat;
     sal_Int32 nWhat = 0;
-    float fWhat = 0.0;
+    double fWhat = 0.0;
 
     // string.
     if( What >>= sWhat )
@@ -3010,6 +3029,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     {
         uno::Reference< util::XSearchDescriptor > xDescriptor = xSearch->createSearchDescriptor();
         xDescriptor->setSearchString( sSearch );
+        xDescriptor->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SRCHREGEXP ) ), uno::Any( true ) );
 
         uno::Reference< excel::XRange > xAfterRange;
         uno::Reference< table::XCellRange > xStartCell;
@@ -3115,8 +3135,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
 
         ScGlobal::SetSearchItem( newOptions );
 
-        uno::Reference< util::XSearchDescriptor > xSearchDescriptor( xDescriptor, uno::UNO_QUERY );
-        uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xSearchDescriptor) : xSearch->findFirst( xSearchDescriptor );
+        uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xDescriptor) : xSearch->findFirst( xDescriptor );
         uno::Reference< table::XCellRange > xCellRange( xInterface, uno::UNO_QUERY );
         if ( xCellRange.is() )
         {
@@ -4910,8 +4929,7 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
     if( m_Areas->getCount() > 1 )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can not set Range.ShowDetail attribute ")), uno::Reference< uno::XInterface >() );
 
-    sal_Bool bShowDetail = sal_False;
-    aShowDetail >>= bShowDetail;
+    bool bShowDetail = extractBoolFromAny( aShowDetail );
 
     RangeHelper helper( mxRange );
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = helper.getSheetCellCursor();

@@ -33,13 +33,13 @@
 class SbxArray;
 
 // SBXSCAN.CXX
-extern void ImpCvtNum( double nNum, short nPrec, String& rRes, BOOL bCoreString=FALSE );
+extern void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, BOOL bCoreString=FALSE );
 extern SbxError ImpScan
-    ( const String& rSrc, double& nVal, SbxDataType& rType, USHORT* pLen,
+    ( const ::rtl::OUString& rSrc, double& nVal, SbxDataType& rType, USHORT* pLen,
       BOOL bAllowIntntl=FALSE, BOOL bOnlyIntntl=FALSE );
 
 // mit erweiterter Auswertung (International, "TRUE"/"FALSE")
-extern BOOL ImpConvStringExt( String& rSrc, SbxDataType eTargetType );
+extern BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 
 // SBXINT.CXX
 
@@ -116,9 +116,9 @@ void    ImpPutDate( SbxValues*, double );
 
 // SBXSTR.CXX
 
-String  ImpGetString( const SbxValues* );
-String  ImpGetCoreString( const SbxValues* );
-void    ImpPutString( SbxValues*, const String* );
+::rtl::OUString     ImpGetString( const SbxValues* );
+::rtl::OUString     ImpGetCoreString( const SbxValues* );
+void    ImpPutString( SbxValues*, const ::rtl::OUString* );
 
 // SBXCHAR.CXX
 
@@ -145,7 +145,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* );
 void    ImpPutBool( SbxValues*, INT16 );
 
 // ByteArry <--> String
-SbxArray* StringToByteArray(const String& rStr);
-String ByteArrayToString(SbxArray* pArr);
+SbxArray* StringToByteArray(const ::rtl::OUString& rStr);
+::rtl::OUString ByteArrayToString(SbxArray* pArr);
 
 #endif

@@ -115,13 +115,8 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
         }
         else
         {
-            SbiProcDef* pProc = aVar.pDef->GetProcDef();
-            // per DECLARE definiert?
-            if( pProc && pProc->GetLib().Len() )
-                eOp = pProc->IsCdecl() ? _CALLC : _CALL;
-            else
-                eOp = ( aVar.pDef->GetScope() == SbRTL ) ? _RTL :
-                    (aVar.pDef->IsGlobal() ? _FIND_G : _FIND);
+            eOp = ( aVar.pDef->GetScope() == SbRTL ) ? _RTL :
+                (aVar.pDef->IsGlobal() ? _FIND_G : _FIND);
         }
 
         if( eOp == _FIND )
@@ -187,17 +182,6 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         aVar.pPar->Gen();
     }
 
-    SbiProcDef* pProc = aVar.pDef->GetProcDef();
-    // per DECLARE definiert?
-    if( pProc )
-    {
-        // Dann evtl. einen LIB-Befehl erzeugen
-        if( pProc->GetLib().Len() )
-            pGen->Gen( _LIB, pGen->GetParser()->aGblStrings.Add( pProc->GetLib() ) );
-        // und den Aliasnamen nehmen
-        if( pProc->GetAlias().Len() )
-            nId = ( nId & 0x8000 ) | pGen->GetParser()->aGblStrings.Add( pProc->GetAlias() );
-    }
     pGen->Gen( eOp, nId, sal::static_int_cast< UINT16 >( GetType() ) );
 
     if( aVar.pvMorePar )
@@ -223,13 +207,8 @@ void SbiExprList::Gen()
     {
         pParser->aGen.Gen( _ARGC );
         // AB 10.1.96: Typ-Anpassung bei DECLARE
-        USHORT nCount = 1, nParAnz = 0;
-        SbiSymPool* pPool = NULL;
-        if( pProc )
-        {
-            pPool = &pProc->GetParams();
-            nParAnz = pPool->GetSize();
-        }
+        USHORT nCount = 1 /*, nParAnz = 0*/;
+//      SbiSymPool* pPool = NULL;
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
             pExpr->Gen();
@@ -239,6 +218,7 @@ void SbiExprList::Gen()
                 USHORT nSid = pParser->aGblStrings.Add( pExpr->GetName() );
                 pParser->aGen.Gen( _ARGN, nSid );
 
+                /* TODO: Check after Declare concept change
                 // AB 10.1.96: Typanpassung bei named -> passenden Parameter suchen
                 if( pProc )
                 {
@@ -246,39 +226,26 @@ void SbiExprList::Gen()
                     pParser->Error( SbERR_NO_NAMED_ARGS );
 
                     // Spaeter, wenn Named Args bei DECLARE moeglich
-                    /*
-                    for( USHORT i = 1 ; i < nParAnz ; i++ )
-                    {
-                        SbiSymDef* pDef = pPool->Get( i );
-                        const String& rName = pDef->GetName();
-                        if( rName.Len() )
-                        {
-                            if( pExpr->GetName().ICompare( rName )
-                                == COMPARE_EQUAL )
-                            {
-                                pParser->aGen.Gen( _ARGTYP, pDef->GetType() );
-                                break;
-                            }
-                        }
-                    }
-                    */
+                    //for( USHORT i = 1 ; i < nParAnz ; i++ )
+                    //{
+                    //  SbiSymDef* pDef = pPool->Get( i );
+                    //  const String& rName = pDef->GetName();
+                    //  if( rName.Len() )
+                    //  {
+                    //      if( pExpr->GetName().ICompare( rName )
+                    //          == COMPARE_EQUAL )
+                    //      {
+                    //          pParser->aGen.Gen( _ARGTYP, pDef->GetType() );
+                    //          break;
+                    //      }
+                    //  }
+                    //}
                 }
+                */
             }
             else
             {
                 pParser->aGen.Gen( _ARGV );
-
-                // Funktion mit DECLARE -> Typ-Anpassung
-                if( pProc && nCount < nParAnz )
-                {
-                    SbiSymDef* pDef = pPool->Get( nCount );
-                    USHORT nTyp = sal::static_int_cast< USHORT >(
-                        pDef->GetType() );
-                    // Zusätzliches Flag für BYVAL einbauen
-                    if( pDef->IsByVal() )
-                        nTyp |= 0x8000;
-                    pParser->aGen.Gen( _ARGTYP, nTyp );
-                }
             }
         }
     }

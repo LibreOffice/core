@@ -145,8 +145,11 @@ public class JPropEx
         //String path = makeAbs( inputFileArg );
         path = path.replace( rootArg + "/" , "" );
         path = path.replace("/","\\");
-        return new SdfEntity( projectArg , path , "" /* dummy1 */ , resourceType , "", "" , "" , "" , "" /* dummy2 */ ,
-                              sourceLanguage , "",  "" , ""  , "" , "2002-02-02 02:02:02" );
+        // TODO: Make this static
+        java.text.SimpleDateFormat dateformat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = dateformat.format( new Date() );
+        return new SdfEntity( projectArg , path , "0" /* dummy1 */ , resourceType , "", "" , "" , "" , "0" /* dummy2 */ ,
+                              sourceLanguage , "",  "" , ""  , "" , date );
     }
 
     private void merge()

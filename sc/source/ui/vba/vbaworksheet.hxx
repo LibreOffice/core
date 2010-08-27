@@ -68,6 +68,9 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
 
     css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const rtl::OUString& sName );
+
+    css::uno::Reference< css::beans::XPropertySet > getFirstDBRangeProperties() throw (css::uno::RuntimeException);
+
 protected:
 
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -95,6 +98,7 @@ public:
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectContents() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectDrawingObjects() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getProtectScenarios() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() throw (css::uno::RuntimeException) ;
     virtual css::uno::Any SAL_CALL ChartObjects( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) throw (css::uno::RuntimeException);
@@ -106,6 +110,8 @@ public:
      virtual sal_Int16 SAL_CALL getIndex() throw (css::uno::RuntimeException);
      virtual sal_Int32 SAL_CALL getEnableSelection() throw (css::uno::RuntimeException);
      virtual void SAL_CALL setEnableSelection( sal_Int32 nSelection ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getAutoFilterMode() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAutoFilterMode( sal_Bool bAutoFilterMode ) throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);

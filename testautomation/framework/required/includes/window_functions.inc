@@ -196,9 +196,6 @@ end sub
 
 testcase tCheckWindowTitle( sApplication as string, sReference as string )
 
-    if ( sApplication = "soffice" ) then
-
-
     printlog( "Update test for the office window titles" )
 
     ' This is a Testtool-only problem that the product name is not displayed

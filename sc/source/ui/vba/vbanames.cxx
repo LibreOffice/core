@@ -173,11 +173,6 @@ ScVbaNames::getElementType() throw( css::uno::RuntimeException )
 uno::Reference< container::XEnumeration >
 ScVbaNames::createEnumeration() throw (uno::RuntimeException)
 {
-    if ( mxNames.is() )
-    {
-        uno::Reference< container::XEnumerationAccess > xAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-        return xAccess->createEnumeration();
-    }
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxNames, uno::UNO_QUERY_THROW );
     return new NamesEnumeration( this, mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
 }

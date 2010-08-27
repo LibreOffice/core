@@ -161,6 +161,9 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 
                     // In den String-Pool uebernehmen
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
+
+                    if( rDef.IsNew() && pProc == NULL )
+                        aRequiredTypes.push_back( aCompleteName );
                 }
                 eType = SbxOBJECT;
                 break;
@@ -874,7 +877,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
             }
             if( bCompatible && Peek() == PARAMARRAY )
             {
-                if( bByVal || bByVal || bOptional )
+                if( bByVal || bOptional )
                     Error( SbERR_UNEXPECTED, PARAMARRAY );
                 Next();
                 bParamArray = TRUE;
@@ -946,6 +949,8 @@ void SbiParser::DefDeclare( BOOL bPrivate )
       Error( SbERR_UNEXPECTED, eCurTok );
     else
     {
+        bool bFunction = (eCurTok == FUNCTION);
+
         SbiProcDef* pDef = ProcDecl( TRUE );
         if( pDef )
         {
@@ -970,7 +975,70 @@ void SbiParser::DefDeclare( BOOL bPrivate )
                 aPublics.Add( pDef );
 
             if ( pDef )
+            {
                 pDef->SetPublic( !bPrivate );
+
+                // New declare handling
+                if( pDef->GetLib().Len() > 0 )
+                {
+                    if( bNewGblDefs && nGblChain == 0 )
+                    {
+                        nGblChain = aGen.Gen( _JUMP, 0 );
+                        bNewGblDefs = FALSE;
+                    }
+
+                    USHORT nSavLine = nLine;
+                    aGen.Statement();
+                    pDef->Define();
+                    pDef->SetLine1( nSavLine );
+                    pDef->SetLine2( nSavLine );
+
+                    SbiSymPool& rPool = pDef->GetParams();
+                    USHORT nParCount = rPool.GetSize();
+
+                    SbxDataType eType = pDef->GetType();
+                    if( bFunction )
+                        aGen.Gen( _PARAM, 0, sal::static_int_cast< UINT16 >( eType ) );
+
+                    if( nParCount > 1 )
+                    {
+                        aGen.Gen( _ARGC );
+
+                        for( USHORT i = 1 ; i < nParCount ; ++i )
+                        {
+                            SbiSymDef* pParDef = rPool.Get( i );
+                            SbxDataType eParType = pParDef->GetType();
+
+                            aGen.Gen( _PARAM, i, sal::static_int_cast< UINT16 >( eParType ) );
+                            aGen.Gen( _ARGV );
+
+                            USHORT nTyp = sal::static_int_cast< USHORT >( pParDef->GetType() );
+                            if( pParDef->IsByVal() )
+                            {
+                                // Reset to avoid additional byval in call to wrapper function
+                                pParDef->SetByVal( FALSE );
+                                nTyp |= 0x8000;
+                            }
+                            aGen.Gen( _ARGTYP, nTyp );
+                        }
+                    }
+
+                    aGen.Gen( _LIB, aGblStrings.Add( pDef->GetLib() ) );
+
+                    SbiOpcode eOp = pDef->IsCdecl() ? _CALLC : _CALL;
+                    USHORT nId = pDef->GetId();
+                    if( pDef->GetAlias().Len() )
+                        nId = ( nId & 0x8000 ) | aGblStrings.Add( pDef->GetAlias() );
+                    if( nParCount > 1 )
+                        nId |= 0x8000;
+                    aGen.Gen( eOp, nId, sal::static_int_cast< UINT16 >( eType ) );
+
+                    if( bFunction )
+                        aGen.Gen( _PUT );
+
+                    aGen.Gen( _LEAVE );
+                }
+            }
         }
     }
 }

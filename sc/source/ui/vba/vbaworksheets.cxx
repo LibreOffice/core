@@ -52,7 +52,7 @@
 #include "vbaglobals.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworkbook.hxx"
-#include <unonames.hxx>
+#include "unonames.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

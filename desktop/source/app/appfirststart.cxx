@@ -36,12 +36,14 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 
 #include "app.hxx"
 
-using rtl::OUString;
-using namespace desktop;
-using namespace com::sun::star::beans;
+using ::rtl::OUString;
+using namespace ::desktop;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 
 static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
 static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
@@ -128,24 +130,29 @@ sal_Bool Desktop::LicenseNeedsAcceptance()
 */
 }
 
+/* Local function - get access to the configuration */
+static Reference< XPropertySet > impl_getConfigurationAccess( const OUString& rPath )
+{
+    Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+
+    // get configuration provider
+    Reference< XMultiServiceFactory > xConfigProvider = Reference< XMultiServiceFactory >(
+            xFactory->createInstance( sConfigSrvc ), UNO_QUERY_THROW );
+
+    Sequence< Any > aArgs( 1 );
+    NamedValue aValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NodePath" ) ), makeAny( rPath ) );
+    aArgs[0] <<= aValue;
+    return Reference< XPropertySet >(
+            xConfigProvider->createInstanceWithArguments( sAccessSrvc, aArgs ), UNO_QUERY_THROW );
+}
+
 /* Local function - was the wizard completed already? */
 static sal_Bool impl_isFirstStart()
 {
     try {
-        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
 
-        // get configuration provider
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-                xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
-
-        Sequence< Any > theArgs(1);
-        NamedValue v(OUString::createFromAscii("NodePath"), makeAny(OUString::createFromAscii("org.openoffice.Setup/Office")));
-        theArgs[0] <<= v;
-
-        Reference< XPropertySet > pset = Reference< XPropertySet >(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-
-        Any result = pset->getPropertyValue(OUString::createFromAscii("FirstStartWizardCompleted"));
+        Any result = xPSet->getPropertyValue(OUString::createFromAscii("FirstStartWizardCompleted"));
         sal_Bool bCompleted = sal_False;
         if ((result >>= bCompleted) && bCompleted)
             return sal_False;  // wizard was already completed
@@ -219,20 +226,9 @@ static sal_Bool impl_isLicenseAccepted()
 
     try
     {
-        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
 
-        // get configuration provider
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-                xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
-
-        Sequence< Any > theArgs(1);
-        NamedValue v(OUString::createFromAscii("NodePath"),
-                makeAny(OUString::createFromAscii("org.openoffice.Setup/Office")));
-        theArgs[0] <<= v;
-        Reference< XPropertySet > pset = Reference< XPropertySet >(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-
-        Any result = pset->getPropertyValue(OUString::createFromAscii("LicenseAcceptDate"));
+        Any result = xPSet->getPropertyValue(OUString::createFromAscii("LicenseAcceptDate"));
 
         OUString aAcceptDate;
         if (result >>= aAcceptDate)
@@ -270,5 +266,53 @@ static sal_Bool impl_isLicenseAccepted()
 sal_Bool Desktop::IsFirstStartWizardNeeded()
 {
     return impl_isFirstStart() || !impl_isLicenseAccepted();
+}
+
+void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
+{
+    if ( bQuickStart )
+    {
+        try
+        {
+            Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
+
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "OfficeRestartInProgress" ) );
+            Any aRestart = xPSet->getPropertyValue( sPropName );
+            sal_Bool bRestart = sal_False;
+            if ( ( aRestart >>= bRestart ) && bRestart )
+            {
+                xPSet->setPropertyValue( sPropName, makeAny( sal_False ) );
+                Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
+
+                Sequence< Any > aSeq( 2 );
+                aSeq[0] <<= sal_True;
+                aSeq[1] <<= sal_True;
+
+                Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Quickstart" ) ) ),UNO_QUERY_THROW );
+                xQuickstart->initialize( aSeq );
+            }
+        }
+        catch( uno::Exception& )
+        {
+            // this is no critical operation so it should not prevent office from starting
+        }
+    }
+}
+
+void Desktop::SetRestartState()
+{
+    try
+    {
+        Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "OfficeRestartInProgress" ) );
+        xPSet->setPropertyValue( sPropName, makeAny( sal_True ) );
+        Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
+    }
+    catch( uno::Exception& )
+    {
+        // this is no critical operation, ignore the exception
+    }
+
 }
 

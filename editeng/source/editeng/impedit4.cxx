@@ -76,12 +76,17 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/help.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/edtdlg.hxx>
+
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2811,8 +2816,23 @@ void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipW
 #endif // !SVX_LIGHT
 }
 
+
+struct TransliterationChgData
+{
+    USHORT                      nStart;
+    xub_StrLen                  nLen;
+    EditSelection               aSelection;
+    String                      aNewText;
+    uno::Sequence< sal_Int32 >  aOffsets;
+};
+
+
 EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
 {
+    uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
+    if (!_xBI.is())
+        return rSelection;
+
     EditSelection aSel( rSelection );
     aSel.Adjust( aEditDoc );
 
@@ -2821,8 +2841,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     EditSelection aNewSel( aSel );
 
-    USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
-    USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
+    const USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
+    const USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
     BOOL bChanges = FALSE;
     BOOL bLenChanged = FALSE;
@@ -2845,83 +2865,266 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         USHORT nCurrentEnd = nEndPos;
         sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-        do
+        // since we don't use Hiragana/Katakana or half-width/full-width transliterations here
+        // it is fine to use ANYWORD_IGNOREWHITESPACES. (ANY_WORD btw is broken and will
+        // occasionaly miss words in consecutive sentences). Also with ANYWORD_IGNOREWHITESPACES
+        // text like 'just-in-time' will be converted to 'Just-In-Time' which seems to be the
+        // proper thing to do.
+        const sal_Int16 nWordType = i18n::WordType::ANYWORD_IGNOREWHITESPACES;
+
+        //! In order to have less trouble with changing text size, e.g. because
+        //! of ligatures or � (German small sz) being resolved, we need to process
+        //! the text replacements from end to start.
+        //! This way the offsets for the yet to be changed words will be
+        //! left unchanged by the already replaced text.
+        //! For this we temporarily save the changes to be done in this vector
+        std::vector< TransliterationChgData >   aChanges;
+        TransliterationChgData                  aChgData;
+
+        if (nTransliterationMode == i18n::TransliterationModulesExtra::TITLE_CASE)
         {
-            if ( bConsiderLanguage )
+            // for 'capitalize every word' we need to iterate over each word
+
+            i18n::Boundary aSttBndry;
+            i18n::Boundary aEndBndry;
+            aSttBndry = _xBI->getWordBoundary(
+                        *pNode, nStartPos,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nStartPos + 1 ) ) ),
+                        nWordType, TRUE /*prefer forward direction*/);
+            aEndBndry = _xBI->getWordBoundary(
+                        *pNode, nEndPos,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nEndPos + 1 ) ) ),
+                        nWordType, FALSE /*prefer backward direction*/);
+
+            // prevent backtracking to the previous word if selection is at word boundary
+            if (aSttBndry.endPos <= nStartPos)
             {
-                nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart+1 ), &nCurrentEnd );
-                if ( nCurrentEnd > nEndPos )
-                    nCurrentEnd = nEndPos;
+                aSttBndry = _xBI->nextWord(
+                        *pNode, aSttBndry.endPos,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aSttBndry.endPos + 1 ) ) ),
+                        nWordType);
+            }
+            // prevent advancing to the next word if selection is at word boundary
+            if (aEndBndry.startPos >= nEndPos)
+            {
+                aEndBndry = _xBI->previousWord(
+                        *pNode, aEndBndry.startPos,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aEndBndry.startPos + 1 ) ) ),
+                        nWordType);
             }
 
-            xub_StrLen nLen = nCurrentEnd - nCurrentStart;
-
-            Sequence <sal_Int32> aOffsets;
-            String aNewText( aTranslitarationWrapper.transliterate( *pNode, nLanguage, nCurrentStart, nLen, &aOffsets ) );
-
-            if( ( nLen != aNewText.Len() ) || !pNode->Equals( aNewText, nCurrentStart, nLen ) )
+            i18n::Boundary aCurWordBndry( aSttBndry );
+            while (aCurWordBndry.startPos <= aEndBndry.startPos)
             {
-                bChanges = TRUE;
-                if ( nLen != aNewText.Len() )
-                    bLenChanged = TRUE;
-
-#ifndef SVX_LIGHT
-                // Create UndoAction on Demand....
-                if ( !pUndo && IsUndoEnabled() && !IsInUndo() )
-                {
-                    ESelection aESel( CreateESel( aSel ) );
-                    pUndo = new EditUndoTransliteration( this, aESel, nTransliterationMode );
-
-                    if ( ( nStartNode == nEndNode ) && !aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() ) )
-                        pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
-                    else
-                        pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
-                }
+                nCurrentStart = (xub_StrLen)aCurWordBndry.startPos;
+                nCurrentEnd   = (xub_StrLen)aCurWordBndry.endPos;
+                sal_Int32 nLen = nCurrentEnd - nCurrentStart;
+                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+#if OSL_DEBUG_LEVEL > 1
+                String aText( pNode->Copy( nCurrentStart, nLen ) );
 #endif
 
-                // Change text without loosing the attributes
-                USHORT nCharsAfterTransliteration =
-                    sal::static_int_cast< USHORT >(aOffsets.getLength());
-                const sal_Int32* pOffsets = aOffsets.getConstArray();
-                short nDiffs = 0;
-                for ( USHORT n = 0; n < nCharsAfterTransliteration; n++ )
+                Sequence< sal_Int32 > aOffsets;
+                String aNewText( aTranslitarationWrapper.transliterate( *pNode,
+                        GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
+                        nCurrentStart, nLen, &aOffsets ));
+
+                if (!pNode->Equals( aNewText, nCurrentStart, nLen ))
                 {
-                    USHORT nCurrentPos = nCurrentStart+n;
-                    sal_Int32 nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
+                    aChgData.nStart     = nCurrentStart;
+                    aChgData.nLen       = nLen;
+                    aChgData.aSelection = EditSelection( EditPaM( pNode, nCurrentStart ), EditPaM( pNode, nCurrentEnd ) );
+                    aChgData.aNewText   = aNewText;
+                    aChgData.aOffsets   = aOffsets;
+                    aChanges.push_back( aChgData );
+                }
+#if OSL_DEBUG_LEVEL > 1
+                String aSelTxt ( GetSelected( aChgData.aSelection ) );
+                (void) aSelTxt;
+#endif
 
-                    if ( !nDiff )
-                    {
-                        DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
-                        pNode->SetChar( nCurrentPos, aNewText.GetChar(n) );
-                    }
-                    else if ( nDiff < 0 )
-                    {
-                        // Replace first char, delete the rest...
-                        DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
-                        pNode->SetChar( nCurrentPos, aNewText.GetChar(n) );
+                aCurWordBndry = _xBI->nextWord( *pNode, nCurrentEnd,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
+                        nWordType);
+            }
+            DBG_ASSERT( nCurrentEnd >= aEndBndry.endPos, "failed to reach end of transliteration" );
+        }
+        else if (nTransliterationMode == i18n::TransliterationModulesExtra::SENTENCE_CASE)
+        {
+            // for 'sentence case' we need to iterate sentence by sentence
 
-                        DBG_ASSERT( (nCurrentPos+1) < pNode->Len(), "TransliterateText - String smaller than expected!" );
-                        GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), sal::static_int_cast< USHORT >(-nDiff) );
-                    }
-                    else
-                    {
-                        DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
-                        GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), aNewText.GetChar(n) );
+            sal_Int32 nLastStart = _xBI->beginOfSentence(
+                    *pNode, nEndPos,
+                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nEndPos + 1 ) ) ) );
+            sal_Int32 nLastEnd = _xBI->endOfSentence(
+                    *pNode, nLastStart,
+                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nLastStart + 1 ) ) ) );
 
-                    }
-                    nDiffs = sal::static_int_cast< short >(nDiffs + nDiff);
+            // extend nCurrentStart, nCurrentEnd to the current sentence boundaries
+            nCurrentStart = _xBI->beginOfSentence(
+                    *pNode, nStartPos,
+                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nStartPos + 1 ) ) ) );
+            nCurrentEnd = _xBI->endOfSentence(
+                    *pNode, nCurrentStart,
+                    SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
+
+            // prevent backtracking to the previous sentence if selection starts at end of a sentence
+            if (nCurrentEnd <= nStartPos)
+            {
+                // now nCurrentStart is probably located on a non-letter word. (unless we
+                // are in Asian text with no spaces...)
+                // Thus to get the real sentence start we should locate the next real word,
+                // that is one found by DICTIONARY_WORD
+                i18n::Boundary aBndry = _xBI->nextWord( *pNode, nCurrentEnd,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
+                        i18n::WordType::DICTIONARY_WORD);
+
+                // now get new current sentence boundaries
+                nCurrentStart = _xBI->beginOfSentence(
+                        *pNode, aBndry.startPos,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aBndry.startPos + 1 ) ) ) );
+                nCurrentEnd = _xBI->endOfSentence(
+                        *pNode, nCurrentStart,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
+            }
+            // prevent advancing to the next sentence if selection ends at start of a sentence
+            if (nLastStart >= nEndPos)
+            {
+                // now nCurrentStart is probably located on a non-letter word. (unless we
+                // are in Asian text with no spaces...)
+                // Thus to get the real sentence start we should locate the previous real word,
+                // that is one found by DICTIONARY_WORD
+                i18n::Boundary aBndry = _xBI->previousWord( *pNode, nLastStart,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nLastStart + 1 ) ) ),
+                        i18n::WordType::DICTIONARY_WORD);
+                nLastEnd = _xBI->endOfSentence(
+                        *pNode, aBndry.startPos,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, aBndry.startPos + 1 ) ) ) );
+                if (nCurrentEnd > nLastEnd)
+                    nCurrentEnd = nLastEnd;
+            }
+
+            while (nCurrentStart < nLastEnd)
+            {
+                sal_Int32 nLen = nCurrentEnd - nCurrentStart;
+                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+#if OSL_DEBUG_LEVEL > 1
+                String aText( pNode->Copy( nCurrentStart, nLen ) );
+#endif
+
+                Sequence< sal_Int32 > aOffsets;
+                String aNewText( aTranslitarationWrapper.transliterate( *pNode,
+                        GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
+                        nCurrentStart, nLen, &aOffsets ));
+
+                if (!pNode->Equals( aNewText, nCurrentStart, nLen ))
+                {
+                    aChgData.nStart     = nCurrentStart;
+                    aChgData.nLen       = nLen;
+                    aChgData.aSelection = EditSelection( EditPaM( pNode, nCurrentStart ), EditPaM( pNode, nCurrentEnd ) );
+                    aChgData.aNewText   = aNewText;
+                    aChgData.aOffsets   = aOffsets;
+                    aChanges.push_back( aChgData );
                 }
 
-                if ( nNode == nEndNode )
-                    aNewSel.Max().GetIndex() =
-                        aNewSel.Max().GetIndex() + nDiffs;
-
-                ParaPortion* pParaPortion = GetParaPortions()[nNode];
-                pParaPortion->MarkSelectionInvalid( nCurrentStart, std::max< USHORT >( nCurrentStart+nLen, nCurrentStart+aNewText.Len() ) );
-
+                i18n::Boundary aFirstWordBndry;
+                aFirstWordBndry = _xBI->nextWord(
+                        *pNode, nCurrentEnd,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentEnd + 1 ) ) ),
+                        nWordType);
+                nCurrentStart = aFirstWordBndry.startPos;
+                nCurrentEnd = _xBI->endOfSentence(
+                        *pNode, nCurrentStart,
+                        SvxCreateLocale( GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ) ) );
             }
-            nCurrentStart = nCurrentEnd;
-        } while( nCurrentEnd < nEndPos );
+            DBG_ASSERT( nCurrentEnd >= nLastEnd, "failed to reach end of transliteration" );
+        }
+        else
+        {
+            do
+            {
+                if ( bConsiderLanguage )
+                {
+                    nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart+1 ), &nCurrentEnd );
+                    if ( nCurrentEnd > nEndPos )
+                        nCurrentEnd = nEndPos;
+                }
+
+                xub_StrLen nLen = nCurrentEnd - nCurrentStart;
+
+                Sequence< sal_Int32 > aOffsets;
+                String aNewText( aTranslitarationWrapper.transliterate( *pNode, nLanguage, nCurrentStart, nLen, &aOffsets ) );
+
+                if (!pNode->Equals( aNewText, nCurrentStart, nLen ))
+                {
+                    aChgData.nStart     = nCurrentStart;
+                    aChgData.nLen       = nLen;
+                    aChgData.aSelection = EditSelection( EditPaM( pNode, nCurrentStart ), EditPaM( pNode, nCurrentEnd ) );
+                    aChgData.aNewText   = aNewText;
+                    aChgData.aOffsets   = aOffsets;
+                    aChanges.push_back( aChgData );
+                }
+
+                nCurrentStart = nCurrentEnd;
+            } while( nCurrentEnd < nEndPos );
+        }
+
+        if (aChanges.size() > 0)
+        {
+#ifndef SVX_LIGHT
+            // Create a single UndoAction on Demand for all the changes ...
+            if ( !pUndo && IsUndoEnabled() && !IsInUndo() )
+            {
+                // adjust selection to include all changes
+                for (size_t i = 0; i < aChanges.size(); ++i)
+                {
+                    const EditSelection &rSel = aChanges[i].aSelection;
+                    if (aSel.Min().GetNode() == rSel.Min().GetNode() &&
+                        aSel.Min().GetIndex() > rSel.Min().GetIndex())
+                        aSel.Min().SetIndex( rSel.Min().GetIndex() );
+                    if (aSel.Max().GetNode() == rSel.Max().GetNode() &&
+                        aSel.Max().GetIndex() < rSel.Max().GetIndex())
+                        aSel.Max().SetIndex( rSel.Max().GetIndex() );
+                }
+                aNewSel = aSel;
+
+                ESelection aESel( CreateESel( aSel ) );
+                pUndo = new EditUndoTransliteration( this, aESel, nTransliterationMode );
+
+                const bool bSingleNode = aSel.Min().GetNode()== aSel.Max().GetNode();
+                const bool bHasAttribs = aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
+                if (bSingleNode && !bHasAttribs)
+                    pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
+                else
+                    pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
+            }
+#endif
+
+            // now apply the changes from end to start to leave the offsets of the
+            // yet unchanged text parts remain the same.
+            for (size_t i = 0; i < aChanges.size(); ++i)
+            {
+                const TransliterationChgData &rData = aChanges[ aChanges.size() - 1 - i ];
+
+                bChanges = TRUE;
+                if (rData.nLen != rData.aNewText.Len())
+                    bLenChanged = TRUE;
+
+                // Change text without loosing the attributes
+                USHORT nDiffs = ReplaceTextOnly( rData.aSelection.Min().GetNode(),
+                        rData.nStart, rData.nLen, rData.aNewText, rData.aOffsets );
+
+                // adjust selection in end node to possibly changed size
+                if (aSel.Max().GetNode() == rData.aSelection.Max().GetNode())
+                    aNewSel.Max().GetIndex() = aNewSel.Max().GetIndex() + nDiffs;
+
+                USHORT nSelNode = aEditDoc.GetPos( rData.aSelection.Min().GetNode() );
+                ParaPortion* pParaPortion = GetParaPortions()[nSelNode];
+                pParaPortion->MarkSelectionInvalid( rData.nStart,
+                        std::max< USHORT >( rData.nStart + rData.nLen,
+                                            rData.nStart + rData.aNewText.Len() ) );
+            }
+        } // if (aChanges.size() > 0)
     }
 
 #ifndef SVX_LIGHT
@@ -2944,6 +3147,52 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     return aNewSel;
 }
+
+
+short ImpEditEngine::ReplaceTextOnly(
+    ContentNode* pNode,
+    USHORT nCurrentStart, xub_StrLen nLen,
+    const String& rNewText,
+    const uno::Sequence< sal_Int32 >& rOffsets )
+{
+    (void)  nLen;
+
+    // Change text without loosing the attributes
+    USHORT nCharsAfterTransliteration =
+        sal::static_int_cast< USHORT >(rOffsets.getLength());
+    const sal_Int32* pOffsets = rOffsets.getConstArray();
+    short nDiffs = 0;
+    for ( USHORT n = 0; n < nCharsAfterTransliteration; n++ )
+    {
+        USHORT nCurrentPos = nCurrentStart+n;
+        sal_Int32 nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
+
+        if ( !nDiff )
+        {
+            DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
+            pNode->SetChar( nCurrentPos, rNewText.GetChar(n) );
+        }
+        else if ( nDiff < 0 )
+        {
+            // Replace first char, delete the rest...
+            DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
+            pNode->SetChar( nCurrentPos, rNewText.GetChar(n) );
+
+            DBG_ASSERT( (nCurrentPos+1) < pNode->Len(), "TransliterateText - String smaller than expected!" );
+            GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), sal::static_int_cast< USHORT >(-nDiff) );
+        }
+        else
+        {
+            DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
+            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), rNewText.GetChar(n) );
+
+        }
+        nDiffs = sal::static_int_cast< short >(nDiffs + nDiff);
+    }
+
+    return nDiffs;
+}
+
 
 void ImpEditEngine::SetAsianCompressionMode( USHORT n )
 {

@@ -76,7 +76,7 @@ double ImpGetDouble( const SbxValues* p )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
+            if( !p->pOUString )
             {
                 nRes = 0;
                 if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
@@ -86,7 +86,7 @@ double ImpGetDouble( const SbxValues* p )
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                 {
                     nRes = 0;
                     if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
@@ -188,9 +188,9 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                p->pString = new XubString;
-            ImpCvtNum( (double) n, 14, *p->pString, bCoreString );
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
+            ImpCvtNum( (double) n, 14, *p->pOUString, bCoreString );
             break;
         case SbxOBJECT:
         {

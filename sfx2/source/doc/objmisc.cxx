@@ -732,7 +732,7 @@ void SfxObjectShell::FreeSharedFile( const ::rtl::OUString& aTempFileURL )
     SetSharedXMLFlag( sal_False );
 
     if ( IsDocShared() && aTempFileURL.getLength()
-      && !SfxMedium::EqualURLs( aTempFileURL, GetSharedFileURL() ) )
+      && !::utl::UCBContentHelper::EqualURLs( aTempFileURL, GetSharedFileURL() ) )
     {
         if ( pImp->m_bAllowShareControlFileClean )
         {

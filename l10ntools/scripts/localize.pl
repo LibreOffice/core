@@ -492,7 +492,7 @@ sub collectfiles{
         # -e
         # if ( -x $command ){
         if( $command ){
-            if( !$bVerbose  ){ $args .= " -QQ "; }
+            if( !$bVerbose  ){ $args .= " "; }
             $args .= " -e -f $localizeSDF -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US";}

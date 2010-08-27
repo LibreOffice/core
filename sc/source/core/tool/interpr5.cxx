@@ -310,6 +310,9 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
     ScMatrix* pMat = new ScMatrix( nC, nR);
     pMat->SetErrorInterpreter( this);
+    // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
+    // very matrix.
+    pMat->SetImmutable( false);
     SCSIZE nCols, nRows;
     pMat->GetDimensions( nCols, nRows);
     if ( nCols != nC || nRows != nR )
@@ -2069,23 +2072,25 @@ bool ScInterpreter::CheckMatrix(BOOL _bLOG,BOOL _bTrendGrowth,BYTE& nCase,SCSIZE
         {
             PushIllegalArgument();
             return false;
-        } // if (!pMatY->IsValue(i))
-    } // for ( SCSIZE i = 0; i < nCountY; i++ )
+        }
+    }
+
     if ( _bLOG )
     {
+        ScMatrixRef pNewY = pMatY->CloneIfConst();
         for (SCSIZE nElem = 0; nElem < nCountY; nElem++)
         {
-            const double fVal = pMatY->GetDouble(nElem);
+            const double fVal = pNewY->GetDouble(nElem);
             if (fVal <= 0.0)
             {
                 PushIllegalArgument();
                 return false;
             }
             else
-                pMatY->PutDouble(log(fVal), nElem);
-        } // for (nElem = 0; nElem < nCountY; nElem++)
-    } // if ( _bRKP )
-
+                pNewY->PutDouble(log(fVal), nElem);
+        }
+        pMatY = pNewY;
+    }
 
     if (pMatX)
     {

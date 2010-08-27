@@ -2363,15 +2363,23 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
         Dialog* pDlg = (Dialog*) GetWindow();
         Window* pParent = pDlg->GetWindow( WINDOW_PARENTOVERLAP );
         Window* pOldParent = NULL;
+        Window* pSetParent = NULL;
         if ( pParent && !pParent->IsReallyVisible() )
         {
             pOldParent = pDlg->GetParent();
             Window* pFrame = pDlg->GetWindow( WINDOW_FRAME );
             if( pFrame != pDlg )
+            {
                 pDlg->SetParent( pFrame );
+                pSetParent = pFrame;
+            }
         }
+
         nRet = pDlg->Execute();
-        if ( pOldParent )
+
+        // set the parent back only in case no new parent was set from outside
+        // in other words, revert only own changes
+        if ( pOldParent && pDlg->GetParent() == pSetParent )
             pDlg->SetParent( pOldParent );
     }
     return nRet;

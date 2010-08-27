@@ -37,8 +37,8 @@
 #include <basic/sbxvar.hxx>
 #include "sbxconv.hxx"
 
-static String   ImpCurrencyToString( const SbxINT64& );
-static SbxINT64 ImpStringToCurrency( const String& );
+static ::rtl::OUString   ImpCurrencyToString( const SbxINT64& );
+static SbxINT64 ImpStringToCurrency( const ::rtl::OUString& );
 
 SbxINT64 ImpGetCurrency( const SbxValues* p )
 {
@@ -121,10 +121,10 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
+            if( !p->pOUString )
                 nRes.SetNull();
             else
-                nRes = ImpStringToCurrency( *p->pString );
+                nRes = ImpStringToCurrency( *p->pOUString );
             break;
         case SbxOBJECT:
         {
@@ -224,10 +224,10 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                p->pString = new XubString;
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
 
-            *p->pString = ImpCurrencyToString( r );
+            *p->pOUString = ImpCurrencyToString( r );
             break;
         case SbxOBJECT:
         {
@@ -319,7 +319,7 @@ start:
 
 // Hilfs-Funktionen zur Wandlung
 
-static String ImpCurrencyToString( const SbxINT64 &r )
+static ::rtl::OUString ImpCurrencyToString( const SbxINT64 &r )
 {
     BigInt a10000 = 10000;
 
@@ -331,20 +331,20 @@ static String ImpCurrencyToString( const SbxINT64 &r )
     aFrac %= a10000;
     aFrac += a10000;
 
-    String aString;
+    ::rtl::OUString aString;
     if( r.nHigh < 0 )
-        aString = '-';
+        aString = ::rtl::OUString( (sal_Unicode)'-' );
     aString += aInt.GetString();
-    aString += '.';
+    aString += ::rtl::OUString( (sal_Unicode)'.' );
     aString += aFrac.GetString().GetBuffer()+1;
     return aString;
 }
 
-static SbxINT64 ImpStringToCurrency( const String &r )
+static SbxINT64 ImpStringToCurrency( const ::rtl::OUString &r )
 {
     int nDec = 4;
     String aStr;
-    const sal_Unicode* p = r.GetBuffer();
+    const sal_Unicode* p = r.getStr();
 
     if( *p == '-' )
         aStr += *p++;

@@ -36,6 +36,7 @@
     #include <time.h>           // clock()
     #include <tools/stream.hxx>
 #endif
+
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
@@ -46,9 +47,6 @@
 #include <editeng/hangulhanja.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/i18n/WordType.hdl>
-#include <com/sun/star/i18n/ScriptType.hdl>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <dlelstnr.hxx>
@@ -85,6 +83,15 @@
 #include <istyleaccess.hxx>
 
 #include <unomid.h>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+
+#include <vector>
+
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -1578,49 +1585,247 @@ void SwLinguStatistik::Flush()
 
 #endif
 
-// change text to Upper/Lower/Hiragana/Katagana/...
-void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
-        xub_StrLen nStt, xub_StrLen nEnd, SwUndoTransliterate* pUndo )
+
+struct TransliterationChgData
 {
-    if( nStt < nEnd )
+    xub_StrLen              nStart;
+    xub_StrLen              nLen;
+    String                  sChanged;
+    Sequence< sal_Int32 >   aOffsets;
+};
+
+// change text to Upper/Lower/Hiragana/Katagana/...
+void SwTxtNode::TransliterateText(
+    utl::TransliterationWrapper& rTrans,
+    xub_StrLen nStt, xub_StrLen nEnd,
+    SwUndoTransliterate* pUndo )
+{
+    if (nStt < nEnd && pBreakIt->GetBreakIter().is())
     {
-        SwLanguageIterator* pIter;
-        if( rTrans.needLanguageForTheMode() )
-            pIter = new SwLanguageIterator( *this, nStt );
-        else
-            pIter = 0;
+        // since we don't use Hiragana/Katakana or half-width/full-width transliterations here
+        // it is fine to use ANYWORD_IGNOREWHITESPACES. (ANY_WORD btw is broken and will
+        // occasionaly miss words in consecutive sentences). Also with ANYWORD_IGNOREWHITESPACES
+        // text like 'just-in-time' will be converted to 'Just-In-Time' which seems to be the
+        // proper thing to do.
+        const sal_Int16 nWordType = WordType::ANYWORD_IGNOREWHITESPACES;
 
-        xub_StrLen nEndPos;
-        sal_uInt16 nLang;
-        do {
-            if( pIter )
-            {
-                nLang = pIter->GetLanguage();
-                nEndPos = pIter->GetChgPos();
-                if( nEndPos > nEnd )
-                    nEndPos = nEnd;
-            }
-            else
-            {
-                nLang = LANGUAGE_SYSTEM;
-                nEndPos = nEnd;
-            }
-            xub_StrLen nLen = nEndPos - nStt;
+        //! In order to have less trouble with changing text size, e.g. because
+        //! of ligatures or � (German small sz) being resolved, we need to process
+        //! the text replacements from end to start.
+        //! This way the offsets for the yet to be changed words will be
+        //! left unchanged by the already replaced text.
+        //! For this we temporarily save the changes to be done in this vector
+        std::vector< TransliterationChgData >   aChanges;
+        TransliterationChgData                  aChgData;
 
-            Sequence <sal_Int32> aOffsets;
-            String sChgd( rTrans.transliterate( m_Text, nLang, nStt, nLen,
-                                                &aOffsets ));
-            if( !m_Text.Equals( sChgd, nStt, nLen ) )
+        if (rTrans.getType() == (sal_uInt32)TransliterationModulesExtra::TITLE_CASE)
+        {
+            // for 'capitalize every word' we need to iterate over each word
+
+            Boundary aSttBndry;
+            Boundary aEndBndry;
+            aSttBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+                        GetTxt(), nStt,
+                        pBreakIt->GetLocale( GetLang( nStt ) ),
+                        nWordType,
+                        TRUE /*prefer forward direction*/);
+            aEndBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+                        GetTxt(), nEnd,
+                        pBreakIt->GetLocale( GetLang( nEnd ) ),
+                        nWordType,
+                        FALSE /*prefer backward direction*/);
+
+            // prevent backtracking to the previous word if selection is at word boundary
+            if (aSttBndry.endPos <= nStt)
             {
-                if ( pUndo )
+                aSttBndry = pBreakIt->GetBreakIter()->nextWord(
+                        GetTxt(), aSttBndry.endPos,
+                        pBreakIt->GetLocale( GetLang( aSttBndry.endPos ) ),
+                        nWordType);
+            }
+            // prevent advancing to the next word if selection is at word boundary
+            if (aEndBndry.startPos >= nEnd)
+            {
+                aEndBndry = pBreakIt->GetBreakIter()->previousWord(
+                        GetTxt(), aEndBndry.startPos,
+                        pBreakIt->GetLocale( GetLang( aEndBndry.startPos ) ),
+                        nWordType);
+            }
+
+            Boundary aCurWordBndry( aSttBndry );
+            while (aCurWordBndry.startPos <= aEndBndry.startPos)
+            {
+                nStt = (xub_StrLen)aCurWordBndry.startPos;
+                nEnd = (xub_StrLen)aCurWordBndry.endPos;
+                sal_Int32 nLen = nEnd - nStt;
+                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+#if OSL_DEBUG_LEVEL > 1
+                String aText( GetTxt().Copy( nStt, nLen ) );
+#endif
+
+                Sequence <sal_Int32> aOffsets;
+                String sChgd( rTrans.transliterate( GetTxt(), GetLang( nStt ), nStt, nLen, &aOffsets ));
+
+                if (!m_Text.Equals( sChgd, nStt, nLen ))
                 {
-                    pUndo->AddChanges( *this, nStt, nLen, aOffsets );
+                    aChgData.nStart     = nStt;
+                    aChgData.nLen       = nLen;
+                    aChgData.sChanged   = sChgd;
+                    aChgData.aOffsets   = aOffsets;
+                    aChanges.push_back( aChgData );
                 }
-                ReplaceTextOnly( nStt, nLen, sChgd, aOffsets );
+
+                aCurWordBndry = pBreakIt->GetBreakIter()->nextWord(
+                        GetTxt(), nEnd,
+                        pBreakIt->GetLocale( GetLang( nEnd ) ),
+                        nWordType);
             }
-            nStt = nEndPos;
-        } while( nEndPos < nEnd && pIter && pIter->Next() );
-        delete pIter;
+        }
+        else if (rTrans.getType() == (sal_uInt32)TransliterationModulesExtra::SENTENCE_CASE)
+        {
+            // for 'sentence case' we need to iterate sentence by sentence
+
+            sal_Int32 nLastStart = pBreakIt->GetBreakIter()->beginOfSentence(
+                    GetTxt(), nEnd,
+                    pBreakIt->GetLocale( GetLang( nEnd ) ) );
+            sal_Int32 nLastEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                    GetTxt(), nLastStart,
+                    pBreakIt->GetLocale( GetLang( nLastStart ) ) );
+
+            // extend nStt, nEnd to the current sentence boundaries
+            sal_Int32 nCurrentStart = pBreakIt->GetBreakIter()->beginOfSentence(
+                    GetTxt(), nStt,
+                    pBreakIt->GetLocale( GetLang( nStt ) ) );
+            sal_Int32 nCurrentEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                    GetTxt(), nCurrentStart,
+                    pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
+
+            // prevent backtracking to the previous sentence if selection starts at end of a sentence
+            if (nCurrentEnd <= nStt)
+            {
+                // now nCurrentStart is probably located on a non-letter word. (unless we
+                // are in Asian text with no spaces...)
+                // Thus to get the real sentence start we should locate the next real word,
+                // that is one found by DICTIONARY_WORD
+                i18n::Boundary aBndry = pBreakIt->GetBreakIter()->nextWord(
+                        GetTxt(), nCurrentEnd,
+                        pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
+                        i18n::WordType::DICTIONARY_WORD);
+
+                // now get new current sentence boundaries
+                nCurrentStart = pBreakIt->GetBreakIter()->beginOfSentence(
+                        GetTxt(), aBndry.startPos,
+                        pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
+                nCurrentEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                        GetTxt(), nCurrentStart,
+                        pBreakIt->GetLocale( GetLang( nCurrentStart) ) );
+            }
+            // prevent advancing to the next sentence if selection ends at start of a sentence
+            if (nLastStart >= nEnd)
+            {
+                // now nCurrentStart is probably located on a non-letter word. (unless we
+                // are in Asian text with no spaces...)
+                // Thus to get the real sentence start we should locate the previous real word,
+                // that is one found by DICTIONARY_WORD
+                i18n::Boundary aBndry = pBreakIt->GetBreakIter()->previousWord(
+                        GetTxt(), nLastStart,
+                        pBreakIt->GetLocale( GetLang( nLastStart) ),
+                        i18n::WordType::DICTIONARY_WORD);
+                nLastEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                        GetTxt(), aBndry.startPos,
+                        pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
+                if (nCurrentEnd > nLastEnd)
+                    nCurrentEnd = nLastEnd;
+            }
+
+            while (nCurrentStart < nLastEnd)
+            {
+                sal_Int32 nLen = nCurrentEnd - nCurrentStart;
+                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+#if OSL_DEBUG_LEVEL > 1
+                String aText( GetTxt().Copy( nCurrentStart, nLen ) );
+#endif
+
+                Sequence <sal_Int32> aOffsets;
+                String sChgd( rTrans.transliterate( GetTxt(),
+                        GetLang( nCurrentStart ), nCurrentStart, nLen, &aOffsets ));
+
+                if (!m_Text.Equals( sChgd, nStt, nLen ))
+                {
+                    aChgData.nStart     = nCurrentStart;
+                    aChgData.nLen       = nLen;
+                    aChgData.sChanged   = sChgd;
+                    aChgData.aOffsets   = aOffsets;
+                    aChanges.push_back( aChgData );
+                }
+
+                Boundary aFirstWordBndry;
+                aFirstWordBndry = pBreakIt->GetBreakIter()->nextWord(
+                        GetTxt(), nCurrentEnd,
+                        pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
+                        nWordType);
+                nCurrentStart = aFirstWordBndry.startPos;
+                nCurrentEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                        GetTxt(), nCurrentStart,
+                        pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
+            }
+        }
+        else
+        {
+            // here we may transliterate over complete language portions...
+
+            SwLanguageIterator* pIter;
+            if( rTrans.needLanguageForTheMode() )
+                pIter = new SwLanguageIterator( *this, nStt );
+            else
+                pIter = 0;
+
+            xub_StrLen nEndPos;
+            sal_uInt16 nLang;
+            do {
+                if( pIter )
+                {
+                    nLang = pIter->GetLanguage();
+                    nEndPos = pIter->GetChgPos();
+                    if( nEndPos > nEnd )
+                        nEndPos = nEnd;
+                }
+                else
+                {
+                    nLang = LANGUAGE_SYSTEM;
+                    nEndPos = nEnd;
+                }
+                xub_StrLen nLen = nEndPos - nStt;
+
+                Sequence <sal_Int32> aOffsets;
+                String sChgd( rTrans.transliterate( m_Text, nLang, nStt, nLen, &aOffsets ));
+
+                if (!m_Text.Equals( sChgd, nStt, nLen ))
+                {
+                    aChgData.nStart     = nStt;
+                    aChgData.nLen       = nLen;
+                    aChgData.sChanged   = sChgd;
+                    aChgData.aOffsets   = aOffsets;
+                    aChanges.push_back( aChgData );
+                }
+
+                nStt = nEndPos;
+            } while( nEndPos < nEnd && pIter && pIter->Next() );
+            delete pIter;
+        }
+
+        if (aChanges.size() > 0)
+        {
+            // now apply the changes from end to start to leave the offsets of the
+            // yet unchanged text parts remain the same.
+            for (size_t i = 0; i < aChanges.size(); ++i)
+            {
+                TransliterationChgData &rData = aChanges[ aChanges.size() - 1 - i ];
+                if (pUndo)
+                    pUndo->AddChanges( *this, rData.nStart, rData.nLen, rData.aOffsets );
+                ReplaceTextOnly( rData.nStart, rData.nLen, rData.sChanged, rData.aOffsets );
+            }
+        }
     }
 }
 
