@@ -240,22 +240,6 @@ ControlModelContainerBase::~ControlModelContainerBase()
     mbGroupsUpToDate = sal_False;
 }
 
-Any ControlModelContainerBase::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet( ControlModelContainer_IBase::queryInterface( rType ) );
-    return aRet;
-}
-
-// XTypeProvider
-IMPL_IMPLEMENTATION_ID( ControlModelContainerBase )
-Sequence< Type > ControlModelContainerBase::getTypes() throw(RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        ControlModelContainer_IBase::getTypes(),
-        ControlModel_Base::getTypes()
-    );
-}
-
 Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     Any aAny;
@@ -569,7 +553,7 @@ void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, cons
                 Reference< beans::XPropertySetInfo > xPropInfo = xProps.get()->getPropertySetInfo();
 
                 ::rtl::OUString sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
-                if ( xPropInfo.get()->hasPropertyByName(  sImageSourceProperty ))
+                if ( xPropInfo.get()->hasPropertyByName(  sImageSourceProperty ) && ImplHasProperty(BASEPROPERTY_DIALOGSOURCEURL) )
                 {
                     Any aUrl = xProps.get()->getPropertyValue(  sImageSourceProperty );
 
@@ -770,11 +754,18 @@ void SAL_CALL ControlModelContainerBase::setEnabled( ::sal_Bool _enabled ) throw
 }
 ::rtl::OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_sTitle;
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    Reference<XPropertySet> xThis(*this,UNO_QUERY);
+    ::rtl::OUString sTitle;
+    xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
+    return sTitle;
+    //return m_sTitle;
 }
 void SAL_CALL ControlModelContainerBase::setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
-    m_sTitle = _title;
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    Reference<XPropertySet> xThis(*this,UNO_QUERY);
+    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),makeAny(_title));
 }
 ::rtl::OUString SAL_CALL ControlModelContainerBase::getImageURL() throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1331,24 +1322,6 @@ ControlContainerBase::ControlContainerBase() :
 
 ControlContainerBase::~ControlContainerBase()
 {
-}
-
-// XInterface
-Any ControlContainerBase::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet( ContainerControl_IBase::queryInterface( rType ) );
-    return (aRet.hasValue() ? aRet : UnoControlContainer::queryAggregation( rType ));
-}
-
-// XTypeProvider
-IMPL_IMPLEMENTATION_ID( ControlContainerBase )
-Sequence< Type >
-ControlContainerBase::getTypes() throw(RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        ContainerControl_IBase::getTypes(),
-        UnoControlContainer::getTypes()
-    );
 }
 
 void ControlContainerBase::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)

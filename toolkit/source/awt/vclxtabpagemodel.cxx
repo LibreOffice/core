@@ -31,14 +31,11 @@
 #include <vcl/tabctrl.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 //  ----------------------------------------------------
 //  class VCLXDialog
 //  ----------------------------------------------------
-void VCLXTabPageModel::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
-{
-    VCLXWindow::ImplGetPropertyIds( rIds );
-}
 
 VCLXTabPageModel::VCLXTabPageModel()
 {
@@ -51,25 +48,9 @@ VCLXTabPageModel::~VCLXTabPageModel()
 #endif
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXTabPageModel::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                            SAL_STATIC_CAST( ::com::sun::star::awt::tab::XTabPage*, this ),
-                            SAL_STATIC_CAST( ::com::sun::star::awt::tab::XTabPageModel*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXTabPageModel )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageModel>* ) NULL ),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
-
 void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    /*::osl::MutexGuard aGuard( GetMutex() );
     Window* pWindow = GetWindow();
 
     if ( pWindow )
@@ -82,12 +63,12 @@ void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
         pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
-    }
+    }*/
 }
 
 ::com::sun::star::awt::DeviceInfo VCLXTabPageModel::getInfo() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+    ::com::sun::star::awt::DeviceInfo aInfo;// = VCLXDevice::getInfo();
     return aInfo;
 }
 
@@ -97,15 +78,15 @@ void SAL_CALL VCLXTabPageModel::setProperty(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
-    TabPage* pTabPage = (TabPage*)GetWindow();
+    /*TabPage* pTabPage = (TabPage*)GetWindow();
     if ( pTabPage )
     {
         sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         VCLXWindow::setProperty( PropertyName, Value );
-    }
+    }*/
 }
 //XTabPageModel
 ::sal_Int16 SAL_CALL VCLXTabPageModel::getTabPageID() throw (::com::sun::star::uno::RuntimeException)
@@ -118,23 +99,23 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 void SAL_CALL VCLXTabPageModel::setEnabled( ::sal_Bool _enabled ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TabControl* pTabControl = (TabControl*)GetWindow();
-    if ( pTabControl )
-        pTabControl->EnablePage(0, true);
+    //TabControl* pTabControl = (TabControl*)GetWindow();
+    //if ( pTabControl )
+    //  pTabControl->EnablePage(0, true);
 }
 ::rtl::OUString SAL_CALL VCLXTabPageModel::getTitle() throw (::com::sun::star::uno::RuntimeException)
 {
-    TabControl* pTabControl = (TabControl*)GetWindow();
-    if ( pTabControl )
-        return pTabControl->GetPageText(0);
-    else
+    //TabControl* pTabControl = (TabControl*)GetWindow();
+    //if ( pTabControl )
+    //  return pTabControl->GetPageText(0);
+    //else
         return ::rtl::OUString::createFromAscii("");
 }
 void SAL_CALL VCLXTabPageModel::setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TabControl* pTabControl = (TabControl*)GetWindow();
-    if ( pTabControl )
-        pTabControl->SetPageText(0, _title);
+    //TabControl* pTabControl = (TabControl*)GetWindow();
+    //if ( pTabControl )
+    //  pTabControl->SetPageText(0, _title);
 
 }
 ::rtl::OUString SAL_CALL VCLXTabPageModel::getImageURL() throw (::com::sun::star::uno::RuntimeException)
@@ -153,4 +134,19 @@ void SAL_CALL VCLXTabPageModel::setImageURL( const ::rtl::OUString& /*_imageurl*
 void SAL_CALL VCLXTabPageModel::setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
 {
     (void)_tooltip;
+}
+::cppu::IPropertyArrayHelper& VCLXTabPageModel::getInfoHelper()
+{
+     static UnoPropertyArrayHelper* pHelper = NULL;
+     if ( !pHelper )
+     {
+        com::sun::star::uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+         pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+     return *pHelper;
+}
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > VCLXTabPageModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
 }

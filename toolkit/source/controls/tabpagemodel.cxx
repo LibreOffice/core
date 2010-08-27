@@ -38,6 +38,7 @@
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
+#include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <tools/list.hxx>
@@ -142,31 +143,14 @@ using namespace ::com::sun::star::util;
 //  ----------------------------------------------------
 //  class UnoControlTabPageModel
 //  ----------------------------------------------------
-UnoControlTabPageModel::UnoControlTabPageModel()
+UnoControlTabPageModel::UnoControlTabPageModel(Reference< XComponentContext >const & i_xCompContext) : m_xCompContext(i_xCompContext)
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
-}
-
-UnoControlTabPageModel::UnoControlTabPageModel(Reference< XComponentContext >const & xCompContext)
-{
-    (void)xCompContext;
-    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
-}
-
-Any UnoControlTabPageModel::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet( ControlModelContainer_IBase::queryInterface( rType ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
-}
-
-//// XTypeProvider
-IMPL_IMPLEMENTATION_ID( UnoControlTabPageModel )
-Sequence< Type > UnoControlTabPageModel::getTypes() throw(RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        ControlModelContainerBase::getTypes(),
-        UnoControlModel::getTypes()
-    );
+    ImplRegisterProperty( BASEPROPERTY_TITLE );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
 }
 
 ::rtl::OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException)
@@ -190,8 +174,7 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return aAny;
 }
 
-::cppu::IPropertyArrayHelper& UnoControlTabPageModel
-::getInfoHelper()
+::cppu::IPropertyArrayHelper& UnoControlTabPageModel::getInfoHelper()
 {
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
@@ -207,15 +190,68 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySet
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
+////----- XInitialization -------------------------------------------------------------------
+void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
+{
+    sal_Int16 nPageId;
+    if ( rArguments.getLength() == 1 )
+    {
+         if ( !( rArguments[ 0 ] >>= nPageId ))
+             throw lang::IllegalArgumentException();
+        m_nTabPageId = nPageId;
+    }
+    else if ( rArguments.getLength() == 2 )
+    {
+        if ( !( rArguments[ 0 ] >>= nPageId ))
+             throw lang::IllegalArgumentException();
+        m_nTabPageId = nPageId;
+        ::rtl::OUString sURL;
+        if ( !( rArguments[ 1 ] >>= sURL ))
+            throw lang::IllegalArgumentException();
+        Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create(m_xCompContext,sURL);
+        if ( xDialogModel.is() )
+        {
+            Sequence< ::rtl::OUString> aNames = xDialogModel->getElementNames();
+            const ::rtl::OUString* pIter = aNames.getConstArray();
+            const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                try
+                {
+                    Any aElement(xDialogModel->getByName(*pIter));
+                    xDialogModel->removeByName(*pIter);
+                    insertByName(*pIter,aElement);
+                }
+                catch(const Exception& ex)
+                {
+                    (void)ex;
+                }
+            }
+            Reference<XPropertySet> xDialogProp(xDialogModel,UNO_QUERY);
+            if ( xDialogProp.is() )
+            {
+                static const ::rtl::OUString s_sResourceResolver(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"));
+                Reference<XPropertySet> xThis(*this,UNO_QUERY);
+                xThis->setPropertyValue(s_sResourceResolver,xDialogProp->getPropertyValue(s_sResourceResolver));
+                xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)));
+                xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL)));
+                xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_HELPTEXT),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_HELPTEXT)));
+                xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)));
 
+            }
+        }
+    }
+    else
+        m_nTabPageId = -1;
+}
 //===== Service ===============================================================
 Reference< XInterface > SAL_CALL UnoControlTabPageModel_CreateInstance( const Reference< XMultiServiceFactory >&  xServiceFactory)
 {
     Reference < ::com::sun::star::beans::XPropertySet > xPropertySet (xServiceFactory, UNO_QUERY);
     Any any = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii("DefaultContext"));
     Reference < XComponentContext > xCompCtx;
-    any <<= xCompCtx;
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlTabPageModel> );
+    any >>= xCompCtx;
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlTabPageModel>(xCompCtx) );
     //return Reference < XInterface > ( (::cppu::OWeakObject* ) new UnoControlTabPageModel(xCompCtx));
 }
 
@@ -247,23 +283,8 @@ UnoControlTabPage::~UnoControlTabPage()
 
 ::rtl::OUString UnoControlTabPage::GetComponentServiceName()
 {
-        return ::rtl::OUString::createFromAscii( "TabPageModel" );
+    return ::rtl::OUString::createFromAscii( "TabPageModel" );
 }
-
-// XInterface
-Any UnoControlTabPage::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::tab::XTabPage*, this ) );
-    if ( !aRet.hasValue() )
-        aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XWindowListener*, this ) );
-    return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
-}
-//lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoControlTabPage)
-getCppuType( ( uno::Reference< awt::tab::XTabPage>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XWindowListener>* ) NULL ),
-    ControlContainerBase::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 void UnoControlTabPage::dispose() throw(RuntimeException)
 {
@@ -274,9 +295,7 @@ void UnoControlTabPage::dispose() throw(RuntimeException)
     ControlContainerBase::dispose();
 }
 
-void SAL_CALL UnoControlTabPage::disposing(
-    const EventObject& Source )
-throw(RuntimeException)
+void SAL_CALL UnoControlTabPage::disposing(    const EventObject& Source )throw(RuntimeException)
 {
      ControlContainerBase::disposing( Source );
 }
@@ -284,6 +303,7 @@ throw(RuntimeException)
 void UnoControlTabPage::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ImplUpdateResourceResolver();
 
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 

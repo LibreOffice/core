@@ -93,27 +93,21 @@
 class UnoControlTabPageModel :  public ControlModelContainerBase
                                 //public TabPageModel
 {
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xCompContext;
 protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 public:
-    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCompContext); ;
-    UnoControlTabPageModel();
+    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_xCompContext);
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException){ return UnoControlModel::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    // XInitialization
+    virtual void SAL_CALL initialize (const com::sun::star::uno::Sequence<com::sun::star::uno::Any>& rArguments)
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageModel, ControlModelContainerBase, szServiceName_UnoControlTabPageModel )
@@ -123,10 +117,11 @@ public:
 //  ----------------------------------------------------
 //  class UnoTabPageControl
 //  ----------------------------------------------------
-
-class UnoControlTabPage : public ControlContainerBase,
-                        public ::com::sun::star::awt::tab::XTabPage,
-                        public ::com::sun::star::awt::XWindowListener
+typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
+                                            ,   ::com::sun::star::awt::tab::XTabPage
+                                            ,   ::com::sun::star::awt::XWindowListener
+                                            >   UnoControlTabPage_Base;
+class UnoControlTabPage : public UnoControlTabPage_Base
 {
 private:
     bool            m_bWindowListener;
@@ -135,11 +130,6 @@ public:
     UnoControlTabPage();
     ~UnoControlTabPage();
     ::rtl::OUString             GetComponentServiceName();
-
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -150,11 +140,6 @@ public:
     virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlTabPage, szServiceName_UnoControlTabPage)
 };

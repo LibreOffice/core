@@ -36,27 +36,21 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include "toolkit/awt/vclxwindow.hxx"
+#include <toolkit/controls/unocontrolmodel.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include "forward.hxx"
-
+#include <cppuhelper/implbase1.hxx>
 //  ----------------------------------------------------
-class VCLXTabPageModel : public ::com::sun::star::awt::tab::XTabPage,
-                         public ::com::sun::star::awt::tab::XTabPageModel,
-                         public VCLXWindow
+typedef ::cppu::AggImplInheritanceHelper1 <    UnoControlModel,
+                                            ::com::sun::star::awt::tab::XTabPageModel
+                                             > VCLXTabPageModel_Base;
+class VCLXTabPageModel : public VCLXTabPageModel_Base
 {
 public:
     VCLXTabPageModel();
+    VCLXTabPageModel( const VCLXTabPageModel& rModel ) : VCLXTabPageModel_Base( rModel ) {;}
     ~VCLXTabPageModel();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
@@ -64,9 +58,11 @@ public:
     // ::com::sun::star::awt::XDevice,
     ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+    // virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+    UnoControlModel*    Clone() const { return new VCLXTabPageModel( *this ); }
 
+    // ::com::sun::star::beans::XMultiPropertySet
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -80,5 +76,7 @@ public:
     virtual void SAL_CALL setImageURL( const ::rtl::OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTooltip() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException);
+protected:
+    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 };
 #endif // _TOOLKIT_AWT_VCLXTABPAGEMODEL_HXX_

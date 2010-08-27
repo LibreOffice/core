@@ -51,7 +51,8 @@
 //  class ControlModelContainerBase
 //  ----------------------------------------------------
 typedef UnoControlModel     ControlModel_Base;
-typedef ::cppu::ImplHelper8 <   ::com::sun::star::lang::XMultiServiceFactory
+typedef ::cppu::AggImplInheritanceHelper8   <   ControlModel_Base
+                            ,   ::com::sun::star::lang::XMultiServiceFactory
                             ,   ::com::sun::star::container::XContainer
                             ,   ::com::sun::star::container::XNameContainer
                             ,   ::com::sun::star::awt::XTabControllerModel
@@ -62,7 +63,6 @@ typedef ::cppu::ImplHelper8 <   ::com::sun::star::lang::XMultiServiceFactory
                             >   ControlModelContainer_IBase;
 
 class ControlModelContainerBase :   public ControlModelContainer_IBase
-                                ,   public ControlModel_Base
 {
 public:
     // would like to make this typedef private, too, but the Forte 7 compiler does have
@@ -108,15 +108,6 @@ public:
                         ~ControlModelContainerBase();
 
     UnoControlModel*    Clone() const;
-
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::container::XContainer
     void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -221,11 +212,12 @@ class ResourceListener  :public ::com::sun::star::util::XModifyListener,
         bool                                                                                    m_bListening;
 };
 
-typedef ::cppu::ImplHelper2 < ::com::sun::star::container::XContainerListener
+typedef ::cppu::AggImplInheritanceHelper2   < UnoControlContainer
+                            ,   ::com::sun::star::container::XContainerListener
                             ,   ::com::sun::star::util::XChangesListener
                             >   ContainerControl_IBase;
 
-class ControlContainerBase : public UnoControlContainer, public ContainerControl_IBase
+class ControlContainerBase : public ContainerControl_IBase
 {
 protected:
     bool                                                                        mbSizeModified;
@@ -244,10 +236,6 @@ public:
     ~ControlContainerBase();
 
     DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, "toolkit.ControlContainerBase" )
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL acquire() throw() { OWeakAggObject::acquire(); }
-    void SAL_CALL release() throw() { OWeakAggObject::release(); }
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
@@ -258,10 +246,6 @@ public:
     void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // XChangesListener
     virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (::com::sun::star::uno::RuntimeException);

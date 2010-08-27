@@ -109,20 +109,6 @@ UnoControlDialogModel::~UnoControlDialogModel()
 {
 }
 
-Any UnoControlDialogModel::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet( ControlModelContainer_IBase::queryInterface( rType ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
-}
-// XTypeProvider
-IMPL_IMPLEMENTATION_ID( UnoControlDialogModel )
-Sequence< Type > UnoControlDialogModel::getTypes() throw(RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        ControlModelContainerBase::getTypes(),
-        UnoControlModel::getTypes()
-    );
-}
 
 ::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
 {

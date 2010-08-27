@@ -333,7 +333,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "window",             WINDOW_WINDOW },
     { "workwindow",         WINDOW_WORKWINDOW },
     { "tabpagecontainer",   WINDOW_CONTROL },
-    { "tabpagemodel",       WINDOW_TABCONTROL }
+    { "tabpagemodel",       WINDOW_TABPAGE }
 };
 
 extern "C"
@@ -867,18 +867,21 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
+                *ppNewComp = new VCLXTabPageContainer;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );
             break;
             case WINDOW_TABPAGE:
+                /*
                 if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
                         ::rtl::OUString::createFromAscii("tabpagemodel") ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );
-                    *ppNewComp = new VCLXTabPageModel;
+                    *ppNewComp = new VCLXTabPageContainer;
                 }
                 else
+                */
                 {
                     pNewWindow = new TabPage( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPage;
@@ -1014,7 +1017,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
                         ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
                 {
-                    pNewWindow = new Control( pParent, nWinBits );
+                    pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
                 }
             break;
