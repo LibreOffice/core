@@ -69,6 +69,7 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 
     if ( m_xDialog.is() )
     {
+        aRet = m_xDialog->execute();
         // try to center dialog on model window
         if( m_xModel.is() ) try
         {
@@ -82,7 +83,6 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
         catch( uno::Exception& )
         {
         }
-        aRet = m_xDialog->execute();
     }
     OSL_TRACE("ScVbaUserForm::Show() execute returned %d", aRet);
     if ( mbDispose )

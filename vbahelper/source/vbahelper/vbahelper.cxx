@@ -1004,81 +1004,25 @@ UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
 //---------------------------------------------
 double UserFormGeometryHelper::getLeft()
 {
-    if ( mbDialog )
-    {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
-        {
-            // get the size with decoration
-            Rectangle aResult = pWindow->GetWindowExtentsRelative( NULL );
-            return aResult.getX();
-        }
-    }
-
     return mxWindow->getPosSize().X;
 }
 
 //---------------------------------------------
 void UserFormGeometryHelper::setLeft( double nLeft )
 {
-    sal_Int64 nNewLeft = nLeft;
-    if ( mbDialog )
-    {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
-        {
-            // set the size with decoration
-            Rectangle aRDecor = pWindow->GetWindowExtentsRelative( NULL );
-            if ( !aRDecor.IsEmpty() )
-            {
-                sal_Int64 nDecor = aRDecor.getX();
-                sal_Int64 nUnDecor = mxWindow->getPosSize().X;
-                nNewLeft = nLeft + nUnDecor - nDecor;
-            }
-        }
-    }
-
-    mxWindow->setPosSize( nNewLeft, 0, 0, 0, awt::PosSize::X );
+    mxWindow->setPosSize( nLeft, 0, 0, 0, awt::PosSize::X );
 }
 
 //---------------------------------------------
 double UserFormGeometryHelper::getTop()
 {
-    if ( mbDialog )
-    {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
-        {
-            // get the size with decoration
-            Rectangle aResult = pWindow->GetWindowExtentsRelative( NULL );
-            return aResult.getY();
-        }
-    }
-
     return mxWindow->getPosSize().Y;
 }
 
 //---------------------------------------------
 void UserFormGeometryHelper::setTop( double nTop )
 {
-    sal_Int64 nNewTop = nTop;
-    if ( mbDialog )
-    {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
-        {
-            // set the size with decoration
-            Rectangle aRDecor = pWindow->GetWindowExtentsRelative( NULL );
-            if ( !aRDecor.IsEmpty() )
-            {
-                sal_Int64 nDecor = aRDecor.getY();
-                sal_Int64 nUnDecor = mxWindow->getPosSize().Y;
-                nNewTop = nTop + nUnDecor - nDecor;
-            }
-        }
-    }
-
-    mxWindow->setPosSize( 0, nNewTop, 0, 0, awt::PosSize::Y );
+    mxWindow->setPosSize( 0, nTop, 0, 0, awt::PosSize::Y );
 }
 
 //---------------------------------------------
