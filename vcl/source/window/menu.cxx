@@ -965,7 +965,7 @@ void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
     mpSalMenu       = NULL;
-    nMenuFlags      = MENU_FLAG_SHOWCHECKIMAGES;
+    nMenuFlags      = 0;
     nDefaultItem    = 0;
     //bIsMenuBar      = FALSE;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
@@ -2363,6 +2363,10 @@ Size Menu::ImplCalcSize( Window* pWin )
     if( nMax > nMinMenuItemHeight )
         nMinMenuItemHeight = nMax;
 
+    // When no native rendering of the checkbox & no image in the menu, we
+    // have to add some extra space even in the MENU_FLAG_SHOWCHECKIMAGES case
+    bool bSpaceForCheckbox = ( nMax == 0 );
+
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
     {
@@ -2372,6 +2376,9 @@ Size Menu::ImplCalcSize( Window* pWin )
             MenuItemData* pData = pItemList->GetDataFromPos( --i );
             if ( ImplIsVisible( i ) && (( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE )))
             {
+                // we have an icon, don't add the extra space
+                bSpaceForCheckbox = false;
+
                 Size aImgSz = pData->aImage.GetSizePixel();
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
                     aMaxImgSz.Height() = aImgSz.Height();
@@ -2418,7 +2425,7 @@ Size Menu::ImplCalcSize( Window* pWin )
             if ( !bIsMenuBar && pData->HasCheck() )
             {
                 nCheckWidth = nMaxCheckWidth;
-                if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
+                if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
                 {
                     // checks / images take the same place
                     if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
@@ -2482,7 +2489,7 @@ Size Menu::ImplCalcSize( Window* pWin )
     {
         USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
-        if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
+        if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
         {
             long nImgOrChkWidth = 0;
             nImagePos = nCheckPos;
