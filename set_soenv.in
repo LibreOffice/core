@@ -986,7 +986,7 @@ $SOURCE_ROOT_DIR      = join("/", @splitlist);
 
 # default TARFILE_LOCATION
 if ('@TARFILE_LOCATION@' eq "DEFAULT")
-{	$TARFILE_LOCATION="$SOURCE_ROOT_DIR/ext_sources";
+{	$TARFILE_LOCATION="$SOURCE_ROOT_DIR/src";
 }
 
 #
