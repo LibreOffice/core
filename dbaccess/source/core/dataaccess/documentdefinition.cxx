@@ -1569,16 +1569,7 @@ sal_Bool ODocumentDefinition::saveAs()
                 Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
                 if ( xNC.is() )
                 {
-                    if ( m_pImpl->m_aProps.aTitle == pDocuSave->getName() )
-                    {
-                        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-                        if ( xPersist.is() )
-                        {
-                            xPersist->storeOwn();
-                            notifyDataSourceModified();
-                        }
-                    }
-                    else
+                    if ( m_pImpl->m_aProps.aTitle != pDocuSave->getName() )
                     {
                         try
                         {
@@ -1617,6 +1608,12 @@ sal_Bool ODocumentDefinition::saveAs()
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
+                    }
+                    Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+                    if ( xPersist.is() )
+                    {
+                        xPersist->storeOwn();
+                        notifyDataSourceModified();
                     }
                 }
             }
