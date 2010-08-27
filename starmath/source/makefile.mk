@@ -45,6 +45,7 @@ SMDLL=TRUE
 SRS2NAME =smres
 SRC2FILES = smres.src   \
             symbol.src	\
+            toolbox.src \
             commands.src
 
 SLO1FILES =  \
