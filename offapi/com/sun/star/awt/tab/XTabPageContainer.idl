@@ -29,7 +29,6 @@
 
 #include <com/sun/star/awt/tab/XTabPageContainerListener.idl>
 #include <com/sun/star/awt/tab/XTabPage.idl>
-#include <com/sun/star/awt/XControlContainer.idl>
 //=============================================================================
 
 module com {  module sun {  module star {  module awt { module tab {
@@ -42,7 +41,7 @@ module com {  module sun {  module star {  module awt { module tab {
 
     @since OOo 3.3.0
  */
-interface XTabPageContainer: XControlContainer
+interface XTabPageContainer
 {
     /** Returns the number of tab pages.
         @returns

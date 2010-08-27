@@ -24,33 +24,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_tab_UnoControlTabPageModel_idl__
-#define __com_sun_star_awt_tab_UnoControlTabPageModel_idl__
+#ifndef __com_sun_star_awt_UnoControlDialogModelProvider_idl__
+#define __com_sun_star_awt_UnoControlDialogModelProvider_idl__
 
-#include <com/sun/star/awt/tab/XTabPageModel.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt { module tab {
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 //=============================================================================
 
-/** specifies the standard model of a XTabPageModel.
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies a service to load a dialog model and allows to access the control models inside
+
     @since OOo 3.3.0
  */
-service UnoControlTabPageModel : XTabPageModel
+service UnoControlDialogModelProvider : com::sun::star::container::XNameContainer
 {
-    /** Creates a new XTabPageModel with a given ID.
+    /** Creates a new dialog model
     */
-    create([in] short tabPageID);
-
-    /** Creates a new XTabPageModel with a given ID and a url which is used to load teh tab page model.
-    */
-    load([in] short tabPageID,[in] string url);
+    create([in] string URL)raises ( com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================
 
-}; }; }; }; };
+}; }; }; };
 
 #endif

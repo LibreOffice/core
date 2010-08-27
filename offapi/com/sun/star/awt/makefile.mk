@@ -161,6 +161,7 @@ IDLFILES=\
     UnoControlDialog.idl\
     UnoControlDialogElement.idl\
     UnoControlDialogModel.idl\
+    UnoControlDialogModelProvider.idl\
     UnoControlEdit.idl\
     UnoControlEditModel.idl\
     UnoControlFileControl.idl\
