@@ -48,15 +48,24 @@ public:
     void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
     void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
     void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
+
+// needed for RemoteCommand and Profiling
+    void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nMethod, nNr );}
+    void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nMethod, bBool );}
+
 // MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );}
+    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );} // also used outside MacroRecorder
     void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
     void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
 //  new
     void GenReturn( USHORT nRet, rtl::OString aUId, String aString );
-    void GenReturn( USHORT nRet, rtl::OString aUId, SbxValue &aValue );
     void GenReturn( USHORT nRet, rtl::OString aUId, comm_ULONG nNr, String aString, BOOL bBool );
+
+    void GenReturn( USHORT nRet, USHORT nMethod, SbxValue &aValue );
+// and Profiling
+    void GenReturn( USHORT nRet, USHORT nMethod, String aString );
+
 // MacroRecorder
     void GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString );
     void GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, BOOL bBool );

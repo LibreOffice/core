@@ -107,20 +107,17 @@ IMPL_LINK( MacroRecorder, HookRefreshHdl, void*, EMPTYARG )
 
 void MacroRecorder::LogVCL( rtl::OString aParentID, USHORT nVCLWindowType, rtl::OString aID, String aMethod, USHORT nParam )
 {
-    // FIXME: HELPID
-    ::comphelper::UiEventsLogger::logVcl( rtl::OStringToOUString( aParentID, RTL_TEXTENCODING_UTF8 ), nVCLWindowType, rtl::OStringToOUString( aID, RTL_TEXTENCODING_UTF8 ), aMethod, nParam );
+    ::comphelper::UiEventsLogger::logVcl( Id2Str( aParentID ), nVCLWindowType, Id2Str( aID ), aMethod, nParam );
 }
 
 void MacroRecorder::LogVCL( rtl::OString aParentID, USHORT nVCLWindowType, rtl::OString aID, String aMethod )
 {
-    // FIXME: HELPID
-    ::comphelper::UiEventsLogger::logVcl( rtl::OStringToOUString( aParentID, RTL_TEXTENCODING_UTF8 ), nVCLWindowType, rtl::OStringToOUString( aID, RTL_TEXTENCODING_UTF8 ), aMethod );
+    ::comphelper::UiEventsLogger::logVcl( Id2Str( aParentID ), nVCLWindowType, Id2Str( aID ), aMethod );
 }
 
 Window* MacroRecorder::GetParentWithID( Window* pThis )
 {
     Window *pOverlap = pThis->GetWindow( WINDOW_OVERLAP );
-    // FIXME: HELPID
     while ( pOverlap != pThis && !pThis->GetUniqueOrHelpId().getLength() && pThis->GET_REAL_PARENT() )
         pThis = pThis->GET_REAL_PARENT();
     return pThis;
@@ -128,7 +125,6 @@ Window* MacroRecorder::GetParentWithID( Window* pThis )
 
 rtl::OString MacroRecorder::GetParentID( Window* pThis )
 {
-    // FIXME: HELPID
     if ( pThis->GetParent() )
         return pThis->GetParent()->GetUniqueOrHelpId();
     else
@@ -197,15 +193,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_WINDOW_ACTIVATE:
                         if ( m_bRecord )
                         {
-                            // FIXME: HELPID
-                            #if 0
-                            StatementList::pRet->GenReturn( RET_MacroRecorder, rtl::OString(), (comm_USHORT)(M_SetPage|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pWin->GetUniqueOrHelpId().GetNum()) ); //GetNum() ULONG != comm_ULONG on 64bit
-                            #endif
+                            StatementList::pRet->GenReturn( RET_MacroRecorder, rtl::OString(), (comm_USHORT)(M_SetPage|M_RET_NUM_CONTROL), Id2Str( pWin->GetUniqueOrHelpId() ) );
                             bSendData = TRUE;
                         }
                         if ( m_bLog )
                         {
-                            // FIXME: HELPID
                             LogVCL( rtl::OString(), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("SetPage") );
                         }
                         break;
@@ -221,15 +213,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             {
                                 if ( m_bRecord )
                                 {
-                                    // FIXME: HELPID
-                                    #if 0
                                     StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_USHORT)M_Check );
-                                    #endif
                                     bSendData = TRUE;
                                 }
                                 if ( m_bLog )
                                 {
-                                    // FIXME: HELPID
                                     LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("Check") );
                                 }
                             }
@@ -255,15 +243,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             }
                             if ( m_bRecord )
                             {
-                                // FIXME: HELPID
-                                #if 0
-                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
-                                #endif
+                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), nMethod );
                                 bSendData = TRUE;
                             }
                             if ( m_bLog )
                             {
-                                // FIXME: HELPID
                                 LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), aMethod );
                             }
                         }
@@ -293,15 +277,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_LISTBOX_SELECT:
                         if ( m_bRecord )
                         {
-                            // FIXME: HELPID
-                            #if 0
                             StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_USHORT)M_Select, comm_ULONG( ((ListBox*)pWin)->GetSelectEntryPos() +1 ) );
-                            #endif
                             bSendData = TRUE;
                         }
                         if ( m_bLog )
                         {
-                            // FIXME: HELPID
                             LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("Select"), ((ListBox*)pWin)->GetSelectEntryPos() );
                         }
                         break;
@@ -332,16 +312,12 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                     Sound::Beep();
                                 else
                                 {
-                                    // FIXME: HELPID
-                                    #if 0
                                     StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_USHORT)M_Select, (comm_ULONG) nPos+1 );
-                                    #endif
                                     bSendData = TRUE;
                                 }
                             }
                             if ( m_bLog )
                             {
-                                // FIXME: HELPID
                                 LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("Select"), nPos );
                             }
                         }
@@ -358,7 +334,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_BUTTON_CLICK:
                         Window* pParent = pWin->GetParent();
                         BOOL bDone = FALSE;
-                        // FIXME: HELPID
                         if ( pParent->IsDialog() && !pWin->GetUniqueOrHelpId().getLength() )
                         {
                             switch ( pParent->GetType() )
@@ -398,22 +373,17 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                         }
                                         if ( m_bRecord )
                                         {
-                                            // FIXME: HELPID
-                                            #if 0
                                             if ( nMethod != M_Click )
-                                                StatementList::pRet->GenReturn( RET_MacroRecorder, rtl::OString( 0 ), nMethod );
+                                                StatementList::pRet->GenReturn( RET_MacroRecorder, UID_ACTIVE, nMethod );
                                             else
-                                                StatementList::pRet->GenReturn( RET_MacroRecorder, rtl::OString( 0 ), nMethod, (comm_ULONG)nCurrentButtonId );
-                                            #endif
+                                                StatementList::pRet->GenReturn( RET_MacroRecorder, UID_ACTIVE, nMethod, (comm_ULONG)nCurrentButtonId );
                                             bSendData = TRUE;
                                         }
                                         if ( m_bLog )
                                         {
                                             if ( nMethod != M_Click )
-                                                // FIXME: HELPID
                                                 LogVCL( rtl::OString(), pWin->GetType(), pWin->GetUniqueOrHelpId(), aMethod );
                                             else
-                                                // FIXME: HELPID
                                                 LogVCL( rtl::OString(), pWin->GetType(), pWin->GetUniqueOrHelpId(), aMethod, nCurrentButtonId );
                                             bDone = TRUE;
                                         }
@@ -433,15 +403,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                         }
                                         if ( m_bRecord )
                                         {
-                                            // FIXME: HELPID
-                                            #if 0
-                                            StatementList::pRet->GenReturn( RET_MacroRecorder, pParent->GetSmartUniqueOrHelpId(), nMethod );
-                                            #endif
+                                            StatementList::pRet->GenReturn( RET_MacroRecorder, pParent->GetUniqueOrHelpId(), nMethod );
                                             bSendData = TRUE;
                                         }
                                         if ( m_bLog )
                                         {
-                                            // FIXME: HELPID
                                             LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), aMethod );
                                             bDone = TRUE;
                                         }
@@ -451,20 +417,15 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         }
                         if ( m_bRecord )
                         {
-                            // FIXME: HELPID
                             if ( !bSendData && pWin->GetUniqueOrHelpId().getLength() )
                             {
-                                // FIXME: HELPID
-                                #if 0
-                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Click );
-                                #endif
+                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_USHORT)M_Click );
                                 bSendData = TRUE;
                             }
                         }
                         if ( m_bLog )
                         {
                             if ( !bDone )
-                                // FIXME: HELPID
                                 LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("Click") );
                         }
                 }
@@ -519,15 +480,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             }
                             if ( m_bRecord )
                             {
-                                // FIXME: HELPID
-                                #if 0
                                 StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), nMethod );
-                                #endif
                                 bSendData = TRUE;
                             }
                             if ( m_bLog )
                             {
-                                // FIXME: HELPID
                                 LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), aMethod );
                             }
                         }
@@ -545,15 +502,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_BUTTON_CLICK:
                         if ( m_bRecord )
                         {
-                            // FIXME: HELPID
-                            #if 0
                             StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_USHORT)M_Click );
-                            #endif
                             bSendData = TRUE;
                         }
                         if ( m_bLog )
                         {
-                            // FIXME: HELPID
                             LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("Click") );
                         }
                         break;
@@ -587,15 +540,12 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 // compare to 1 for floating ToolBoxes
                                 if ( m_bRecord )
                                 {
-                                    // FIXME: HELPID
-                                    #if 0
-                                    if ( !pWin->GetUniqueOrHelpId().getLength() || pWin->GetUniqueOrHelpId().Matches( 1 ) )
+                                    if ( !pWin->GetUniqueOrHelpId().getLength() /* || pWin->GetUniqueOrHelpId().Matches( 1 ) */ )
                                         // generate direct Button access
-                                        StatementList::pRet->GenReturn( RET_MacroRecorder, rtl::OString( pTB->GetItemCommand( pTB->GetCurItemId() ) ), (comm_USHORT)(M_Click) );
+                                        StatementList::pRet->GenReturn( RET_MacroRecorder, Str2Id( pTB->GetItemCommand( pTB->GetCurItemId() ) ), (comm_USHORT)(M_Click) );
                                     else
                                         // access via Toolbox
-                                        StatementList::pRet->GenReturn( RET_MacroRecorder, pTB->GetUniqueOrHelpId(), (comm_USHORT)(M_Click|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pTB->GetHelpId( pTB->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
-                                    #endif
+                                        StatementList::pRet->GenReturn( RET_MacroRecorder, pTB->GetUniqueOrHelpId(), (comm_USHORT)(M_Click|M_RET_NUM_CONTROL), Id2Str( pTB->GetHelpId( pTB->GetCurItemId() ) ) );
                                     bSendData = TRUE;
                                 }
 /* not needed                               if ( m_bLog )
@@ -624,7 +574,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 //                                  }
 //                                    if ( m_bLog )
 //                                    {
-//                                        LogVCL( pActionParent->GetSmartUniqueOrHelpId(), pWin->GetType(), rtl::OString( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), CUniString("TearOff") );
+//                                        LogVCL( pActionParent->GetSmartUniqueOrHelpId(), pWin->GetType(), pActionParent->GetHelpId( pActionParent->GetCurItemId() ), CUniString("TearOff") );
 //                                    }
 //                                }
 //                                pActionParent = NULL;
@@ -726,7 +676,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 Window *pIdWin = GetParentWithID( pWin );
                                 if ( pIdWin != pWin )
                                    bKeyFollowFocus = TRUE;
-                               // FIXME: HELPID
                                 aKeyUniqueID = pIdWin->GetUniqueOrHelpId();
                                 if ( m_bLog )
                                 {
@@ -1075,15 +1024,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 {
                     if ( m_bRecord )
                     {
-                        // FIXME: HELPID
-                        #if 0
                         StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), M_SetText, aEditModifyString );
-                        #endif
                         bSendData = TRUE;
                     }
                     if ( m_bLog )
                     {
-                        // FIXME: HELPID
                         LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetUniqueOrHelpId(), CUniString("Modify") );
                     }
                     pEditModify = NULL;

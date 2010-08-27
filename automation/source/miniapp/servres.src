@@ -54,6 +54,7 @@ ModalDialog GROSSER_TEST_DLG
     };
     OKButton 1
     {
+        HelpID = "hid1" ;
         Pos = MAP_APPFONT ( 132 , 92 ) ;
         Size = MAP_APPFONT ( 64 , 12 ) ;
         TabStop = TRUE ;
@@ -175,6 +176,7 @@ Menu MENU_CLIENT
         MenuItem
         {
             Identifier = IDM_FILE ;
+            HelpID = IDM_FILE_HELP ;
             Text = "~File" ;
             SubMenu = Menu
             {
@@ -183,6 +185,7 @@ Menu MENU_CLIENT
                     MenuItem
                     {
                         Identifier = IDM_FILE_OPEN_TEST ;
+                        HelpID = IDM_FILE_OPEN_TEST_HELP ;
                         Text = "~Open Test Window" ;
                     };
                     MenuItem
@@ -193,6 +196,7 @@ Menu MENU_CLIENT
                     MenuItem
                     {
                         Identifier = IDM_FILE_EXIT ;
+                        HelpID = IDM_FILE_EXIT_HELP ;
                         Text = "~Beenden" ;
                         AccelKey = KeyCode
                         {

@@ -293,9 +293,9 @@ public:
     static BOOL bDying;
     static BOOL bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
     BOOL bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static rtl::OString aSubMenuId1;            // Untermenüs bei PopupMenus
-    static rtl::OString aSubMenuId2;            // erstmal 2-Stufig
-    static rtl::OString aSubMenuId3;            // and now even 3 levels #i31512#
+    static USHORT aSubMenuId1;          // Untermenüs bei PopupMenus
+    static USHORT aSubMenuId2;          // erstmal 2-Stufig
+    static USHORT aSubMenuId3;          // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
     static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
 
@@ -349,7 +349,6 @@ class StatementCommand : public StatementList   // Befehl ausführen (wintree, re
     friend class ImplRemoteControl;
 protected:
     USHORT nMethodId;
-    rtl::OString aSmartMethodId;
     USHORT nParams;
     comm_USHORT nNr1,nNr2,nNr3,nNr4;
     comm_ULONG nLNr1;

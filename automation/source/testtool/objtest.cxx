@@ -3469,11 +3469,9 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 //                                              ULONG nHintUserData = pImpl->pNextReturn->GetParent()->GetUserData();
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
 //                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
-                        // FIXME: HELPID
-                        #if 0
-                        if ( aNextReturnId.Matches( aUId ) )
+                        if ( aNextReturnId.equals( aUId ) )
                         {
-                            if( nParams & PARAM_ULONG_1 )
+                            if( nParams & PARAM_ULONG_1 )   // FIXME this is to allow negative numbers, hoping that no large numbers are interpreted wrong. should have new PARAM_LONG_1 instead
                             {
                                 if ( nLNr1 > 0x7fffffff )
                                     pImpl->pNextReturn->PutLong( long(nLNr1 - 0xffffffff) -1 );
@@ -3483,7 +3481,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
                             if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
                             if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
-                            if( nParams & PARAM_SBXVALUE_1 )
+                            if( nParams & PARAM_SBXVALUE_1 )    // FIXME: allow generic datatype
                             {
                                 SbxValues aValues( SbxDATE );
                                 xValue1->Get( aValues );
@@ -3494,7 +3492,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             ADD_ERROR(SbxERR_BAD_ACTION, GEN_RES_STR0(S_RETURNED_VALUE_ID_MISSMATCH) )
                         }
-                        #endif
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(nHintUserData);
                         pImpl->pNextReturn = NULL;
                     }

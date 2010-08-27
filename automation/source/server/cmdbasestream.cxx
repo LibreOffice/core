@@ -102,6 +102,43 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG 
     Write(bBool);
 }
 
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_ULONG nNr )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write(nMethod);
+    Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
+    Write(nNr);
+}
+
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_String *pString )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write(nMethod);
+    Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
+    Write(pString);
+}
+
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_BOOL bBool )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write(nMethod);
+    Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
+    Write(bBool);
+}
+
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_USHORT nNr )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write(nMethod);
+    Write(comm_USHORT(PARAM_USHORT_1));         // Typ der folgenden Parameter
+    Write(nNr);
+}
+
+
 // MacroRecorder
 void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod )
 {

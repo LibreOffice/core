@@ -31,7 +31,7 @@
  *    This file is intended to supply the types and defines for Environment independent
  *    building of the packethandler
  *    Only adaption of this file should be necessary. Else it is a bug!
- *    Eather including apropriate files or defining the types when not available in the environment
+ *    Ether including apropriate files or defining the types when not available in the environment
  *
  ************************************************************************/
 
