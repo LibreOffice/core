@@ -318,44 +318,37 @@ inline void doubleToString(StringT ** pResult,
 
     if ( rtl::math::isNan( fValue ) )
     {
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-1.#NAN");
+        // #i112652# XMLSchema-2
+        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");
         if (pResultCapacity == 0)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
             nResultOffset = 0;
         }
+        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                       RTL_CONSTASCII_STRINGPARAM("NaN"));
 
-        if ( bSign )
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("-"));
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("1"));
-        T::appendChar(pResult, pResultCapacity, &nResultOffset, cDecSeparator);
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("#NAN"));
         return;
     }
 
     bool bHuge = fValue == HUGE_VAL; // g++ 3.0.1 requires it this way...
     if ( bHuge || rtl::math::isInf( fValue ) )
     {
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-1.#INF");
+        // #i112652# XMLSchema-2
+        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
         if (pResultCapacity == 0)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
             nResultOffset = 0;
         }
-
         if ( bSign )
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                            RTL_CONSTASCII_STRINGPARAM("-"));
         T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("1"));
-        T::appendChar(pResult, pResultCapacity, &nResultOffset, cDecSeparator);
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("#INF"));
+                       RTL_CONSTASCII_STRINGPARAM("INF"));
+
         return;
     }
 
@@ -736,7 +729,29 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             ++p0;
     }
     CharT const * p = p0;
+    bool bDone = false;
 
+    // #i112652# XMLSchema-2
+    if (3 >= (pEnd - p))
+    {
+        if ((CharT('N') == p[0]) && (CharT('a') == p[1])
+            && (CharT('N') == p[2]))
+        {
+            p += 3;
+            rtl::math::setNan( &fVal );
+            bDone = true;
+        }
+        else if ((CharT('I') == p[0]) && (CharT('N') == p[1])
+                 && (CharT('F') == p[2]))
+        {
+            p += 3;
+            fVal = HUGE_VAL;
+            eStatus = rtl_math_ConversionStatus_OutOfRange;
+            bDone = true;
+        }
+    }
+
+    if (!bDone) // do not recognize e.g. NaN1.23
     {
         // leading zeros and group separators may be safely ignored
         while (p != pEnd && (*p == CharT('0') || *p == cGroupSeparator))
