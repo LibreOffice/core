@@ -176,7 +176,11 @@ struct DebugData
         aDbgData.bOverwrite = TRUE;
         aDbgData.nTraceOut = DBG_OUT_NULL;
         aDbgData.nWarningOut = DBG_OUT_NULL;
+#ifdef UNX
+        aDbgData.nErrorOut = DBG_OUT_SHELL;
+#else
         aDbgData.nErrorOut = DBG_OUT_MSGBOX;
+#endif
         aDbgData.bMemInit = 0x77;
         aDbgData.bMemBound = 0x55;
         aDbgData.bMemFree = 0x33;
