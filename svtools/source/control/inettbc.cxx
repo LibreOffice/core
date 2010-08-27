@@ -162,7 +162,7 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const String& rText )
     : aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aBaseURL( pBoxP->aBaseURL )
-    , aText(  rText )
+    , aText( rText )
     , pBox( pBoxP )
     , bStop( FALSE )
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
@@ -681,6 +681,7 @@ void SvtMatchContext_Impl::run()
             aCurObj.SetURL( *aPickList.GetObject( nPos ) );
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
+
             if( eProt != INET_PROT_NOT_VALID && aCurObj.GetProtocol() != eProt )
                 continue;
 
@@ -705,7 +706,7 @@ void SvtMatchContext_Impl::run()
                     {
                         // try if text matches the scheme
                         String aScheme( INetURLObject::GetScheme( aCurObj.GetProtocol() ) );
-                        if ( aText.CompareTo( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
+                        if ( aText.CompareIgnoreCaseToAscii( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
                         {
                             if( bFull )
                                 aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -724,7 +725,7 @@ void SvtMatchContext_Impl::run()
                         aCurString.Erase( 0, aScheme.Len() );
                     }
 
-                    if( aText.CompareTo( aCurString, aText.Len() )== COMPARE_EQUAL )
+                    if( aText.CompareIgnoreCaseToAscii( aCurString, aText.Len() )== COMPARE_EQUAL )
                     {
                         if( bFull )
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
