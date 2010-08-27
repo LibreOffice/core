@@ -135,8 +135,8 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
         {
             rtl::OString aCmd(".uno:");
             aCmd += pSlot->GetUnoName();
-            return SfxStatusBarControl::CreateControl( nSlotId, nID, pStatusBar, pModule );
             pStatusBar->SetHelpId( nSlotId, aCmd );
+            return SfxStatusBarControl::CreateControl( nSlotId, nID, pStatusBar, pModule );
         }
     }
 
