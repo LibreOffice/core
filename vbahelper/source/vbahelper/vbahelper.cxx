@@ -1010,7 +1010,7 @@ double UserFormGeometryHelper::getLeft()
 //---------------------------------------------
 void UserFormGeometryHelper::setLeft( double nLeft )
 {
-    mxWindow->setPosSize( nLeft, 0, 0, 0, awt::PosSize::X );
+    mxWindow->setPosSize( nLeft, mxWindow->getPosSize().Y, 0, 0, awt::PosSize::POS );
 }
 
 //---------------------------------------------
@@ -1022,7 +1022,7 @@ double UserFormGeometryHelper::getTop()
 //---------------------------------------------
 void UserFormGeometryHelper::setTop( double nTop )
 {
-    mxWindow->setPosSize( 0, nTop, 0, 0, awt::PosSize::Y );
+    mxWindow->setPosSize( mxWindow->getPosSize().X, nTop, 0, 0, awt::PosSize::POS );
 }
 
 //---------------------------------------------
