@@ -1558,6 +1558,7 @@ void Desktop::Main()
     std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
     std::auto_ptr<SvtPathOptions> pPathOptions;
 
+    Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     sal_Bool bRestartRequested( sal_False );
     sal_Bool bUseSystemFileDialog(sal_True);
     int      nAcquireCount( 0 );
@@ -1761,7 +1762,6 @@ void Desktop::Main()
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
 
-        Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
         {
             ::comphelper::ComponentContext aContext( xSMgr );
             xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
@@ -1929,7 +1929,6 @@ void Desktop::Main()
         // call Application::Execute to process messages in vcl message loop
         RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
-        Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
         try
         {
             // The JavaContext contains an interaction handler which is used when
@@ -1937,9 +1936,10 @@ void Desktop::Main()
             com::sun::star::uno::ContextLayer layer2(
                 new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
-            ::comphelper::ComponentContext aContext( xSMgr );
-            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
-            if ( !xRestartManager.is() || !xRestartManager->isRestartRequested( sal_True ) )
+            // check whether the shutdown is caused by restart just before entering the Execute
+            bRestartRequested = bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
+            if ( !bRestartRequested )
             {
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoQuickstart() );
@@ -1957,12 +1957,10 @@ void Desktop::Main()
             OfficeIPCThread::SetDowning();
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
-
-        // check whether the shutdown is caused by restart
-        sal_Bool bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
-        if ( bRestartRequested )
-            SetRestartState();
     }
+
+    if ( bRestartRequested )
+        SetRestartState();
 
     if (xGlobalBroadcaster.is())
     {
