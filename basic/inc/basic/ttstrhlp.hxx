@@ -31,6 +31,8 @@
 
 #define CByteString( constAsciiStr ) ByteString( RTL_CONSTASCII_STRINGPARAM ( constAsciiStr ) )
 #define CUniString( constAsciiStr ) UniString( RTL_CONSTASCII_USTRINGPARAM ( constAsciiStr ) )
+#define Str2Id( Str ) rtl::OUStringToOString( Str, RTL_TEXTENCODING_ASCII_US )
+#define Id2Str( Id ) String( rtl::OStringToOUString( Id, RTL_TEXTENCODING_ASCII_US ) )
 
 #define StartKenn           CUniString("%")
 #define EndKenn             CUniString("%")
@@ -42,7 +44,7 @@
 #define TabKenn             ( StartKenn.AppendAscii("Tab") )
 #define MakeStringParam(Type,aText) ( Type.AppendAscii("=").Append( aText ).Append( EndKenn ) )
 #define MakeStringNumber(Type,nNumber)  MakeStringParam (Type, UniString::CreateFromInt32(nNumber))
-#define UIdString(aID) MakeStringParam(UIdKenn,aID.GetText())
+#define UIdString(aID) MakeStringParam(UIdKenn,String(rtl::OStringToOUString( aID, RTL_TEXTENCODING_ASCII_US )))
 #define MethodString(nNumber) MakeStringNumber(MethodKenn,nNumber)
 #define TypeString(nNumber) MakeStringNumber(TypeKenn,nNumber)
 #define SlotString(nNumber) MakeStringNumber(SlotKenn,nNumber)
