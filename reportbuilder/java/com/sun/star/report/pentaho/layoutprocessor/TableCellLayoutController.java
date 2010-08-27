@@ -81,7 +81,8 @@ public class TableCellLayoutController extends SectionLayoutController
             }
             else if ( "float".equals(valueType))
             {
-                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE, "1.#NAN");
+                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
+                    FormatValueUtility.VALUE, "NaN");
             }
         }
         catch (Exception e)
