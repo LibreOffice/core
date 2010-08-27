@@ -41,10 +41,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-
-#ifndef  _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HDL_
-#include <com/sun/star/task/XInteractionHandler.hdl>
-#endif
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -426,7 +423,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
             uno::Reference< XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
-                eInclude =  INCLUDE_FOLDERS_ONLY;
+                eInclude = INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -654,7 +651,7 @@ void SvtMatchContext_Impl::run()
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
                     if ( UCBContentHelper::IsFolder( aMainURL ) && aURLObject.hasFinalSlash() )
-                           Insert( aText, aMatch );
+                            Insert( aText, aMatch );
                     else
                         // otherwise the parent folder will be taken
                         aURLObject.removeSegment();
@@ -1314,7 +1311,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
                 return sal_False; // no such user
 #else
             pPasswd = getpwnam( OUStringToOString( OUString( aUserName ), RTL_TEXTENCODING_ASCII_US ).getStr() );
-             if( pPasswd )
+            if( pPasswd )
                 aParseTilde = String::CreateFromAscii( pPasswd->pw_dir );
             else
                 return sal_False; // no such user
