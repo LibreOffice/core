@@ -35,6 +35,8 @@ ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
 PRJINC=..$/..
 
+IMGLST_SRS=$(SRS)$/$(TARGET).srs
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -42,18 +44,24 @@ PRJINC=..$/..
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =      								\
-    $(SLO)$/SlsFontProvider.obj					\
-    $(SLO)$/SlsPageObject.obj					\
-    $(SLO)$/SlsPageObjectViewContact.obj		\
-    $(SLO)$/SlsPageObjectViewObjectContact.obj	\
-    $(SLO)$/SlsLayouter.obj						\
-    $(SLO)$/SlideSorterView.obj					\
-    $(SLO)$/SlsViewCacheContext.obj				\
-    $(SLO)$/SlsViewOverlay.obj
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
+    SlsResource.src
 
-EXCEPTIONSFILES=								\
-    $(SLO)$/SlsPageObjectViewObjectContact.obj
+SLOFILES =      							\
+    $(SLO)$/SlideSorterView.obj				\
+    $(SLO)$/SlsButtonBar.obj				\
+    $(SLO)$/SlsFontProvider.obj				\
+    $(SLO)$/SlsFramePainter.obj				\
+    $(SLO)$/SlsInsertAnimator.obj			\
+    $(SLO)$/SlsInsertionIndicatorOverlay.obj\
+    $(SLO)$/SlsLayeredDevice.obj			\
+    $(SLO)$/SlsLayouter.obj					\
+    $(SLO)$/SlsPageObjectLayouter.obj		\
+    $(SLO)$/SlsPageObjectPainter.obj		\
+    $(SLO)$/SlsTheme.obj					\
+    $(SLO)$/SlsToolTip.obj					\
+    $(SLO)$/SlsViewCacheContext.obj
 
 # --- Tagets -------------------------------------------------------
 
