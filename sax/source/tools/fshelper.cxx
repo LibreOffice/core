@@ -12,8 +12,9 @@ namespace sax_fastparser {
 FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream ) :
     mpSerializer(new FastSaxSerializer())
 {
-    Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    mxTokenHandler = Reference<xml::sax::XFastTokenHandler> ( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.FastTokenHandler") ) ), UNO_QUERY_THROW );
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
+    Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), UNO_SET_THROW );
+    mxTokenHandler.set( xFactory->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.FastTokenHandler") ), xContext ), UNO_QUERY_THROW );
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );
@@ -23,11 +24,7 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
 FastSerializerHelper::~FastSerializerHelper()
 {
     mpSerializer->endDocument();
-
-    if (mpSerializer) {
-        delete mpSerializer;
-        mpSerializer = NULL;
-    }
+    delete mpSerializer;
 }
 
 void FastSerializerHelper::startElement(const char* elementName, ...)
