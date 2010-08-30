@@ -7,3 +7,5 @@ IsOfficeRunning
 SetFeatureState
 SetNewFeatureState
 ShowOnlineUpdateDialog
+RegisterExtensions
+RemoveExtensions
