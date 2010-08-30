@@ -145,6 +145,7 @@ testcase i_us2_pres1
     DocumentImpress.UseMenu
     hMenuSelectNr (4)
     hMenuSelectNr (1)
+    call sSelectEmptyLayout
     sleep (1)
 
     kontext "Slides"

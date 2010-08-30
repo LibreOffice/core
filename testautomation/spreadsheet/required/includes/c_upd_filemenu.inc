@@ -238,6 +238,7 @@ testcase tFileOpenCSV
     Oeffnen.Click
     Kontext "TextImport"
     TextImport.ok
+    sleep (2)
     Printlog " - CSV import dialog is in function"
     Kontext "DocumentCalc"
     printlog " Close document"
