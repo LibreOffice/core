@@ -374,7 +374,8 @@ public class StylesWriter
         rootAttributes.addNamespaceDeclaration("xsd", OfficeNamespaces.XSD_NS);
         rootAttributes.addNamespaceDeclaration("xsi", OfficeNamespaces.XSI_NS);
         rootAttributes.addNamespaceDeclaration("grddl", OfficeNamespaces.GRDDL_NS);
-        rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version", "1.2");
+        rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version",
+                OfficeDocumentReportTarget.ODF_VERSION);
 
         this.xmlWriter.writeXmlDeclaration("UTF-8");
         this.xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS,
