@@ -51,7 +51,6 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/signaturestate.hxx>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

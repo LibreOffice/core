@@ -74,10 +74,7 @@ using namespace ::com::sun::star;
 #define FIXTODOUBLE( nFix )     ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )       ((long)floor(FIXTODOUBLE(nFix)+0.5))
 
-#if defined WIN
-#define TWAIN_LIBNAME           "TWAIN.DLL"
-#define TWAIN_FUNCNAME          "DSM_Entry"
-#elif defined WNT
+#if defined WNT
 #define TWAIN_LIBNAME           "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME          "DSM_Entry"
 #endif
@@ -109,7 +106,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     TW_IDENTITY                                 aSrcIdent;
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
-    NAMESPACE_VOS( OModule )*                   pMod;
+    vos:: OModule *                 pMod;
     ULONG                                       nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;
