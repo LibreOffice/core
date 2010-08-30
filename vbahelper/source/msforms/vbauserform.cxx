@@ -185,7 +185,9 @@ ScVbaUserForm::hasMethod( const ::rtl::OUString& /*aName*/ ) throw (uno::Runtime
 uno::Any SAL_CALL
 ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
+    // if the dialog already closed we should do nothing, but the VBA will call methods of the Controls objects
+    // thus we have to provide a dummy object in this case
+    uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY );
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl ) );
     if ( index.hasValue() )
         return uno::makeAny( xControls->Item( index, uno::Any() ) );

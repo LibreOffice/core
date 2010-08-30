@@ -813,6 +813,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetModifyPasswordEntered( sal_False );
                         xNewObj->SetReadOnly();
                     }
+                    else if ( rReq.GetSlot() == SID_EDITDOC && bForEdit && !xNewObj->IsReadOnlyMedium() )
+                    {
+                        // the filter might request setting of the document to readonly state
+                        // but in case of SID_EDITDOC it should not happen if the document
+                        // can be opened for editing
+                        xNewObj->SetReadOnlyUI( sal_False );
+                    }
 
                     if ( xNewObj->IsDocShared() )
                     {
@@ -1172,10 +1179,6 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
     DBG_CHKTHIS(SfxViewFrame, 0);
     SFX_APP();
 
-#ifdef WIN
-    pSfxApp->TestFreeResources_Impl();
-#endif
-
     pDispatcher->DoActivate_Impl( bUI, pOldFrame );
 
     // Wenn ich einen parent habe und dieser ist kein parent des alten
@@ -1240,9 +1243,6 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
             pFrame = pFrame->GetParentViewFrame();
         }
     }
-#ifdef WIN
-    pSfxApp->TestFreeResources_Impl();
-#endif
 }
 
 //------------------------------------------------------------------------
@@ -2144,6 +2144,8 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
         aTransformLoadArgs.remove( "Hidden" );
 
     ::rtl::OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "private:object" ) );
+    if ( !sURL.getLength() )
+        sURL = i_rDoc.GetFactory().GetFactoryURL();
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
     xLoader->loadComponentFromURL( sURL, ::rtl::OUString::createFromAscii( "_self" ), 0,

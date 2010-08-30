@@ -36,6 +36,7 @@
 
 #include "rtl/ustrbuf.hxx"
 #include "osl/diagnose.h"
+#include "comphelper/storagehelper.hxx"
 
 #include "../inc/urihelper.hxx"
 
@@ -85,7 +86,7 @@ void PackageUri::init() const
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString::createFromAscii( "/" );
+            m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
             return;
         }
 
@@ -100,7 +101,7 @@ void PackageUri::init() const
                 != sal_Unicode( '/' ) ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString::createFromAscii( "/" );
+            m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
             return;
         }
 
@@ -128,8 +129,8 @@ void PackageUri::init() const
             {
                 m_aParam +=
                     ( m_aParam.getLength()
-                      ? ::rtl::OUString::createFromAscii( "&purezip" )
-                      : ::rtl::OUString::createFromAscii( "?purezip" ) );
+                      ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&purezip" ) )
+                      : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?purezip" ) ) );
             }
 
             aPureUri = aPureUri.replaceAt( 0,
@@ -143,7 +144,7 @@ void PackageUri::init() const
                 // Only <scheme>:/// - Empty authority
 
                 // error, but remember that we did a init().
-                m_aPath = rtl::OUString::createFromAscii( "/" );
+                m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
                 return;
             }
             else if ( nEnd == ( aPureUri.getLength() - 1 ) )
@@ -154,7 +155,7 @@ void PackageUri::init() const
                     // Only <scheme>://// or <scheme>://<something>//
 
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
                     return;
                 }
 
@@ -175,7 +176,7 @@ void PackageUri::init() const
                     nStart, aPureUri.getLength() - nStart, aNormPackage );
                 m_aPackage
                     = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
-                m_aPath = rtl::OUString::createFromAscii( "/" );
+                m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
                 m_aUri = m_aUri.replaceAt( 0,
                                            ( nParam >= 0 )
                                            ? nParam
@@ -193,16 +194,19 @@ void PackageUri::init() const
             {
                 m_aPath = aPureUri.copy( nEnd + 1 );
 
-                // Empty path segments or encoded slashes?
-                if ( m_aPath.indexOf(
-                         rtl::OUString::createFromAscii( "//" ) ) != -1
-                  || m_aPath.indexOf(
-                      rtl::OUString::createFromAscii( "%2F" ) ) != -1
-                  || m_aPath.indexOf(
-                      rtl::OUString::createFromAscii( "%2f" ) ) != -1 )
+                // Unexpected sequences of characters:
+                // - empty path segments
+                // - encoded slashes
+                // - parent folder segments ".."
+                // - current folder segments "."
+                if ( m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "//" ) ) ) != -1
+                  || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2F" ) ) ) != -1
+                  || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2f" ) ) ) != -1
+                  || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
+                  || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
                     return;
                 }
 
@@ -239,7 +243,7 @@ void PackageUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString::createFromAscii( "/" );
+            m_aPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
         }
     }
 }
