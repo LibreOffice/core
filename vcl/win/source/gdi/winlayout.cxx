@@ -2894,6 +2894,11 @@ void GraphiteWinLayout::RestoreDC(gr::Segment & segment) const
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
 {
+    if (args.mnMinCharPos >= args.mnEndCharPos)
+    {
+        maImpl.clear();
+        return true;
+    }
     HFONT hUnRotatedFont;
     if (args.mnOrientation)
     {

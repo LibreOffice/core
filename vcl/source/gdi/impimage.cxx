@@ -553,14 +553,14 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 // -----------------------------------------------------------------------
 
 void ImplImageBmp::ImplUpdateDisplayBmp( OutputDevice*
-#if defined WIN || defined WNT
+#if defined WNT
 pOutDev
 #endif
 )
 {
     if( !mpDisplayBmp && !maBmpEx.IsEmpty() )
     {
-#if defined WIN || defined WNT
+#if defined WNT
         if( maBmpEx.IsAlpha() )
             mpDisplayBmp = new BitmapEx( maBmpEx );
         else
