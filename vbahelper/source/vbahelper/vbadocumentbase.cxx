@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
@@ -131,23 +132,56 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
     else
         xModifiable->setModified( false );
 
-    uno::Reference< util::XCloseable > xCloseable( getModel(), uno::UNO_QUERY );
-
-    if( xCloseable.is() )
-        // use close(boolean DeliverOwnership)
-
-        // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
-        // assume ownership if they object the closure by throwing a CloseVetoException
-        // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
-        xCloseable->close(sal_True);
-    // If close is not supported by this model - try to dispose it.
-    // But if the model disagree with a reset request for the modify state
-    // we shouldn't do so. Otherwhise some strange things can happen.
-    else
+    // first try to close the document using UI dispatch functionality
+    sal_Bool bUIClose = sal_False;
+    try
     {
-        uno::Reference< lang::XComponent > xDisposable ( getModel(), uno::UNO_QUERY );
-        if ( xDisposable.is() )
-            xDisposable->dispose();
+        uno::Reference< frame::XController > xController( getModel()->getCurrentController(), uno::UNO_SET_THROW );
+        uno::Reference< frame::XDispatchProvider > xDispatchProvider( xController->getFrame(), uno::UNO_QUERY_THROW );
+
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< util::XURLTransformer > xURLTransformer(
+                        xServiceManager->createInstanceWithContext(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ),
+                            mxContext ),
+                        uno::UNO_QUERY_THROW );
+
+        util::URL aURL;
+        aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc" ) );
+        xURLTransformer->parseStrict( aURL );
+
+        uno::Reference< css::frame::XDispatch > xDispatch(
+                xDispatchProvider->queryDispatch( aURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ), 0 ),
+                uno::UNO_SET_THROW );
+        xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
+        bUIClose = sal_True;
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    if ( !bUIClose )
+    {
+        // if it is not possible to use UI dispatch, try to close the model directly
+        uno::Reference< util::XCloseable > xCloseable( getModel(), uno::UNO_QUERY );
+        if( xCloseable.is() )
+        {
+            // use close(boolean DeliverOwnership)
+
+            // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
+            // assume ownership if they object the closure by throwing a CloseVetoException
+            // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
+            xCloseable->close(sal_True);
+        }
+        else
+        {
+            // If close is not supported by this model - try to dispose it.
+            // But if the model disagree with a reset request for the modify state
+            // we shouldn't do so. Otherwhise some strange things can happen.
+            uno::Reference< lang::XComponent > xDisposable ( getModel(), uno::UNO_QUERY );
+            if ( xDisposable.is() )
+                xDisposable->dispose();
+        }
     }
 }
 
