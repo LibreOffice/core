@@ -117,11 +117,11 @@ public class StylesWriter
                 {
                     globals
                 });
-        writeAutomaticStylesSection(new OfficeStylesCollection[]
+        writeCommonStylesSection(new OfficeStylesCollection[]
                 {
                     globals
                 });
-        writeCommonStylesSection(new OfficeStylesCollection[]
+        writeAutomaticStylesSection(new OfficeStylesCollection[]
                 {
                     globals
                 });
@@ -379,7 +379,7 @@ public class StylesWriter
 
         this.xmlWriter.writeXmlDeclaration("UTF-8");
         this.xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS,
-                "document-content", rootAttributes, XmlWriterSupport.OPEN);
+                "document-styles", rootAttributes, XmlWriterSupport.OPEN);
     }
 
     public void close()
