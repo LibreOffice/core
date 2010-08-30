@@ -4458,7 +4458,7 @@ StarBasicDisposeItem* lcl_getOrCreateItemForBasic( StarBASIC* pBasic )
     return pItem;
 }
 
-void lcl_registerComponentToBeDisposedForBasic
+void registerComponentToBeDisposedForBasic
     ( Reference< XComponent > xComponent, StarBASIC* pBasic )
 {
     StarBasicDisposeItem* pItem = lcl_getOrCreateItemForBasic( pBasic );
@@ -4573,7 +4573,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
                     while( pParentBasic == NULL && pCurObject != NULL );
 
                     OSL_ASSERT( pParentBasic != NULL );
-                    lcl_registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
+                    registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
                 }
 
                 o_rRetAny <<= xRet;
