@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #include <vbahelper/vbadocumentsbase.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -215,12 +216,6 @@ VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xP
 uno::Any SAL_CALL
 VbaDocumentsBase::Add() throw (uno::RuntimeException)
 {
-     uno::Sequence< beans::PropertyValue > aArgs( 1 );
-     beans::PropertyValue aArg;
-     aArg.Name = ::rtl::OUString::createFromAscii("MacroExecutionMode");
-     aArg.Value = uno::Any(com::sun::star::document::MacroExecMode::USE_CONFIG);
-     aArgs[ 0 ] = aArg;
-
      uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
@@ -235,9 +230,17 @@ VbaDocumentsBase::Add() throw (uno::RuntimeException)
         sURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc") );
     else
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+
+    // prepare the media descriptor
+    ::comphelper::MediaDescriptor aMediaDesc;
+    aMediaDesc[ ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
+    aMediaDesc.setComponentDataEntry( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ApplyFormDesignMode" ) ), uno::Any( false ) );
+
+    // craete the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
                                        sURL ,
-                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0, aArgs );
+                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
+                                       aMediaDesc.getAsConstPropertyValueList() );
     return uno::makeAny( xComponent );
 }
 
