@@ -82,7 +82,7 @@ private:
     ORefCount& SAL_CALL operator= (const ORefCount&);
 };
 
-class OReference : public NAMESPACE_VOS(IReference)
+class OReference : public vos::IReference
 {
 public:
     OReference();

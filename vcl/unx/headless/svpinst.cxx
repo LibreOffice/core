@@ -302,7 +302,7 @@ vos::IMutex* SvpSalInstance::GetYieldMutex()
 ULONG SvpSalInstance::ReleaseYieldMutex()
 {
     if ( m_aYieldMutex.GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         vos::OThread::getCurrentIdentifier() )
     {
         ULONG nCount = m_aYieldMutex.GetAcquireCount();
         ULONG n = nCount;
@@ -464,13 +464,13 @@ SvpSalYieldMutex::SvpSalYieldMutex()
 void SvpSalYieldMutex::acquire()
 {
     OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnThreadId = vos::OThread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SvpSalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
@@ -483,7 +483,7 @@ sal_Bool SvpSalYieldMutex::tryToAcquire()
 {
     if ( OMutex::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = vos::OThread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }

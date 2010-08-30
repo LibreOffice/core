@@ -28,31 +28,6 @@
 #ifndef _DLL_HXX
 #define _DLL_HXX
 
-#ifdef WIN
-
-#include <tools/svwin.h>
-
-// ----------------------
-// - Zugriffsfunktionen -
-// ----------------------
-
-struct SVDATA;
-
-extern "C"
-{
-// IN APPDATA.ASM
-SVDATA* FAR PASCAL GetSVData();
-}
-
-// IN TOOLSDLL.CXX
-void SetSVData( SVDATA* pSVData );
-
-#endif
-
-// -------------------------------
-// - Sonstige Funktionen fuer SV -
-// -------------------------------
-
 // Um Resourcen wieder freizugeben
 inline void ImpDeInitWinTools() {}
 
