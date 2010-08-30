@@ -90,6 +90,8 @@ extern const XMLPropertyMapEntry aXMLScTableStylesImportProperties[];
 #define CTF_SC_DIAGONALTLBRWIDTH                    (XML_SC_CTF_START + 26)
 #define CTF_SC_DIAGONALBLTR                         (XML_SC_CTF_START + 27)
 #define CTF_SC_DIAGONALBLTRWIDTH                    (XML_SC_CTF_START + 28)
+#define CTF_SC_DIAGONALTLBRWIDTHS                   (XML_SC_CTF_START + 29)
+#define CTF_SC_DIAGONALBLTRWIDTHS                   (XML_SC_CTF_START + 30)
 
 #define CTF_SC_ROWHEIGHT                            (XML_SC_CTF_START + 50)
 #define CTF_SC_ROWOPTIMALHEIGHT                     (XML_SC_CTF_START + 51)

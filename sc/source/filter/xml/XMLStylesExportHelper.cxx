@@ -1234,10 +1234,31 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nFie
     const sal_Int32 nStringIndex)
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
-    if (aTables[nTable].size() == static_cast<sal_uInt32>(nField))
+    DBG_ASSERT(aTables[nTable].size() >= static_cast<size_t>(nField), "wrong field");
+    if (aTables[nTable].size() == static_cast<size_t>(nField))
         aTables[nTable].push_back(nStringIndex);
-    aTables[nTable][nField] = nStringIndex;
+    else
+        aTables[nTable][nField] = nStringIndex;
+}
+
+void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField,
+        const sal_Int32 nStringIndex, const sal_Int32 nEndField)
+{
+    DBG_ASSERT( nStartField <= nEndField, "bad field range");
+    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    DBG_ASSERT(aTables[nTable].size() >= static_cast<size_t>(nStartField), "wrong field");
+    ScMysalInt32Vec& rTable = aTables[nTable];
+    size_t nSize = rTable.size();
+    if (nSize == static_cast<size_t>(nStartField))
+        rTable.insert( rTable.end(), static_cast<size_t>(nEndField - nStartField + 1), nStringIndex);
+    else
+    {
+        size_t nField = static_cast<size_t>(nStartField);
+        for ( ; nField < nSize && nField <= static_cast<size_t>(nEndField); ++nField)
+            rTable[nField] = nStringIndex;
+        if (nField <= static_cast<size_t>(nEndField))
+            rTable.insert( rTable.end(), static_cast<size_t>(nEndField - nField + 1), nStringIndex);
+    }
 }
 
 rtl::OUString* ScRowStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)

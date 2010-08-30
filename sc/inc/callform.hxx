@@ -35,16 +35,10 @@
 #define MAXARRSIZE      0xfffe
 
 //------------------------------------------------------------------------
-#ifndef WIN
 #ifndef WNT
 #define CALLTYPE
 #else
 #define CALLTYPE            __cdecl
-#endif
-#else
-#define PASCAL              _pascal
-#define FAR                 _far
-#define CALLTYPE            FAR PASCAL
 #endif
 
 extern "C" {
