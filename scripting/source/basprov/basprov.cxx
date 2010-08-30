@@ -412,7 +412,7 @@ namespace basprov
                         if ( pMethods )
                         {
                             SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
-                            if ( pMethod )
+                            if ( pMethod && !pMethod->IsHidden() )
                             {
                                 if ( m_pDocBasicManager == pBasicMgr )
                                     xScript = new BasicScriptImpl( aDescription, pMethod, *m_pDocBasicManager, m_xInvocationContext );
