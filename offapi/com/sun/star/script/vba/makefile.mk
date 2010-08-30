@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,30 +23,30 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#***********************************************************************/
+#*************************************************************************
 
-PRJ = ..
-PRJNAME = sal
-TARGET = cppunittester
+PRJ=..$/..$/..$/..$/..
 
-ENABLE_EXCEPTIONS = TRUE
+PRJNAME=offapi
 
-.INCLUDE: settings.mk
+TARGET=cssscriptvba
+PACKAGE=com$/sun$/star$/script$/vba
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
+# --- Settings -----------------------------------------------------
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+# ------------------------------------------------------------------------
 
-OBJFILES = $(APP1OBJS)
+IDLFILES=\
+    VBAEventId.idl \
+    VBAEventProcessor.idl \
+    VBASpreadsheetEventProcessor.idl \
+    VBATextEventProcessor.idl \
+    XVBACompatibility.idl \
+    XVBAEventProcessor.idl \
+    XVBAModuleInfo.idl
 
-APP1OBJS = $(OBJ)/cppunittester.obj
-APP1RPATH = NONE
-APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
-APP1TARGET = cppunittester
+# ------------------------------------------------------------------
 
-.INCLUDE: target.mk
+.INCLUDE :  target.mk
+.INCLUDE :  $(PRJ)$/util$/target.pmk
