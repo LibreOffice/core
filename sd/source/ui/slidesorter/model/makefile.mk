@@ -46,6 +46,7 @@ SLOFILES =      							\
     $(SLO)$/SlsPageDescriptor.obj			\
     $(SLO)$/SlsPageEnumeration.obj			\
     $(SLO)$/SlsPageEnumerationProvider.obj	\
+    $(SLO)$/SlsVisualState.obj				\
     $(SLO)$/SlideSorterModel.obj
 
 EXCEPTIONSFILES= 
