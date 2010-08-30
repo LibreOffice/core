@@ -27,7 +27,6 @@
 
 #include <WW8ResourceModelImpl.hxx>
 #include <resources.hxx>
-#include <util.hxx>
 #include <WW8OutputWithDepth.hxx>
 #include <resourcemodel/TableManager.hxx>
 #include <rtl/string.hxx>

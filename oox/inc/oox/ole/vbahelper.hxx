@@ -30,11 +30,6 @@
 
 #include "oox/helper/binarystreambase.hxx"
 
-namespace com { namespace sun { namespace star {
-    namespace container { class XNameContainer; }
-    namespace document { class XEventsSupplier; }
-} } }
-
 namespace oox { class BinaryInputStream; }
 
 namespace oox {
@@ -101,124 +96,6 @@ public:
                             ::rtl::OUString& rKey,
                             ::rtl::OUString& rValue,
                             const ::rtl::OUString& rKeyValue );
-
-    /** Removes whitespace characters from the beginning of the passed string.
-
-        @param rCodeLine  (in/out parameter) The string to be modified.
-
-        @return  True = at least one whitespace character found and removed
-            from rCodeLine. False = rCodeLine is empty or does not start with
-            a whitespace character.
-     */
-    static bool         eatWhitespace( ::rtl::OUString& rCodeLine );
-
-    /** Removes the passed keyword from the beginning of the passed string.
-
-        @param rCodeLine  (in/out parameter) The string to be modified.
-
-        @param rKeyword  The keyword to be removed from the beginning of the
-            rCodeLine string.
-
-        @return  True = rCodeLine starts with the passed keyword (case
-            insensitive), and is followed by whitespace characters, or it ends
-            right after the keyword. The keyword and the following whitespace
-            characters have been removed from rCodeLine. False = rCodeLine is
-            empty or does not start with the specified keyword, or the keyword
-            is not followed by whitespace characters.
-     */
-    static bool         eatKeyword( ::rtl::OUString& rCodeLine, const ::rtl::OUString& rKeyword );
-
-    /** Returns the VBA source code of the specified module, or an empty
-        string, if the module does not exist.
-
-        @param rxBasicLib  The container for all VBA code modules.
-        @param rModuleName  The name of the VBA code module.
-     */
-    static ::rtl::OUString getSourceCode(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
-                            const ::rtl::OUString& rModuleName );
-
-    /** Checks, if a macro with the specified name exists in the passed VBA
-        source code.
-
-        @param rSourceCode  The VBA source code.
-        @param rMacroName  The name of the macro.
-     */
-    static bool         hasMacro(
-                            const ::rtl::OUString& rSourceCode,
-                            const ::rtl::OUString& rMacroName );
-
-    /** Checks, if a macro with the specified name exists in the specified
-        module.
-
-        @param rxBasicLib  The container for all VBA code modules.
-        @param rModuleName  The name of the VBA module to check for the macro.
-        @param rMacroName  The name of the macro.
-     */
-    static bool         hasMacro(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
-                            const ::rtl::OUString& rModuleName,
-                            const ::rtl::OUString& rMacroName );
-
-    /** Tries to insert a VBA macro into the specified code module.
-
-        @descr  If the specified macro does not exist, it will be generated as
-            following, using the passed parameters. If the parameter rMacroType
-            is left empty, a sub procedure macro will be generated:
-
-            Private Sub <rMacroName> ( <rMacroArgs> )
-                <rMacroCode>
-            End Sub
-
-            If the parameter rMacroType is not empty, a function macro
-            will be generated. Note that the parameter rMacroCode has to
-            provide the code that returns the function value.
-
-            Private Function <rMacroName> ( <rMacroArgs> ) As <rMacroType>
-                <rMacroCode>
-            End Function
-
-            The source code in rMacroCode may contain a special placeholder
-            $MACRO that will be replaced by the macro name passed in rMacroName
-            before the macro will be inserted into the module.
-
-        @param rModuleName  The name of the VBA module to be used.
-        @param rMacroName  The name of the VBA macro to be inserted.
-        @param rMacroArgs  The argument list of the VBA macro.
-        @param rMacroType  Macro return type (empty for sub procedure).
-        @param rMacroCode  The VBA source code for the macro.
-
-        @return  True, if the specified VBA macro has been inserted. False, if
-            there already exists a macro with the specified name, or if any
-            error has occurred, for example, Office configuration forbids to
-            generate executable VBA code or the specified module does not
-            exist.
-     */
-    static bool         insertMacro(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
-                            const ::rtl::OUString& rModuleName,
-                            const ::rtl::OUString& rMacroName,
-                            const ::rtl::OUString& rMacroArgs,
-                            const ::rtl::OUString& rMacroType,
-                            const ::rtl::OUString& rMacroCode );
-
-    /** Tries to attach a VBA macro to an event of the passed events supplier.
-
-        @descr  The function checks if the specified macro exists and attaches
-            it to the event of the passed events supplier.
-
-        @param rxEventsSupp  The events supplier for the event to be attached.
-        @param rEventName  The event name used in the office API.
-        @param rLibraryName  The name of the Basic library containing the macro.
-        @param rModuleName  The name of the VBA module containing the macro.
-        @param rMacroName  The name of the VBA macro to attach to the event.
-     */
-    static bool         attachMacroToEvent(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventsSupplier >& rxEventsSupp,
-                            const ::rtl::OUString& rEventName,
-                            const ::rtl::OUString& rLibraryName,
-                            const ::rtl::OUString& rModuleName,
-                            const ::rtl::OUString& rMacroName );
 
 private:
                         VbaHelper();
