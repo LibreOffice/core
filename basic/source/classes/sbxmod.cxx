@@ -2494,6 +2494,8 @@ void SbUserFormModule::Unload()
 }
 //liuchen
 
+void registerComponentToBeDisposedForBasic( Reference< XComponent > xComponent, StarBASIC* pBasic );
+
 void SbUserFormModule::InitObject()
 {
     try
@@ -2525,6 +2527,25 @@ void SbUserFormModule::InitObject()
             aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
             uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
+
+            // the dialog must be disposed at the end!
+            if( xComponent.is() )
+            {
+                StarBASIC* pParentBasic = NULL;
+                SbxObject* pCurObject = this;
+                do
+                {
+                    SbxObject* pParent = pCurObject->GetParent();
+                    pParentBasic = PTR_CAST(StarBASIC,pParent);
+                    pCurObject = pParent;
+                }
+                while( pParentBasic == NULL && pCurObject != NULL );
+
+                OSL_ASSERT( pParentBasic != NULL );
+                registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
+            }
+
+
             // remove old listener if it exists
             if ( m_DialogListener.get() )
                 m_DialogListener->removeListener();
