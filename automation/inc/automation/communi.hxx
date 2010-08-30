@@ -76,10 +76,10 @@ public:
     CommunicationManagerClient( BOOL bUseMultiChannel = FALSE );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public NAMESPACE_VOS(OThread)
+class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public vos::OThread
 {
 public:
-    CommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    CommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
     virtual ~CommunicationLinkViaSocket();
 
     virtual BOOL IsCommunicationError();
@@ -101,8 +101,8 @@ protected:
     virtual BOOL ShutdownCommunication();
     ULONG nConnectionClosedEventId;
     ULONG nDataReceivedEventId;
-    NAMESPACE_VOS(OMutex) aMConnectionClosed;   // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
-    NAMESPACE_VOS(OMutex) aMDataReceived;       // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    vos::OMutex aMConnectionClosed; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    vos::OMutex aMDataReceived;     // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
@@ -133,7 +133,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public NAMESPACE_VOS(OThread)
+class CommunicationManagerServerAcceptThread: public vos::OThread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, ULONG nPort, USHORT nMaxCon = CM_UNLIMITED_CONNECTIONS );
@@ -145,11 +145,11 @@ protected:
 
 private:
     CommunicationManagerServerViaSocket* pMyServer;
-    NAMESPACE_VOS(OAcceptorSocket) *pAcceptorSocket;
+    vos::OAcceptorSocket *pAcceptorSocket;
     ULONG nPortToListen;
     USHORT nMaxConnections;
     ULONG nAddConnectionEventId;
-    NAMESPACE_VOS(OMutex) aMAddConnection;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    vos::OMutex aMAddConnection;    // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 
@@ -174,7 +174,7 @@ private:
     ByteString aHostToTalk;
     ULONG nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
 };
 
 #endif
