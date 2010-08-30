@@ -36,9 +36,11 @@
 #include <svl/hint.hxx>
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/extract.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -4170,13 +4172,25 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
 //==========================================================================
 
-typedef WeakImplHelper1< XInvocation > ModuleInvocationProxyHelper;
+namespace {
+class OMutexBasis
+{
+protected:
+    // this mutex is necessary for OInterfaceContainerHelper
+    ::osl::Mutex m_aMutex;
+};
+};
 
-class ModuleInvocationProxy : public ModuleInvocationProxyHelper
+typedef WeakImplHelper2< XInvocation, XComponent > ModuleInvocationProxyHelper;
+
+class ModuleInvocationProxy : public OMutexBasis,
+                              public ModuleInvocationProxyHelper
 {
     ::rtl::OUString     m_aPrefix;
     SbxObjectRef        m_xScopeObj;
     bool                m_bProxyIsClassModuleObject;
+
+    ::cppu::OInterfaceContainerHelper m_aListeners;
 
 public:
     ModuleInvocationProxy( const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
@@ -4197,11 +4211,17 @@ public:
                                  Sequence< sal_Int16 >& rOutParamIndex,
                                  Sequence< Any >& rOutParam )
         throw( CannotConvertException, InvocationTargetException );
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw(RuntimeException);
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
+    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
 };
 
 ModuleInvocationProxy::ModuleInvocationProxy( const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj )
     : m_aPrefix( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_") ) )
     , m_xScopeObj( xScopeObj )
+    , m_aListeners( m_aMutex )
 {
     m_bProxyIsClassModuleObject = xScopeObj.Is() ? xScopeObj->ISA(SbClassModuleObject) : false;
 }
@@ -4298,13 +4318,14 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
     NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
 
     Any aRet;
-    if( !m_xScopeObj.Is() )
+    SbxObjectRef xScopeObj = m_xScopeObj;
+    if( !xScopeObj.Is() )
         return aRet;
 
     ::rtl::OUString aFunctionName = m_aPrefix;
     aFunctionName += rFunction;
 
-    SbxVariable* p = m_xScopeObj->Find( aFunctionName, SbxCLASS_METHOD );
+    SbxVariable* p = xScopeObj->Find( aFunctionName, SbxCLASS_METHOD );
     SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
     if( pMeth == NULL )
     {
@@ -4341,6 +4362,30 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
     return aRet;
 }
 
+void SAL_CALL ModuleInvocationProxy::dispose()
+    throw(RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EventObject aEvent( (XComponent*)this );
+    m_aListeners.disposeAndClear( aEvent );
+
+    m_xScopeObj = NULL;
+}
+
+void SAL_CALL ModuleInvocationProxy::addEventListener( const Reference< XEventListener >& xListener )
+    throw (RuntimeException)
+{
+    m_aListeners.addInterface( xListener );
+}
+
+void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEventListener >& xListener )
+    throw (RuntimeException)
+{
+    m_aListeners.removeInterface( xListener );
+}
+
+
 Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::OUString& aVBAType,
                                            const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj )
 {
@@ -4369,6 +4414,97 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
 
     return xRet;
 }
+
+typedef std::vector< WeakReference< XComponent > >  ComponentRefVector;
+
+struct StarBasicDisposeItem
+{
+    StarBASIC*              m_pBasic;
+    SbxArrayRef             m_pRegisteredVariables;
+    ComponentRefVector      m_vComImplementsObjects;
+
+    StarBasicDisposeItem( StarBASIC* pBasic )
+        : m_pBasic( pBasic )
+    {
+        m_pRegisteredVariables = new SbxArray();
+    }
+};
+
+typedef std::vector< StarBasicDisposeItem* > DisposeItemVector;
+
+static DisposeItemVector GaDisposeItemVector;
+
+DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC* pBasic )
+{
+    DisposeItemVector::iterator it;
+    for( it = GaDisposeItemVector.begin() ; it != GaDisposeItemVector.end() ; ++it )
+    {
+        StarBasicDisposeItem* pItem = *it;
+        if( pItem->m_pBasic == pBasic )
+            return it;
+    }
+    return GaDisposeItemVector.end();
+}
+
+StarBasicDisposeItem* lcl_getOrCreateItemForBasic( StarBASIC* pBasic )
+{
+    DisposeItemVector::iterator it = lcl_findItemForBasic( pBasic );
+    StarBasicDisposeItem* pItem = (it != GaDisposeItemVector.end()) ? *it : NULL;
+    if( pItem == NULL )
+    {
+        pItem = new StarBasicDisposeItem( pBasic );
+        GaDisposeItemVector.push_back( pItem );
+    }
+    return pItem;
+}
+
+void lcl_registerComponentToBeDisposedForBasic
+    ( Reference< XComponent > xComponent, StarBASIC* pBasic )
+{
+    StarBasicDisposeItem* pItem = lcl_getOrCreateItemForBasic( pBasic );
+    pItem->m_vComImplementsObjects.push_back( xComponent );
+}
+
+void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic )
+{
+    StarBasicDisposeItem* pItem = lcl_getOrCreateItemForBasic( pBasic );
+    SbxArray* pArray = pItem->m_pRegisteredVariables;
+    pArray->Put( pVar, pArray->Count() );
+}
+
+void disposeComVariablesForBasic( StarBASIC* pBasic )
+{
+    DisposeItemVector::iterator it = lcl_findItemForBasic( pBasic );
+    if( it != GaDisposeItemVector.end() )
+    {
+        StarBasicDisposeItem* pItem = *it;
+
+        SbxArray* pArray = pItem->m_pRegisteredVariables;
+        USHORT nCount = pArray->Count();
+        for( USHORT i = 0 ; i < nCount ; ++i )
+        {
+            SbxVariable* pVar = pArray->Get( i );
+            pVar->ClearComListener();
+        }
+
+        ComponentRefVector& rv = pItem->m_vComImplementsObjects;
+        ComponentRefVector::iterator itCRV;
+        for( itCRV = rv.begin() ; itCRV != rv.end() ; ++itCRV )
+        {
+            try
+            {
+                Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY_THROW );
+                xComponent->dispose();
+            }
+            catch( Exception& )
+            {}
+        }
+
+        delete pItem;
+        GaDisposeItemVector.erase( it );
+    }
+}
+
 
 // Handle module implements mechanism for OLE types
 bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject )
@@ -4423,6 +4559,23 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
 
             if( bSuccess )
             {
+                Reference< XComponent > xComponent( xProxy, UNO_QUERY );
+                if( xComponent.is() )
+                {
+                    StarBASIC* pParentBasic = NULL;
+                    SbxObject* pCurObject = this;
+                    do
+                    {
+                        SbxObject* pParent = pCurObject->GetParent();
+                        pParentBasic = PTR_CAST(StarBASIC,pParent);
+                        pCurObject = pParent;
+                    }
+                    while( pParentBasic == NULL && pCurObject != NULL );
+
+                    OSL_ASSERT( pParentBasic != NULL );
+                    lcl_registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
+                }
+
                 o_rRetAny <<= xRet;
                 break;
             }

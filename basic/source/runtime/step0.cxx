@@ -548,7 +548,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
 
                 refVal->SetDeclareClassName( aDeclareClassName );
-                refVal->SetComListener( xComListener );     // Hold reference
+                refVal->SetComListener( xComListener, &rBasic );        // Hold reference
             }
 
             *refVar = *refVal;

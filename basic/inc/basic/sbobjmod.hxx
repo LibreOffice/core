@@ -52,6 +52,10 @@ class SbObjModule : public SbModule
 {
     SbObjModule( const SbObjModule& );
     SbObjModule();
+
+protected:
+    virtual ~SbObjModule();
+
 public:
     TYPEINFO();
     SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );

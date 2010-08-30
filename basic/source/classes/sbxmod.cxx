@@ -2072,6 +2072,11 @@ SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::Mod
     else if ( mInfo.ModuleObject.is() )
         SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
 }
+
+SbObjModule::~SbObjModule()
+{
+}
+
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
 {

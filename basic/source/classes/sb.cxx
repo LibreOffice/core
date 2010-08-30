@@ -761,6 +761,8 @@ void StarBASIC::SetModified( BOOL b )
     SbxBase::SetModified( b );
 }
 
+void disposeComVariablesForBasic( StarBASIC* pBasic );
+
 StarBASIC::~StarBASIC()
 {
     if( !--GetSbData()->nInst )
@@ -803,6 +805,8 @@ StarBASIC::~StarBASIC()
         }
         xUnoListeners = NULL;
     }
+
+    disposeComVariablesForBasic( this );
 }
 
 // Override new() operator, so that everyone can create a new instance
