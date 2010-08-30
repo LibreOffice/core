@@ -55,11 +55,11 @@
 #include "vcl/dllapi.h"
 
 // Libraries
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 // Module type definitions and forward declarations.
 //

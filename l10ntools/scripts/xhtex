@@ -1,3 +1,4 @@
+#!/bin/sh
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,21 @@
 #
 #*************************************************************************
 
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'setsolar'
+exit 1
+fi
 
-PRJ=../..
-PRJNAME=transex3
-TARGET=jpropex
-
-.INCLUDE : ant.mk
-
-ALLTAR : ANTBUILD
-
+if [ ${GUI} = "WNT" ]; then
+if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
+    exec python $SOLARVERSION/$INPATH/bin/xhtex.py "$@"
+else
+    exec python $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xhtex.py "$@"
+fi
+else
+if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
+    exec python  -B $SOLARVERSION/$INPATH/bin/xhtex.py "$@"
+else
+    exec python  -B $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xhtex.py "$@"
+fi
+fi
