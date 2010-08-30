@@ -323,11 +323,11 @@ void ImportExcel8::AttachDocumentEvents()
     SfxObjectShell* pShell = GetDocShell();
     if( HasBasic() && pShell )
     {
-        uno::Reference< lang::XMultiServiceFactory > xGlobalFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< sheet::XSpreadsheetDocument > xDocument( pShell->GetModel(), uno::UNO_QUERY );
-        if( xGlobalFactory.is() && xDocument.is() )
+        if( xContext.is() && xDocument.is() )
         {
-            ::oox::xls::ExcelVbaProject aVbaProject( xGlobalFactory, xDocument );
+            ::oox::xls::ExcelVbaProject aVbaProject( xContext, xDocument );
             aVbaProject.attachToEvents();
         }
     }

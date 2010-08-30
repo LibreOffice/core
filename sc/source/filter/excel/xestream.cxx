@@ -46,6 +46,7 @@
 #include "compiler.hxx"
 
 #include <oox/core/tokens.hxx>
+#include <oox/xls/excelvbaproject.hxx>
 #include <formula/grammar.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
@@ -56,14 +57,13 @@ using ::com::sun::star::io::XStream;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XServiceInfo;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::utl::OStreamWrapper;
 using ::std::vector;
 
+using namespace ::com::sun::star::uno;
 using namespace formula;
 
 // ============================================================================
@@ -813,8 +813,8 @@ const char* XclXmlUtils::ToPsz( bool b )
 
 // ============================================================================
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot )
-    : XmlFilterBase( rSMgr )
+XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rxContext, SvStream& rStrm, const XclExpRoot& rRoot )
+    : XmlFilterBase( rxContext )
     , mrRoot( rRoot )
 {
     Sequence< PropertyValue > aArgs( 1 );
@@ -1017,6 +1017,11 @@ oox::drawingml::chart::ChartConverter& XclExpXmlStream::getChartConverter()
 bool XclExpXmlStream::exportDocument() throw()
 {
     return false;
+}
+
+::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const
+{
+    return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
 ::rtl::OUString XclExpXmlStream::implGetImplementationName() const
