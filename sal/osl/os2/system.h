@@ -356,8 +356,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(MAC) && \
-    !defined(MACOSX)
+    !defined(SOLARIS) && !defined(MACOSX)
 #   error "Target plattform not specified !"
 #endif
 

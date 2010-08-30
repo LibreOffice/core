@@ -25,38 +25,26 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_INVALIDREMOVEDPARAMETEREXCEPTION_IDL
-#define INCLUDED_COM_SUN_STAR_DEPLOYMENT_INVALIDREMOVEDPARAMETEREXCEPTION_IDL
+#ifndef __com_sun_star_script_vba_VBATextEventProcessor_idl__
+#define __com_sun_star_script_vba_VBATextEventProcessor_idl__
 
-#include "com/sun/star/uno/Exception.idl"
+#include <com/sun/star/script/vba/VBAEventProcessor.idl>
 
-module com { module sun { module star { module deployment {
+//=============================================================================
 
-interface XPackage;
+module com {  module sun {  module star { module script { module vba {
 
-/**
-   indicates that <member>XPackageRegistry::bindPackage</member> was previously
-   called with a different value for the <code>removed</code> parameter and that
-   the <type>XPackage</type> object created by that call still exist.
+//=============================================================================
 
-   @since OOo 3.3.0
-*/
-exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
-    /** the value of the <code>removed</code> parameter which was used in
-        <member>XPackageRegistry::bindPackage</member> to create the currently
-        existing <type>XPackage</type> object.
-    */
-    boolean PreviousValue;
-    /**
-       the <type>XPackage</type> that was already bound to the provided
-       <code>url</code> paramter during
-       <member>XPackageRegistry::bindPackage</member>.
-
-       <p>Must not be <NULL/>.</p>
-    */
-    XPackage Extension;
+service VBATextEventProcessor
+{
+    service VBAEventProcessor;
 };
 
-}; }; }; };
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
 
 #endif
