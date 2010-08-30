@@ -252,3 +252,6 @@ toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleValue
 toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleText
 toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleComponent
 toolkit.AccessibleMenuSeparator::com::sun::star::accessibility::XAccessibleComponent
+
+### i114213 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleSelection
