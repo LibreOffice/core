@@ -102,7 +102,9 @@ SLOFILES= \
         $(SLO)$/vbapagesetup.obj \
         $(SLO)$/vbapagebreak.obj \
         $(SLO)$/vbapagebreaks.obj \
+        $(SLO)$/vbaeventshelper.obj \
         $(SLO)$/service.obj
+
 .ENDIF
 # --- Targets ------------------------------------------------------
 

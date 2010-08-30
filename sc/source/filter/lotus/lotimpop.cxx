@@ -48,7 +48,7 @@
 #include "lotattr.hxx"
 
 
-static NAMESPACE_VOS( OMutex )      aLotImpSemaphore;
+static vos:: OMutex         aLotImpSemaphore;
 
 
 ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :

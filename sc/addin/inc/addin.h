@@ -67,18 +67,11 @@ typedef enum
     NONE
 } ParamType;
 
-#ifndef WIN
 #ifdef WNT
 #define CALLTYPE        __cdecl
 #else
 #define CALLTYPE
 #endif
-#else
-#define PASCAL          _pascal
-#define FAR             _far
-#define CALLTYPE        FAR PASCAL
-#endif
-
 
 #ifdef __cplusplus
 

@@ -489,6 +489,8 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
                                         //  Horizontale Linien
                                         //
 
+    bool bHiddenRow = true;
+    SCROW nHiddenEndRow = -1;
     nPosY = nScrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -503,9 +505,17 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
             {
                 for (SCROW i = nYplus1; i <= MAXROW; ++i)
                 {
+                    if (i > nHiddenEndRow)
+                        bHiddenRow = pDoc->RowHidden(i, nTab, nHiddenEndRow);
+                    /* TODO: optimize the row break thing for large hidden
+                     * segments where HasRowBreak() has to be called
+                     * nevertheless for each row, as a row break is drawn also
+                     * for hidden rows, above them. This needed to be done only
+                     * once per hidden segment, maybe giving manual breaks
+                     * priority. Something like GetNextRowBreak() and
+                     * GetNextManualRowBreak(). */
                     nBreak = pDoc->HasRowBreak(i, nTab);
-                    bool bHidden = pDoc->RowHidden(i, nTab);
-                    if (nBreak || !bHidden)
+                    if (!bHiddenRow || nBreak)
                         break;
                 }
 

@@ -420,7 +420,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 }
 
 
-void ExcTable::FillAsTable( size_t nCodeNameIdx )
+void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
 
@@ -550,7 +550,7 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     Add( new ExcEof );
 }
 
-void ExcTable::FillAsXmlTable( size_t nCodeNameIdx )
+void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
 {
     RootData& rR = GetOldRoot();
 
@@ -640,7 +640,7 @@ void ExcTable::FillAsXmlTable( size_t nCodeNameIdx )
 }
 
 
-void ExcTable::FillAsEmptyTable( size_t nCodeNameIdx )
+void ExcTable::FillAsEmptyTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
 
@@ -723,7 +723,7 @@ void ExcDocument::ReadDoc( void )
     aHeader.FillAsHeader( maBoundsheetList );
 
     SCTAB nScTab = 0, nScTabCount = GetTabInfo().GetScTabCount();
-    size_t nCodeNameIdx = 0, nCodeNameCount = GetExtDocOptions().GetCodeNameCount();
+    SCTAB nCodeNameIdx = 0, nCodeNameCount = GetExtDocOptions().GetCodeNameCount();
 
     for( ; nScTab < nScTabCount; ++nScTab )
     {

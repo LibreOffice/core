@@ -29,6 +29,9 @@
 
 #include<vbahelper/vbahelper.hxx>
 #include <docsh.hxx>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
 
 class ScCellRangesBase;
 
@@ -48,6 +51,11 @@ namespace ooo
         ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
         ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
+            css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges ) throw ( css::uno::RuntimeException );
+            css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::uno::RuntimeException );
+             ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
+             ScDocument* GetDocumentFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
+             css::uno::Reference< css::frame::XModel > GetModelFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
             class ScVbaCellRangeAccess
             {
             public:
