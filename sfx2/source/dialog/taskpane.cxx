@@ -253,10 +253,11 @@ namespace sfx2
 
         pWindow->SetHelpId( HID_TASKPANE_WINDOW );
         pWindow->SetOutputSizePixel( Size( 300, 450 ) );
-        pWindow->Show();
 
         dynamic_cast< SfxDockingWindow* >( pWindow )->Initialize( i_pInfo );
         SetHideNotDelete( TRUE );
+
+        pWindow->Show();
     }
 
     //------------------------------------------------------------------------------------------------------------------
