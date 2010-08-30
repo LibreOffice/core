@@ -498,8 +498,10 @@ void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
 
 void PrintDialog::NUpTabPage::setupLayout()
 {
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-    long nIndent = 3*aBorder.Width();
+    Size aBorder( LogicToPixel( Size( 6, 6 ), MapMode( MAP_APPFONT ) ) );
+    /*  According to OOo style guide, the horizontal indentation of child
+        elements to their parent element should always be 6 map units. */
+    long nIndent = aBorder.Width();
 
     maLayout.setParentWindow( this );
     maLayout.setOuterBorder( aBorder.Width() );
