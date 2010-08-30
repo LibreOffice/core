@@ -62,7 +62,7 @@ inline void Set_UInt32( BYTE *& p, UINT32 n )
 #if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #define __WW8_NEEDS_COPY
 #else
-#if defined WNT || defined WIN || defined OS2
+#if defined WNT || defined OS2
 #define __WW8_NEEDS_PACK
 #pragma pack(2)
 #endif

@@ -81,8 +81,8 @@ void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
 {
     if ( ( ! pFrm->IsVertical() &&
              pFrm->Frm().Width() == pFrm->GetUpper()->Prt().Width() ) ||
-             pFrm->IsVertical() &&
-             pFrm->Frm().Height() == pFrm->GetUpper()->Prt().Height() )
+         (   pFrm->IsVertical() &&
+             pFrm->Frm().Height() == pFrm->GetUpper()->Prt().Height() ) )
         pFrm->bValidSize = sal_True;
 /*
     pFrm->bValidPrtArea = sal_True;
