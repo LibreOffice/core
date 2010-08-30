@@ -127,10 +127,6 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
     //-------------------------------------------
     // interface
     public:
-        /** Value type of the 'ComponentData' property.
-         */
-        typedef ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > ComponentDataSequence;
-
         //---------------------------------------
         /** @short  these ctors do nothing - excepting that they forward
                     the given parameters to the base class ctors.
@@ -204,8 +200,9 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         /** Returns a value from the sequence contained in the property
             'ComponentData' of this media descriptor.
 
-            @descr  The property 'ComponentData' should be empty or should
-                contain a value of type ComponentDataSequence (see above).
+            @descr  The property 'ComponentData' should be empty, or should
+                contain a value of type sequence<com.sun.star.beans.NamedValue>
+                or sequence<com.sun.star.beans.PropertyValue>.
 
             @return  The value with the specified name, if existing in the
                 sequence of the 'ComponentData' property, otherwise an empty
@@ -218,10 +215,11 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         /** Inserts a value into the sequence contained in the property
             'ComponentData' of the media descriptor.
 
-            @descr  The property 'ComponentData' should be empty or should
-                contain a value of type ComponentDataSequence (see above). The
-                passed value will be inserted into the sequence, or, if already
-                existing, will be overwritten.
+            @descr  The property 'ComponentData' should be empty, or should
+                contain a value of type sequence<com.sun.star.beans.NamedValue>
+                or sequence<com.sun.star.beans.PropertyValue>. The passed value
+                will be inserted into the sequence, or, if already existing,
+                will be overwritten.
 
             @param rName  The name of the value to be inserted into the
                 sequence of the 'ComponentData' property.
@@ -237,10 +235,10 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         /** Removes a value from the sequence contained in the property
             'ComponentData' of the media descriptor.
 
-            @descr  The property 'ComponentData' should be empty or should
-                contain a value of type ComponentDataSequence (see above). The
-                value with the passed name will be removed from the sequence,
-                if existing.
+            @descr  The property 'ComponentData' should be empty, or should
+                contain a value of type sequence<com.sun.star.beans.NamedValue>
+                or sequence<com.sun.star.beans.PropertyValue>. The value with
+                the passed name will be removed from the sequence, if existing.
 
             @param rName  The name of the value to be removed from the sequence
                 of the 'ComponentData' property.
