@@ -35,9 +35,9 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
 #include <cppuhelper/implbase1.hxx>
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <cppconn/resultset_metadata.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 namespace connectivity
 {
