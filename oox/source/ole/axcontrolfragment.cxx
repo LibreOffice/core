@@ -136,7 +136,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                     Reference< XInputStream > xStrgStrm = getFilter().openInputStream( aFragmentPath );
                     if( xStrgStrm.is() )
                     {
-                        OleStorage aStorage( getFilter().getGlobalFactory(), xStrgStrm, false );
+                        OleStorage aStorage( getFilter().getServiceFactory(), xStrgStrm, false );
                         BinaryXInputStream aInStrm( aStorage.openInputStream( CREATE_OUSTRING( "f" ) ), true );
                         if( !aInStrm.isEof() )
                             if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModelFromGuid( aClassId ) ) )

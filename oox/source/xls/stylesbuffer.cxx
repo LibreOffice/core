@@ -26,8 +26,7 @@
  ************************************************************************/
 
 #include "oox/xls/stylesbuffer.hxx"
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
@@ -38,44 +37,40 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont2.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
-#include "properties.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::awt::FontDescriptor;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::awt::XFont2;
-using ::com::sun::star::table::BorderLine;
-using ::com::sun::star::table::TableBorder;
-using ::com::sun::star::text::XText;
-using ::com::sun::star::style::XStyle;
-using ::oox::core::FilterBase;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::FilterBase;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -306,7 +301,7 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 // ============================================================================
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
-    GraphicHelper( rHelper.getGlobalFactory(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
+    GraphicHelper( rHelper.getBaseFilter().getComponentContext(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
     WorkbookHelper( rHelper )
 {
 }
@@ -3444,4 +3439,3 @@ void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 n
 
 } // namespace xls
 } // namespace oox
-

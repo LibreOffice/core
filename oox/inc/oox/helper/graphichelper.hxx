@@ -45,7 +45,6 @@ namespace com { namespace sun { namespace star {
     namespace graphic { class XGraphic; }
     namespace graphic { class XGraphicObject; }
     namespace graphic { class XGraphicProvider; }
-    namespace lang { class XMultiServiceFactory; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -68,7 +67,7 @@ class GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame,
                             const StorageRef& rxStorage );
     virtual             ~GraphicHelper();

@@ -37,15 +37,34 @@ using namespace ::com::sun::star;
 using namespace core;
 using namespace drawingml;
 
+::rtl::OUString SAL_CALL ShapeContextHandler_getImplementationName()
+{
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.ShapeContextHandler" );
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL
+ShapeContextHandler_getSupportedServiceNames()
+{
+    uno::Sequence< ::rtl::OUString > s(1);
+    s[0] = CREATE_OUSTRING( "com.sun.star.xml.sax.FastShapeContextHandler" );
+    return s;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL
+ShapeContextHandler_createInstance( const uno::Reference< uno::XComponentContext > & context)
+        SAL_THROW((uno::Exception))
+{
+    return static_cast< ::cppu::OWeakObject* >( new ShapeContextHandler(context) );
+}
+
+
 ShapeContextHandler::ShapeContextHandler
 (uno::Reference< uno::XComponentContext > const & context) :
 mnStartToken(0), m_xContext(context)
 {
     try
     {
-        uno::Reference<lang::XMultiServiceFactory>
-            xFactory(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        mxFilterBase.set( new ShapeFilterBase(xFactory) );
+        mxFilterBase.set( new ShapeFilterBase(context) );
     }
     catch( uno::Exception& )
     {
@@ -320,11 +339,6 @@ uno::Sequence< ::rtl::OUString > ShapeContextHandler::getSupportedServiceNames()
     return ShapeContextHandler_getSupportedServiceNames();
 }
 
-::rtl::OUString SAL_CALL ShapeContextHandler_getImplementationName() {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.oox.ShapeContextHandler"));
-}
-
 ::sal_Bool SAL_CALL ShapeContextHandler::supportsService
 (const ::rtl::OUString & ServiceName) throw (css::uno::RuntimeException)
 {
@@ -334,40 +348,6 @@ uno::Sequence< ::rtl::OUString > ShapeContextHandler::getSupportedServiceNames()
         return sal_True;
 
     return sal_False;
-}
-
-uno::Sequence< ::rtl::OUString > SAL_CALL
-ShapeContextHandler_getSupportedServiceNames()
-{
-    uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.xml.sax.FastShapeContextHandler"));
-    return s;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL
-ShapeContextHandler_create(
-    const uno::Reference< uno::XComponentContext > & context)
-        SAL_THROW((uno::Exception))
-{
-    return static_cast< ::cppu::OWeakObject * >
-        (new ShapeContextHandler(context));
-}
-
-uno::Reference< uno::XInterface > SAL_CALL
-ShapeContextHandler_createInstance
-( const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
-{
-    uno::Reference<beans::XPropertySet>
-        xPropertySet(rSMgr, uno::UNO_QUERY_THROW);
-    uno::Any aDefaultContext = xPropertySet->getPropertyValue
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
-
-    uno::Reference<uno::XComponentContext> xContext;
-    aDefaultContext >>= xContext;
-
-    return ShapeContextHandler_create(xContext);
 }
 
 }}

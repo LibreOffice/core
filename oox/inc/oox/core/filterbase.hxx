@@ -51,9 +51,11 @@ namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
+    namespace lang { class XMultiComponentFactory; }
     namespace lang { class XMultiServiceFactory; }
     namespace task { class XInteractionHandler; }
     namespace task { class XStatusIndicator; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace comphelper {
@@ -90,7 +92,8 @@ class OOX_DLLPUBLIC FilterBase : public FilterBaseBase, public ::cppu::BaseMutex
 {
 public:
     explicit            FilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual             ~FilterBase();
 
@@ -110,9 +113,17 @@ public:
     /** Returns the specified argument passed through the XInitialization interface. */
     ::com::sun::star::uno::Any getArgument( const ::rtl::OUString& rArgName ) const;
 
-    /** Returns the global service factory passed in the filter constructor (always existing). */
+    /** Returns the component context passed in the filter constructor (always existing). */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                        getComponentContext() const;
+
+    /** Returns the component service factory (always existing). */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >&
+                        getComponentFactory() const;
+
+    /** Returns the multi service factory of the component (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                        getGlobalFactory() const;
+                        getServiceFactory() const;
 
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
@@ -122,7 +133,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getModelFactory() const;
 
-    /** Returns the frame that will contain the document model. */
+    /** Returns the frame that will contain the document model (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
                         getTargetFrame() const;
 

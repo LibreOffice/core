@@ -24,93 +24,95 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "FastTokenHandlerService.hxx"
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include "oox/helper/helper.hxx"
 
 namespace oox {
 namespace shape {
 
-using namespace ::com::sun::star;
+// ============================================================================
 
-FastTokenHandlerService::FastTokenHandlerService(uno::Reference< uno::XComponentContext > const & context) :
-    m_xContext(context)
-{}
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+OUString SAL_CALL FastTokenHandlerService_getImplementationName()
+{
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.FastTokenHandlerService" );
+}
+
+Sequence< OUString > SAL_CALL FastTokenHandlerService_getSupportedServiceNames()
+{
+    Sequence< OUString > s( 1 );
+    s[ 0 ] = CREATE_OUSTRING( "com.sun.star.xml.sax.FastTokenHandler" );
+    return s;
+}
+
+Reference< XInterface > SAL_CALL FastTokenHandlerService_createInstance( const Reference< XComponentContext >& rxContext ) throw (Exception)
+{
+    return static_cast< ::cppu::OWeakObject* >( new FastTokenHandlerService( rxContext ) );
+}
+
+// ============================================================================
+
+FastTokenHandlerService::FastTokenHandlerService( const Reference< XComponentContext >& rxContext ) :
+    m_xContext( rxContext )
+{
+}
+
+FastTokenHandlerService::~FastTokenHandlerService()
+{
+}
 
 // com.sun.star.uno.XServiceInfo:
-::rtl::OUString SAL_CALL FastTokenHandlerService::getImplementationName() throw (uno::RuntimeException)
+OUString SAL_CALL FastTokenHandlerService::getImplementationName() throw (RuntimeException)
 {
     return FastTokenHandlerService_getImplementationName();
 }
 
-::sal_Bool SAL_CALL FastTokenHandlerService::supportsService(::rtl::OUString const & serviceName) throw (uno::RuntimeException)
+sal_Bool SAL_CALL FastTokenHandlerService::supportsService( const OUString& serviceName ) throw (RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > serviceNames = FastTokenHandlerService_getSupportedServiceNames();
-    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
-        if (serviceNames[i] == serviceName)
+    Sequence< OUString > serviceNames = FastTokenHandlerService_getSupportedServiceNames();
+    for( sal_Int32 i = 0; i < serviceNames.getLength(); ++i )
+    {
+        if( serviceNames[ i ] == serviceName )
             return sal_True;
     }
     return sal_False;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FastTokenHandlerService::getSupportedServiceNames() throw (uno::RuntimeException)
+Sequence< OUString > SAL_CALL FastTokenHandlerService::getSupportedServiceNames() throw (RuntimeException)
 {
     return FastTokenHandlerService_getSupportedServiceNames();
 }
 
-::sal_Int32 SAL_CALL FastTokenHandlerService::getToken(const ::rtl::OUString & Identifier) throw (::com::sun::star::uno::RuntimeException)
+// ::com::sun::star::xml::sax::XFastTokenHandler:
+sal_Int32 SAL_CALL FastTokenHandlerService::getToken( const OUString& Identifier ) throw (RuntimeException)
 {
     return mFastTokenHandler.getToken(Identifier);
 }
 
-::rtl::OUString SAL_CALL FastTokenHandlerService::getIdentifier(::sal_Int32 Token) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL FastTokenHandlerService::getIdentifier( sal_Int32 Token ) throw (RuntimeException)
 {
     return mFastTokenHandler.getIdentifier(Token);
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL FastTokenHandlerService::getUTF8Identifier( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException)
+Sequence< sal_Int8 > SAL_CALL FastTokenHandlerService::getUTF8Identifier( sal_Int32 Token ) throw (RuntimeException)
 {
     return mFastTokenHandler.getUTF8Identifier(Token);
 }
 
-::sal_Int32 SAL_CALL FastTokenHandlerService::getTokenFromUTF8(const ::com::sun::star::uno::Sequence< ::sal_Int8 > & Identifier) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL FastTokenHandlerService::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier ) throw (RuntimeException)
 {
     return mFastTokenHandler.getTokenFromUTF8(Identifier);
 }
 
-::rtl::OUString SAL_CALL FastTokenHandlerService_getImplementationName() {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.oox.FastTokenHandlerService"));
-}
+// ============================================================================
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FastTokenHandlerService_getSupportedServiceNames()
-{
-    uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.xml.sax.FastTokenHandler"));
-    return s;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL FastTokenHandlerService_create(
-    const uno::Reference< uno::XComponentContext > & context)
-        SAL_THROW((uno::Exception))
-{
-    return static_cast< ::cppu::OWeakObject * >(new FastTokenHandlerService(context));
-}
-
-uno::Reference< uno::XInterface > SAL_CALL
-FastTokenHandlerService_createInstance
-( const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
-{
-    uno::Reference<beans::XPropertySet>
-        xPropertySet(rSMgr, uno::UNO_QUERY_THROW);
-    uno::Any aDefaultContext = xPropertySet->getPropertyValue
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
-
-    uno::Reference<uno::XComponentContext> xContext;
-    aDefaultContext >>= xContext;
-
-    return FastTokenHandlerService_create(xContext);
-}
-
-}}
+} // namspace shape
+} // namspace oox

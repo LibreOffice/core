@@ -107,8 +107,8 @@ XmlFilterBaseImpl::XmlFilterBaseImpl() :
 
 // ============================================================================
 
-XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    FilterBase( rxGlobalFactory ),
+XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    FilterBase( rxContext ),
     mxImpl( new XmlFilterBaseImpl ),
     mnRelId( 1 ),
     mnMaxDocId( 0 )
@@ -116,7 +116,7 @@ XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalF
     try
     {
         // create the fast parser
-        mxImpl->mxFastParser.set( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
+        mxImpl->mxFastParser.set( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
         mxImpl->mxFastParser->setTokenHandler( new FastTokenHandler );
 
         // register XML namespaces
@@ -144,6 +144,7 @@ XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalF
     }
     catch( Exception& )
     {
+        throw RuntimeException();
     }
 }
 
@@ -504,7 +505,7 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
     /*  Get the input stream directly from the media descriptor, or decrypt the
         package again. The latter is needed e.g. when the document is reloaded.
         All this is implemented in the detector service. */
-    FilterDetect aDetector( getGlobalFactory() );
+    FilterDetect aDetector( getComponentContext() );
     return aDetector.extractUnencryptedPackage( rMediaDesc );
 }
 
@@ -512,12 +513,12 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ZipStorage( getGlobalFactory(), rxInStream ) );
+    return StorageRef( new ZipStorage( getServiceFactory(), rxInStream ) );
 }
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ZipStorage( getGlobalFactory(), rxOutStream ) );
+    return StorageRef( new ZipStorage( getServiceFactory(), rxOutStream ) );
 }
 
 // ============================================================================

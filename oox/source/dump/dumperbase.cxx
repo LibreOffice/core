@@ -1714,7 +1714,7 @@ void Config::construct( const Config& rParent )
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
     if( rFilter.getFileUrl().getLength() > 0 )
-        construct( pcEnvVar, rFilter.getGlobalFactory(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
+        construct( pcEnvVar, rFilter.getServiceFactory(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
 }
 
 void Config::construct( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )

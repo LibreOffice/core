@@ -235,17 +235,16 @@ OUString FilterDetect_getImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
+Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return Reference< XInterface >( *new FilterDetect( xServiceManager ) );
+    return static_cast< ::cppu::OWeakObject* >( new FilterDetect( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-FilterDetect::FilterDetect( const Reference< XMultiServiceFactory >& rxFactory ) :
-    mxFactory( rxFactory )
+FilterDetect::FilterDetect( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    mxContext( rxContext, UNO_SET_THROW )
 {
-    OSL_ENSURE( mxFactory.is(), "FilterDetect::FilterDetect - no service factory" );
 }
 
 FilterDetect::~FilterDetect()
@@ -455,11 +454,12 @@ PasswordVerifier::PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo ) 
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDesc ) const
 {
-    if( mxFactory.is() )
+    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY );
+    if( xFactory.is() )
     {
         // try the plain input stream
         Reference< XInputStream > xInStrm( rMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
-        if( !xInStrm.is() || lclIsZipPackage( mxFactory, xInStrm ) )
+        if( !xInStrm.is() || lclIsZipPackage( xFactory, xInStrm ) )
             return xInStrm;
 
         // check if a temporary file is passed in the 'ComponentData' property
@@ -467,12 +467,12 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         if( xDecrypted.is() )
         {
             Reference< XInputStream > xDecrInStrm = xDecrypted->getInputStream();
-            if( lclIsZipPackage( mxFactory, xDecrInStrm ) )
+            if( lclIsZipPackage( xFactory, xDecrInStrm ) )
                 return xDecrInStrm;
         }
 
         // try to decrypt an encrypted OLE package
-        ::oox::ole::OleStorage aOleStorage( mxFactory, xInStrm, false );
+        ::oox::ole::OleStorage aOleStorage( xFactory, xInStrm, false );
         if( aOleStorage.isStorage() ) try
         {
             // open the required input streams in the encrypted package
@@ -518,7 +518,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 else
                 {
                     // create temporary file for unencrypted package
-                    Reference< XStream > xTempFile( mxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+                    Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
                     Reference< XOutputStream > xDecryptedPackage( xTempFile->getOutputStream(), UNO_SET_THROW );
                     BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
                     BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
@@ -549,7 +549,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     rMediaDesc.setComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ), Any( xTempFile ) );
 
                     Reference< XInputStream > xDecrInStrm = xTempFile->getInputStream();
-                    if( lclIsZipPackage( mxFactory, xDecrInStrm ) )
+                    if( lclIsZipPackage( xFactory, xDecrInStrm ) )
                         return xDecrInStrm;
                 }
             }
@@ -588,12 +588,13 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 {
     OUString aFilterName;
     MediaDescriptor aMediaDesc( rMediaDescSeq );
+    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
 
     /*  Check that the user has not choosen to abort detection, e.g. by hitting
         'Cancel' in the password input dialog. This may happen because this
         filter detection is used by different filters. */
     bool bAborted = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED(), false );
-    if( !bAborted && mxFactory.is() ) try
+    if( !bAborted ) try
     {
         aMediaDesc.addInputStream();
 
@@ -604,10 +605,10 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
         Reference< XInputStream > xInStrm( extractUnencryptedPackage( aMediaDesc ), UNO_SET_THROW );
 
         // try to detect the file type, must be a ZIP package
-        ZipStorage aZipStorage( mxFactory, xInStrm );
+        ZipStorage aZipStorage( xFactory, xInStrm );
         if( aZipStorage.isStorage() )
         {
-            Reference< XFastParser > xParser( mxFactory->createInstance(
+            Reference< XFastParser > xParser( xFactory->createInstance(
                 CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
 
             xParser->setFastDocumentHandler( new FilterDetectDocHandler( aFilterName ) );

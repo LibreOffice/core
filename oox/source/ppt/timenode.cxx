@@ -588,7 +588,7 @@ namespace oox { namespace ppt {
             const Reference< XAnimationNode >& rxNode )
     {
         try {
-            Reference< XAnimationNode > xNode ( rFilter.getGlobalFactory()->createInstance(rServiceName ), UNO_QUERY_THROW );
+            Reference< XAnimationNode > xNode ( rFilter.getServiceFactory()->createInstance( rServiceName ), UNO_QUERY_THROW );
             Reference< XTimeContainer > xParentContainer( rxNode, UNO_QUERY_THROW );
 
             xParentContainer->appendChild( xNode );

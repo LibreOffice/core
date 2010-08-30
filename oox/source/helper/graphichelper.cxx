@@ -35,7 +35,6 @@
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/seqstream.hxx>
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
@@ -67,13 +66,17 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 // ============================================================================
 
-GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
-    mxGraphicProvider( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY ),
+GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
+    mxCompContext( rxContext ),
     mxStorage( rxStorage ),
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
-    ::comphelper::ComponentContext aContext( rxGlobalFactory );
-    mxCompContext = aContext.getUNOContext();
+    OSL_ENSURE( mxCompContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
+    Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
+    OSL_ENSURE( xFactory.is(), "GraphicHelper::GraphicHelper - missing service factory" );
+
+    if( xFactory.is() )
+        mxGraphicProvider.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
 
     //! TODO: get colors from system
     maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;
@@ -110,9 +113,9 @@ GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalF
     // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
     // TODO: we need some mechanism to keep and pass the parent frame
     Reference< XFrame > xFrame = rxTargetFrame;
-    if( !xFrame.is() && rxGlobalFactory.is() ) try
+    if( !xFrame.is() && xFactory.is() ) try
     {
-        Reference< XFramesSupplier > xFramesSupp( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
         xFrame = xFramesSupp->getActiveFrame();
     }
     catch( Exception& )

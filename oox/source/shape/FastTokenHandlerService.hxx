@@ -28,54 +28,46 @@
 #ifndef OOX_SHAPE_FASTTOKENHANDLERSERVICE_HXX
 #define OOX_SHAPE_FASTTOKENHANDLERSERVICE_HXX
 
-#include <sal/config.h>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include "oox/core/fasttokenhandler.hxx"
-
-namespace css = ::com::sun::star;
 
 namespace oox {
 namespace shape {
 
-class FastTokenHandlerService:
-    public ::cppu::WeakImplHelper2<
-        css::lang::XServiceInfo,
-        css::xml::sax::XFastTokenHandler>
+// ============================================================================
+
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::xml::sax::XFastTokenHandler > FastTokenHandlerServiceBase;
+
+class FastTokenHandlerService : public FastTokenHandlerServiceBase
 {
 public:
-    explicit FastTokenHandlerService(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit FastTokenHandlerService( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxCcontext );
+    virtual ~FastTokenHandlerService();
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString & ServiceName) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString & ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::xml::sax::XFastTokenHandler:
-    virtual ::sal_Int32 SAL_CALL getToken(const ::rtl::OUString & Identifier) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getIdentifier(::sal_Int32 Token) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getToken(const ::rtl::OUString & Identifier) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getIdentifier(::sal_Int32 Token) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getTokenFromUTF8(const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getTokenFromUTF8(const ::com::sun::star::uno::Sequence< ::sal_Int8 > & Identifier) throw (::com::sun::star::uno::RuntimeException);
 
 private:
     FastTokenHandlerService(FastTokenHandlerService &); // not defined
     void operator =(FastTokenHandlerService &); // not defined
 
-    virtual ~FastTokenHandlerService() {}
-
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::oox::core::FastTokenHandler mFastTokenHandler;
 };
 
-::rtl::OUString SAL_CALL FastTokenHandlerService_getImplementationName();
+// ============================================================================
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL FastTokenHandlerService_getSupportedServiceNames();
+} // namspace shape
+} // namspace oox
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL _FastTokenHandlerService_create(
-    const css::uno::Reference< css::uno::XComponentContext > & context)
-    SAL_THROW((css::uno::Exception));
-
-}}
-#endif // OOX_SHAPE_FAST_TOKEN_HANDLER_SERVICE_HXX
+#endif

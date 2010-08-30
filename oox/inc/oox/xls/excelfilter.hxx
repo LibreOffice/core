@@ -59,7 +59,8 @@ class ExcelFilter : public ::oox::core::XmlFilterBase, public ExcelFilterBase
 {
 public:
     explicit            ExcelFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
     virtual             ~ExcelFilter();
 
     virtual bool        importDocument() throw();
@@ -82,7 +83,8 @@ class ExcelBiffFilter : public ::oox::core::BinaryFilterBase, public ExcelFilter
 {
 public:
     explicit            ExcelBiffFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
     virtual             ~ExcelBiffFilter();
 
     virtual bool        importDocument() throw();

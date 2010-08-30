@@ -45,7 +45,7 @@ class OOX_DLLPUBLIC ExcelVbaProject : public ::oox::ole::VbaProject
 {
 public:
     explicit            ExcelVbaProject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& rxDocument );
 
     /** Attaches all document and sheet events to existing VBA macros. */

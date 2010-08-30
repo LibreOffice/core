@@ -42,8 +42,8 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-BinaryFilterBase::BinaryFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    FilterBase( rxGlobalFactory )
+BinaryFilterBase::BinaryFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    FilterBase( rxContext )
 {
 }
 
@@ -55,12 +55,12 @@ BinaryFilterBase::~BinaryFilterBase()
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxInStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxInStream, true ) );
 }
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxOutStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxOutStream, true ) );
 }
 
 // ============================================================================

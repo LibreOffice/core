@@ -37,9 +37,9 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace document { class XEventsSupplier; }
     namespace frame { class XModel; }
-    namespace lang { class XMultiServiceFactory; }
     namespace script { class XLibraryContainer; }
     namespace script { namespace vba { class XVBAMacroResolver; } }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox { class GraphicHelper; }
@@ -53,7 +53,7 @@ class OOX_DLLPUBLIC VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rConfigCompName );
                         ~VbaFilterConfig();
 
@@ -116,7 +116,7 @@ class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 {
 public:
     explicit            VbaProject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const ::rtl::OUString& rConfigCompName );
     virtual             ~VbaProject();
@@ -338,8 +338,8 @@ private:
     typedef RefVector< VbaMacroAttacherBase >           MacroAttacherVector;
     typedef ::std::map< ::rtl::OUString, sal_Int32 >    DummyModuleMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxGlobalFactory;    /// Global service factory.
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        mxCompContext;      /// Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         mxDocModel;         /// Document model used to import/export the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >

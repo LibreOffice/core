@@ -106,7 +106,6 @@ D3DSceneShadeMode
 DDELinks
 DatabaseRanges
 Decoration
-DefaultContext
 DefaultScrollValue
 DefaultSpinValue
 DefaultState

@@ -85,26 +85,27 @@ void ExcelFilterBase::unregisterWorkbookData()
 
 OUString SAL_CALL ExcelFilter_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilter" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
 
 Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw()
 {
-    OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilter" );
-    Sequence< OUString > aSeq( &aServiceName, 1 );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
+    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
     return aSeq;
 }
 
 Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxGlobalFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelFilter::ExcelFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    XmlFilterBase( rxGlobalFactory )
+ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    XmlFilterBase( rxContext )
 {
 }
 
@@ -161,7 +162,7 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
 
 ::oox::ole::VbaProject* ExcelFilter::implCreateVbaProject() const
 {
-    return new ExcelVbaProject( getGlobalFactory(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+    return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
 OUString ExcelFilter::implGetImplementationName() const
@@ -173,26 +174,27 @@ OUString ExcelFilter::implGetImplementationName() const
 
 OUString SAL_CALL ExcelBiffFilter_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" );
 }
 
 Sequence< OUString > SAL_CALL ExcelBiffFilter_getSupportedServiceNames() throw()
 {
-    OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" );
-    Sequence< OUString > aSeq( &aServiceName, 1 );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
+    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
     return aSeq;
 }
 
 Reference< XInterface > SAL_CALL ExcelBiffFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxGlobalFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelBiffFilter::ExcelBiffFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    BinaryFilterBase( rxGlobalFactory )
+ExcelBiffFilter::ExcelBiffFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    BinaryFilterBase( rxContext )
 {
 }
 
@@ -241,7 +243,7 @@ GraphicHelper* ExcelBiffFilter::implCreateGraphicHelper() const
 
 ::oox::ole::VbaProject* ExcelBiffFilter::implCreateVbaProject() const
 {
-    return new ExcelVbaProject( getGlobalFactory(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+    return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
 OUString ExcelBiffFilter::implGetImplementationName() const

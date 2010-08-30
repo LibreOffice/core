@@ -38,6 +38,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace comphelper { class MediaDescriptor; }
@@ -96,7 +97,8 @@ private:
 class OOX_DLLPUBLIC FilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
 public:
-    explicit            FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+    explicit            FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
     virtual             ~FilterDetect();
 
     /** Tries to extract an unencrypted ZIP package from the passed media
@@ -149,12 +151,12 @@ public:
         interface of the temporary file will be stored in the 'ComponentData'
         property of the passed media descriptor.
      */
-    virtual ::rtl::OUString SAL_CALL detect(
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq )
+    virtual ::rtl::OUString SAL_CALL
+                        detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq )
                             throw( ::com::sun::star::uno::RuntimeException );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
 
 // ============================================================================

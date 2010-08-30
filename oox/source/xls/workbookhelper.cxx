@@ -621,7 +621,7 @@ FilterBase& WorkbookHelper::getBaseFilter() const
 
 Reference< XMultiServiceFactory > WorkbookHelper::getGlobalFactory() const
 {
-    return mrBookData.getBaseFilter().getGlobalFactory();
+    return mrBookData.getBaseFilter().getServiceFactory();
 }
 
 FilterType WorkbookHelper::getFilterType() const

@@ -241,7 +241,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     Reference< XInterface > xInt;
     try
     {
-        xInt = mxData->mrFilter.getGlobalFactory()->createInstance( rServiceName );
+        xInt = mxData->mrFilter.getServiceFactory()->createInstance( rServiceName );
     }
     catch( Exception& )
     {

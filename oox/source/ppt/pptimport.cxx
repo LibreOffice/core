@@ -42,24 +42,25 @@ namespace oox { namespace ppt {
 
 OUString SAL_CALL PowerPointImport_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.PowerPointImport" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.ppt.PowerPointImport" );
 }
 
 uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.ooxpptx" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
+    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return (cppu::OWeakObject*)new PowerPointImport( rSMgr );
+    return static_cast< ::cppu::OWeakObject* >( new PowerPointImport( rxContext ) );
 }
 
-PowerPointImport::PowerPointImport( const uno::Reference< lang::XMultiServiceFactory > & rSMgr  )
-    : XmlFilterBase( rSMgr )
-    , mxChartConv( new ::oox::drawingml::chart::ChartConverter )
+PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    XmlFilterBase( rxContext ),
+    mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 {
 }
 
@@ -164,7 +165,7 @@ private:
 };
 
 PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
-    GraphicHelper( rFilter.getGlobalFactory(), rFilter.getTargetFrame(), rFilter.getStorage() ),
+    GraphicHelper( rFilter.getComponentContext(), rFilter.getTargetFrame(), rFilter.getStorage() ),
     mrFilter( rFilter )
 {
 }
@@ -183,7 +184,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 
 ::oox::ole::VbaProject* PowerPointImport::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getGlobalFactory(), getModel(), CREATE_OUSTRING( "Impress" ) );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Impress" ) );
 }
 
 OUString PowerPointImport::implGetImplementationName() const

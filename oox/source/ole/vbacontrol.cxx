@@ -731,13 +731,13 @@ OUString lclGetQuotedString( const OUString& rCodeLine )
 
 // ----------------------------------------------------------------------------
 
-VbaUserForm::VbaUserForm( const Reference< XMultiServiceFactory >& rxGlobalFactory,
+VbaUserForm::VbaUserForm( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
-    mxGlobalFactory( rxGlobalFactory ),
+    mxCompContext( rxContext ),
     mxDocModel( rxDocModel ),
     maConverter( rxDocModel, rGraphicHelper, bDefaultColorBgr )
 {
-    OSL_ENSURE( mxGlobalFactory.is(), "VbaUserForm::VbaUserForm - missing service factory" );
+    OSL_ENSURE( mxCompContext.is(), "VbaUserForm::VbaUserForm - missing component context" );
     OSL_ENSURE( mxDocModel.is(), "VbaUserForm::VbaUserForm - missing document model" );
 }
 
@@ -745,7 +745,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         StorageBase& rVbaFormStrg, const OUString& rModuleName, rtl_TextEncoding eTextEnc )
 {
     OSL_ENSURE( rxDialogLib.is(), "VbaUserForm::importForm - missing dialog library" );
-    if( !mxGlobalFactory.is() || !mxDocModel.is() || !rxDialogLib.is() )
+    if( !mxCompContext.is() || !mxDocModel.is() || !rxDialogLib.is() )
         return;
 
     // check that the '03VBFrame' stream exists, this is required for forms
@@ -803,16 +803,15 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     {
         // create the dialog model
         OUString aServiceName = mxCtrlModel->getServiceName();
-        Reference< XControlModel > xDialogModel( mxGlobalFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XControlModel > xDialogModel( xFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
         Reference< XNameContainer > xDialogNC( xDialogModel, UNO_QUERY_THROW );
 
         // convert properties and embedded controls
         if( convertProperties( xDialogModel, maConverter, 0 ) )
         {
             // export the dialog to XML and insert it into the dialog library
-            PropertySet aFactoryProps( mxGlobalFactory );
-            Reference< XComponentContext > xCompContext( aFactoryProps.getAnyProperty( PROP_DefaultContext ), UNO_QUERY_THROW );
-            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, xCompContext ), UNO_SET_THROW );
+            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, mxCompContext ), UNO_SET_THROW );
             OSL_ENSURE( !rxDialogLib->hasByName( aFormName ), "VbaUserForm::importForm - multiple dialogs with equal name" );
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
         }

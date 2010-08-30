@@ -37,6 +37,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XVBACompat.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
@@ -94,14 +95,15 @@ bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUS
 
 // ----------------------------------------------------------------------------
 
-VbaFilterConfig::VbaFilterConfig( const Reference< XMultiServiceFactory >& rxGlobalFactory, const OUString& rConfigCompName )
+VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& rConfigCompName )
 {
-    OSL_ENSURE( rxGlobalFactory.is(), "VbaFilterConfig::VbaFilterConfig - missing service factory" );
-    try
+    OSL_ENSURE( rxContext.is(), "VbaFilterConfig::VbaFilterConfig - missing component context" );
+    if( rxContext.is() ) try
     {
         OSL_ENSURE( rConfigCompName.getLength() > 0, "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
         OUString aConfigPackage = CREATE_OUSTRING( "org.openoffice.Office." ) + rConfigCompName;
-        mxConfigAccess = ConfigurationHelper::openConfig( rxGlobalFactory, aConfigPackage, ConfigurationHelper::E_READONLY );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        mxConfigAccess = ConfigurationHelper::openConfig( xFactory, aConfigPackage, ConfigurationHelper::E_READONLY );
     }
     catch( Exception& )
     {
@@ -153,13 +155,14 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
 
 // ============================================================================
 
-VbaProject::VbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory,
+VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const OUString& rConfigCompName ) :
-    VbaFilterConfig( rxGlobalFactory, rConfigCompName ),
-    mxGlobalFactory( rxGlobalFactory ),
+    VbaFilterConfig( rxContext, rConfigCompName ),
+    mxCompContext( rxContext ),
     mxDocModel( rxDocModel ),
     maPrjName( CREATE_OUSTRING( "Standard" ) )
 {
+    OSL_ENSURE( mxCompContext.is(), "VbaProject::VbaProject - missing component context" );
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
     mxBasicLib = openLibrary( PROP_BasicLibraries, false );
     mxDialogLib = openLibrary( PROP_DialogLibraries, false );
@@ -552,7 +555,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
-                VbaUserForm aForm( mxGlobalFactory, mxDocModel, rGraphicHelper, bDefaultColorBgr );
+                VbaUserForm aForm( mxCompContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
                 aForm.importForm( xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch( Exception& )
@@ -569,13 +572,14 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
 void VbaProject::attachMacros()
 {
-    if( !maMacroAttachers.empty() ) try
+    if( !maMacroAttachers.empty() && mxCompContext.is() ) try
     {
+        Reference< XMultiComponentFactory > xFactory( mxCompContext->getServiceManager(), UNO_SET_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= mxDocModel;
         aArgs[ 1 ] <<= maPrjName;
-        Reference< XVBAMacroResolver > xResolver( mxGlobalFactory->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs ), UNO_QUERY_THROW );
+        Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
+            CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs, mxCompContext ), UNO_QUERY_THROW );
         maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::boost::cref( xResolver ) );
     }
     catch( Exception& )
@@ -585,14 +589,15 @@ void VbaProject::attachMacros()
 
 void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
 {
-    try
+    if( mxCompContext.is() ) try
     {
+        Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< XStorageBasedDocument > xStorageBasedDoc( mxDocModel, UNO_QUERY_THROW );
         Reference< XStorage > xDocStorage( xStorageBasedDoc->getDocumentStorage(), UNO_QUERY_THROW );
         {
             using namespace ::com::sun::star::embed::ElementModes;
             Reference< XStream > xDocStream( xDocStorage->openStreamElement( CREATE_OUSTRING( "_MS_VBA_Macros" ), SEEKABLE | WRITE | TRUNCATE ), UNO_SET_THROW );
-            OleStorage aDestStorage( mxGlobalFactory, xDocStream, false );
+            OleStorage aDestStorage( xFactory, xDocStream, false );
             rVbaPrjStrg.copyStorageToStorage( aDestStorage );
             aDestStorage.commit();
         }

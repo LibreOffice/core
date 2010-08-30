@@ -405,10 +405,10 @@ uno::Sequence< ::rtl::OUString > VBAMacroResolver_getSupportedServiceNames()
 
 ::rtl::OUString VBAMacroResolver_getImplementationName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAMacroResolver" ) );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.vba.VBAMacroResolver" ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( const uno::Reference< lang::XMultiServiceFactory >& ) throw (uno::Exception)
+uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& ) throw (uno::Exception)
 {
     return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
 }

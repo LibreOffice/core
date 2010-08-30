@@ -56,8 +56,8 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
-ExcelVbaProject::ExcelVbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XSpreadsheetDocument >& rxDocument ) :
-    ::oox::ole::VbaProject( rxGlobalFactory, Reference< XModel >( rxDocument, UNO_QUERY ), CREATE_OUSTRING( "Calc" ) ),
+ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContext, const Reference< XSpreadsheetDocument >& rxDocument ) :
+    ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ), CREATE_OUSTRING( "Calc" ) ),
     mxDocument( rxDocument )
 {
 }

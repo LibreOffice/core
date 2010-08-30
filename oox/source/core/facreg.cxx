@@ -25,152 +25,74 @@
  *
  ************************************************************************/
 
-#include "oox/dllapi.h"
-
-#include <string.h>
-
-#include <sal/config.h>
-
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-
-#include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
+#include <cppuhelper/implementationentry.hxx>
 
 using ::rtl::OUString;
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
-#define SERVICE( className )                                        \
-extern OUString SAL_CALL className##_getImplementationName() throw();   \
-extern uno::Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw();\
-extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(           \
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr )                \
-    throw( uno::Exception )
+// Declare static functions providing service information =====================
 
-#define SERVICE2( className )                                       \
-extern OUString SAL_CALL className##_getImplementationName() throw();   \
-extern uno::Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw();\
-extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(           \
-        const uno::Reference< uno::XComponentContext > & xContext )             \
-    throw( uno::Exception )
+#define DECLARE_FUNCTIONS( className )                                                  \
+extern OUString SAL_CALL className##_getImplementationName() throw();                   \
+extern Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw();    \
+extern Reference< XInterface > SAL_CALL className##_createInstance(                     \
+    const Reference< XComponentContext >& rxContext ) throw (Exception)
 
 namespace oox {
-    namespace core { SERVICE( FilterDetect ); }
-    namespace ppt { SERVICE( PowerPointImport ); }
-    namespace xls { SERVICE( BiffDetector ); }
-    namespace xls { SERVICE( ExcelFilter ); }
-    namespace xls { SERVICE( ExcelBiffFilter ); }
-    namespace shape { SERVICE( ShapeContextHandler ); }
-    namespace shape { SERVICE( FastTokenHandlerService ); }
-    namespace docprop { SERVICE2( OOXMLDocPropImportImpl ); }
-    namespace xls { SERVICE2( OOXMLFormulaParser ); }
+    namespace core {    DECLARE_FUNCTIONS( FilterDetect );              }
+    namespace docprop { DECLARE_FUNCTIONS( OOXMLDocPropImportImpl );    }
+    namespace ppt {     DECLARE_FUNCTIONS( PowerPointImport );          }
+    namespace shape {   DECLARE_FUNCTIONS( FastTokenHandlerService );   }
+    namespace shape {   DECLARE_FUNCTIONS( ShapeContextHandler );       }
+    namespace xls {     DECLARE_FUNCTIONS( BiffDetector );              }
+    namespace xls {     DECLARE_FUNCTIONS( ExcelFilter );               }
+    namespace xls {     DECLARE_FUNCTIONS( ExcelBiffFilter );           }
+    namespace xls {     DECLARE_FUNCTIONS( OOXMLFormulaParser );        }
 }
 
-//
-#ifdef __cplusplus
-extern "C"
+#undef DECLARE_FUNCTIONS
+
+// ============================================================================
+
+namespace {
+
+#define IMPLEMENTATION_ENTRY( className ) \
+    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 }
+
+static ::cppu::ImplementationEntry const spServices[] =
 {
-#endif
+    IMPLEMENTATION_ENTRY( ::oox::core::FilterDetect ),
+    IMPLEMENTATION_ENTRY( ::oox::docprop::OOXMLDocPropImportImpl ),
+    IMPLEMENTATION_ENTRY( ::oox::ppt::PowerPointImport ),
+    IMPLEMENTATION_ENTRY( ::oox::shape::FastTokenHandlerService ),
+    IMPLEMENTATION_ENTRY( ::oox::shape::ShapeContextHandler ),
+    IMPLEMENTATION_ENTRY( ::oox::xls::BiffDetector ),
+    IMPLEMENTATION_ENTRY( ::oox::xls::ExcelFilter ),
+    IMPLEMENTATION_ENTRY( ::oox::xls::ExcelBiffFilter ),
+    IMPLEMENTATION_ENTRY( ::oox::xls::OOXMLFormulaParser ),
+    { 0, 0, 0, 0, 0, 0 }
+};
 
-OOX_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
+#undef IMPLEMENTATION_ENTRY
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+        const sal_Char** ppEnvironmentTypeName, uno_Environment** /*ppEnvironment*/ )
 {
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
-    uno::Reference< registry::XRegistryKey > xNewKey(
-        pRegistryKey->createKey(
-            OUString( sal_Unicode( '/' ) ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
-
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( rServices.getConstArray()[i]);
+    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, spServices );
 }
 
-#define WRITEINFO(className)\
-    writeInfo( pKey, className##_getImplementationName(), className##_getSupportedServiceNames() )
-
-OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKey )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
 {
-    if( pRegistryKey )
-    {
-        try
-        {
-            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-
-            WRITEINFO( ::oox::core::FilterDetect );
-            WRITEINFO( ::oox::ppt::PowerPointImport );
-            WRITEINFO( ::oox::xls::BiffDetector );
-            WRITEINFO( ::oox::xls::ExcelFilter );
-            WRITEINFO( ::oox::xls::ExcelBiffFilter );
-            WRITEINFO( ::oox::shape::ShapeContextHandler );
-            WRITEINFO( ::oox::shape::FastTokenHandlerService );
-            WRITEINFO( ::oox::docprop::OOXMLDocPropImportImpl );
-            WRITEINFO( ::oox::xls::OOXMLFormulaParser );
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_True;
+    return ::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, spServices );
 }
 
-#define SINGLEFACTORY(classname)\
-        if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
-        {\
-            xFactory = ::cppu::createSingleFactory( xMSF,\
-                classname##_getImplementationName(),\
-                classname##_createInstance,\
-                classname##_getSupportedServiceNames() );\
-        }
-
-#define SINGLEFACTORY2(classname)\
-        if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
-        {\
-            xCompFactory = ::cppu::createSingleComponentFactory(\
-                classname##_createInstance,\
-                classname##_getImplementationName(),\
-                classname##_getSupportedServiceNames() );\
-        }
-
-OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * )
-{
-    void * pRet = 0;
-    if( pServiceManager )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
-
-        uno::Reference< lang::XSingleServiceFactory > xFactory;
-        uno::Reference< lang::XSingleComponentFactory > xCompFactory;
-
-        const sal_Int32 nImplNameLen = strlen( pImplName );
-
-        SINGLEFACTORY( ::oox::core::FilterDetect )
-        else SINGLEFACTORY( oox::ppt::PowerPointImport )
-        else SINGLEFACTORY( ::oox::xls::BiffDetector )
-        else SINGLEFACTORY( ::oox::xls::ExcelFilter )
-        else SINGLEFACTORY( ::oox::xls::ExcelBiffFilter )
-        else SINGLEFACTORY( ::oox::shape::ShapeContextHandler)
-        else SINGLEFACTORY( ::oox::shape::FastTokenHandlerService)
-        else SINGLEFACTORY2( ::oox::docprop::OOXMLDocPropImportImpl )
-        else SINGLEFACTORY2( ::oox::xls::OOXMLFormulaParser )
-
-        if( xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-        else if ( xCompFactory.is() )
-        {
-            xCompFactory->acquire();
-            pRet = xCompFactory.get();
-        }
-    }
-    return pRet;
-}
-
-#ifdef __cplusplus
-}
-#endif
-
+// ============================================================================
