@@ -1545,8 +1545,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_INSERTTEXT:
         {
             const SfxStringItem& rItem =
-                (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
-
+                    (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
             if (pWin)
                 pWin->InsertText(rItem.GetValue());
             break;

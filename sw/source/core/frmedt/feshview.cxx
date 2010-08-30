@@ -30,10 +30,6 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include "hintids.hxx"
 
-#ifdef WIN
-#define _FESHVIEW_ONLY_INLINE_NEEDED
-#endif
-
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
