@@ -727,6 +727,30 @@ OUString lclGetQuotedString( const OUString& rCodeLine )
     return aBuffer.makeStringAndClear();
 }
 
+bool lclEatWhitespace( OUString& rCodeLine )
+{
+    sal_Int32 nIndex = 0;
+    while( (nIndex < rCodeLine.getLength()) && ((rCodeLine[ nIndex ] == ' ') || (rCodeLine[ nIndex ] == '\t')) )
+        ++nIndex;
+    if( nIndex > 0 )
+    {
+        rCodeLine = rCodeLine.copy( nIndex );
+        return true;
+    }
+    return false;
+}
+
+bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
+{
+    if( rCodeLine.matchIgnoreAsciiCase( rKeyword ) )
+    {
+        rCodeLine = rCodeLine.copy( rKeyword.getLength() );
+        // success, if code line ends after keyword, or if whitespace follows
+        return (rCodeLine.getLength() == 0) || lclEatWhitespace( rCodeLine );
+    }
+    return false;
+}
+
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -762,10 +786,10 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     while( !bBeginFound && !aFrameTextStrm.isEof() )
     {
         aLine = aFrameTextStrm.readLine().trim();
-        bBeginFound = VbaHelper::eatKeyword( aLine, aBegin );
+        bBeginFound = lclEatKeyword( aLine, aBegin );
     }
     // check for the specific GUID that represents VBA forms
-    if( !bBeginFound || !VbaHelper::eatKeyword( aLine, CREATE_OUSTRING( "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) ) )
+    if( !bBeginFound || !lclEatKeyword( aLine, CREATE_OUSTRING( "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) ) )
         return;
 
     // remaining line is the form name

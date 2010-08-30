@@ -241,7 +241,7 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
         case VML_TOKEN( image ):
             return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

@@ -30,7 +30,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
@@ -46,6 +46,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;

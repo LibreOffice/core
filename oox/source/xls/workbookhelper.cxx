@@ -677,8 +677,7 @@ void WorkbookHelper::finalizeWorkbookImport()
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
 
     /*  Import the VBA project (after finalizing workbook settings which
-        contains the workbook code name), and attach VBA macros to document and
-        sheet events. */
+        contains the workbook code name). */
     StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         getBaseFilter().getVbaProject().importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
