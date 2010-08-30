@@ -28,6 +28,7 @@
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <basic/sbx.hxx>
@@ -69,7 +70,6 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 
     if ( m_xDialog.is() )
     {
-        aRet = m_xDialog->execute();
         // try to center dialog on model window
         if( m_xModel.is() ) try
         {
@@ -77,12 +77,16 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
             uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
             uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
             awt::Rectangle aPosSize = xWindow->getPosSize();    // already in pixel
-            setLeft( (aPosSize.Width - getWidth()) / 2.0 );
-            setTop( (aPosSize.Height - getHeight()) / 2.0 );
+
+            uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XWindow > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
+            xControlWindow->setPosSize( (aPosSize.Width - getWidth()) / 2.0, (aPosSize.Height - getHeight()) / 2.0, 0, 0, awt::PosSize::POS );
         }
         catch( uno::Exception& )
         {
         }
+
+        aRet = m_xDialog->execute();
     }
     OSL_TRACE("ScVbaUserForm::Show() execute returned %d", aRet);
     if ( mbDispose )
