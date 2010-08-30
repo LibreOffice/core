@@ -977,6 +977,8 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
         aArgs.remove( "BreakMacroSignature" );
         aArgs.remove( "Stream" );
         aArgs.remove( "InputStream" );
+        aArgs.remove( "URL" );
+        aArgs.remove( "Frame" );
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
@@ -987,6 +989,10 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
         {
             SfxAllItemSet aSet( pObjectShell->GetPool() );
             TransformParameters( SID_OPENDOC, rArgs, aSet );
+
+            // the arguments are not allowed to reach the medium
+            aSet.ClearItem( SID_FILE_NAME );
+            aSet.ClearItem( SID_FILLFRAME );
 
             pMedium->GetItemSet()->Put( aSet );
             SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );

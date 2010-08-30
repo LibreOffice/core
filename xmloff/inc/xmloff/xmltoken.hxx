@@ -3107,6 +3107,9 @@ namespace xmloff { namespace token {
         XML_N_CHART_EXT,
         XML_COORDINATE_REGION,
 
+        XML_DIAGONAL_BL_TR_WIDTHS,
+        XML_DIAGONAL_TL_BR_WIDTHS,
+
         XML_TOKEN_END
     };
 
