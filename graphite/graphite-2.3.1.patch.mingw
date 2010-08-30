@@ -116,15 +116,6 @@
  #include <assert.h>
 --- misc/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	2009-01-29 17:33:19.000000000 +0900
 +++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	2009-08-23 20:59:16.211375000 +0900
-@@ -408,7 +408,7 @@
- 					if (pPolyCurve->wType == TT_PRIM_QSPLINE &&
- 						// test if this is the last curve
- 						pPolyHdr->cb - (int)((byte *)(&pPolyCurve->apfx[j]) - (byte *)(pPolyHdr))
--							== sizeof POINTFX &&
-+							== sizeof(POINTFX) &&
- 						// and the two points are identical
- 						CompareFixed(pPolyCurve->apfx[j].x, pPolyHdr->pfxStart.x) &&
- 						CompareFixed(pPolyCurve->apfx[j].y, pPolyHdr->pfxStart.y))
 @@ -846,7 +846,7 @@
  
  } // namespace gr
