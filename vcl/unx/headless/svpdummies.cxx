@@ -61,6 +61,7 @@ void SvpSalObject::GrabFocus() {}
 void SvpSalObject::SetBackground() {}
 void SvpSalObject::SetBackground( SalColor ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
+void SvpSalObject::InterceptChildWindowKeyDown( sal_Bool ) {}
 
 // SalI18NImeStatus
 SvpImeStatus::~SvpImeStatus() {}
