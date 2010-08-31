@@ -197,7 +197,7 @@ const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandle
         break;
     }
     VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( mpShell, aMacroName, false );
-    return aMacroInfo.IsResolved() ? aMacroInfo.ResolvedMacro() : ::rtl::OUString();
+    return aMacroInfo.IsResolved() ? ::rtl::OUString( aMacroInfo.ResolvedMacro() ) : ::rtl::OUString();
 }
 
 void VbaEventsHelperBase::stopListening()
