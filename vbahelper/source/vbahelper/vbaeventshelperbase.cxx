@@ -200,7 +200,7 @@ const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandle
                 append( sal_Unicode( '.' ) ).append( rInfo.maMacroName ).makeStringAndClear();
         break;
     }
-    return resolveVBAMacro( mpShell, aMacroName ).ResolvedMacro();
+    return resolveVBAMacro( mpShell, aMacroName ).msResolvedMacro;
 }
 
 void VbaEventsHelperBase::stopListening()
