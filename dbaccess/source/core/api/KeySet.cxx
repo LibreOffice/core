@@ -809,10 +809,12 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
         for (;aAutoIter !=  aAutoEnd; ++aAutoIter)
         {
             // we will only fetch values which are keycolumns
-            if ( m_pKeyColumnNames->find(*aAutoIter) != aEnd )
+            SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+            if ( aFind != aEnd )
             {
                 sMaxStmt += sMax;
-                sMaxStmt += ::dbtools::quoteName( sQuote,*aAutoIter);
+                sMaxStmt += ::dbtools::quoteName( sQuote,aFind->second.sRealName
+);
                 sMaxStmt += sMaxEnd;
             }
         }
@@ -823,7 +825,9 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
             ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT ");
             sStmt += sMaxStmt;
             sStmt += ::rtl::OUString::createFromAscii("FROM ");
-            sStmt += m_aSelectComposedTableName;
+            ::rtl::OUString sCatalog,sSchema,sTable;
+            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
             try
             {
                 // now fetch the autoincrement values
