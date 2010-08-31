@@ -4179,7 +4179,7 @@ protected:
     // this mutex is necessary for OInterfaceContainerHelper
     ::osl::Mutex m_aMutex;
 };
-};
+} // namespace
 
 typedef WeakImplHelper2< XInvocation, XComponent > ModuleInvocationProxyHelper;
 
@@ -4566,9 +4566,9 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
                     SbxObject* pCurObject = this;
                     do
                     {
-                        SbxObject* pParent = pCurObject->GetParent();
-                        pParentBasic = PTR_CAST(StarBASIC,pParent);
-                        pCurObject = pParent;
+                        SbxObject* pObjParent = pCurObject->GetParent();
+                        pParentBasic = PTR_CAST( StarBASIC, pObjParent );
+                        pCurObject = pObjParent;
                     }
                     while( pParentBasic == NULL && pCurObject != NULL );
 

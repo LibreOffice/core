@@ -2535,9 +2535,9 @@ void SbUserFormModule::InitObject()
                 SbxObject* pCurObject = this;
                 do
                 {
-                    SbxObject* pParent = pCurObject->GetParent();
-                    pParentBasic = PTR_CAST(StarBASIC,pParent);
-                    pCurObject = pParent;
+                    SbxObject* pObjParent = pCurObject->GetParent();
+                    pParentBasic = PTR_CAST( StarBASIC, pObjParent );
+                    pCurObject = pObjParent;
                 }
                 while( pParentBasic == NULL && pCurObject != NULL );
 

@@ -591,8 +591,8 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             }
             else if( bVBAEnabled )  // !pObj
             {
-                SbxArray* pPar = pElem->GetParameters();
-                if( pPar != NULL )
+                SbxArray* pParam = pElem->GetParameters();
+                if( pParam != NULL )
                     Error( SbERR_NO_OBJECT );
             }
         }
