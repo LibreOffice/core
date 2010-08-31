@@ -48,7 +48,7 @@ namespace vcl
          or a child WindowArranger (a node in the hierarchy), but never both
     */
 
-    class WindowArranger
+    class VCL_DLLPUBLIC WindowArranger
     {
     protected:
         struct Element
@@ -101,12 +101,19 @@ namespace vcl
         Rectangle                   m_aManagedArea;
         long                        m_nOuterBorder;
 
+        rtl::OUString               m_aIdentifier;
+
         virtual Element* getElement( size_t i_nIndex ) = 0;
         const Element* getConstElement( size_t i_nIndex ) const
         { return const_cast<WindowArranger*>(this)->getElement( i_nIndex ); }
 
 
     public:
+        static long getDefaultBorder();
+
+        static long getBorderValue( long nBorder )
+        { return nBorder >= 0 ? nBorder : -nBorder * getDefaultBorder(); }
+
         WindowArranger( WindowArranger* i_pParent = NULL )
         : m_pParentWindow( i_pParent ? i_pParent->m_pParentWindow : NULL )
         , m_pParentArranger( i_pParent )
@@ -140,6 +147,9 @@ namespace vcl
         }
 
         virtual bool isVisible() const; // true if any element is visible
+
+        virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getProperties() const;
+        virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
 
         sal_Int32 getExpandPriority( size_t i_nIndex ) const
         {
@@ -187,9 +197,15 @@ namespace vcl
             m_nOuterBorder = i_nBorder;
             resize();
         }
+
+        const rtl::OUString getIdentifier() const
+        { return m_aIdentifier; }
+
+        void setIdentifier( const rtl::OUString& i_rId )
+        { m_aIdentifier = i_rId; }
     };
 
-    class RowOrColumn : public WindowArranger
+    class VCL_DLLPUBLIC RowOrColumn : public WindowArranger
     {
         long    m_nBorderWidth;
         bool    m_bColumn;
@@ -204,7 +220,7 @@ namespace vcl
 
     public:
         RowOrColumn( WindowArranger* i_pParent = NULL,
-                     bool bColumn = true, long i_nBorderWidth = 5 )
+                     bool bColumn = true, long i_nBorderWidth = -1 )
         : WindowArranger( i_pParent )
         , m_nBorderWidth( i_nBorderWidth )
         , m_bColumn( bColumn )
@@ -230,7 +246,7 @@ namespace vcl
         long getBorderWidth() const { return m_nBorderWidth; }
     };
 
-    class LabeledElement : public WindowArranger
+    class VCL_DLLPUBLIC LabeledElement : public WindowArranger
     {
         WindowArranger::Element m_aLabel;
         WindowArranger::Element m_aElement;
@@ -248,7 +264,7 @@ namespace vcl
         }
 
     public:
-        LabeledElement( WindowArranger* i_pParent = NULL, int i_nLabelStyle = 0, long i_nDistance = 5 )
+        LabeledElement( WindowArranger* i_pParent = NULL, int i_nLabelStyle = 0, long i_nDistance = -1 )
         : WindowArranger( i_pParent )
         , m_nDistance( i_nDistance )
         , m_nLabelColumnWidth( 0 )
@@ -274,11 +290,11 @@ namespace vcl
         { return m_aElement.getOptimalSize( i_eType ); }
     };
 
-    class LabelColumn : public RowOrColumn
+    class VCL_DLLPUBLIC LabelColumn : public RowOrColumn
     {
         long getLabelWidth() const;
     public:
-        LabelColumn( WindowArranger* i_pParent = NULL, long i_nBorderWidth = 5 )
+        LabelColumn( WindowArranger* i_pParent = NULL, long i_nBorderWidth = -1 )
         : RowOrColumn( i_pParent, true, i_nBorderWidth )
         {}
         virtual ~LabelColumn();
@@ -291,7 +307,7 @@ namespace vcl
         size_t addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent = 0 );
     };
 
-    class Indenter : public WindowArranger
+    class VCL_DLLPUBLIC Indenter : public WindowArranger
     {
         long                        m_nIndent;
         WindowArranger::Element     m_aElement;
@@ -301,7 +317,7 @@ namespace vcl
         { return i_nIndex == 0 ? &m_aElement : NULL; }
 
     public:
-        Indenter( WindowArranger* i_pParent = NULL, long i_nIndent = 15 )
+        Indenter( WindowArranger* i_pParent = NULL, long i_nIndent = 3*getDefaultBorder() )
         : WindowArranger( i_pParent )
         , m_nIndent( i_nIndent )
         {}
@@ -325,7 +341,7 @@ namespace vcl
         { setChild( boost::shared_ptr<WindowArranger>( i_pChild ), i_nExpandPrio ); }
     };
 
-    class Spacer : public WindowArranger
+    class VCL_DLLPUBLIC Spacer : public WindowArranger
     {
         WindowArranger::Element     m_aElement;
         Size                        m_aSize;
@@ -351,7 +367,7 @@ namespace vcl
         virtual bool isVisible() const { return true; }
     };
 
-    class MatrixArranger : public WindowArranger
+    class VCL_DLLPUBLIC MatrixArranger : public WindowArranger
     {
         long    m_nBorderX;
         long    m_nBorderY;
@@ -392,8 +408,8 @@ namespace vcl
 
     public:
         MatrixArranger( WindowArranger* i_pParent = NULL,
-                        long i_nBorderX = 5,
-                        long i_nBorderY = 5 )
+                        long i_nBorderX = -1,
+                        long i_nBorderY = -1 )
         : WindowArranger( i_pParent )
         , m_nBorderX( i_nBorderX )
         , m_nBorderY( i_nBorderY )
