@@ -49,7 +49,7 @@
 #include <unotools/syslocale.hxx>
 #include "vcl/svapp.hxx"
 
-#if defined WIN || (defined OS2 && !defined ICC)
+#if (defined OS2 && !defined ICC)
 #define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
 #else
 #define EXPDLG_FUNCTION_NAME    "DoExportDialog"

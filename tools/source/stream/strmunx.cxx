@@ -60,7 +60,7 @@ DECLARE_LIST( InternalStreamLockList, InternalStreamLock* )
 namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
 
 #ifndef BOOTSTRAP
-namespace { struct LockMutex : public rtl::Static< NAMESPACE_VOS(OMutex), LockMutex > {}; }
+namespace { struct LockMutex : public rtl::Static< vos::OMutex, LockMutex > {}; }
 #endif
 
 class InternalStreamLock
@@ -111,7 +111,7 @@ InternalStreamLock::~InternalStreamLock()
 sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
-    NAMESPACE_VOS( OGuard ) aGuard( LockMutex::get() );
+    vos:: OGuard  aGuard( LockMutex::get() );
 #endif
     ByteString aFileName(pStream->GetFileName(), osl_getThreadTextEncoding());
     struct stat aStat;
@@ -161,7 +161,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
-    NAMESPACE_VOS( OGuard ) aGuard( LockMutex::get() );
+    vos:: OGuard  aGuard( LockMutex::get() );
 #endif
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
