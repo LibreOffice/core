@@ -266,10 +266,6 @@ EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAt
     DBG_ASSERT( rAttr.Which() == EE_CHAR_ESCAPEMENT, "Kein Escapementattribut!" );
 }
 
-#if defined( WIN ) && !defined( WNT )
-#pragma optimize ("", off)
-#endif
-
 void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 {
     USHORT nProp = ((const SvxEscapementItem*)GetItem())->GetProp();
@@ -282,11 +278,6 @@ void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
         nEsc = sal::static_int_cast< short >( -( 100 - nProp ) );
     rFont.SetEscapement( nEsc );
 }
-
-#if defined( WIN ) && !defined( WNT )
-#pragma optimize ("", on)
-#endif
-
 
 // -------------------------------------------------------------------------
 // class EditCharAttribOutline

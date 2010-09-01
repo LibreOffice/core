@@ -372,11 +372,13 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
 
     if ( ! GetEntryData( nPos )->m_bLocked )
     {
-        if ( GetEntryData( nPos )->m_eState == REGISTERED )
-            aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-        else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-            aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
-
+        if ( GetEntryData( nPos )->m_bUser )
+        {
+            if ( GetEntryData( nPos )->m_eState == REGISTERED )
+                aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+            else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+                aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+        }
         aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
 

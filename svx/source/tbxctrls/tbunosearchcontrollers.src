@@ -25,55 +25,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_idl.hxx"
+#include <svx/dialogs.hrc>
 
-#ifdef WIN
-#include <svwin.h>
-
-#ifndef _SYSDEP_HXX
-#include <sysdep.hxx>
-#endif
-
-// Statische DLL-Verwaltungs-Variablen
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-
-/***************************************************************************
-|*
-|*    LibMain()
-|*
-|*    Beschreibung       Initialisierungsfunktion der DLL
-|*    Ersterstellung     TH 05.05.93
-|*    Letzte Aenderung   TH 05.05.93
-|*
-***************************************************************************/
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
+String RID_SVXSTR_FINDBAR_FIND
 {
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-/***************************************************************************
-|*
-|*    WEP()
-|*
-|*    Beschreibung      DLL-Deinitialisierung
-|*    Ersterstellung     TH 05.05.93
-|*    Letzte Aenderung   TH 05.05.93
-|*
-***************************************************************************/
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
+    Text [ en-US ] = "Find" ;
+};
