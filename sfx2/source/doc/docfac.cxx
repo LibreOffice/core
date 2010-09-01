@@ -467,7 +467,9 @@ SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const String& i_rVie
         )
     {
         SfxViewFactory& rViewFac( GetViewFactory( nViewNo ) );
-        if ( rViewFac.GetViewName() == i_rViewName )
+        if  (   ( rViewFac.GetAPIViewName() == i_rViewName )
+            ||  ( rViewFac.GetLegacyViewName() == i_rViewName )
+            )
             return &rViewFac;
     }
     return NULL;
