@@ -201,11 +201,14 @@ ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::Un
         uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
         uno::Reference< awt::XControlContainer > xContainer( m_xDialog, uno::UNO_QUERY_THROW );
         uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
-        ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
-            uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
-            ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
-            pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
-        aResult = uno::makeAny( xVBAControl );
+        if ( xControl.is() )
+        {
+            ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
+                uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
+                ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
+                pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
+            aResult = uno::makeAny( xVBAControl );
+        }
     }
 
     return aResult;
