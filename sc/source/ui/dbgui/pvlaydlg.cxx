@@ -958,7 +958,6 @@ PointerStyle ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
         if ( eCheckTarget != TYPE_SELECT )
         {
             // check if the target orientation is allowed for this field
-            bool bAllowed = true;
             ScDPFuncDataVec* fromArr = NULL;
             switch ( eDnDFromType )
             {
