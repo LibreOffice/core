@@ -99,6 +99,19 @@ bool JobData::setPaper( int i_nWidth, int i_nHeight )
     return bSuccess;
 }
 
+bool JobData::setPaperBin( int i_nPaperBin )
+{
+    bool bSuccess = false;
+    if( m_pParser )
+    {
+        const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : NULL;
+
+        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
+    }
+    return bSuccess;
+}
+
 bool JobData::getStreamBuffer( void*& pData, int& bytes )
 {
     // consistency checks

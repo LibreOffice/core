@@ -75,6 +75,7 @@ struct JobData
 
     void setCollate( bool bCollate );
     bool setPaper( int nWidth, int nHeight ); // dimensions in pt
+    bool setPaperBin( int nPaperBin ); // dimensions in pt
 
     // creates a new buffer using new
     // it is up to the user to delete it again

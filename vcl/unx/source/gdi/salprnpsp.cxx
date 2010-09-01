@@ -1118,12 +1118,38 @@ ULONG PspSalPrinter::GetErrorCode()
 
 // -----------------------------------------------------------------------
 
+struct PDFNewJobParameters
+{
+    Size        maPageSize;
+    USHORT      mnPaperBin;
+
+    PDFNewJobParameters( const Size& i_rSize = Size(),
+                         USHORT i_nPaperBin = 0xffff )
+    : maPageSize( i_rSize ), mnPaperBin( i_nPaperBin ) {}
+
+    bool operator!=(const PDFNewJobParameters& rComp ) const
+    {
+        Size aCompLSSize( rComp.maPageSize.Height(), rComp.maPageSize.Width() );
+        return
+            (maPageSize != rComp.maPageSize && maPageSize != aCompLSSize)
+        ||  mnPaperBin != rComp.mnPaperBin
+        ;
+    }
+
+    bool operator==(const PDFNewJobParameters& rComp) const
+    {
+        return ! this->operator!=(rComp);
+    }
+};
+
 struct PDFPrintFile
 {
     rtl::OUString       maTmpURL;
-    Size                maPageSize;
+    PDFNewJobParameters maParameters;
 
-    PDFPrintFile( const rtl::OUString& i_rURL, const Size& i_rSize ) : maTmpURL( i_rURL ), maPageSize( i_rSize ) {}
+    PDFPrintFile( const rtl::OUString& i_rURL, const PDFNewJobParameters& i_rNewParameters )
+    : maTmpURL( i_rURL )
+    , maParameters( i_rNewParameters ) {}
 };
 
 BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobName, const String& i_rAppName,
@@ -1180,7 +1206,7 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
     int nAllPages = i_rController.getFilteredPageCount();
     i_rController.createProgressDialog();
     bool bAborted = false;
-    Size aLastPageSize(0,0);
+    PDFNewJobParameters aLastParm;
     for( int nPage = 0; nPage < nAllPages && ! bAborted; nPage++ )
     {
         if( nPage == nAllPages-1 )
@@ -1203,8 +1229,7 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
         {
             pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
             pPrinter->SetPaperSizeUser( aPageSize.aSize, true );
-            Size aRealSize( pPrinter->GetPaperSize() );
-            Size aLSSize( aRealSize.Height(), aRealSize.Width() );
+            PDFNewJobParameters aNewParm( pPrinter->GetPaperSize(), pPrinter->GetPaperBin() );
 
             // create PDF writer on demand
             // either on first page
@@ -1212,7 +1237,7 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
             // so we need to start a new job to get a new paper format from the printer
             // orientation switches (that is switch of height and width) is handled transparently by CUPS
             if( ! pWriter ||
-                (aRealSize != aLastPageSize && aLSSize != aLastPageSize && ! i_pFileName ) )
+                (aNewParm != aLastParm && ! i_pFileName ) )
             {
                 if( pWriter )
                 {
@@ -1234,8 +1259,8 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
                     aPDFUrl = aTmp;
                 }
                 // save current file and paper format
-                aLastPageSize = aRealSize;
-                aPDFFiles.push_back( PDFPrintFile( aPDFUrl, aRealSize ) );
+                aLastParm = aNewParm;
+                aPDFFiles.push_back( PDFPrintFile( aPDFUrl, aNewParm ) );
                 // update context
                 aContext.URL = aPDFUrl;
 
@@ -1244,8 +1269,8 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
                 pWriter->SetDocInfo( aDocInfo );
             }
 
-            pWriter->NewPage( TenMuToPt( aRealSize.Width() ),
-                              TenMuToPt( aRealSize.Height() ),
+            pWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
+                              TenMuToPt( aNewParm.maPageSize.Height() ),
                               vcl::PDFWriter::Portrait );
 
             pWriter->PlayMetafile( aPageFile, aMtfContext, NULL );
@@ -1300,8 +1325,10 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
                     osl_setFilePos( pFile, osl_Pos_Absolut, 0 );
                     std::vector< char > buffer( 0x10000, 0 );
                     // update job data with current page size
-                    Size aPageSize( aPDFFiles[i].maPageSize );
+                    Size aPageSize( aPDFFiles[i].maParameters.maPageSize );
                     m_aJobData.setPaper( TenMuToPt( aPageSize.Width() ), TenMuToPt( aPageSize.Height() ) );
+                    // update job data with current paperbin
+                    m_aJobData.setPaperBin( aPDFFiles[i].maParameters.mnPaperBin );
 
                     // spool current file
                     FILE* fp = PrinterInfoManager::get().startSpool( pPrinter->GetName(), i_rController.isDirectPrint() );
