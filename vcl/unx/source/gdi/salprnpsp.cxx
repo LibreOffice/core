@@ -1265,7 +1265,13 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
                 aContext.URL = aPDFUrl;
 
                 // create and initialize PDFWriter
+                #if defined __SUNPRO_CC
+                #pragma disable_warn
+                #endif
                 pWriter.reset( new vcl::PDFWriter( aContext ) );
+                #if defined __SUNPRO_CC
+                #pragma enable_warn
+                #endif
                 pWriter->SetDocInfo( aDocInfo );
             }
 
