@@ -2246,24 +2246,28 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
 //--------------------------------------------------------------------
 
-void SfxViewFrame::SaveCurrentViewData_Impl()
+void SfxViewFrame::SaveCurrentViewData_Impl( const USHORT i_nNewViewId )
 {
     SfxViewShell* pCurrentShell = GetViewShell();
     ENSURE_OR_RETURN_VOID( pCurrentShell != NULL, "SfxViewFrame::SaveCurrentViewData_Impl: no current view shell -> no current view data!" );
 
     // determine the logical (API) view name
     const SfxObjectFactory& rDocFactory( pCurrentShell->GetObjectShell()->GetFactory() );
-    const sal_uInt16 nViewNo = rDocFactory.GetViewNo_Impl( GetCurViewId(), 0 );
-    const String sViewName = rDocFactory.GetViewFactory( nViewNo ).GetAPIViewName();
-    if ( sViewName.Len() == 0 )
+    const sal_uInt16 nCurViewNo = rDocFactory.GetViewNo_Impl( GetCurViewId(), 0 );
+    const String sCurrentViewName = rDocFactory.GetViewFactory( nCurViewNo ).GetAPIViewName();
+    const sal_uInt16 nNewViewNo = rDocFactory.GetViewNo_Impl( i_nNewViewId, 0 );
+    const String sNewViewName = rDocFactory.GetViewFactory( nNewViewNo ).GetAPIViewName();
+    if ( ( sCurrentViewName.Len() == 0 ) || ( sNewViewName.Len() == 0 ) )
     {
         // can't say anything about the view, the respective application did not yet migrate its code to
         // named view factories => bail out
+        OSL_ENSURE( false, "SfxViewFrame::SaveCurrentViewData_Impl: views without API names? Shouldn't happen anymore?" );
         return;
     }
+    OSL_ENSURE( !sNewViewName.Equals( sCurrentViewName ), "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!" );
 
-    // do *not* save view data when the view is a print preview
-    if ( sViewName.EqualsAscii( "PrintPreview" ) )
+    // save the view data only when we're moving from a non-print-preview to the print-preview view
+    if ( !sNewViewName.EqualsAscii( "PrintPreview" ) )
         return;
 
     // retrieve the view data from the view
@@ -2371,7 +2375,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         const USHORT nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
 
         // save the view data of the old view, so it can be restored later on (when needed)
-        SaveCurrentViewData_Impl();
+        SaveCurrentViewData_Impl( nViewId );
 
         // create and load new ViewShell
         SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(
