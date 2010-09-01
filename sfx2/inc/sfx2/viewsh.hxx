@@ -123,17 +123,6 @@ public: \
     static SfxViewFactory&Factory() { return *pFactory; } \
     static void           InitFactory()
 
-#define SFX_IMPL_VIEWFACTORY(Class, rResId) \
-    SfxViewFactory* Class::pFactory; \
-    SfxViewShell* __EXPORT Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
-    { return new Class(pFrame, pOldView); } \
-    void Class::RegisterFactory( USHORT nPrio ) \
-    { \
-        pFactory = new SfxViewFactory(&CreateInstance,&InitFactory,nPrio,rResId);\
-        InitFactory(); \
-    } \
-    void Class::InitFactory()
-
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
     SfxViewFactory* Class::pFactory; \
     SfxViewShell* __EXPORT Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \

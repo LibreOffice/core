@@ -30,7 +30,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
 #include <rtl/ustrbuf.hxx>
 #include "viewfac.hxx"
 
@@ -72,23 +71,10 @@ String SfxViewFactory::GetAPIViewName() const
 // CTOR / DTOR -----------------------------------------------------------
 
 SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                                USHORT nOrdinal, const ResId& aDescrResId ):
-    fnCreate(fnC),
-    fnInit(fnI),
-    nOrd(nOrdinal),
-    aDescription(aDescrResId.GetId(), *aDescrResId.GetResMgr()),
-    m_sViewName()
-{
-    aDescription.SetRT(aDescrResId.GetRT());
-    DBG_CTOR(SfxViewFactory, 0);
-}
-
-SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
                                 USHORT nOrdinal, const sal_Char* asciiViewName ):
     fnCreate(fnC),
     fnInit(fnI),
     nOrd(nOrdinal),
-    aDescription( SfxResId( 0 ) ),
     m_sViewName( String::CreateFromAscii( asciiViewName ) )
 {
     DBG_CTOR(SfxViewFactory, 0);

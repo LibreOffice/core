@@ -159,6 +159,21 @@ void SfxObjectFactory::RegisterViewFactory
     SfxViewFactory &rFactory
 )
 {
+#if OSL_DEBUG_LEVEL > 0
+    {
+        const String sViewName( rFactory.GetAPIViewName() );
+        for ( sal_uInt16 i = 0; i < pImpl->aViewFactoryArr.Count(); ++i )
+        {
+            if ( !pImpl->aViewFactoryArr[i]->GetAPIViewName().Equals( sViewName ) )
+                continue;
+            ByteString sMessage( "SfxObjectFactory::RegisterViewFactory: duplicate view name '" );
+            sMessage += ByteString( sViewName, RTL_TEXTENCODING_ASCII_US );
+            sMessage += "'!";
+            OSL_ENSURE( false, sMessage.GetBuffer() );
+            break;
+        }
+    }
+#endif
     sal_uInt16 nPos;
     for ( nPos = 0;
           nPos < pImpl->aViewFactoryArr.Count() &&

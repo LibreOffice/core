@@ -46,16 +46,12 @@ class SFX2_DLLPUBLIC SfxViewFactory
 {
 public:
     SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                    USHORT nOrdinal, const ResId& aDescrResId );
-    SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
                     USHORT nOrdinal, const sal_Char* asciiViewName );
     ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
     void          InitFactory();
 
-    String        GetDescription() const
-                  { return String( aDescription ); }
     USHORT        GetOrdinal() const { return nOrd; }
 
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.
@@ -72,7 +68,6 @@ private:
     SfxViewCtor fnCreate;
     SfxViewInit fnInit;
     USHORT      nOrd;
-    ResId       aDescription;
     const String    m_sViewName;
 };
 
