@@ -300,7 +300,7 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
 }
 
 css::uno::Any SAL_CALL
-ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
+ScVbaWorkbook::Styles( const uno::Any& Item ) throw (uno::RuntimeException)
 {
     // quick look and Styles object doesn't seem to have a valid parent
     // or a least the object browser just shows an object that has no
@@ -313,17 +313,15 @@ ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
 
 // Amelia Wang
 uno::Any SAL_CALL
-ScVbaWorkbook::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
+ScVbaWorkbook::Names( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel( getModel() );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
-    uno::Reference< XCollection > xNames( new ScVbaNames( this , mxContext , xNamedRanges , xModel ));
-    if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
-    {
+    uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
+    if ( aIndex.hasValue() )
+        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
     return uno::Any( xNames );
-}
-    return uno::Any( xNames->Item( aIndex, uno::Any() ) );
 }
 
 rtl::OUString&

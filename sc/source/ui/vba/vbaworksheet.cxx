@@ -51,6 +51,7 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -95,6 +96,7 @@
 #include "vbaworksheets.hxx"
 #include "vbahyperlinks.hxx"
 #include "vbasheetobjects.hxx"
+#include "vbanames.hxx"
 
 #define STANDARDWIDTH 2267
 #define STANDARDHEIGHT 427
@@ -733,8 +735,15 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 uno::Any SAL_CALL
 ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWorkbook( getParent(), uno::UNO_QUERY_THROW );
-    return xWorkbook->Names( aIndex );
+    // fake sheet-local names by returning all global names
+    // #163498# initialize Names object with correct parent (this worksheet)
+    // TODO: real sheet-local names...
+    uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
+    if ( aIndex.hasValue() )
+        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+    return uno::Any( xNames );
 }
 
 uno::Any SAL_CALL
