@@ -198,7 +198,7 @@ void OKeySet::initColumns()
     m_pForeignColumnNames.reset( new SelectColumnsMetaData(bCase) );
 }
 void OKeySet::findTableColumnsMatching_throw(const Any& i_aTable
-                                                   ,const Reference<XDatabaseMetaData>& /*i_xMeta*/
+                                                   ,const Reference<XDatabaseMetaData>& i_xMeta
                                                    ,const Reference<XNameAccess>& i_xQueryColumns)
 {
     // first ask the database itself for the best columns which can be used
@@ -209,9 +209,6 @@ void OKeySet::findTableColumnsMatching_throw(const Any& i_aTable
 
     const Reference<XColumnsSupplier> xTblColSup(i_aTable,UNO_QUERY_THROW);
     const Reference<XNameAccess> xTblColumns = xTblColSup->getColumns();
-    ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames),true);
-    ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),m_sUpdateTableName,(*m_pColumnNames),true);
-
     // locate parameter in select columns
     Reference<XParametersSupplier> xParaSup(m_xComposer,UNO_QUERY);
     Reference<XIndexAccess> xQueryParameters = xParaSup->getParameters();
@@ -222,7 +219,26 @@ void OKeySet::findTableColumnsMatching_throw(const Any& i_aTable
         Reference<XPropertySet> xPara(xQueryParameters->getByIndex(i),UNO_QUERY_THROW);
         xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumns[i];
     }
-    ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,m_sUpdateTableName,(*m_pParameterNames),true);
+
+    if ( m_sUpdateTableName.getLength() )
+    {
+        ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames),true);
+        ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),m_sUpdateTableName,(*m_pColumnNames),true);
+        ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,m_sUpdateTableName,(*m_pParameterNames),true);
+    }
+    else
+    {
+        ::rtl::OUString sCatalog,sSchema,sTable;
+        Reference<XPropertySet> xTableProp(i_aTable,UNO_QUERY);
+        Any aCatalog = xTableProp->getPropertyValue(PROPERTY_CATALOGNAME);
+        aCatalog >>= sCatalog;
+        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+        xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+        const ::rtl::OUString sComposedUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
+        ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sComposedUpdateTableName,(*m_pKeyColumnNames),true);
+        ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),sComposedUpdateTableName,(*m_pColumnNames),true);
+        ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,sComposedUpdateTableName,(*m_pParameterNames),true);
+    }
 
     SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();
     SelectColumnsMetaData::const_iterator aPosEnd = m_pKeyColumnNames->end();
@@ -823,7 +839,10 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
             ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT ");
             sStmt += sMaxStmt;
             sStmt += ::rtl::OUString::createFromAscii("FROM ");
-            sStmt += m_aSelectComposedTableName;
+            ::rtl::OUString sCatalog,sSchema,sTable;
+            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
+            //sStmt += m_aSelectComposedTableName;
             try
             {
                 // now fetch the autoincrement values
