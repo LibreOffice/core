@@ -1513,6 +1513,11 @@ void SvTreeListBox::SetWindowBits( WinBits nWinStyle )
     pImp->SetWindowBits( nWinStyle );
     pImp->Resize();
     Invalidate();
+
+    if ( nWindowStyle != GetStyle() )
+    {
+        SetStyle( nWindowStyle );
+    }
 }
 
 void SvTreeListBox::PaintEntry( SvLBoxEntry* pEntry )
@@ -2521,7 +2526,12 @@ void SvTreeListBox::StateChanged( StateChangedType i_nStateChange )
     SvLBox::StateChanged( i_nStateChange );
     if ( ( i_nStateChange & STATE_CHANGE_STYLE ) != 0 )
     {
-        SetWindowBits( GetStyle() );
+        if ( GetStyle() != nWindowStyle )
+            // keep in sync with our WindowBits
+            // TODO: SetWindowBits is weird, it should be completely replaced (in all clients) with SetStyle
+            // (or are there WindowBits which have a different meaning when interpreted as style? Wouldn't
+            // be the first time, but all of those should be fixed meanwhile ...)
+            SetWindowBits( GetStyle() );
     }
 }
 
