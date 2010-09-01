@@ -65,18 +65,18 @@ interface XGlobals: com::sun::star::uno::XInterface
 
     void Calculate() raises(com::sun::star::script::BasicErrorException);
     XRange Cells([in] any RowIndex, [in] any ColumnIndex);
-    XRange Columns([in] any aIndex);
-    any CommandBars( [in] any aIndex );
+    XRange Columns([in] any Index);
+    any CommandBars( [in] any Index );
     any Evaluate( [in] string Name );
 XRange Intersect([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
         raises(com::sun::star::script::BasicErrorException);
-    any WorkSheets( [in] any aIndex );
-    any WorkBooks( [in] any aIndex );
+    any WorkSheets( [in] any Index );
+    any WorkBooks( [in] any Index );
     any WorksheetFunction();
-    any Windows( [in] any aIndex );
-    any Sheets( [in] any aIndex );
+    any Windows( [in] any Index );
+    any Sheets( [in] any Index );
     any Range( [in] any Cell1, [in] any Cell2 );
-    XRange Rows([in] any aIndex);
+    XRange Rows([in] any Index);
     any Names( [in] any Index );
     XRange Union([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
         raises(com::sun::star::script::BasicErrorException);

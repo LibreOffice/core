@@ -43,7 +43,7 @@ interface XTemplate
 
     [attribute, readonly] string Name;
 
-    any AutoTextEntries( [in] any aIndex );
+    any AutoTextEntries( [in] any Index );
 };
 
 }; }; };
