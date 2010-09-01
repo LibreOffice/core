@@ -489,7 +489,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             pPar->Put( NULL, 0 );
     }
     // Index-Access bei UnoObjekten beruecksichtigen
-    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) )
+    else if( pElem->GetType() == SbxOBJECT && (!pElem->ISA(SbxMethod) || !pElem->IsBroadcaster()) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )
