@@ -289,7 +289,7 @@ testcase tiToolsThesaurusContextMenu
     endif
 
     Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-
+    call sMakeReadOnlyDocumentEditable
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
