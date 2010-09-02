@@ -76,11 +76,13 @@ namespace vcl
 
             Element( Window* i_pWin,
                      boost::shared_ptr<WindowArranger> const & i_pChild = boost::shared_ptr<WindowArranger>(),
-                     sal_Int32 i_nExpandPriority = 0
+                     sal_Int32 i_nExpandPriority = 0,
+                     const Size& i_rMinSize = Size()
                    )
             : m_pElement( i_pWin )
             , m_pChild( i_pChild )
             , m_nExpandPriority( i_nExpandPriority )
+            , m_aMinSize( i_rMinSize )
             , m_bHidden( false )
             , m_nLeftBorder( 0 )
             , m_nTopBorder( 0 )
@@ -183,6 +185,19 @@ namespace vcl
             }
         }
 
+        void getBorders( size_t i_nIndex, long* i_pLeft = NULL, long* i_pTop = NULL, long* i_pRight = NULL, long* i_pBottom = NULL ) const
+        {
+            const Element* pEle = getConstElement( i_nIndex );
+            if( pEle )
+            {
+                if( i_pLeft )   *i_pLeft   = pEle->m_nLeftBorder;
+                if( i_pTop )    *i_pTop    = pEle->m_nTopBorder;
+                if( i_pRight )  *i_pRight  = pEle->m_nRightBorder;
+                if( i_pBottom ) *i_pBottom = pEle->m_nBottomBorder;
+            }
+        }
+
+
         void show( bool i_bShow = true, bool i_bImmediateUpdate = true );
 
         void setManagedArea( const Rectangle& i_rArea )
@@ -234,7 +249,7 @@ namespace vcl
 
         // add a managed window at the given index
         // an index smaller than zero means add the window at the end
-        size_t addWindow( Window*, sal_Int32 i_nExpandPrio = 0, size_t i_nIndex = ~0 );
+        size_t addWindow( Window*, sal_Int32 i_nExpandPrio = 0, const Size& i_rMinSize = Size(), size_t i_nIndex = ~0 );
         void remove( Window* );
 
         size_t addChild( boost::shared_ptr<WindowArranger> const &, sal_Int32 i_nExpandPrio = 0, size_t i_nIndex = ~0 );
@@ -304,7 +319,7 @@ namespace vcl
 
         // returns the index of the added label
         size_t addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> const& i_rElement, long i_nIndent = 0 );
-        size_t addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent = 0 );
+        size_t addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent = 0, const Size& i_rElementMinSize = Size() );
     };
 
     class VCL_DLLPUBLIC Indenter : public WindowArranger
@@ -386,9 +401,10 @@ namespace vcl
             MatrixElement( Window* i_pWin,
                            sal_uInt32 i_nX, sal_uInt32 i_nY,
                            boost::shared_ptr<WindowArranger> const & i_pChild = boost::shared_ptr<WindowArranger>(),
-                           sal_Int32 i_nExpandPriority = 0
+                           sal_Int32 i_nExpandPriority = 0,
+                           const Size& i_rMinSize = Size()
                           )
-            : WindowArranger::Element( i_pWin, i_pChild, i_nExpandPriority )
+            : WindowArranger::Element( i_pWin, i_pChild, i_nExpandPriority, i_rMinSize )
             , m_nX( i_nX )
             , m_nY( i_nY )
             {
@@ -422,7 +438,7 @@ namespace vcl
         virtual size_t countElements() const { return m_aElements.size(); }
 
         // add a managed window at the given matrix position
-        size_t addWindow( Window*, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 );
+        size_t addWindow( Window*, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0, const Size& i_rMinSize = Size() );
         void remove( Window* );
 
         size_t addChild( boost::shared_ptr<WindowArranger> const &, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 );

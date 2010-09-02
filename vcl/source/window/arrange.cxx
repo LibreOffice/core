@@ -178,16 +178,26 @@ Size WindowArranger::Element::getOptimalSize( WindowSizeType i_eType ) const
     Size aResult;
     if( ! m_bHidden )
     {
+        bool bVisible = false;
         if( m_pElement && m_pElement->IsVisible() )
+        {
             aResult = m_pElement->GetOptimalSize( i_eType );
-        else if( m_pChild )
+            bVisible = true;
+        }
+        else if( m_pChild && m_pChild->isVisible() )
+        {
             aResult = m_pChild->getOptimalSize( i_eType );
-        if( aResult.Width() < m_aMinSize.Width() )
-            aResult.Width() = m_aMinSize.Width();
-        if( aResult.Height() < m_aMinSize.Height() )
-            aResult.Height() = m_aMinSize.Height();
-        aResult.Width() += getBorderValue( m_nLeftBorder ) + getBorderValue( m_nRightBorder );
-        aResult.Height() += getBorderValue( m_nTopBorder ) + getBorderValue( m_nBottomBorder );
+            bVisible = true;
+        }
+        if( bVisible )
+        {
+            if( aResult.Width() < m_aMinSize.Width() )
+                aResult.Width() = m_aMinSize.Width();
+            if( aResult.Height() < m_aMinSize.Height() )
+                aResult.Height() = m_aMinSize.Height();
+            aResult.Width() += getBorderValue( m_nLeftBorder ) + getBorderValue( m_nRightBorder );
+            aResult.Height() += getBorderValue( m_nTopBorder ) + getBorderValue( m_nBottomBorder );
+        }
     }
 
     return aResult;
@@ -477,20 +487,20 @@ void RowOrColumn::resize()
     }
 }
 
-size_t RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio, size_t i_nIndex )
+size_t RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio, const Size& i_rMinSize, size_t i_nIndex )
 {
     size_t nIndex = i_nIndex;
     if( i_nIndex >= m_aElements.size() )
     {
         nIndex = m_aElements.size();
-        m_aElements.push_back( WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
+        m_aElements.push_back( WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio, i_rMinSize ) );
     }
     else
     {
         std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
         while( i_nIndex-- )
             ++it;
-        m_aElements.insert( it, WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
+        m_aElements.insert( it, WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio, i_rMinSize ) );
     }
     return nIndex;
 }
@@ -664,6 +674,9 @@ long LabelColumn::getLabelWidth() const
                 if( pLW )
                 {
                     Size aLabSize( pLW->GetOptimalSize( WINDOWSIZE_MINIMUM ) );
+                    long nLB = 0;
+                    pLabel->getBorders(0, &nLB);
+                    aLabSize.Width() += getBorderValue( nLB );
                     if( aLabSize.Width() > nWidth )
                         nWidth = aLabSize.Width();
                 }
@@ -754,12 +767,13 @@ size_t LabelColumn::addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> 
     return nIndex;
 }
 
-size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent )
+size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent, const Size& i_rElementMinSize )
 {
     boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 1 ) );
     xLabel->setLabel( i_pLabel );
     xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
     xLabel->setElement( i_pElement );
+    xLabel->setMinimumSize( 1, i_rElementMinSize );
     size_t nIndex = addChild( xLabel );
     resize();
     return nIndex;
@@ -918,7 +932,7 @@ void MatrixArranger::resize()
     }
 }
 
-size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio )
+size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio, const Size& i_rMinSize )
 {
     sal_uInt64 nMapValue = getMap( i_nX, i_nY );
     std::map< sal_uInt64, size_t >::const_iterator it = m_aMatrixMap.find( nMapValue );
@@ -926,7 +940,7 @@ size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32
     if( it == m_aMatrixMap.end() )
     {
         m_aMatrixMap[ nMapValue ] = nIndex = m_aElements.size();
-        m_aElements.push_back( MatrixElement( i_pWindow, i_nX, i_nY, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
+        m_aElements.push_back( MatrixElement( i_pWindow, i_nX, i_nY, boost::shared_ptr<WindowArranger>(), i_nExpandPrio, i_rMinSize ) );
     }
     else
     {
@@ -934,6 +948,7 @@ size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32
         rEle.m_pElement = i_pWindow;
         rEle.m_pChild.reset();
         rEle.m_nExpandPriority = i_nExpandPrio;
+        rEle.m_aMinSize = i_rMinSize;
         rEle.m_nX = i_nX;
         rEle.m_nY = i_nY;
         nIndex = it->second;
