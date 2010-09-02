@@ -173,6 +173,67 @@ bool VbaProject::hasDialog( const OUString& rDialogName ) const
     return mxDialogLib.is() && mxDialogLib->hasByName( rDialogName );
 }
 
+// protected ------------------------------------------------------------------
+
+void VbaProject::addDummyModule( const OUString& rName, sal_Int32 nType )
+{
+    OSL_ENSURE( rName.getLength() > 0, "VbaProject::addDummyModule - missing module name" );
+    maDummyModules[ rName ] = nType;
+}
+
+void VbaProject::createDummyModules()
+{
+    /*  !! HACK !! This function is called from old XLS filter only, must be
+        removed when this filter uses the OOX VBA import instead of the old SVX
+        VBA import.
+     */
+
+    // create empty dummy modules
+    typedef RefMap< OUString, VbaModule > VbaModuleMap;
+    VbaModuleMap aDummyModules;
+    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    {
+        OSL_ENSURE( !aDummyModules.has( aIt->first ), "VbaProject::createDummyModules - multiple modules with the same name" );
+        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
+        rxModule.reset( new VbaModule( mxDocModel, aIt->first, RTL_TEXTENCODING_MS_1252, isImportVbaExecutable() ) );
+        rxModule->setType( aIt->second );
+    }
+
+    if( !aDummyModules.empty() ) try
+    {
+        // get the model factory and the basic library
+        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
+        Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
+
+        // try to get access to document objects related to code modules
+        Reference< XNameAccess > xDocObjectNA;
+        try
+        {
+            xDocObjectNA.set( xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAObjectModuleObjectProvider" ) ), UNO_QUERY );
+        }
+        catch( Exception& )
+        {
+            // not all documents support this
+        }
+
+        // create empty dummy modules
+        if( xBasicLib.is() )
+            aDummyModules.forEachMem( &VbaModule::createEmptyModule,
+                ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void VbaProject::prepareImport()
+{
+}
+
+void VbaProject::finalizeImport()
+{
+}
+
 // private --------------------------------------------------------------------
 
 Reference< XLibraryContainer > VbaProject::getLibraryContainer( sal_Int32 nPropId )
@@ -230,6 +291,9 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     OSL_ENSURE( !aDirStrm.isEof(), "VbaProject::importVba - cannot open 'dir' stream" );
     if( aDirStrm.isEof() )
         return;
+
+    // virtual call, derived classes may do some preparations
+    prepareImport();
 
     // read all records of the directory
     rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;
@@ -345,11 +409,21 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         }
     }
 
+    // create empty dummy modules
+    VbaModuleMap aDummyModules;
+    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    {
+        OSL_ENSURE( !aModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
+        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
+        rxModule.reset( new VbaModule( mxDocModel, aIt->first, eTextEnc, bExecutable ) );
+        rxModule->setType( aIt->second );
+    }
+
     /*  Now it is time to load the source code. All modules will be inserted
         into the Basic library of the document specified by the 'maLibName'
         member. Do not create the Basic library, if there are no modules
         specified. */
-    if( !aModules.empty() ) try
+    if( !aModules.empty() || !aDummyModules.empty() ) try
     {
         // get the model factory and the basic library
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
@@ -384,10 +458,17 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             // not all documents support this
         }
 
-        // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
         if( xBasicLib.is() )
-            aModules.forEachMem( &VbaModule::importSourceCode,
-                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+        {
+            // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
+            aModules.forEachMem( &VbaModule::createAndImportModule,
+                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
+                ::boost::cref( xDocObjectNA ) );
+
+            // create empty dummy modules
+            aDummyModules.forEachMem( &VbaModule::createEmptyModule,
+                ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+        }
     }
     catch( Exception& )
     {
@@ -425,6 +506,9 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             }
         }
     }
+
+    // virtual call, derived classes may do some more processing
+    finalizeImport();
 }
 
 void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
