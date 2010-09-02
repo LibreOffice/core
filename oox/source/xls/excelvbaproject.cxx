@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
@@ -48,6 +49,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
@@ -62,66 +64,21 @@ ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContex
 {
 }
 
-void ExcelVbaProject::attachToEvents()
-{
-    // do nothing is code is not executable
-    if( !isImportVbaExecutable() )
-        return;
-
-    // document events
-    PropertySet aDocProp( mxDocument );
-    OUString aCodeName;
-    aDocProp.getProperty( aCodeName, PROP_CodeName );
-    attachToDocumentEvents( aCodeName );
-
-    // sheet events
-    if( mxDocument.is() ) try
-    {
-        Reference< XEnumerationAccess > xSheetsEA( mxDocument->getSheets(), UNO_QUERY_THROW );
-        Reference< XEnumeration > xSheetsEnum( xSheetsEA->createEnumeration(), UNO_SET_THROW );
-        // own try/catch for every sheet
-        while( xSheetsEnum->hasMoreElements() ) try
-        {
-            // TODO: once we have chart sheets we need a switch/case on sheet type
-            Reference< XEventsSupplier > xEventsSupp( xSheetsEnum->nextElement(), UNO_QUERY_THROW );
-            PropertySet aSheetProp( xEventsSupp );
-            aSheetProp.getProperty( aCodeName, PROP_CodeName );
-            attachToSheetEvents( xEventsSupp, aCodeName );
-        }
-        catch( Exception& )
-        {
-        }
-    }
-    catch( Exception& )
-    {
-    }
-}
-
 // protected ------------------------------------------------------------------
 
 namespace {
 
-typedef ::std::set< OUString >      CodeNameSet;
-typedef ::std::list< PropertySet >  SheetPropertySetList;
-
-void lclGenerateMissingCodeNames( CodeNameSet& rUsedCodeNames, SheetPropertySetList& rSheetsWithout, const OUString& rCodeNamePrefix )
+struct SheetCodeNameInfo
 {
-    sal_Int32 nCounter = 1;
-    for( SheetPropertySetList::iterator aIt = rSheetsWithout.begin(), aEnd = rSheetsWithout.end(); aIt != aEnd; ++aIt )
-    {
-        // search for an unused codename
-        OUString aCodeName;
-        do
-        {
-            aCodeName = OUStringBuffer( rCodeNamePrefix ).append( nCounter++ ).makeStringAndClear();
-        }
-        while( rUsedCodeNames.count( aCodeName ) > 0 );
-        rUsedCodeNames.insert( aCodeName );
+    PropertySet         maSheetProps;       /// Property set of the sheet without codename.
+    OUString            maPrefix;           /// Prefix for the codename to be generated.
 
-        // set codename at sheet
-        aIt->setProperty( PROP_CodeName, aCodeName );
-    }
-}
+    inline explicit     SheetCodeNameInfo( PropertySet& rSheetProps, const OUString& rPrefix ) :
+                            maSheetProps( rSheetProps ), maPrefix( rPrefix ) {}
+};
+
+typedef ::std::set< OUString >              CodeNameSet;
+typedef ::std::list< SheetCodeNameInfo >    SheetCodeNameInfoList;
 
 } // namespace
 
@@ -134,8 +91,8 @@ void ExcelVbaProject::prepareImport()
         // collect existing codenames (do not use them when creating new codenames)
         CodeNameSet aUsedCodeNames;
 
-        // collect common sheets and chart sheets without codenames
-        SheetPropertySetList aSheetsWithout, aChartsWithout;
+        // collect sheets without codenames
+        SheetCodeNameInfoList aCodeNameInfos;
 
         // iterate over all imported sheets
         Reference< XEnumerationAccess > xSheetsEA( mxDocument->getSheets(), UNO_QUERY_THROW );
@@ -153,7 +110,7 @@ void ExcelVbaProject::prepareImport()
             else
             {
                 // TODO: once we have chart sheets we need a switch/case on sheet type ('SheetNNN' vs. 'ChartNNN')
-                aSheetsWithout.push_back( aSheetProp );
+                aCodeNameInfos.push_back( SheetCodeNameInfo( aSheetProp, CREATE_OUSTRING( "Sheet" ) ) );
             }
         }
         catch( Exception& )
@@ -161,131 +118,28 @@ void ExcelVbaProject::prepareImport()
         }
 
         // create new codenames if sheets do not have one
-        lclGenerateMissingCodeNames( aUsedCodeNames, aSheetsWithout, CREATE_OUSTRING( "Sheet" ) );
-        lclGenerateMissingCodeNames( aUsedCodeNames, aChartsWithout, CREATE_OUSTRING( "Chart" ) );
+        sal_Int32 nCounter = 1;
+        for( SheetCodeNameInfoList::iterator aIt = aCodeNameInfos.begin(), aEnd = aCodeNameInfos.end(); aIt != aEnd; ++aIt )
+        {
+            // search for an unused codename
+            OUString aCodeName;
+            do
+            {
+                aCodeName = OUStringBuffer( aIt->maPrefix ).append( nCounter++ ).makeStringAndClear();
+            }
+            while( aUsedCodeNames.count( aCodeName ) > 0 );
+            aUsedCodeNames.insert( aCodeName );
+
+            // set codename at sheet
+            aIt->maSheetProps.setProperty( PROP_CodeName, aCodeName );
+
+            // tell base class to create a dummy module
+            addDummyModule( aCodeName, ModuleType::DOCUMENT );
+        }
     }
     catch( Exception& )
     {
     }
-}
-
-void ExcelVbaProject::finalizeImport()
-{
-    attachToEvents();
-}
-
-// private --------------------------------------------------------------------
-
-void ExcelVbaProject::attachToDocumentEvents( const OUString& rCodeName )
-{
-    if( (rCodeName.getLength() == 0) || !hasModule( rCodeName ) )
-        return;
-
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnLoad" ),          rCodeName, CREATE_OUSTRING( "Workbook_Open" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnFocus" ),         rCodeName, CREATE_OUSTRING( "Workbook_Activate" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnUnfocus" ),       rCodeName, CREATE_OUSTRING( "Workbook_Deactivate" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnSave" ),          rCodeName, CREATE_OUSTRING( "Workbook_BeforeSave" ),  OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO False, False" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnSaveAs" ),        rCodeName, CREATE_OUSTRING( "Workbook_BeforeSave" ),  OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO True, False" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnSaveDone" ),      rCodeName, CREATE_OUSTRING( "Workbook_AfterSave" ),   OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO True" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnSaveAsDone" ),    rCodeName, CREATE_OUSTRING( "Workbook_AfterSave" ),   OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO True" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnSaveFailed" ),    rCodeName, CREATE_OUSTRING( "Workbook_AfterSave" ),   OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO False" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnSaveAsFailed" ),  rCodeName, CREATE_OUSTRING( "Workbook_AfterSave" ),   OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO False" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnPrint" ),         rCodeName, CREATE_OUSTRING( "Workbook_BeforePrint" ), OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO False" ) );
-    attachMacroToDocumentEvent( CREATE_OUSTRING( "OnPrepareUnload" ), rCodeName, CREATE_OUSTRING( "Workbook_BeforeClose" ), OUString(), OUString(), CREATE_OUSTRING( "\t$MACRO False" ) );
-}
-
-void ExcelVbaProject::attachToSheetEvents( const Reference< XEventsSupplier >& rxEventsSupp, const OUString& rCodeName )
-{
-    if( !rxEventsSupp.is() || (rCodeName.getLength() == 0) || !hasModule( rCodeName ) )
-        return;
-
-    // attach macros to simple sheet events directly
-    attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnFocus" ),     rCodeName, CREATE_OUSTRING( "Worksheet_Activate" ) );
-    attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnUnfocus" ),   rCodeName, CREATE_OUSTRING( "Worksheet_Deactivate" ) );
-    attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnCalculate" ), rCodeName, CREATE_OUSTRING( "Worksheet_Calculate" ) );
-
-    /*  Attach macros to complex sheet events. The events pass a cell range or
-        a collection of cell ranges depending on the event type and sheet
-        selection. The generated proxy macros need to convert these UNO renges
-        to VBA compatible ranges.
-     */
-
-#define VBA_MACRONAME_RANGECONV "Local_GetVbaRangeFromUnoRange"
-#define VBA_MACRONAME_TARGETCONV "Local_GetVbaTargetFromUnoTarget"
-
-    /*  If this variable turns to true, the macros that convert UNO cell ranges
-        to VBA Range objects have to be inserted.
-     */
-    bool bNeedsTargetHelper = false;
-
-    /*  Insert the proxy macros attached to sheet events that notify something
-        has changed (changed selection and changed cell contents). These events
-        cannot be cancelled. The proxy macro converts the passed UNO cell range
-        or collection of cell ranges to a VBA Range object, and calls the VBA
-        event handler.
-     */
-    OUString aChangeProxyArgs = CREATE_OUSTRING( "ByVal unoTarget As Object" );
-    OUString aChangeProxyCode = CREATE_OUSTRING(
-        "\tDim vbaTarget As Range : Set vbaTarget = " VBA_MACRONAME_TARGETCONV "( unoTarget )\n"
-        "\tIf Not vbaTarget Is Nothing Then $MACRO vbaTarget" );
-    bNeedsTargetHelper |= attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnChange" ), rCodeName, CREATE_OUSTRING( "Worksheet_Change" ),          aChangeProxyArgs, OUString(), aChangeProxyCode );
-    bNeedsTargetHelper |= attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnSelect" ), rCodeName, CREATE_OUSTRING( "Worksheet_SelectionChange" ), aChangeProxyArgs, OUString(), aChangeProxyCode );
-
-    /*  Insert the proxy macros attached to sheet events that notify an ongoing
-        mouse click event (double click and right click). These events can be
-        cancelled by returning false (in VBA: as a Boolean output parameter, in
-        UNO: as return value of the Basic function). The proxy macro converts
-        the passed UNO cell range or collection of cell ranges to a VBA Range
-        object, calls the VBA event handler, and returns the Boolean value
-        provided by the VBA event handler.
-     */
-    OUString aClickProxyArgs = CREATE_OUSTRING( "ByVal unoTarget As Object" );
-    OUString aClickProxyRetT = CREATE_OUSTRING( "Boolean" );
-    OUString aClickProxyCode = CREATE_OUSTRING(
-        "\tDim Cancel As Boolean : Cancel = False\n"
-        "\tDim vbaTarget As Range : Set vbaTarget = " VBA_MACRONAME_TARGETCONV "( unoTarget )\n"
-        "\tIf Not vbaTarget Is Nothing Then $MACRO vbaTarget, Cancel\n"
-        "\t$PROXY = Cancel" );
-    bNeedsTargetHelper |= attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnDoubleClick" ), rCodeName, CREATE_OUSTRING( "Worksheet_BeforeDoubleClick" ), aClickProxyArgs, aClickProxyRetT, aClickProxyCode );
-    bNeedsTargetHelper |= attachMacroToEvent( rxEventsSupp, CREATE_OUSTRING( "OnRightClick" ),  rCodeName, CREATE_OUSTRING( "Worksheet_BeforeRightClick" ),  aClickProxyArgs, aClickProxyRetT, aClickProxyCode );
-
-    if( bNeedsTargetHelper )
-    {
-        /*  Generate a helper function that converts a
-            com.sun.star.sheet.SheetCellRange object to a VBA Range object.
-         */
-        OUString aRangeConvName = CREATE_OUSTRING( VBA_MACRONAME_RANGECONV );
-        OUString aRangeConvArgs = CREATE_OUSTRING( "ByVal unoRange As com.sun.star.sheet.SheetCellRange" );
-        OUString aRangeConvRetT = CREATE_OUSTRING( "Range" );
-        OUString aRangeConvCode = CREATE_OUSTRING(
-            "\tDim unoAddress As com.sun.star.table.CellRangeAddress : Set unoAddress = unoRange.RangeAddress\n"
-            "\tDim vbaSheet As Worksheet : Set vbaSheet = Application.ThisWorkbook.Sheets( unoAddress.Sheet + 1 )\n"
-            "\tSet $MACRO = vbaSheet.Range( vbaSheet.Cells( unoAddress.StartRow + 1, unoAddress.StartColumn + 1 ), vbaSheet.Cells( unoAddress.EndRow + 1, unoAddress.EndColumn + 1 ) )" );
-        insertMacro( rCodeName, aRangeConvName, aRangeConvArgs, aRangeConvRetT, aRangeConvCode );
-
-        /*  Generate a helper function that converts a generic range selection
-            object (com.sun.star.sheet.SheetCellRange or
-            com.sun.star.sheet.SheetCellRanges) to a VBA Range object.
-         */
-        OUString aTargetConvName = CREATE_OUSTRING( VBA_MACRONAME_TARGETCONV );
-        OUString aTargetConvArgs = CREATE_OUSTRING( "ByVal unoTarget As Object" );
-        OUString aTargetConvRetT = CREATE_OUSTRING( "Range" );
-        OUString aTargetConvCode = CREATE_OUSTRING(
-            "\tDim vbaTarget As Range\n"
-            "\tIf unoTarget.supportsService( \"com.sun.star.sheet.SheetCellRange\" ) Then\n"
-            "\t\tSet vbaTarget = " VBA_MACRONAME_RANGECONV "( unoTarget )\n"
-            "\tElseIf unoTarget.supportsService( \"com.sun.star.sheet.SheetCellRanges\" ) Then\n"
-            "\t\tDim unoRangeEnum As Object : Set unoRangeEnum = unoTarget.createEnumeration\n"
-            "\t\tIf unoRangeEnum.hasMoreElements Then Set vbaTarget = " VBA_MACRONAME_RANGECONV "( unoRangeEnum.nextElement )\n"
-            "\t\tWhile unoRangeEnum.hasMoreElements\n"
-            "\t\t\tSet vbaTarget = Application.Union( vbaTarget, " VBA_MACRONAME_RANGECONV "( unoRangeEnum.nextElement ) )\n"
-            "\t\tWend\n"
-            "\tEnd If\n"
-            "\tSet $MACRO = vbaTarget" );
-        insertMacro( rCodeName, aTargetConvName, aTargetConvArgs, aTargetConvRetT, aTargetConvCode );
-    }
-#undef VBA_MACRONAME_RANGECONV
-#undef VBA_MACRONAME_TARGETCONV
 }
 
 // ============================================================================

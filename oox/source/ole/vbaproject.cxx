@@ -413,7 +413,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     VbaModuleMap aDummyModules;
     for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
     {
-        OSL_ENSURE( !aModules.has( aIt->first ) && !!aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
+        OSL_ENSURE( !aModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
         VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
         rxModule.reset( new VbaModule( mxDocModel, aIt->first, eTextEnc, bExecutable ) );
         rxModule->setType( aIt->second );

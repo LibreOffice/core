@@ -48,23 +48,9 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& rxDocument );
 
-    /** Attaches all document and sheet events to existing VBA macros. */
-    void                attachToEvents();
-
 protected:
     /** Adds dummy modules for sheets without imported code name. */
     virtual void        prepareImport();
-    /** Attaches document and sheet events to macros. */
-    virtual void        finalizeImport();
-
-private:
-    /** Attaches VBA macros to all supported document events. */
-    void                attachToDocumentEvents( const ::rtl::OUString& rCodeName );
-
-    /** Attaches VBA macros to all supported sheet events. */
-    void                attachToSheetEvents(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventsSupplier >& rxEventsSupp,
-                            const ::rtl::OUString& rCodeName );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
