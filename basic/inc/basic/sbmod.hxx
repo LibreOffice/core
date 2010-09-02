@@ -44,6 +44,7 @@ class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
+class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
@@ -72,7 +73,7 @@ protected:
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
-    static void     implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
+    static void     implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
     SbProperty*     GetProperty( const String&, SbxDataType );

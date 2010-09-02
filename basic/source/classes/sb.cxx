@@ -954,15 +954,15 @@ struct ClassModuleRunInitItem
     {}
 };
 
-typedef std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
-    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
+// Derive from has_map type instead of typedef
+// to allow forward declaration in sbmod.hxx
+class ModuleInitDependencyMap : public
+    std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
+        ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+{};
 
-static ModuleInitDependencyMap* GpMIDMap = NULL;
-
-void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
+void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )
 {
-    ModuleInitDependencyMap& rMIDMap = *GpMIDMap;
-
     rItem.m_bProcessing = true;
 
     //bool bAnyDependencies = true;
@@ -977,8 +977,8 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
                 String& rStr = *it;
 
                 // Is required type a class module?
-                ModuleInitDependencyMap::iterator itFind = rMIDMap.find( rStr );
-                if( itFind != rMIDMap.end() )
+                ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
+                if( itFind != rMap.end() )
                 {
                     ClassModuleRunInitItem& rParentItem = itFind->second;
                     if( rParentItem.m_bProcessing )
@@ -989,7 +989,7 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
                     }
 
                     if( !rParentItem.m_bRunInitDone )
-                        implProcessModuleRunInit( rParentItem );
+                        implProcessModuleRunInit( rMap, rParentItem );
                 }
             }
         }
@@ -1003,6 +1003,8 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
 // Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
+    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+
     // Init own modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
@@ -1017,7 +1019,6 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     // Consider required types to init in right order. Class modules
     // that are required by other modules have to be initialized first.
     ModuleInitDependencyMap aMIDMap;
-    GpMIDMap = &aMIDMap;
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
@@ -1030,9 +1031,8 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     for( it = aMIDMap.begin() ; it != aMIDMap.end(); ++it )
     {
         ClassModuleRunInitItem& rItem = it->second;
-        SbModule::implProcessModuleRunInit( rItem );
+        SbModule::implProcessModuleRunInit( aMIDMap, rItem );
     }
-    GpMIDMap = NULL;
 
     // Call RunInit on standard modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
