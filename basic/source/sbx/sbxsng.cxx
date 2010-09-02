@@ -112,13 +112,13 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
+            if( !p->pOUString )
                 nRes = 0;
             else
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                     nRes = 0;
                 else if( d > SbxMAXSNG )
                 {
@@ -237,9 +237,9 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
         {
-            if( !p->pString )
-                p->pString = new XubString;
-            ImpCvtNum( (double) n, 6, *p->pString );
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
+            ImpCvtNum( (double) n, 6, *p->pOUString );
             break;
         }
         case SbxOBJECT:
