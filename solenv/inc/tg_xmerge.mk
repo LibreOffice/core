@@ -27,33 +27,32 @@
 
 .IF "$(XTXFILES)"!=""
 
-ALLTAR : $(MISC)/$(TARGET).xtx.pmerge.mk $(XTXFILES)
+L10NEXT*=.txt
+XTX_TARGET_PATH*=$(MISC)/$(TARGET)
 
-.IF "$(L10NEXT)"==""
-L10NEXT:=.txt
-.ENDIF
+ALLTAR : $(XTX_TARGET_PATH).xtx.pmerge.mk $(XTXFILES)
 
-$(MISC)/$(TARGET).xtx.pmerge.mk :  $(XTXFILES)
+$(XTX_TARGET_PATH).xtx.pmerge.mk :  $(XTXFILES)
 
 $(XTXFILES) : $(LOCALIZESDF)
 
-.INCLUDE .IGNORE : $(MISC)/$(TARGET).xtx.pmerge.mk
+.INCLUDE .IGNORE : $(XTX_TARGET_PATH).xtx.pmerge.mk
 
 .IF "$(alllangiso)"!="$(last_merge)"
 XTXMERGEPHONY:=.PHONY
 .ENDIF          # "$(alllangiso)" != "$(last_merge)"
 
-$(MISC)/$(TARGET)/%$(L10NEXT) $(XTXMERGEPHONY) : %.xtx
+$(XTX_TARGET_PATH)/%$(L10NEXT) $(XTXMERGEPHONY) : %.xtx
     @@-$(MKDIRHIER) $(@:d)
 .IF "$(WITH_LANG)"==""
-    $(COMMAND_ECHO)$(COPY) $< $@
+    $(COMMAND_ECHO)$(COPY) $< $(@:d)$(@:b)_en-US$(L10NEXT)
 .ELSE          # "$(WITH_LANG)"==""
     @@-$(RM) $@
     $(COMMAND_ECHO)@noop $(assign XTXMERGELIST+:=$(<:f))
     $(COMMAND_ECHO)@noop $(assign XTXDESTDIR:=$(@:d))
 .ENDIF          # "$(WITH_LANG)"==""
 
-$(MISC)/$(TARGET).xtx.pmerge.mk : $(XTXMERGELIST)
+$(XTX_TARGET_PATH).xtx.pmerge.mk : $(XTXMERGELIST)
 .IF "$(WITH_LANG)"!=""
 # xtxex command file requirements:
 # - one file per line
