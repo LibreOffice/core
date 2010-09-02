@@ -192,8 +192,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySet
 }
 ////----- XInitialization -------------------------------------------------------------------
 void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
 {
-    sal_Int16 nPageId;
+    sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
     {
          if ( !( rArguments[ 0 ] >>= nPageId ))

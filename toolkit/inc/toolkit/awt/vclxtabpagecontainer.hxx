@@ -85,5 +85,6 @@ protected:
 private:
     sal_Int16 m_nActiveTabPageId;
     TabPageListenerMultiplexer m_aTabPageListeners;
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage > > m_aTabPages;
 };
 #endif // _TOOLKIT_AWT_VCLXTABPAGEMODEL_HXX_

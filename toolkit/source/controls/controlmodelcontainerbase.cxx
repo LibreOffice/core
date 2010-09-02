@@ -728,9 +728,9 @@ void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XC
 }
 
 ////----- XInitialization -------------------------------------------------------------------
-void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArguments)
+void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArguments) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
 {
-    sal_Int16 nPageId;
+    sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
     {
          if ( !( rArguments[ 0 ] >>= nPageId ))
@@ -1781,22 +1781,29 @@ uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
 
-
-    ::rtl::OUString ret;
-
     ::rtl::OUString baseLocation;
     ::rtl::OUString url;
 
     rbase  >>= baseLocation;
     rUrl  >>= url;
 
+    ::rtl::OUString absoluteURL( url );
     if ( url.getLength() > 0 )
     {
         INetURLObject urlObj(baseLocation);
         urlObj.removeSegment();
         baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
-        ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+
+        const INetURLObject protocolCheck( url );
+        const INetProtocol protocol = protocolCheck.GetProtocol();
+        if ( protocol == INET_PROT_NOT_VALID )
+        {
+            ::rtl::OUString testAbsoluteURL;
+            if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
+                absoluteURL = testAbsoluteURL;
+        }
     }
 
-    return ret;
+    return absoluteURL;
 }
+

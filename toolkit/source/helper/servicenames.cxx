@@ -107,3 +107,4 @@ const sal_Char __FAR_DATA szServiceName_UnoControlTabPage[] = "com.sun.star.awt.
 const sal_Char __FAR_DATA szServiceName_UnoControlTabPageModel[] = "com.sun.star.awt.tab.UnoControlTabPageModel";
 const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainerModel[] = "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
 const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainer[] = "com.sun.star.awt.tab.UnoControlTabPageContainer";
+

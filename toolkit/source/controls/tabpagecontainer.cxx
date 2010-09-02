@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
@@ -77,6 +78,8 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
     {
         case BASEPROPERTY_DEFAULTCONTROL:
             return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainer ) );
+        case BASEPROPERTY_BORDER:
+            return uno::makeAny((sal_Int16) 2);              // No Border
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -284,5 +287,5 @@ Reference< XInterface > SAL_CALL UnoControlTabPageContainer_CreateInstance( cons
 
 Reference< XInterface > SAL_CALL UnoControlTabPageContainerModel_CreateInstance( const Reference< XMultiServiceFactory >& )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new UnoControlTabPageContainerModel );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlTabPageContainerModel>() );
 }

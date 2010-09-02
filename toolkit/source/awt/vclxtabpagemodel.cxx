@@ -50,7 +50,7 @@ VCLXTabPageModel::~VCLXTabPageModel()
 
 void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
 {
-    /*::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
     Window* pWindow = GetWindow();
 
     if ( pWindow )
@@ -63,7 +63,7 @@ void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
 
         pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
-    }*/
+    }
 }
 
 ::com::sun::star::awt::DeviceInfo VCLXTabPageModel::getInfo() throw(::com::sun::star::uno::RuntimeException)
@@ -74,8 +74,8 @@ void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::
 
 
 void SAL_CALL VCLXTabPageModel::setProperty(
-    const ::rtl::OUString& PropertyName,
-    const ::com::sun::star::uno::Any& Value )
+    const ::rtl::OUString& /*PropertyName*/,
+    const ::com::sun::star::uno::Any& /*Value*/ )
 throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -83,8 +83,6 @@ throw(::com::sun::star::uno::RuntimeException)
     /*TabPage* pTabPage = (TabPage*)GetWindow();
     if ( pTabPage )
     {
-        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
-
         VCLXWindow::setProperty( PropertyName, Value );
     }*/
 }
