@@ -8482,8 +8482,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             rtl::OUString aCodeName;
             if ( pDocSh && ( aValue >>= aCodeName ) )
             {
-                String sNewName( aCodeName );
-                pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), sNewName );
+                pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), aCodeName );
             }
         }
         else
