@@ -25,10 +25,6 @@
 #
 #*************************************************************************
 
-ifneq ($(MAKE_VERSION),3.81)
-$(error You need at least GNU Make 3.81!)
-endif
-
 ifeq ($(strip $(SOLARENV)),)
 $(error No environment set!)
 endif
