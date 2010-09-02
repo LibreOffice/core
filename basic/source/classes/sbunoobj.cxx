@@ -2273,7 +2273,7 @@ Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( TRUE )
-    , bIgnoreNativeCOMObjectMembers( FALSE )
+    , bNativeCOMObject( FALSE )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2324,7 +2324,7 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
         // hiding of equally named COM symbols, e.g. XInvocation::getValue
         Reference< oleautomation::XAutomationObject > xAutomationObject( aUnoObj_, UNO_QUERY );
         if( xAutomationObject.is() )
-            bIgnoreNativeCOMObjectMembers = TRUE;
+            bNativeCOMObject = TRUE;
     }
 
     maTmpUnoObj = aUnoObj_;
@@ -2568,7 +2568,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
     if( !pRes )
     {
         ::rtl::OUString aUName( rName );
-        if( mxUnoAccess.is() && !bIgnoreNativeCOMObjectMembers )
+        if( mxUnoAccess.is() && !bNativeCOMObject )
         {
             if( mxExactName.is() )
             {
@@ -2728,11 +2728,11 @@ void SbUnoObject::implCreateAll( void )
 
     // Instrospection besorgen
     Reference< XIntrospectionAccess > xAccess = mxUnoAccess;
-    if( !xAccess.is() || bIgnoreNativeCOMObjectMembers )
+    if( !xAccess.is() || bNativeCOMObject )
     {
         if( mxInvocation.is() )
             xAccess = mxInvocation->getIntrospection();
-        else if( bIgnoreNativeCOMObjectMembers )
+        else if( bNativeCOMObject )
             return;
     }
     if( !xAccess.is() )
@@ -4582,6 +4582,38 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
         }
      }
 
+    return bSuccess;
+}
+
+
+// Due to an incorrect behavior IE returns an object instead of a string
+// in some scenarios. Calling toString at the object may correct this.
+// Helper function used in sbxvalue.cxx
+bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
+{
+    bool bSuccess = false;
+
+    SbUnoObject* pUnoObj = NULL;
+    if( pObj != NULL && (pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj)) != NULL )
+    {
+        // Only for native COM objects
+        if( pUnoObj->isNativeCOMObject() )
+        {
+            // For now assume success in any case
+            bSuccess = true;
+            pVal->PutString( String() );
+
+            // TODO: Try to find and execute "toString"
+            //SbxVariableRef pMeth = pObj->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "toString" ) ), SbxCLASS_METHOD );
+            //bSuccess = pMeth.Is();
+            //if( bSuccess )
+            //{
+            //  SbxValues aRes;
+            //  pMeth->Get( aRes );
+            //  pVal->Put( aRes );
+            //}
+        }
+    }
     return bSuccess;
 }
 

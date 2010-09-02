@@ -52,7 +52,7 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
     BOOL bNeedIntrospection;
-    BOOL bIgnoreNativeCOMObjectMembers;
+    BOOL bNativeCOMObject;
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
 
     // Hilfs-Methode zum Anlegen der dbg_-Properties
@@ -84,6 +84,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )         { return mxInvocation; }
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+
+    bool isNativeCOMObject( void )
+        { return bNativeCOMObject; }
 };
 SV_DECL_IMPL_REF(SbUnoObject);
 

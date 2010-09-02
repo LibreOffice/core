@@ -436,6 +436,8 @@ SbxValue* SbxValue::TheRealValue() const
 }
 
 // #55226 Zusaetzliche Info transportieren
+bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal );    // sbunoobj.cxx
+
 SbxValue* SbxValue::TheRealValue( BOOL bObjInObjError ) const
 {
     SbxValue* p = (SbxValue*) this;
@@ -461,8 +463,12 @@ SbxValue* SbxValue::TheRealValue( BOOL bObjInObjError ) const
                     ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
                     ((SbxValue*) pObj)->aData.pObj == pObj )
                 {
-                    SetError( SbxERR_BAD_PROP_VALUE );
-                    p = NULL;
+                    bool bSuccess = handleToStringForCOMObjects( pObj, p );
+                    if( !bSuccess )
+                    {
+                        SetError( SbxERR_BAD_PROP_VALUE );
+                        p = NULL;
+                    }
                 }
                 else if( pDflt )
                     p = pDflt;
