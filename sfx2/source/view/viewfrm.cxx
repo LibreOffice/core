@@ -2285,8 +2285,8 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const USHORT i_nNewViewId )
         const sal_Int32 nCount = xViewData->getCount();
         for ( sal_Int32 i=0; i<nCount; ++i )
         {
-            const ::comphelper::NamedValueCollection aViewData( xViewData->getByIndex(i) );
-            ::rtl::OUString sViewId( aViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
+            const ::comphelper::NamedValueCollection aCurViewData( xViewData->getByIndex(i) );
+            ::rtl::OUString sViewId( aCurViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
             if ( sViewId.getLength() == 0 )
                 continue;
 
