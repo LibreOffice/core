@@ -41,12 +41,14 @@ extern Reference< XInterface > SAL_CALL className##_createInstance(             
 namespace oox {
     namespace core {    DECLARE_FUNCTIONS( FilterDetect );              }
     namespace docprop { DECLARE_FUNCTIONS( OOXMLDocPropImportImpl );    }
+    namespace ole {     DECLARE_FUNCTIONS( WordVbaProjectFilter );      }
     namespace ppt {     DECLARE_FUNCTIONS( PowerPointImport );          }
     namespace shape {   DECLARE_FUNCTIONS( FastTokenHandlerService );   }
     namespace shape {   DECLARE_FUNCTIONS( ShapeContextHandler );       }
     namespace xls {     DECLARE_FUNCTIONS( BiffDetector );              }
     namespace xls {     DECLARE_FUNCTIONS( ExcelFilter );               }
     namespace xls {     DECLARE_FUNCTIONS( ExcelBiffFilter );           }
+    namespace xls {     DECLARE_FUNCTIONS( ExcelVbaProjectFilter );     }
     namespace xls {     DECLARE_FUNCTIONS( OOXMLFormulaParser );        }
 }
 
@@ -63,12 +65,14 @@ static ::cppu::ImplementationEntry const spServices[] =
 {
     IMPLEMENTATION_ENTRY( ::oox::core::FilterDetect ),
     IMPLEMENTATION_ENTRY( ::oox::docprop::OOXMLDocPropImportImpl ),
+    IMPLEMENTATION_ENTRY( ::oox::ole::WordVbaProjectFilter ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::PowerPointImport ),
     IMPLEMENTATION_ENTRY( ::oox::shape::FastTokenHandlerService ),
     IMPLEMENTATION_ENTRY( ::oox::shape::ShapeContextHandler ),
     IMPLEMENTATION_ENTRY( ::oox::xls::BiffDetector ),
     IMPLEMENTATION_ENTRY( ::oox::xls::ExcelFilter ),
     IMPLEMENTATION_ENTRY( ::oox::xls::ExcelBiffFilter ),
+    IMPLEMENTATION_ENTRY( ::oox::xls::ExcelVbaProjectFilter ),
     IMPLEMENTATION_ENTRY( ::oox::xls::OOXMLFormulaParser ),
     { 0, 0, 0, 0, 0, 0 }
 };

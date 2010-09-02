@@ -98,6 +98,21 @@ private:
 
 // ============================================================================
 
+class ExcelVbaProjectFilter : public ExcelBiffFilter
+{
+public:
+    explicit            ExcelVbaProjectFilter(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual bool        importDocument() throw();
+    virtual bool        exportDocument() throw();
+
+private:
+    virtual ::rtl::OUString implGetImplementationName() const;
+};
+ // ============================================================================
+
 } // namespace xls
 } // namespace oox
 

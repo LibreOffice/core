@@ -145,6 +145,8 @@ public:
     void                importPaletteColor( RecordInputStream& rStrm );
     /** Imports the PALETTE record from the passed stream. */
     void                importPalette( BiffInputStream& rStrm );
+    /** Imports a color palette from a UNO sequence in the passed any. */
+    void                importPalette( const ::com::sun::star::uno::Any& rPalette );
 
     /** Rturns the RGB value of the color with the passed index. */
     sal_Int32           getColor( sal_Int32 nPaletteIdx ) const;
@@ -995,6 +997,9 @@ public:
     void                importXf( BiffInputStream& rStrm );
     /** Imports the STYLE record from the passed stream. */
     void                importStyle( BiffInputStream& rStrm );
+
+    /** Imports a color palette from a UNO sequence in the passed any. */
+    void                importPalette( const ::com::sun::star::uno::Any& rPalette );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

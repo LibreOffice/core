@@ -251,5 +251,66 @@ OUString ExcelBiffFilter::implGetImplementationName() const
 
 // ============================================================================
 
+OUString SAL_CALL ExcelVbaProjectFilter_getImplementationName() throw()
+{
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" );
+}
+
+Sequence< OUString > SAL_CALL ExcelVbaProjectFilter_getSupportedServiceNames() throw()
+{
+    Sequence< OUString > aSeq( 1 );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL ExcelVbaProjectFilter_createInstance(
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
+{
+    return static_cast< ::cppu::OWeakObject* >( new ExcelVbaProjectFilter( rxContext ) );
+}
+
+// ----------------------------------------------------------------------------
+
+ExcelVbaProjectFilter::ExcelVbaProjectFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    ExcelBiffFilter( rxContext )
+{
+}
+
+bool ExcelVbaProjectFilter::importDocument() throw()
+{
+    bool bRet = false;
+
+    // detect BIFF version and workbook stream name
+    OUString aWorkbookName;
+    BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );
+    OSL_ENSURE( eBiff == BIFF8, "ExcelVbaProjectFilter::ExcelVbaProjectFilter - invalid file format" );
+    if( eBiff != BIFF8 )
+        return false;
+
+    StorageRef xVbaPrjStrg = openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
+    if( !xVbaPrjStrg || !xVbaPrjStrg->isStorage() )
+        return false;
+
+    WorkbookHelperRoot aHelper( *this, eBiff );
+    // set palette colors passed in service constructor
+    Any aPalette = getArgument( CREATE_OUSTRING( "ColorPalette" ) );
+    aHelper.getStyles().importPalette( aPalette );
+    // import the VBA project
+    getVbaProject().importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
+    return true;
+}
+
+bool ExcelVbaProjectFilter::exportDocument() throw()
+{
+    return false;
+}
+
+OUString ExcelVbaProjectFilter::implGetImplementationName() const
+{
+    return ExcelVbaProjectFilter_getImplementationName();
+}
+
+// ============================================================================
+
 } // namespace xls
 } // namespace oox

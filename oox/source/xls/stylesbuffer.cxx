@@ -540,6 +540,18 @@ void ColorPalette::importPalette( BiffInputStream& rStrm )
     }
 }
 
+void ColorPalette::importPalette( const Any& rPalette )
+{
+    Sequence< sal_Int32 > rColorSeq;
+    if( (rPalette >>= rColorSeq) && rColorSeq.hasElements() )
+    {
+        const sal_Int32* pnColor = rColorSeq.getConstArray();
+        const sal_Int32* pnColorEnd = pnColor + rColorSeq.getLength();
+        for( ; pnColor < pnColorEnd; ++pnColor )
+            appendColor( *pnColor & 0xFFFFFF );
+    }
+}
+
 sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
 {
     sal_Int32 nColor = API_RGB_TRANSPARENT;
@@ -3229,6 +3241,11 @@ void StylesBuffer::importXf( BiffInputStream& rStrm )
 void StylesBuffer::importStyle( BiffInputStream& rStrm )
 {
     maCellStyles.importStyle( rStrm );
+}
+
+void StylesBuffer::importPalette( const Any& rPalette )
+{
+    maPalette.importPalette( rPalette );
 }
 
 void StylesBuffer::finalizeImport()
