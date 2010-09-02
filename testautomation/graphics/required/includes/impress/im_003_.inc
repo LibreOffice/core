@@ -217,11 +217,9 @@ testcase tiViewToolbar_1
 
     printlog "open application "
     Call hNewDocument
-    Call sSelectEmptyLayout
-    printlog "delete default content"
-    hUseAsyncSlot( "EditSelectAll" )
-    Kontext "DocumentImpress"
-    DocumentImpress.typeKeys("<DELETE>",true)
+    
+    printlog "use the empty layout"
+    call sSelectEmptyLayout
 
     printlog "Insert->Graphic... : global\input\graf_inp\desp.bmp "
     hUseAsyncSlot( "InsertGraphicsFromFile" )
