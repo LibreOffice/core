@@ -118,10 +118,10 @@ void ExcelVbaProject::prepareImport()
         }
 
         // create new codenames if sheets do not have one
-        sal_Int32 nCounter = 1;
         for( SheetCodeNameInfoList::iterator aIt = aCodeNameInfos.begin(), aEnd = aCodeNameInfos.end(); aIt != aEnd; ++aIt )
         {
             // search for an unused codename
+            sal_Int32 nCounter = 1;
             OUString aCodeName;
             do
             {
