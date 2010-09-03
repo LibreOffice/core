@@ -45,6 +45,7 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 #include "sbtrace.hxx"
+#include "comenumwrapper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -1176,6 +1177,23 @@ void SbiRuntime::PushForEach()
         {
             p->xEnumeration = xEnumerationAccess->createEnumeration();
             p->eForType = FOR_EACH_XENUMERATION;
+        }
+        else if ( isVBAEnabled() && pUnoObj->isNativeCOMObject() )
+        {
+            uno::Reference< script::XInvocation > xInvocation;
+            if ( ( aAny >>= xInvocation ) && xInvocation.is() )
+            {
+                try
+                {
+                    p->xEnumeration = new ComEnumerationWrapper( xInvocation );
+                    p->eForType = FOR_EACH_XENUMERATION;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !p->xEnumeration.is() )
+                bError_ = true;
         }
         else
         {
