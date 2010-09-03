@@ -1327,12 +1327,12 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bEnabled = sal_False;
             if ( aValue >>= bEnabled )
             {
-                WinBits nStyle = rTree.GetStyle();
+                WinBits nStyle = rTree.GetWindowBits();
                 if ( bEnabled )
                     nStyle |= WB_HIDESELECTION;
                 else
                     nStyle &= ~WB_HIDESELECTION;
-                rTree.SetStyle( nStyle );
+                rTree.SetWindowBits( nStyle );
             }
         }
         break;
@@ -1428,7 +1428,7 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         switch(nPropId)
         {
         case BASEPROPERTY_HIDEINACTIVESELECTION:
-            return Any( ( rTree.GetStyle() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
+            return Any( ( rTree.GetWindowBits() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
 
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
