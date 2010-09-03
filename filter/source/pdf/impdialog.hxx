@@ -314,12 +314,13 @@ public:
 //class security tab page
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
-    PushButton                  maPbUserPwd;
+    FixedLine                   maFlGroup;
+    PushButton                  maPbSetPwd;
     FixedText                   maFtUserPwd;
     String                      maUserPwdSet;
     String                      maUserPwdUnset;
+    String                      maStrSetPwd;
 
-    PushButton                  maPbOwnerPwd;
     FixedText                   maFtOwnerPwd;
     String                      maOwnerPwdSet;
     String                      maOwnerPwdUnset;
@@ -347,8 +348,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     long nWidth;
 
-    DECL_LINK( ClickmaPbUserPwdHdl, void* );
-    DECL_LINK( ClickmaPbOwnerPwdHdl, void* );
+    DECL_LINK( ClickmaPbSetPwdHdl, void* );
 
     void enablePermissionControls();
 

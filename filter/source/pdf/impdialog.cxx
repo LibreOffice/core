@@ -1017,12 +1017,12 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
                                               const SfxItemSet& i_rCoreSet ) :
     SfxTabPage( i_pParent, PDFFilterResId( RID_PDF_TAB_SECURITY ), i_rCoreSet ),
-    maPbUserPwd( this, PDFFilterResId( BTN_USER_PWD ) ),
+    maFlGroup( this, PDFFilterResId( FL_PWD_GROUP ) ),
+    maPbSetPwd( this, PDFFilterResId( BTN_SET_PWD ) ),
     maFtUserPwd( this, PDFFilterResId( FT_USER_PWD ) ),
     maUserPwdSet( PDFFilterResId( STR_USER_PWD_SET ) ),
     maUserPwdUnset( PDFFilterResId( STR_USER_PWD_UNSET ) ),
-
-    maPbOwnerPwd( this, PDFFilterResId( BTN_OWNER_PWD ) ),
+    maStrSetPwd( PDFFilterResId( STR_SET_PWD ) ),
     maFtOwnerPwd( this, PDFFilterResId( FT_OWNER_PWD ) ),
     maOwnerPwdSet( PDFFilterResId( STR_OWNER_PWD_SET ) ),
     maOwnerPwdUnset( PDFFilterResId( STR_OWNER_PWD_UNSET ) ),
@@ -1081,6 +1081,8 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
             (*pCurrent++)->SetPosPixel( aNewPos );
         }
     }
+
+    maPbSetPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1135,10 +1137,6 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 // -----------------------------------------------------------------------------
 void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-    maPbUserPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbUserPwdHdl ) );
-
-    maPbOwnerPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl ) );
-
     switch( paParent->mnPrint )
     {
     default:
@@ -1184,30 +1182,20 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
             !( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected() );
 }
 
-//method common to both the password entry procedures
-void ImpPDFTabSecurityPage::ImplPwdPushButton( const String & i_rDlgTitle, String & io_rDestPassword )
+IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
 {
-// string needed: dialog title, message box text, depending on the button clicked
-    SfxPasswordDialog aPwdDialog( this );
+    SfxPasswordDialog aPwdDialog( this, &msUserPwdTitle );
     aPwdDialog.SetMinLen( 0 );
-    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM );
-    aPwdDialog.SetText( i_rDlgTitle );
+    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM | SHOWEXTRAS_PASSWORD2 | SHOWEXTRAS_CONFIRM2 );
+    aPwdDialog.SetText( maStrSetPwd );
+    aPwdDialog.SetGroup2Text( msOwnerPwdTitle );
     aPwdDialog.AllowAsciiOnly();
     if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
-        io_rDestPassword = aPwdDialog.GetPassword();
+    {
+        msUserPassword = aPwdDialog.GetPassword();
+        msOwnerPassword = aPwdDialog.GetPassword2();
+    }
     enablePermissionControls();
-}
-
-IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbUserPwdHdl, void*, EMPTYARG )
-{
-    ImplPwdPushButton(msUserPwdTitle, msUserPassword );
-    return 0;
-}
-
-IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, EMPTYARG )
-{
-    ImplPwdPushButton( msOwnerPwdTitle, msOwnerPassword );
-
     return 0;
 }
 
