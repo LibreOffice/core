@@ -2375,9 +2375,8 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
         }
 
         SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
-        aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+        aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetIndentAt() );
         aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-        FormatLRSpace(aLR);
 
         USHORT nStyle = m_rExport.GetId( *pFmt->GetCharFmt() );
         OString* pString = m_rExport.GetStyle(nStyle);
@@ -2424,6 +2423,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
             else if( sTxt.Len() )
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
         }
+        FormatLRSpace(aLR);
     }
 }
 
