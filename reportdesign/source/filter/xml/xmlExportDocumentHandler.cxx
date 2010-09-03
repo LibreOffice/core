@@ -339,10 +339,16 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
     // set ourself as delegator
     m_xProxy->setDelegator( *this );
+    const ::rtl::OUString sCommand = m_xDatabaseDataProvider->getCommand();
+    if ( sCommand.getLength() )
+        m_aColumns = ::dbtools::getFieldNamesByCommandDescriptor(m_xDatabaseDataProvider->getActiveConnection()
+                    ,m_xDatabaseDataProvider->getCommandType()
+                    ,sCommand);
 
     uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xDatabaseDataProvider,uno::UNO_QUERY);
     if ( xDataProvider.is() )
     {
+        m_aColumns.realloc(1);
         uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames = xDataProvider->getComplexColumnDescriptions();
         for(sal_Int32 i = 0 ; i < aColumnNames.getLength();++i)
         {
@@ -353,14 +359,6 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
                 m_aColumns[nCount] = aColumnNames[i][0];
             }
         }
-    }
-    else
-    {
-        const ::rtl::OUString sCommand = m_xDatabaseDataProvider->getCommand();
-        if ( sCommand.getLength() )
-            m_aColumns = ::dbtools::getFieldNamesByCommandDescriptor(m_xDatabaseDataProvider->getActiveConnection()
-                        ,m_xDatabaseDataProvider->getCommandType()
-                        ,sCommand);
     }
 }
 // --------------------------------------------------------------------------------
