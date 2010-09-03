@@ -1052,7 +1052,9 @@ void RtfAttributeOutput::OutlineNumbering( BYTE nLvl, const SwNumFmt& /*rNFmt*/,
     if ( nLvl >= WW8ListManager::nMaxLevel )
         nLvl = WW8ListManager::nMaxLevel - 1;
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LEVEL);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
+    m_aStyles.append((sal_Int32)nLvl);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_OUTLINELEVEL);
     m_aStyles.append((sal_Int32)nLvl);
 }
 
@@ -2412,12 +2414,12 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
                     }
                     else
                         m_aStyles.append((sal_Int32)nLvl);
-                    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
-                    m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
-                    m_aStyles.append(' ');
                 }
                 else
                     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
+                m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
+                m_aStyles.append(' ');
             }
             else if( sTxt.Len() )
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
