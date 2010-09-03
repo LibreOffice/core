@@ -699,7 +699,6 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
 {
     DBG_CTOR(SvLBox,0);
-    nWindowStyle = nWinStyle;
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = 0;
     pTargetEntry = 0;
@@ -724,7 +723,6 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     DBG_CTOR(SvLBox,0);
     pTargetEntry = 0;
     nImpFlags = 0;
-    nWindowStyle = 0;
     pLBoxImpl = new SvLBox_Impl( *this );
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;

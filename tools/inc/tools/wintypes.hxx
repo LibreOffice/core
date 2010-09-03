@@ -277,6 +277,11 @@ typedef sal_Int64 WinBits;
 #define WB_HASBUTTONS           ((WinBits)0x00800000)
 #define WB_HASLINES             ((WinBits)0x01000000)
 #define WB_HASLINESATROOT       ((WinBits)0x02000000)
+#define WB_HASBUTTONSATROOT     ((WinBits)0x04000000)
+#define WB_NOINITIALSELECTION   ((WinBits)0x08000000)
+#define WB_HIDESELECTION        ((WinBits)0x10000000)
+#define WB_FORCE_MAKEVISIBLE    ((WinBits)0x20000000)
+
 
 // For FileOpen Dialog
 #define WB_PATH                 ((WinBits)0x00100000)
