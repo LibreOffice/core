@@ -103,6 +103,6 @@
 #define SC_PAGEVIEWZOOMVALUE                "PageViewZoomValue"
 #define SC_SHOWPAGEBREAKPREVIEW             "ShowPageBreakPreview"
 #define SC_VIEWID                           "ViewId"
-#define SC_VIEW                             "View"
+#define SC_VIEW                             "view"
 
 #endif
