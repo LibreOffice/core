@@ -66,6 +66,8 @@ $(HELPLINKALLTARGETS) : $(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/$$(@:b:s/_/./
     $(COMMAND_ECHO)$(HELPLINKER) -mod $(LINKNAME) -extlangsrc $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} $(STY_SWITCH) -extlangdest $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} -idxcaption $(XSL_DIR)/idxcaption.xsl -idxcontent $(XSL_DIR)/idxcontent.xsl $(LINKLINKFILES)
     $(COMMAND_ECHO)cd $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && zip -u -r $(LINKNAME).jar $(PACKAGE)/* $(CHECKZIPRESULT)
 .IF "$(SOLAR_JAVA)" == "TRUE"
+# cleanup index dir
+    -$(RM) $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))}/$(LINKNAME).idxl/*
 .IF "$(CHECK_LUCENCE_INDEXER_OUTPUT)" == ""
     $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVA_LIBRARY_PATH) -cp "$(my_cp)" com.sun.star.help.HelpIndexerTool -extension -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -zipdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} && $(TOUCH) $@
 .ELSE
