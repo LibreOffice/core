@@ -102,9 +102,10 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     aToolBox.SetSizePixel( aToolBox.CalcWindowSizePixel() );
     aToolBox.SetSelectHdl( LINK( this, ObjectCatalog, ToolBoxHdl ) );
 
-    aMacroTreeList.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
-                                  WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                                  WB_HSCROLL );
+    aMacroTreeList.SetStyle( WB_BORDER | WB_TABSTOP |
+                             WB_HASLINES | WB_HASLINESATROOT |
+                             WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                             WB_HSCROLL );
 
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
 
