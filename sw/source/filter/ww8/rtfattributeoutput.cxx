@@ -362,9 +362,12 @@ void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     m_bBufferSectionBreaks = false;
 
     OStringBuffer aPar;
-    aPar.append(OOO_STRING_SVTOOLS_RTF_PARD);
-    aPar.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-    aPar.append(' ');
+    if (!m_rExport.bRTFFlySyntax)
+    {
+        aPar.append(OOO_STRING_SVTOOLS_RTF_PARD);
+        aPar.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
+        aPar.append(' ');
+    }
     if (!m_bBufferSectionHeaders)
         m_rExport.Strm() << aPar.makeStringAndClear();
     else
@@ -1408,6 +1411,38 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
 
     switch ( rFrame.GetWriterType() )
     {
+        case sw::Frame::eTxtBox:
+            OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
+            m_rExport.mpParentFrame = &rFrame;
+            m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
+            m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
+            m_rExport.Strm() << m_aRunText.makeStringAndClear();
+            m_rExport.Strm() << m_aStyles.makeStringAndClear();
+            m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
+            m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE;
+            m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
+            m_rExport.Strm() << m_aRunText.makeStringAndClear();
+            m_rExport.Strm() << m_aStyles.makeStringAndClear();
+            m_rExport.Strm() << '}';
+
+            {
+                /*
+                 * Save m_aRun as we should not loose the opening brace.
+                 * OTOH, just drop the contents of m_aRunText in case something
+                 * would be there, causing a problem later.
+                 */
+                OString aSave = m_aRun.makeStringAndClear();
+                m_rExport.bRTFFlySyntax = true;
+                m_rExport.OutContent(*rFrame.GetContent());
+                m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_PARD;
+                m_rExport.bRTFFlySyntax = false;
+                m_aRun.append(aSave);
+                m_aRunText.setLength(0);
+            }
+
+            m_rExport.mpParentFrame = NULL;
+            m_rExport.Strm() << RtfExport::sNewLine;
+            break;
         case sw::Frame::eGraphic:
             if (!rFrame.IsInline())
             {
@@ -2549,6 +2584,11 @@ void RtfAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             m_aStyles.append( (sal_Int32) rLRSpace.GetTxtFirstLineOfst() );
         }
     }
+    else if (rLRSpace.GetLeft() == rLRSpace.GetRight() && m_rExport.bRTFFlySyntax)
+    {
+        m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_DFRMTXTX;
+        m_rExport.OutLong( rLRSpace.GetLeft() );
+    }
 }
 
 void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
@@ -2579,6 +2619,11 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
             m_aStyles.append( (sal_Int32) rULSpace.GetLower() );
         }
+    }
+    else if (rULSpace.GetUpper() == rULSpace.GetLower() && m_rExport.bRTFFlySyntax)
+    {
+        m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_DFRMTXTY;
+        m_rExport.OutLong( rULSpace.GetLower() );
     }
 }
 
@@ -2718,6 +2763,9 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL, OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };
 
     USHORT nDist = rBox.GetDistance();
+
+    if ( m_rExport.bRTFFlySyntax )
+        return;
 
     if( rBox.GetTop() && rBox.GetBottom() &&
             rBox.GetLeft() && rBox.GetRight() &&
