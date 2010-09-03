@@ -79,7 +79,7 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
         case BASEPROPERTY_DEFAULTCONTROL:
             return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainer ) );
         case BASEPROPERTY_BORDER:
-            return uno::makeAny((sal_Int16) 2);              // No Border
+            return uno::makeAny((sal_Int16) 0);              // No Border
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
