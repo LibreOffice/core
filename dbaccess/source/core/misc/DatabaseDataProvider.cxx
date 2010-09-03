@@ -43,6 +43,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
@@ -72,6 +73,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
 {
     m_xInternal.set( m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart.InternalDataProvider")),m_xContext ), uno::UNO_QUERY );
     m_xRangeConversion.set(m_xInternal,uno::UNO_QUERY);
+    m_xComplexDescriptionAccess.set(m_xInternal,uno::UNO_QUERY);
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -315,6 +317,75 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     }
     return xData;
 }
+
+uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL DatabaseDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getComplexRowDescriptions();
+}
+void SAL_CALL DatabaseDataProvider::setComplexRowDescriptions( const uno::Sequence< uno::Sequence< ::rtl::OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setComplexRowDescriptions(aRowDescriptions);
+}
+uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL DatabaseDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getComplexColumnDescriptions();
+}
+void SAL_CALL DatabaseDataProvider::setComplexColumnDescriptions( const uno::Sequence< uno::Sequence< rtl::OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setComplexColumnDescriptions(aColumnDescriptions);
+}
+// ____ XChartDataArray ____
+uno::Sequence< uno::Sequence< double > > SAL_CALL DatabaseDataProvider::getData()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getData();
+}
+
+void SAL_CALL DatabaseDataProvider::setData( const uno::Sequence< uno::Sequence< double > >& rDataInRows )    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setData(rDataInRows);
+}
+
+void SAL_CALL DatabaseDataProvider::setRowDescriptions( const uno::Sequence< rtl::OUString >& aRowDescriptions )    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setRowDescriptions(aRowDescriptions);
+}
+
+void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const uno::Sequence< rtl::OUString >& aColumnDescriptions )    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setColumnDescriptions(aColumnDescriptions);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getRowDescriptions();
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getColumnDescriptions();
+}
+
+// ____ XChartData (base of XChartDataArray) ____
+void SAL_CALL DatabaseDataProvider::addChartDataChangeEventListener(const uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->addChartDataChangeEventListener(x);
+}
+
+void SAL_CALL DatabaseDataProvider::removeChartDataChangeEventListener(const uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->removeChartDataChangeEventListener(x);
+}
+
+double SAL_CALL DatabaseDataProvider::getNotANumber()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getNotANumber();
+}
+
+::sal_Bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->isNotANumber(nNumber);
+}
+
 // -----------------------------------------------------------------------------
 
 uno::Reference< sheet::XRangeSelection > SAL_CALL DatabaseDataProvider::getRangeSelection() throw (uno::RuntimeException)
@@ -616,26 +687,28 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     uno::Reference< sdbc::XResultSet> xRes(m_xRowSet,uno::UNO_QUERY_THROW);
     uno::Reference< sdbc::XRow> xRow(m_xRowSet,uno::UNO_QUERY_THROW);
     uno::Reference< sdbc::XResultSetMetaData> xResultSetMetaData = uno::Reference< sdbc::XResultSetMetaDataSupplier>(m_xRowSet,uno::UNO_QUERY)->getMetaData();
+    uno::Reference< sdbc::XColumnLocate> xColumnLocate(m_xRowSet,uno::UNO_QUERY_THROW);
 
     ::std::vector<sal_Int32> aColumnTypes;
     uno::Sequence< uno::Any > aLabelArgs(1);
     const sal_Int32 nCount = aColumns.getLength();
     if ( nCount )
         aColumnTypes.push_back(xResultSetMetaData->getColumnType(1));
-    for (sal_Int32 i = 1; i < nCount; ++i)
-    {
-        aColumnTypes.push_back(xResultSetMetaData->getColumnType(i+1));
-    } // for (sal_Int32 i = 1; i < nCount; ++i)
 
+    ::std::vector< sal_Int32 > aColumnPositions;
     const ::rtl::OUString* pIter = aColumns.getConstArray();
     const ::rtl::OUString* pEnd = pIter + aColumns.getLength();
     for(sal_Int32 k = 0;pIter != pEnd;++pIter,++k)
     {
+        aColumnPositions.push_back(xColumnLocate->findColumn(*pIter));
         uno::Reference< beans::XPropertySet> xColumn(xColumns->getByName(*pIter),uno::UNO_QUERY);
+        sal_Int32 nType = sdbc::DataType::VARCHAR;
         if ( xColumn.is() )
         {
             m_aNumberFormats.insert( ::std::map< ::rtl::OUString,uno::Any>::value_type(::rtl::OUString::valueOf(k),xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT)));
+            xColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
         }
+        aColumnTypes.push_back(nType);
     }
 
     ::std::vector< ::rtl::OUString > aRowLabels;
@@ -649,9 +722,17 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         aValue.fill(1,aColumnTypes[0],xRow);
         aRowLabels.push_back(aValue.getString());
         ::std::vector< double > aRow;
-        for (sal_Int32 j = _bHasCategories ? 2 : 1,i = 0; j <= nCount; ++j,++i)
+        ::std::vector< sal_Int32 >::iterator aColumnPosIter = aColumnPositions.begin();
+        ::std::vector< sal_Int32 >::iterator aColumnPosEnd = aColumnPositions.end();
+        sal_Int32 i = 0;
+        if ( _bHasCategories )
         {
-            aValue.fill(j,aColumnTypes[j-1],xRow);
+            ++aColumnPosIter;
+            ++i;
+        }
+        for (; aColumnPosIter != aColumnPosEnd; ++aColumnPosIter,++i)
+        {
+            aValue.fill(*aColumnPosIter,aColumnTypes[i],xRow);
             if ( aValue.isNull() )
             {
                 double nValue;
@@ -660,7 +741,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             }
             else
                 aRow.push_back(aValue.getDouble());
-        } // for (sal_Int32 j = 2,i = 0; j <= nCount; ++j,++i)
+        }
         aDataValues.push_back(aRow);
     } // while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
 

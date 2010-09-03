@@ -112,7 +112,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
-        ::rtl::OUString                                                                 m_aSelectComposedTableName;
         ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
 
         sal_Bool m_bRowCountFinal;
