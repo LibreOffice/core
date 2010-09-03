@@ -1327,11 +1327,11 @@ BOOL ScContentTree::LoadFile( const String& rUrl )
 
 void ScContentTree::InitWindowBits( BOOL bButtons )
 {
-    WinBits nFlags = WB_CLIPCHILDREN|WB_HSCROLL;
+    WinBits nFlags = GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL;
     if (bButtons)
         nFlags |= WB_HASBUTTONS|WB_HASBUTTONSATROOT;
 
-    SetWindowBits( nFlags );
+    SetStyle( nFlags );
 }
 
 void ScContentTree::SetRootType( USHORT nNew )
