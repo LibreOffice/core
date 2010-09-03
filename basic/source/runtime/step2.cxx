@@ -407,6 +407,34 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                         }
                     }
                 }
+                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (!p->ISA(SbxMethod) || !p->IsBroadcaster()) )
+                {
+                    // Check for default method with named parameters
+                    SbxBaseRef pObj = (SbxBase*)p->GetObject();
+                    if( pObj && pObj->ISA(SbUnoObject) )
+                    {
+                        SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                        Any aAny = pUnoObj->getUnoAny();
+
+                        if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                        {
+                            Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+                            Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
+
+                            rtl::OUString sDefaultMethod;
+                            if ( xDfltMethod.is() )
+                                sDefaultMethod = xDfltMethod->getDefaultMethodName();
+                            if ( sDefaultMethod.getLength() )
+                            {
+                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                                if( meth != NULL )
+                                    pInfo = meth->GetInfo();
+                                if( pInfo )
+                                    bError_ = false;
+                            }
+                        }
+                    }
+                }
                 if( bError_ )
                     Error( SbERR_NO_NAMED_ARGS );
             }
