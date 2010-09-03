@@ -225,21 +225,21 @@ void RtfAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
        code that we're triggering ?
        */
     if (bIsRTL) {
-        m_aRun.append(OOO_STRING_SVTOOLS_RTF_LTRCH);
-        m_aRun.append(' ');
-        m_aRun.append(OOO_STRING_SVTOOLS_RTF_RTLCH);
+        m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LTRCH);
+        m_aStylesEnd.append(' ');
+        m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_RTLCH);
     } else {
-        m_aRun.append(OOO_STRING_SVTOOLS_RTF_RTLCH);
-        m_aRun.append(' ');
-        m_aRun.append(OOO_STRING_SVTOOLS_RTF_LTRCH);
+        m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_RTLCH);
+        m_aStylesEnd.append(' ');
+        m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LTRCH);
     }
 
     switch (nScript) {
         case i18n::ScriptType::LATIN:
-            m_aRun.append(OOO_STRING_SVTOOLS_RTF_LOCH);
+            m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LOCH);
             break;
         case i18n::ScriptType::ASIAN:
-            m_aRun.append(OOO_STRING_SVTOOLS_RTF_DBCH);
+            m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_DBCH);
             break;
         case i18n::ScriptType::COMPLEX:
             /* noop */
@@ -997,14 +997,17 @@ void RtfAttributeOutput::DefaultStyle( USHORT /*nStyle*/ )
     /* noop, the default style is always 0 in RTF */
 }
 
-void RtfAttributeOutput::StartStyle( const String& rName, bool /*bPapFmt*/,
+void RtfAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
         USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId )
 {
     OSL_TRACE("%s, rName = '%s'", OSL_THIS_FUNC,
             OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ).getStr());
 
     m_aStylesheet.append('{');
-    m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_S);
+    if (bPapFmt)
+        m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_S);
+    else
+        m_aStylesheet.append( OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);
     m_aStylesheet.append( (sal_Int32)nId );
 
     if ( nBase != 0x0FFF )
@@ -2166,6 +2169,8 @@ void RtfAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     USHORT nStyle = m_rExport.GetId( *rCharFmt.GetCharFmt() );
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);
+    m_aStyles.append((sal_Int32)nStyle);
     OString* pString = m_rExport.GetStyle(nStyle);
     if (pString)
         m_aStyles.append(*pString);
