@@ -1379,10 +1379,6 @@ String RID_OBJECTNAME
 {
     Text = "SMath3" ;
 };
-String RID_VIEWNAME
-{
-    Text = "StarMath" ;
-};
 String RID_UNDOEDITNAME
 {
     Text = "Edit" ;
