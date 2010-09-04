@@ -273,15 +273,19 @@ VisibleAreaScroller::VisibleAreaScroller (
     // jump to within this distance of the final value and start the
     // animation from there.
     if (abs(aStart.X()-aEnd.X()) > gnMaxScrollDistance)
+    {
         if (aStart.X() < aEnd.X())
             maStart.X() = aEnd.X()-gnMaxScrollDistance;
         else
             maStart.X() = aEnd.X()+gnMaxScrollDistance;
+    }
     if (abs(aStart.Y()-aEnd.Y()) > gnMaxScrollDistance)
+    {
         if (aStart.Y() < aEnd.Y())
             maStart.Y() = aEnd.Y()-gnMaxScrollDistance;
         else
             maStart.Y() = aEnd.Y()+gnMaxScrollDistance;
+    }
 }
 
 
