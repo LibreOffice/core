@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_basic.hxx"
 #include "comenumwrapper.hxx"
 
 using namespace ::com::sun::star;
