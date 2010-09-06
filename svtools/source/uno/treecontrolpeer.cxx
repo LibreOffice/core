@@ -1322,6 +1322,21 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
 
     switch( GetPropertyId( PropertyName ) )
     {
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+        {
+            sal_Bool bEnabled = sal_False;
+            if ( aValue >>= bEnabled )
+            {
+                WinBits nStyle = rTree.GetWindowBits();
+                if ( bEnabled )
+                    nStyle |= WB_HIDESELECTION;
+                else
+                    nStyle &= ~WB_HIDESELECTION;
+                rTree.SetWindowBits( nStyle );
+            }
+        }
+        break;
+
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
             SelectionType eSelectionType;
@@ -1412,6 +1427,9 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
         switch(nPropId)
         {
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+            return Any( ( rTree.GetWindowBits() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
+
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
             SelectionType eSelectionType;

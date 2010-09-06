@@ -43,6 +43,7 @@
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -180,6 +181,63 @@ void makeAndAppendXMLName(
                 break;
         }
     }
+}
+
+bool createContentProviderData(
+    const rtl::OUString & rProvider,
+    const uno::Reference< container::XHierarchicalNameAccess >& rxHierNameAccess,
+    ContentProviderData & rInfo)
+{
+    // Obtain service name.
+    rtl::OUStringBuffer aKeyBuffer (rProvider);
+    aKeyBuffer.appendAscii( "/ServiceName" );
+
+    rtl::OUString aValue;
+    try
+    {
+        if ( !( rxHierNameAccess->getByHierarchicalName(
+                    aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+        {
+            OSL_ENSURE( false,
+                        "UniversalContentBroker::getContentProviderData - "
+                        "Error getting item value!" );
+        }
+    }
+    catch (container::NoSuchElementException &)
+    {
+        return false;
+    }
+
+    rInfo.ServiceName = aValue;
+
+    // Obtain URL Template.
+    aKeyBuffer.append(rProvider);
+    aKeyBuffer.appendAscii( "/URLTemplate" );
+
+    if ( !( rxHierNameAccess->getByHierarchicalName(
+                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+    {
+        OSL_ENSURE( false,
+                    "UniversalContentBroker::getContentProviderData - "
+                    "Error getting item value!" );
+    }
+
+    rInfo.URLTemplate = aValue;
+
+    // Obtain Arguments.
+    aKeyBuffer.append(rProvider);
+    aKeyBuffer.appendAscii( "/Arguments" );
+
+    if ( !( rxHierNameAccess->getByHierarchicalName(
+                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+    {
+        OSL_ENSURE( false,
+                    "UniversalContentBroker::getContentProviderData - "
+                    "Error getting item value!" );
+    }
+
+    rInfo.Arguments = aValue;
+    return true;
 }
 
 }
@@ -647,28 +705,10 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
     sal_Int32 nCount = Event.Changes.getLength();
     if ( nCount )
     {
+        uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
+        Event.Base >>= xHierNameAccess;
 
-        uno::Reference< lang::XMultiServiceFactory > xConfigProv(
-                m_xSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                uno::UNO_QUERY_THROW );
-
-        uno::Sequence< uno::Any > aArguments( 1 );
-        beans::PropertyValue      aProperty;
-        aProperty.Name
-            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-        aProperty.Value <<= Event.Base;
-        aArguments[ 0 ] <<= aProperty;
-
-        uno::Reference< uno::XInterface > xInterface(
-                xConfigProv->createInstanceWithArguments(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationAccess" ) ),
-                    aArguments ) );
-
-        uno::Reference< container::XHierarchicalNameAccess >
-                                xHierNameAccess( xInterface, uno::UNO_QUERY_THROW );
+        OSL_ASSERT( xHierNameAccess.is() );
 
         const util::ElementChange* pElementChanges
             = Event.Changes.getConstArray();
@@ -682,9 +722,18 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
 
             ContentProviderData aInfo;
 
-            createContentProviderData(aKey, xHierNameAccess, aInfo);
-
-            aData.push_back(aInfo);
+            // Removal of UCPs from the configuration leads to changesOccurred
+            // notifications, too, but it is hard to tell for a given
+            // ElementChange whether it is an addition or a removal, so as a
+            // heuristic consider as removals those that cause a
+            // NoSuchElementException in createContentProviderData.
+            //
+            // For now, removal of UCPs from the configuration is simply ignored
+            // (and not reflected in the UCB's data structures):
+            if (createContentProviderData(aKey, xHierNameAccess, aInfo))
+            {
+                aData.push_back(aInfo);
+            }
         }
 
         prepareAndRegister(aData);
@@ -852,7 +901,10 @@ bool UniversalContentBroker::getContentProviderData(
                     makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
                     aElemBuffer.appendAscii( "']" );
 
-                    createContentProviderData(aElemBuffer.makeStringAndClear(), xHierNameAccess, aInfo);
+                    OSL_VERIFY(
+                        createContentProviderData(
+                            aElemBuffer.makeStringAndClear(), xHierNameAccess,
+                            aInfo));
 
                     rListToFill.push_back( aInfo );
                 }
@@ -882,55 +934,6 @@ bool UniversalContentBroker::getContentProviderData(
     }
 
     return true;
-}
-
-void UniversalContentBroker::createContentProviderData(
-    const rtl::OUString & rProvider,
-    const uno::Reference< container::XHierarchicalNameAccess >& rxHierNameAccess,
-    ContentProviderData & rInfo)
-{
-    // Obtain service name.
-    rtl::OUStringBuffer aKeyBuffer (rProvider);
-    aKeyBuffer.appendAscii( "/ServiceName" );
-
-    rtl::OUString aValue;
-    if ( !( rxHierNameAccess->getByHierarchicalName(
-                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
-    {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
-                    "Error getting item value!" );
-    }
-
-    rInfo.ServiceName = aValue;
-
-    // Obtain URL Template.
-    aKeyBuffer.append(rProvider);
-    aKeyBuffer.appendAscii( "/URLTemplate" );
-
-    if ( !( rxHierNameAccess->getByHierarchicalName(
-                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
-    {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
-                    "Error getting item value!" );
-    }
-
-    rInfo.URLTemplate = aValue;
-
-    // Obtain Arguments.
-    aKeyBuffer.append(rProvider);
-    aKeyBuffer.appendAscii( "/Arguments" );
-
-    if ( !( rxHierNameAccess->getByHierarchicalName(
-                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
-    {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
-                    "Error getting item value!" );
-    }
-
-    rInfo.Arguments = aValue;
 }
 
 //=========================================================================

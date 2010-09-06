@@ -1165,11 +1165,11 @@ void Window::DropScroll(const Point& rMousePos)
     Window::CreateAccessible (void)
 {
     if (mpViewShell != NULL)
-    return mpViewShell->CreateAccessibleDocumentView (this);
+        return mpViewShell->CreateAccessibleDocumentView (this);
     else
     {
         OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
-    return ::Window::CreateAccessible ();
+        return ::Window::CreateAccessible ();
     }
 }
 

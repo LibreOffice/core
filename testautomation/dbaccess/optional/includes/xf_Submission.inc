@@ -41,6 +41,8 @@ end sub
 '-------------------------------------------------------------------------
 testcase tDataNavigatorSubmission    
     
+    Dim sSubmitPath as string
+
     '/// open new XML Form
     printlog "open new XML Form"
     
@@ -101,11 +103,8 @@ testcase tDataNavigatorSubmission
     '/// add a submission
     Kontext "XFormAddSubmission"
         SubmitName.setText("submission1")
-        if ( gPlatgroup = "w95" ) then
-            SubmitAction.setText("file:///" + ConvertPath(gOfficePath,"lin") + "user/work/test.xml")
-        else
-            SubmitAction.setText("file://" + gOfficePath + "user/work/test.xml")
-        endif
+        sSubmitPath = "file:///" + gOfficePath + "user/work/test.xml"
+        SubmitAction.setText( hStringReplaceChar( sSubmitPath, "\", "/" ) )
         SubmitMethod.select 2            
             
     '/// close the add submission dialog

@@ -584,6 +584,7 @@ namespace sfx2
             return;
 
         ::rtl::OUString sFirstVisiblePanelResource;
+        ::rtl::OUString sFirstPanelResource;
 
         const Sequence< ::rtl::OUString > aUIElements( aWindowStateConfig.getNodeNames() );
         for (   const ::rtl::OUString* resource = aUIElements.getConstArray();
@@ -593,6 +594,8 @@ namespace sfx2
         {
             if ( !impl_isToolPanelResource( *resource ) )
                 continue;
+
+            sFirstPanelResource = *resource;
 
             ::utl::OConfigurationNode aResourceNode( aWindowStateConfig.openNode( *resource ) );
             ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode, m_xFrame ) );
@@ -619,6 +622,9 @@ namespace sfx2
             if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
                 sFirstVisiblePanelResource = *resource;
         }
+
+        if ( sFirstVisiblePanelResource.getLength() == 0 )
+            sFirstVisiblePanelResource = sFirstPanelResource;
 
         if ( sFirstVisiblePanelResource.getLength() )
         {
