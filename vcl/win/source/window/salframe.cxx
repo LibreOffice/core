@@ -182,6 +182,25 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWMAXIMIZED;
             pFrame->mbRestoreMaximize = TRUE;
+
+            WINDOWPLACEMENT aPlacement;
+            aPlacement.length = sizeof(aPlacement);
+            if( GetWindowPlacement( pFrame->mhWnd, &aPlacement ) )
+            {
+                RECT aRect = aPlacement.rcNormalPosition;
+                RECT aRect2 = aRect;
+                AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
+                                    FALSE,  GetWindowExStyle( pFrame->mhWnd ) );
+                long nTopDeco = abs( aRect.top - aRect2.top );
+                long nLeftDeco = abs( aRect.left - aRect2.left );
+                long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+                long nRightDeco = abs( aRect.right - aRect2.right );
+
+                pFrame->maState.mnX      = aRect.left + nLeftDeco;
+                pFrame->maState.mnY      = aRect.top + nTopDeco;
+                pFrame->maState.mnWidth  = aRect.right - aRect.left - nLeftDeco - nRightDeco;
+                pFrame->maState.mnHeight = aRect.bottom - aRect.top - nTopDeco - nBottomDeco;
+            }
         }
         else
         {
