@@ -283,9 +283,10 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
                     aStr += pParam->aName;
             }
             aStr += '=';
-            if( pVar->GetType() & SbxARRAY )
+            SbxDataType eType = pVar->GetType();
+            if( eType & SbxARRAY )
                 aStr += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-            else
+            else if( eType != SbxOBJECT )
                 aStr += pVar->GetString();
             if ( nParam < ( pParams->Count() - 1 ) )
                 aStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
