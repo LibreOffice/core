@@ -245,9 +245,19 @@ Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL UnoControlTabPageCont
 void SAL_CALL UnoControlTabPageContainer::addTabPageListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
 {
     m_aTabPageListeners.addInterface( listener );
+    if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::tab::XTabPageContainer >  xTabPageContainer( getPeer(), uno::UNO_QUERY );
+        xTabPageContainer->addTabPageListener( &m_aTabPageListeners );
+    }
 }
 void SAL_CALL UnoControlTabPageContainer::removeTabPageListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
 {
+    if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::tab::XTabPageContainer >  xTabPageContainer( getPeer(), uno::UNO_QUERY );
+        xTabPageContainer->addTabPageListener( &m_aTabPageListeners );
+    }
     m_aTabPageListeners.removeInterface( listener );
 }
 
