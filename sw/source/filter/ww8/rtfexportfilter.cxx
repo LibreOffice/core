@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
-#include "rtfexportfilter.hxx"
-#include "rtfexport.hxx"
+#include <rtfexportfilter.hxx>
+#include <rtfexport.hxx>
+#include <rtfimportfilter.hxx>
 
 #include <docsh.hxx>
 #include <doc.hxx>
@@ -162,19 +163,19 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
             OSL_ENSURE( sal_False, "### InvalidRegistryException (rtfexport)!" );
         }
 
-//        try
-//        {
-//            uno::Reference< registry::XRegistryKey > xNewKey1(
-//                    static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-//                        OUString::createFromAscii( IMPL_NAME_RTFIMPORT "/UNO/SERVICES/" ) ) );
-//            xNewKey1->createKey( RtfExport_getSupportedServiceNames().getConstArray()[0] );
+        try
+        {
+            uno::Reference< registry::XRegistryKey > xNewKey1(
+                    static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
+                        OUString::createFromAscii( IMPL_NAME_RTFIMPORT "/UNO/SERVICES/" ) ) );
+            xNewKey1->createKey( RtfExport_getSupportedServiceNames().getConstArray()[0] );
 
-//            bRet = sal_True;
-//        }
-//        catch( registry::InvalidRegistryException& )
-//        {
-//            OSL_ENSURE( sal_False, "### InvalidRegistryException (rtfimport)!" );
-//        }
+            bRet = sal_True;
+        }
+        catch( registry::InvalidRegistryException& )
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException (rtfimport)!" );
+        }
     }
 
     return bRet;
@@ -199,15 +200,15 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
                     RtfExport_createInstance,
                     RtfExport_getSupportedServiceNames() ) );
     }
-//    else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFIMPORT ) == 0 ) {
-//        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFIMPORT ) );
+    else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFIMPORT ) == 0 ) {
+        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFIMPORT ) );
 
-//        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-//                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-//                    RtfImport_getImplementationName(),
-//                    RtfImport_createInstance,
-//                    RtfImport_getSupportedServiceNames() ) );
-//    }
+        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                    RtfImport_getImplementationName(),
+                    RtfImport_createInstance,
+                    RtfImport_getSupportedServiceNames() ) );
+    }
 
     if ( xFactory.is() )
     {
