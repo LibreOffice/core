@@ -3740,7 +3740,8 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
             SCCOLROW nColArr[2];
             nColArr[0] = thisAddress.StartColumn;
             nColArr[1] = thisAddress.EndColumn;
-            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, thisAddress.Sheet, SC_SIZE_ORIGINAL,
+            // #163561# use mode SC_SIZE_DIRECT: hide for width 0, show for other values
+            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, thisAddress.Sheet, SC_SIZE_DIRECT,
                                                                                 nTwips, TRUE, TRUE );
 
         }
@@ -3904,7 +3905,8 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeExcepti
     SCCOLROW nRowArr[2];
     nRowArr[0] = thisAddress.StartRow;
     nRowArr[1] = thisAddress.EndRow;
-    aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, thisAddress.Sheet, SC_SIZE_ORIGINAL,
+    // #163561# use mode SC_SIZE_DIRECT: hide for height 0, show for other values
+    aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, thisAddress.Sheet, SC_SIZE_DIRECT,
                                                                         nTwips, TRUE, TRUE );
 }
 
