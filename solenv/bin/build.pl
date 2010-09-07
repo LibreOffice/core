@@ -1324,7 +1324,10 @@ sub find_indep_prj {
     $Dependencies = shift;
     if (scalar keys %$Dependencies) {
         foreach my $job (keys %$Dependencies) {
-            push(@candidates, $job) if (!scalar keys %{$$Dependencies{$job}});
+            if (!scalar keys %{$$Dependencies{$job}}) {
+                push(@candidates, $job);
+                last if (!$processes_to_run);
+            };
         };
         if (scalar @candidates) {
             $all_dependent = 0;
