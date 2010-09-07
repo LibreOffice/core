@@ -2844,7 +2844,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
-        const USHORT nPage = nRenderer + 1;
+        // --> TL, OD 2010-09-07 #i114210#
+        // determine the correct page number from the renderer index
+        const USHORT nPage = m_pRenderData->GetPagesToPrint()[ nRenderer ];
+        // <--
 
         // get paper tray to use ...
         sal_Int32 nPrinterPaperTray = -1;
