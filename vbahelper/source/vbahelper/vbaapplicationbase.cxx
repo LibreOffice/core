@@ -298,7 +298,20 @@ void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const u
     ::rtl::OUString aMacroName = MacroName.trim();
     if (0 == aMacroName.indexOf('!'))
         aMacroName = aMacroName.copy(1).trim();
-    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( getCurrentDocument() ), aMacroName );
+
+    uno::Reference< frame::XModel > xModel;
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if ( pMeth )
+    {
+        SbModule* pMod = dynamic_cast< SbModule* >( pMeth->GetParent() );
+        if ( pMod )
+            xModel = StarBASIC::GetModelFromBasic( pMod );
+    }
+
+    if ( !xModel.is() )
+        xModel = getCurrentDocument();
+
+    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
     if( aMacroInfo.IsResolved() )
     {
         // handle the arguments
