@@ -101,6 +101,10 @@ static OUString encodeZipUri( const OUString& rURI )
 
 static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, const OUString& rName ) throw( Exception )
 {
+    if ( rName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
+      || rName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
+        throw lang::IllegalArgumentException();
+
     Sequence< Any > aArgs(1);
     aArgs[0] <<= (sal_Bool)sal_True;
 
@@ -361,6 +365,10 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
     try
     {
         OUString szPackagePath( encodeZipUri( rURL.copy( sVndSunStarPackage.getLength() ) ) );
+
+        if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
+          || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
+            throw lang::IllegalArgumentException();
 
         if( xIfc->hasByHierarchicalName( szPackagePath ) )
         {
