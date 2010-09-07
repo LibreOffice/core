@@ -198,6 +198,13 @@ testcase tCheckWindowTitle( sApplication as string, sReference as string )
 
     printlog( "Update test for the office window titles" )
 
+    ' This is a Testtool-only problem that the product name is not displayed
+    ' after calling hCloseDocument() on the last document.
+    if ( sApplication = "soffice" ) then
+        qaerrorlog( "#i113760# - Product name missing for backing window" )
+        goto endsub
+    endif
+
     const BASIC_MODULE = "tCheckWindowTitle"
     const STRING_NOT_FOUND = 0
     const STRING_LEFTMOST  = 1
@@ -217,21 +224,12 @@ testcase tCheckWindowTitle( sApplication as string, sReference as string )
     printlog( "Application: " & sApplication & "; Title should be: " & sReference )
     printlog( "Open the work windows (documents)" )
     hInitSingleDoc()
-    hCreateDocument()
 
     printlog( "Verify that the correct window is open" )
     select case sApplication
-        case "swriter" :
-        case "sglobal" :
-        case "sweb"    :
-        case "scalc"   :
-        case "simpress":
-        case "sdraw"   :
-        case "smath"   :
         case "basic"   : hInitBasicIDE( BASIC_MODULE )
-        case "chart"   :
-        case "database":
         case "soffice" : hFileCloseAll()
+        case else      : hCreateDocument()
     end select
 
     ' Note: The Testtool connection string does not belong to the window caption
@@ -290,16 +288,7 @@ testcase tCheckWindowTitle( sApplication as string, sReference as string )
 
     printlog( "Cleanup after test" )
     select case sApplication
-        case "swriter" :
-        case "sglobal" :
-        case "sweb"    :
-        case "scalc"   :
-        case "simpress":
-        case "sdraw"   :
-        case "smath"   :
         case "basic"   : hDestroyDocument()
-        case "chart"   :
-        case "database":
         case "soffice" : hCreateDocument()
     end select
 
