@@ -44,6 +44,7 @@ class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
+struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
 
@@ -71,6 +72,7 @@ protected:
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
+    static void     implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
     SbProperty*     GetProperty( const String&, SbxDataType );
@@ -134,7 +136,7 @@ public:
     void SetVBACompat( BOOL bCompat );
     INT32 GetModuleType() { return mnType; }
     void SetModuleType( INT32 nType ) { mnType = nType; }
-    bool GetIsProxyModule() { return bIsProxyModule; }
+    bool isProxyModule() { return bIsProxyModule; }
     void AddVarName( const String& aName );
     void RemoveVars();
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
