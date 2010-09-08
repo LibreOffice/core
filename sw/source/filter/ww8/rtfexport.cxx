@@ -376,6 +376,7 @@ void RtfExport::WriteStyles()
 void RtfExport::WriteMainText()
 {
     OSL_TRACE("%s start", OSL_THIS_FUNC);
+    pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
     WriteText();
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
