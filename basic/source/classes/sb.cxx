@@ -1793,12 +1793,12 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
         return NULL;
     }
 
-    Any aThisComponent( sbxToUnoValue( pThisComponent ) );
-    Reference< frame::XModel > xModel( aThisComponent, UNO_QUERY );
+    Any aThisComponentAny( sbxToUnoValue( pThisComponent ) );
+    Reference< frame::XModel > xModel( aThisComponentAny, UNO_QUERY );
     if ( !xModel.is() )
     {
         // it's no XModel. Okay, ThisComponent nowadays is allowed to be a controller.
-        Reference< frame::XController > xController( aThisComponent, UNO_QUERY );
+        Reference< frame::XController > xController( aThisComponentAny, UNO_QUERY );
         if ( xController.is() )
             xModel = xController->getModel();
     }
