@@ -259,10 +259,6 @@ main( int argc, char* argv[])
 	FILE *pFile;
     
 	pOutput = GetOutputFile( argc, argv );
-	if( !isQuiet() ){ 
-        fprintf( stdout, "\nTransEx 3.1 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
-	    fprintf( stdout, "=====================================================================================\n" );
-    }
 
     if ( !pOutput ) {
 		fprintf( stdout, "Syntax:TRANSEX[-p Prj][-r PrjRoot]-i FileIn...[-o FileOut][-m DataBase][-e][-b][-u][-L l1,l2,...]\n" );
@@ -300,8 +296,6 @@ main( int argc, char* argv[])
 	/* get error info. and end export */
 	nRetValue = GetError();
 	EndExport();
-
-	if( !isQuiet() ) fprintf( stdout, "\n===================================\n\n" ); 
 
 	/* return error level */
 	return nRetValue;

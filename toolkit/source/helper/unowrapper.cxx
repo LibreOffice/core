@@ -318,12 +318,17 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
         while ( pTopWindowChild )
         {
-            OSL_ENSURE( pTopWindowChild->GetParent() == pWindow, "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
+            OSL_ENSURE( pTopWindowChild->GetParent() == pWindow,
+                        "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
 
-            uno::Reference< lang::XComponent > xComp( pTopWindowChild->GetComponentInterface( FALSE ), uno::UNO_QUERY );
-            pTopWindowChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
-            if  ( xComp.is() )
-                xComp->dispose();
+            Window* pNextTopChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
+
+            //the window still could be on the stack, so we have to
+            // use lazy delete ( it will automatically
+            // disconnect from the currently destroyed parent window )
+            pTopWindowChild->doLazyDelete();
+
+            pTopWindowChild = pNextTopChild;
         }
     }
 }
