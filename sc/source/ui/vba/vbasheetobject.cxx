@@ -38,7 +38,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <oox/helper/helper.hxx>
+#include <svx/unoshape.hxx>
 #include "vbafont.hxx"
+#include "drwlayer.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -237,13 +239,38 @@ void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName ) throw (uno:
 
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeException)
 {
-    // TODO
-    return excel::XlPlacement::xlMoveAndSize;
+    sal_Int32 nRet = excel::XlPlacement::xlMoveAndSize;
+    SvxShape* pShape = SvxShape::getImplementation( mxShape );
+    if(pShape)
+    {
+        SdrObject* pObj = pShape->GetSdrObject();
+        if (pObj)
+        {
+            ScAnchorType eType = ScDrawLayer::GetAnchor(pObj);
+            if (eType == SCA_PAGE)
+                nRet = excel::XlPlacement::xlFreeFloating;
+        }
+    }
+    return nRet;
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 nPlacement ) throw (uno::RuntimeException)
 {
-    // TODO
+    SvxShape* pShape = SvxShape::getImplementation( mxShape );
+    if(pShape)
+    {
+        SdrObject* pObj = pShape->GetSdrObject();
+        if (pObj)
+        {
+            ScAnchorType eType = SCA_CELL;
+            if ( nPlacement == excel::XlPlacement::xlFreeFloating )
+                eType = SCA_PAGE;
+
+            // xlMove is not supported, treated as SCA_CELL (xlMoveAndSize)
+
+            ScDrawLayer::SetAnchor(pObj, eType);
+        }
+    }
 }
 
 sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject() throw (uno::RuntimeException)
