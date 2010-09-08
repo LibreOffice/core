@@ -1180,6 +1180,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 // beim Programm-Ende freigeben, damit nichts gehalten wird.
                 ClearUnoObjectsInRTL_Impl( xBasic );
 
+                clearNativeObjectWrapperVector();
+
                 DBG_ASSERT(pINST->nCallLvl==0,"BASIC-Call-Level > 0");
                 delete pINST, pINST = NULL, bDelInst = FALSE;
 

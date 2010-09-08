@@ -47,6 +47,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
+#include <com/sun/star/script/NativeObjectWrapper.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
@@ -514,6 +515,44 @@ static void implHandleAnyException( const Any& _rCaughtException )
     }
 }
 
+
+// NativeObjectWrapper handling
+struct ObjectItem
+{
+    SbxObjectRef    m_xNativeObj;
+
+    ObjectItem( void )
+    {}
+    ObjectItem( SbxObject* pNativeObj )
+        : m_xNativeObj( pNativeObj )
+    {}
+};
+static std::vector< ObjectItem >    GaNativeObjectWrapperVector;
+
+void clearNativeObjectWrapperVector( void )
+{
+    GaNativeObjectWrapperVector.clear();
+}
+
+sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
+{
+    sal_uInt32 nIndex = GaNativeObjectWrapperVector.size();
+    GaNativeObjectWrapperVector.push_back( ObjectItem( pNativeObj ) );
+    return nIndex;
+}
+
+SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
+{
+    SbxObjectRef xRetObj;
+    if( nIndex < GaNativeObjectWrapperVector.size() )
+    {
+        ObjectItem& rItem = GaNativeObjectWrapperVector[ nIndex ];
+        xRetObj = rItem.m_xNativeObj;
+    }
+    return xRetObj;
+}
+
+
 // Von Uno nach Sbx wandeln
 SbxDataType unoToSbxType( TypeClass eType )
 {
@@ -700,6 +739,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             if( eTypeClass == TypeClass_STRUCT )
             {
                 ArrayWrapper aWrap;
+                //NativeObjectWrapper aNativeObjectWrapper;
                 if ( (aValue >>= aWrap) )
                 {
                     SbxDimArray* pArray = NULL;
@@ -719,6 +759,15 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                         pVar->PutEmpty();
                     break;
                 }
+                //else if ( (aValue >>= aNativeObjectWrapper) )
+                //{
+                //  sal_uInt32 nIndex;
+                //  if( (aNativeObjectWrapper.ObjectId >>= nIndex) )
+                //  {
+                //      SbxObject* pObj = lcl_getNativeObject( nIndex );
+                //      pVar->PutObject( pObj );
+                //  }
+                //}
                 else
                 {
                     SbiInstance* pInst = pINST;
@@ -1095,6 +1144,20 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
             }
+            //if( !xObj->ISA(SbUnoObject) )
+            //{
+            //  // Create NativeObjectWrapper to identify object in case of callbacks
+            //  SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
+            //  if( pObj != NULL )
+            //  {
+            //      NativeObjectWrapper aNativeObjectWrapper;
+            //      sal_uInt32 nIndex = lcl_registerNativeObjectWrapper( pObj );
+            //      aNativeObjectWrapper.ObjectId <<= nIndex;
+            //      Any aRetAny;
+            //      aRetAny <<= aNativeObjectWrapper;
+            //      return aRetAny;
+            //  }
+            //}
         }
     }
 

@@ -296,6 +296,9 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 
+void disposeComVariablesForBasic( StarBASIC* pBasic );
+void clearNativeObjectWrapperVector( void );
+
 
 //========================================================================
 // #118116 Collection object
