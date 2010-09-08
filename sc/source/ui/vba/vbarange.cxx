@@ -4355,6 +4355,20 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         {
             RangeHelper multiCellRange( mxRange );
             autoFiltAddress = multiCellRange.getCellRangeAddressable()->getRangeAddress();
+            // #163530# Filter box shows only entry of first row
+            ScDocument* pDocument = ( pShell ? pShell->GetDocument() : NULL );
+            if ( pDocument )
+            {
+                SCCOL nStartCol = autoFiltAddress.StartColumn;
+                SCROW nStartRow = autoFiltAddress.StartRow;
+                SCCOL nEndCol = autoFiltAddress.EndColumn;
+                SCROW nEndRow = autoFiltAddress.EndRow;
+                pDocument->GetDataArea( autoFiltAddress.Sheet, nStartCol, nStartRow, nEndCol, nEndRow, TRUE, true );
+                autoFiltAddress.StartColumn = nStartCol;
+                autoFiltAddress.StartRow = nStartRow;
+                autoFiltAddress.EndColumn = nEndCol;
+                autoFiltAddress.EndRow = nEndRow;
+            }
         }
 
         uno::Reference< sheet::XDatabaseRanges > xDBRanges = lcl_GetDataBaseRanges( pShell );
@@ -4374,13 +4388,9 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
         // set autofilt
         xDBRangeProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AutoFilter") ), uno::Any(sal_True) );
-        // set header
+        // set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
-        sal_Bool bHasColHeader = sal_False;
-        ScDocument* pDoc = pShell ? pShell->GetDocument() : NULL;
-
-        bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) ) ? sal_True : sal_False;
-        xFiltProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ContainsHeader") ), uno::Any( bHasColHeader ) );
+        xFiltProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ContainsHeader") ), uno::Any( sal_True ) );
     }
 
 
