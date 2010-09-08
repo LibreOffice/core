@@ -89,6 +89,9 @@ private:
         sal_Bool shared, rtl::OUString const & fileUri)
         throw (css::uno::RuntimeException);
 
+    virtual void SAL_CALL removeExtensionXcuFile(rtl::OUString const & fileUri)
+        throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL insertModificationXcuFile(
         rtl::OUString const & fileUri,
         css::uno::Sequence< rtl::OUString > const & includedPaths,
@@ -114,6 +117,20 @@ void Service::insertExtensionXcuFile(
         Modifications mods;
         Components::getSingleton().insertExtensionXcuFile(
             shared, fileUri, &mods);
+        Components::getSingleton().initGlobalBroadcaster(
+            mods, rtl::Reference< RootAccess >(), &bc);
+    }
+    bc.send();
+}
+
+void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
+    throw (css::uno::RuntimeException)
+{
+    Broadcaster bc;
+    {
+        osl::MutexGuard g(lock);
+        Modifications mods;
+        Components::getSingleton().removeExtensionXcuFile(fileUri, &mods);
         Components::getSingleton().initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
