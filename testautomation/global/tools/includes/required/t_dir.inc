@@ -298,7 +298,7 @@ function hSplitString( sString as string, sSeparator as string, iIndex as intege
     ' probably the most commonly used item. If the index is invalid (out of
     ' bounds) we print a warning and return an error string.
 
-    const CFN & "global::tools::includes::required::t_dir.inc:hSplitString(): "
+    const CFN = "global::tools::includes::required::t_dir.inc:hSplitString(): "
     const ERROR_MESSAGE = "Array out of bounds for the requested index in string "
     const ARRAY_INDEX_CORRECTION = 1 ' The array lower boundary is zero but
                                      ' function starts to count with one.
