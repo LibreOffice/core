@@ -739,7 +739,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             if( eTypeClass == TypeClass_STRUCT )
             {
                 ArrayWrapper aWrap;
-                //NativeObjectWrapper aNativeObjectWrapper;
+                NativeObjectWrapper aNativeObjectWrapper;
                 if ( (aValue >>= aWrap) )
                 {
                     SbxDimArray* pArray = NULL;
@@ -759,15 +759,18 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                         pVar->PutEmpty();
                     break;
                 }
-                //else if ( (aValue >>= aNativeObjectWrapper) )
-                //{
-                //  sal_uInt32 nIndex;
-                //  if( (aNativeObjectWrapper.ObjectId >>= nIndex) )
-                //  {
-                //      SbxObject* pObj = lcl_getNativeObject( nIndex );
-                //      pVar->PutObject( pObj );
-                //  }
-                //}
+                else if ( (aValue >>= aNativeObjectWrapper) )
+                {
+                    sal_uInt32 nIndex;
+                    if( (aNativeObjectWrapper.ObjectId >>= nIndex) )
+                    {
+                        SbxObject* pObj = lcl_getNativeObject( nIndex );
+                        pVar->PutObject( pObj );
+                    }
+                    else
+                        pVar->PutEmpty();
+                    break;
+                }
                 else
                 {
                     SbiInstance* pInst = pINST;
@@ -1144,20 +1147,20 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
             }
-            //if( !xObj->ISA(SbUnoObject) )
-            //{
-            //  // Create NativeObjectWrapper to identify object in case of callbacks
-            //  SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
-            //  if( pObj != NULL )
-            //  {
-            //      NativeObjectWrapper aNativeObjectWrapper;
-            //      sal_uInt32 nIndex = lcl_registerNativeObjectWrapper( pObj );
-            //      aNativeObjectWrapper.ObjectId <<= nIndex;
-            //      Any aRetAny;
-            //      aRetAny <<= aNativeObjectWrapper;
-            //      return aRetAny;
-            //  }
-            //}
+            if( !xObj->ISA(SbUnoObject) )
+            {
+                // Create NativeObjectWrapper to identify object in case of callbacks
+                SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
+                if( pObj != NULL )
+                {
+                    NativeObjectWrapper aNativeObjectWrapper;
+                    sal_uInt32 nIndex = lcl_registerNativeObjectWrapper( pObj );
+                    aNativeObjectWrapper.ObjectId <<= nIndex;
+                    Any aRetAny;
+                    aRetAny <<= aNativeObjectWrapper;
+                    return aRetAny;
+                }
+            }
         }
     }
 

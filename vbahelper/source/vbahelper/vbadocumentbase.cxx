@@ -97,8 +97,8 @@ VbaDocumentBase::getPath() throw (uno::RuntimeException)
 ::rtl::OUString
 VbaDocumentBase::getFullName() throw (uno::RuntimeException)
 {
-        rtl::OUString sPath;
-    ::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
+    rtl::OUString sPath = getName();
+    //::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
     return sPath;
 }
 
