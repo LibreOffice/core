@@ -58,6 +58,7 @@
 
 #include <comphelper/componentcontext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <toolkit/helper/tkresmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
@@ -1612,6 +1613,30 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
                 }
                 break;
             }
+        }
+    }
+    sal_Int32 nLen = rEvents.getLength();
+    for( sal_Int32 i = 0; i < nLen; i++ )
+    {
+        const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
+        Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
+        sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
+        if ( bOwnModel && rEvt.PropertyName.equalsAsciiL( "ImageURL", 8 ))
+        {
+            ::rtl::OUString aImageURL;
+            Reference< graphic::XGraphic > xGraphic;
+            if (( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) ) >>= aImageURL ) &&
+                ( aImageURL.getLength() > 0 ))
+            {
+                ::rtl::OUString absoluteUrl =
+                    getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
+                                         uno::makeAny(aImageURL));
+
+                xGraphic = Impl_getGraphicFromURL_nothrow( absoluteUrl );
+            }
+
+            ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), sal_True );
+            break;
         }
     }
     UnoControlContainer::ImplModelPropertiesChanged( rEvents );
