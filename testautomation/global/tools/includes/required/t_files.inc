@@ -34,7 +34,6 @@
 function hGrafikEinfuegen( cFile as string ) as Boolean
 
     hGrafikEinfuegen() = hInsertGraphic( cFile, "Static" )
-    exit function
     
 end function
 
@@ -43,7 +42,6 @@ end function
 function hGrafikVerknuepftEinfuegen( cFile as string ) as Boolean
 
     hGrafikVerknuepftEinfuegen() = hInsertGraphic( cFile, "Linked" )
-    exit function
 
 end function
 
@@ -556,13 +554,12 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hFileOpenLocally( _sSourcePath as string ) as boolean
+function hFileOpenLocally( byVal sSourcePath as string ) as boolean
 
     const CFN = "global::tools::includes::required::t_files.inc:hFileOpenLocally(): "
 
     GVERBOSE = true
 
-    dim sSourcePath as string : sSourcePath = ConvertToURL( _sSourcePath )
     dim sTargetPath as string
     dim sTargetFile as string
 
@@ -588,6 +585,7 @@ function hFileOpenLocally( _sSourcePath as string ) as boolean
         printlog( CFN & "To..: " & sTargetPath )
     endif
 
+    ' Copy the file from anywhere to the local user directory
     FileCopy( sSourcePath, sTargetPath )
 
     ' This is a hook that allows to access the filename under which the file
@@ -595,6 +593,8 @@ function hFileOpenLocally( _sSourcePath as string ) as boolean
     ' the new filename.
     gLastWorkFile = sTargetPath
 
+    ' Finally open the file from the local work directory. It should open
+    ' ready for editing
     hFileOpenLocally() = hFileOpen( gLastWorkFile )
 
 end function
