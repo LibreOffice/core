@@ -1612,7 +1612,7 @@ String SwCalc::GetDBName(const String& rName)
 namespace
 {
 
-BOOL
+static bool
 lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos, double& rVal,
         const LocaleDataWrapper* const pLclData )
 {
@@ -1638,7 +1638,7 @@ lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos, double& rVal,
  *  Erstellt    :   OK 07.06.94 12:56
  *  Aenderung   :   JP 27.10.98
  ******************************************************************************/
-BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, const LocaleDataWrapper* const pLclData )
 {
     const SvtSysLocale aSysLocale;
@@ -1646,24 +1646,24 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             pLclData ? pLclData : aSysLocale.GetLocaleDataPtr() );
 }
 
-BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, SwDoc* const pDoc )
 {
     const SvtSysLocale aSysLocale;
-    const LocaleDataWrapper* pLclD = aSysLocale.GetLocaleDataPtr();
+    ::std::auto_ptr<const LocaleDataWrapper> pLclD;
     if( pDoc )
     {
         LanguageType eLang = GetDocAppScriptLang( *pDoc );
         if( eLang != SvxLocaleToLanguage( pLclD->getLocale() ) )
-            pLclD = new LocaleDataWrapper(
+        {
+            pLclD.reset( new LocaleDataWrapper(
                             ::comphelper::getProcessServiceFactory(),
-                            SvxCreateLocale( eLang ) );
+                            SvxCreateLocale( eLang ) ) );
+        }
     }
 
-    BOOL bRet = lcl_Str2Double( rCommand, rCommandPos, rVal, pLclD );
-
-    if( pLclD != aSysLocale.GetLocaleDataPtr() )
-        delete pLclD;
+    bool const bRet = lcl_Str2Double( rCommand, rCommandPos, rVal,
+            (pLclD.get()) ? pLclD.get() : aSysLocale.GetLocaleDataPtr() );
 
     return bRet;
 }

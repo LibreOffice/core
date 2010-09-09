@@ -230,11 +230,11 @@ public:
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
     BOOL        IsCalcError() const                 { return 0 != eError; }
 
-    static BOOL Str2Double( const String& rStr, xub_StrLen& rPos,
+    static bool Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal,
-                                const LocaleDataWrapper* pData = 0 );
-    static BOOL Str2Double( const String& rStr, xub_StrLen& rPos,
-                                double& rVal, SwDoc* pDoc );
+                                LocaleDataWrapper const*const pData = 0 );
+    static bool Str2Double( const String& rStr, xub_StrLen& rPos,
+                                double& rVal, SwDoc *const pDoc );
 
     SW_DLLPUBLIC static BOOL IsValidVarName( const String& rStr,
                                     String* pValidName = 0 );
