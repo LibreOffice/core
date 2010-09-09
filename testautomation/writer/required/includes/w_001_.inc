@@ -773,9 +773,9 @@ testcase tFileSaveAsExport
     Call hNewDocument
 
     PrintLog "Open document '..\writer\required\input\st1_1.sxw"
-    Call hFileOpen(xExport)
+    Call hFileOpenLocally(xExport)
 
-    Call sMakeReadOnlyDocumentEditable
+    'Call sMakeReadOnlyDocumentEditable
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
     xExportFile = gOfficepath + "user\work\ecksport.doc"
