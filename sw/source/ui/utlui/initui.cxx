@@ -260,7 +260,8 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
             p->SearchAndReplace(C2S("%1"), C2S(",,"));
             p->SearchAndReplace(C2S("%2"), C2S("''"));
 #else
-            const LocaleDataWrapper& rLclD = SvtSysLocale().GetLocaleData();
+            const SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
             //unter richtigen Betriebssystemen funktioniert es auch so
             p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
             p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());
