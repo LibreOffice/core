@@ -136,6 +136,8 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 #endif
 }
 
+void removeDimAsNewRecoverItem( SbxVariable* pVar );
+
 SbxVariable::~SbxVariable()
 {
 #ifdef DBG_UTIL
@@ -146,6 +148,8 @@ SbxVariable::~SbxVariable()
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     GetSbxData_Impl()->aVars.Remove( this );
 #endif
+    if( IsSet( SBX_DIM_AS_NEW ))
+        removeDimAsNewRecoverItem( this );
     delete mpSbxVariableImpl;
     delete pCst;
 }

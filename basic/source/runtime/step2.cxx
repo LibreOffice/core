@@ -1119,12 +1119,24 @@ void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
     PushVar( pNew );
 }
 
-void SbiRuntime::implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 )
+void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, UINT32 nOp2 )
 {
-    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );      // len = all bits above 0x10000
-    String aStr;
-    aStr.Fill( nCount, 0 );
-    pStrVar->PutString( aStr );
+    bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
+    if( bWithEvents )
+        pVar->SetFlag( SBX_WITH_EVENTS );
+
+    bool bDimAsNew = ((nOp2 & SBX_TYPE_DIM_AS_NEW_FLAG) != 0);
+    if( bDimAsNew )
+        pVar->SetFlag( SBX_DIM_AS_NEW );
+
+    bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
+    if( bFixedString )
+    {
+        USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );      // len = all bits above 0x10000
+        String aStr;
+        aStr.Fill( nCount, 0 );
+        pVar->PutString( aStr );
+    }
 }
 
 // Einrichten einer lokalen Variablen (+StringID+Typ)
@@ -1139,12 +1151,7 @@ void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
         SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
         SbxVariable* p = new SbxVariable( t );
         p->SetName( aName );
-        bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
-        if( bWithEvents )
-            p->SetFlag( SBX_WITH_EVENTS );
-        bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
-        if( bFixedString )
-            implCreateFixedString( p, nOp2 );
+        implHandleSbxFlags( p, t, nOp2 );
         refLocals->Put( p, refLocals->Count() );
     }
 }
@@ -1171,12 +1178,7 @@ void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassMo
         // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
         pProp->SetFlag( SBX_NO_MODIFY);
 
-        bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
-        if( bWithEvents )
-            pProp->SetFlag( SBX_WITH_EVENTS );
-        bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
-        if( bFixedString )
-            implCreateFixedString( p, nOp2 );
+        implHandleSbxFlags( pProp, t, nOp2 );
     }
 }
 

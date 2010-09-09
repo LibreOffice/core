@@ -565,7 +565,6 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                     if( pObj != NULL )
                     {
                         String aObjClass = pObj->GetClassName();
-                        (void)aObjClass;
 
                         SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
                         if( pClassModuleObj != NULL )
@@ -761,8 +760,6 @@ void StarBASIC::SetModified( BOOL b )
 {
     SbxBase::SetModified( b );
 }
-
-void disposeComVariablesForBasic( StarBASIC* pBasic );
 
 StarBASIC::~StarBASIC()
 {

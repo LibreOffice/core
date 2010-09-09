@@ -436,7 +436,7 @@ class SbiRuntime
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
     void StepFIND_STATIC( UINT32, UINT32 );
-    void implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 );
+    void implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, UINT32 nOp2 );
 public:
     void          SetVBAEnabled( bool bEnabled );
     USHORT      GetImageFlag( USHORT n ) const;
