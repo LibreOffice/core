@@ -509,7 +509,7 @@ function hGetWorkPath() as string
 
     ' Retrieve the user's work directory using the API (or fallback)
 
-    dim sPath as string
+    dim sPath as string : sPath = ""
     dim oOfficeConnect as object
     dim oOfficeConfig as object
     dim bPathIsFromAPI as boolean
@@ -571,7 +571,7 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     endif
 
     ' Find out what the name of the target file is going to be
-    sTargetFile = hSplitString( sSourcePath, "/", 0 )
+    sTargetFile = hSplitString( sSourcePath, getPathSeparator, 0 )
     sTargetPath = hGetWorkFile( sTargetFile )
 
     if ( FileExists( sTargetPath ) ) then

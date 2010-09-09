@@ -304,11 +304,22 @@ function hSplitString( sString as string, sSeparator as string, iIndex as intege
                                      ' function starts to count with one.
 
     ' Split the string into its fragments into an array with dynamic boundaries
-    dim sArray() as string: sArray() = split( sString, sSeparator )
-    dim sReturnString as string
+    dim sArray() as string
+    dim sReturnString as string : sReturnString = ""
+
+    if ( GVERBOSE ) then
+        printlog( CFN & "Separator is: " & sSeparator )
+        printlog( CFN & "Original string is: " & sString )
+    endif
+
+    sArray() = split( sString, sSeparator )
+
+    if ( GVERBOSE ) then
+        printlog( CFN & "Number of items found: " & ubound( sArray() ) )
+    endif
 
 	' Special case: Index out of bounds
-	if ( iIndex > ( ubound( sArray ) + ARRAY_INDEX_CORRECTION ) or iIndex < 0 ) then
+	if ( iIndex > ( ubound( sArray() ) + ARRAY_INDEX_CORRECTION ) or iIndex < 0 ) then
         warnlog( CFN   & ERROR_MESSAGE & sString )
 		hSplitString() = ERROR_MESSAGE & sString
 		exit function
