@@ -575,7 +575,7 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     sTargetPath = hGetWorkFile( sTargetFile )
 
     if ( FileExists( sTargetPath ) ) then
-        warnlog( CFN & "Target file already exists, replacing it!" )
+        qaerrorlog( CFN & "Target file already exists, replacing it!" )
         hFileDelete( sTargetPath )
     endif
 
