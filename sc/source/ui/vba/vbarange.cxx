@@ -172,6 +172,9 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 using ::std::vector;
 
+// difference between VBA and file format width, in character units
+const double fExtraWidth = 182.0 / 256.0;
+
 //    * 1 point = 1/72 inch = 20 twips
 //    * 1 inch = 72 points = 1440 twips
 //    * 1 cm = 567 twips
@@ -3614,15 +3617,6 @@ ScVbaRange::getDefaultMethodName(  ) throw (uno::RuntimeException)
 }
 
 
-uno::Reference< awt::XDevice >
-getDeviceFromDoc( const uno::Reference< frame::XModel >& xModel ) throw( uno::RuntimeException )
-{
-    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XFrame> xFrame( xController->getFrame(), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XDevice > xDevice( xFrame->getComponentWindow(), uno::UNO_QUERY_THROW );
-    return xDevice;
-}
-
 // returns calc internal col. width ( in points )
 double
 ScVbaRange::getCalcColWidth( const table::CellRangeAddress& rAddress) throw (uno::RuntimeException)
@@ -3645,29 +3639,16 @@ ScVbaRange::getCalcRowHeight( const table::CellRangeAddress& rAddress ) throw (u
 }
 
 // return Char Width in points
-double getDefaultCharWidth( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
+double getDefaultCharWidth( ScDocShell* pDocShell )
 {
-    const static rtl::OUString sDflt( RTL_CONSTASCII_USTRINGPARAM("Default"));
-    const static rtl::OUString sCharFontName( RTL_CONSTASCII_USTRINGPARAM("CharFontName"));
-    const static rtl::OUString sPageStyles( RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
-    // get the font from the default style
-    uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess( xStyleSupplier->getStyleFamilies(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess2( xNameAccess->getByName( sPageStyles ), uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xProps( xNameAccess2->getByName( sDflt ), uno::UNO_QUERY_THROW );
-    rtl::OUString sFontName;
-    xProps->getPropertyValue( sCharFontName ) >>= sFontName;
-
-    uno::Reference< awt::XDevice > xDevice = getDeviceFromDoc( xModel );
-    awt::FontDescriptor aDesc;
-    aDesc.Name = sFontName;
-    uno::Reference< awt::XFont > xFont( xDevice->getFont( aDesc ), uno::UNO_QUERY_THROW );
-    double nCharPixelWidth =  xFont->getCharWidth( (sal_Int8)'0' );
-
-    double nPixelsPerMeter = xDevice->getInfo().PixelPerMeterX;
-    double nCharWidth = nCharPixelWidth /  nPixelsPerMeter;
-    nCharWidth = nCharWidth * (double)56700;// in twips
-    return lcl_TwipsToPoints( (USHORT)nCharWidth );
+    ScDocument* pDoc = pDocShell->GetDocument();
+    OutputDevice* pRefDevice = pDoc->GetRefDevice();
+    ScPatternAttr* pAttr = pDoc->GetDefPattern();
+    ::Font aDefFont;
+    pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
+    pRefDevice->SetFont( aDefFont );
+    long nCharWidth = pRefDevice->GetTextWidth( String( '0' ) );        // 1/100th mm
+    return lcl_hmmToPoints( nCharWidth );
 }
 
 uno::Any SAL_CALL
@@ -3685,7 +3666,7 @@ ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
     if ( pShell )
     {
         uno::Reference< frame::XModel > xModel = pShell->GetModel();
-        double defaultCharWidth = getDefaultCharWidth( xModel );
+        double defaultCharWidth = getDefaultCharWidth( pShell );
         RangeHelper thisRange( mxRange );
         table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
         sal_Int32 nStartCol = thisAddress.StartColumn;
@@ -3700,9 +3681,9 @@ ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
             if ( nColTwips != nCurTwips )
                 return aNULL();
         }
-        nColWidth = lcl_Round2DecPlaces( lcl_TwipsToPoints( nColTwips ) );
-        if ( xModel.is() )
-            nColWidth = nColWidth / defaultCharWidth;
+        nColWidth = lcl_TwipsToPoints( nColTwips );
+        if ( nColWidth != 0.0 )
+            nColWidth = ( nColWidth / defaultCharWidth ) - fExtraWidth;
     }
     nColWidth = lcl_Round2DecPlaces( nColWidth );
     return uno::makeAny( nColWidth );
@@ -3727,11 +3708,8 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
         ScDocShell* pDocShell = getScDocShell();
         if ( pDocShell )
         {
-                uno::Reference< frame::XModel > xModel = pDocShell->GetModel();
-                if ( xModel.is() )
-                {
-
-            nColWidth = ( nColWidth * getDefaultCharWidth( xModel ) );
+            if ( nColWidth != 0.0 )
+                nColWidth = ( nColWidth + fExtraWidth ) * getDefaultCharWidth( pDocShell );
             RangeHelper thisRange( mxRange );
             table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
             USHORT nTwips = lcl_pointsToTwips( nColWidth );
@@ -3745,7 +3723,6 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
                                                                                 nTwips, TRUE, TRUE );
 
         }
-    }
 }
 
 uno::Any SAL_CALL
