@@ -103,7 +103,7 @@ end function
 function hIsNamedDocLoaded( cFileName as string ) as boolean
 
     ' Retrieve the current filename from the document properties - which in
-    ' comparision to the old approach to retrive the name from the file save
+    ' comparision to the old approach to retrieve the name from the file save
     ' dialog - gives us the file including its extension. So we only need
     ' to compare the last characters from a full path to be relatively
     ' certain that we work with the correct file. There is some small margin of
@@ -496,6 +496,106 @@ function hDeleteFile( cFileOrig as string ) as boolean
         printlog( CFN & "Nothing to do." )
         hDeleteFile() = true
     endif
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hGetWorkFile( cFileName as string ) as string
+    hGetWorkFile() = hGetWorkPath() & cFileName
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hGetWorkPath() as string
+
+    ' Retrieve the user's work directory using the API (or fallback)
+
+    dim sPath as string
+    dim oOfficeConnect as object
+    dim oOfficeConfig as object
+    dim bPathIsFromAPI as boolean
+
+    const CFN = "global::tools::includes::required::t_files.inc:hGetWorkPath(): "
+
+    ' Create an UNO service and ask it for the location of Work
+    try
+        oOfficeConnect = hGetUnoService( true )
+        oOfficeConfig  = oOfficeConnect.createInstance( "com.sun.star.util.PathSettings" )
+        sPath = convertFromURL( oOfficeConfig.Work )
+        bPathIsFromAPI = true
+    catch
+        printlog( CFN & "Could not access service, connection broken?" )
+        sPath = convertpath( gOfficePath & "user/work" )
+        bPathIsFromAPI = false
+    endcatch
+
+    if ( GVERBOSE ) then
+
+        printlog( CFN & "Path is: " & sPath )
+
+        ' Check path existence
+        if ( FileExists( sPath ) ) then
+            printlog( CFN & "Path exists." )
+        else
+            warnlog( CFN & "Path does not exist." )
+        endif
+
+        ' Inform about the location from where the path was taken
+        if ( bPathIsFromAPI ) then
+        	printlog( CFN & "Path was taken from API" )
+        else
+            warnlog( CFN & "Path was taken from (hardcoded) fallback" )
+        endif
+
+    endif
+
+    hGetWorkPath() = sPath & getPathSeparator
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hFileOpenLocally( _sSourcePath as string ) as boolean
+
+    const CFN = "global::tools::includes::required::t_files.inc:hFileOpenLocally(): "
+
+    GVERBOSE = true
+
+    dim sSourcePath as string : sSourcePath = ConvertToURL( _sSourcePath )
+    dim sTargetPath as string
+    dim sTargetFile as string
+
+    ' If the source file does not exist we quit
+    if ( not FileExists( sSourcePath ) then
+        warnlog( CFN & "Source path/file does not exist: " & sSourcePath )
+        hFileOpenLocally() = false
+        exit function
+    endif
+
+    ' Find out what the name of the target file is going to be
+    sTargetFile = hSplitString( sSourcePath, "/", 0 )
+    sTargetPath = hGetWorkFile( sTargetFile )
+
+    if ( FileExists( sTargetPath ) ) then
+        warnlog( CFN & "Target file already exists, replacing it!" )
+        hFileDelete( sTargetPath )
+    endif
+
+    if ( GVERBOSE ) then
+        printlog( CFN & "Copying file" )
+        printlog( CFN & "From: " & sSourcePath )
+        printlog( CFN & "To..: " & sTargetPath )
+    endif
+
+    FileCopy( sSourcePath, sTargetPath )
+
+    ' This is a hook that allows to access the filename under which the file
+    ' has been saved. Due to restrictive coding guidelines we cannot return
+    ' the new filename.
+    gLastWorkFile = sTargetPath
+
+    hFileOpenLocally() = hFileOpen( gLastWorkFile )
 
 end function
 '
