@@ -36,7 +36,7 @@
 
 #include "viewlayer.hxx"
 
-class JavaChildWindow;
+class SystemChildWindow;
 
 namespace com { namespace sun { namespace star { namespace drawing {
     class XShape;
@@ -155,7 +155,7 @@ namespace slideshow
                                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rDXDeviceParams );
 
             ViewLayerSharedPtr                    mpViewLayer;
-            ::std::auto_ptr< JavaChildWindow >    mpMediaWindow;
+            ::std::auto_ptr< SystemChildWindow >    mpMediaWindow;
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 
