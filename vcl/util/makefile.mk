@@ -464,3 +464,16 @@ SHL6STDLIBS+= $(XRANDR_LIBS)
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/vcl.component
+
+.IF "$(OS)" == "MACOSX"
+my_platform = .macosx
+.ELIF "$(OS)" == "WNT"
+my_platform = .windows
+.END
+
+$(MISC)/vcl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        vcl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt vcl$(my_platform).component
