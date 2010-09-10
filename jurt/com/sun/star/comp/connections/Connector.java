@@ -84,21 +84,6 @@ public class Connector implements XConnector {
     }
 
     /**
-     * Writes the service information into the given registry key.
-     *
-     * <p>This method is called by the <code>JavaLoader</code>.</p>
-     *
-     * @param regKey the registry key.
-     * @return <code>true</code> if the operation succeeded.
-     *
-     * @see com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(Connector.class.getName(),
-                                                      __serviceName, regKey);
-    }
-
-    /**
      * Constructs a new <code>Connector</code> that uses the given service
      * factory to create a specific <code>XConnector</code>.
      *

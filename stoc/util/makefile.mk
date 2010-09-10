@@ -95,3 +95,16 @@ DEF2NAME=	$(SHL2TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/bootstrap.component $(MISC)/stocservices.component
+
+$(MISC)/bootstrap.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        bootstrap.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt bootstrap.component
+
+$(MISC)/stocservices.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt stocservices.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt stocservices.component
