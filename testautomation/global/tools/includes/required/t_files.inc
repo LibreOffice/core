@@ -556,9 +556,19 @@ end function
 '
 function hFileOpenLocally( byVal sSourcePath as string ) as boolean
 
-    const CFN = "global::tools::includes::required::t_files.inc:hFileOpenLocally(): "
+    ' Issue #i112208# - implement a function that copies a file from testautomation
+    ' into the local work directory to avoid that the document gets opened
+    ' in read-only mode. See details of the implementation in the issue
+    ' description.
 
-    GVERBOSE = true
+    ' Parameters
+    ' 1) Path as string, URLs are untested
+    ' 2) Separator, usually "getPathSeparator"
+    ' 3) Item number, 0 = last item which usually is the file name from a path.
+    '    Begin counting with 1, while the function internally accesses item 0
+    '    from the array.
+
+    const CFN = "global::tools::includes::required::t_files.inc:hFileOpenLocally(): "
 
     dim sTargetPath as string
     dim sTargetFile as string
@@ -574,19 +584,19 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     sTargetFile = hSplitString( sSourcePath, getPathSeparator, 0 )
     sTargetPath = hGetWorkFile( sTargetFile )
 
+    ' Copy the file from anywhere to the local user directory if it does not 
+    ' exist. This behavior was discussed on IRC
     if ( FileExists( sTargetPath ) ) then
-        qaerrorlog( CFN & "Target file already exists, replacing it!" )
-        hFileDelete( sTargetPath )
+        printlog( CFN & "Re-using existing local copy of workfile" )
+    else
+        if ( GVERBOSE ) then
+            printlog( CFN & "Copying file" )
+            printlog( CFN & "From: " & sSourcePath )
+            printlog( CFN & "To..: " & sTargetPath )
+        endif
+        FileCopy( sSourcePath, sTargetPath )
     endif
 
-    if ( GVERBOSE ) then
-        printlog( CFN & "Copying file" )
-        printlog( CFN & "From: " & sSourcePath )
-        printlog( CFN & "To..: " & sTargetPath )
-    endif
-
-    ' Copy the file from anywhere to the local user directory
-    FileCopy( sSourcePath, sTargetPath )
 
     ' This is a hook that allows to access the filename under which the file
     ' has been saved. Due to restrictive coding guidelines we cannot return
