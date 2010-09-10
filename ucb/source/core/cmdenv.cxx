@@ -183,7 +183,7 @@ UcbCommandEnvironment::createServiceFactory(
     const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
 {
     return uno::Reference< lang::XSingleServiceFactory >(
-            cppu::createOneInstanceFactory(
+            cppu::createSingleFactory(
                 rxServiceMgr,
                 UcbCommandEnvironment::getImplementationName_Static(),
                 UcbCommandEnvironment_CreateInstance,

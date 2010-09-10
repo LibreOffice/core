@@ -103,13 +103,8 @@ using namespace com::sun::star::io;
 #include <stdlib.h>
 #include <ctype.h>
 
-#if defined (WIN) || defined (WNT) || defined (OS2)
+#if defined (WNT) || defined (OS2)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
-#endif
-
-#ifdef WIN
-#include <dos.h>      // _dos_getfileattr
-#include <errno.h>
 #endif
 
 #ifdef UNX
@@ -420,7 +415,7 @@ RTLFUNC(CurDir)
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
 //  rPar.Get(0)->PutEmpty();
-#if defined (WIN) || defined (WNT) || defined (OS2)
+#if defined (WNT) || defined (OS2)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
     {
@@ -527,7 +522,7 @@ RTLFUNC(ChDrive) // JSM
 #ifndef UNX
         String aPar1 = rPar.Get(1)->GetString();
 
-#if defined (WIN) || defined (WNT) || defined (OS2)
+#if defined (WNT) || defined (OS2)
         if (aPar1.Len() > 0)
         {
             int nCurDrive = (int)aPar1.GetBuffer()[0]; ;
@@ -2792,11 +2787,7 @@ RTLFUNC(Dir)
                     pRTLData->nDirFlags = nFlags = rPar.Get(2)->GetInteger();
                 else
                     pRTLData->nDirFlags = 0;
-                // Nur diese Bitmaske ist unter Windows erlaubt
-    #ifdef WIN
-                if( nFlags & ~0x1E )
-                    StarBASIC::Error( SbERR_BAD_ARGUMENT ), pRTLData->nDirFlags = 0;
-    #endif
+
                 // Sb_ATTR_VOLUME wird getrennt gehandelt
                 if( pRTLData->nDirFlags & Sb_ATTR_VOLUME )
                     aPath = aEntry.GetVolume();
@@ -2826,31 +2817,7 @@ RTLFUNC(Dir)
                     }
                     DirEntry aNextEntry=(*(pRTLData->pDir))[pRTLData->nCurDirPos++];
                     aPath = aNextEntry.GetName(); //Full();
-    #ifdef WIN
-                    aNextEntry.ToAbs();
-                    String sFull(aNextEntry.GetFull());
-                    unsigned nFlags;
-
-                    if (_dos_getfileattr( sFull.GetStr(), &nFlags ))
-                        StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-                    else
-                    {
-                        INT16 nCurFlags = pRTLData->nDirFlags;
-                        if( (nCurFlags == Sb_ATTR_NORMAL)
-                          && !(nFlags & ( _A_HIDDEN | _A_SYSTEM | _A_VOLID | _A_SUBDIR ) ) )
-                            break;
-                        else if( (nCurFlags & Sb_ATTR_HIDDEN) && (nFlags & _A_HIDDEN) )
-                            break;
-                        else if( (nCurFlags & Sb_ATTR_SYSTEM) && (nFlags & _A_SYSTEM) )
-                            break;
-                        else if( (nCurFlags & Sb_ATTR_VOLUME) && (nFlags & _A_VOLID) )
-                            break;
-                        else if( (nCurFlags & Sb_ATTR_DIRECTORY) && (nFlags & _A_SUBDIR) )
-                            break;
-                    }
-    #else
                     break;
-    #endif
                 }
             }
             rPar.Get(0)->PutString( aPath );
@@ -3404,8 +3371,8 @@ RTLFUNC(Shell)
     }
     else
     {
-        USHORT nOptions = NAMESPACE_VOS(OProcess)::TOption_SearchPath|
-                          NAMESPACE_VOS(OProcess)::TOption_Detached;
+        USHORT nOptions = vos::OProcess::TOption_SearchPath|
+                          vos::OProcess::TOption_Detached;
         String aCmdLine = rPar.Get(1)->GetString();
         // Zusaetzliche Parameter anhaengen, es muss eh alles geparsed werden
         if( nArgCount >= 4 )
@@ -3483,13 +3450,13 @@ RTLFUNC(Shell)
             switch( nWinStyle )
             {
                 case 2:
-                    nOptions |= NAMESPACE_VOS(OProcess)::TOption_Minimized;
+                    nOptions |= vos::OProcess::TOption_Minimized;
                     break;
                 case 3:
-                    nOptions |= NAMESPACE_VOS(OProcess)::TOption_Maximized;
+                    nOptions |= vos::OProcess::TOption_Maximized;
                     break;
                 case 10:
-                    nOptions |= NAMESPACE_VOS(OProcess)::TOption_FullScreen;
+                    nOptions |= vos::OProcess::TOption_FullScreen;
                     break;
             }
 
@@ -3497,10 +3464,10 @@ RTLFUNC(Shell)
             if( nArgCount >= 5 )
                 bSync = rPar.Get(4)->GetBool();
             if( bSync )
-                nOptions |= NAMESPACE_VOS(OProcess)::TOption_Wait;
+                nOptions |= vos::OProcess::TOption_Wait;
         }
-        NAMESPACE_VOS(OProcess)::TProcessOption eOptions =
-            (NAMESPACE_VOS(OProcess)::TProcessOption)nOptions;
+        vos::OProcess::TProcessOption eOptions =
+            (vos::OProcess::TProcessOption)nOptions;
 
 
         // #72471 Parameter aufbereiten
@@ -3530,25 +3497,25 @@ RTLFUNC(Shell)
         }
 
         //const char* pParams = aParams.Len() ? aParams.GetStr() : 0;
-        NAMESPACE_VOS(OProcess)* pApp;
-        pApp = new NAMESPACE_VOS(OProcess)( aOUStrProgUNC );
+        vos::OProcess* pApp;
+        pApp = new vos::OProcess( aOUStrProgUNC );
         BOOL bSucc;
         if( nParamCount == 0 )
         {
-            bSucc = pApp->execute( eOptions ) == NAMESPACE_VOS(OProcess)::E_None;
+            bSucc = pApp->execute( eOptions ) == vos::OProcess::E_None;
         }
         else
         {
-            NAMESPACE_VOS(OArgumentList) aArgList( pArgumentList, nParamCount );
-            bSucc = pApp->execute( eOptions, aArgList ) == NAMESPACE_VOS(OProcess)::E_None;
+            vos::OArgumentList aArgList( pArgumentList, nParamCount );
+            bSucc = pApp->execute( eOptions, aArgList ) == vos::OProcess::E_None;
         }
 
         /*
         if( nParamCount == 0 )
-            pApp = new NAMESPACE_VOS(OProcess)( pProg );
+            pApp = new vos::OProcess( pProg );
         else
-            pApp = new NAMESPACE_VOS(OProcess)( pProg, pParamList, nParamCount );
-        BOOL bSucc = pApp->execute( eOptions ) == NAMESPACE_VOS(OProcess)::E_None;
+            pApp = new vos::OProcess( pProg, pParamList, nParamCount );
+        BOOL bSucc = pApp->execute( eOptions ) == vos::OProcess::E_None;
         */
 
         delete pApp;
@@ -4134,8 +4101,7 @@ RTLFUNC(Load)
     {
         if( pObj->IsA( TYPE( SbUserFormModule ) ) )
         {
-            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
-            pFormModule->load();
+            ((SbUserFormModule*)pObj)->Load();
         }
         else if( pObj->IsA( TYPE( SbxObject ) ) )
         {
@@ -4381,16 +4347,6 @@ RTLFUNC(SetAttr) // JSM
             // #57064 Bei virtuellen URLs den Real-Path extrahieren
             DirEntry aEntry( aStr );
             String aFile = aEntry.GetFull();
-    #ifdef WIN
-            int nErr = _dos_setfileattr( aFile.GetStr(),(unsigned ) nFlags );
-            if ( nErr )
-            {
-                if (errno == EACCES)
-                    StarBASIC::Error( SbERR_ACCESS_DENIED );
-                else
-                    StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-            }
-    #endif
             ByteString aByteFile( aFile, gsl_getSystemTextEncoding() );
     #ifdef WNT
             if (!SetFileAttributes (aByteFile.GetBuffer(),(DWORD)nFlags))

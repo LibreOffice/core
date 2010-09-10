@@ -48,9 +48,7 @@
 #include <memory>
 #include <sys/stat.h>
 
-#if defined(MAC)
-const char sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const char sNewLine = '\012';
 #else
 const char sNewLine[] = "\015\012"; // \015\012 and not \n
@@ -464,8 +462,10 @@ void SAL_CALL ODriver::createCatalog( const Sequence< PropertyValue >& info ) th
     {
         TDatabaseStruct aDBInfo;
         fillInfo(info,aDBInfo);
-        static char envName[] = "DBSERVICE=0";
-        putenv( envName );
+
+        ::rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DBSERVICE"));
+        ::rtl::OUString envData(RTL_CONSTASCII_USTRINGPARAM("0"));
+        osl_setEnvironment(envVar.pData, envData.pData);
 
         m_sDbRunDir = m_sDbWorkURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/wrk/")) + aDBInfo.sDBName;
         String sTemp;
@@ -854,7 +854,7 @@ void ODriver::createNeededDirs(const ::rtl::OUString& sDBName)
         if(UCBContentHelper::Exists(sTemp))
             UCBContentHelper::Kill(sTemp);
 
-#if !(defined(WIN) || defined(WNT))
+#if !(defined(WNT))
         sTemp = sDBConfig;
         sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diag"));
         if(!UCBContentHelper::IsFolder(sTemp))
@@ -876,7 +876,7 @@ void ODriver::createNeededDirs(const ::rtl::OUString& sDBName)
 void ODriver::clearDatabase(const ::rtl::OUString& sDBName)
 { // stop the database
     ::rtl::OUString sCommand;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     ::rtl::OUString sStop = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stop"));
     OArgumentList aArgs(2,&sDBName,&sStop);
     sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_cons.exe"));
@@ -921,7 +921,7 @@ void ODriver::createDb( const TDatabaseStruct& _aInfo)
     PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KERNELTRACESIZE")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100")));
     PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOG_QUEUE_PAGES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10")));
 
-#if !(defined(WIN) || defined(WNT))
+#if !defined(WNT)
     PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OPMSG1")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/dev/null")));
 #endif
 
@@ -989,7 +989,7 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
         (*pFileStream)  << "x_param"
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
                         << ".exe"
 #endif
                         << " -d "
@@ -1000,7 +1000,7 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
                         << ::rtl::OString(_PWD,_PWD.getLength(),gsl_getSystemTextEncoding())
                         << " "
                         << ::rtl::OString(_CMD,_CMD.getLength(),gsl_getSystemTextEncoding())
-#if (defined(WIN) || defined(WNT))
+#if defined(WNT)
 #if (OSL_DEBUG_LEVEL > 1) || defined(DBG_UTIL)
                         << " >> %DBWORK%\\create.log 2>&1"
 #endif
@@ -1050,7 +1050,7 @@ void ODriver::PutParam(const ::rtl::OUString& sDBName,
 {
     OArgumentList aArgs(3,&sDBName,&rWhat,&rHow);
     ::rtl::OUString sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("putparam"));
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     sCommand += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
 #endif
 
@@ -1112,7 +1112,7 @@ OSL_TRACE("CreateFile %d",_nSize);
 int ODriver::X_START(const ::rtl::OUString& sDBName)
 {
     ::rtl::OUString sCommand;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
     ::rtl::OUString sArg1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-d"));
     ::rtl::OUString sArg3 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
@@ -1150,7 +1150,7 @@ int ODriver::X_START(const ::rtl::OUString& sDBName)
 int ODriver::X_STOP(const ::rtl::OUString& sDBName)
 {
     ::rtl::OUString sCommand;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
     ::rtl::OUString sArg1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-d"));
     ::rtl::OUString sArg2 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
@@ -1195,7 +1195,7 @@ void ODriver::XUTIL(const ::rtl::OUString& _rParam,
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
         (*pFileStream)  <<
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
                             "xutil.exe"
 #else
                             "utility"
@@ -1248,7 +1248,7 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
         (*pFileStream)  << "xload"
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
                         << ".exe"
 #endif
                         << " -d "
@@ -1317,7 +1317,7 @@ void ODriver::fillEnvironmentVariables()
 ::rtl::OUString ODriver::generateInitFile() const
 {
     String sExt;
-#if !(defined(WIN) || defined(WNT))
+#if !defined(WNT)
     sExt = String::CreateFromAscii(".sh");
 #else
     sExt = String::CreateFromAscii(".bat");
@@ -1325,13 +1325,13 @@ void ODriver::fillEnvironmentVariables()
 
     String sWorkUrl(m_sDbWorkURL);
     ::utl::TempFile aCmdFile(String::CreateFromAscii("Init"),&sExt,&sWorkUrl);
-#if !(defined(WIN) || defined(WNT))
+#if !defined(WNT)
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
     chmod(ByteString(sPhysicalPath,gsl_getSystemTextEncoding()).GetBuffer(),S_IRUSR|S_IWUSR|S_IXUSR);
 #endif
 
-#if !(defined(WIN) || defined(WNT))
+#if !defined(WNT)
     SvStream* pFileStream = aCmdFile.GetStream(STREAM_WRITE);
     (*pFileStream)  << "#!/bin/sh"
                     << sNewLine
@@ -1441,7 +1441,7 @@ void ODriver::X_CONS(const ::rtl::OUString& sDBName,const ::rtl::OString& _ACTIO
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
         (*pFileStream)  << "x_cons"
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
                         << ".exe"
 #endif
                         << " "
@@ -1524,7 +1524,7 @@ sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersio
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
         (*pFileStream)  << "getparam"
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
                         << ".exe"
 #endif
                         << " "
@@ -1574,7 +1574,7 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
         pFileStream->Seek(STREAM_SEEK_TO_END);
 
         (*pFileStream)  << "getparam"
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
                         << ".exe"
 #endif
                         << " "
@@ -1654,7 +1654,7 @@ sal_Bool ODriver::isKernelVersion(const char* _pVersion)
 // -----------------------------------------------------------------------------
 void ODriver::installSystemTables(  const TDatabaseStruct& _aInfo)
 {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% -b %m_sDbRoot%\env\TERMCHAR.ind
     ::rtl::OUString aBatch =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-b "));
     ::rtl::OUString sTemp2 = m_sDbRootURL   + m_sDelimit
