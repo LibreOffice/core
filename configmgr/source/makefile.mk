@@ -52,7 +52,6 @@ SLOFILES = \
     $(SLO)/modifications.obj \
     $(SLO)/node.obj \
     $(SLO)/nodemap.obj \
-    $(SLO)/pad.obj \
     $(SLO)/parsemanager.obj \
     $(SLO)/partial.obj \
     $(SLO)/propertynode.obj \
@@ -66,8 +65,7 @@ SLOFILES = \
     $(SLO)/xcdparser.obj \
     $(SLO)/xcsparser.obj \
     $(SLO)/xcuparser.obj \
-    $(SLO)/xmldata.obj \
-    $(SLO)/xmlreader.obj
+    $(SLO)/xmldata.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
@@ -76,7 +74,8 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALHELPERLIB) \
-    $(SALLIB)
+    $(SALLIB) \
+    $(XMLREADERLIB)
 SHL1TARGET = configmgr.uno
 SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
