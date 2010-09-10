@@ -134,9 +134,6 @@ DBG_NAME(OTableEditorCtrl)
 
 #define HANDLE_ID       0
 
-// Anzahl Spalten beim Neuanlegen
-#define NEWCOLS        128
-
 // default Spaltenbreiten
 #define FIELDNAME_WIDTH     100
 #define FIELDTYPE_WIDTH     150
