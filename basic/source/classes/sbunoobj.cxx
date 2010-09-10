@@ -2514,6 +2514,47 @@ void SbUnoObject::doIntrospection( void )
 // #67781 Start einer Liste aller SbUnoMethod-Instanzen
 static SbUnoMethod* pFirst = NULL;
 
+void clearUnoMethodsForBasic( StarBASIC* pBasic )
+{
+    SbUnoMethod* pMeth = pFirst;
+    while( pMeth )
+    {
+        SbxObject* pObject = dynamic_cast< SbxObject* >( pMeth->GetParent() );
+        if ( pObject )
+        {
+            StarBASIC* pModBasic = dynamic_cast< StarBASIC* >( pObject->GetParent() );
+            if ( pModBasic == pBasic )
+            {
+                // for now the solution is to remove the method from the list and to clear it,
+                // but in case the element should be correctly transfered to another StarBASIC,
+                // we should either set module parent to NULL without clearing it, or even
+                // set the new StarBASIC as the parent of the module
+                // pObject->SetParent( NULL );
+
+                if( pMeth == pFirst )
+                    pFirst = pMeth->pNext;
+                else if( pMeth->pPrev )
+                    pMeth->pPrev->pNext = pMeth->pNext;
+                if( pMeth->pNext )
+                    pMeth->pNext->pPrev = pMeth->pPrev;
+
+                pMeth->pPrev = NULL;
+                pMeth->pNext = NULL;
+
+                pMeth->SbxValue::Clear();
+                pObject->SbxValue::Clear();
+
+                // start from the beginning after object clearing, the cycle will end since the method is removed each time
+                pMeth = pFirst;
+            }
+            else
+                pMeth = pMeth->pNext;
+        }
+        else
+            pMeth = pMeth->pNext;
+    }
+}
+
 void clearUnoMethods( void )
 {
     SbUnoMethod* pMeth = pFirst;

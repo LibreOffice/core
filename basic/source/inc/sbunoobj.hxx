@@ -93,11 +93,13 @@ SV_DECL_IMPL_REF(SbUnoObject);
 
 // #67781 Rueckgabewerte der Uno-Methoden loeschen
 void clearUnoMethods( void );
+void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
 class SbUnoMethod : public SbxMethod
 {
     friend class SbUnoObject;
     friend void clearUnoMethods( void );
+    friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > m_xUnoMethod;
     ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >* pParamInfoSeq;

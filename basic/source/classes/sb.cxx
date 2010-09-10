@@ -804,6 +804,7 @@ StarBASIC::~StarBASIC()
         xUnoListeners = NULL;
     }
 
+    clearUnoMethodsForBasic( this );
     disposeComVariablesForBasic( this );
 }
 
