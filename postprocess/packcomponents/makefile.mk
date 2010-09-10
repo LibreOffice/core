@@ -355,11 +355,6 @@ my_components += avmedia.jar
 .END
 
 my_components += mailmerge #TODO: OOo mailmerge vs. OOO email
-#TODO: OOO i18n
-#TODO: OOO migrationoo3
-#TODO: OOO printcompat
-#TODO: OOO socomp
-#TODO: OOO tab2
 
 .INCLUDE: target.mk
 
