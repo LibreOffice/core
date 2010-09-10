@@ -312,6 +312,13 @@ File gid_File_Dl_Store
     // CompID = "A5477BD7-89A3-44AF-8B42-9E28D55C8066";
 End
 
+File gid_File_Dl_Xmlreader
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("xmlreader");
+    Styles = (PACKED);
+End
+
 File gid_File_Dl_Jvmaccess
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -1150,6 +1157,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Reg,
             gid_File_Dl_Rmcxt,
             gid_File_Dl_Store,
+            gid_File_Dl_Xmlreader,
             gid_File_Dl_Jvmaccess,
             gid_File_Dl_Jvmfwk,
             gid_File_Dl_Sunjavaplugin,
