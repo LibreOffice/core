@@ -283,13 +283,6 @@ sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
     return new FrameLineConnection( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
 }
 
-sfx::ItemConnectionBase* CreateFrameBoxConnection( USHORT /*nBoxSlot*/, USHORT /*nBoxInfoSlot*/,
-        FrameSelector& /*rFrameSel*/, FrameBorderType /*eBorder*/, sfx::ItemConnFlags /*nFlags*/ )
-{
-    DBG_ERRORFILE( "svx::CreateFrameBoxConnection - not implemented" );
-    return 0;
-}
-
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
         MetricField& rMfLeft, MetricField& rMfRight,
         MetricField& rMfTop, MetricField& rMfBottom,

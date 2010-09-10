@@ -155,7 +155,6 @@ private:
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
     BOOL                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
     void                ResetColor_Impl( const SfxItemSet& rSet );
-    BOOL                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     DECL_LINK(          UpdateHdl_Impl, Timer* );
     DECL_LINK(          FontModifyHdl_Impl, void* );
