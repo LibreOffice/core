@@ -28,6 +28,8 @@
 #include "precompiled_stoc.hxx"
 #include "sal/config.h"
 
+#include <cstddef>
+#include <cstdlib>
 #include <map>
 #include <vector>
 
