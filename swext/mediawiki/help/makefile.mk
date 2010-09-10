@@ -79,7 +79,9 @@ $(OUT_MEDIAWIKI)/help/component.txt : component.txt
 
 $(OUT_MEDIAWIKI)/help/%.xhp : $(OUT_MEDIAWIKI)_merge/help/%.xhp
     @@-$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)cat $< | sed -e 's/@WIKIEXTENSIONPRODUCTNAME@/Wiki Publisher/g ; s/@WIKIEXTENSIONID@/com.sun.wiki-publisher/g ; s/@WIKIEXTENSIONFILENAME@/wiki-publisher/g' > $@
+    $(COMMAND_ECHO)cat $< | sed -e 's/@WIKIEXTENSIONPRODUCTNAME@/Wiki Publisher/g' | \
+        sed  's/@WIKIEXTENSIONID@/com.sun.wiki-publisher/g' | \
+        sed 's/@WIKIEXTENSIONFILENAME@/wiki-publisher/g' > $@
 
 .ENDIF          # "$(ENABLE_MEDIAWIKI)" != "YES"
 
