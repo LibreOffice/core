@@ -1,7 +1,7 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -23,16 +23,14 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
-************************************************************************/
+ ************************************************************************/
 
-Module gid_Module_Langpack_Binfilter_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "900";
-    Default = NO;
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Binfilter_Template;
-    Name = "gid_Module_Langpack_Binfilter_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Binfilter_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
+#ifdef std_was_redefined_as_stlport
+//  put things back the way they were
+#   define std std_was_redefined_as_stlport
+#   undef _STLP_OUTERMOST_HEADER_ID
+//  force config to be re-read
+#   undef _STLP_NOTHROW_INHERENTLY
+#   undef _STLP_CONFIG_H
+#   include <stddef.h>
+#endif

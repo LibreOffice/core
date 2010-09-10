@@ -33,7 +33,7 @@ Module gid_Module_Optional_Binfilter
     Sortkey = "700";
     InstallOrder = "1100";
     ParentID = gid_Module_Optional;
-    Default = YES;
+    Default = NO;
     Files = (gid_File_Share_Registry_Binfilter_Xcd,
     gid_Starregistry_Legacy_Binfilters_Rdb,
     gid_File_Lib_Bf_Go,
@@ -60,6 +60,7 @@ Module gid_Module_Langpack_Binfilter_Template
     ParentID = gid_Module_Optional_Binfilter;
     Name = "gid_Module_Langpack_Binfilter_Template";
     Description = "gid_Module_Langpack_Binfilter_Template";
+    Default = NO;
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Res_Bf_Sch,
              gid_File_Res_Bf_Svx,
