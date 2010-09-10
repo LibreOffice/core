@@ -2976,10 +2976,6 @@ void ScInterpreter::ScMin( BOOL bTextAsZero )
         PushDouble(nMin);
 }
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-
 void ScInterpreter::ScMax( BOOL bTextAsZero )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMax" );
@@ -3100,10 +3096,6 @@ void ScInterpreter::ScMax( BOOL bTextAsZero )
     else
         PushDouble(nMax);
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
-
 
 double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
 {
@@ -5789,10 +5781,6 @@ void ScInterpreter::ScVLookup()
     CalculateLookup(FALSE);
 }
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-
 void ScInterpreter::ScSubTotal()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSubTotal" );
@@ -5832,10 +5820,6 @@ void ScInterpreter::ScSubTotal()
         PushDouble( nVal );
     }
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
-
 
 ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
 {
@@ -7097,22 +7081,75 @@ void ScInterpreter::ScText()
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         String sFormatString = GetString();
-        double fVal = GetDouble();
         String aStr;
-        Color* pColor = NULL;
-        LanguageType eCellLang;
-        const ScPatternAttr* pPattern = pDok->GetPattern(
-            aPos.Col(), aPos.Row(), aPos.Tab() );
-        if ( pPattern )
-            eCellLang = ((const SvxLanguageItem&)
-                pPattern->GetItem( ATTR_LANGUAGE_FORMAT )).GetValue();
+        bool bString = false;
+        double fVal = 0.0;
+        switch (GetStackType())
+        {
+            case svError:
+                PopError();
+                break;
+            case svDouble:
+                fVal = PopDouble();
+                break;
+            case svString:
+                aStr = PopString();
+                bString = true;
+                break;
+            default:
+                {
+                    FormulaTokenRef xTok( PopToken());
+                    if (!nGlobalError)
+                    {
+                        PushTempToken( xTok);
+                        // Temporarily override the ConvertStringToValue()
+                        // error for GetCellValue() / GetCellValueOrZero()
+                        USHORT nSErr = mnStringNoValueError;
+                        mnStringNoValueError = errNotNumericString;
+                        fVal = GetDouble();
+                        mnStringNoValueError = nSErr;
+                        if (nGlobalError == errNotNumericString)
+                        {
+                            // Not numeric.
+                            nGlobalError = 0;
+                            PushTempToken( xTok);
+                            aStr = GetString();
+                            bString = true;
+                        }
+                    }
+                }
+        }
+        if (nGlobalError)
+            PushError( nGlobalError);
         else
-            eCellLang = ScGlobal::eLnge;
-        if ( !pFormatter->GetPreviewStringGuess( sFormatString, fVal, aStr,
-                &pColor, eCellLang ) )
-            PushIllegalArgument();
-        else
-            PushString(aStr);
+        {
+            String aResult;
+            Color* pColor = NULL;
+            LanguageType eCellLang;
+            const ScPatternAttr* pPattern = pDok->GetPattern(
+                    aPos.Col(), aPos.Row(), aPos.Tab() );
+            if ( pPattern )
+                eCellLang = ((const SvxLanguageItem&)
+                        pPattern->GetItem( ATTR_LANGUAGE_FORMAT )).GetValue();
+            else
+                eCellLang = ScGlobal::eLnge;
+            if (bString)
+            {
+                if (!pFormatter->GetPreviewString( sFormatString, aStr,
+                            aResult, &pColor, eCellLang))
+                    PushIllegalArgument();
+                else
+                    PushString( aResult);
+            }
+            else
+            {
+                if (!pFormatter->GetPreviewStringGuess( sFormatString, fVal,
+                            aResult, &pColor, eCellLang))
+                    PushIllegalArgument();
+                else
+                    PushString( aResult);
+            }
+        }
     }
 }
 

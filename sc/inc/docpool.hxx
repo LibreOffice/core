@@ -65,6 +65,7 @@ public:
     static void                 CheckRef( const SfxPoolItem& );
 
     void StyleDeleted( ScStyleSheet* pStyle );      // Loeschen von Vorlagen im Organizer
+    void CellStyleCreated( const String& rName );
     virtual SfxItemPresentation     GetPresentation(
                                         const SfxPoolItem&  rItem,
                                         SfxItemPresentation ePresentation,
