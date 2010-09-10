@@ -94,9 +94,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
 using namespace vos;
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -2092,6 +2090,13 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                     EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
                     aEquation.nOperation = 0;                   // creating a default equation with value 1
                     aEquation.nPara[ 0 ] = 1;                   // hoping that this will not break anything
+                    rEquations.push_back( aEquation );
+                }
+                catch ( ... )
+                {
+                    EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
+                    aEquation.nOperation = 0;                   // not catched on linux platform
+                    aEquation.nPara[ 0 ] = 1;
                     rEquations.push_back( aEquation );
                 }
                 rEquationOrder.push_back( rEquations.size() - 1 );

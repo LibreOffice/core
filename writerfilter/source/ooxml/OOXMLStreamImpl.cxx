@@ -69,22 +69,6 @@ OOXMLStreamImpl::OOXMLStreamImpl
 }
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> xStorageStream, const rtl::OUString & rId)
-: mxContext(xContext),
-  mxStorageStream(xStorageStream),
-  mnStreamType(UNKNOWN),
-  msId(rId)
-{
-    mxStorage.set
-        (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
-         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream));
-    mxRelationshipAccess.set(mxStorage, uno::UNO_QUERY_THROW);
-
-    init();
-}
-
-OOXMLStreamImpl::OOXMLStreamImpl
 (OOXMLStreamImpl & rOOXMLStream, const rtl::OUString & rId)
 : mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),

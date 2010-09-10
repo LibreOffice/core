@@ -103,11 +103,6 @@ bool OOXMLParserState::isForwardEvents() const
     return mbForwardEvents;
 }
 
-void OOXMLParserState::incContextCount()
-{
-    mnContexts++;
-}
-
 const string OOXMLParserState::getHandle() const
 {
     char sBuffer[256];
@@ -120,11 +115,6 @@ const string OOXMLParserState::getHandle() const
 void OOXMLParserState::setHandle()
 {
     mnHandle = mnContexts;
-}
-
-unsigned int OOXMLParserState::getContextCount() const
-{
-    return mnContexts;
 }
 
 void OOXMLParserState::setDocument(OOXMLDocument * pDocument)
@@ -147,42 +137,9 @@ const rtl::OUString & OOXMLParserState::getXNoteId() const
     return mpDocument->getXNoteId();
 }
 
-void OOXMLParserState::setXNoteType(const Id & rId)
-{
-    mpDocument->setXNoteType(rId);
-}
-
-const Id & OOXMLParserState::getXNoteType() const
-{
-    return mpDocument->getXNoteType();
-}
-
 const ::rtl::OUString & OOXMLParserState::getTarget() const
 {
     return mpDocument->getTarget();
-}
-
-void OOXMLParserState::newCharacterProperty(const Id & rId,
-                                            OOXMLValue::Pointer_t pVal)
-{
-    if (rId != 0x0)
-    {
-        if (mpCharacterProps.get() == NULL)
-            mpCharacterProps =
-                OOXMLPropertySet::Pointer_t(new OOXMLPropertySetImpl());
-
-        OOXMLPropertyImpl::Pointer_t pProperty
-            (new OOXMLPropertyImpl(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
-
-#ifdef DEBUG_PROPERTIES
-        debug_logger->startElement("<newCharacterProperty");
-        debug_logger->chars(pProperty->toString());
-        debug_logger->endElement("newCharacterProperty");
-#endif
-
-        mpCharacterProps->add(pProperty);
-    }
-
 }
 
 void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
@@ -200,11 +157,6 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
         debug_logger->endElement("resolveCharacterProperties");
 #endif
     }
-}
-
-OOXMLPropertySet::Pointer_t OOXMLParserState::getCharacterProperties() const
-{
-    return mpCharacterProps;
 }
 
 void OOXMLParserState::setCharacterProperties
@@ -317,6 +269,22 @@ void OOXMLParserState::endTable()
     mTableProps.pop();
 }
 
+void OOXMLParserState::incContextCount()
+{
+    mnContexts++;
+}
+
+#ifdef DEBUG
+unsigned int OOXMLParserState::getContextCount() const
+{
+    return mnContexts;
+}
+
+string OOXMLParserState::toString() const
+{
+    return toTag()->toString();
+}
+
 XMLTag::Pointer_t OOXMLParserState::toTag() const
 {
     XMLTag::Pointer_t pTag(new XMLTag("parserstate"));
@@ -352,10 +320,6 @@ XMLTag::Pointer_t OOXMLParserState::toTag() const
 
     return pTag;
  }
-
-string OOXMLParserState::toString() const
-{
-    return toTag()->toString();
-}
+#endif
 
 }}
