@@ -581,8 +581,8 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     endif
 
     ' Find out what the name of the target file is going to be
-    sTargetFile = hSplitString( sSourcePath, getPathSeparator, 0 )
-    sTargetPath = hGetWorkFile( sTargetFile )
+    sTargetFile = hSplitString( sSourcePath, getPathSeparator, 0 ) ' The file
+    sTargetPath = hGetWorkFile( sTargetFile ) ' The path + file
 
     ' Copy the file from anywhere to the local user directory if it does not 
     ' exist. This behavior was discussed on IRC
@@ -596,7 +596,6 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
         endif
         FileCopy( sSourcePath, sTargetPath )
     endif
-
 
     ' This is a hook that allows to access the filename under which the file
     ' has been saved. Due to restrictive coding guidelines we cannot return
