@@ -81,3 +81,11 @@ SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/configmgr.component
+
+$(MISC)/configmgr.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        configmgr.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt configmgr.component

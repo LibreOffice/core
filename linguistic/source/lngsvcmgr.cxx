@@ -1990,31 +1990,6 @@ uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
     return xService;
 }
 
-
-
-sal_Bool SAL_CALL LngSvcMgr_writeInfo(
-            void * /*pServiceManager*/,
-            registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += LngSvcMgr::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey =
-            pRegistryKey->createKey( aImpl );
-        uno::Sequence< OUString > aServices = LngSvcMgr::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(uno::Exception &)
-    {
-        return sal_False;
-    }
-}
-
 void * SAL_CALL LngSvcMgr_getFactory(
             const sal_Char * pImplName,
             lang::XMultiServiceFactory * pServiceManager,
