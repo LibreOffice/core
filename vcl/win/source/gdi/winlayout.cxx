@@ -2821,7 +2821,7 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 class GraphiteWinLayout : public WinLayout
 {
 private:
-    mutable gr::WinFont   mpFont;
+    mutable GraphiteWinFont mpFont;
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
@@ -2894,6 +2894,11 @@ void GraphiteWinLayout::RestoreDC(gr::Segment & segment) const
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
 {
+    if (args.mnMinCharPos >= args.mnEndCharPos)
+    {
+        maImpl.clear();
+        return true;
+    }
     HFONT hUnRotatedFont;
     if (args.mnOrientation)
     {

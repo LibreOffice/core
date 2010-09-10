@@ -50,7 +50,7 @@ namespace vos
     @version 0.1
 */
 
-class IExecutable : public NAMESPACE_VOS(IReference)
+class IExecutable : public vos::IReference
 {
 public:
 
@@ -82,8 +82,8 @@ public:
 /** OExecutable
     added default impl. of IReferenceCounter
 */
-class OExecutable : public NAMESPACE_VOS(IExecutable),
-                    public NAMESPACE_VOS(OReference)
+class OExecutable : public vos::IExecutable,
+                    public vos::OReference
 
 {
 public:

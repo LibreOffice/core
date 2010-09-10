@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef WIN
-#include <sysdep.hxx>
-#endif
 #include <string.h>
 // #include <math.h>
 #include <vcl/svapp.hxx>
@@ -48,9 +45,6 @@
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 
-#ifdef WIN
-#include <sysdep.hxx>
-#endif
 #include <string.h>
 #include <math.h>
 

@@ -39,7 +39,6 @@
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <svtools/svmedit.hxx>
 #include <svtools/fmtfield.hxx>
-#include <com/sun/star/awt/XImageConsumer.hpp>
 
 
 #include <comphelper/uno3.hxx>
@@ -243,7 +242,7 @@ struct RMItemData
     ::rtl::OUString     Label;
 };
 
-typedef ::cppu::ImplInheritanceHelper3  <   VCLXImageConsumer
+typedef ::cppu::ImplInheritanceHelper3  <   VCLXGraphicControl
                                         ,   ::com::sun::star::container::XContainerListener
                                         ,   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::awt::XItemEventBroadcaster
@@ -288,7 +287,7 @@ public:
 
 protected:
 
-    // VCLXImageConsumer overridables
+    // VCLXGraphicControl overridables
     virtual void    ImplSetNewImage();
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );

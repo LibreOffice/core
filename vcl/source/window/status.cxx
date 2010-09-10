@@ -320,6 +320,8 @@ void StatusBar::ImplFormat()
             nExtraWidth2 = 0;
         }
         nX = STATUSBAR_OFFSET_X;
+        if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+            nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
     pItem = mpItemList->First();
@@ -544,7 +546,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
         long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
         ImplControlValue aValue( nFullWidth * (long)nPerc / 10000 );
         Rectangle aDrawRect( rPos, Size( nFullWidth, nPrgsHeight ) );
-        Region aControlRegion( aDrawRect );
+        Rectangle aControlRegion( aDrawRect );
         if( bNeedErase )
         {
             Window* pEraseWindow = pWindow;
@@ -711,13 +713,13 @@ void StatusBar::ImplCalcProgressRect()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        Region aControlRegion( Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
-        Region aNativeControlRegion, aNativeContentRegion;
+        Rectangle aControlRegion( Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
+        Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
         {
-            long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            long nProgressHeight = aNativeControlRegion.GetHeight();
             if( nProgressHeight > maPrgsFrameRect.GetHeight() )
             {
                 long nDelta = nProgressHeight - maPrgsFrameRect.GetHeight();
@@ -833,7 +835,7 @@ void StatusBar::Resize()
 {
     // Breite und Hoehe abfragen und merken
     Size aSize = GetOutputSizePixel();
-    mnDX = aSize.Width();
+    mnDX = aSize.Width() - ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;
     // subtract border
@@ -1723,13 +1725,13 @@ Size StatusBar::CalcWindowSizePixel() const
     if( pThis->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        Region aControlRegion( Rectangle( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) ) );
-        Region aNativeControlRegion, aNativeContentRegion;
+        Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
+        Rectangle aNativeControlRegion, aNativeContentRegion;
         if( pThis->GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                            CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                            aNativeControlRegion, aNativeContentRegion ) )
         {
-            nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            nProgressHeight = aNativeControlRegion.GetHeight();
         }
     }
 
@@ -1737,14 +1739,13 @@ Size StatusBar::CalcWindowSizePixel() const
         pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
     {
         ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
-        Region aBound, aContent;
-        Region aNatRgn( Rectangle( Point( 0, 0 ), Size( 150, 50 ) ) );
+        Rectangle aBound, aContent;
+        Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
         if( pThis->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
             aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
             mpImplData->mnItemBorderWidth =
-                ( aBound.GetBoundRect().GetHeight() -
-                  aContent.GetBoundRect().GetHeight() ) / 2;
+                ( aBound.GetHeight() - aContent.GetHeight() ) / 2;
         }
     }
 
