@@ -38,7 +38,10 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <functional>
+#include <algorithm>
 
+#include "unomodel.hxx"
 #include "utility.hxx"
 #include "smmod.hxx"
 
@@ -132,6 +135,15 @@ typedef std::map< String, SmSym, lt_String >    SymbolMap_t;
 
 // vector of pointers to the actual symbols in the above container
 typedef std::vector< const SmSym * >            SymbolPtrVec_t;
+
+struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
+{
+    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 )
+    {
+        return pSym1->GetCharacter() < pSym2->GetCharacter();
+    }
+};
+
 
 class SmSymbolManager : public SfxListener
 {
