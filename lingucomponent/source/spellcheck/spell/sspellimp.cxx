@@ -673,32 +673,6 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-
-sal_Bool SAL_CALL SpellChecker_writeInfo(
-            void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-
-    try
-    {
-        String aImpl( '/' );
-        aImpl += SpellChecker::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        Reference< registry::XRegistryKey > xNewKey =
-                pRegistryKey->createKey( aImpl );
-        Sequence< OUString > aServices =
-                SpellChecker::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
-}
-
-
 void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
