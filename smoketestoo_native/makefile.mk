@@ -33,6 +33,13 @@ ENABLE_EXCEPTIONS = TRUE
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
+
 SLOFILES = $(SHL1OBJS)
 
 SHL1TARGET = smoketest
@@ -47,13 +54,10 @@ DEF1NAME = $(SHL1TARGET)
 
 ALLTAR : cpptest
 
-cpptest : $(SHL1TARGETN) $(BIN)/smoketestdoc.sxw
+cpptest : $(SHL1TARGETN)
 
 TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
 CPPTEST_LIBRARY = $(SHL1TARGETN)
-
-$(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
-    $(COPY) $< $@
 
 .IF "$(OS)" != "WNT"
 $(installationtest_instpath).flag : $(shell ls \

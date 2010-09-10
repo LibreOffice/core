@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Helpers for accessing treelists
 '*
@@ -251,6 +251,15 @@ function hExpandAllNodes( oControl as object ) as integer
     endif
     hExpandAllNodes() = iNodeCurCount
     
+end function
+
+'*******************************************************************************
+
+function hGetAllNodeNames( oControl as object , lsList() as string ) as integer
+
+    hExpandAllNodes( oControl )
+    hGetAllNodeNames() = hGetVisibleNodeNames( oControl, lsList() )
+
 end function
 
 '*******************************************************************************

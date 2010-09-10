@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - Tools Menu Part II
 '*
@@ -166,7 +166,6 @@ testcase tToolsMacro
     printlog " Close Select Certificate' dialog with 'Cancel'"
     SelectCertificate.Cancel
     Kontext "DigitalSignature"
-    add.click
     '/// Close 'Digital Signatures' dialog with 'Cancel'
     printlog " Close 'Digital Signatures' dialog with 'Cancel'"
     DigitalSignature.ok

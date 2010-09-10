@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update Test for Fax Wizard
 '*
@@ -35,9 +35,6 @@ testcase tUpdtWizardFax
 
     printlog( "Resource test for the fax wizard" )
 
-    dim iErr as integer
-    dim brc as boolean
-    
     dim cTemplateName as string
     dim cTemplatePath as string    
     
@@ -74,14 +71,14 @@ testcase tUpdtWizardFax
         TemplateName.setText( cTemplateName )
         
         hSetTemplateSavePath( cTemplatePath )
-        
-        hFinishWizard( 1 )
+
+        kontext "AutopilotFax"
+        hClickButton( FinishButton )
         
         kontext "StandardBar"
         hWaitForObject( Speichern, 5000 )
        
-        brc = hDestroyDocument()
-        if ( not brc ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
+        if ( not hDestroyDocument() ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
         
         printlog( "Delete the user-template: " & cTemplatePath )
         hDeleteFile( cTemplatePath )

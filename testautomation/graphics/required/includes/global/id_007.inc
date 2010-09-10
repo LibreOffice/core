@@ -25,12 +25,37 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'\**********************************************************************************
+'\******************************************************************************
 
+sub id_007
+
+    printLog Chr(13) + "---------    id_007    ----------"
+    ' in imp available via context menu, in draw via modify menu
+
+    call tdModifyFlipVertikal
+    call tdModifyFlipHorizontal
+    call tdContextConvertIntoCurve
+    call tdContextConvertIntoPolygon
+    call tdContextConvertIntoContour
+    call tdContextConvertInto3D
+    call tdContextConvertIntoRotationObject
+    call tdContextConvertIntoBitmap
+    call tdContextConvertIntoMetaFile
+    call tdModifyArrange
+    call tdModifyArrangeObjects
+    call tdModifyAlignment
+    call tdContextDistribution
+    call tdContextDescriptionObject
+    call tdContextNameObject
+    call tdModifyConnectBreak
+    call tdModifyShapes
+    call tdModifyCombineSplit
+end sub
+'-------------------------------------------------------------------------------
 testcase tdModifyFlipVertikal
 
     '/// open application ///'

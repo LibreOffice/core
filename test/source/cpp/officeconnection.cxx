@@ -33,7 +33,9 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
+#include <preextstl.h>
 #include "cppunit/TestAssert.h"
+#include <postextstl.h>
 #include "osl/process.h"
 #include "osl/time.h"
 #include "sal/types.h"

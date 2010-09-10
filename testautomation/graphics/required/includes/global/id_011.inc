@@ -25,12 +25,23 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
 '\******************************************************************************
+sub id_011
 
+    printLog Chr(13) + "---------    id_011    ----------"
+
+    call tdBezierToolbar
+    call tiDrawObjectBar
+    call tiTextToolbar
+    call tiGraphicsObjectBar
+    call tiGluepointToolbar
+
+end sub
+'-------------------------------------------------------------------------------
 testcase tiTextToolbar
 
     Dim iWaitIndex as integer
