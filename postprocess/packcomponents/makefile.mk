@@ -46,9 +46,7 @@ my_components = \
     avmedia \
     basctl \
     basprov \
-    bf_migratefilter \
     bib \
-    bindet \
     cached1 \
     calc \
     canvasfactory \
@@ -256,6 +254,12 @@ my_components += \
     report \
     table \
     web
+.END
+
+.IF "$(WITH_BINFILTER)" != "NO"
+my_components += \
+    bf_migratefilter \
+    bindet
 .END
 
 .IF "$(WITH_LDAP)" == "YES"
