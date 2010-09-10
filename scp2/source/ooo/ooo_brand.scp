@@ -52,4 +52,12 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
   #endif
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_SERVICES";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES}";
+End
+
 BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )
