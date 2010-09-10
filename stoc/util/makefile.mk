@@ -57,7 +57,8 @@ SHL1STDLIBS= \
                 $(SALHELPERLIB)         \
         $(CPPUHELPERLIB)	\
                 $(SALLIB)		\
-        $(REGLIB)
+        $(REGLIB) \
+        $(XMLREADERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)

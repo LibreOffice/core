@@ -29,6 +29,7 @@
 #include "sal/config.h"
 
 #include <cstdlib>
+#include <memory>
 #include <vector>
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -60,6 +61,8 @@
 #include "sal/types.h"
 
 #include "bootstrapservices.hxx"
+
+#include "textualservices.hxx"
 
 extern rtl_StandardModuleCount g_moduleCount;
 
@@ -121,6 +124,7 @@ private:
     { return stoc_bootstrap::simreg_getSupportedServiceNames(); }
 
     Registry registry_;
+    std::auto_ptr< stoc::simpleregistry::TextualServices > textual_;
 };
 
 class Key: public cppu::WeakImplHelper1< css::registry::XRegistryKey > {
@@ -1128,7 +1132,7 @@ rtl::OUString Key::getResolvedName(rtl::OUString const & aKeyName)
 
 rtl::OUString SimpleRegistry::getURL() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(mutex_);
-    return registry_.getName();
+    return textual_.get() == 0 ? registry_.getName() : textual_->getUri();
 }
 
 void SimpleRegistry::open(
@@ -1136,13 +1140,33 @@ void SimpleRegistry::open(
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
+    if (textual_.get() != 0) {
+        throw css::registry::InvalidRegistryException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.registry.SimpleRegistry.open(")) +
+             rURL +
+             rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "): instance already open"))),
+            static_cast< OWeakObject * >(this));
+    }
     RegError err = (rURL.getLength() == 0 && bCreate)
         ? REG_REGISTRY_NOT_EXISTS
         : registry_.open(rURL, bReadOnly ? REG_READONLY : REG_READWRITE);
     if (err == REG_REGISTRY_NOT_EXISTS && bCreate) {
         err = registry_.create(rURL);
     }
-    if (err != REG_NO_ERROR) {
+    switch (err) {
+    case REG_NO_ERROR:
+        break;
+    case REG_INVALID_REGISTRY:
+        if (bReadOnly && !bCreate) {
+            textual_.reset(new stoc::simpleregistry::TextualServices(rURL));
+            break;
+        }
+        // fall through
+    default:
         throw css::registry::InvalidRegistryException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -1158,13 +1182,17 @@ void SimpleRegistry::open(
 
 sal_Bool SimpleRegistry::isValid() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(mutex_);
-    return registry_.isValid();
+    return textual_.get() != 0 || registry_.isValid();
 }
 
 void SimpleRegistry::close()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
+    if (textual_.get() != 0) {
+        textual_.reset();
+        return;
+    }
     RegError err = registry_.close();
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -1181,6 +1209,10 @@ void SimpleRegistry::destroy()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
+    if (textual_.get() != 0) {
+        textual_.reset();
+        return;
+    }
     RegError err = registry_.destroy(rtl::OUString());
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -1197,6 +1229,9 @@ css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
+    if (textual_.get() != 0) {
+        return textual_->getRootKey();
+    }
     RegistryKey root;
     RegError err = registry_.openRootKey(root);
     if (err != REG_NO_ERROR) {
@@ -1215,7 +1250,7 @@ sal_Bool SimpleRegistry::isReadOnly()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
-    return registry_.isReadOnly();
+    return textual_.get() != 0 || registry_.isReadOnly();
 }
 
 void SimpleRegistry::mergeKey(
@@ -1225,6 +1260,14 @@ void SimpleRegistry::mergeKey(
         css::registry::MergeConflictException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
+    if (textual_.get() != 0) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.registry.SimpleRegistry.mergeKey: not"
+                    " supported for textual representation")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
     RegistryKey root;
     RegError err = registry_.openRootKey(root);
     if (err == REG_NO_ERROR) {
