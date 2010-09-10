@@ -380,10 +380,12 @@ void PresenterTextView::MoveCaret (
                             // the previous or the start of the next paragraph.
                             pParagraph = GetParagraph(nParagraphIndex);
                             if (pParagraph)
+                            {
                                 if (nDistance<0)
                                     nCharacterIndex = pParagraph->GetCharacterCount();
                                 else
                                     nCharacterIndex = 0;
+                            }
                         }
                     }
                     else

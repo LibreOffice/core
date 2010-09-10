@@ -358,6 +358,7 @@ public class StylesWriter
                 OfficeNamespaces.DATASTYLE_NS);
         rootAttributes.addNamespaceDeclaration("svg", OfficeNamespaces.SVG_NS);
         rootAttributes.addNamespaceDeclaration("chart", OfficeNamespaces.CHART_NS);
+        rootAttributes.addNamespaceDeclaration("chartooo", OfficeNamespaces.CHARTOOO_NS);
         rootAttributes.addNamespaceDeclaration("dr3d", OfficeNamespaces.DR3D_NS);
         rootAttributes.addNamespaceDeclaration("math", OfficeNamespaces.MATHML_NS);
         rootAttributes.addNamespaceDeclaration("form", OfficeNamespaces.FORM_NS);
@@ -372,7 +373,8 @@ public class StylesWriter
                 OfficeNamespaces.XFORMS_NS);
         rootAttributes.addNamespaceDeclaration("xsd", OfficeNamespaces.XSD_NS);
         rootAttributes.addNamespaceDeclaration("xsi", OfficeNamespaces.XSI_NS);
-        rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version", "1.0");
+        rootAttributes.addNamespaceDeclaration("grddl", OfficeNamespaces.GRDDL_NS);
+        rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version", "1.2");
 
         this.xmlWriter.writeXmlDeclaration("UTF-8");
         this.xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS,

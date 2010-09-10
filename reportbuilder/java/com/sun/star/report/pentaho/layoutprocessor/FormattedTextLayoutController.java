@@ -136,9 +136,20 @@ public class FormattedTextLayoutController
         else
         {
             final DataFlags df = FormatValueUtility.computeDataFlag(element, getFlowController());
-            if (df != null && df.getValue() instanceof String )
+            if (df != null)
             {
-                target.processContent(df);
+                if (df.getValue() instanceof String)
+                {
+                    target.processContent(df);
+                }
+                else //@see http://qa.openoffice.org/issues/show_bug.cgi?id=108954
+                {
+                    Element cell = getParentTableCell();
+                    if (cell != null && "string".equals(cell.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE)))
+                    {
+                        target.processContent(df);
+                    }
+                }
             }
         }
 
