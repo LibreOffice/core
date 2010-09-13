@@ -47,6 +47,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/brshitem.hxx>
 #include <vcl/msgbox.hxx>
+#include <svl/cjkoptions.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <usrpref.hxx>
@@ -348,10 +349,15 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
     }
     else
     {
-        if ( eHScrollMetric == FUNIT_CHAR )
-            eHScrollMetric == FUNIT_CM;
-        if ( eVScrollMetric == FUNIT_LINE )
-            eVScrollMetric == FUNIT_CM;
+        SvtCJKOptions aCJKOptions;
+        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eHScrollMetric == FUNIT_CHAR ))
+            eHScrollMetric = FUNIT_INCH;
+        else if ( eHScrollMetric == FUNIT_CHAR )
+            eHScrollMetric = FUNIT_CM;
+        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eVScrollMetric == FUNIT_LINE ))
+            eVScrollMetric = FUNIT_INCH;
+        else if ( eVScrollMetric == FUNIT_LINE )
+            eVScrollMetric = FUNIT_CM;
     }
     SwView* pTmpView = SwModule::GetFirstView();
     // fuer alle MDI-Fenster das Lineal umschalten

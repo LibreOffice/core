@@ -127,7 +127,6 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             case FUNIT_POINT:
             case FUNIT_PICA:
             case FUNIT_INCH:
-            case FUNIT_CHAR:
             {
                 // nur diese Metriken benutzen
                 USHORT nPos = aMetricLB.InsertEntry( sMetric );
@@ -229,9 +228,12 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = TRUE;
     }
 
-    if(aUseCharUnit.IsChecked() != aUseCharUnit.GetSavedValue())
+    sal_Bool bIsUseCharUnitFlag = aUseCharUnit.IsChecked();
+    SvtCJKOptions aCJKOptions;
+        bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
+    if( bIsUseCharUnitFlag != aUseCharUnit.GetSavedValue())
     {
-        rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, aUseCharUnit.IsChecked()));
+        rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
         bRet = TRUE;
     }
 

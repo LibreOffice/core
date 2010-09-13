@@ -331,9 +331,9 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
                 m_bHRulerChanged = sal_True;
             }
             m_bVRulerChanged = sal_True;
+            pView->GetHLineal().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
+            pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
         }
-        pView->GetHLineal().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
-        pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
 }
 /* -----------------------------08.02.2002 10:54------------------------------
 

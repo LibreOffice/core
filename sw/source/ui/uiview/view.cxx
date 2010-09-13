@@ -955,16 +955,40 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     BOOL bApplyCharUnit = pUsrPref->IsApplyCharUnit();
     SvtCJKOptions aCJKOptions;
-    if ( aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
-        pHRuler->SetUnit( FUNIT_CHAR );
+    if ( aCJKOptions.IsAsianTypographyEnabled() )
+    {
+        if ( bApplyCharUnit )
+            eMetric = FUNIT_CHAR;
+        else
+        {
+            if ( eMetric == FUNIT_CHAR )
+                eMetric = FUNIT_CM;
+        }
+    }
     else
-        pHRuler->SetUnit( eMetric );
+    {
+        if ( eMetric == FUNIT_CHAR )
+            eMetric = FUNIT_INCH;
+    }
+    pHRuler->SetUnit( eMetric );
 
     eMetric = pUsrPref->GetVScrollMetric();
-    if ( aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
-        pVRuler->SetUnit(FUNIT_LINE);
+    if ( aCJKOptions.IsAsianTypographyEnabled() )
+    {
+        if ( bApplyCharUnit )
+            eMetric = FUNIT_LINE;
+        else
+        {
+            if ( eMetric == FUNIT_LINE )
+                eMetric = FUNIT_CM;
+        }
+    }
     else
-        pVRuler->SetUnit( eMetric );
+    {
+        if ( eMetric == FUNIT_LINE )
+            eMetric = FUNIT_INCH;
+    }
+    pVRuler->SetUnit( eMetric );
 
         pHRuler->SetCharWidth( 371 );  // default character width
         pVRuler->SetLineHeight( 551 );  // default line height
