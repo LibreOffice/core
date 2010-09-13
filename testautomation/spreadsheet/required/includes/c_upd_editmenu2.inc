@@ -638,10 +638,10 @@ testcase tEditObjectEdit
     
     '/// Load testdocument 'spreadsheet/required/input/tEditObject.ods'
     printlog " Load testdocument 'spreadsheet/required/input/tEditObject.ods'"
-    Call hFileOpen ( ConvertPath ( gTesttoolPath + "spreadsheet\required\input\tEditObject.ods"))
+    hFileOpenLocally( gTesttoolPath + "spreadsheet\required\input\tEditObject.ods" )
     '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    sMakeReadOnlyDocumentEditable()
+    'printlog "If the file is not editable, click the edit button on standardbar"
+    'sMakeReadOnlyDocumentEditable()
     '/// Select OLE-object
     printlog " Select OLE-object"
     fselectFirstOLE
