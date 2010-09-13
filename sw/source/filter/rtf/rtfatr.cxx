@@ -438,15 +438,15 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
                 }
 
                 const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( static_cast<USHORT>(nLvl) );
-                if( pNFmt->GetAbsLSpace() )
+                if( pNFmt->GetIndentAt() )
                 {
                     SfxItemSet aSet( *rFmt.GetAttrSet().GetPool(),
                                     rFmt.GetAttrSet().GetRanges() );
                     aSet.SetParent( &rFmt.GetAttrSet() );
                     SvxLRSpaceItem aLR( (SvxLRSpaceItem&)aSet.Get( RES_LR_SPACE ) );
 
-                    aLR.SetTxtLeft( aLR.GetTxtLeft() + pNFmt->GetAbsLSpace() );
-                    aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineOffset() );
+                    aLR.SetTxtLeft( aLR.GetTxtLeft() + pNFmt->GetIndentAt() );
+                    aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineIndent() );
 
                     aSet.Put(aLR);
                     rSet.Put(aSet);
@@ -1210,7 +1210,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     }
 
     // gibt es harte Attributierung ?
-    if( bNewFmts && pNd->HasSwAttrSet())
+    if( pNd->HasSwAttrSet() )
     {
         rRTFWrt.pFlyFmt = 0;
 
@@ -1233,9 +1233,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SfxItemSet aSet( rNdSet );
             SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
 
-            aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+            aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetIndentAt() );
             if( MAXLEVEL > pNd->GetActualListLevel() )
-                aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+                aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineIndent() );
             else
                 aSet.ClearItem( RES_PARATR_NUMRULE );
             aSet.Put( aLR );
