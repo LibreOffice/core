@@ -476,14 +476,14 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long    nTick2 ;
     if ( mnUnitIndex == RULER_UNIT_CHAR )
     {
-        nTick3 = mnCharWidth;
+        nTick3 = mnCharWidth*2;
         nTickCount = mnCharWidth;
         nTickUnit = mnCharWidth;
         nTick2 = mnCharWidth;
     }
     else if ( mnUnitIndex == RULER_UNIT_LINE )
     {
-        nTick3 = mnLineHeight;
+        nTick3 = mnLineHeight*2;
         nTickCount = mnLineHeight;
         nTickUnit = mnLineHeight;
         nTick2 = mnLineHeight;
@@ -3219,3 +3219,11 @@ const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
 USHORT              Ruler::GetIndentCount() const { return mpData->nIndents; }
 const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
 
+/* ---------------------------------------------------
+ *
+ * ---------------------------------------------------*/
+void Ruler::DrawTicks()
+{
+    mbFormat = TRUE;
+    ImplDraw();
+}

@@ -876,6 +876,8 @@ public:
 
     void                SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
     void                SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
+
+    void                DrawTicks();
 };
 
 #endif  // _RULER_HXX
