@@ -370,8 +370,6 @@ testcase tToolsLanguageThesaurus
 
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
     hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\english.ods" )
-    printlog "If the file is not editable, click the edit button on standardbar"
-    'call sMakeReadOnlyDocumentEditable
     Kontext "DocumentCalc"
     printlog " Enter 'test' in a cell"
     Call fCalcSelectRange ("B2")
