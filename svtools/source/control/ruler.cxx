@@ -81,7 +81,9 @@
 #define RULER_UNIT_MILE     6
 #define RULER_UNIT_POINT    7
 #define RULER_UNIT_PICA     8
-#define RULER_UNIT_COUNT    9
+#define RULER_UNIT_CHAR     9
+#define RULER_UNIT_LINE    10
+#define RULER_UNIT_COUNT    11
 
 // -----------------
 // - ImplRulerData -
@@ -145,7 +147,9 @@ static ImplRulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MAP_100TH_INCH,     1200,   120,    600,   1200,   30480, 3, "'"      }, // FOOT
 { MAP_10TH_INCH,    633600, 63360, 316800, 633600, 1609344, 4, " miles" }, // MILE
 { MAP_POINT,             1,    12,     12,     36,     353, 2, " pt"    }, // POINT
-{ MAP_100TH_MM,        423,   423,    423,    846,     423, 3, " pi"    }  // PICA
+{ MAP_100TH_MM,        423,   423,    423,    846,     423, 3, " pi"    }, // PICA
+{ MAP_100TH_MM,        371,   371,    371,    743,     371, 3, " ch"    }, // CHAR
+{ MAP_100TH_MM,        551,   551,    551,   1102,     551, 3, " li"    }  // LINE
 };
 
 // =======================================================================

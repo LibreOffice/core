@@ -30,6 +30,7 @@
 #include <vcl/svids.hrc>
 #endif
 
+// Amelia : adds two units , 'ch' and 'line'
 StringArray SV_FUNIT_STRINGS
 {
     ItemList [ en-US ] =
@@ -51,6 +52,8 @@ StringArray SV_FUNIT_STRINGS
         < "feet" ; FUNIT_FOOT ; > ;
         < "miles" ; FUNIT_MILE ; > ;
         < "mile" ; FUNIT_MILE ; > ;
+        < "ch" ; FUNIT_CHAR ; > ;
+        < "line" ; FUNIT_LINE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
 };
