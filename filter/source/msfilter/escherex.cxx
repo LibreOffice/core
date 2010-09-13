@@ -720,6 +720,29 @@ void EscherPropertyContainer::CreateTextProperties(
 
     if ( nTextId )
         AddOpt( ESCHER_Prop_lTxid, nTextId );
+
+    // n#404221: In case of rotation we need to write the txtflTextFlow
+    // attribute too.
+    if (bIsTextFrame) {
+        sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
+        aAny,
+        rXPropSet,
+        String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ),
+        sal_True )
+        ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10 : 0;
+        if (nAngle==900) {
+        AddOpt( ESCHER_Prop_txflTextFlow, 1 );
+        bSuppressRotation=true;
+        }
+        if (nAngle==1800) {
+        AddOpt( ESCHER_Prop_txflTextFlow, 2 );
+        bSuppressRotation=true;
+        }
+        if (nAngle==2700) {
+        AddOpt( ESCHER_Prop_txflTextFlow, 3 );
+        bSuppressRotation=true;
+        }
+    }
 }
 
 sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
