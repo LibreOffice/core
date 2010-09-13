@@ -85,6 +85,8 @@ class SwTextGridPage: public SfxTabPage
     Size            m_aPageSize;
     sal_Bool        m_bVertical;
     sal_Bool        m_bSquaredMode;
+    sal_Bool        m_bHRulerChanged;
+    sal_Bool        m_bVRulerChanged;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     ~SwTextGridPage();
