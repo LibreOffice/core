@@ -35,6 +35,9 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
 #include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -53,3 +56,33 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
     return eUnit;
 }
 
+BOOL GetApplyCharUnit( const SfxItemSet& rSet )
+{
+    BOOL  bUseCharUnit = FALSE;
+    const SfxPoolItem* pItem = NULL;
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, FALSE, &pItem ) )
+        bUseCharUnit = (BOOL)( (const SfxBoolItem*)pItem )->GetValue();
+    else
+    {
+        // FIXME - this might be wrong, cf. the DEV300 changes in GetModuleFieldUnit()
+        SfxViewFrame* pFrame = SfxViewFrame::Current();
+        SfxObjectShell* pSh = NULL;
+        if ( pFrame )
+            pSh = pFrame->GetObjectShell();
+        if ( pSh )  // #93209# the object shell is not always available during reload
+        {
+            SfxModule* pModule = pSh->GetModule();
+            if ( pModule )
+            {
+                pItem = pModule->GetItem( SID_ATTR_APPLYCHARUNIT );
+                if ( pItem )
+                    bUseCharUnit = (BOOL)( (SfxBoolItem*)pItem )->GetValue();
+            }
+            else
+            {
+                DBG_ERRORFILE( "GetApplyCharUnit(): no module found" );
+            }
+        }
+    }
+    return bUseCharUnit;
+}
