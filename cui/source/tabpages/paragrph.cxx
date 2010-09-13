@@ -38,6 +38,7 @@
 #define _SVX_PARAGRPH_CXX   0
 
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>
 #include <cuires.hrc>
 #include "paragrph.hrc"
@@ -438,11 +439,19 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( rSet );
+
+    BOOL bApplyCharUnit = GetApplyCharUnit( rSet );
+
+    if ( bApplyCharUnit )
+        eFUnit = FUNIT_CHAR;
     SetFieldUnit( aLeftIndent, eFUnit );
     SetFieldUnit( aRightIndent, eFUnit );
     SetFieldUnit( aFLineIndent, eFUnit );
+    if ( bApplyCharUnit )
+        eFUnit = FUNIT_LINE;
     SetFieldUnit( aTopDist, eFUnit );
     SetFieldUnit( aBottomDist, eFUnit );
+    eFUnit = FUNIT_POINT;
     SetFieldUnit( aLineDistAtMetricBox, eFUnit );
 
     USHORT _nWhich = GetWhich( SID_ATTR_LRSPACE );
