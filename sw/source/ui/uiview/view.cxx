@@ -117,6 +117,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -950,9 +951,21 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pVRuler->SetZoom( aZoomFract );
     pHRuler->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));
     FieldUnit eMetric = pUsrPref->GetHScrollMetric();
-    pHRuler->SetUnit( eMetric );
+
+    BOOL bApplyCharUnit = pUsrPref->IsApplyCharUnit();
+    if ( bApplyCharUnit )
+        pHRuler->SetUnit( FUNIT_CHAR );
+    else
+        pHRuler->SetUnit( eMetric );
+
     eMetric = pUsrPref->GetVScrollMetric();
-    pVRuler->SetUnit( eMetric );
+    if ( bApplyCharUnit )
+        pVRuler->SetUnit(FUNIT_LINE);
+    else
+        pVRuler->SetUnit( eMetric );
+
+        pHRuler->SetCharWidth( 371 );  // default character width
+        pVRuler->SetLineHeight( 551 );  // default line height
 
     // DocShell setzen
     pDocSh->SetView( this );

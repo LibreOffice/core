@@ -736,6 +736,19 @@ String GetAppLangDateTimeString( const DateTime& rDT )
     return sRet;
 }
 
+/*----------------------------------------------------------------------------
+ * add a new function which can get and set the current "SID_ATTR_APPLYCHARUNIT" value
+ *---------------------------------------------------------------------------*/
+BOOL HasCharUnit( BOOL bWeb)
+{
+    return SW_MOD()->GetUsrPref(bWeb)->IsApplyCharUnit();
+}
+
+void SetApplyCharUnit(BOOL bApplyChar, BOOL bWeb)
+{
+    SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
+}
+
 /*-- 26.01.2006 08:06:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/

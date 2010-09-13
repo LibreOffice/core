@@ -76,7 +76,7 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
-    Window*         aControls[18];
+    Window*         aControls[20];
 
     sal_Int32       m_nRubyUserValue;
     sal_Bool        m_bRubyUserValue;

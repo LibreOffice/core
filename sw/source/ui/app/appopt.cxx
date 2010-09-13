@@ -139,6 +139,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     FN_PARAM_WRTSHELL,      FN_PARAM_WRTSHELL,
                                     FN_PARAM_ADDPRINTER,    FN_PARAM_ADDPRINTER,
                                     SID_ATTR_METRIC,        SID_ATTR_METRIC,
+                                    SID_ATTR_APPLYCHARUNIT, SID_ATTR_APPLYCHARUNIT,
                                     SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
                                     RES_BACKGROUND,         RES_BACKGROUND,
                                     SID_HTML_MODE,          SID_HTML_MODE,
@@ -379,6 +380,15 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
     }
+
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT,
+                                                    FALSE, &pItem ) )
+    {
+        SFX_APP()->SetOptions(rSet);
+        const SfxBoolItem* pCharItem = (const SfxBoolItem*)pItem;
+        ::SetApplyCharUnit(pCharItem->GetValue(), !bTextDialog);
+    }
+
     if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC,
                                                     FALSE, &pItem ) )
     {

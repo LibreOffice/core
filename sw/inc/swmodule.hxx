@@ -169,6 +169,8 @@ public:
     //default page mode for text grid
     void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
 
+    void ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb);  // apply_char_unit
+
     // ConfigItems erzeugen
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
     SwPrintOptions*     GetPrtOptions(sal_Bool bWeb);

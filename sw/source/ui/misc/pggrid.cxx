@@ -113,7 +113,9 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aControls[14] =&aPrintCB;
     aControls[15] =&aColorFT;
     aControls[16] =&aColorLB;
-    aControls[17] =0;
+    aControls[17] =&aLinesRangeFT;
+    aControls[18] =&aCharsRangeFT;
+    aControls[19] =0;
 
     Link aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
     aCharsPerLineNF.SetUpHdl(aLink);
@@ -309,6 +311,10 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         aGridItem.SetPrintGrid(aPrintCB.IsChecked());
         aGridItem.SetColor(aColorLB.GetSelectEntryColor());
         rSet.Put(aGridItem);
+/// Amelia
+        SwView * pView = ::GetActiveView();
+        pView->GetHLineal().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
+        pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
 }
 /* -----------------------------08.02.2002 10:54------------------------------
 
@@ -413,6 +419,10 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             long nHeight = static_cast< sal_Int32 >(m_aPageSize.Height() / aLinesPerPageNF.GetValue());
             aTextSizeMF.SetValue(aTextSizeMF.Normalize(nHeight), FUNIT_TWIP);
             aRubySizeMF.SetValue(0, FUNIT_TWIP);
+            String aMaxLinesFTStr = String::CreateFromAscii("( 1 - ");
+            aMaxLinesFTStr += String::CreateFromInt32(aLinesPerPageNF.GetValue());
+            aMaxLinesFTStr += String::CreateFromAscii(" )");
+            aLinesRangeFT.SetText( aMaxLinesFTStr );
 
             m_nRubyUserValue = nHeight;
             m_bRubyUserValue = sal_True;
@@ -421,6 +431,10 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
         {
             long nWidth = static_cast< sal_Int32 >(m_aPageSize.Width() / aCharsPerLineNF.GetValue());
             aCharWidthMF.SetValue(aCharWidthMF.Normalize(nWidth), FUNIT_TWIP);
+            String aMaxCharsFTStr = String::CreateFromAscii("( 1 - ");
+            aMaxCharsFTStr += String::CreateFromInt32(aCharsPerLineNF.GetValue());
+            aMaxCharsFTStr += String::CreateFromAscii(" )");
+            aCharsRangeFT.SetText( aMaxCharsFTStr );
         }
     }
     GridModifyHdl(0);
@@ -436,7 +450,6 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
         if (&aTextSizeMF == pField)
         {
             sal_Int32 nTextSize = static_cast< sal_Int32 >(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
-            aCharsPerLineNF.SetValue(m_aPageSize.Width() / nTextSize);
             m_bRubyUserValue = sal_False;
         }
         //set maximum line per page
@@ -454,14 +467,22 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
             sal_Int32 nTextSize = static_cast< sal_Int32 >(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
             aLinesPerPageNF.SetValue(m_aPageSize.Height() / nTextSize);
             m_bRubyUserValue = sal_False;
+            String aRangesStr = String::CreateFromAscii("( 1 - ");
+            aRangesStr += String::CreateFromInt32( m_aPageSize.Height() / nTextSize );
+            aRangesStr += String::CreateFromAscii(" )");
+            aLinesRangeFT.SetText( aRangesStr );
         }
         else if (&aCharWidthMF == pField)
         {
             sal_Int32 nTextWidth = static_cast< sal_Int32 >(aCharWidthMF.Denormalize(aCharWidthMF.GetValue(FUNIT_TWIP)));
+            sal_Int32 nMaxChar = 45 ;
             if (nTextWidth)
-                aCharsPerLineNF.SetValue(m_aPageSize.Width() / nTextWidth);
-            else
-                aCharsPerLineNF.SetValue( 45 );
+                nMaxChar = m_aPageSize.Width() / nTextWidth;
+            aCharsPerLineNF.SetValue( nMaxChar );
+            String aCharRangeStr = String::CreateFromAscii("( 1 - ");
+            aCharRangeStr += String::CreateFromInt32( nMaxChar );
+            aCharRangeStr += String::CreateFromAscii(" )");
+            aCharsRangeFT.SetText( aCharRangeStr );
         }
         //rubySize is disabled
     }
@@ -489,6 +510,7 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
     {
         aCharsPerLineFT.Enable(sal_False);
         aCharsPerLineNF.Enable(sal_False);
+        aCharsRangeFT.Enable(sal_False);
         aCharWidthFT.Enable(sal_False);
         aCharWidthMF.Enable(sal_False);
     }

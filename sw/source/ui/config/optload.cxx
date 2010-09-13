@@ -220,6 +220,12 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = TRUE;
     }
 
+    if(aUseCharUnit.IsChecked() != aUseCharUnit.GetSavedValue())
+    {
+        rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, aUseCharUnit.IsChecked()));
+        bRet = TRUE;
+    }
+
     sal_Bool bIsSquaredPageModeFlag = aUseSquaredPageMode.IsChecked();
     if ( bIsSquaredPageModeFlag != aUseSquaredPageMode.GetSavedValue() )
     {
@@ -306,6 +312,17 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         aUseSquaredPageMode.Check( bSquaredPageMode );
             aUseSquaredPageMode.SaveValue();
     }
+
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT, FALSE, &pItem))
+    {
+        BOOL bUseCharUnit = ((const SfxBoolItem*)pItem)->GetValue();
+        aUseCharUnit.Check(bUseCharUnit);
+    }
+    else
+    {
+        aUseCharUnit.Check(pUsrPref->IsApplyCharUnit());
+    }
+    aUseCharUnit.SaveValue();
 }
 /*-----------------13.01.97 14.44-------------------
     Metric des Deftabstops umschalten

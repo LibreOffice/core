@@ -153,6 +153,7 @@ class SwMasterUsrPref : public SwViewOption
     SwCursorConfig      aCursorConfig;
     SwWebColorConfig*   pWebColorConfig;
 
+    sal_Bool bApplyCharUnit; // apply_char_unit
 public:
     SwMasterUsrPref(BOOL bWeb);
     ~SwMasterUsrPref();
@@ -253,6 +254,17 @@ public:
                     if(!bNoModify)
                         aLayoutConfig.SetModified();
                 }
+
+    sal_Bool    IsApplyCharUnit() const
+    {
+        return bApplyCharUnit;
+    }
+    void   SetApplyCharUnit(BOOL bSet, sal_Bool bNoModify = sal_False)
+    {
+        bApplyCharUnit = bSet;
+        if(!bNoModify)
+            aLayoutConfig.SetModified();
+    }
 
     sal_Int32   GetDefTab() const { return nDefTab;}
     void        SetDefTab( sal_Int32  nSet, sal_Bool bNoModify = sal_False )

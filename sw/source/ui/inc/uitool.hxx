@@ -73,6 +73,9 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 SW_DLLPUBLIC FieldUnit  GetDfltMetric(BOOL bWeb);
 void        SetDfltMetric(FieldUnit eMetric, BOOL bWeb);
 
+SW_DLLPUBLIC BOOL HasCharUnit( BOOL bWeb );
+void SetApplyCharUnit(BOOL bApplyChar, BOOL bWeb);
+
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE, BOOL bWithDefault = FALSE);
 

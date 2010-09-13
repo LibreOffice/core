@@ -308,6 +308,63 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb 
         pTmpView = SwModule::GetNextView(pTmpView);
     }
 }
+
+/*-------------------------------------------------
+set the usrpref 's char unit attribute and set ruler
+'s unit as char if the "apply char unit" is checked
+--------------------------------------------------*/
+void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
+{
+    SwMasterUsrPref* pPref;
+    if(bWeb)
+    {
+        if(!pWebUsrPref)
+        GetUsrPref(sal_True);
+        pPref = pWebUsrPref;
+    }
+    else
+    {
+        if(!pUsrPref)
+        GetUsrPref(sal_False);
+        pPref = pUsrPref;
+    }
+    BOOL  bOldApplyCharUnit = pPref->IsApplyCharUnit();
+    BOOL    bHasChanged = FALSE;
+    if(bOldApplyCharUnit != bApplyChar)
+    {
+        pPref->SetApplyCharUnit(bApplyChar);
+        bHasChanged = TRUE;
+    }
+
+    if( !bHasChanged )
+        return;
+
+    FieldUnit eHScrollMetric = pPref->IsHScrollMetric() ? pPref->GetHScrollMetric() : pPref->GetMetric();
+    FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : pPref->GetMetric();
+    if(bApplyChar)
+    {
+        eHScrollMetric = FUNIT_CHAR;
+        eVScrollMetric = FUNIT_LINE;
+    }
+    else
+    {
+        eHScrollMetric = FUNIT_CM;
+        eVScrollMetric = FUNIT_CM;
+    }
+    SwView* pTmpView = SwModule::GetFirstView();
+    // fuer alle MDI-Fenster das Lineal umschalten
+    while(pTmpView)
+    {
+        if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
+        {
+            pTmpView->ChangeVLinealMetric(eVScrollMetric);
+            pTmpView->ChangeTabMetric(eHScrollMetric);
+        }
+
+        pTmpView = SwModule::GetNextView(pTmpView);
+    }
+}
+
 /*-----------------13.11.96 11.57-------------------
 
 --------------------------------------------------*/
