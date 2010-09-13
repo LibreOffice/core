@@ -51,6 +51,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <svx/ruler.hxx>
 #include <pggrid.hxx>
 #include <tgrditem.hxx>
 #include <pggrid.hrc>
@@ -74,10 +75,12 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aLayoutFL               (this, SW_RES(FL_LAYOUT          )),
     aLinesPerPageFT         (this, SW_RES(FT_LINESPERPAGE    )),
     aLinesPerPageNF         (this, SW_RES(NF_LINESPERPAGE    )),
+    aLinesRangeFT           (this, SW_RES(FT_LINERANGE    )),
     aTextSizeFT             (this, SW_RES(FT_TEXTSIZE        )),
     aTextSizeMF             (this, SW_RES(MF_TEXTSIZE        )),
     aCharsPerLineFT         (this, SW_RES(FT_CHARSPERLINE    )),
     aCharsPerLineNF         (this, SW_RES(NF_CHARSPERLINE    )),
+    aCharsRangeFT           (this, SW_RES(FT_CHARRANGE       )),
     aCharWidthFT            (this, SW_RES(FT_CHARWIDTH        )),
     aCharWidthMF            (this, SW_RES(MF_CHARWIDTH        )),
     aRubySizeFT             (this, SW_RES(FT_RUBYSIZE        )),

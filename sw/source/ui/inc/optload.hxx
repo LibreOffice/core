@@ -68,6 +68,7 @@ private:
     FixedText   aTabFT;
     MetricField aTabMF;
     CheckBox    aUseSquaredPageMode;
+    CheckBox    aUseCharUnit;
 
     SwWrtShell* pWrtShell;
     sal_Bool    bHTMLMode;

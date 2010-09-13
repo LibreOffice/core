@@ -54,12 +54,14 @@ class SwTextGridPage: public SfxTabPage
 
     FixedText       aLinesPerPageFT;
     NumericField    aLinesPerPageNF;
+    FixedText       aLinesRangeFT;
 
     FixedText       aTextSizeFT;
     MetricField     aTextSizeMF;
 
     FixedText       aCharsPerLineFT;
     NumericField    aCharsPerLineNF;
+    FixedText       aCharsRangeFT;
 
     FixedText       aCharWidthFT;
     MetricField     aCharWidthMF;

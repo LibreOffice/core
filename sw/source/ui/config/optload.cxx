@@ -77,6 +77,10 @@
 
 using namespace ::com::sun::star;
 
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svl/eitem.hxx>
+#endif
+
 /* -----------------22.10.98 15:12-------------------
  *
  * --------------------------------------------------*/
@@ -100,6 +104,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aTabFT              ( this, SW_RES( FT_TAB ) ),
     aTabMF              ( this, SW_RES( MF_TAB ) ),
     aUseSquaredPageMode ( this, SW_RES( CB_USE_SQUARE_PAGE_MODE ) ),
+    aUseCharUnit             ( this , SW_RES( CB_USE_CHAR_UNIT ) ),
 
     pWrtShell   ( NULL ),
     bHTMLMode   ( FALSE ),
@@ -122,6 +127,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             case FUNIT_POINT:
             case FUNIT_PICA:
             case FUNIT_INCH:
+            case FUNIT_CHAR:
             {
                 // nur diese Metriken benutzen
                 USHORT nPos = aMetricLB.InsertEntry( sMetric );

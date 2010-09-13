@@ -176,14 +176,25 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
             case FUNIT_POINT:
             case FUNIT_PICA:
             case FUNIT_INCH:
+            case FUNIT_CHAR:    // add two units , 'character' and 'line' , their ticks are not fixed
+            case FUNIT_LINE:
             {
                 // nur diese Metriken benutzen
-                USHORT nPos = aMetricLB.InsertEntry( sMetric );
-                aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
-                aVMetric.InsertEntry( sMetric );
-                aVMetric.SetEntryData( nPos, (void*)(long)eFUnit );
-                aHMetric.InsertEntry( sMetric );
-                aHMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                                // a horizontal ruler has not the 'line' unit
+                                // there isn't 'line' unit in HTML format
+                                if ( eFUnit != FUNIT_LINE )
+                                {
+                        USHORT nPos = aMetricLB.InsertEntry( sMetric );
+                        aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
+                            aHMetric.InsertEntry( sMetric );
+                                    aHMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                                }
+                                // a vetical ruler has not the 'character' unit
+                if ( eFUnit != FUNIT_CHAR )
+                {
+                            USHORT nPos = aVMetric.InsertEntry( sMetric );
+                            aVMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                }
             }
             default:;//prevent warning
         }
