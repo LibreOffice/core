@@ -45,6 +45,7 @@
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/svtdata.hxx>
+#include <tools/wintypes.hxx>
 
 #ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
