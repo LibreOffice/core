@@ -45,7 +45,7 @@ abstract public class EnhancedComplexTestCase extends ComplexTestCase implements
 private void callEntry(String _sEntry, ParameterHelper _aParam)
 {
     // log.println("- next file is: ------------------------------");
-    log.println("File: " + _sEntry);
+    log.println("      File: " + _sEntry);
     // TODO: check if 'sEntry' is a guilty document.
     File aFile = new File(_aParam.getInputPath());
     String sPath = _aParam.getInputPath();
