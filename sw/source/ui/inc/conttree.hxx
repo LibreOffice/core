@@ -30,6 +30,9 @@
 #include <svtools/svtreebx.hxx>
 #include "swcont.hxx"
 
+#include<map>
+//using namespace std;
+
 class SwWrtShell;
 class SwContentType;
 class SwNavigationPI;
@@ -73,6 +76,8 @@ class SwContentTree : public SvTreeListBox
     SwWrtShell*         pHiddenShell;   // gedropptes Doc
     SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
     SwNavigationConfig* pConfig;
+
+    std::map< void*, sal_Bool > mOutLineNodeMap;
 
     sal_Int32           nActiveBlock;
     USHORT              nHiddenBlock;
