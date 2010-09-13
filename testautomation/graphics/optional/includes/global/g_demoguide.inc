@@ -224,10 +224,8 @@ testcase t_Interoperability
     
     '///Open PowerPoint presentation
     printlog "Open PowerPoint presentation"
-    hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/dotNetOverview.ppt"))
+    hFileOpenLocally( gTesttoolPath + "graphics/required/input/dotNetOverview.ppt" )
 
-    Call sMakeReadOnlyDocumentEditable
-    
     'Save the name of the origin background (taken from last slide)
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<END>"

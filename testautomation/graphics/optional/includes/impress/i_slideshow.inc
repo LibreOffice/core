@@ -29,27 +29,16 @@
 '*
 '* short description :
 '*
-'*******************************************************************
-'*
-' #1 tSlideShowSlideShow
-' #1 tSlideShowRehearseTimings
-' #1 tSlideShowSlideShowSettings
-' #1 tSlideShowCustomSlideShow
-' #1 tSlideShowSlideTransition
-' #1 tSlideShowShowHideSlide
-'*
 '\******************************************************************
+
 testcase tSlideShowSlideShow
 
     dim bLoaded as boolean
     dim i as integer
 
     '/// open file 'graphics\\input\\diashow.odp' ///'
-    hFileOpen  ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
+    hFileOpenLocally( gTesttoolPath + "graphics\required\input\diashow.odp" )
     sleep 30
-
-    printlog "check if the document is writable"
-    sMakeReadOnlyDocumentEditable
 
    bLoaded = false
 
@@ -292,10 +281,8 @@ testcase tSlideShowSlideShowSettings
 
    bLoaded = false
    '/// open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides) ///'
-   hFileOpen   ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
+   hFileOpenLocally( gTesttoolPath + "graphics\required\input\diashow.odp" )
    sleep 10
-   printlog "check if the document is writable"
-   sMakeReadOnlyDocumentEditable
 
    try
       Kontext "DocumentImpress"

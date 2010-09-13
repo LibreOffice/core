@@ -391,24 +391,15 @@ testcase tDocumentFilename
 		goto endsub
 	end if
 	
-	Dim  sOriginalFile as String
 	Dim  sTestFile     as String
 	Dim  sFilename(4)  as String
 	Dim  i             as Integer
 	
-	sTestFile    = Convertpath (gOfficepath + "user\work\pageTest.sxw")
-	sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
+	sTestFile = gTesttoolpath & "writer\optional\input\fields\pageTest.sxw"
 	
 	sFilename(0) = "pageTest.sxw"
 	sFilename(1) = "pageTest"
-	sFilename(2) = Convertpath (gOfficepath + "user\work\")
+	sFilename(2) = Convertpath( gOfficepath + "user\work\" )
 	sFilename(3) = sTestFile
 	
 	printlog "Insert/Fields/Other/Document / File name"
@@ -867,22 +858,12 @@ endcase
 testcase tDocumentStatistics
 
   Dim sTestFile     as String
-  Dim sOriginalFile as string
   Dim sStatistics() as String
   Dim sType as string
   Dim i             as Integer
 
   sStatistics = Array( "2", "2", "3", "13", "2", "2", "1" )
-
-    sTestFile    = Convertpath (gOfficepath + "user\work\statisticsTest.sxw")
-    sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
-    ' document has to be copied to local file system to avoid opening a read-only file
-    ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-    FileCopy (sOriginalFile, sTestFile)
-    if FileExists ( sTestFile ) = false then
-        Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-        goto endsub
-    end if
+  sTestFile= Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
 
   printlog "Insert/Fields/Other/Document / Statistics"
  '/// <b> Insert/Fields/Other/Document / Statistics </b>
@@ -928,7 +909,6 @@ endcase
 testcase tDocumentTemplate
 
     Dim sTestFile     as String
-    Dim sOriginalFile as string
     Dim sDirectory    as String
     Dim oDirectory    as String
     Dim sLanguage     as String
@@ -937,15 +917,7 @@ testcase tDocumentTemplate
     Dim i             as Integer
     
     sLanguage    = fGetDirLanguage()
-    sTestFile    = Convertpath (gOfficepath + "user\work\diploma.ott")
-    sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\diploma.ott")
-    ' document has to be copied to local file system to avoid opening a read-only file
-    ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-    FileCopy (sOriginalFile, sTestFile)
-    if FileExists ( sTestFile ) = false then
-        Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-        goto endsub
-    end if
+    sTestFile = gTesttoolpath + "writer\optional\input\fields\diploma.ott"
     
     sResult(0)   = fGetCateGory()
     sResult(1)   = "diploma.ott"

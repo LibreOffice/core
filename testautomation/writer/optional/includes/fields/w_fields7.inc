@@ -182,7 +182,6 @@ testcase tL10NtestDate
     end if
     
     Dim sTestFile    as String
-    Dim sOriginalFile as string
     Dim sDate()      as String
     Dim iCountry()   as Integer
     Dim i , j        as Integer
@@ -215,17 +214,7 @@ testcase tL10NtestDate
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-  	sTestFile   = Convertpath (gOfficepath + "user\work\Date.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
-    
-    
+	sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
     sDate  = Array( _
            "Tuesday, August 3, 2004"    , _
            "mardi 3 août 2004"    , _
@@ -304,7 +293,6 @@ testcase tL10NtestTime
     end if
 
     Dim sTestFile as String
-    Dim sOriginalFile as string
     Dim sTime() as String
     Dim iCountry() as Integer
     Dim i as Integer
@@ -338,17 +326,8 @@ testcase tL10NtestTime
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-  	sTestFile   = Convertpath (gOfficepath + "user\work\Time.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Time.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
-    
-    
+
+	sTestFile = gTesttoolpath + "writer\optional\input\fields\Time.sxw"
     sTime  = Array( _
                "04:46:08 PM"     , _
                "04:46:08 PM"     , _

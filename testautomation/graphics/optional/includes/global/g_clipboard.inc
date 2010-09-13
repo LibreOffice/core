@@ -45,7 +45,7 @@ testcase tiEditUndo
     Dim sDatei as string
     Dim Ueber_Text_1 as string
     
-    if (gApplication = "IMPRESS") then 
+    if ( gApplication = "IMPRESS" ) then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -53,10 +53,7 @@ testcase tiEditUndo
     
     sDatei = gTesttoolPath + "graphics\required\input\leer."+ExtensionString
     
-    hFileOpen ConvertPath (sDatei)
-    sleep 5
-    printlog "Checking for readonly state. If so, make it editable."
-    sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sDatei )
 
     hTypeKeys "<TAB><TAB>"
     sleep 3

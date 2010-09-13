@@ -264,23 +264,13 @@ testcase tDocInformationUserDefined
     QAErrorLog "#i112077#Tabpage 'Custom properties' has no declaration"
     goto endsub
 	Dim sTestFile as String
-	Dim sOriginalFile as string
 	Dim sVarResult() as String
 	Dim sFixResult() as String
 	Dim i as integer
 	Dim j as Integer
 	
 	j = UBound(sVarResult)
-	sTestFile  = Convertpath (gOfficepath + "user\work\fields_docinfos.sxw")
-	sOriginalFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
-	
+	sTestFile = gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw"
 	sVarResult = Array( _
                       "A1"     , _
                       "B2"     , _
@@ -344,8 +334,6 @@ endcase
 
 testcase tDocInformationCreated
 
-	Dim sTestFile     as String
-	Dim sOriginalFile as String	
 	Dim sFirstName    as String
 	Dim sLastName     as String
 	Dim sFirstName1   as String
@@ -355,15 +343,7 @@ testcase tDocInformationCreated
 	Dim i as Integer
 	
 	sFirstName1 = "Test1" : sLastName1 = "Test2"
-	sTestFile   = Convertpath (gOfficePath + "user\work\fields_docinfos.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
+	sTestFile   = gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw"
 	
 	sVarResult(0) =  sFirstName1 + " " + sLastName1
 	sVarResult(1) =  fGetDate1(Date)
@@ -458,7 +438,6 @@ endcase
 testcase tDocInformationModified
 
 	Dim sTestFile     as String
-	Dim sOriginalFile as String
 	Dim sSaveasFile   as String
 	Dim sFirstName    as String
 	Dim sLastName     as String
@@ -469,15 +448,7 @@ testcase tDocInformationModified
 	Dim i             as Integer
 	
 	sFirstName1 = "Test1" : sLastName1 = "Test2"
-	sTestFile   = Convertpath (gOfficePath + "user\work\fields_docinfos.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
+	sTestFile   = gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw"
 	sSaveasFile = ConvertPath (gOfficePath + "user\work\fields_docinfos1.sxw" )
 	
 	sVarResult(0) =  sFirstName1 + " " + sLastName1
@@ -595,7 +566,6 @@ testcase tDocInformationModifiedSavefile
 	goto endsub
 	
 	Dim sTestFile     as String
-	Dim sOriginalFile as string
 	Dim sSaveasFile   as String
 	Dim sFirstName    as String
 	Dim sLastName     as String
@@ -606,15 +576,7 @@ testcase tDocInformationModifiedSavefile
 	Dim i             as Integer
 	
 	sFirstName1 = "Test1" : sLastName1 = "Test2"
-	sTestFile   = Convertpath (gOfficePath + "user\work\fields_docinfos.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
+	sTestFile   = gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw"
 	sSaveasFile = ConvertPath (gOfficePath + "user\work\fields_docinfos1.sxw" )
 	
 	sVarResult(0) =  sFirstName1 + " " + sLastName1
@@ -715,7 +677,6 @@ endcase
 testcase tDocInformationPrinted
 
 	Dim sTestFile     as String
-	Dim sOriginalFile as String
 	Dim sFirstName    as String
 	Dim sLastName     as String
 	Dim sFirstName1   as String
@@ -725,17 +686,7 @@ testcase tDocInformationPrinted
 	Dim i             as Integer
 	
 	sFirstName1 = "Test1" : sLastName1 = "Test2"
-	sTestFile   = Convertpath (gOfficePath + "user\work\fields_docinfos.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
-
-
+	sTestFile   = gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw"
 	sVarResult(0) =  sFirstName1 + " " + sLastName1
 	sVarResult(1) =  fGetDate1(Date)
 	
@@ -842,7 +793,6 @@ endcase
 testcase tDocInformationRevisionnumber
 
 	Dim sTestFile   as String
-	Dim sOriginalFile as string
 	Dim sSaveasFile as String
 	Dim sFirstName  as String
 	Dim sLastName   as String
@@ -854,15 +804,7 @@ testcase tDocInformationRevisionnumber
 	sFirstName1 = "Test1" : sLastName1 = "Test2"
 	sVarResult  = "17"    : sFixResult = "4"
 
-  	sTestFile   = Convertpath (gOfficePath + "user\work\fields_docinfos.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
+	sTestFile   = gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw"
 	sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformationRevisionnumber.sxw" )
 	
 	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
@@ -947,21 +889,12 @@ endcase
 testcase tDocInformationTotaleditingtime
 
 	Dim sTestFile   as String
-	Dim sOriginalFile	as string
 	Dim sSaveasFile as String
 	Dim sVarResult  as String
 	Dim sFixResult  as String
 	
 	sFixResult  = "00:29:05"
-  	sTestFile   = Convertpath (gOfficePath + "user\work\fields_docinfos.sxw")
-	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
-	' document has to be copied to local file system to avoid opening a read-only file
-	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
-	FileCopy (sOriginalFile, sTestFile)
-	if FileExists ( sTestFile ) = false then
-		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
-		goto endsub
-	end if
+	sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
 	sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformationRevisionnumber.sxw" )
 
 	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )

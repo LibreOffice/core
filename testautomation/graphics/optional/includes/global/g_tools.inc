@@ -107,14 +107,13 @@ testcase tiToolsThesaurus
     
     PrintLog "Thesaurus with 1 word: " + sWord
 
-    if( Ucase(gApplication) = "DRAW" ) then
+    if( gApplication = "DRAW" ) then
         sExt = ".odg"
-    elseif( Ucase(gApplication) = "IMPRESS" ) then
+    elseif( gApplication = "IMPRESS" ) then
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-    Call sMakeReadOnlyDocumentEditable()
+    Call hFileOpenLocally(gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
@@ -280,16 +279,15 @@ testcase tiToolsThesaurusContextMenu
 
     PrintLog "Thesaurus with 1 word: " + sWord
 
-    if( Ucase(gApplication) = "DRAW" ) then
+    if( gApplication = "DRAW" ) then
         sExt = ".odg"
         Kontext "DrawDocument"
-    elseif( Ucase(gApplication) = "IMPRESS" ) then
+    elseif( gApplication = "IMPRESS" ) then
         sExt = ".odp"
         Kontext "ImpressDocument"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
@@ -384,14 +382,14 @@ testcase tiToolsHyphenation2
   dim sDraw as string
   dim sFile as string
   PrintLog "- Tools/Hyphenation2"
-   Select Case Ucase(gApplication)
+   Select Case gApplication
       case "DRAW"         : sExt = ".odg"
       case "IMPRESS"      : sExt = ".odp"
    end select
 
    if ((not bAsianLan) AND (iSprache <> 07)) then
        sFile = gTesttoolpath + "graphics\required\input\silben_"+iSprache+sExt
-       Call hFileOpen (sFile)
+       hFileOpenLocally( sFile )
    endif
 
    select case iSprache					'/// Open prepared document ///'
@@ -411,15 +409,13 @@ testcase tiToolsHyphenation2
        case else : if bAsianLan then
              printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
              printlog " :-) will use English instead"
-             Call hFileOpen (gTesttoolpath + "graphics\required\input\silben_"+"1"+sExt)
+             hFileOpenLocally( gTesttoolpath + "graphics\required\input\silben_"+"1"+sExt )
              DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
           else
              Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here and create file: "+sFile
              hNewDocument
           endif
    end select
-
-   Call sMakeReadOnlyDocumentEditable
 
   printlog "   - Test hyphenation"
    EditSelectAll '/// Press CTRL + A to select all ///'
