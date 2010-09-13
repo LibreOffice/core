@@ -44,8 +44,7 @@ testcase tIBIS111099
     Printlog "Copy testdocument locally"
     app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls"),gOfficePath + ConvertPath("user/work/111099.xls")
     printlog " Open the test document"
-    Call hFileOpen(testdoc)
-    Call sMakeReadOnlyDocumentEditable    
+    hFileOpenLocally(testdoc)
     '/// Invoke Control Toolbar
     '///+ Try to click control 'Push Button'
     '///+> <ul><li>Click successful - BUG #111099#</li>
@@ -76,8 +75,7 @@ testcase tIBIS111158
     Printlog "Copy testdocument locally"
     app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls"),gOfficePath + ConvertPath("user/work/111158.xls")
     printlog " Open the test document"
-    Call hFileOpen(testdoc)
-    Call sMakeReadOnlyDocumentEditable      
+    hFileOpenLocally(testdoc)
     Kontext "Standardbar"
     '/// If 'Form Controls' toolbar is not visible: View / Toolbars / Form Controls     
     Call hToolbarSelect("CONTROLS", true)

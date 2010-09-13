@@ -224,11 +224,7 @@ testcase tArrayconstants02
     
     '///Load xls testdocument <i>gTestToolPath</i>/spreadsheet/optional/input/arrayconstants.xls
     printlog "Load xls testdocument <i>gTestToolPath</i>/spreadsheet/optional/input/arrayconstants.xls"
-    call hFileOpen ( sImportFile )
-    sleep(2)
-    '///If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    call hFileOpenLocally( sImportFile )
     
     '///Check that the cell contents of B4 is 1
     printlog "Check that the cell contents of B4 is 1"

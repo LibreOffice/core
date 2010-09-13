@@ -61,9 +61,6 @@ testcase tToolsSpellcheck
     
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
     hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\english.ods" )
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    'call sMakeReadOnlyDocumentEditable
     '/// Enter 'fgsdftk' in a cell
     printlog " Enter 'fgsdftk' in a cell"
     Kontext "DocumentCalc"
@@ -212,9 +209,6 @@ testcase tToolsHangulHanjaConversion
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\korean.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\korean.ods"
     hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\korean.ods" )
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    'call sMakeReadOnlyDocumentEditable
     '/// Select cell B1
     printlog " Select cell B1"
     Call fCalcSelectRange ("B1")
