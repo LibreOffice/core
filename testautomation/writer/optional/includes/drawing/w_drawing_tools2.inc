@@ -636,8 +636,8 @@ testcase  tGroup_12
     Call hCloseDocument
     
       PrintLog "- Open previous saved document "
-    Call hFileOpen (sDocument)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sDocument)
+    
     Kontext "DocumentWriter"
     Call gMouseClick(34,34)    'set focus in the group
     

@@ -642,9 +642,9 @@ testcase tInsertGraphic_10
     sleep(2)
 
     '/// Reload the file
-    Call hFileOpen(gOfficepath + "user\work\tInsertGraphic_5.odt")
+    hFileOpenLocally( gOfficepath + "user\work\tInsertGraphic_5.odt")
     sleep(2)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     '/// Check if the inserted graphics are still there
     Kontext "DocumentWriter"

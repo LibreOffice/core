@@ -94,8 +94,8 @@ testcase tSetReferenceNoSelection
   Call hNewDocument
 
   '/// Open test file pageTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -182,8 +182,8 @@ testcase tInsertReferencePage
   Call hNewDocument
 
   '/// Open test file pageTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -242,8 +242,8 @@ testcase tInsertReferenceChapter
   Call hNewDocument
 
   '/// Open test file chapterTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// Set curson to the 2nd line
    Call wTypeKeys "<MOD1 Home>"
@@ -685,8 +685,8 @@ testcase tInsertBookmarkPage
   Call hNewDocument
 
   '/// Open test file pageTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -743,8 +743,8 @@ testcase tInsertBookmarkChapter
   Call hNewDocument
 
   '/// Open test file chapterTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// Set curson to the 2nd line
    Call wTypeKeys "<MOD1 Home>"

@@ -243,9 +243,9 @@ testcase tFormatCharacter3
     Call hCloseDocument
     printlog "reopen previous saved document and check saved character format"    
     if gApplication = "WRITER" then
-        Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+        hFileOpenLocally(  gOfficePath + "user\work\format1.odt" )
     else
-        Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+        hFileOpenLocally(  gOfficePath + "user\work\format1.odm" )
     end if
     Call wTypeKeys "<Mod1 Home><Right>"
     Wait 500
@@ -579,9 +579,9 @@ testcase tFormatCharacter
 	Call hCloseDocument
 	printlog "re-open previous saved document"
 	if gApplication = "WRITER" then
-    	Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+    	hFileOpenLocally(  gOfficePath + "user\work\format1.odt" )
 	else
-  	    Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+  	    hFileOpenLocally(  gOfficePath + "user\work\format1.odm" )
 	end if
    	Call wTypeKeys "<Mod1 Home><Right>"
 	Wait 500

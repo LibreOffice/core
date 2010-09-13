@@ -67,8 +67,8 @@ testcase tDocInformationTitle
   Call hNewDocument
 
   '/// Open test file fields_docinfos.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// File / Properties / Description , input some
   '/// + new text in Title
@@ -119,8 +119,8 @@ testcase tDocInformationSubject
   Call hNewDocument
 
   '/// Open test file fields_docinfos.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// File / Properties / Description , input some
   '/// + text in Subject
@@ -171,8 +171,8 @@ testcase tDocInformationKeywords
   Call hNewDocument
 
   '/// Open test file fields_docinfos.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// File / Properties / Description , input some
   '/// + text in Keywords
@@ -223,8 +223,8 @@ testcase tDocInformationDescription
   Call hNewDocument
 
   '/// Open test file fields_docinfos.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// File / Properties / Description , input some
   '/// + text in Description
@@ -301,7 +301,7 @@ testcase tDocInformationUserDefined
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	
 	'/// File / Properties / Description , input some
 	'/// + text in Description
@@ -378,8 +378,8 @@ testcase tDocInformationCreated
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
-	Call sMakeReadOnlyDocumentEditable
+	hFileOpenLocally( sTestFile )
+	
 	
 	Call fFindWord ("Created")
 	Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
@@ -495,7 +495,7 @@ testcase tDocInformationModified
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	Call hFileSaveAsKill (sSaveAsFile)
 	
 	Call fFindWord ("Modified")
@@ -632,7 +632,7 @@ testcase tDocInformationModifiedSavefile
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	
 	Call fFindWord ("Modified")
 	Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
@@ -749,7 +749,7 @@ testcase tDocInformationPrinted
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	
 	Call fFindWord ("Last printed")
 	Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
@@ -873,7 +873,7 @@ testcase tDocInformationRevisionnumber
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	
 	'/// Change author to author : Test2 Test1
 	ToolsOptions
@@ -972,7 +972,7 @@ testcase tDocInformationTotaleditingtime
 	Call hNewDocument
 	
 	'/// Open test file fields_docinfos.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	
 	'/// Save the file as another file
 	Call hFileSaveAsKill(sSaveAsFile)

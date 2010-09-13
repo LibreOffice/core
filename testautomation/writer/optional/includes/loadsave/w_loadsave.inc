@@ -80,7 +80,7 @@ testcase tExportAllReadableFormatsIntoODF
 		if GetExtention ( sExportFile ) = "psw" then
 			QAErrorlog "#i102221#Pocket Word filter puts General I/O Error"
 		else
-			Call hFileOpen ( ImportFileList(i) )
+			hFileOpenLocally(  ImportFileList(i) )
 			printlog "-  done"
 	
 			Kontext "TextImport"

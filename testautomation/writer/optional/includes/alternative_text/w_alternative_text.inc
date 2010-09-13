@@ -106,7 +106,7 @@ testcase tPictureAlternativeText
 	Call hCloseDocument
 	
     printlog "- Reload"
-	Call hFileOpen ( gOfficePath + "user\work\tPictureAlternativeText.odt" )		
+	hFileOpenLocally(  gOfficePath + "user\work\tPictureAlternativeText.odt" )		
 	' select graphic
 	Call wTypeKeys ("<SHIFT F4>")
 	
@@ -190,7 +190,7 @@ testcase tFrameAlternativeText
 	Call hCloseDocument
 	
     printlog "- Reload"
-	Call hFileOpen ( gOfficePath + "user\work\tFrameAlternativeText.odt" )		
+	hFileOpenLocally(  gOfficePath + "user\work\tFrameAlternativeText.odt" )		
 	' select frame
 	Call wTypeKeys ("<SHIFT F4>")
 	
@@ -271,7 +271,7 @@ testcase tOLEAlternativeText
 	Call hCloseDocument
 	
     printlog "- Reload"
-	Call hFileOpen ( gOfficePath + "user\work\tOLEAlternativeText.odt" )		
+	hFileOpenLocally(  gOfficePath + "user\work\tOLEAlternativeText.odt" )		
 	' select OLE
 	Call wTypeKeys ("<SHIFT F4>")
 	

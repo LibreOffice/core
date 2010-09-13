@@ -59,7 +59,7 @@ testcase tToolsSpellcheckWithShortcut
     end if
 
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -150,7 +150,7 @@ testcase tToolsSpellcheckCorrect
 
     printlog " Open document where the formatting is set to the language we wish to test."
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     printlog " Insert some faulty text"
     Sleep 1
@@ -285,7 +285,7 @@ testcase tToolsSpellcheck1Mistake
 
     printlog " Open document where the formatting is set to the language we wish to test."
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     '/// Insert a sentence with one definded mistake and execute spellcheck ///
     Call wTypeKeys sErrorSampleText
@@ -387,8 +387,8 @@ testcase tToolsSpellcheckForward
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
             EditPaste
     else
-        Call hFileOpen(InsFile)
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally( InsFile)
+        
     end if
     '/// point cursor to beginning of document and execute spellcheck ///
     Call wTypeKeys "<Mod1 Home>"
@@ -561,8 +561,8 @@ testcase tToolsSpellcheckOnlyOneWord
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
             EditPaste
     else
-        Call hFileOpen(InsFile)
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally( InsFile)
+        
     end if
     Call wTypeKeys "<Mod1 Home>"
 
@@ -742,7 +742,7 @@ testcase tToolsSpellcheckAutomatic
     PrintLog "- Tools / Spellcheck / AutoSpellcheck"
     printlog " Open document where the formatting is set to the language we wish to test."
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     '/// Enable Auto-Spellcheck in options
     Call wEnableAutoSpellcheck ( true )
@@ -937,8 +937,8 @@ testcase tToolsSpellcheckChangeLanguageAttribute
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
         EditPaste
     else
-        Call hFileOpen(InsFile)
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally( InsFile)
+        
     end if
     Call wTypeKeys "<Mod1 Home>"
 
@@ -1135,8 +1135,8 @@ testcase tToolsSpellcheckButtonChange
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
         EditPaste
     else
-        Call hFileOpen(InsFile)
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally( InsFile)
+        
     end if
     Call wTypeKeys "<Mod1 Home>"
 
@@ -1202,8 +1202,8 @@ testcase tToolsSpellcheckButtonChangeAll
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
         EditPaste
     else
-        Call hFileOpen(InsFile)
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally( InsFile)
+        
     end if
     Call wTypeKeys "<Mod1 Home>"
 
@@ -1289,7 +1289,7 @@ testcase tToolsThesaurus
 
     printlog "Open new preformatted-writerdocument"
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     printlog "-  Thesaurus without a word"
     '/// Call Thesaurus without a written word ///
@@ -1323,7 +1323,7 @@ testcase tToolsThesaurus
 
     printlog " Open new preformatted-document where the formatting is set to the language we wish to test."
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
 
     Call wTypeKeys sWordInitial
     Call wTypeKeys "<Home><Right><Right>"
@@ -1445,7 +1445,7 @@ testcase tToolsThesaurusSynonyms
 
     printlog "Open new preformatted-writerdocument"
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    
     Call wTypeKeys sWordInitial
     Call wTypeKeys "<Shift Home>"
 

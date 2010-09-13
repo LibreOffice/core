@@ -938,7 +938,7 @@ testcase tToolsOptionsWriterCompatibility1
 
     printlog "- load previously saved document"
     Call hNewDocument
-    Call hFileOpen (gOfficePath + "user\work\tToolsOptionsWriterCompatibility1.odt")
+    hFileOpenLocally( gOfficePath + "user\work\tToolsOptionsWriterCompatibility1.odt")
 
     Printlog "check state of all checkboxes and uncheck all checkboxes"
     ToolsOptions
@@ -1010,8 +1010,8 @@ testcase tToolsOptionsWriterCompatibility2
     Call hNewDocument
     printlog "open document  ./writer/leve11/input/options/compatibility1.doc"
     printlog "check formatting of current opened document"
-    Call hFileOpen ( gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
+    
 
     Call wTypeKeys ("<Mod1 Home>")
     Call wTypeKeys ("<Down>")
@@ -1253,7 +1253,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     ExtrasOptionenDLG.Cancel
 
     printlog "Reload recently saved document"
-    Call hFileOpen (sDocument)
+    hFileOpenLocally( sDocument)
 
     printlog "Tools-Options-OOo Writer-Compatibility"
     ToolsOptions

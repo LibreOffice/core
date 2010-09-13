@@ -1233,7 +1233,7 @@ testcase tMasterDocToolsHyphenation
         hUseAsyncSlot( "EditPaste" )
     end if
 
-    Call sMakeReadOnlyDocumentEditable
+    
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")

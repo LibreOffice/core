@@ -291,7 +291,7 @@ testcase tUndoSpellcheck
     printlog "- Spellcheck: Autocheck"
     '/// new document ///
     hfileOpen (gTesttoolpath + "writer\optional\input\undo\spellcheck_undo.odt")
-    Call sMakeReadOnlyDocumentEditable
+    
     '/// Type "This is a testp<End>"
     Call wTypeKeys ( "<End>" )  'This is a testp
     '/// Select word' testp'

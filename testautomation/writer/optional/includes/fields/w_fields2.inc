@@ -319,8 +319,8 @@ testcase tDocumentChapter
   Call hNewDocument
 
   '/// Open test file chapterTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
    Call wTypeKeys "<MOD1 End><Return>"
 
@@ -416,7 +416,7 @@ testcase tDocumentFilename
 	Call hNewDocument
 	
 	'/// Open test file pageTest.sxw
-	Call hFileOpen(sTestFile)
+	hFileOpenLocally( sTestFile )
 	
 	Call wTypeKeys "<MOD1 Home>"
 	Call wTypeKeys "<End><Return>"
@@ -470,8 +470,8 @@ testcase tDocumentPage
   Call hNewDocument
 
   '/// Open test file pageTest.sxw which includes 3 pages
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally( sTestFile )
+   
 
   '/// Go to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -890,7 +890,7 @@ testcase tDocumentStatistics
   '/// Open test file statisticsTest.sxw which includes
   '/// 2 tables , 2 pictures , 22 paragraph , 1 object ,
   '/// 2 words , 12 characters and 2 pages
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
 
    Call wTypeKeys "<MOD1 Home><Down>"
 
@@ -958,7 +958,7 @@ testcase tDocumentTemplate
     '/// <b> Insert/Fields/Other/Document / Template </b>
      
     '/// Open test file diploma.ott
-    Call hFileOpen(sTestFile)
+    hFileOpenLocally( sTestFile )
     
     Call wTypeKeys "<MOD1 Home>"
     

@@ -852,7 +852,7 @@ testcase tTextframes_10
     '/// Open a test file
     '/// + This test file is designed for Anchor in gathering pages&columns test.
     '/// + There are 2 columns in the page. And the frame is in the second column.
-    Call hFileOpen(sTestFile1,false)
+    hFileOpenLocally( sTestFile1,false)
     
     
     'Press return to ensure the frame is in 2nd column
@@ -888,7 +888,7 @@ testcase tTextframes_10
     '/// + This test file is designed for Anchor in seperating
     '/// + pages&columns test.
     '/// + There are 2 pages. And the frame is in the second page.
-    Call hFileOpen(sTestFile2,false)
+    hFileOpenLocally( sTestFile2,false)
     
     
     'check if the frame is in the 2nd page

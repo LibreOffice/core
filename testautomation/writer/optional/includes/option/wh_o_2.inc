@@ -48,8 +48,8 @@ testcase tToolsOptionsHTMLPrint
     dim bRadioBut(4) as boolean         ' RadioButtons
     dim bTempRadioBut(4) as boolean
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\test.html" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\test.html" )
+    
     printlog "- Tools/Options/HTML: PrintHTML "
 
     printlog (" - save states ")
@@ -163,7 +163,7 @@ testcase tToolsOptionsHTMLPrint
     ' Is saved with document
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    Call hFileOpen(gOfficepath + "user\work\printtest.html")
+    hFileOpenLocally( gOfficepath + "user\work\printtest.html")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
