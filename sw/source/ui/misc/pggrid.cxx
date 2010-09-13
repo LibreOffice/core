@@ -259,6 +259,7 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
         GridTypeHdl(pButton);
         aSnapToCharsCB.Check(rGridItem.IsSnapToChars());
         aLinesPerPageNF.SetValue(rGridItem.GetLines());
+        SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
         m_nRubyUserValue = rGridItem.GetBaseHeight();
         m_bRubyUserValue = sal_True;
         aTextSizeMF.SetValue(aTextSizeMF.Normalize(m_nRubyUserValue), FUNIT_TWIP);
@@ -384,6 +385,12 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
         if ( m_bSquaredMode )
         {
             aCharsPerLineNF.SetValue(m_aPageSize.Width() / nTextSize);
+        aCharsPerLineNF.SetMax( aCharsPerLineNF.GetValue() );
+            aLinesPerPageNF.SetMax( m_aPageSize.Height() /
+        (   aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)) +
+                    aRubySizeMF.Denormalize(aRubySizeMF.GetValue(FUNIT_TWIP))));
+            SetLinesOrCharsRanges( aCharsRangeFT , aCharsPerLineNF.GetMax() );
+            SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
         }
         else
         {
@@ -393,8 +400,20 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
                 aCharsPerLineNF.SetValue(m_aPageSize.Width() / nTextWidth);
             else
                 aCharsPerLineNF.SetValue( 45 );
+        SetLinesOrCharsRanges( aCharsRangeFT , aCharsPerLineNF.GetMax() );
+        SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
         }
     }
+}
+/* -----------------------------30.05.2008 14:12------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue )
+{
+    String aFieldStr = String::CreateFromAscii("( 1 -");
+    aFieldStr += String::CreateFromInt32( nValue );
+    aFieldStr += String::CreateFromAscii(" )");
+    rField.SetText( aFieldStr );
 }
 /* -----------------------------06.02.2002 15:24------------------------------
 
@@ -430,6 +449,8 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
                     aRubySizeMF.Denormalize(aRubySizeMF.GetValue(FUNIT_TWIP))));
             aLinesPerPageNF.SetMax(nMaxLines);
         }
+        SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
+    SetLinesOrCharsRanges( aCharsRangeFT , aCharsPerLineNF.GetMax() );
     }
     else//in normal mode
     {
@@ -438,10 +459,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             long nHeight = static_cast< sal_Int32 >(m_aPageSize.Height() / aLinesPerPageNF.GetValue());
             aTextSizeMF.SetValue(aTextSizeMF.Normalize(nHeight), FUNIT_TWIP);
             aRubySizeMF.SetValue(0, FUNIT_TWIP);
-            String aMaxLinesFTStr = String::CreateFromAscii("( 1 - ");
-            aMaxLinesFTStr += String::CreateFromInt32(aLinesPerPageNF.GetValue());
-            aMaxLinesFTStr += String::CreateFromAscii(" )");
-            aLinesRangeFT.SetText( aMaxLinesFTStr );
+            SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
 
             m_nRubyUserValue = nHeight;
             m_bRubyUserValue = sal_True;
@@ -450,10 +468,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
         {
             long nWidth = static_cast< sal_Int32 >(m_aPageSize.Width() / aCharsPerLineNF.GetValue());
             aCharWidthMF.SetValue(aCharWidthMF.Normalize(nWidth), FUNIT_TWIP);
-            String aMaxCharsFTStr = String::CreateFromAscii("( 1 - ");
-            aMaxCharsFTStr += String::CreateFromInt32(aCharsPerLineNF.GetValue());
-            aMaxCharsFTStr += String::CreateFromAscii(" )");
-            aCharsRangeFT.SetText( aMaxCharsFTStr );
+            SetLinesOrCharsRanges( aCharsRangeFT , aCharsPerLineNF.GetMax() );
         }
     }
     GridModifyHdl(0);
@@ -477,6 +492,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
                 (   aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)) +
                     aRubySizeMF.Denormalize(aRubySizeMF.GetValue(FUNIT_TWIP))));
             aLinesPerPageNF.SetMax(nMaxLines);
+            SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
         }
     }
     else
@@ -486,10 +502,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
             sal_Int32 nTextSize = static_cast< sal_Int32 >(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
             aLinesPerPageNF.SetValue(m_aPageSize.Height() / nTextSize);
             m_bRubyUserValue = sal_False;
-            String aRangesStr = String::CreateFromAscii("( 1 - ");
-            aRangesStr += String::CreateFromInt32( m_aPageSize.Height() / nTextSize );
-            aRangesStr += String::CreateFromAscii(" )");
-            aLinesRangeFT.SetText( aRangesStr );
+            SetLinesOrCharsRanges( aLinesRangeFT , aLinesPerPageNF.GetMax() );
         }
         else if (&aCharWidthMF == pField)
         {
@@ -498,10 +511,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
             if (nTextWidth)
                 nMaxChar = m_aPageSize.Width() / nTextWidth;
             aCharsPerLineNF.SetValue( nMaxChar );
-            String aCharRangeStr = String::CreateFromAscii("( 1 - ");
-            aCharRangeStr += String::CreateFromInt32( nMaxChar );
-            aCharRangeStr += String::CreateFromAscii(" )");
-            aCharsRangeFT.SetText( aCharRangeStr );
+            SetLinesOrCharsRanges( aCharsRangeFT , aCharsPerLineNF.GetMax() );
         }
         //rubySize is disabled
     }
