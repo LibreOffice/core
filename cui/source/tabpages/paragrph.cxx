@@ -442,17 +442,25 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
     BOOL bApplyCharUnit = GetApplyCharUnit( rSet );
 
-    if ( bApplyCharUnit )
+    SvtCJKOptions aCJKOptions;
+    if(aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
         eFUnit = FUNIT_CHAR;
+
     SetFieldUnit( aLeftIndent, eFUnit );
     SetFieldUnit( aRightIndent, eFUnit );
     SetFieldUnit( aFLineIndent, eFUnit );
-    if ( bApplyCharUnit )
-        eFUnit = FUNIT_LINE;
-    SetFieldUnit( aTopDist, eFUnit );
-    SetFieldUnit( aBottomDist, eFUnit );
-    eFUnit = FUNIT_POINT;
-    SetFieldUnit( aLineDistAtMetricBox, eFUnit );
+    if ( eFUnit == FUNIT_CHAR )
+    {
+        SetFieldUnit( aTopDist, FUNIT_LINE );
+        SetFieldUnit( aBottomDist, FUNIT_LINE );
+        SetFieldUnit( aLineDistAtMetricBox, FUNIT_POINT );
+    }
+    else
+    {
+        SetFieldUnit( aTopDist, eFUnit );
+        SetFieldUnit( aBottomDist, eFUnit );
+        SetFieldUnit( aLineDistAtMetricBox, eFUnit );
+    }
 
     USHORT _nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxItemState eItemState = rSet.GetItemState( _nWhich );
@@ -544,7 +552,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
             else
             {
                 aTopDist.SetRelative();
-                SetFieldUnit( aTopDist, eFUnit );
+                if ( eFUnit == FUNIT_CHAR )
+                    SetFieldUnit( aTopDist, FUNIT_LINE );
+                else
+                    SetFieldUnit( aTopDist, eFUnit );
                 SetMetricValue( aTopDist, rOldItem.GetUpper(), eUnit );
             }
 
@@ -556,7 +567,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
             else
             {
                 aBottomDist.SetRelative();
-                SetFieldUnit( aBottomDist, eFUnit );
+                if ( eFUnit == FUNIT_CHAR )
+                    SetFieldUnit( aBottomDist, FUNIT_LINE );
+                else
+                    SetFieldUnit( aBottomDist, eFUnit );
                 SetMetricValue( aBottomDist, rOldItem.GetLower(), eUnit );
             }
         }
