@@ -279,10 +279,13 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
 
         // macro format = Container.Module.Procedure
         parseMacro( sMacroUrl, sContainer, sModule, sProcedure );
-        uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
         uno::Reference< container::XNameContainer > xPrjNameCache;
-        if ( xSF.is() )
-            xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+
+        // As long as service VBAProjectNameProvider isn't supported in the model, disable the createInstance call
+        // (the ServiceNotRegisteredException is wrongly caught in ScModelObj::createInstance)
+        //uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
+        //if ( xSF.is() )
+        //    xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
 
         std::vector< rtl::OUString > sSearchList;
 
