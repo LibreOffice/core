@@ -50,13 +50,11 @@ function fFunctionname ( sFunctionname_en as string ) as string
     use "global/tools/includes/required/t_doc2.inc" 
     const CFN = "qa:qatesttool:spreadsheet:tools:includes:c_l10n_tools.in:fFunctionname "
     
-    sloaddocument = Convertpath (gTesttoolPath + "spreadsheet\tools\input\Functionnames.ods" )
+    sloaddocument = gTesttoolPath & "spreadsheet\tools\input\Functionnames.ods"
         
     '///Load document with all functions <i>gTestToolPath</i>/spreadsheet/tools/input/Functionnames.ods
-    call hFileOpen ( sloaddocument )
+    hFileOpenLocally( sloaddocument )
     sleep (2)
-    '///Make sure that the file is editable
-    call sMakeReadOnlyDocumentEditable()
 
     '///Setting selection to A1 to avoid messagebox in Search and Replace dialog.
     call fCalcSelectRange ("A1")
@@ -145,13 +143,10 @@ function fError_l10n ( sError_en as string ) as string
     use "global/tools/includes/required/t_doc2.inc" 
     const CFN = "qa:qatesttool:spreadsheet:tools:includes:c_l10n_tools.in:fError_l10n "
     
-    sloaddocument = Convertpath (gTesttoolPath + "spreadsheet\tools\input\Errorcodes.ods" )
+    sloaddocument = gTesttoolPath & "spreadsheet\tools\input\Errorcodes.ods"
         
     '///Load document with all errorcodes <i>gTestToolPath</i>/spreadsheet/tools/input/Errorcodes.ods
-    call hFileOpen ( sloaddocument )
-    sleep (2)
-    '///Make sure that the file is editable
-    call sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally( sloaddocument )
 
     '///Setting selection to A1 to avoid messagebox in Search and Replace dialog.
     call fCalcSelectRange ("A1")
