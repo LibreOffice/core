@@ -268,6 +268,8 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnExtraStyle    = 0;                    // Style des Extra-Feldes
     mnExtraClicks   = 0;                    // Click-Anzahl fuer Extra-Feld
     mnExtraModifier = 0;                    // Modifier-Tasten beim Click im Extrafeld
+    mnCharWidth     = 371;
+    mnLineHeight    = 551;
     mbCalc          = TRUE;                 // Muessen Pagebreiten neu berechnet werden
     mbFormat        = TRUE;                 // Muss neu ausgegeben werden
     mbDrag          = FALSE;                // Sind wir im Drag-Modus
@@ -476,6 +478,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long    nTick2 ;
     if ( mnUnitIndex == RULER_UNIT_CHAR )
     {
+        if ( mnCharWidth == 0 )
+            mnCharWidth = 371;
         nTick3 = mnCharWidth*2;
         nTickCount = mnCharWidth;
         nTickUnit = mnCharWidth;
@@ -483,6 +487,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     }
     else if ( mnUnitIndex == RULER_UNIT_LINE )
     {
+        if ( mnLineHeight == 0 )
+            mnLineHeight = 551;
         nTick3 = mnLineHeight*2;
         nTickCount = mnLineHeight;
         nTickUnit = mnLineHeight;
