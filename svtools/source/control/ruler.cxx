@@ -467,6 +467,25 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long    nY;
     BOOL    bNoTicks = FALSE;
 
+    //Amelia
+    long    nTickUnit ;
+    long    nTick2 ;
+    if ( mnUnitIndex == RULER_UNIT_CHAR )
+    {
+        nTick3 = mnCharWidth;
+        nTickCount = mnCharWidth;
+        nTickUnit = mnCharWidth;
+        nTick2 = mnCharWidth;
+    }
+    else if ( mnUnitIndex == RULER_UNIT_LINE )
+    {
+        nTick3 = mnLineHeight;
+        nTickCount = mnLineHeight;
+        nTickUnit = mnLineHeight;
+        nTick2 = mnLineHeight;
+    }
+    aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
+
     // Groessenvorberechnung
     BOOL bVertRight = FALSE;
     if ( mnWinStyle & WB_HORZ )
@@ -487,7 +506,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long nMaxWidth = maVirDev.PixelToLogic( Size( mpData->nPageWidth, 0 ), maMapMode ).Width();
     if ( nMaxWidth < 0 )
         nMaxWidth *= -1;
-    nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
+// Amelia
+    if (( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ))
+        nMaxWidth /= nTickUnit;
+    else
+        nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
     UniString aNumStr( UniString::CreateFromInt32( nMaxWidth ) );
     long nTxtWidth = GetTextWidth( aNumStr );
     if ( (nTxtWidth*2) > nTickWidth )
@@ -567,7 +590,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 // Tick3 - Ausgabe (Text)
                 if ( !(nTick % nTick3) )
                 {
-                    aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
+                    //aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
+                    if ( ( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ) )
+                        aNumStr = UniString::CreateFromInt32( nTick / nTickUnit );
+                    else
+                        aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
                     nTxtWidth2 = GetTextWidth( aNumStr )/2;
 
                     nX = nStart+n;
@@ -594,7 +621,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 // Tick/Tick2 - Ausgabe (Striche)
                 else
                 {
-                    if ( !(nTick % aImplRulerUnitTab[mnUnitIndex].nTick2) )
+        /// Amelia
+                    if ( ( mnUnitIndex != RULER_UNIT_CHAR ) && ( mnUnitIndex != RULER_UNIT_LINE ) )
+                        nTick2 = aImplRulerUnitTab[mnUnitIndex].nTick2;
+                    if ( !(nTick % nTick2 ) )
                         nTickWidth = RULER_TICK2_WIDTH;
                     else
                         nTickWidth = RULER_TICK1_WIDTH;
@@ -2803,6 +2833,12 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
                 break;
             case FUNIT_PICA:
                 mnUnitIndex = RULER_UNIT_PICA;
+                break;
+            case FUNIT_CHAR:
+                mnUnitIndex = RULER_UNIT_CHAR;
+                break;
+            case FUNIT_LINE:
+                mnUnitIndex = RULER_UNIT_LINE;
                 break;
             default:
 #ifdef DBG_UTIL

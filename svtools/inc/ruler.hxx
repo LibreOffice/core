@@ -690,6 +690,10 @@ private:
     USHORT              mnExtraStyle;
     USHORT              mnExtraClicks;
     USHORT              mnExtraModifier;
+// Amelia
+    long                mnCharWidth;
+    long                mnLineHeight;
+
     RulerExtra          meExtraType;
     RulerType           meDragType;
     MapUnit             meSourceUnit;
@@ -869,6 +873,9 @@ public:
 
     //set text direction right-to-left
     void                SetTextRTL(BOOL bRTL);
+
+    void                SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
+    void                SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
 };
 
 #endif  // _RULER_HXX

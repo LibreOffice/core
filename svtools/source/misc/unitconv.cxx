@@ -63,6 +63,9 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
     rField.SetUnit( eUnit );
     switch( eUnit )
     {
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
+        case FUNIT_CHAR:
+        case FUNIT_LINE:
         case FUNIT_MM:
             rField.SetSpinSize( 50 );
             break;
