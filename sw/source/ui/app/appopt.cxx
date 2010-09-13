@@ -230,6 +230,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pAppView->GetVLinealMetric(eUnit);
     pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< UINT16 >(eUnit) ));
     pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< UINT16 >(pPref->GetMetric()) ));
+    pRet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, pPref->IsApplyCharUnit()));
     if(bTextDialog)
     {
         if(pAppView)

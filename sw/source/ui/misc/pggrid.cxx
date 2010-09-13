@@ -323,17 +323,17 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         aGridItem.SetColor(aColorLB.GetSelectEntryColor());
         rSet.Put(aGridItem);
 /// Amelia
+            SwView * pView = ::GetActiveView();
         if ( aGridItem.GetGridType() != GRID_NONE )
         {
-            SwView * pView = ::GetActiveView();
             if ( aGridItem.GetGridType() == GRID_LINES_CHARS )
             {
-                pView->GetHLineal().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
                 m_bHRulerChanged = sal_True;
             }
-            pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
             m_bVRulerChanged = sal_True;
         }
+        pView->GetHLineal().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
+        pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
 }
 /* -----------------------------08.02.2002 10:54------------------------------
 

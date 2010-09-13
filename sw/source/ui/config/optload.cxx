@@ -148,7 +148,10 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsAsianTypographyEnabled())
+        {
         aUseSquaredPageMode.Hide();
+                aUseCharUnit.Hide();
+        }
 }
 
 /*-----------------18.01.97 12.43-------------------

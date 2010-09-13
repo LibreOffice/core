@@ -348,8 +348,10 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
     }
     else
     {
-        eHScrollMetric = FUNIT_CM;
-        eVScrollMetric = FUNIT_CM;
+        if ( eHScrollMetric == FUNIT_CHAR )
+            eHScrollMetric == FUNIT_CM;
+        if ( eVScrollMetric == FUNIT_LINE )
+            eVScrollMetric == FUNIT_CM;
     }
     SwView* pTmpView = SwModule::GetFirstView();
     // fuer alle MDI-Fenster das Lineal umschalten

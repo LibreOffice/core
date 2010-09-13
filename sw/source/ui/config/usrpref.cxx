@@ -63,6 +63,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     bIsVScrollMetricSet(sal_False),
     nDefTab( MM50 * 4 ),
     bIsSquaredPageMode(sal_False),
+    bApplyCharUnit(sal_False),
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
@@ -333,7 +334,7 @@ void SwLayoutViewConfig::Commit()
             case 16: pValues[nProp] <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;// "ViewLayout/Columns",
             case 17: bSet = rParent.IsViewLayoutBookMode(); break;// "ViewLayout/BookMode",
             case 18: bSet = rParent.IsSquaredPageMode(); break;// "Other/IsSquaredPageMode",
-            case 19: bSet = rParent.IsApplyCharUnit(); break;// "Other/IsApplyCharUnit",
+            case 19: bSet = rParent.IsApplyCharUnit(); break;// "Other/ApplyCharUnit",
         }
         if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 || nProp == 18 || nProp == 19 )
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());

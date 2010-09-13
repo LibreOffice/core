@@ -116,6 +116,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+#include <svl/cjkoptions.hxx>
 
 
 using namespace ::com::sun::star;
@@ -953,13 +954,14 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     FieldUnit eMetric = pUsrPref->GetHScrollMetric();
 
     BOOL bApplyCharUnit = pUsrPref->IsApplyCharUnit();
-    if ( bApplyCharUnit )
+    SvtCJKOptions aCJKOptions;
+    if ( aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
         pHRuler->SetUnit( FUNIT_CHAR );
     else
         pHRuler->SetUnit( eMetric );
 
     eMetric = pUsrPref->GetVScrollMetric();
-    if ( bApplyCharUnit )
+    if ( aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
         pVRuler->SetUnit(FUNIT_LINE);
     else
         pVRuler->SetUnit( eMetric );
