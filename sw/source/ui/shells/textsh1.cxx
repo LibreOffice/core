@@ -1596,7 +1596,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 GetViewFrame()->GetChildWindow( nWhich ) ));
                 break;
             case FN_EDIT_HYPERLINK:
-            case FN_REMOVE_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
             {
                 SfxItemSet aSet(GetPool(),
@@ -1604,6 +1603,20 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ) || rSh.HasReadonlySel())
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
+            case FN_REMOVE_HYPERLINK:
+            {
+                SfxItemSet aSet(GetPool(),
+                                RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT);
+                rSh.GetCurAttr(aSet);
+
+        // If a hyperlink is selected, either alone or along with other text...
+                if( ((SFX_ITEM_DONTCARE & aSet.GetItemState( RES_TXTATR_INETFMT, TRUE )) == 0) || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);
                 }
