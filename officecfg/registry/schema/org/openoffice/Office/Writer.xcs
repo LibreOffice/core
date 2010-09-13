@@ -1588,6 +1588,18 @@
 					</info>
 					<value>true</value>
 				</prop>
+                <!-- added for apply char unit 2006-12-1 -->
+                <prop oor:name="ApplyCharUnit" oor:type="xs:boolean">
+                    <!-- OldPath: Writer/Layout -->
+                    <!-- OldLocation: Soffice.cfg -->
+                    <!-- UIHints: Tools - Options - Text document - Layout - [Section] Apply char unit -->
+                    <info>
+                        <author>OS</author>
+                        <desc>apply char unit to calculate the paragraph's indent</desc>
+                        <label>apply char unit</label>
+                    </info>
+                    <value>true</value>
+                </prop>
 			</group>
 			<group oor:name="Zoom">
 				<info>
@@ -1651,18 +1663,6 @@
 					</info>
 					<value>false</value>
 				</prop>
-                <!-- added for apply char unit 2006-12-1 -->
-                <prop oor:name="ApplyCharUnit" oor:type="xs:boolean">
-                    <!-- OldPath: Writer/Layout -->
-                    <!-- OldLocation: Soffice.cfg -->
-                    <!-- UIHints: Tools - Options - Text document - Layout - [Section] Apply char unit -->
-                    <info>
-                        <author>OS</author>
-                        <desc>apply char unit to calculate the paragraph's indent</desc>
-                        <label>apply char unit</label>
-                    </info>
-                    <value>true</value>
-                </prop>
 			</group>
 		</group>
 		<group oor:name="Grid">
