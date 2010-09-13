@@ -1178,6 +1178,8 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Miles" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
+        < "Char" ; FUNIT_CHAR ; > ;
+        < "Line" ; FUNIT_LINE ; > ;
     };
     };
 

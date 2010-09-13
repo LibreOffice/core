@@ -3830,6 +3830,33 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ApplyCharUnit SID_ATTR_APPLYCHARUNIT
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxBoolItem Modified SID_MODIFIED
 
 [

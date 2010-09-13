@@ -87,6 +87,18 @@ Menu RID_SVXMN_RULER
             Checkable = TRUE ;
             Text [ en-US ] = "Pica" ;
         };
+        MenuItem
+        {
+            Identifier = ID_CHAR ;
+            Checkable = TRUE ;
+            Text[ en-US ] = "Char" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_LINE ;
+            Checkable = TRUE ;
+            Text[ en-US ] = "Line" ;
+        };
     };
 };
 String RID_SVXSTR_RULER_TAB_LEFT
