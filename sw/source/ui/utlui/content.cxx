@@ -1240,18 +1240,63 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
 
             sal_uInt16 nCount = pCntType->GetMemberCount();
-            for(sal_uInt16 i = 0; i < nCount; i++)
-            {
-                const SwContent* pCnt = pCntType->GetMember(i);
-                if(pCnt)
-                {
-                    String sEntry = pCnt->GetName();
-                    if(!sEntry.Len())
-                        sEntry = sSpace;
-                    InsertEntry(sEntry, pParent,
-                            sal_False, LIST_APPEND, (void*)pCnt);
-                }
+             /**************************************************************
+                 Add for outline plus/minus
+             ***************************************************************/
+             if(pCntType->GetType() == CONTENT_TYPE_OUTLINE)
+             {
+                 SvLBoxEntry* pChild = 0;
+                 for(sal_uInt16 i = 0; i < nCount; i++)
+                 {
+                     const SwContent* pCnt = pCntType->GetMember(i);
+                     if(pCnt)
+                     {
+                         sal_uInt16 nLevel = ((SwOutlineContent*)pCnt)->GetOutlineLevel();
+                         String sEntry = pCnt->GetName();
+                         if(!sEntry.Len())
+                             sEntry = sSpace;
+                         if(!pChild || (nLevel == 0))
+                             pChild = InsertEntry(sEntry, pParent,
+                                         sal_False, LIST_APPEND,(void*)pCnt);
+                         else
+                         {
+                             //back search parent.
+                             if(((SwOutlineContent*)pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
+                                 pChild = InsertEntry(sEntry, pChild,
+                                         sal_False, LIST_APPEND, (void*)pCnt);
+                             else
+                             {
+                                 pChild = Prev(pChild);
+                                 while(pChild &&
+                                         lcl_IsContent(pChild) &&
+                                         !(((SwOutlineContent*)pChild->GetUserData())->GetOutlineLevel() < nLevel)
+                                      )
+                                 {
+                                     pChild = Prev(pChild);
+                                 }
+                                 if(pChild)
+                                     pChild = InsertEntry(sEntry, pChild,
+                                                 sal_False, LIST_APPEND, (void*)pCnt);
+                             }
+                        }
+                     }
+                 }
+             }
+             else
+             {
+                 for(sal_uInt16 i = 0; i < nCount; i++)
+                 {
+                     const SwContent* pCnt = pCntType->GetMember(i);
+                     if(pCnt)
+                     {
+                         String sEntry = pCnt->GetName();
+                         if(!sEntry.Len())
+                             sEntry = sSpace;
+                         InsertEntry(sEntry, pParent,
+                             sal_False, LIST_APPEND, (void*)pCnt);
+                     }
 
+                 }
             }
         }
     }
@@ -1263,7 +1308,7 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
 
 sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 {
-    if(!bIsRoot)
+    if(!bIsRoot || ((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE)
     {
         if(lcl_IsContentType(pParent))
         {
@@ -1276,6 +1321,19 @@ sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
             }
             else
                 nHiddenBlock |= nOr;
+            if((pCntType->GetType() == CONTENT_TYPE_OUTLINE))
+            {
+                sal_Bool bBool = SvTreeListBox::Expand(pParent);
+                SvLBoxEntry* pChild = Next(pParent);
+                while(pChild && lcl_IsContent(pChild) && pParent->HasChilds())
+                {
+                    if(pChild->HasChilds())
+                        SvTreeListBox::Expand(pChild);
+                    pChild = Next(pChild);
+                }
+                return bBool;
+            }
+
         }
     }
     return SvTreeListBox::Expand(pParent);
@@ -1288,10 +1346,12 @@ sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
 {
     sal_Bool bRet;
-    if(!bIsRoot)
+    if(!bIsRoot || ((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE)
     {
         if(lcl_IsContentType(pParent))
         {
+            if(bIsRoot)
+                return bRet = sal_False;
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
             sal_uInt16 nAnd = 1 << pCntType->GetType();
             nAnd = ~nAnd;
@@ -1306,7 +1366,8 @@ sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
             bRet = SvTreeListBox::Collapse(pParent);
     }
     else
-        bRet = sal_False;
+//      bRet = sal_False;
+        bRet = SvTreeListBox::Collapse(pParent);
     return bRet;
 }
 
@@ -1323,9 +1384,9 @@ IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
     DBG_ASSERT(pEntry, "kein aktueller Eintrag!");
     if(pEntry)
     {
-        if(lcl_IsContentType(pEntry))
+        if(lcl_IsContentType(pEntry) && !pEntry->HasChilds())
             RequestingChilds(pEntry);
-        else if(bIsActive || bIsConstant)
+        else if(!lcl_IsContentType(pEntry) && (bIsActive || bIsConstant))
         {
             if(bIsConstant)
             {
@@ -1369,9 +1430,14 @@ void SwContentTree::Display( sal_Bool bActive )
             nOldScrollPos = pVScroll->GetThumbPos();
 
         sEntryName = GetEntryText(pOldSelEntry);
+        SvLBoxEntry* pParantEntry = pOldSelEntry;
+        while( GetParent(pParantEntry))
+        {
+            pParantEntry = GetParent(pParantEntry);
+        }
         if(GetParent(pOldSelEntry))
         {
-            nEntryRelPos = (sal_uInt16)(GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(GetParent(pOldSelEntry)));
+            nEntryRelPos = (sal_uInt16)(GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParantEntry));
         }
     }
     Clear();
@@ -1465,18 +1531,24 @@ void SwContentTree::Display( sal_Bool bActive )
                     (*ppRootContentT)->GetName(), rImage, rImage,
                         0, sal_False, LIST_APPEND, *ppRootContentT);
 
-            for(sal_uInt16 i = 0; i < (*ppRootContentT)->GetMemberCount(); i++ )
+            if(nRootType != CONTENT_TYPE_OUTLINE)
             {
-                const SwContent* pCnt = (*ppRootContentT)->GetMember(i);
-                if(pCnt)
+                SvLBoxEntry* pEntry;
+                for(sal_uInt16 i = 0; i < (*ppRootContentT)->GetMemberCount(); i++ )
                 {
-                    String sEntry = pCnt->GetName();
-                    if(!sEntry.Len())
-                        sEntry = sSpace;
-                    InsertEntry( sEntry, pParent,
-                                sal_False, LIST_APPEND, (void*)pCnt);
+                    const SwContent* pCnt = (*ppRootContentT)->GetMember(i);
+                    if(pCnt)
+                    {
+                        String sEntry = pCnt->GetName();
+                        if(!sEntry.Len())
+                            sEntry = sSpace;
+                        InsertEntry( sEntry, pParent,
+                            sal_False, LIST_APPEND, (void*)pCnt);
+                    }
                 }
-            }
+             }
+             else
+                 RequestingChilds(pParent);
             Expand(pParent);
             if( nRootType == CONTENT_TYPE_OUTLINE && bIsActive )
             {
@@ -1851,9 +1923,9 @@ sal_Bool SwContentTree::HasContentChanged()
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
-                    if(bLevelOrVisibiblityChanged)
-                        bInvalidate = sal_True;
                     sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
+                    if((nType == CONTENT_TYPE_OUTLINE) && bLevelOrVisibiblityChanged)
+                        bRepaint = sal_True;
                     if(bLevelOrVisibiblityChanged)
                         bInvalidate = sal_True;
 
@@ -2760,6 +2832,10 @@ sal_Bool  SwContentTree::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
         return sal_False;
     sal_Bool bEnable = sal_False;
     SvLBoxEntry* pParentEntry = GetParent(pEntry);
+    while(pParentEntry && (!lcl_IsContentType(pParentEntry)))
+    {
+        pParentEntry = GetParent(pParentEntry);
+    }
     if(!bIsLastReadOnly && (!IsVisible() ||
         (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE && pParentEntry ||
             lcl_IsContent(pEntry) && ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE)))
