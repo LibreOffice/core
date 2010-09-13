@@ -527,9 +527,8 @@ testcase tStrokeSort
 
     Call hNewDocument
     '/// Open a test file and check <i>No Grid</i> checkbox
-    Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
-    sMakeReadOnlyDocumentEditable
-    EditSelectAll
+    hFileOpenLocally( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
+    hUseAsyncSlot( "EditSelectAll" )
 
     '/// Open <i>Tools/Sort</i>
     ToolsSort
@@ -617,9 +616,8 @@ testcase tPinyinSort
 
     Call hNewDocument
     '/// Open a test file and check <i>No Grid</i> checkbox
-    Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
-    sMakeReadOnlyDocumentEditable
-    EditSelectAll
+    hFileOpenLocally( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
+    hUseAsyncSlot( "EditSelectAll" )
 
     '/// Open <i>Tools/Sort</i>
     ToolsSort

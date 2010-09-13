@@ -85,7 +85,6 @@ testcase tToolsSpellcheck
         goto endsub
     end if
     hFileOpenLocally( TheFile )
-    'Call sMakeReadOnlyDocumentEditable
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -247,7 +246,6 @@ testcase tToolsThesaurus
         goto endsub
     end if
     call hFileOpenLocally( TheFile )
-    'Call sMakeReadOnlyDocumentEditable
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -354,7 +352,6 @@ testcase tToolsHyphenation
         goto endsub
     end select
 
-    'Call sMakeReadOnlyDocumentEditable
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
@@ -987,7 +984,6 @@ testcase tToolsHangulHanjaConversion
 
     printlog " Open the test file"
     hFileOpenLocally(sTestFile)
-    'Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
@@ -1127,7 +1123,6 @@ testcase tHtmlDocToolsHangulHanjaConversion
 
     printlog " Open the test file"
     hFileOpenLocally(sTestFile)
-    'Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
