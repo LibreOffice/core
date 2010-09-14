@@ -1237,6 +1237,21 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         }
         else if( aUnknownToken.Len() )
         {
+            // Fix i#59064 : Paste content of unknown tags.
+            if (aToken.Len() > 0)
+            {
+                if( !bDocInitalized )
+                    DocumentDetected();
+                pDoc->InsertString( *pPam, aToken );
+
+                // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
+                // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
+                if( aParaAttrs.Count() )
+                    aParaAttrs.Remove( 0, aParaAttrs.Count() );
+
+                SetAttr();
+            }
+
             // Unbekannte Token im Header werden nur durch ein passendes
             // End-Token, </HEAD> oder <BODY> wieder beendet. Darin wird Text
             // ignoriert.
@@ -1254,6 +1269,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             case HTML_TEXTTOKEN:
                 return;
             default:
+                aUnknownToken.Erase();
                 break;
             }
         }
