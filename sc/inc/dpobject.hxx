@@ -186,7 +186,7 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
-    String              GetDimName( long nDim, BOOL& rIsDataLayout );
+    String              GetDimName( long nDim, BOOL& rIsDataLayout, sal_Int32* pFlags = NULL );
     BOOL                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTableHeaderData& rData);
@@ -259,6 +259,8 @@ public:
                             PivotField* pRefColFields = NULL, SCSIZE nRefColCount = 0,
                             PivotField* pRefRowFields = NULL, SCSIZE nRefRowCount = 0,
                             PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
+
+    static bool         IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags );
 };
 
 
