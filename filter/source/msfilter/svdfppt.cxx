@@ -3677,7 +3677,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
 
     UINT32  nBuFlags = 0;
     UINT16  nHasAnm = 0;
-    UINT32  nAnmScheme = 0x10003;
+    UINT32  nAnmScheme = 0xFFFF0003;
     UINT16  nBuBlip = 0xffff;
 
     const PPTExtParaProv* pParaProv = pExtParaProv;
