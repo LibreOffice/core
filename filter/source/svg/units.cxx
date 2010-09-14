@@ -35,10 +35,6 @@ namespace svgi
 
 double convLength( double value, SvgUnit unit, const State& rState, char dir )
 {
-    const double fBoxLen( dir=='h' ? rState.maViewBox.getWidth() :
-                          (dir=='v' ? rState.maViewBox.getHeight() :
-                           rState.maViewBox.getRange().getLength()));
-
     // convert svg unit to internal coordinates ("pixel"). Since the
     // OOo drawing layer is still largely integer-based, the initial
     // viewport transformation includes a certain scale factor
@@ -55,7 +51,28 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
         case SVG_LENGTH_UNIT_PT: break;
         case SVG_LENGTH_UNIT_EM: fRet *= rState.mnFontSize; break;
         case SVG_LENGTH_UNIT_EX: fRet *= rState.mnFontSize / 2.0; break;
-        case SVG_LENGTH_UNIT_PERCENTAGE: fRet *= fBoxLen; break;
+        case SVG_LENGTH_UNIT_PERCENTAGE:
+        {
+            double fBoxLen;
+            if (rState.maViewBox.isEmpty())
+            {
+                basegfx::B2DRange aDefaultBox(0, 0,
+                  convLength(210, SVG_LENGTH_UNIT_MM, rState, 'h'),
+                  convLength(297, SVG_LENGTH_UNIT_MM, rState, 'v'));
+                fBoxLen = (dir=='h' ? aDefaultBox.getWidth() :
+                          (dir=='v' ? aDefaultBox.getHeight() :
+                           aDefaultBox.getRange().getLength()));
+            }
+            else
+            {
+                fBoxLen = (dir=='h' ? rState.maViewBox.getWidth() :
+                          (dir=='v' ? rState.maViewBox.getHeight() :
+                           rState.maViewBox.getRange().getLength()));
+            }
+
+            fRet *= fBoxLen/100.0;
+        }
+        break;
         default: OSL_TRACE( "Unknown length type" ); break;
     }
 
