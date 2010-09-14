@@ -374,6 +374,8 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nSingleLineId, sal::static_int_cast<INT32>(WB_SINGLELINE) );
     nSysWinId           = pHS->getID( "WB_SYSTEMWINDOW" );
     aWinBits.SetConstant( nSysWinId, sal::static_int_cast<INT32>(WB_SYSTEMWINDOW) );
+    nStdPopupId         = pHS->getID( "WB_STDPOPUP" );
+    aWinBits.SetConstant( nStdPopupId, sal::static_int_cast<INT32>(WB_STDPOPUP) );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/

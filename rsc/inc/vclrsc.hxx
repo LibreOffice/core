@@ -84,6 +84,10 @@ typedef sal_Int64 WinBits;
 #define WB_AUTOVSCROLL          ((WinBits)0x40000000)
 
 #define WB_HIDE                 ((WinBits)0x80000000)
+
+// system floating window
+#define WB_POPUP                ((WinBits)0x20000000)
+
 #define WB_HSCROLL              WB_HORZ
 #define WB_VSCROLL              WB_VERT
 #define WB_TOPIMAGE             WB_TOP
@@ -152,6 +156,7 @@ typedef sal_Int64 WinBits;
 #define WB_STDMODAL             (WB_STDDIALOG)
 #define WB_STDTABDIALOG         (WB_STDDIALOG)
 #define WB_STDTABCONTROL        0
+#define WB_STDPOPUP             (WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL)
 
 // For TreeListBox
 #define WB_HASBUTTONS           ((WinBits)0x00800000)

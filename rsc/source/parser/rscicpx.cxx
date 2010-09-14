@@ -2218,6 +2218,7 @@ RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
     INS_WINBIT(pClassFloatingWindow,Zoomable)
     INS_WINBIT(pClassFloatingWindow,HideWhenDeactivate)
     INS_WINBIT(pClassFloatingWindow,EnableResizing)
+    INS_WINBIT(pClassFloatingWindow,StdPopup)
 
     return pClassFloatingWindow;
 }

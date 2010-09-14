@@ -97,6 +97,7 @@ class RscTypCont
     Atom                nMinimizeId;
     Atom                nMaximizeId;
     Atom                nCloseableId;
+    Atom                nStdPopupId;
     Atom                nAppId;
     Atom                nTabstopId;
     Atom                nGroupId;
