@@ -3968,6 +3968,29 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
     if( pLR )
         aLR = *(const SvxLRSpaceItem*)pLR;
 
+    // Fix the regression issue: #i99822#: Discussion?
+    // Since the list lever formatting doesn't apply into paragraph style
+    // for list levels of mode LABEL_ALIGNMENT.(see ww8par3.cxx
+    // W8ImplReader::RegisterNumFmtOnTxtNode).
+    // Need to apply the list format to the paragraph here.
+    SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
+    if( pTxtNode && pTxtNode->AreListLevelIndentsApplicable() )
+    {
+        SwNumRule * pNumRule = pTxtNode->GetNumRule();
+        if( pNumRule )
+        {
+            BYTE nLvl = static_cast< BYTE >(pTxtNode->GetActualListLevel());
+            const SwNumFmt* pFmt = pNumRule->GetNumFmt( nLvl );
+            if ( pFmt && pFmt->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                aLR.SetTxtLeft( pFmt->GetIndentAt() );
+                aLR.SetTxtFirstLineOfst( static_cast<short>(pFmt->GetFirstLineIndent()) );
+                // make paragraph have hard-set indent attributes
+                pTxtNode->SetAttr( aLR );
+            }
+        }
+    }
+
     /*
     The older word sprms mean left/right, while the new ones mean before/after.
     Writer now also works with before after, so when we see old left/right and
