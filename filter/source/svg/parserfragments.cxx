@@ -117,52 +117,72 @@ geometry::AffineMatrix2D multiplyMatrix( const geometry::AffineMatrix2D& rLHS,
     return basegfx::unotools::affineMatrixFromHomMatrix(aRet,aRHS);
 }
 
+namespace
+{
+    struct ColorGrammar : public ::boost::spirit::grammar< ColorGrammar >
+    {
+    public:
+        ARGBColor& m_rColor;
+        explicit ColorGrammar( ARGBColor& rColor ) : m_rColor(rColor) {}
+        template< typename ScannerT >
+        struct definition
+        {
+            ::boost::spirit::rule< ScannerT > colorExpression;
+            definition( const ColorGrammar& self )
+            {
+                using namespace ::boost::spirit;
+
+                int_parser<sal_uInt8,10,1,3> byte_p;
+                colorExpression =
+                    (
+                        // the #rrggbb form
+                        ('#' >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
+                                                                   boost::ref(self.m_rColor.r),_1,_2)]
+                             >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
+                                                                   boost::ref(self.m_rColor.g),_1,_2)]
+                             >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
+                                                                   boost::ref(self.m_rColor.b),_1,_2)])
+                        |
+                        // the #rgb form
+                        ('#' >> xdigit_p[boost::bind(&setFourBitColor,
+                                                     boost::ref(self.m_rColor.r),_1)]
+                             >> xdigit_p[boost::bind(&setFourBitColor,
+                                                     boost::ref(self.m_rColor.g),_1)]
+                             >> xdigit_p[boost::bind(&setFourBitColor,
+                                                     boost::ref(self.m_rColor.b),_1)])
+                        |
+                        // rgb() form
+                        (str_p("rgb")
+                            >> '(' >>
+                            (
+                                // rgb(int,int,int)
+                                (byte_p[boost::bind(&setIntColor,
+                                                    boost::ref(self.m_rColor.r),_1)] >> ',' >>
+                                 byte_p[boost::bind(&setIntColor,
+                                                    boost::ref(self.m_rColor.g),_1)] >> ',' >>
+                                 byte_p[boost::bind(&setIntColor,
+                                                    boost::ref(self.m_rColor.b),_1)])
+                             |
+                                // rgb(double,double,double)
+                                (real_p[assign_a(self.m_rColor.r)] >> ',' >>
+                                 real_p[assign_a(self.m_rColor.g)] >> ',' >>
+                                 real_p[assign_a(self.m_rColor.b)])
+                             )
+                         >> ')')
+                     );
+            }
+            ::boost::spirit::rule<ScannerT> const& start() const { return colorExpression; }
+        };
+    };
+}
+
 bool parseColor( const char* sColor, ARGBColor& rColor  )
 {
     using namespace ::boost::spirit;
 
-    int_parser<sal_uInt8,10,1,3> byte_p;
-
     if( parse(sColor,
-            //  Begin grammar
-            (
-                // the #rrggbb form
-                ('#' >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                           boost::ref(rColor.r),_1,_2)]
-                     >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                           boost::ref(rColor.g),_1,_2)]
-                     >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                           boost::ref(rColor.b),_1,_2)])
-              |
-                // the #rgb form
-                ('#' >> xdigit_p[boost::bind(&setFourBitColor,
-                                             boost::ref(rColor.r),_1)]
-                     >> xdigit_p[boost::bind(&setFourBitColor,
-                                             boost::ref(rColor.g),_1)]
-                     >> xdigit_p[boost::bind(&setFourBitColor,
-                                             boost::ref(rColor.b),_1)])
-              |
-                // rgb() form
-                (str_p("rgb")
-                 >> '(' >>
-                     (
-                             // rgb(int,int,int)
-                             (byte_p[boost::bind(&setIntColor,
-                                                 boost::ref(rColor.r),_1)] >> ',' >>
-                              byte_p[boost::bind(&setIntColor,
-                                                 boost::ref(rColor.g),_1)] >> ',' >>
-                              byte_p[boost::bind(&setIntColor,
-                                                 boost::ref(rColor.b),_1)])
-                           |
-                             // rgb(double,double,double)
-                             (real_p[assign_a(rColor.r)] >> ',' >>
-                              real_p[assign_a(rColor.g)] >> ',' >>
-                              real_p[assign_a(rColor.b)])
-                     )
-                 >> ')')
-            ) >> end_p,
-            //  End grammar
-            space_p).full )
+              ColorGrammar(rColor) >> end_p,
+              space_p).full )
     {
         // free-form color found & parsed
         return true;
@@ -516,6 +536,32 @@ bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector 
         ) >> end_p,
         //  End grammar
         space_p).full;
+}
+
+//////////////////////////////////////////////////////////////
+
+bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
+                    std::pair<ARGBColor,bool>&          io_rColor,
+                    const char*                         sPaintUri )
+{
+    using namespace ::boost::spirit;
+
+    const bool bRes = parse(sPaintUri,
+        //  Begin grammar
+        (
+            str_p("url(#") >>
+            (+alnum_p)[assign_a(o_rPaintUri)] >>
+            str_p(")") >>
+            *( str_p("none")[assign_a(io_rColor.second,false)] |
+               str_p("currentColor")[assign_a(io_rColor.second,true)] |
+               ColorGrammar(io_rColor.first)
+               // TODO(F1): named color
+             )
+        ) >> end_p,
+        //  End grammar
+        space_p).full;
+
+    return bRes;
 }
 
 //////////////////////////////////////////////////////////////

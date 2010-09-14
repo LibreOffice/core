@@ -996,6 +996,9 @@ struct AnnotatingVisitor
                      const ARGBColor& rInheritColor,
                      const Gradient&  rInheritGradient )
     {
+        std::pair<const char*,const char*> aPaintUri(NULL,NULL);
+        std::pair<ARGBColor,bool>          aColor(maCurrState.maCurrentColor,
+                                                  false);
         if( strcmp(sValue,"none") == 0 )
             rType = NONE;
         else if( strcmp(sValue,"currentColor") == 0 )
@@ -1009,18 +1012,32 @@ struct AnnotatingVisitor
             rColor = rInheritColor;
             rGradient = rInheritGradient;
         }
-        else if( strncmp(sValue,"url(#",5) == 0 )
+        else if( parsePaintUri(aPaintUri,aColor,sValue) )
         {
-            // assuming gradient. assumption does not hold generally
-            if( rValue.getLength() > 5 )
+            if( aPaintUri.first != aPaintUri.second )
             {
-                ElementRefMapType::iterator aRes;
-                if( (aRes=maGradientIdMap.find(rValue.copy(5,
-                                                           rValue.getLength()-6))) != maGradientIdMap.end() )
+                // assuming gradient. assumption does not hold generally
+                const char* pClosingBracket;
+                if( (pClosingBracket=strstr(sValue,")")) && rValue.getLength() > 5 )
                 {
-                    rGradient = maGradientVector[aRes->second];
-                    rType = GRADIENT;
+                    ElementRefMapType::iterator aRes;
+                    if( (aRes=maGradientIdMap.find(
+                             rValue.copy(aPaintUri.first-sValue,
+                                         aPaintUri.second-aPaintUri.first))) != maGradientIdMap.end() )
+                    {
+                        rGradient = maGradientVector[aRes->second];
+                        rType = GRADIENT;
+                    }
                 }
+            }
+            else if( aColor.second )
+            {
+                rType = SOLID;
+                rColor = aColor.first;
+            }
+            else
+            {
+                rType = NONE;
             }
         }
         else

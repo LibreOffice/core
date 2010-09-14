@@ -18,6 +18,7 @@
 
 #include <sal/config.h>
 #include <vector>
+#include <utility>
 #include <string>
 
 namespace basegfx
@@ -41,6 +42,29 @@ namespace svgi
 
     /// Parse given string for a list of double values, comma-delimited
     bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector );
+
+    /** Parse paint uri
+
+        @param o_rPaintUri
+        Start and end ptr for uri substring (within
+        [sPaintUri,sPaintUri+strlen(sPaintUri)]
+
+        @param io_rColor
+        The optional paint color to use. if o_rPaintUri is empty,
+        parser sets io_rColor.second to false for color="None", to
+        true and keeps current io_rColor.first entry for
+        "currentColor", and to true and sets io_rColor.first to parsed
+        color otherwise.
+
+        @param sPaintUri
+        String to parse. Permitted to contain the optional paint
+        stuff, like fallback color.
+
+        @return true, if a paint uri was successfully parsed.
+     */
+    bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
+                        std::pair<ARGBColor,bool>&          io_rColor,
+                        const char*                         sPaintUri );
 
     /// Parse given string for the xlink attribute
     bool parseXlinkHref( const char* xlink, std::string& data );
