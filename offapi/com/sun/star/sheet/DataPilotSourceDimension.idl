@@ -156,6 +156,14 @@ published service DataPilotSourceDimension
      */
     [property] sequence< com::sun::star::sheet::TableFilterField > Filter;
 
+    //-------------------------------------------------------------------------
+
+    /** contains flags that control the usage of the dimension.
+
+        @see com::sun::star::sheet::DimensionFlags
+     */
+    [readonly, property, optional] long Flags;
+
 };
 
 //=============================================================================
