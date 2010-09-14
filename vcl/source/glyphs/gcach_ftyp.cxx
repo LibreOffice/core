@@ -301,6 +301,7 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnSynthetic( nSynthetic ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
+    mpFontCharMap( NULL ),
     mpChar2Glyph( NULL ),
     mpGlyph2Char( NULL ),
     mpExtraKernInfo( pExtraKernInfo )
@@ -318,6 +319,8 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 
 FtFontInfo::~FtFontInfo()
 {
+    if( mpFontCharMap )
+        mpFontCharMap->DeReference();
     delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
@@ -1733,29 +1736,39 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
+/*const*/ ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
 {
-    CmapResult aCmapResult;
-    bool bOK = GetFontCodeRanges( aCmapResult );
-    ImplFontCharMap* pIFCMap = NULL;
-    if( !bOK )
-        pIFCMap = ImplFontCharMap::GetDefaultMap();
-    else
-        pIFCMap = new ImplFontCharMap( aCmapResult );
-    // TODO?: cache ImplFontCharMap
-    return pIFCMap;
+    const ImplFontCharMap* pIFCMap = mpFontInfo->GetImplFontCharMap();
+    return const_cast<ImplFontCharMap*>(pIFCMap); // TODO: make all GetImplFontCharMap()'s const-correct
+}
+
+const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
+{
+    // check if the charmap is already cached
+    if( !mpFontCharMap )
+    {
+        CmapResult aCmapResult;
+        bool bOK = GetFontCodeRanges( aCmapResult );
+        if( bOK )
+            mpFontCharMap = new ImplFontCharMap( aCmapResult );
+        else
+                mpFontCharMap = ImplFontCharMap::GetDefaultMap();
+    }
+
+    mpFontCharMap->AddReference();
+    return mpFontCharMap;
 }
 
 // TODO: merge into method GetFontCharMap()
-bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
+bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
 {
-    rResult.mbSymbolic = mpFontInfo->IsSymbolFont();
+    rResult.mbSymbolic = IsSymbolFont();
 
     // TODO: is the full CmapResult needed on platforms calling this?
     if( FT_IS_SFNT( maFaceFT ) )
     {
         ULONG nLength = 0;
-        const unsigned char* pCmap = mpFontInfo->GetTable( "cmap", &nLength );
+        const unsigned char* pCmap = GetTable( "cmap", &nLength );
         if( pCmap && (nLength > 0) )
             if( ParseCMAP( pCmap, nLength, rResult ) )
                 return true;
