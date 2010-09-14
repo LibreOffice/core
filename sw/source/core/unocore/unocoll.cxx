@@ -1504,7 +1504,7 @@ sal_Int32 SwXBookmarks::getCount(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount();
+    return GetDoc()->getIDocumentMarkAccess()->getMarksCount();
 }
 
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
@@ -1514,11 +1514,11 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    if(nIndex < 0 || nIndex >= pMarkAccess->getBookmarksCount())
+    if(nIndex < 0 || nIndex >= pMarkAccess->getMarksCount())
         throw IndexOutOfBoundsException();
 
     uno::Any aRet;
-    ::sw::mark::IMark* pBkmk = pMarkAccess->getBookmarksBegin()[nIndex].get();
+    ::sw::mark::IMark* pBkmk = pMarkAccess->getMarksBegin()[nIndex].get();
     const uno::Reference< text::XTextContent > xRef =
         SwXBookmark::CreateXBookmark(*GetDoc(), *pBkmk);
     aRet <<= xRef;
@@ -1533,8 +1533,8 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
         throw uno::RuntimeException();
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark(rName);
-    if(ppBkmk == pMarkAccess->getBookmarksEnd())
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(rName);
+    if(ppBkmk == pMarkAccess->getMarksEnd())
         throw NoSuchElementException();
 
     uno::Any aRet;
@@ -1552,10 +1552,10 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
         throw uno::RuntimeException();
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    uno::Sequence<OUString> aSeq(pMarkAccess->getBookmarksCount());
+    uno::Sequence<OUString> aSeq(pMarkAccess->getMarksCount());
     sal_Int32 nCnt = 0;
-    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-        ppMark != pMarkAccess->getBookmarksEnd();)
+    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+        ppMark != pMarkAccess->getMarksEnd();)
         aSeq[nCnt++] = (*ppMark++)->GetName();
     return aSeq;
 }
@@ -1568,7 +1568,7 @@ sal_Bool SwXBookmarks::hasByName(const OUString& rName)
         throw uno::RuntimeException();
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    return pMarkAccess->findBookmark(rName) != pMarkAccess->getBookmarksEnd();
+    return pMarkAccess->findMark(rName) != pMarkAccess->getMarksEnd();
 }
 
 uno::Type SAL_CALL SwXBookmarks::getElementType()
