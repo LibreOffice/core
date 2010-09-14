@@ -1796,7 +1796,7 @@ sal_Bool SVGReader::parseAndConvert()
 {
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
         m_xServiceFactory->createInstance(
-            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY );
+            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
 
     uno::Reference<xml::dom::XDocument> xDom(
         xDomBuilder->parse(m_xInputStream),
@@ -2702,7 +2702,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
         xServiceFactory->createInstance(
             rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")),
-        uno::UNO_QUERY );
+        uno::UNO_QUERY_THROW );
 
     uno::Reference<io::XInputStream> xStream(
         new utl::OInputStreamWrapper(rStream) );
