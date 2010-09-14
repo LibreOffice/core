@@ -172,7 +172,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
     {
         const USHORT nBitCount( discretizeBitcount(aHeader.nBitCount) );
 
-        const Size          aSizePixel( aHeader.nWidth, aHeader.nHeight );
+        const Size          aSizePixel( aHeader.nWidth, abs(aHeader.nHeight) );
         BitmapPalette       aDummyPal;
         Bitmap              aNewBmp( aSizePixel, nBitCount, &aDummyPal );
         BitmapWriteAccess*  pAcc = aNewBmp.AcquireWriteAccess();
@@ -244,7 +244,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
                                       Fraction( 1000, aHeader.nYPelsPerMeter ) );
 
                     aNewBmp.SetPrefMapMode( aMapMode );
-                    aNewBmp.SetPrefSize( Size( aHeader.nWidth, aHeader.nHeight ) );
+                    aNewBmp.SetPrefSize( Size( aHeader.nWidth, abs(aHeader.nHeight) ) );
                 }
             }
 
@@ -365,7 +365,7 @@ BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal
         else
         {
             rIStm >> rHeader.nWidth;
-            rIStm >> rHeader.nHeight;
+            rIStm >> rHeader.nHeight; //rHeader.nHeight=abs(rHeader.nHeight);
             rIStm >> rHeader.nPlanes;
             rIStm >> rHeader.nBitCount;
             rIStm >> rHeader.nCompression;
@@ -461,7 +461,13 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
         if( rHeader.nColsUsed && rHeader.nBitCount > 8 )
             rIStm.SeekRel( rHeader.nColsUsed * ( ( rHeader.nSize != DIBCOREHEADERSIZE ) ? 4 : 3 ) );
 
-        rIStm.Read( rAcc.GetBuffer(), rHeader.nHeight * nAlignedWidth );
+        if ( rHeader.nHeight > 0 )
+            rIStm.Read( rAcc.GetBuffer(), rHeader.nHeight * nAlignedWidth );
+        else
+        {
+            for( int i = abs(rHeader.nHeight)-1; i >= 0; i-- )
+                rIStm.Read( ((char*)rAcc.GetBuffer()) + (nAlignedWidth*i), nAlignedWidth );
+        }
     }
     else
     {
@@ -504,7 +510,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
         else
         {
             const long  nWidth = rHeader.nWidth;
-            const long  nHeight = rHeader.nHeight;
+            const long  nHeight = abs(rHeader.nHeight);
             BYTE*       pBuf = new BYTE[ nAlignedWidth ];
 
             // true color DIB's can have a (optimization) palette
@@ -1061,7 +1067,7 @@ void Bitmap::ImplDecodeRLE( BYTE* pBuffer, DIBInfoHeader& rHeader,
                             BitmapWriteAccess& rAcc, BOOL bRLE4 )
 {
     Scanline    pRLE = pBuffer;
-    long        nY = rHeader.nHeight - 1L;
+    long        nY = abs(rHeader.nHeight) - 1L;
     const ULONG nWidth = rAcc.Width();
     ULONG       nCountByte;
     ULONG       nRunByte;
