@@ -2713,9 +2713,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             else if (!nInTable)
             {
                 // Always insert a txtnode for a column break, e.g. ##
-                AppendTxtNode(*pPaM->GetPoint());
-                rDoc.InsertPoolItem(*pPaM,
-                    SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+                SwCntntNode *pCntNd=pPaM->GetCntntNode();
+                if (pCntNd!=NULL && pCntNd->Len()>0) // if par is empty not break is needed
+                    AppendTxtNode(*pPaM->GetPoint());
+                rDoc.InsertPoolItem(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             }
             break;
         case 0x7:
