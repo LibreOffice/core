@@ -515,6 +515,9 @@ AC_ARG_WITH(system-sane,
 AC_ARG_WITH(system-xrender,
 [  --with-system-xrender-headers  Use XRender headers already on system
 ],,)
+AC_ARG_WITH(system-mesa-headers,
+[  --with-system-mesa-headers     Use Mesa headers already on system
+],,)
 AC_ARG_WITH(system-curl,
 [  --with-system-curl      Use curl already on system
 ],,)
@@ -5014,6 +5017,20 @@ AC_SUBST(XRANDR_DLOPEN)
 AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
+
+dnl ===================================================================
+dnl Check for system Mesa
+dnl ===================================================================
+AC_MSG_CHECKING([which Mesa headers to use])
+if test "$with_system_mesa_headers" == "no"; then
+   AC_MSG_RESULT([internal])
+   SYSTEM_MESA_HEADERS=NO
+   BUILD_TYPE="$BUILD_TYPE MESA"
+else
+   AC_MSG_RESULT([external])
+   SYSTEM_MESA_HEADERS=YES
+fi
+AC_SUBST(SYSTEM_MESA_HEADERS)
 
 dnl ===================================================================
 dnl Check for building neon

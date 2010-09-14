@@ -1899,6 +1899,7 @@ ToFile( "LIBXSLT_CFLAGS",    "@LIBXSLT_CFLAGS@",   "e" );
 ToFile( "LIBXSLT_LIBS",      "@LIBXSLT_LIBS@",     "e" );
 ToFile( "SYSTEM_SANE_HEADER","@SYSTEM_SANE_HEADER@","e" );
 ToFile( "SYSTEM_XRENDER_HEADERS","@SYSTEM_XRENDER_HEADERS@","e" );
+ToFile( "SYSTEM_MESA_HEADERS","@SYSTEM_MESA_HEADERS@","e" );
 ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
 ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
