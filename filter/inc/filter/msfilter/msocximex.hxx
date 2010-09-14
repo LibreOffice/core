@@ -1417,4 +1417,38 @@ public:
                                 const com::sun::star::awt::Size& rSize );
 };
 
+
+class HTML_TextBox : public OCX_ModernControl
+{
+public:
+    HTML_TextBox() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.TextField");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel");
+        mnBackColor = 0x80000005L;
+        mnForeColor = 0x80000008L;
+        nBorderColor = 0x80000006L;
+        aFontData.SetHasAlign(TRUE);
+    }
+
+    using OCX_ModernControl::Import; // to not hide the other two import methods
+    virtual sal_Bool Import(com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet);
+  /*
+    sal_Bool Export(SotStorageRef &rObj,
+        const com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet,
+        const com::sun::star::awt::Size& rSize);
+    sal_Bool WriteContents(SotStorageStreamRef &rObj,
+        const com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet,
+        const com::sun::star::awt::Size& rSize);
+  */
+    static OCX_Control *Create() { return new HTML_TextBox;}
+
+        virtual sal_Bool Read(SotStorageStream *pS);
+        virtual sal_Bool ReadFontData(SotStorageStream *pS);
+};
+
+
+
 #endif
