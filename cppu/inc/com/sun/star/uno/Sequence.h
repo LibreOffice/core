@@ -69,7 +69,7 @@ class Sequence
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
-    inline static void * SAL_CALL operator new ( size_t nSize )
+    inline static void * SAL_CALL operator new ( ::size_t nSize )
         SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
     /** @internal */
@@ -77,7 +77,7 @@ public:
         SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
     /** @internal */
-    inline static void * SAL_CALL operator new ( size_t, void * pMem )
+    inline static void * SAL_CALL operator new ( ::size_t, void * pMem )
         SAL_THROW( () )
         { return pMem; }
     /** @internal */

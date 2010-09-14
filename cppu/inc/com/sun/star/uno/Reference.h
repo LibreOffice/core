@@ -239,13 +239,13 @@ class Reference : public BaseReference
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
-    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( ::size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
     /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
     /** @internal */
-    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( ::size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
     /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
