@@ -2074,6 +2074,11 @@ void SwTabFrm::MakeAll()
                            pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
                 bCalcLowers = TRUE;
+                // --> OD 2009-03-06 #i99267#
+                // reset <bSplit> after forward move to assure that follows
+                // can be joined, if further space is available.
+                bSplit = FALSE;
+                // <--
             }
         }
 
