@@ -84,9 +84,14 @@
 
 #else
 
+    #include <dxsdkver.h>
     #include <d3d9.h>
     #include <d3dx9.h>
-//  #include <dxerr9.h>     #i107614# removing include, it has been changed in the latest sdk fron August2009 from dxerr9.h into dxerr.h
+    #if _DXSDK_BUILD_MAJOR < 1734 /* Earlier than the August 2009 DXSDK */
+        #include <dxerr9.h>
+    #else
+        #include <dxerr.h>
+    #endif
 
     typedef IDirect3DSurface9 surface_type;
 
