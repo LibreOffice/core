@@ -1,0 +1,328 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: module_accessories.scp,v $
+ *
+ *  $Revision: 1.0 $
+ *
+ *  last change: $Author: KAMI $ $Date: 2006/02/18 14:50:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 3.
+ *
+ *
+ *    GNU Lesser General Public License Version 3
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+Module gid_Module_Optional_Extensions
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
+    ParentID = gid_Module_Optional;
+    Files = ( );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+/* ** Presentation Minimizer ** */
+
+#ifndef WITHOUT_EXTENSION_MINIMIZER
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_MINIMIZER
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MINIMIZER);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Presentation_Minimizer );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Report Builder ** */
+
+#ifndef WITHOUT_EXTENSION_REPORTDESIGN
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_REPORTDESIGN
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_REPORTDESIGN);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Report_Builder );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** MediaWiki Publisher** */
+
+#ifndef WITHOUT_EXTENSION_MEDIAWIKI
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_MEDIAWIKI
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_MediaWiki );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Presenter Screen ** */
+
+#ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_PRESENTER_SCREEN
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_PRESENTER_SCREEN);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Presenter_Screen );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** PDF Import ** */
+
+#ifndef WITHOUT_EXTENSION_PDFIMPORT
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_PDFIMPORT
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_PDFIMPORT);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_PDF_Import );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Lightproof ** */
+
+#ifdef WITH_EXTENSION_LIGHTPROOF
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_LightProof
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_LIGHTPROOF);
+    ParentID = gid_Module_Optional_Extensions;
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Numbertext ** */
+
+#ifdef WITH_EXTENSION_NUMBERTEXT
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_NumberText
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_NumberText );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Hungarian Cross-reference Toolbar ** */
+
+#ifdef WITH_EXTENSION_HUNART
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_HunArt
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_HUNART);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_HunArt );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Typography Toolbar ** */
+
+#ifdef WITH_EXTENSION_TYPO
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_Typo
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_TYPO);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Typo );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** ConvertTextToNumber ** */
+
+#ifdef WITH_EXTENSION_CT2N
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_CT2N
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_CT2N);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_CT2N );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Watch Window ** */
+
+#ifdef WITH_EXTENSION_WATCH_WINDOW
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_Watch_Window
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_WATCH_WINDOW);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Watch_Window );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Google Docs ** */
+
+#ifdef WITH_EXTENSION_GOOGLE_DOCS
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_Google_Docs
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Google_Docs );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** NLPSolver ** */
+
+#ifdef WITH_EXTENSION_NLPSOLVER
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_NLPSolver
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_NLPSolver );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** LanguageTool ** */
+
+#ifdef WITH_EXTENSION_LANGUAGETOOL
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_LanguageTool
+ PackageInfo = "packinfo_extensions.txt";
+ MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_LANGUAGETOOL);
+ ParentID = gid_Module_Optional_Extensions;
+ Files = (
+ gid_File_Oxt_LanguageTool );
+ Minimal = NO;
+ Default = YES;
+ Styles = ( );
+End
+#endif
+#endif
+
+/* ** MySQL Connector ** */
+
+#ifdef WITH_EXTENSION_MYSQLC
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_MySQLConnector
+ PackageInfo = "packinfo_extensions.txt";
+ MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MYSQLC);
+ ParentID = gid_Module_Optional_Extensions;
+ Files = (
+ gid_File_Oxt_MySQLConnector );
+ Minimal = NO;
+ Default = YES;
+ Styles = ( );
+End
+#endif
+#endif
+
+/* ** oooblogger ** */
+
+#ifdef WITH_EXTENSION_OOOBLOGGER
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_OOoBlogger
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_OOOBLOGGER);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_OOoBlogger );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Sun Template Pack ** */
+
+#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_Sun_Template_Pack
+    ParentID = gid_Module_Optional_Extensions;
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SUN_TEMPLATE_PACK);
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
