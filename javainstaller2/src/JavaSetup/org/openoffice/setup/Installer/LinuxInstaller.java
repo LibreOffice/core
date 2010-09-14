@@ -227,7 +227,7 @@ public class LinuxInstaller extends Installer {
                 }
 
                 // Defining a Vector that contains the full rpm command. Then the string array can be
-                // created dynamically.
+                // created dynamically. Otherwise there would be too many different scenarios.
 
                 Vector rpmVector = new Vector();
 
@@ -361,7 +361,7 @@ public class LinuxInstaller extends Installer {
             }
 
             // Defining a Vector that contains the full rpm command. Then the string array can be
-            // created dynamically.
+            // created dynamically. Otherwise there would be too many different scenarios.
 
             Vector rpmVector = new Vector();
 

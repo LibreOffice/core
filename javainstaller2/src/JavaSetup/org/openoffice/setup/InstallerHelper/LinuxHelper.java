@@ -391,7 +391,8 @@ import java.util.Vector;public class LinuxHelper {
 
             data.setIsDebianSystem(true);
 
-            // Second check: If this is a Debian system, is "--force-debian" required?
+            // Second check: If this is a Debian system, is "--force-debian" required? Older
+            // versions do not support "--force-debian".
 
             // String rpmQuery = "rpm --help;
             String[] rpmQueryArray = new String[2];
