@@ -265,6 +265,7 @@ sub print_jdk_dir()
 {
     my $dir =
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.5/JavaHome") ||
+      reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.6/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.4/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.3/JavaHome");
     print cygpath($dir, 'w', $output_format); 
