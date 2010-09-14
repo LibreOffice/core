@@ -418,8 +418,10 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     if( _statusbar >>= sText )
     {
         setDisplayStatusBar( sal_True );
-        xStatusIndicator->start( sText, 100 );
-        //xStatusIndicator->setText( sText );
+        if ( sText.getLength() )
+            xStatusIndicator->start( sText, 100 );
+        else
+            xStatusIndicator->end();        // restore normal state for empty text
     }
     else if( _statusbar >>= bDefault )
     {
