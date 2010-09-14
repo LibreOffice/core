@@ -27,8 +27,8 @@
 
 PRJ=.
 
-PRJNAME=wpd
-TARGET=wpd
+PRJNAME=wps
+TARGET=wps
 
 # --- Settings -----------------------------------------------------
 
@@ -36,19 +36,25 @@ TARGET=wpd
 
 # --- Files --------------------------------------------------------
 
-.IF "$(SYSTEM_LIBWPD)" == "YES"
+.IF "$(SYSTEM_LIBWPS)" == "YES"
 @all:
-    @echo "Using system libwpd..."
+    @echo "Using system libwps..."
 .ENDIF
 
-TARFILE_NAME=libwpd-0.8.14
-TARFILE_MD5=64d66018897d759358f454010b6e75d2
+# libwps depends on the libwpd framework
+.IF "$(SYSTEM_LIBWPD)" == "YES"
+INCPRE+=$(LIBWPD_CFLAGS)
+.ELSE
+INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
+.ENDIF
+
+TARFILE_NAME=libwps-0.1.2
+TARFILE_MD5=799fc3b835a79adce8c88a3fee0150c1
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
-BUILD_DIR=src$/lib
+BUILD_DIR=src/lib
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
-

@@ -1,0 +1,3 @@
+lwps	libwps	: LIBWPD:libwpd soltools NULL
+lwps	libwps	usr1	-	all	lwps_mkout NULL
+lwps	libwps	nmake	-	all	lwps_libwps NULL
