@@ -1,5 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\boost
 mkdir: %_DEST%\inc%_EXT%\boost\bind
+mkdir: %_DEST%\inc%_EXT%\boost\concept
+mkdir: %_DEST%\inc%_EXT%\boost\concept\detail
 mkdir: %_DEST%\inc%_EXT%\boost\config
 mkdir: %_DEST%\inc%_EXT%\boost\config\compiler
 mkdir: %_DEST%\inc%_EXT%\boost\config\no_tr1
@@ -110,8 +112,12 @@ mkdir: %_DEST%\inc%_EXT%\boost\spirit\home
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor\impl
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\attribute
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\attribute\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug\impl
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\dynamic
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\dynamic\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\core
@@ -128,6 +134,10 @@ mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\error_handling
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\error_handling\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\iterator
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\iterator\impl
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\phoenix
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\phoenix\impl
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\symbols
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\symbols\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\utility
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\utility\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\utility\impl\chset
@@ -157,6 +167,8 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 
 ..\%__SRC%\inc\boost\* %_DEST%\inc%_EXT%\boost
 ..\%__SRC%\inc\boost\bind\* %_DEST%\inc%_EXT%\boost\bind
+..\%__SRC%\inc\boost\concept\* %_DEST%\inc%_EXT%\boost\concept
+..\%__SRC%\inc\boost\concept\detail\* %_DEST%\inc%_EXT%\boost\concept\detail
 ..\%__SRC%\inc\boost\config\* %_DEST%\inc%_EXT%\boost\config
 ..\%__SRC%\inc\boost\config\compiler\* %_DEST%\inc%_EXT%\boost\config\compiler
 ..\%__SRC%\inc\boost\config\no_tr1\* %_DEST%\inc%_EXT%\boost\config\no_tr1
@@ -266,8 +278,12 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\spirit\home\classic\* %_DEST%\inc%_EXT%\boost\spirit\home\classic
 ..\%__SRC%\inc\boost\spirit\home\classic\actor\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor
 ..\%__SRC%\inc\boost\spirit\home\classic\actor\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor\impl
+..\%__SRC%\inc\boost\spirit\home\classic\attribute\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\attribute
+..\%__SRC%\inc\boost\spirit\home\classic\attribute\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\attribute\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\debug\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug
 ..\%__SRC%\inc\boost\spirit\home\classic\debug\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug\impl
+..\%__SRC%\inc\boost\spirit\home\classic\dynamic\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\dynamic
+..\%__SRC%\inc\boost\spirit\home\classic\dynamic\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\dynamic\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\meta\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta
 ..\%__SRC%\inc\boost\spirit\home\classic\meta\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\core\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\core
@@ -284,6 +300,10 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\spirit\home\classic\error_handling\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\error_handling\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\iterator\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\iterator
 ..\%__SRC%\inc\boost\spirit\home\classic\iterator\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\iterator\impl
+..\%__SRC%\inc\boost\spirit\home\classic\phoenix\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\phoenix
+..\%__SRC%\inc\boost\spirit\home\classic\phoenix\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\phoenix\impl
+..\%__SRC%\inc\boost\spirit\home\classic\symbols\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\symbols
+..\%__SRC%\inc\boost\spirit\home\classic\symbols\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\symbols\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\utility\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\utility
 ..\%__SRC%\inc\boost\spirit\home\classic\utility\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\utility\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\utility\impl\chset\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\utility\impl\chset
