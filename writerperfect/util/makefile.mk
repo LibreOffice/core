@@ -19,10 +19,17 @@ LIBWPS=$(LIBWPS_LIBS)
 LIBWPS=-lwpslib
 .ENDIF
 
+.IF "$(SYSTEM_LIBWPG)" == "YES"
+LIBWPG=$(LIBWPG_LIBS)
+.ELSE
+LIBWPG=-lwpglib
+.ENDIF
+
 .ELSE
 
 LIBWPD=$(LIBPRE) wpdlib.lib
 LIBWPS=$(LIBPRE) wpslib.lib
+LIBWPG=$(LIBPRE) wpglib.lib
 
 .ENDIF
 
@@ -78,5 +85,33 @@ SHL2IMPLIB = i$(SHL2TARGET)
 SHL2LIBS = $(LIB2TARGET)
 SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 DEF2NAME = $(SHL2TARGET)
+
+LIB3TARGET= $(SLB)$/wpgimport.lib
+LIB3FILES= \
+    $(SLB)$/stream.lib  \
+    $(SLB)$/filter.lib  \
+    $(SLB)$/wpgimp.lib
+SHL3LIBS=$(LIB3TARGET)
+SHL3STDLIBS+= \
+    $(SVLLIB)	\
+    $(SOTLIB) \
+    $(SO2LIB) \
+    $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB) \
+    $(XMLOFFLIB) \
+    $(LIBWPD) \
+    $(LIBWPG)
+
+SHL3TARGET = wpgimport$(DLLPOSTFIX)
+SHL3IMPLIB = i$(SHL3TARGET)
+SHL3LIBS = $(LIB3TARGET)
+SHL3VERSIONMAP = $(SOLARENV)/src/component.map
+DEF3NAME = $(SHL3TARGET)
 
 .INCLUDE :  target.mk

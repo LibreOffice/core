@@ -7,7 +7,8 @@ T4_DRAW = \
     draw_StarOffice_XML_Draw_Template \
     pdf_Portable_Document_Format\
     draw8 \
-    draw8_template
+    draw8_template \
+    draw_WordPerfect_Graphics
 
 # -----------------------------------------------
 # count = 9
@@ -16,7 +17,9 @@ F4_DRAW = \
     draw_StarOffice_XML_Draw_Template \
     draw_pdf_Export \
     draw8 \
-    draw8_template
+    draw8_template \
+    WordPerfectGraphics
+
 
 # -----------------------------------------------
 # count = 4
