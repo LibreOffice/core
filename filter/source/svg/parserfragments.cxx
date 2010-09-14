@@ -510,7 +510,8 @@ bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector 
             list_p.direct
             (
                 real_p[push_back_a(rOutputVector)],
-                ','
+                // list delimiter is either ',' or space
+                ',' | eps_p
             )
         ) >> end_p,
         //  End grammar

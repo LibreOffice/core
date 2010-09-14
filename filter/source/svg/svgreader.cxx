@@ -254,6 +254,7 @@ struct AnnotatingVisitor
                 // init state. inherit defaults from parent.
                 maCurrState = maParentStates.back();
                 maCurrState.maTransform.identity();
+                maCurrState.maViewBox.reset();
 
                 // scan for style info
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
