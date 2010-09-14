@@ -26,25 +26,38 @@
 #*************************************************************************
 
 PRJ=..$/..
+
 PRJNAME=filter
 TARGET=svgfilter
-
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE :  	settings.mk
+.INCLUDE :  settings.mk
+.INCLUDE :	libs.mk
 
 # --- Types -------------------------------------
 
-SLOFILES=	$(SLO)$/svguno.obj			\
-            $(SLO)$/svgfilter.obj		\
+SLOFILES= \
+            $(SLO)$/b2dellipse.obj	\
+            $(SLO)$/parserfragments.obj \
             $(SLO)$/svgexport.obj		\
+            $(SLO)$/svgfilter.obj		\
             $(SLO)$/svgfontexport.obj	\
-            $(SLO)$/svgwriter.obj	
-.IF "$(SOLAR_JAVA)"!=""
-SLOFILES+=		$(SLO)$/svgimport.obj
+            $(SLO)$/svgimport.obj		\
+            $(SLO)$/svgreader.obj		\
+            $(SLO)$/svgwriter.obj		\
+            $(SLO)$/tokenmap.obj        \
+            $(SLO)$/units.obj
+
+.IF "$(COMID)"=="gcc3"
+.IF "$(CCNUMVER)">="000400000000" || "$(SYSTEM_BOOST)"=="YES"
+CFLAGS+=-DUSE_MODERN_SPIRIT
+.ENDIF
+.ENDIF
+.IF "$(SYSTEM_BOOST)"=="NO"
+CFLAGS+=-DUSE_MODERN_SPIRIT
 .ENDIF
 
 # --- Library -----------------------------------
@@ -54,21 +67,17 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(EDITENGLIB)			\
     $(SVXCORELIB)			\
+    $(BASEGFXLIB)		\
     $(XMLOFFLIB)		\
-    $(SVTOOLLIB)		\
+    $(SVTOOLLIB)	    \
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB) 
-
-.IF "$(SOLAR_JAVA)"!=""
-SHL1STDLIBS+=\
-    $(JVMACCESSLIB)
-.ENDIF
-
+    $(SALLIB)			\
+    $(LIBXML)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
@@ -81,3 +90,16 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+# Generate gperf files - from oox/source/token
+$(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf : tokens.txt gentoken.pl
+        $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf
+
+$(INCCOM)$/tokens.cxx : $(MISC)$/tokens.gperf makefile.mk
+        gperf --compare-strncmp -C -m 20 $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" >$(INCCOM)$/tokens.cxx
+
+$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
+
+$(SLO)$/parserfragments.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
+
+$(SLO)$/svgreader.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
