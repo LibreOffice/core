@@ -68,8 +68,8 @@ static BOOL rebaseImage( const std::string& filePath, LPVOID address )
     ULONG_PTR lpNewImageBase = reinterpret_cast<ULONG_PTR>(address);
 
     BOOL bResult = ReBaseImage(
-        filePath.c_str(),
-        "",
+        (PSTR)filePath.c_str(),
+        (PSTR)"",
         TRUE,
         FALSE,
         FALSE,
