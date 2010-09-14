@@ -258,7 +258,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // kopiere Attribute/Text
     if( !pCpyAttrNd->HasSwAttrSet() )
         // wurde ein AttrSet fuer die Numerierung angelegt, so loesche diesen!
-        pTxtNd->ResetAllAttr();
+        pCpyAttrNd->ResetAllAttr();
 
     // if Copy-Textnode unequal to Copy-Attrnode, then copy first
     // the attributes into the new Node.
