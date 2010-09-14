@@ -87,9 +87,14 @@ sub check_system_path
 
     if( $^O =~ /cygwin/i )
     {   # When using cygwin's perl the PATH variable is POSIX style and ...
-        $pathvariable = qx{cygpath -mp "$pathvariable"} ;
+        my $temparrayref = installer::converter::convert_stringlist_into_array_without_newline(\$pathvariable, $local_pathseparator);
+        foreach $i (0..$#$temparrayref) {
+            $$temparrayref[$i] = qx{cygpath -m "$$temparrayref[$i]"};
+            chomp($$temparrayref[$i]);
+        }
         # has to be converted to DOS style for further use.
         $local_pathseparator = ';';
+        $pathvariable = join($local_pathseparator, @$temparrayref);
     }
     my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 
