@@ -33,7 +33,7 @@ aux_alllangiso*:=$(alllangiso)
 SHELL_PACKAGE:=$(subst,/,$/ $(PACKAGE))
 XHPDEST*:=$(COMMONMISC)
 
-HLANGXHPFILES:=$(foreach,i,$(XHPFILES) $(foreach,j,$(aux_alllangiso) $(XHPDEST)$/$j$/$(SHELL_PACKAGE)$/$(i:f)))
+HLANGXHPFILES*:=$(foreach,i,$(XHPFILES) $(foreach,j,$(aux_alllangiso) $(XHPDEST)$/$j$/$(SHELL_PACKAGE)$/$(i:f)))
 
 ALLTAR : $(COMMONMISC)$/$(TARGET).done $(COMMONMISC)$/xhp_changed.flag optix
 
