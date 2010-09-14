@@ -308,10 +308,11 @@ struct AnnotatingVisitor
     bool hasGradientOpacity( const Gradient& rGradient )
     {
         return
-            maGradientStopVector[
-                rGradient.maStops[0]].maStopColor.a != 1.0 ||
-            maGradientStopVector[
-                rGradient.maStops[1]].maStopColor.a != 1.0;
+            !rGradient.maStops.empty() &&
+            (maGradientStopVector[
+                 rGradient.maStops[0]].maStopColor.a != 1.0 ||
+             maGradientStopVector[
+                 rGradient.maStops[1]].maStopColor.a != 1.0);
     }
 
     struct StopSorter
@@ -2464,10 +2465,11 @@ struct ShapeRenderingVisitor
     bool hasGradientOpacity( const Gradient& rGradient )
     {
         return
-            mrGradientStopVector[
-                rGradient.maStops[0]].maStopColor.a != 1.0 ||
-            mrGradientStopVector[
-                rGradient.maStops[1]].maStopColor.a != 1.0;
+            !rGradient.maStops.empty() &&
+            (mrGradientStopVector[
+                 rGradient.maStops[0]].maStopColor.a != 1.0 ||
+             mrGradientStopVector[
+                 rGradient.maStops[1]].maStopColor.a != 1.0);
     }
 
     sal_Int8 toByteColor( double val )
