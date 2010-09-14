@@ -1746,6 +1746,28 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
             switch( pSpace->GetLineSpaceRule() )
             {
                 case SVX_LINE_SPACE_AUTO:
+            if (pSpace->GetInterLineSpaceRule()==SVX_INTER_LINE_SPACE_PROP) {
+                        long nTmp = pSpace->GetPropLineSpace();
+                        if (nTmp<100) { // code adaped from fixed line height
+                            nTmp *= nLineHeight;
+                            nTmp /= 100;
+                            if( !nTmp )
+                                ++nTmp;
+                            nLineHeight = (KSHORT)nTmp;
+/*
+                            //@TODO figure out how WW maps ascent and descent
+                            //in case of prop  line spacing <100%
+                            KSHORT nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                            if( nAsc < pCurr->GetAscent() ||
+                                nLineHeight - nAsc < pCurr->Height() -
+pCurr->GetAscent() )
+                                pCurr->SetClipping( sal_True );
+                            pCurr->SetAscent( nAsc );
+*/
+                            pCurr->Height( nLineHeight );
+                            pInf->GetParaPortion()->SetFixLineHeight();
+                        }
+                    }
                 break;
                 case SVX_LINE_SPACE_MIN:
                 {
