@@ -31,6 +31,10 @@
 #include "WW8Sttbf.hxx"
 #include <cstdio>
 
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
 namespace ww8
 {
     WW8Struct::WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize)
