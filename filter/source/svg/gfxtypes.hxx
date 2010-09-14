@@ -155,19 +155,6 @@ enum CapStyle
     ROUND
 };
 
-enum FontStyle
-{
-    STYLE_NORMAL,
-    STYLE_OBLIQUE,
-    STYLE_ITALIC
-};
-
-enum FontVariant
-{
-    VARIANT_NORMAL,
-    VARIANT_SMALLCAPS
-};
-
 struct State
 {
     State() :
@@ -177,8 +164,8 @@ struct State
         maViewBox(),
         maFontFamily(), // app-default
         mnFontSize(12.0),
-        meFontStyle(STYLE_NORMAL),
-        meFontVariant(VARIANT_NORMAL),
+        maFontStyle(RTL_CONSTASCII_USTRINGPARAM("normal")),
+        maFontVariant(RTL_CONSTASCII_USTRINGPARAM("normal")),
         mnFontWeight(400.0),
         meTextAnchor(BEFORE),
         meTextDisplayAlign(BEFORE),
@@ -220,8 +207,8 @@ struct State
 
      */
     double                      mnFontSize;
-    FontStyle                   meFontStyle;
-    FontVariant                 meFontVariant;
+    rtl::OUString               maFontStyle;
+    rtl::OUString               maFontVariant;
     double                      mnFontWeight;
 
     TextAlign                   meTextAnchor; // text-anchor
@@ -265,8 +252,8 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.maViewBox==rRHS.maViewBox &&
         rLHS.maFontFamily==rRHS.maFontFamily &&
         rLHS.mnFontSize==rRHS.mnFontSize &&
-        rLHS.meFontStyle==rRHS.meFontStyle &&
-        rLHS.meFontVariant==rRHS.meFontVariant &&
+        rLHS.maFontStyle==rRHS.maFontStyle &&
+        rLHS.maFontVariant==rRHS.maFontVariant &&
         rLHS.mnFontWeight==rRHS.mnFontWeight &&
         rLHS.meTextAnchor==rRHS.meTextAnchor &&
         rLHS.meTextDisplayAlign==rRHS.meTextDisplayAlign &&
@@ -310,8 +297,8 @@ struct StateHash
             ^  size_t(rState.maViewBox.getHeight())
             ^  size_t(rState.maFontFamily.hashCode())
             ^  size_t(rState.mnFontSize)
-            ^  size_t(rState.meFontStyle)
-            ^  size_t(rState.meFontVariant)
+            ^  size_t(rState.maFontStyle.hashCode())
+            ^  size_t(rState.maFontVariant.hashCode())
             ^  size_t(rState.mnFontWeight)
             ^  size_t(rState.meTextAnchor)
             ^  size_t(rState.meTextDisplayAlign)

@@ -415,6 +415,24 @@ struct AnnotatingVisitor
         return aBuf.makeStringAndClear();
     }
 
+    rtl::OUString getOdfAlign( TextAlign eAlign )
+    {
+        static ::rtl::OUString aStart(USTR("start"));
+        static ::rtl::OUString aEnd(USTR("end"));
+        // static ::rtl::OUString aJustify(USTR("justify"));
+        static ::rtl::OUString aCenter(USTR("center"));
+        switch(eAlign)
+        {
+            default:
+            case BEFORE:
+                return aStart;
+            case CENTER:
+                return aCenter;
+            case AFTER:
+                return aEnd;
+        }
+    }
+
     bool writeStyle(State& rState, const sal_Int32 nTagId)
     {
         rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
@@ -443,7 +461,7 @@ struct AnnotatingVisitor
         // do we have a gradient fill? then write out gradient as well
         if( rState.meFillType == GRADIENT && rState.maFillGradient.maStops.size() > 1 )
         {
-            // TODO(F3): ODF12 supposedly also groks svg:linear/radialGradient
+            // TODO(F3): ODF12 supposedly also groks svg:linear/radialGradient. But CL says: nope.
             xAttrs->AddAttribute( USTR( "draw:name" ), getStyleName("svggradient", rState.maFillGradient.mnId) );
             if( rState.maFillGradient.meType == Gradient::LINEAR )
             {
@@ -515,6 +533,47 @@ struct AnnotatingVisitor
         }
 
         // serialize to automatic-style section
+        if( nTagId == XML_TEXT )
+        {
+            // write paragraph style attributes
+            xAttrs->Clear();
+
+            xAttrs->AddAttribute( USTR( "style:name" ), getStyleName("svgparagraphstyle", mnCurrStateId) );
+            xAttrs->AddAttribute( USTR( "style:family" ), USTR("paragraph") );
+            mxDocumentHandler->startElement( USTR("style:style"),
+                                             xUnoAttrs );
+
+            xAttrs->Clear();
+            xAttrs->AddAttribute( USTR( "fo:text-align"), getOdfAlign(rState.meTextAnchor));
+
+            mxDocumentHandler->startElement( USTR("style:paragraph-properties"),
+                                             xUnoAttrs );
+            mxDocumentHandler->endElement( USTR("style:paragraph-properties") );
+            mxDocumentHandler->endElement( USTR("style:style") );
+
+            // write text style attributes
+            xAttrs->Clear();
+
+            xAttrs->AddAttribute( USTR( "style:name" ), getStyleName("svgtextstyle", mnCurrStateId) );
+            xAttrs->AddAttribute( USTR( "style:family" ), USTR("text") );
+            mxDocumentHandler->startElement( USTR("style:style"),
+                                             xUnoAttrs );
+            xAttrs->Clear();
+            xAttrs->AddAttribute( USTR( "fo:font-family"), rState.maFontFamily);
+            xAttrs->AddAttribute( USTR( "fo:font-size"),
+                                  rtl::OUString::valueOf(pt2mm(rState.mnFontSize))+USTR("mm"));
+            xAttrs->AddAttribute( USTR( "fo:font-style"), rState.maFontStyle);
+            xAttrs->AddAttribute( USTR( "fo:font-variant"), rState.maFontVariant);
+            xAttrs->AddAttribute( USTR( "fo:font-weight"),
+                                  rtl::OUString::valueOf(rState.mnFontWeight));
+            xAttrs->AddAttribute( USTR( "fo:color"), getOdfColor(rState.maFillColor));
+
+            mxDocumentHandler->startElement( USTR("style:text-properties"),
+                                             xUnoAttrs );
+            mxDocumentHandler->endElement( USTR("style:text-properties") );
+            mxDocumentHandler->endElement( USTR("style:style") );
+        }
+
         xAttrs->Clear();
         xAttrs->AddAttribute( USTR( "style:name" ), getStyleName("svggraphicstyle", mnCurrStateId) );
         xAttrs->AddAttribute( USTR( "style:family" ), USTR("graphic") );
@@ -928,13 +987,16 @@ struct AnnotatingVisitor
                 maCurrState.mnFontSize=convLength(sValue,maCurrState,'v');
                 break;
             case XML_FONT_STYLE:
-                maCurrState.meFontStyle=STYLE_ITALIC; // TODO: sValue.toStyleId();
+                parseFontStyle(maCurrState,sValue,aValueUtf8.getStr());
                 break;
             case XML_FONT_WEIGHT:
                 maCurrState.mnFontWeight=sValue.toDouble();
                 break;
             case XML_FONT_VARIANT:
-                maCurrState.meFontVariant=VARIANT_SMALLCAPS; // TODO: sValue.toDouble();
+                parseFontVariant(maCurrState,sValue,aValueUtf8.getStr());
+                break;
+            case XML_TEXT_ANCHOR:
+                parseTextAlign(maCurrState,aValueUtf8.getStr());
                 break;
             case XML_STOP_COLOR:
                 if( maGradientVector.empty() ||
@@ -985,6 +1047,34 @@ struct AnnotatingVisitor
             }
         }
         while( nIndex != -1 );
+    }
+
+    void parseFontStyle( State&               io_rInitialState,
+                         const rtl::OUString& rValue,
+                         const char*          sValue )
+    {
+        if( strcmp(sValue,"inherit") != 0 )
+            io_rInitialState.maFontStyle = rValue;
+    }
+
+    void parseFontVariant( State&               io_rInitialState,
+                           const rtl::OUString& rValue,
+                           const char*          sValue )
+    {
+        if( strcmp(sValue,"inherit") != 0 )
+            io_rInitialState.maFontVariant = rValue;
+    }
+
+    void parseTextAlign( State&      io_rInitialState,
+                         const char* sValue )
+    {
+        if( strcmp(sValue,"start") == 0 )
+            io_rInitialState.meTextAnchor = BEFORE;
+        else if( strcmp(sValue,"middle") == 0 )
+            io_rInitialState.meTextAnchor = CENTER;
+        else if( strcmp(sValue,"end") == 0 )
+            io_rInitialState.meTextAnchor = AFTER;
+        // keep current val for sValue == "inherit"
     }
 
     void parsePaint( const rtl::OUString& rValue,
@@ -1391,6 +1481,10 @@ struct ShapeWritingVisitor
                 // actually export text
                 xAttrs->Clear();
 
+                // some heuristic attempts to have text output
+                // baseline-relative
+                y -= 2.0*maCurrState.mnFontSize/3.0;
+
                 // extract basic transformations out of CTM
                 basegfx::B2DTuple aScale, aTranslate;
                 double fRotate, fShearX;
@@ -1423,9 +1517,16 @@ struct ShapeWritingVisitor
 
                 xAttrs->Clear();
                 mxDocumentHandler->startElement(USTR("draw:text-box"),xUnoAttrs);
-                // TODO: put text style in here
+                xAttrs->AddAttribute( USTR( "text:style-name" ), USTR("svgparagraphstyle")+sStyleId);
                 mxDocumentHandler->startElement(USTR("text:p"),xUnoAttrs);
+
+                xAttrs->Clear();
+                xAttrs->AddAttribute( USTR( "text:style-name" ), USTR("svgtextstyle")+sStyleId);
+                mxDocumentHandler->startElement(USTR("text:span"),xUnoAttrs);
+
+                xAttrs->Clear();
                 mxDocumentHandler->characters(sText.makeStringAndClear());
+                mxDocumentHandler->endElement(USTR("text:span"));
                 mxDocumentHandler->endElement(USTR("text:p"));
                 mxDocumentHandler->endElement(USTR("draw:text-box"));
                 mxDocumentHandler->endElement(USTR("draw:frame"));
@@ -2291,6 +2392,14 @@ struct ShapeRenderingVisitor
                 Font aFont(maCurrState.maFontFamily,
                            Size(0,
                                 basegfx::fround(pt100thmm(maCurrState.mnFontSize))));
+                aFont.SetAlign(ALIGN_BASELINE);
+                aFont.SetColor(getVclColor(maCurrState.maFillColor));
+                aFont.SetFillColor(getVclColor(maCurrState.maFillColor));
+
+                if( !maCurrState.maFontStyle.equalsAscii("normal") )
+                    aFont.SetItalic(ITALIC_NORMAL); // TODO: discriminate
+                if( !maCurrState.mnFontWeight != 400.0 )
+                    aFont.SetWeight(WEIGHT_BOLD); // TODO: discriminate
 
                 // extract basic transformations out of CTM
                 basegfx::B2DTuple aScale, aTranslate;
@@ -2312,9 +2421,27 @@ struct ShapeRenderingVisitor
 
                 // TODO(F2): update bounds
                 mrOutDev.SetFont(aFont);
+                const ::rtl::OUString aText( sText.makeStringAndClear() );
+                switch( maCurrState.meTextAnchor )
+                {
+                    default:
+                    case BEFORE:
+                        break;
+
+                    case CENTER:
+                    {
+                        const long nWidth=mrOutDev.GetTextWidth(aText);
+                        x -= nWidth/2;
+                    }
+                    break;
+
+                    case AFTER:
+                        x -= mrOutDev.GetTextWidth(aText);
+                        break;
+                }
                 mrOutDev.DrawText(Point(basegfx::fround(pt100thmm(x)),
                                         basegfx::fround(pt100thmm(y))),
-                                  sText.makeStringAndClear());
+                                  aText);
                 break;
             }
         }
@@ -2592,6 +2719,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
 
     aVDev.EnableOutput( FALSE );
     aMtf.Record( &aVDev );
+    aVDev.SetTextAlign(ALIGN_BASELINE);
 
     // parse styles and fill state stack
     svgi::State      aInitialState;
