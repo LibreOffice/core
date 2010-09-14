@@ -197,6 +197,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         // --> OD 2008-06-05 #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
         // <--
+    case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -320,6 +321,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbTabAtLeftIndentForParagraphsInList = value;
         break;
         // <--
+    case INVERT_BORDER_SPACING:
+        mbInvertBorderSpacing = value;
+    break;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:

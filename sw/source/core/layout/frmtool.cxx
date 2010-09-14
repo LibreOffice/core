@@ -2002,8 +2002,9 @@ void SwBorderAttrs::_CalcBottom()
 
 long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
 {
-    long nRight;
+    long nRight=0;
 
+    if (!pCaller->IsTxtFrm() || !((SwTxtFrm*)pCaller)->GetTxtNode()->GetDoc()->get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
@@ -2011,6 +2012,7 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
     else
         nRight = CalcRightLine();
 
+    }
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
         nRight += rLR.GetLeft();
@@ -2030,20 +2032,23 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
 
 long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
-    long nLeft;
+    long nLeft=0;
 
+    if (!pCaller->IsTxtFrm() || !((SwTxtFrm*)pCaller)->GetTxtNode()->GetDoc()->get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
         nLeft = CalcRightLine();
     else
         nLeft = CalcLeftLine();
+    }
 
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
         nLeft += rLR.GetRight();
     else
         nLeft += rLR.GetLeft();
+
 
     // --> OD 2008-01-21 #newlistlevelattrs#
     // correction: do not retrieve left margin for numbering in R2L-layout

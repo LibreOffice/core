@@ -124,7 +124,8 @@ enum SwDocumentSettingsPropertyHandles
     // --> OD 2008-06-05 #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     // <--
-    HANDLE_MODIFYPASSWORDINFO
+    HANDLE_MODIFYPASSWORDINFO,
+    HANDLE_INVERT_BORDER_SPACING
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -179,7 +180,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // --> OD 2008-06-05 #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, CPPUTYPE_PROPERTYVALUE, 0,   0},
-
+        { RTL_CONSTASCII_STRINGPARAM("InvertBorderSpacing"), HANDLE_INVERT_BORDER_SPACING, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -688,6 +689,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     uno::Reference< uno::XInterface >() );
         }
         break;
+    case HANDLE_INVERT_BORDER_SPACING:
+    {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, bTmp);
+    }
+    break;
         default:
             throw UnknownPropertyException();
     }
@@ -1020,7 +1027,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue <<= mpDocSh->GetModifyPasswordInfo();
         }
         break;
-
+    case HANDLE_INVERT_BORDER_SPACING:
+    {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::INVERT_BORDER_SPACING);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+    }
+    break;
         default:
             throw UnknownPropertyException();
     }

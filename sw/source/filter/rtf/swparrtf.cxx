@@ -296,7 +296,7 @@ void SwRTFParser::Continue( int nToken )
             // --> FME 2006-02-10 #131283#
             pDoc->set(IDocumentSettingAccess::TABLE_ROW_KEEP, true);
             pDoc->set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
-
+        pDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
             //
             // COMPATIBILITY FLAGS END
             //

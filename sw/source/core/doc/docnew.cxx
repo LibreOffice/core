@@ -383,6 +383,7 @@ SwDoc::SwDoc() :
     // --> OD 2008-06-05 #i89181#
     mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
     // <--
+    mbInvertBorderSpacing                   = false;        // hidden
 
     //
     // COMPATIBILITY FLAGS END

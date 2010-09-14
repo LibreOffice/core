@@ -1394,6 +1394,8 @@ void SwWW8ImplReader::ImportDop()
     rDoc.set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
     // <--
 
+    rDoc.set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
+
     //
     // COMPATIBILITY FLAGS END
     //

@@ -4798,10 +4798,19 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
 
                 maTracer.Log(sw::log::eBorderDistOutside);
 
-                aBox.SetDistance( (USHORT)aInnerDist.Left(), BOX_LINE_LEFT );
-                aBox.SetDistance( (USHORT)aInnerDist.Top(), BOX_LINE_TOP );
-                aBox.SetDistance( (USHORT)aInnerDist.Right(), BOX_LINE_RIGHT );
-                aBox.SetDistance( (USHORT)aInnerDist.Bottom(), BOX_LINE_BOTTOM );
+        if ((nBorder & WW8_LEFT)==WW8_LEFT) {
+            aBox.SetDistance( (USHORT)aInnerDist.Left(), BOX_LINE_LEFT );
+        }
+        if ((nBorder & WW8_TOP)==WW8_TOP) {
+            aBox.SetDistance( (USHORT)aInnerDist.Top(), BOX_LINE_TOP );
+        }
+        if ((nBorder & WW8_RIGHT)==WW8_RIGHT) {
+            aBox.SetDistance( (USHORT)aInnerDist.Right(), BOX_LINE_RIGHT );
+        }
+
+        if ((nBorder & WW8_BOT)==WW8_BOT) {
+            aBox.SetDistance( (USHORT)aInnerDist.Bottom(), BOX_LINE_BOTTOM );
+        }
 
                 NewAttr( aBox );
 

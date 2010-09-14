@@ -4662,7 +4662,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
     //fuer (Row,Body,Ftn,Root,Column,NoTxt) gibt's hier nix zu tun
-    if ( (GetType() & 0x90C5) || (Prt().SSize() == Frm().SSize()) )
+    if ( (GetType() & 0x90C5) )
         return;
 
     if ( (GetType() & 0x2000) &&    //Cell
