@@ -70,7 +70,6 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
-    FixedInfo       aInfo;
     ListBox *       pListBox;
     ToolBox &       rToolBox;
     BOOL            bUserSel;
@@ -95,7 +94,6 @@ public:
 
     void                        StartSelection();
     inline ListBox &            GetListBox()    { return *pListBox; }
-    inline FixedInfo &          GetInfo()       { return aInfo; }
 
     BOOL                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( BOOL bVal )    { bUserSel = bVal; }
@@ -106,7 +104,6 @@ public:
 
 SvxPopupWindowListBox::SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
-    aInfo       ( this, SVX_RES( FT_NUM_OPERATIONS ) ),
     rToolBox    ( rTbx ),
     bUserSel    ( FALSE ),
     nTbxId      ( nId ),
@@ -242,7 +239,7 @@ void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
 
     String aText( aActionStr );
     aText.SearchAndReplaceAllAscii( "$(ARG1)", String::CreateFromInt32( nCount ) );
-    pPopupWin->GetInfo().SetText( aText );
+    pPopupWin->SetText( aText );
 }
 
 
