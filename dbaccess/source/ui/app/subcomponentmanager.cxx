@@ -529,7 +529,8 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool SubComponentManager::activateSubFrame( const ::rtl::OUString& _rName, const sal_Int32 _nComponentType, const ElementOpenMode _eOpenMode ) const
+    bool SubComponentManager::activateSubFrame( const ::rtl::OUString& _rName, const sal_Int32 _nComponentType,
+        const ElementOpenMode _eOpenMode, Reference< XComponent >& o_rComponent ) const
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
@@ -545,6 +546,13 @@ namespace dbaui
         const Reference< XFrame > xFrame( pos->xFrame, UNO_SET_THROW );
         const Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
         xTopWindow->toFront();
+
+        if ( pos->xModel.is() )
+            o_rComponent = pos->xModel.get();
+        else if ( pos->xController.is() )
+            o_rComponent = pos->xController.get();
+        else
+            o_rComponent = pos->xFrame.get();
 
         return true;
     }
