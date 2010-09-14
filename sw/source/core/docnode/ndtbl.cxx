@@ -39,6 +39,7 @@
 #include <editeng/brkitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <svl/stritem.hxx>
 // OD 06.08.2003 #i17174#
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
@@ -4265,6 +4266,48 @@ void SwDoc::SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
     }
     pBoxFmt->SetFmtAttr( rSet );
     SetModified();
+}
+
+void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
+{
+    SwPaM aPam(rPos);
+    aPam.Move(fnMoveBackward);
+    SwCntntNode *pNode = aPam.GetCntntNode();
+    if ( 0 == pNode )
+        return ;
+    if( pNode->IsTxtNode() )
+    {
+        SwTxtNode * pTxtNode = pNode->GetTxtNode();
+        if ( pTxtNode && pTxtNode->IsNumbered() && pTxtNode->GetTxt().Len()==0 )
+        {
+            const SfxPoolItem* pFmtItem = 0;
+            SfxItemSet rSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),
+                        RES_PARATR_BEGIN, RES_PARATR_END - 1,
+                        0);
+            pTxtNode->SwCntntNode::GetAttr( rSet );
+            if ( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE , FALSE , &pFmtItem ) )
+            {
+                SwUndoDelNum * pUndo;
+                if( DoesUndo() )
+                {
+                    ClearRedo();
+                    AppendUndo( pUndo = new SwUndoDelNum( aPam ) );
+                }
+                else
+                    pUndo = 0;
+                SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
+                aRegH.RegisterInModify( pTxtNode , *pTxtNode );
+                if ( pUndo )
+                    pUndo->AddNode( *pTxtNode , FALSE );
+                String aStyle = String::CreateFromAscii("");
+                SfxStringItem * pNewItem = (SfxStringItem*)pFmtItem->Clone();
+                pNewItem->SetValue( aStyle );
+                rSet.Put( *pNewItem );
+                pTxtNode->SetAttr( rSet );
+                delete pNewItem;
+            }
+        }
+    }
 }
 
 void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )

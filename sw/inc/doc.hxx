@@ -1751,6 +1751,7 @@ public:
     void ChkBoxNumFmt( SwTableBox& rAktBox, sal_Bool bCallUpdate );
     void SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );
+    void ClearLineNumAttrs( SwPosition & rPos );
 
     sal_Bool InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                         const SwTable* pCpyTbl = 0, sal_Bool bCpyName = sal_False,

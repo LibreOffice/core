@@ -928,6 +928,8 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
             if(HasSelection())
                 DelRight();
             SwFEShell::SplitNode();
+            // delete the numbered attribute of the last line if the last line is empty
+            GetDoc()->ClearLineNumAttrs( *GetCrsr()->GetPoint() );
         }
 
         const SwPageDesc *pDesc = pPageDesc
