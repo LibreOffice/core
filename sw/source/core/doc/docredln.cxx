@@ -1574,6 +1574,27 @@ const SwRedline* SwDoc::GetRedline( const SwPosition& rPos,
                     --nM;
                     pRedl = (*pRedlineTbl)[ nM ];
                 }
+                // if there are format and insert changes in the same position
+                // show insert change first.
+                // since the redlines are sorted by position, only check the redline
+                // before and after the current redline
+                if( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
+                {
+                    if( nM && rPos >= *(*pRedlineTbl)[ nM - 1 ]->Start() &&
+                        rPos <= *(*pRedlineTbl)[ nM - 1 ]->End() &&
+                        ( nsRedlineType_t::REDLINE_INSERT == (*pRedlineTbl)[ nM - 1 ]->GetType() ) )
+                    {
+                        --nM;
+                        pRedl = (*pRedlineTbl)[ nM ];
+                    }
+                    else if( ( nM + 1 ) <= nO && rPos >= *(*pRedlineTbl)[ nM + 1 ]->Start() &&
+                        rPos <= *(*pRedlineTbl)[ nM + 1 ]->End() &&
+                        ( nsRedlineType_t::REDLINE_INSERT == (*pRedlineTbl)[ nM + 1 ]->GetType() ) )
+                    {
+                        ++nM;
+                        pRedl = (*pRedlineTbl)[ nM ];
+                    }
+                }
 
                 if( pFndPos )
                     *pFndPos = nM;
