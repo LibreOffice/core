@@ -68,6 +68,14 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 
+    virtual void DrawingTab(
+        const Point& rStartPos, long nWidth, const String& rChar,
+        const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        const Color& rOverlineColor,
+        const Color& rTextLineColor);
+
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void        ParaAttribsChanged( USHORT nPara );
     virtual BOOL        SpellNextDocument();

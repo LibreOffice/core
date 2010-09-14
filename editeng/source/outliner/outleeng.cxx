@@ -204,6 +204,15 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
         pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
 }
 
+void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar,
+    const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+    bool bEndOfLine, bool bEndOfParagraph,
+    const Color& rOverlineColor, const Color& rTextLineColor)
+{
+    pOwner->DrawingTab(rStartPos, nWidth, rChar, rFont, nPara, nIndex, nRightToLeft,
+            bEndOfLine, bEndOfParagraph, rOverlineColor, rTextLineColor );
+}
+
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
     EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL

@@ -1790,7 +1790,20 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHO
     {
         // #101498#
         DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, pWrongSpellVector,
-            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, bEndOfLine, bEndOfParagraph, bEndOfBullet);
+            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, false, 0, bEndOfLine, bEndOfParagraph, bEndOfBullet);
+
+        aDrawPortionHdl.Call( &aInfo );
+    }
+}
+
+void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar, const SvxFont& rFont,
+    USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
+    const Color& rOverlineColor, const Color& rTextLineColor)
+{
+    if(aDrawPortionHdl.IsSet())
+    {
+        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.Len(), rFont, nPara, nIndex, NULL, NULL,
+            NULL, NULL, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
 
         aDrawPortionHdl.Call( &aInfo );
     }

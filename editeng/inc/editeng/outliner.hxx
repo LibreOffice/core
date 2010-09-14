@@ -422,6 +422,9 @@ public:
     // #101498# BiDi level needs to be transported, too.
     BYTE                mnBiDiLevel;
 
+    bool                mbFilled;
+    long                mnWidthToFill;
+
     // bitfield
     unsigned            mbEndOfLine : 1;
     unsigned            mbEndOfParagraph : 1;
@@ -445,6 +448,8 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor,
         BYTE nBiDiLevel,
+        bool bFilled,
+        long nWidthToFill,
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet)
@@ -462,6 +467,8 @@ public:
         maOverlineColor(rOverlineColor),
         maTextLineColor(rTextLineColor),
         mnBiDiLevel(nBiDiLevel),
+        mbFilled( bFilled ),
+        mnWidthToFill( nWidthToFill ),
         mbEndOfLine(bEndOfLine),
         mbEndOfParagraph(bEndOfParagraph),
         mbEndOfBullet(bEndOfBullet)
@@ -892,6 +899,14 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
+        const Color& rTextLineColor);
+
+    virtual void DrawingTab(
+        const Point& rStartPos, long nWidth, const String& rChar,
+        const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 

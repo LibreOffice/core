@@ -3517,7 +3517,26 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     String aText;
                                     aText.Fill( (USHORT)nChars, pTextPortion->GetExtraValue() );
+                                    aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.Len(), NULL );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
+
+                                    if ( bStripOnly )
+                                    {
+                                        // create EOL and EOP bools
+                                        const bool bEndOfLine(y == pLine->GetEndPortion());
+                                        const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+
+                                        const Color aOverlineColor(pOutDev->GetOverlineColor());
+                                        const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                                        // StripPortions() data callback
+                                        GetEditEnginePtr()->DrawingTab( aTmpPos,
+                                            pTextPortion->GetSize().Width(),
+                                            pTextPortion->GetExtraValue(),
+                                            aTmpFont, n, nIndex, pTextPortion->GetRightToLeft(),
+                                            bEndOfLine, bEndOfParagraph,
+                                            aOverlineColor, aTextLineColor);
+                                    }
                                 }
                             }
                             break;

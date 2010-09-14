@@ -129,6 +129,8 @@ namespace drawinglayer
 
             /// #i96669# internal: add simple range buffering for this primitive
             basegfx::B2DRange                       maB2DRange;
+            bool                                    mbFilled;           // Whether to fill a given width with the text
+            long                                    mnWidthToFill;      // the width to fill
 
         protected:
             /// local decomposition.
@@ -144,7 +146,9 @@ namespace drawinglayer
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const ::com::sun::star::lang::Locale& rLocale,
-                const basegfx::BColor& rFontColor);
+                const basegfx::BColor& rFontColor,
+                bool bFilled = false,
+                long nWidthToFill = 0);
 
             /// helpers
             /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -161,6 +165,8 @@ namespace drawinglayer
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
+            bool isFilled() const { return mbFilled; }
+            long getWidthToFill() const { return mnWidthToFill; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;

@@ -370,7 +370,9 @@ namespace
                     aDXArray,
                     aFontAttribute,
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
-                    aBFontColor);
+                    aBFontColor,
+                    rInfo.mbFilled,
+                    rInfo.mnWidthToFill);
             }
 
             if(rInfo.mbEndOfBullet)

@@ -250,22 +250,49 @@ namespace drawinglayer
                     mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
+                    String aText( rTextCandidate.getText() );
+                    xub_StrLen nPos = rTextCandidate.getTextPosition();
+                    xub_StrLen nLen = rTextCandidate.getTextLength();
+
+                    sal_Int32* pDXArray = aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL ;
+
+                    if ( rTextCandidate.isFilled() )
+                    {
+                        basegfx::B2DVector aOldFontScaling, aOldTranslate;
+                        double fOldRotate, fOldShearX;
+                        rTextCandidate.getTextTransform().decompose(aOldFontScaling, aOldTranslate, fOldRotate, fOldShearX);
+
+                        long nWidthToFill = rTextCandidate.getWidthToFill( ) * aFontScaling.getX() / aOldFontScaling.getX();
+
+                        long nWidth = mpOutputDevice->GetTextArray(
+                            rTextCandidate.getText(), pDXArray, 0, 1 );
+                        long nChars = 2;
+                        if ( nWidth )
+                            nChars = nWidthToFill / nWidth;
+
+                        String aFilled;
+                        aFilled.Fill( (USHORT)nChars, aText.GetChar( 0 ) );
+                        aText = aFilled;
+                        nPos = 0;
+                        nLen = nChars;
+                    }
+
                     if(aTransformedDXArray.size())
                     {
                         mpOutputDevice->DrawTextArray(
                             aStartPoint,
-                            rTextCandidate.getText(),
-                            &(aTransformedDXArray[0]),
-                            rTextCandidate.getTextPosition(),
-                            rTextCandidate.getTextLength());
+                            aText,
+                            pDXArray,
+                            nPos,
+                            nLen);
                     }
                     else
                     {
                         mpOutputDevice->DrawText(
                             aStartPoint,
-                            rTextCandidate.getText(),
-                            rTextCandidate.getTextPosition(),
-                            rTextCandidate.getTextLength());
+                            aText,
+                            nPos,
+                            nLen);
                     }
 
                     if(rTextCandidate.getFontAttribute().getRTL())
