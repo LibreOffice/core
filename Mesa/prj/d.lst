@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc%_EXT%\GL
+
+..\inc\*.h %_DEST%\inc%_EXT%\GL\*.h
