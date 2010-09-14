@@ -48,7 +48,6 @@
   </implementation>
   <implementation name="com.sun.star.comp.chart.ChartTypeManager">
     <service name="com.sun.star.chart2.ChartTypeManager"/>
-    <service name="com.sun.star.lang.MultiServiceFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart.ColumnChartType">
     <service name="com.sun.star.chart2.ChartType"/>
