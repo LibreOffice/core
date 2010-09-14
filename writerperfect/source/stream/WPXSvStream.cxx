@@ -9,7 +9,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
-        WPXInputStream(true),
+        WPSInputStream(),
         mxChildStorage(),
         mxChildStream(),
         mxStream(xStream),

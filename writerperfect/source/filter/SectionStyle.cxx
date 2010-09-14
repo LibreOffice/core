@@ -33,7 +33,7 @@
 
 #ifdef _MSC_VER
 double rint(double x);
-#endif /* _WIN32 */
+#endif /* _MSC_VER */
 
 SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
                            const WPXPropertyListVector &xColumns,

@@ -58,7 +58,7 @@ _WriterDocumentState::_WriterDocumentState() :
 {
 }
 
-DocumentCollector::DocumentCollector(WPXInputStream *pInput, DocumentHandler *pHandler) :
+DocumentCollector::DocumentCollector(WPSInputStream *pInput, DocumentHandler *pHandler) :
         mpInput(pInput),
         mpHandler(pHandler),
     mbUsed(false),

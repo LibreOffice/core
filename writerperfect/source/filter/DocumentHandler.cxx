@@ -42,19 +42,19 @@ DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :
 
 void DocumentHandler::startDocument()
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::startDocument"));
+    WRITER_DEBUG_MSG(("DocumentHandler::startDocument\n"));
     mxHandler->startDocument();
 }
 
 void DocumentHandler::endDocument()
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::endDocument"));
+    WRITER_DEBUG_MSG(("DocumentHandler::endDocument\n"));
     mxHandler->endDocument();
 }
 
 void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::startElement"));
+    WRITER_DEBUG_MSG(("DocumentHandler::startElement\n"));
         SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
     Reference < XAttributeList > xAttrList(pAttrList);
     WPXPropertyList::Iter i(xPropList);
@@ -71,13 +71,13 @@ void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xP
 
 void DocumentHandler::endElement(const char *psName)
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::endElement"));
+    WRITER_DEBUG_MSG(("DocumentHandler::endElement\n"));
         mxHandler->endElement(OUString::createFromAscii(psName));
 }
 
 void DocumentHandler::characters(const WPXString &sCharacters)
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::characters"));
+    WRITER_DEBUG_MSG(("DocumentHandler::characters\n"));
         OUString sCharU16(sCharacters.cstr(), strlen(sCharacters.cstr()), RTL_TEXTENCODING_UTF8);
         mxHandler->characters(sCharU16);
 }

@@ -10,6 +10,12 @@ ENABLE_EXCEPTIONS=true
 INCPRE+=$(LIBWPD_CFLAGS)
 .ENDIF
 
+.IF "$(SYSTEM_LIBWPS)" == "YES"
+INCPRE+=$(LIBWPS_CFLAGS)
+.ELSE
+INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwps
+.ENDIF
+
 # broken but ... necessary, internal include shafted ...
 INCPRE+= -I..
 
