@@ -1747,6 +1747,21 @@ MetricField::~MetricField()
 {
 }
 
+void MetricField::SetUnit( FieldUnit nNewUnit )
+{
+    sal_Int64 nMax = Denormalize( GetMax( nNewUnit ) );
+    sal_Int64 nMin = Denormalize( GetMin( nNewUnit ) );
+    sal_Int64 nFirst = Denormalize( GetFirst( nNewUnit ) );
+    sal_Int64 nLast = Denormalize( GetLast( nNewUnit ) );
+
+    MetricFormatter::SetUnit( nNewUnit );
+
+    SetMax( Normalize( nMax ), nNewUnit );
+    SetMin( Normalize( nMin ), nNewUnit );
+    SetFirst( Normalize( nFirst ), nNewUnit );
+    SetLast( Normalize( nLast ), nNewUnit );
+}
+
 // -----------------------------------------------------------------------
 
 void MetricField::SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit )
