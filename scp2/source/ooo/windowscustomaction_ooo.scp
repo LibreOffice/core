@@ -468,6 +468,15 @@ WindowsCustomAction gid_Customaction_ShowReleaseNotes2
 	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
 End
 
+WindowsCustomAction gid_Customaction_SelectLanguage
+    Name = "SelectLanguage";
+    Typ = "321";
+    Source = "sellangmsi.dll";
+    Target = "SelectLanguage";
+    Inbinarytable = 1;
+    Assignment1 = ("ControlEvent", "SetupType", "Next", "DoAction", "SelectLanguage", "1", "1");
+End
+
 WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
 	Name = "RebaseLibrariesOnProperties";
 	Typ = "65";

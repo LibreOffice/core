@@ -1139,12 +1139,9 @@ sub put_windows_productpath_into_template
 
     my $productpath = $variableshashref->{'PROPERTYTABLEPRODUCTNAME'};
 
-    my $locallangs = $$languagestringref;
-    $locallangs =~ s/_/ /g;
     if (length($locallangs) > $installer::globals::max_lang_length) { $locallangs = "multi lingual"; }
 
-    if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . $locallangs . ")"; }
-
+    if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . sprintf('%x', time()) . ")"; }
     # if (( $installer::globals::languagepack ) && ( $installer::globals::unicodensis )) { $productpath = convert_textstring_to_utf16($productpath, $localnsisdir, "stringhelper.txt"); }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
@@ -1295,7 +1292,6 @@ sub nsis_language_converter
     elsif ( $language eq "ja" ) { $nsislanguage = "Japanese"; }
     elsif ( $language eq "ko" ) { $nsislanguage = "Korean"; }
     elsif ( $language eq "th" ) { $nsislanguage = "Thai"; }
-    elsif ( $language eq "vi" ) { $nsislanguage = "Vietnamese"; }
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
     else {

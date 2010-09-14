@@ -1865,3 +1865,12 @@ STD_UNO_LIB_FILE(gid_File_Lib_Unordf, unordf)
 STD_UNO_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
+
+#ifdef WNT
+File gid_File_Lib_sellangmsi
+    TXT_FILE_BODY;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+    Dir = gid_Dir_Program;
+    Name = "sellangmsi.dll";
+End
+#endif
