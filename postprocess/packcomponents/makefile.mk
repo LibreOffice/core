@@ -354,11 +354,11 @@ my_components += avmediagst
 my_components += avmedia.jar
 .END
 
-my_components += mailmerge #TODO: OOo mailmerge vs. OOO email
+my_ooo_components = mailmerge
 
 .INCLUDE: target.mk
 
-ALLTAR : $(MISC)/services.rdb
+ALLTAR : $(MISC)/services.rdb $(MISC)/ooo-services.rdb
 
 $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/services.input $(my_components:^"$(SOLARXMLDIR)/":+".component")
@@ -370,3 +370,15 @@ $(MISC)/services.input .ERRREMOVE :
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
+
+$(MISC)/ooo-services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/ooo-services.input \
+        $(my_ooo_components:^"$(SOLARXMLDIR)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/ooo-services.input
+
+$(MISC)/ooo-services.input .ERRREMOVE :
+    - $(RM) $@
+    echo '<list>' \
+        '$(my_ooo_components:^"<filename>":+".component</filename>")' \
+        '</list>' > $@
