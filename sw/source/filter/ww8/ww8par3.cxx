@@ -321,6 +321,14 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     }
 }
 
+eF_ResT SwWW8ImplReader::Read_F_HTMLControl( WW8FieldDesc* pF, String& rStr)
+{
+    if( bObj && nPicLocFc )
+        nObjLocFc = nPicLocFc;
+    bEmbeddObj = true;
+    return FLD_TEXT;
+}
+
 void SwWW8ImplReader::DeleteFormImpl()
 {
     delete pFormImpl, pFormImpl = 0;

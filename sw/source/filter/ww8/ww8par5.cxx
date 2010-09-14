@@ -908,7 +908,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_Hyperlink,         // 88
         0,                                          // 89
         0,                                          // 90
-        0,                                          // 91
+        &SwWW8ImplReader::Read_F_HTMLControl,       // 91
         0,                                          // 92
         0,                                          // 93
         0,                                          // 94
