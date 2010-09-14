@@ -77,7 +77,12 @@ void ParagraphStyle::write(DocumentHandler *pHandler) const
         if (strcmp(k.key(), "fo:margin-top") == 0)
             propList.insert("fo:margin-top", k()->getStr());
         if (strcmp(k.key(), "fo:margin-bottom") == 0)
-            propList.insert("fo:margin-bottom", k()->getStr());
+        {
+            if (k()->getFloat() > 0.0f)
+                propList.insert("fo:margin-bottom", k()->getStr());
+            else
+                propList.insert("fo:margin-bottom", 0.0f);
+        }
         if (strcmp(k.key(), "fo:line-height") == 0)
             propList.insert("fo:line-height", k()->getStr());
         if (strcmp(k.key(), "fo:break-before") == 0)
