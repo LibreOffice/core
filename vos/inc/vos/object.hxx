@@ -70,8 +70,8 @@ public:
     /** Define private new and delete operator because of compiler bug,
         when allocating and deleteing a exported class
     */
-    void* SAL_CALL operator new(size_t size);
-    void* SAL_CALL operator new(size_t size, void* p);
+    void* SAL_CALL operator new(::size_t size);
+    void* SAL_CALL operator new(::size_t size, void* p);
 
     void  SAL_CALL operator delete(void* p);
 
