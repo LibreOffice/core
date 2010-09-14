@@ -3087,29 +3087,6 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     pPreviewWIN->SetPositionMode();
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
-    //HACK("der Wert sollte mal sinnvol gesetzt werden")
-    long nWidth = 10000;
-    nWidth = OutputDevice::LogicToLogic( nWidth,
-                                            (MapUnit)eCoreUnit, MAP_100TH_MM );
-
-    aDistBorderMF.SetMax(aDistBorderMF.Normalize( nWidth ), FUNIT_100TH_MM );
-    aDistNumMF   .SetMax(aDistNumMF   .Normalize( nWidth ), FUNIT_100TH_MM );
-    aIndentMF    .SetMax(aIndentMF    .Normalize( nWidth ), FUNIT_100TH_MM );
-    // --> OD 2008-02-18 #newlistlevelattrs#
-    aListtabMF.SetMax(aListtabMF.Normalize( nWidth ), FUNIT_100TH_MM );
-    aAlignedAtMF.SetMax(aAlignedAtMF.Normalize( nWidth ), FUNIT_100TH_MM );
-    aIndentAtMF.SetMax(aIndentAtMF.Normalize( nWidth ), FUNIT_100TH_MM );
-    // <--
-    long nLast2 = nWidth /2;
-    aDistBorderMF.SetLast( aDistBorderMF.Normalize(   nLast2 ), FUNIT_100TH_MM );
-    aDistNumMF   .SetLast( aDistNumMF     .Normalize( nLast2 ), FUNIT_100TH_MM );
-    aIndentMF    .SetLast( aIndentMF      .Normalize( nLast2 ), FUNIT_100TH_MM );
-    // --> OD 2008-02-18 #newlistlevelattrs#
-    aListtabMF.SetLast(aListtabMF.Normalize( nLast2 ), FUNIT_100TH_MM );
-    aAlignedAtMF.SetLast(aAlignedAtMF.Normalize( nLast2 ), FUNIT_100TH_MM );
-    aIndentAtMF.SetLast(aIndentAtMF.Normalize( nLast2 ), FUNIT_100TH_MM );
-    // <--
-
 #if OSL_DEBUG_LEVEL > 1
     pDebugFixedText = new FixedText(this, 0);
     pDebugFixedText->Show();
