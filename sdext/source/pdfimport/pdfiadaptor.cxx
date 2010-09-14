@@ -250,7 +250,7 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
 
     bool bSuccess=false;
 
-    if( xInput.is() && (!rURL.getLength() || rURL.compareToAscii( "file:", 5 ) != 0) )
+    if( xInput.is() )
         bSuccess = xpdf_ImportFromStream( xInput, pSink, xIHdl, rPwd, m_xContext );
     else
         bSuccess = xpdf_ImportFromFile( rURL, pSink, xIHdl, rPwd, m_xContext );

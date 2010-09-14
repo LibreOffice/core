@@ -1105,7 +1105,11 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
 
     osl_closeFile( aFile );
 
-    return bSuccess && xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext );
+    if ( bSuccess )
+        bSuccess = xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext );
+    osl_removeFile( aURL.pData );
+
+    return bSuccess;
 }
 
 }
