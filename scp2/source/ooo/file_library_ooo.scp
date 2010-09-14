@@ -959,6 +959,8 @@ End
 
 STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
 
+STD_UNO_LIB_FILE(gid_File_Lib_Msworks,msworks)
+
 STD_UNO_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
 STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
