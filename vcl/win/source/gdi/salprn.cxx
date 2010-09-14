@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#define WINVER 0x0500
+
 #include <string.h>
 #include <tools/svwin.h>
 
