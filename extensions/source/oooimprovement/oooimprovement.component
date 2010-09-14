@@ -28,13 +28,11 @@
 
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.extensions.oooimprovement.CoreController">
+  <implementation
+      name="com.sun.star.comp.extensions.oooimprovement.CoreController">
     <service name="com.sun.star.oooimprovement.CoreController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.extensions.oooimprovement.InviteJob">
-    <service name="com.sun.star.task.XAsyncJob"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.extensions.oooimprovement.OnLogRotateJob">
-    <service name="com.sun.star.task.XAsyncJob"/>
-  </implementation>
+  <implementation name="com.sun.star.comp.extensions.oooimprovement.InviteJob"/>
+  <implementation
+      name="com.sun.star.comp.extensions.oooimprovement.OnLogRotateJob"/>
 </component>
