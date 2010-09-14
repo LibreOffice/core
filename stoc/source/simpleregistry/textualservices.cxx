@@ -194,27 +194,27 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
                      RTL_CONSTASCII_USTRINGPARAM(
                          ": unexpected item in <component>"))),
                 css::uno::Reference< css::uno::XInterface >());
+        case STATE_IMPLEMENTATION_INITIAL:
         case STATE_IMPLEMENTATION_SERVICE:
         case STATE_IMPLEMENTATION_SINGLETON:
             if (res == xmlreader::XmlReader::RESULT_END) {
                 state = STATE_COMPONENT;
                 break;
             }
-            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("singleton")))
-            {
-                handleSingleton();
-                state = STATE_SINGLETON;
-                break;
-            }
-            // fall through
-        case STATE_IMPLEMENTATION_INITIAL:
             if (state != STATE_IMPLEMENTATION_SINGLETON &&
                 res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
                 name.equals(RTL_CONSTASCII_STRINGPARAM("service")))
             {
                 handleService();
                 state = STATE_SERVICE;
+                break;
+            }
+            if (state != STATE_IMPLEMENTATION_INITIAL &&
+                res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("singleton")))
+            {
+                handleSingleton();
+                state = STATE_SINGLETON;
                 break;
             }
             throw css::registry::InvalidRegistryException(

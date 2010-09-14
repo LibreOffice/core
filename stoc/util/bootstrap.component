@@ -38,16 +38,12 @@
     <service name="com.sun.star.registry.NestedRegistry"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.ORegistryServiceManager">
-    <service name="com.sun.star.lang.MultiServiceFactory"/>
     <service name="com.sun.star.lang.RegistryServiceManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.OServiceManager">
-    <service name="com.sun.star.lang.MultiServiceFactory"/>
     <service name="com.sun.star.lang.ServiceManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.stoc.OServiceManagerWrapper">
-    <service name="com.sun.star.lang.MultiServiceFactory"/>
-  </implementation>
+  <implementation name="com.sun.star.comp.stoc.OServiceManagerWrapper"/>
   <implementation name="com.sun.star.comp.stoc.RegistryTypeDescriptionProvider">
     <service name="com.sun.star.reflection.TypeDescriptionProvider"/>
   </implementation>
