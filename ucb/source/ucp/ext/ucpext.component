@@ -29,7 +29,6 @@
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.comp.ucp.ext.ContentProvider">
-    <service name="com.sun.star.ucb.ContentProvider"/>
     <service name="com.sun.star.ucb.ExtensionContentProvider"/>
   </implementation>
 </component>
