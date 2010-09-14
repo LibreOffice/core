@@ -1201,13 +1201,13 @@ _Optlink
             nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareTo(
                             *((RTF_TokenEntry*)pSecond)->pUToken );
         else
-            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareToAscii(
+            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareIgnoreCaseToAscii(
                             ((RTF_TokenEntry*)pSecond)->sToken );
     }
     else
     {
         if( -1 == ((RTF_TokenEntry*)pSecond)->nToken )
-            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->CompareToAscii(
+            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->CompareIgnoreCaseToAscii(
                             ((RTF_TokenEntry*)pFirst)->sToken );
         else
             nRet = strcmp( ((RTF_TokenEntry*)pFirst)->sToken,
