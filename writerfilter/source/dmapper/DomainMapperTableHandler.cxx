@@ -36,6 +36,10 @@
 #include <PropertyMapHelper.hxx>
 #endif
 
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
+
 namespace writerfilter {
 namespace dmapper {
 

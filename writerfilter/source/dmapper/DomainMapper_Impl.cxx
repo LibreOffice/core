@@ -80,6 +80,7 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 
 #if DEBUG
+#include <stdio.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #endif
