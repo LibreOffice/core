@@ -92,7 +92,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-z,noexecstack
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)$(COM)"=="SOLARISC52"
@@ -120,13 +120,7 @@ pixman_CFLAGS+=-fPIC
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-.IF "$(CPUNAME)"=="X86_64"
-# static builds tend to fail on 64bit
 CONFIGURE_FLAGS=--enable-static=no --enable-shared=yes
-.ELSE
-# use static lib to avoid linking problems with older system pixman libs
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no
-.ENDIF
 CONFIGURE_FLAGS+=CFLAGS="$(pixman_CFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
@@ -149,11 +143,7 @@ OUT2LIB+=pixman$/.libs$/*.a
 OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
 .ELSE
-.IF "$(CPUNAME)"=="X86_64"
-OUT2LIB+=pixman$/.libs$/libpixman-1.so
-.ELSE
-OUT2LIB+=pixman$/.libs$/libpixman-1.a
-.ENDIF
+OUT2LIB+=pixman$/.libs$/libpixman-1.so*
 .ENDIF
 
 # --- Targets ------------------------------------------------------
