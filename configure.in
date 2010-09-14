@@ -78,6 +78,13 @@ AC_ARG_ENABLE(mozilla,
                           binary for your platform, to build without this
                           version, use this option.
 ],,enable_mozilla="yes")
+
+AC_ARG_WITH(extension-integration,
+[
+  --with-extension-integration      It will integrate the builded extensions
+              to the installer of the product.],
+,)
+
 AC_ARG_WITH(fonts,
 [  --without-fonts         OOo includes some third-party fonts to provide a reliable
                           basis for help content, templates, samples, etc.
@@ -823,6 +830,51 @@ AC_ARG_WITH(alloc,
 
                           Note that on FreeBSD/NetBSD system==jemalloc
 ],,)
+AC_ARG_WITH(sun-templates,
+[
+  --with-sun-templates      Integrate Sun template packages.],
+,)
+
+AC_ARG_WITH(lightproof,
+[
+  --with-lightproof      Integrate Lightproof extension],
+,)
+
+AC_ARG_WITH(numbertext,
+[
+  --with-numbertext      Integrate Numbertext extension],
+,)
+
+AC_ARG_WITH(hunart,
+[
+  --with-hunart      Integrate Hungarian Cross-reference Toolbar extension],
+,)
+
+AC_ARG_WITH(typo,
+[
+  --with-typo      Integrate Typography Toolbar extension],
+,)
+
+AC_ARG_WITH(watch-window,
+[
+  --with-watch-window      Integrate Watch Window extension to Calc],
+,)
+
+AC_ARG_WITH(google-docs,
+[
+  --with-google-docs      Download and integrate Google Documents extension.],
+,)
+
+AC_ARG_WITH(nlpsolver,
+[
+  --with-nlpsolver      Download and integrate NLPSolver extension.],
+,)
+
+AC_ARG_WITH(oooblogger,
+[
+  --with-oooblogger      Download and integrate oooblogger extension.],
+,)
+
 AC_ARG_ENABLE(verbose,
 [  --enable-verbose        Increase build verbosity.
   --disable-verbose       Decrease build verbosity.
@@ -3988,6 +4040,9 @@ fi
 AC_SUBST(ENABLE_MYSQLC)
 
 if test "$ENABLE_MYSQLC" = "YES"; then
+
+SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MYSQLC"
+
 dnl ===================================================================
 dnl Check for system MySQL
 dnl ===================================================================
@@ -5929,6 +5984,7 @@ if test -n "$enable_minimizer" -a "$enable_minimizer" != "no"; then
 else
    AC_MSG_RESULT([no])
    ENABLE_MINIMIZER=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
 fi
 AC_SUBST(ENABLE_MINIMIZER)
 
@@ -5939,6 +5995,7 @@ if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; th
 else
    AC_MSG_RESULT([no])
    ENABLE_PRESENTER_SCREEN=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PRESENTER_SCREEN"
 fi
 AC_SUBST(ENABLE_PRESENTER_SCREEN)
 
@@ -5970,6 +6027,7 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
 else
    AC_MSG_RESULT([no])
    ENABLE_PDFIMPORT=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
@@ -6000,6 +6058,7 @@ if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test 
 else
   AC_MSG_RESULT([no])
   ENABLE_MEDIAWIKI=NO
+  SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
@@ -6208,6 +6267,7 @@ if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test 
 else
   AC_MSG_RESULT([no])
   ENABLE_REPORTBUILDER=NO
+  SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_REPORTDESIGN"
   SYSTEM_JFREEREPORT=NO
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)
@@ -6603,6 +6663,190 @@ else
   AC_MSG_RESULT([no])
   SCPDEFS="$SCPDEFS -DWITHOUT_MATHMLDTD"
 fi
+
+dnl ===================================================================
+dnl Test whether to integrate extensions into the product's installer
+dnl ===================================================================
+AC_MSG_CHECKING([for extensions intergration])
+if test "z$with_extension_integration" = "z" -o "z$with_extension_integration" = "zno" ; then
+  WITH_EXTENSION_INTEGRATION=NO
+  AC_MSG_RESULT([no integration])
+else
+  WITH_EXTENSION_INTEGRATION=YES
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_INTEGRATION"
+  AC_MSG_RESULT([integration])
+fi
+AC_SUBST(WITH_EXTENSION_INTEGRATION)
+
+dnl ===================================================================
+dnl Test whether to include Lightproof extensions
+dnl ===================================================================
+AC_MSG_CHECKING([for Lightproof extensions integration (only supported languages displayed)])
+if test "z$with_lightproof" = "z" -o "z$with_lightproof" = "zno" ; then
+    LIGHTPROOF_LANG=""
+    AC_MSG_RESULT([no integration])
+else
+    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
+    lightproof_supported_langs="hu"
+    if test "z$with_lightproof" = "zyes" ; then
+		wanted_lightproof="$lightproof_supported_langs"
+    else
+    # check whether the langs are supported by Lightproof
+    wanted_lightproof=
+    for lang in $with_lightproof ; do
+        if test -n "`echo $lightproof_supported_langs | grep "$lang"`" ; then
+            wanted_lightproof="$wanted_lightproof $lang"
+        fi
+    done
+    fi
+    LIGHTPROOF_LANG=
+    # check whether the langs are requested at all
+    for lang in $wanted_lightproof ; do
+    if test -n "`echo $with_lang | grep "$lang"`" ; then
+        LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
+    fi
+    done
+    AC_MSG_RESULT([$LIGHTPROOF_LANG])
+fi
+AC_SUBST(LIGHTPROOF_LANG)
+
+dnl ===================================================================
+dnl Test whether to include Watch Window extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Watch Window extension integration])
+if test "z$with_watch_window" = "z" -o "z$with_watch_window" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
+fi
+AC_SUBST(WITH_WATCH_WINDOW_EXTENSION)
+
+dnl ===================================================================
+dnl Test whether to include ConvertTextToNumber extension
+dnl ===================================================================
+AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
+if test "z$with_ct2n" = "z" -o "z$with_ct2n" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  BUILD_TYPE="$BUILD_TYPE CT2N"
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
+fi
+
+dnl ===================================================================
+dnl Test whether to include Numbertext extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Numbertext extension integration])
+if test "z$with_numbertext" = "z" -o "z$with_numbertext" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
+fi
+AC_SUBST(WITH_NUMBERTEXT_EXTENSION)
+
+dnl ===================================================================
+dnl Test whether to include Hungarian Cross-reference Toolbar extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
+if test "z$with_hunart" = "z" -o "z$with_hunart" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
+fi
+AC_SUBST(WITH_HUNART_EXTENSION)
+
+dnl ===================================================================
+dnl Test whether to include Typography Toolbar extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Typography Toolbar extension integration])
+if test "z$with_typo" = "z" -o "z$with_typo" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
+fi
+AC_SUBST(WITH_TYPO_EXTENSION)
+
+dnl ===================================================================
+dnl Test whether to include Google Docs extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Google Docs extension integration])
+if test "z$with_google_docs" = "z" -o "z$with_google_docs" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
+fi
+
+dnl ===================================================================
+dnl Test whether to include NLPSolver extension
+dnl ===================================================================
+AC_MSG_CHECKING([for NLPSolver extension integration])
+if test "z$with_nlpsolver" = "z" -o "z$with_nlpsolver" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  BUILD_TYPE="$BUILD_TYPE NLPSOLVER"
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NLPSOLVER"
+fi
+
+dnl ===================================================================
+dnl Test whether to include LanguageTool extension
+dnl ===================================================================
+AC_MSG_CHECKING([for LanguageTool extension integration])
+if test "z$with_languagetool" = "z" -o "z$with_languagetool" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
+fi
+
+dnl ===================================================================
+dnl Test whether to include oooblogger extension
+dnl ===================================================================
+AC_MSG_CHECKING([for oooblogger extension integration])
+if test "z$with_oooblogger" = "z" -o "z$with_oooblogger" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
+fi
+
+dnl ===================================================================
+dnl Test whether to include Sun Professinal Template Pack
+dnl ===================================================================
+AC_MSG_CHECKING([for Sun Professinal Template Pack integration (only supported languages displayed)])
+if test "z$with_sun_templates" = "z" -o "z$with_sun_templates" = "zno" ; then
+    SUNTEMPLATES_LANG=""
+    AC_MSG_RESULT([no integration])
+else
+    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_SUN_TEMPLATE_PACK"
+    sun_supported_langs="en-US de it fr es hu"
+    if test "z$with_sun_templates" = "zyes" ; then
+    wanted_sun_templates="$sun_supported_langs"
+    else
+    # check whether the langs are supported by Sun
+    wanted_sun_templates=
+    for lang in $with_sun_templates ; do
+        if test -n "`echo $sun_supported_langs | grep "$lang"`" ; then
+        wanted_sun_templates="$wanted_sun_templates $lang"
+        fi
+    done
+    fi
+    SUNTEMPLATES_LANG=
+    # check whether the langs are requested at all
+    for lang in $wanted_sun_templates ; do
+    if test -n "`echo $with_lang | grep "$lang"`" ; then
+        SUNTEMPLATES_LANG="$SUNTEMPLATES_LANG $lang"
+    fi
+    done
+    AC_MSG_RESULT([$SUNTEMPLATES_LANG])
+fi
+AC_SUBST(SUNTEMPLATES_LANG)
 
 dnl ===================================================================
 dnl Test whether to include fonts
