@@ -153,6 +153,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         void Clear();
 
+        void SetDefault( ::rtl::OUString sName, bool bValue );
+
         /*-****************************************************************************************************//**
             @short      return complete specified list
             @descr      Call it to get all entries of compatibility options.
