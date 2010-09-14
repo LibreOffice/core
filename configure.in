@@ -343,6 +343,9 @@ AC_ARG_WITH(system-expat,
 AC_ARG_WITH(system-libwpd,
 [  --with-system-libwpd    Use libwpd already on system
 ],,)
+AC_ARG_WITH(system-libwps,
+[  --with-system-libwps    Use libwps already on system
+],,)
 AC_ARG_WITH(system-libxml,
 [  --with-system-libxml    Use libxml already on system
 ],,)
@@ -3689,6 +3692,24 @@ if test  "$test_freetype" = "yes"; then
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
+
+dnl ===================================================================
+dnl Check for system libwps
+dnl ===================================================================
+AC_MSG_CHECKING([which libwps to use])
+if test -n "$with_system_libwps" -o -n "$with_system_libs" && \
+        test "$with_system_libwps" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBWPS=YES
+    PKG_CHECK_MODULES( LIBWPS, libwps-0.1 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBWPS=NO
+    BUILD_TYPE="$BUILD_TYPE LIBWPS"
+fi
+AC_SUBST(SYSTEM_LIBWPS)
+AC_SUBST(LIBWPS_CFLAGS)
+AC_SUBST(LIBWPS_LIBS)
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
