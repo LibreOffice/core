@@ -39,6 +39,13 @@ Directory gid_Dir_Brand_Root
 End
 #endif
 
+File gid_Brand_File_ServicesRdb
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "/ooo/services.rdb";
+    Styles = (PACKED);
+End
+
 ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     ProfileID = gid_Brand_Profile_Bootstrap_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -50,14 +57,6 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
   #else
     Value = "";
   #endif
-End
-
-ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
-    ModuleID = gid_Module_Root_Brand;
-    ProfileID = gid_Brand_Profile_Fundamental_Ini;
-    Section = "Bootstrap";
-    Key = "URE_MORE_SERVICES";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES}";
 End
 
 BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )
