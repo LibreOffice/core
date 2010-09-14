@@ -84,7 +84,8 @@ class ImplBorderWindowView;
 #define BORDERWINDOW_TITLE_NORMAL           ((USHORT)0x0001)
 #define BORDERWINDOW_TITLE_SMALL            ((USHORT)0x0002)
 #define BORDERWINDOW_TITLE_TEAROFF          ((USHORT)0x0004)
-#define BORDERWINDOW_TITLE_NONE             ((USHORT)0x0008)
+#define BORDERWINDOW_TITLE_POPUP            ((USHORT)0x0008)
+#define BORDERWINDOW_TITLE_NONE             ((USHORT)0x0010)
 
 // --------------------
 // - ImplBorderWindow -

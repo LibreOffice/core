@@ -3571,8 +3571,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aStyleSet.SetAppFont( aFont );
     aStyleSet.SetHelpFont( aFont );
-    aStyleSet.SetTitleFont( aFont );
-    aStyleSet.SetFloatTitleFont( aFont );
     aStyleSet.SetMenuFont( aFont );
     aStyleSet.SetToolFont( aFont );
     aStyleSet.SetLabelFont( aFont );
@@ -3582,6 +3580,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldFont( aFont );
     aStyleSet.SetIconFont( aFont );
     aStyleSet.SetGroupFont( aFont );
+
+    aFont.SetWeight( WEIGHT_BOLD );
+    aStyleSet.SetTitleFont( aFont );
+    aStyleSet.SetFloatTitleFont( aFont );
 
     // get cursor blink time
     GtkSettings *pSettings = gtk_widget_get_settings( gWidgetData[m_nScreen].gEditBoxWidget );

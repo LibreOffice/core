@@ -65,7 +65,8 @@ class PopupModeEvent;
 
 #define FLOATWIN_TITLE_NORMAL                   ((USHORT)0x0001)
 #define FLOATWIN_TITLE_TEAROFF                  ((USHORT)0x0002)
-#define FLOATWIN_TITLE_NONE                     ((USHORT)0x0004)
+#define FLOATWIN_TITLE_POPUP                    ((USHORT)0x0004)
+#define FLOATWIN_TITLE_NONE                     ((USHORT)0x0008)
 
 // ------------------
 // - FloatingWindow -

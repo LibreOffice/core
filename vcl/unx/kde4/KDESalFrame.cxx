@@ -288,12 +288,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetAppFont( aFont );
     style.SetHelpFont( aFont );
 
-    if( !bSetTitleFont )
-    {
-        style.SetTitleFont( aFont );
-    }
-
-    style.SetFloatTitleFont( aFont );
     style.SetMenuFont( aFont ); // will be changed according to pMenuBar
     //style.SetToolFont( aFont ); //already set above
     style.SetLabelFont( aFont );
@@ -303,6 +297,13 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetFieldFont( aFont );
     style.SetIconFont( aFont );
     style.SetGroupFont( aFont );
+
+    aFont.SetWeight( WEIGHT_BOLD );
+    if( !bSetTitleFont )
+    {
+        style.SetTitleFont( aFont );
+    }
+    style.SetFloatTitleFont( aFont );
 
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );

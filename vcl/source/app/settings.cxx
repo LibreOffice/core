@@ -562,8 +562,8 @@ void ImplStyleData::SetStandardStyles()
     maPushButtonFont            = aStdFont;
     maFieldFont                 = aStdFont;
     maIconFont                  = aStdFont;
-    maFloatTitleFont            = aStdFont;
     aStdFont.SetWeight( WEIGHT_BOLD );
+    maFloatTitleFont            = aStdFont;
     maTitleFont                 = aStdFont;
 
     maFaceColor                 = Color( COL_LIGHTGRAY );

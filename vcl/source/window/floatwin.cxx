@@ -138,7 +138,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mpNextFloat             = NULL;
     mpFirstPopupModeWin     = NULL;
     mnPostId                = 0;
-    mnTitle                 = (nStyle & WB_MOVEABLE) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
+    mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
     mnOldTitle              = mnTitle;
     mnPopupModeFlags        = 0;
     mbInPopupMode           = FALSE;
@@ -652,6 +652,8 @@ void FloatingWindow::SetTitleType( USHORT nTitle )
             nTitleStyle = BORDERWINDOW_TITLE_SMALL;
         else if ( nTitle == FLOATWIN_TITLE_TEAROFF )
             nTitleStyle = BORDERWINDOW_TITLE_TEAROFF;
+        else if ( nTitle == FLOATWIN_TITLE_POPUP )
+            nTitleStyle = BORDERWINDOW_TITLE_POPUP;
         else // nTitle == FLOATWIN_TITLE_NONE
             nTitleStyle = BORDERWINDOW_TITLE_NONE;
         ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetTitleType( nTitleStyle, aOutSize );
@@ -672,7 +674,9 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
 
     // remove title
     mnOldTitle = mnTitle;
-    if ( nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF )
+    if ( ( mpWindowImpl->mnStyle & WB_POPUP ) && GetText().Len() )
+        SetTitleType( FLOATWIN_TITLE_POPUP );
+    else if ( nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF )
         SetTitleType( FLOATWIN_TITLE_TEAROFF );
     else
         SetTitleType( FLOATWIN_TITLE_NONE );
