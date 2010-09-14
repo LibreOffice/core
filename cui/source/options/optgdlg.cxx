@@ -40,6 +40,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <i18npool/mslangid.hxx>
+#include <unotools/compatibility.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/cacheoptions.hxx>
 #include <unotools/fontoptions.hxx>
@@ -1587,6 +1588,11 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // the end of this method
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
         rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, TRUE ) );
+
+        sal_uInt16 nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
+        bool bNewCJK = ( nNewType & SCRIPTTYPE_ASIAN ) != 0;
+        SvtCompatibilityOptions aCompatOpts;
+        aCompatOpts.SetDefault( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE, !bNewCJK );
     }
 
     if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
