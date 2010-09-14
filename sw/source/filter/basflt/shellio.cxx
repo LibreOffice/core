@@ -209,6 +209,16 @@ ULONG SwReader::Read( const Reader& rOptions )
             else
                 nEndCntnt = nLen - nEndCntnt;
             pPam->GetPoint()->nContent.Assign( pCNd, nEndCntnt );
+
+            const SwStartNode* pTblBoxStart = pCNd->FindTableBoxStartNode();
+            if ( pTblBoxStart )
+            {
+                SwTableBox* pBox = pTblBoxStart->GetTblBox();
+                if ( pBox )
+                {
+                    pDoc->ChkBoxNumFmt( *pBox, TRUE );
+                }
+            }
         }
 
         if( pCrsr )
