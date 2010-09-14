@@ -205,6 +205,14 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
 
 // -----------------------------------------------------------------------------
 
+class FilterConfigItem;
+extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
+{
+    return importSvg( rStream, rGraphic );
+}
+
+// -----------------------------------------------------------------------------
+
 namespace sdecl = comphelper::service_decl;
  sdecl::class_<SVGFilter> serviceImpl;
  const sdecl::ServiceDecl svgFilter(

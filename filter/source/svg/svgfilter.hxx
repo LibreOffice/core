@@ -268,4 +268,11 @@ sal_Bool SAL_CALL SVGFilter_supportsService( const ::rtl::OUString& ServiceName 
 SAL_CALL SVGFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
     throw ( ::com::sun::star::uno::Exception );
 
+// -----------------------------------------------------------------------------
+
+class SvStream;
+class Graphic;
+
+bool importSvg(SvStream & rStream, Graphic & rGraphic );
+
 #endif // SVGFILTER_HXX

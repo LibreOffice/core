@@ -41,6 +41,7 @@ SHL1STDLIBS= 	        \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
+    $(SVTOOLLIB)	    \
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\

@@ -7,6 +7,7 @@
  *      Thorsten Behrens <tbehrens@novell.com>
  *
  *      Copyright (C) 2008, Novell Inc.
+ *      Parts copyright 2005 by Sun Microsystems, Inc.
  *
  *   The Contents of this file are made available subject to
  *   the terms of GNU Lesser General Public License Version 3.
@@ -40,6 +41,17 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <unotools/streamwrap.hxx>
+#include <xmloff/xmluconv.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/gradient.hxx>
+#include <svtools/filter.hxx>
+#include <tools/zcodec.hxx>
 
 #include <boost/bind.hpp>
 #include <hash_set>
@@ -423,6 +435,9 @@ struct AnnotatingVisitor
         // find two representative stop colors (as odf only support
         // start&end color)
         optimizeGradientStops(rState.maFillGradient);
+
+        if( !mxDocumentHandler.is() )
+            return true; // cannot write style, svm import case
 
         // do we have a gradient fill? then write out gradient as well
         if( rState.meFillType == GRADIENT && rState.maFillGradient.maStops.size() > 1 )
@@ -1505,10 +1520,12 @@ struct ShapeWritingVisitor
             for( sal_uInt32 i=0; i<rPoly.count(); ++i )
             {
                 aPolys.push_back(
-                    basegfx::tools::createAreaGeometryForPolygon(
-                        rPoly.getB2DPolygon(i),
-                        aState.mnStrokeWidth/2.0,
-                        aState.meLineJoin));
+                    basegfx::tools::stripNeutralPolygons(
+                        basegfx::tools::prepareForPolygonOperation(
+                            basegfx::tools::createAreaGeometry(
+                                rPoly.getB2DPolygon(i),
+                                aState.mnStrokeWidth/2.0,
+                                aState.meLineJoin))));
                 // TODO(F2): line ends
             }
 
@@ -1873,4 +1890,735 @@ sal_Bool SVGReader::parseAndConvert()
     return sal_True;
 }
 
+///////////////////////////////////////////////////////////////
+
+struct ShapeRenderingVisitor
+{
+    ShapeRenderingVisitor(StatePool&    /*rStatePool*/,
+                          StateMap&     rStateMap,
+                          OutputDevice& rOutDev,
+                          const std::vector< Gradient >& rGradientVector,
+                          const std::vector< GradientStop >& rGradientStopVector) :
+        mrStateMap(rStateMap),
+        mrOutDev(rOutDev),
+        mrGradientVector(rGradientVector),
+        mrGradientStopVector(rGradientStopVector)
+    {}
+
+    void operator()( const uno::Reference<xml::dom::XElement>& )
+    {
+    }
+
+    void operator()( const uno::Reference<xml::dom::XElement>&      xElem,
+                     const uno::Reference<xml::dom::XNamedNodeMap>& xAttributes )
+    {
+        sal_Int32 nDummyIndex(0);
+        rtl::OUString sStyleId(
+            xElem->getAttribute(
+                USTR("internal-style-ref")).getToken(
+                    0,'$',nDummyIndex));
+        StateMap::iterator pOrigState=mrStateMap.find(
+            sStyleId.toInt32());
+
+        if( pOrigState == mrStateMap.end() )
+            return; // non-exportable element, e.g. linearGradient
+
+        maCurrState = pOrigState->second;
+
+        const sal_Int32 nTokenId(getTokenId(xElem->getNodeName()));
+        switch(nTokenId)
+        {
+            case XML_LINE:
+            {
+                // collect attributes
+                const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                rtl::OUString sAttributeValue;
+                double x1=0.0,y1=0.0,x2=0.0,y2=0.0;
+                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                {
+                    sAttributeValue = xAttributes->item(i)->getNodeValue();
+                    const sal_Int32 nAttribId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    switch(nAttribId)
+                    {
+                        case XML_X1:
+                            x1= convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_X2:
+                            x2 = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_Y1:
+                            y1 = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_Y2:
+                            y2 = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        default:
+                            // skip
+                            break;
+                    }
+                }
+
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(x1,y1));
+                aPoly.append(basegfx::B2DPoint(x2,y2));
+
+                renderPathShape(basegfx::B2DPolyPolygon(aPoly));
+                break;
+            }
+            case XML_POLYGON:
+            case XML_POLYLINE:
+            {
+                rtl::OUString sPoints = xElem->hasAttribute(USTR("points")) ? xElem->getAttribute(USTR("points")) : USTR("");
+                basegfx::B2DPolygon aPoly;
+                basegfx::tools::importFromSvgPoints(aPoly, sPoints);
+                if( nTokenId == XML_POLYGON || maCurrState.meFillType != NONE )
+                    aPoly.setClosed(true);
+
+                renderPathShape(basegfx::B2DPolyPolygon(aPoly));
+                break;
+            }
+            case XML_RECT:
+            {
+                // collect attributes
+                const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                rtl::OUString sAttributeValue;
+                bool bRxSeen=false, bRySeen=false;
+                double x=0.0,y=0.0,width=0.0,height=0.0,rx=0.0,ry=0.0;
+                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                {
+                    sAttributeValue = xAttributes->item(i)->getNodeValue();
+                    const sal_Int32 nAttribId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    switch(nAttribId)
+                    {
+                        case XML_X:
+                            x = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_Y:
+                            y = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_WIDTH:
+                            width = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_HEIGHT:
+                            height = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_RX:
+                            rx = convLength(sAttributeValue,maCurrState,'h');
+                            bRxSeen=true;
+                            break;
+                        case XML_RY:
+                            ry = convLength(sAttributeValue,maCurrState,'v');
+                            bRySeen=true;
+                            break;
+                        default:
+                            // skip
+                            break;
+                    }
+                }
+
+                if( bRxSeen && !bRySeen )
+                    ry = rx;
+                else if( bRySeen && !bRxSeen )
+                    rx = ry;
+
+                basegfx::B2DPolygon aPoly;
+                aPoly = basegfx::tools::createPolygonFromRect(
+                    basegfx::B2DRange(x,y,x+width,y+height),
+                    rx, ry );
+
+                renderPathShape(basegfx::B2DPolyPolygon(aPoly));
+                break;
+            }
+            case XML_PATH:
+            {
+                rtl::OUString sPath = xElem->hasAttribute(USTR("d")) ? xElem->getAttribute(USTR("d")) : USTR("");
+                basegfx::B2DPolyPolygon aPoly;
+                basegfx::tools::importFromSvgD(aPoly, sPath);
+
+                renderPathShape(aPoly);
+                break;
+            }
+            case XML_CIRCLE:
+            {
+                // collect attributes
+                const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                rtl::OUString sAttributeValue;
+                double cx=0.0,cy=0.0,r=0.0;
+                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                {
+                    sAttributeValue = xAttributes->item(i)->getNodeValue();
+                    const sal_Int32 nAttribId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    switch(nAttribId)
+                    {
+                        case XML_CX:
+                            cx = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_CY:
+                            cy = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_R:
+                            r = convLength(sAttributeValue,maCurrState,'o');
+                        default:
+                            // skip
+                            break;
+                    }
+                }
+
+                basegfx::B2DEllipse aEllipse(basegfx::B2DPoint(cx, cy), basegfx::B2DTuple(r,r));
+                basegfx::B2DPolygon aPoly = basegfx::tools::createPolygonFromEllipse(
+                    aEllipse.getB2DEllipseCenter(),
+                    aEllipse.getB2DEllipseRadius().getX(),
+                    aEllipse.getB2DEllipseRadius().getY());
+
+                renderPathShape(basegfx::B2DPolyPolygon(aPoly));
+                break;
+            }
+            case XML_ELLIPSE:
+            {
+                // collect attributes
+                const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                rtl::OUString sAttributeValue;
+                double cx=0.0,cy=0.0,rx=0.0, ry=0.0;
+                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                {
+                    sAttributeValue = xAttributes->item(i)->getNodeValue();
+                    const sal_Int32 nAttribId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    switch(nAttribId)
+                    {
+                        case XML_CX:
+                            cx = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_CY:
+                            cy = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_RX:
+                            rx = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_RY:
+                            ry = convLength(sAttributeValue,maCurrState,'v');
+                        default:
+                            // skip
+                            break;
+                    }
+                }
+
+                basegfx::B2DEllipse aEllipse(basegfx::B2DPoint(cx, cy), basegfx::B2DTuple(rx,ry));
+                basegfx::B2DPolygon aPoly = basegfx::tools::createPolygonFromEllipse(
+                    aEllipse.getB2DEllipseCenter(),
+                    aEllipse.getB2DEllipseRadius().getX(),
+                    aEllipse.getB2DEllipseRadius().getY());
+
+                renderPathShape(basegfx::B2DPolyPolygon(aPoly));
+                break;
+            }
+            case XML_IMAGE:
+            {
+                // collect attributes
+                const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                rtl::OUString sAttributeValue;
+                double x=0.0,y=0.0,width=0.0,height=0.0;
+                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                {
+                    sAttributeValue = xAttributes->item(i)->getNodeValue();
+                    const sal_Int32 nAttribId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    switch(nAttribId)
+                    {
+                        case XML_X:
+                            x = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_Y:
+                            y = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_WIDTH:
+                            width = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_HEIGHT:
+                            height = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        default:
+                            // skip
+                            break;
+                    }
+                }
+
+                rtl::OUString sValue = xElem->hasAttribute(USTR("href")) ? xElem->getAttribute(USTR("href")) : USTR("");
+                rtl::OString aValueUtf8( sValue.getStr(), sValue.getLength(), RTL_TEXTENCODING_UTF8 );
+                std::string sLinkValue;
+                parseXlinkHref(aValueUtf8.getStr(), sLinkValue);
+
+                if (!sLinkValue.empty())
+                {
+                    // <- blatant copy from svx/source/xml/xmlgrhlp.cxx
+                    Graphic aGraphic;
+
+                    uno::Sequence<sal_Int8> aData;
+                    SvXMLUnitConverter::decodeBase64(aData,
+                                                     rtl::OUString::createFromAscii(sLinkValue.c_str()));
+                    SvMemoryStream aSrc(aData.getArray(),
+                                        aData.getLength(),
+                                        STREAM_READ);
+                    USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
+                    USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+                    GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), aSrc ,nFormat,&pDeterminedFormat );
+
+                    if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
+                    {
+                        //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
+                        //unzip them and try again
+
+                        BYTE    sFirstBytes[ 2 ];
+
+                        aSrc.Seek( STREAM_SEEK_TO_END );
+                        ULONG nStreamLen = aSrc.Tell();
+                        aSrc.Seek( 0 );
+
+                        if ( !nStreamLen )
+                        {
+                            SvLockBytes* pLockBytes = aSrc.GetLockBytes();
+                            if ( pLockBytes  )
+                                pLockBytes->SetSynchronMode( TRUE );
+
+                            aSrc.Seek( STREAM_SEEK_TO_END );
+                            nStreamLen = aSrc.Tell();
+                            aSrc.Seek( 0 );
+                        }
+                        if( nStreamLen >= 2 )
+                        {
+                            //read two byte
+                            aSrc.Read( sFirstBytes, 2 );
+
+                            if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
+                            {
+                                SvMemoryStream* pDest = new SvMemoryStream;
+                                ZCodec aZCodec( 0x8000, 0x8000 );
+                                aZCodec.BeginCompression(ZCODEC_GZ_LIB);
+                                aSrc.Seek( 0 );
+                                aZCodec.Decompress( aSrc, *pDest );
+
+                                if (aZCodec.EndCompression() && pDest )
+                                {
+                                    pDest->Seek( STREAM_SEEK_TO_END );
+                                    ULONG nStreamLen_ = pDest->Tell();
+                                    if (nStreamLen_)
+                                    {
+                                        pDest->Seek(0L);
+                                        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                                    }
+                                }
+                                delete pDest;
+                            }
+                        }
+                    }
+                    // -> blatant copy from svx/source/xml/xmlgrhlp.cxx
+
+                    const Rectangle aBounds(
+                        Point(basegfx::fround(pt100thmm(x)),
+                              basegfx::fround(pt100thmm(y))),
+                        Size(basegfx::fround(pt100thmm(width)),
+                             basegfx::fround(pt100thmm(height))));
+                    aGraphic.Draw(&mrOutDev,
+                                  aBounds.TopLeft(),
+                                  aBounds.GetSize());
+                    maBounds.Union(aBounds);
+                }
+                break;
+            }
+            case XML_TEXT:
+            {
+                // collect text from all TEXT_NODE children into sText
+                rtl::OUStringBuffer sText;
+                visitChildren(boost::bind(
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
+                                  boost::ref(sText),
+                                  boost::bind(&xml::dom::XNode::getNodeValue,
+                                              _1)),
+                              xElem,
+                              xml::dom::NodeType_TEXT_NODE);
+
+                // collect attributes
+                const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                rtl::OUString sAttributeValue;
+                double x=0.0,y=0.0,width=0.0,height=0.0;
+                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                {
+                    sAttributeValue = xAttributes->item(i)->getNodeValue();
+                    const sal_Int32 nAttribId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    switch(nAttribId)
+                    {
+                        case XML_X:
+                            x = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_Y:
+                            y = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        case XML_WIDTH:
+                            width = convLength(sAttributeValue,maCurrState,'h');
+                            break;
+                        case XML_HEIGHT:
+                            height = convLength(sAttributeValue,maCurrState,'v');
+                            break;
+                        default:
+                            // skip
+                            break;
+                    }
+                }
+
+                // actually export text
+                Font aFont(maCurrState.maFontFamily,
+                           Size(0,
+                                basegfx::fround(pt100thmm(maCurrState.mnFontSize))));
+
+                // extract basic transformations out of CTM
+                basegfx::B2DTuple aScale, aTranslate;
+                double fRotate, fShearX;
+                ::rtl::OUString sTransformValue;
+                if (maCurrState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
+                {
+                    rtl::OUString sTransform;
+                    x += aTranslate.getX();
+                    y += aTranslate.getY();
+
+                    aFont.SetSize(
+                        Size(basegfx::fround(aFont.GetWidth()*aScale.getX()),
+                             basegfx::fround(aFont.GetHeight()*aScale.getY())));
+
+                    if( fRotate )
+                        aFont.SetOrientation(basegfx::fround(fRotate*1800.0/M_PI));
+                }
+
+                // TODO(F2): update bounds
+                mrOutDev.SetFont(aFont);
+                mrOutDev.DrawText(Point(basegfx::fround(pt100thmm(x)),
+                                        basegfx::fround(pt100thmm(y))),
+                                  sText.makeStringAndClear());
+                break;
+            }
+        }
+    }
+
+    void push()
+    {
+    }
+
+    void pop()
+    {
+    }
+
+    bool hasGradientOpacity( const Gradient& rGradient )
+    {
+        return
+            mrGradientStopVector[
+                rGradient.maStops[0]].maStopColor.a != 1.0 ||
+            mrGradientStopVector[
+                rGradient.maStops[1]].maStopColor.a != 1.0;
+    }
+
+    sal_Int8 toByteColor( double val )
+    {
+        // TODO(Q3): duplicated from vcl::unotools
+        return sal::static_int_cast<sal_Int8>(
+            basegfx::fround(val*255.0));
+    }
+
+    ::Color getVclColor( const ARGBColor& rColor )
+    {
+        const sal_uInt8 nRed  ( toByteColor(rColor.r)   );
+        const sal_uInt8 nGreen( toByteColor(rColor.g) );
+        const sal_uInt8 nBlue ( toByteColor(rColor.b)  );
+
+        return ::Color(nRed,nGreen,nBlue);
+    }
+
+    void renderPathShape(const basegfx::B2DPolyPolygon& rPoly)
+    {
+        // we might need to split up polypolygon into multiple path
+        // shapes (e.g. when emulating line stroking)
+        State aState = maCurrState;
+
+        // bring polygon from pt coordinate system to 100th millimeter
+        aState.maCTM.scale(2540.0/72.0,2540.0/72.0);
+
+        basegfx::B2DPolyPolygon aPoly(rPoly);
+        aPoly.transform(aState.maCTM);
+
+        const basegfx::B2DRange aBounds=basegfx::tools::getRange(aPoly);
+        maBounds.Union(
+            Rectangle(
+                basegfx::fround(aBounds.getMinX()),
+                basegfx::fround(aBounds.getMinY()),
+                basegfx::fround(aBounds.getMaxX()),
+                basegfx::fround(aBounds.getMaxY())));
+
+        // fill first
+        mrOutDev.SetLineColor();
+
+        // do we have a gradient fill?
+        if( aState.meFillType == GRADIENT && aState.maFillGradient.maStops.size() > 1 )
+        {
+            ::Gradient aGradient;
+
+            if( aState.maFillGradient.meType == Gradient::LINEAR )
+            {
+                // should the optimizeGradientStops method decide that
+                // this is a three-color gradient, it prolly wanted us
+                // to take axial instead
+                aGradient = ::Gradient( aState.maFillGradient.maStops.size() == 3 ?
+                                        GRADIENT_AXIAL :
+                                        GRADIENT_LINEAR );
+            }
+            else
+            {
+                aGradient = ::Gradient( GRADIENT_ELLIPTICAL );
+            }
+
+            basegfx::B2DTuple rScale, rTranslate;
+            double rRotate, rShearX;
+            if( aState.maFillGradient.maTransform.decompose(rScale, rTranslate, rRotate, rShearX) )
+                aGradient.SetAngle( basegfx::fround(rRotate*1800.0/M_PI) );
+            aGradient.SetStartColor( getVclColor(
+                                         mrGradientStopVector[
+                                             aState.maFillGradient.maStops[0]].maStopColor) );
+            aGradient.SetEndColor( getVclColor(
+                                       mrGradientStopVector[
+                                           aState.maFillGradient.maStops[1]].maStopColor) );
+
+            if( hasGradientOpacity(aState.maFillGradient) )
+            {
+                ::Gradient aTransparencyGradient=aGradient;
+
+                const BYTE  cTransStart( 255-
+                    basegfx::fround(mrGradientStopVector[
+                                        aState.maFillGradient.maStops[1]].maStopColor.a*
+                                    aState.mnFillOpacity*255.0));
+                const Color aTransStart( cTransStart, cTransStart, cTransStart );
+
+                const BYTE  cTransEnd( 255-
+                    basegfx::fround(mrGradientStopVector[
+                                        aState.maFillGradient.maStops[0]].maStopColor.a*
+                                    aState.mnFillOpacity*255.0));
+                const Color aTransEnd( cTransEnd, cTransEnd, cTransEnd );
+
+                // modulate gradient opacity with overall fill opacity
+                aTransparencyGradient.SetStartColor(aTransStart);
+                aTransparencyGradient.SetEndColor(aTransEnd);
+
+                VirtualDevice   aVDev;
+                GDIMetaFile     aMtf;
+
+                aVDev.EnableOutput( FALSE );
+                aVDev.SetMapMode( mrOutDev.GetMapMode() );
+                aMtf.Record( &aVDev );
+
+                aVDev.SetLineColor();
+                aVDev.SetFillColor();
+                aVDev.DrawGradient(::PolyPolygon(aPoly),aGradient);
+
+                const Rectangle aMtfBounds(
+                    basegfx::fround(aBounds.getMinX()),
+                    basegfx::fround(aBounds.getMinY()),
+                    basegfx::fround(aBounds.getMaxX()),
+                    basegfx::fround(aBounds.getMaxY()));
+
+                MapMode aMap(mrOutDev.GetMapMode());
+                aMtf.Stop();
+                aMtf.WindStart();
+                aMap.SetOrigin( aMtfBounds.TopLeft() );
+                aMtf.SetPrefMapMode( aMap );
+                aMtf.SetPrefSize( aMtfBounds.GetSize() );
+
+                mrOutDev.DrawTransparent(aMtf,
+                                         aMtfBounds.TopLeft(),
+                                         aMtfBounds.GetSize(),
+                                         aTransparencyGradient);
+            }
+            else
+            {
+                mrOutDev.DrawGradient(::PolyPolygon(aPoly),aGradient);
+            }
+        }
+        else
+        {
+            if( aState.meFillType == NONE )
+                mrOutDev.SetFillColor();
+            else
+                mrOutDev.SetFillColor(getVclColor(aState.maFillColor));
+
+            if( aState.mnFillOpacity != 1.0 )
+                mrOutDev.DrawTransparent(::PolyPolygon(aPoly),
+                                         basegfx::fround(
+                                             (1.0-aState.mnFillOpacity)*100.0));
+            else
+                mrOutDev.DrawPolyPolygon(::PolyPolygon(aPoly));
+        }
+
+        // Stroking now
+        mrOutDev.SetFillColor();
+
+        if( aState.meStrokeType != NONE &&
+            (aState.maDashArray.size() ||
+             aState.mnStrokeWidth != 1.0) )
+        {
+            // vcl thick lines are severly borked - generate filled
+            // polygon instead
+            std::vector<basegfx::B2DPolyPolygon> aPolys;
+            aPoly = rPoly;
+            if( !aState.maDashArray.empty() )
+            {
+                aPoly.clear();
+                basegfx::B2DPolyPolygon aSegment;
+                for( sal_uInt32 i=0; i<rPoly.count(); ++i )
+                {
+                    basegfx::tools::applyLineDashing(rPoly,
+                                                     aState.maDashArray,
+                                                     &aSegment);
+                    aPoly.append(aSegment);
+                }
+            }
+
+            // applied line dashing to original rPoly above, to get
+            // correctly transformed lengths - need to transform
+            // again, now
+            aPoly.transform(aState.maCTM);
+
+            for( sal_uInt32 i=0; i<aPoly.count(); ++i )
+            {
+                // ugly. convert to integer-based tools polygon
+                // first, and only _then_ remove intersections (we
+                // might get new ones from the rounding)
+                aPolys.push_back(
+                    basegfx::tools::stripNeutralPolygons(
+                        basegfx::tools::prepareForPolygonOperation(
+                            ::PolyPolygon(
+                                basegfx::tools::createAreaGeometry(
+                                    aPoly.getB2DPolygon(i),
+                                    pt100thmm(aState.mnStrokeWidth/2.0),
+                                    aState.meLineJoin)).getB2DPolyPolygon())));
+                // TODO(F2): line ends
+            }
+
+            mrOutDev.SetLineColor();
+            mrOutDev.SetFillColor(getVclColor(aState.maStrokeColor));
+
+            for( sal_uInt32 i=0; i<aPolys.size(); ++i )
+            {
+                if( aState.mnStrokeOpacity != 1.0 )
+                    mrOutDev.DrawTransparent(::PolyPolygon(aPolys[i]),
+                                             basegfx::fround(
+                                                 (1.0-aState.mnStrokeOpacity)*100.0));
+                else
+                    mrOutDev.DrawPolyPolygon(::PolyPolygon(aPolys[i]));
+
+                const basegfx::B2DRange aStrokeBounds=basegfx::tools::getRange(aPolys[i]);
+                maBounds.Union(
+                    Rectangle(
+                        basegfx::fround(aStrokeBounds.getMinX()),
+                        basegfx::fround(aStrokeBounds.getMinY()),
+                        basegfx::fround(aStrokeBounds.getMaxX()),
+                        basegfx::fround(aStrokeBounds.getMaxY())));
+            }
+        }
+        else
+        {
+            if( aState.meStrokeType == NONE )
+                mrOutDev.SetLineColor();
+            else
+                mrOutDev.SetLineColor(getVclColor(aState.maStrokeColor));
+
+            if( aState.mnStrokeOpacity != 1.0 )
+                mrOutDev.DrawTransparent(::PolyPolygon(aPoly),
+                                         basegfx::fround(
+                                             (1.0-aState.mnStrokeOpacity)*100.0));
+            else
+                mrOutDev.DrawPolyPolygon(::PolyPolygon(aPoly));
+        }
+    }
+
+    State                                      maCurrState;
+    StateMap&                                  mrStateMap;
+    OutputDevice&                               mrOutDev;
+    const std::vector< Gradient >&             mrGradientVector;
+    const std::vector< GradientStop >&         mrGradientStopVector;
+    Rectangle                                   maBounds;
+};
+
 } // namespace svgi
+
+bool importSvg(SvStream & rStream, Graphic & rGraphic )
+{
+    const uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
+        ::comphelper::getProcessServiceFactory());
+
+    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
+        xServiceFactory->createInstance(
+            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")),
+        uno::UNO_QUERY );
+
+    uno::Reference<io::XInputStream> xStream(
+        new utl::OInputStreamWrapper(rStream) );
+
+    uno::Reference<xml::dom::XDocument> xDom(
+        xDomBuilder->parse(xStream),
+        uno::UNO_QUERY_THROW );
+
+    uno::Reference<xml::dom::XElement> xDocElem( xDom->getDocumentElement(),
+                                                 uno::UNO_QUERY_THROW );
+
+    VirtualDevice   aVDev;
+    GDIMetaFile     aMtf;
+
+    aVDev.EnableOutput( FALSE );
+    aMtf.Record( &aVDev );
+
+    // parse styles and fill state stack
+    svgi::State      aInitialState;
+    svgi::StatePool aStatePool;
+    svgi::StateMap  aStateMap;
+    svgi::AnnotatingVisitor aVisitor(aStatePool,
+                                     aStateMap,
+                                     aInitialState,
+                                     uno::Reference<xml::sax::XDocumentHandler>());
+    svgi::visitElements(aVisitor, xDocElem);
+
+#ifdef VERBOSE
+    dumpTree(xDocElem);
+#endif
+
+    // render all shapes to mtf
+    svgi::ShapeRenderingVisitor aRenderer(aStatePool,aStateMap,aVDev,
+                                         aVisitor.maGradientVector,
+                                         aVisitor.maGradientStopVector);
+    svgi::visitElements(aRenderer, xDocElem);
+
+    aMtf.Stop();
+
+    aMtf.WindStart();
+    aMtf.SetPrefMapMode( MAP_100TH_MM );
+
+    // get the document dimensions
+
+    // if the "width" and "height" attributes are missing, inkscape fakes
+    // A4 portrait for. Let's do the same.
+    if (!xDocElem->hasAttribute(USTR("width")))
+        xDocElem->setAttribute(USTR("width"), USTR("210mm"));
+    if (!xDocElem->hasAttribute(USTR("height")))
+        xDocElem->setAttribute(USTR("height"), USTR("297mm"));
+
+    aMtf.SetPrefSize(
+        Size(
+            std::max(
+                sal_Int32(aRenderer.maBounds.Right()),
+                basegfx::fround( svgi::pt100thmm(svgi::convLength(xDocElem->getAttribute(USTR("width")),aInitialState,'h')) )),
+            std::max(
+                sal_Int32(aRenderer.maBounds.Bottom()),
+                basegfx::fround( svgi::pt100thmm(svgi::convLength(xDocElem->getAttribute(USTR("height")),aInitialState,'v')) ))));
+
+    rGraphic = aMtf;
+
+    return sal_True;
+}
