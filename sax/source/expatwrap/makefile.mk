@@ -83,5 +83,5 @@ $(MISC)/sax.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
 $(MISC)/sax.inbuild.component .ERRREMOVE : \
         $(SOLARENV)/bin/createcomponent.xslt sax.component
     $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_INBUILD)$(SHL1TARGETN:f)' -o $@ \
+        '$(COMPONENTPREFIX_INBUILD_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt sax.component
