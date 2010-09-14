@@ -297,7 +297,7 @@ testcase HTMLToWRITERGraphicLinked
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_writer_graphic1.odt",false)
+        hFileOpen( gOfficepath + "user\work\html_to_writer_graphic1.odt",false)
         printlog "  Reopen saved document "
         Wait 500
         printlog "  Close saved document "
@@ -357,7 +357,7 @@ testcase HTMLToWRITERControl
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_writer_control.odt",false)
+        hFileOpen( gOfficepath + "user\work\html_to_writer_control.odt",false)
         printlog "  Reopen saved document "
         Wait 500
         printlog "  Close saved document "
@@ -423,7 +423,7 @@ testcase HTMLToWRITERFloatingFrame
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_writer_float.odt",false)
+        hFileOpen( gOfficepath + "user\work\html_to_writer_float.odt",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument

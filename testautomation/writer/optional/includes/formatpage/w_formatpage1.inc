@@ -348,7 +348,7 @@ testcase tFormatPage_6
 
 	Call hNewDocument
 
-	hFileOpenLocally( gOfficepath + "user\work\tFormatPage_6.odt")
+	hFileOpen( gOfficepath + "user\work\tFormatPage_6.odt")
 
 	'/// Check if Pre-defined formats are correct
 	fFormatPageWriter("TabSeite")

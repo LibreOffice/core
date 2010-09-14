@@ -674,7 +674,7 @@ testcase tViewNavigator6
     Sleep 2
 
     printlog "- Saving and Loading the document, check settings"
-    hFileOpenLocally( gOfficePath + "user\work\uvobj.odt")
+    hFileOpen( gOfficePath & "user\work\uvobj.odt")
     '/// Navigator has to be opened with document ///
     Kontext "Navigator"
     if Navigator.NotExists then

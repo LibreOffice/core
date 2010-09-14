@@ -81,7 +81,7 @@ testcase DrawToWriterScrollingText
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_scrolling_text.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_scrolling_text.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -136,7 +136,7 @@ testcase DrawToWriterGroupedObject
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_grouped_object.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_grouped_object.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -191,7 +191,7 @@ testcase DrawToWriter3D
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_3d.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_3d.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -246,7 +246,7 @@ testcase DrawToWriterFontwork
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_fontwork.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_fontwork.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -301,7 +301,7 @@ testcase DrawToWriterBullets
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_bullets.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_bullets.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -357,7 +357,7 @@ testcase DrawToWriterDimensionLines
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_dim_lines.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_dim_lines.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -413,7 +413,7 @@ testcase DrawToWriterConnectors
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    hFileOpenLocally( gOfficepath + "user\work\draw_to_writer_connectors.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_connectors.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument

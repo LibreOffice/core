@@ -149,7 +149,7 @@ testcase HTMLToCALCField
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_calc_field.ods",true)
+        hFileOpen( gOfficepath + "user\work\html_to_calc_field.ods",true)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -203,7 +203,7 @@ testcase HTMLToCALCTable
         printlog "  Save document as ..\user\work\html_to_calc_table.ods" 
         Call hCloseDocument
         printlog "  Close saved document " 
-        hFileOpenLocally( gOfficepath + "user\work\html_to_calc_table.ods",true)
+        hFileOpen( gOfficepath + "user\work\html_to_calc_table.ods",true)
         printlog "  Reopen saved document " 
         Call hCloseDocument
         printlog "  Close saved document " 
@@ -260,7 +260,7 @@ testcase HTMLToCALCGraphicLinked
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_calc_graphic1.ods",false)
+        hFileOpen( gOfficepath + "user\work\html_to_calc_graphic1.ods",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -317,7 +317,7 @@ testcase HTMLToCALCControl
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_calc_control.ods",false)
+        hFileOpen( gOfficepath + "user\work\html_to_calc_control.ods",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -378,7 +378,7 @@ testcase HTMLToCALCFloatingFrame
         printlog "  Close saved document " 
         Call hCloseDocument
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_calc_float.ods",false)
+        hFileOpen( gOfficepath + "user\work\html_to_calc_float.ods",false)
         printlog "  Close saved document "
         Call hCloseDocument
     else

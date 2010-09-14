@@ -763,7 +763,7 @@ testcase tFormatPage_60
     Call hCloseDocument
 
     Call hNewDocument
-    hFileOpenLocally( gOfficepath + "user\work\tFormatPage_60.odt")
+    hFileOpen( gOfficepath + "user\work\tFormatPage_60.odt")
     
 
     '/// check if the configuration is all right

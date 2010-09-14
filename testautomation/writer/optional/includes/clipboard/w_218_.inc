@@ -154,7 +154,7 @@ testcase HTMLToDRAWField
         Call hCloseDocument
         sleep (2)
         printlog " + Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_draw_field.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_field.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument
@@ -211,7 +211,7 @@ testcase HTMLToDRAWTable
      Call hCloseDocument
      wait 500
      printlog " + Reopen saved document "
-     hFileOpenLocally( gOfficepath + "user\work\html_to_draw_table.odg",false)
+     hFileOpen( gOfficepath + "user\work\html_to_draw_table.odg",false)
      Wait 500
      printlog " + Close saved document "
      Call hCloseDocument
@@ -267,7 +267,7 @@ testcase HTMLToDRAWGraphicLinked
         Call hCloseDocument
         wait 500
         printlog " + Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_draw_graphic1.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_graphic1.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument
@@ -324,7 +324,7 @@ testcase HTMLToDRAWControl
         Call hCloseDocument
         wait 500
         printlog " + Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_draw_control.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_control.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument
@@ -386,7 +386,7 @@ testcase HTMLToDRAWFloatingFrame
         Call hCloseDocument
         wait 500
         printlog " + Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_draw_float.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_float.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument

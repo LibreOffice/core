@@ -149,7 +149,7 @@ testcase HTMLToIMPRESSField
      Call hCloseDocument
      wait 500
      printlog "  Reopen saved document "
-     hFileOpenLocally( gOfficepath + "user\work\html_to_impress_field.odp",false)
+     hFileOpen( gOfficepath + "user\work\html_to_impress_field.odp",false)
      Wait 500
      printlog "  Close saved document "
      Call hCloseDocument
@@ -206,7 +206,7 @@ testcase HTMLToIMPRESSTable
      Call hCloseDocument
      wait 500
      printlog "  Reopen saved document "
-     hFileOpenLocally( gOfficepath + "user\work\html_to_impress_table.odp",false)
+     hFileOpen( gOfficepath + "user\work\html_to_impress_table.odp",false)
      Wait 500
      printlog "  Close saved document "
      Call hCloseDocument
@@ -262,7 +262,7 @@ testcase HTMLToIMPRESSGraphicLinked
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_impress_graphic1.odp",false)
+        hFileOpen( gOfficepath + "user\work\html_to_impress_graphic1.odp",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -319,7 +319,7 @@ testcase HTMLToIMPRESSControl
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_impress_control.odp",false)
+        hFileOpen( gOfficepath + "user\work\html_to_impress_control.odp",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -381,7 +381,7 @@ testcase HTMLToIMPRESSFloatingFrame
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        hFileOpenLocally( gOfficepath + "user\work\html_to_impress_float.odp",false)
+        hFileOpen( gOfficepath + "user\work\html_to_impress_float.odp",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument

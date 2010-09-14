@@ -642,7 +642,7 @@ testcase tInsertGraphic_10
     sleep(2)
 
     '/// Reload the file
-    hFileOpenLocally( gOfficepath + "user\work\tInsertGraphic_5.odt")
+    hFileOpen( gOfficepath & "user\work\tInsertGraphic_5.odt")
     sleep(2)
     
 

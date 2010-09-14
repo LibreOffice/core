@@ -86,7 +86,7 @@ testcase HTMLToHTMLText
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_html_text.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_text.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -143,7 +143,7 @@ testcase HTMLToHTMLField
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_html_field.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_field.html" )
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -200,7 +200,7 @@ testcase HTMLToHTMLTable
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_html_table.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_table.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -256,7 +256,7 @@ testcase HTMLToHTMLGraphicLinked
         Call hCloseDocument
         printlog "  Close saved document "
         sleep (2)
-        hFileOpenLocally( gOfficepath + "user\work\html_to_html_graphic1.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_graphic1.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -313,7 +313,7 @@ testcase HTMLToHTMLControl
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_html_control.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_control.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -375,7 +375,7 @@ testcase HTMLToHTMLFloatingFrame
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        hFileOpenLocally( gOfficepath + "user\work\html_to_html_float.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_float.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument

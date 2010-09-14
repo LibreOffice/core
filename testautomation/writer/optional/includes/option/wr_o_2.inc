@@ -587,7 +587,7 @@ testcase tToolsOptionsWriterPrint1
     ExtrasOptionenDlg.OK
     WaitSlot (2)
 	' Notify is saved with document
-    hFileOpenLocally( gOfficepath + "user\work\printtest." & WriterFilterExtension(0) )
+    hFileOpen( gOfficePath & "user\work\printtest." & WriterFilterExtension(0) )
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
 

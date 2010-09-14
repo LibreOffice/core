@@ -1263,7 +1263,7 @@ testcase tFormatPage_46
      Call hCloseDocument
 
      Call hNewDocument
-     hFileOpenLocally( gOfficepath + "user\work\tFormatPage_46.odt")
+     hFileOpen( gOfficepath + "user\work\tFormatPage_46.odt")
 
     '/// Check if the setting are still kept
      fFormatPageWriter("TabSpalten")

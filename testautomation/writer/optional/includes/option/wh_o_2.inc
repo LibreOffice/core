@@ -163,7 +163,7 @@ testcase tToolsOptionsHTMLPrint
     ' Is saved with document
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    hFileOpenLocally( gOfficepath + "user\work\printtest.html")
+    hFileOpen( gOfficePath & "user\work\printtest.html")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 

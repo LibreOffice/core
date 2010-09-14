@@ -147,7 +147,7 @@ testcase CalcToWriterText2
     Call hCloseDocument
     wait 500
     printlog "  Reopen saved document "
-    hFileOpenLocally( gOfficepath + "user\work\writer_to_writer_textformat_cellcontent.odt",false)
+    hFileOpen( gOfficepath + "user\work\writer_to_writer_textformat_cellcontent.odt",false)
     Wait 500
     printlog "  Close saved document "
     Call hCloseDocument
@@ -329,7 +329,7 @@ testcase CalcToWriterHyperlink2
     Call hCloseDocument
     wait 500
     printlog "  Reopen saved document "
-    hFileOpenLocally( gOfficepath + "user\work\writer_to_writer_hyperlink_cellcontent.odt",false)
+    hFileOpen( gOfficepath + "user\work\writer_to_writer_hyperlink_cellcontent.odt",false)
     Wait 500
     printlog "  Close saved document "
     Call hCloseDocument
@@ -381,7 +381,7 @@ testcase CalcToWriterDrawObject
     Call hCloseDocument
     wait 500
     printlog "  Reopen saved document "
-    hFileOpenLocally( gOfficepath + "user\work\writer_to_writer_draw.odt",false)
+    hFileOpen( gOfficepath + "user\work\writer_to_writer_draw.odt",false)
     Wait 500
     printlog "  Close saved document "
     Call hCloseDocument
@@ -433,7 +433,7 @@ testcase CalcToWriterOLE
     Call hCloseDocument
     wait 500
     printlog "  Reopen saved document "
-    hFileOpenLocally( gOfficepath + "user\work\writer_to_writer_ole.odt",false)
+    hFileOpen( gOfficepath + "user\work\writer_to_writer_ole.odt",false)
     Wait 500
     printlog "  Close saved document "
     Call hCloseDocument

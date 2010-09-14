@@ -938,7 +938,7 @@ testcase tToolsOptionsWriterCompatibility1
 
     printlog "- load previously saved document"
     Call hNewDocument
-    hFileOpenLocally( gOfficePath + "user\work\tToolsOptionsWriterCompatibility1.odt")
+    hFileOpen( gOfficePath & "user\work\tToolsOptionsWriterCompatibility1.odt")
 
     Printlog "check state of all checkboxes and uncheck all checkboxes"
     ToolsOptions
