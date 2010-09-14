@@ -604,6 +604,7 @@ private:
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
     bool mbProtectForm                              : 1;
     bool mbInvertBorderSpacing                      : 1;
+    bool mbCollapseEmptyCellPara                    : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // OD 2008-06-05 #i89181# - see above
 
     // #i78591#

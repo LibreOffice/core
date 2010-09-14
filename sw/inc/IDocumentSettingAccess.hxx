@@ -82,6 +82,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
          // <--
      INVERT_BORDER_SPACING,
+         COLLAPSE_EMPTY_CELL_PARA,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,

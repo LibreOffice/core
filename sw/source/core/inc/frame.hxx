@@ -624,6 +624,7 @@ public:
     SwRootFrm           *FindRootFrm();
     SwPageFrm           *FindPageFrm();
     SwFrm               *FindColFrm();
+    SwRowFrm            *FindRowFrm();
     SwFtnBossFrm        *FindFtnBossFrm( BOOL bFootnotes = FALSE );
     SwTabFrm            *ImplFindTabFrm();
     SwFtnFrm            *ImplFindFtnFrm();
@@ -910,6 +911,9 @@ public:
 
     // FME 2007-08-30 #i81146# new loop control
     void ValidateThisAndAllLowers( const USHORT nStage );
+
+public:
+    bool IsCollapse() const;
 };
 
 inline BOOL SwFrm::IsInDocBody() const

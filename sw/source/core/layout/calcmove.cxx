@@ -63,6 +63,8 @@
 #include <flyfrms.hxx>
 // <--
 
+#include <ndtxt.hxx>
+
 //------------------------------------------------------------------------
 //              Move-Methoden
 //------------------------------------------------------------------------
@@ -952,6 +954,42 @@ void SwLayoutFrm::MakeAll()
 |*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
+bool SwTxtNode::IsCollapse() const
+{
+    if ( GetDoc()->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA ) &&  GetTxt().Len()==0 ) {
+        ULONG nIdx=GetIndex();
+        const SwEndNode *pNdBefore=GetNodes()[nIdx-1]->GetEndNode();
+        const SwEndNode *pNdAfter=GetNodes()[nIdx+1]->GetEndNode();
+
+        // The paragraph is collapsed only if the NdAfter is the end of a cell
+        bool bInTable = this->FindTableNode( ) != NULL;
+
+        SwSortedObjs* pObjs = this->GetFrm()->GetDrawObjs( );
+        sal_uInt32 nObjs = ( pObjs != NULL ) ? pObjs->Count( ) : 0;
+
+        if ( pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else
+        return false;
+}
+
+bool SwFrm::IsCollapse() const
+{
+    if (IsTxtFrm()) {
+        const SwTxtFrm *pTxtFrm=(SwTxtFrm*)this;
+        const SwTxtNode *pTxtNode=pTxtFrm->GetTxtNode();
+        if (pTxtNode && pTxtNode->IsCollapse()) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
 
 BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
@@ -1054,6 +1092,11 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
             // OD 2004-03-02 #106629# - use new method <CalcLowerSpace(..)>
             SwTwips nLower = CalcLowerSpace( &rAttrs );
+        if (IsCollapse()) {
+        ViewShell *pSh = GetShell();
+        nUpper=0;
+        nLower=0;
+        }
 //            // in balanced columned section frames we do not want the
 //            // common border
 //            sal_Bool bCommonBorder = sal_True;

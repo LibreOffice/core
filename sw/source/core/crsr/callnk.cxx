@@ -43,9 +43,14 @@
 #include <doc.hxx>
 #include <frmfmt.hxx>
 #include <txtfrm.hxx>
+#include <tabfrm.hxx>
+#include <rowfrm.hxx>
+#include <fmtfsize.hxx>
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
+
+#include<vcl/window.hxx>
 
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
@@ -96,6 +101,51 @@ SwCallLink::~SwCallLink()
     SwCntntNode * pCNd = pCurCrsr->GetCntntNode();
     if( !pCNd )
         return;
+
+    bool bUpdatedTable = false;
+    SwFrm *myFrm=pCNd->GetFrm();
+    if (myFrm!=NULL)
+    {
+        // We need to emulated a change of the row height in order
+        // to have the complete row redrawn
+        SwRowFrm* pRow = myFrm->FindRowFrm( );
+        if ( pRow )
+        {
+            const SwTableLine* pLine = pRow->GetTabLine( );
+            SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
+            pRow->Modify( NULL, &pSize );
+
+            bUpdatedTable = true;
+        }
+    }
+
+    const SwDoc *pDoc=rShell.GetDoc();
+    const SwCntntNode *pNode = NULL;
+    if ( ( pDoc != NULL && nNode < pDoc->GetNodes( ).Count( ) ) )
+    {
+        pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
+    }
+    if ( pNode != NULL )
+    {
+        SwFrm *myFrm2=pNode->GetFrm();
+        if (myFrm2!=NULL)
+        {
+            // We need to emulated a change of the row height in order
+            // to have the complete row redrawn
+            SwRowFrm* pRow = myFrm2->FindRowFrm();
+            if ( pRow )
+            {
+                const SwTableLine* pLine = pRow->GetTabLine( );
+                SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
+                pRow->Modify( NULL, &pSize );
+
+                bUpdatedTable = true;
+            }
+        }
+    }
+
+    if ( bUpdatedTable )
+        rShell.GetWin( )->Invalidate( 0 );
 
     xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
     USHORT nNdWhich = pCNd->GetNodeType();

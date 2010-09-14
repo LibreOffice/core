@@ -3639,21 +3639,7 @@ bool lcl_PamContainsFly(SwPaM & rPam)
 void SwWW8ImplReader::TabCellEnd()
 {
     if (nInTable && pTableDesc)
-    {
         pTableDesc->TableCellEnd();
-
-        if (bReadTable
-            && pWFlyPara == NULL
-            && mpTableEndPaM.get() != NULL
-            && (! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
-            && SwPaM::LessThan(*mpTableEndPaM, *pPaM)
-            && mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode()
-            && !lcl_PamContainsFly(*mpTableEndPaM)
-            )
-        {
-            rDoc.DelFullPara(*mpTableEndPaM);
-        }
-    }
 
     bFirstPara = true;    // We have come to the end of a cell so FirstPara flag
     bReadTable = false;

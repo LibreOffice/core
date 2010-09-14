@@ -384,6 +384,7 @@ SwDoc::SwDoc() :
     mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
     // <--
     mbInvertBorderSpacing                   = false;        // hidden
+    mbCollapseEmptyCellPara                 = true;        // hidden
 
     //
     // COMPATIBILITY FLAGS END

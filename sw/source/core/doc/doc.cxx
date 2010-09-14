@@ -198,6 +198,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
         // <--
     case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
+        case COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -324,6 +325,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
     case INVERT_BORDER_SPACING:
         mbInvertBorderSpacing = value;
     break;
+        case COLLAPSE_EMPTY_CELL_PARA:
+            mbCollapseEmptyCellPara = value;
+         break;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:

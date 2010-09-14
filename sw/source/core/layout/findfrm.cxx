@@ -596,6 +596,15 @@ SwFrm *SwFrm::FindColFrm()
     return pFrm;
 }
 
+SwRowFrm *SwFrm::FindRowFrm()
+{
+    SwFrm *pFrm = this;
+    do
+    {   pFrm = pFrm->GetUpper();
+    } while ( pFrm && !pFrm->IsRowFrm() );
+    return dynamic_cast< SwRowFrm* >( pFrm );
+}
+
 SwFrm* SwFrm::FindFooterOrHeader()
 {
     SwFrm* pRet = this;

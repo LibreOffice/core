@@ -58,6 +58,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 
+#include <crsrsh.hxx>
+
 /*************************************************************************
  *                      class SwTmpEndPortion
  *************************************************************************/
@@ -228,6 +230,20 @@ SwLinePortion *SwArrowPortion::Compress() { return this; }
 
 SwTwips SwTxtFrm::EmptyHeight() const
 {
+    if (IsCollapse()) {
+        ViewShell *pSh = GetShell();
+        if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
+            SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
+            SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
+            if (pCurrFrm==(SwCntntFrm*)this) {
+                // do nothing
+            } else {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+    }
     ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;

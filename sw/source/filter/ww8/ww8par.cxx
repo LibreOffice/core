@@ -1395,6 +1395,7 @@ void SwWW8ImplReader::ImportDop()
     // <--
 
     rDoc.set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
+    rDoc.set(IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA, true);
 
     //
     // COMPATIBILITY FLAGS END

@@ -125,7 +125,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     // <--
     HANDLE_MODIFYPASSWORDINFO,
-    HANDLE_INVERT_BORDER_SPACING
+    HANDLE_INVERT_BORDER_SPACING,
+    HANDLE_COLLAPSE_EMPTY_CELL_PARA
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -181,6 +182,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, CPPUTYPE_PROPERTYVALUE, 0,   0},
         { RTL_CONSTASCII_STRINGPARAM("InvertBorderSpacing"), HANDLE_INVERT_BORDER_SPACING, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("CollapseEmptyCellPara"), HANDLE_COLLAPSE_EMPTY_CELL_PARA, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -695,6 +697,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, bTmp);
     }
     break;
+        case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1033,6 +1041,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
     }
     break;
+        case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }

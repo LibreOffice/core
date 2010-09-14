@@ -856,6 +856,8 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
 
+    bool IsCollapse() const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 
