@@ -45,14 +45,8 @@ CDEFS+=-I..$/app
 
 SLOFILES = \
         $(SLO)$/migration.obj \
-        $(SLO)$/wizard.obj    \
-        $(SLO)$/pages.obj     \
         $(SLO)$/cfgfilter.obj 
         
-SRS1NAME=	wizard
-SRC1FILES=	wizard.src	        
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

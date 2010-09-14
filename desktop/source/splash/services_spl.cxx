@@ -35,7 +35,6 @@
 #include <unotools/configmgr.hxx>
 
 #include "splash.hxx"
-#include "firststart.hxx"
 
 
 using namespace rtl;
@@ -48,14 +47,12 @@ using namespace ::desktop;
 static const char* pServices[] =
 {
     SplashScreen::serviceName,
-    FirstStart::serviceName,
     NULL
 };
 
 static const char* pImplementations[] =
 {
     SplashScreen::implementationName,
-    FirstStart::implementationName,
     NULL
 };
 
@@ -64,7 +61,6 @@ typedef Reference<XInterface>(* fProvider)(const Reference<XMultiServiceFactory>
 static const fProvider pInstanceProviders[] =
 {
     SplashScreen::getInstance,
-    FirstStart::CreateInstance,
     NULL
 };
 
@@ -72,7 +68,6 @@ static const fProvider pInstanceProviders[] =
 static const char** pSupportedServices[] =
 {
     SplashScreen::interfaces,
-    FirstStart::interfaces,
     NULL
 };
 

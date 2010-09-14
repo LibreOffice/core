@@ -71,8 +71,7 @@ LINKFLAGSAPPGUI!:=	$(LINKFLAGSAPPGUI:s/-bind_at_load//)
 
 RESLIB1NAME=		dkt
 RESLIB1IMAGES=		$(PRJ)$/res
-RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
-                    $(SRS)$/wizard.srs
+RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 
 .IF "$(L10N_framework)"==""
 .IF "$(LINK_SO)"=="TRUE"

@@ -47,7 +47,7 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
-#include "../migration/pages.hxx"
+#include "../migration/migration.hxx"
 
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -1710,37 +1710,9 @@ void Desktop::Main()
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return;
-        // First Start Wizard allowed ?
-        if ( ! pCmdLineArgs->IsNoFirstStartWizard())
-        {
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ FirstStartWizard" );
 
-            if (IsFirstStartWizardNeeded())
-            {
-                ::utl::RegOptions().removeReminder(); // remove patch registration reminder
-                Reference< XJob > xFirstStartJob( xSMgr->createInstance(
-                    DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
-                if (xFirstStartJob.is())
-                {
-                    sal_Bool bDone = sal_False;
-                    Sequence< NamedValue > lArgs(2);
-                    lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
-                    lArgs[0].Value <<= LicenseNeedsAcceptance();
-                    lArgs[1].Name    = ::rtl::OUString::createFromAscii("LicensePath");
-                    lArgs[1].Value <<= GetLicensePath();
-
-                    xFirstStartJob->execute(lArgs) >>= bDone;
-                    if ( !bDone )
-                    {
-                        return;
-                    }
-                }
-            }
-            else if ( RegistrationPage::hasReminderDateCome() )
-                RegistrationPage::executeSingleMode();
-
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
-        }
+        if ( Migration::checkMigration() )
+            Migration::doMigration();
 
         // keep a language options instance...
         pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
