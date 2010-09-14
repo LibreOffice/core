@@ -233,9 +233,11 @@ SalInstance *CreateSalInstance()
     if( ! pInst )
         pInst = autodetect_plugin();
 
-    // fallback to gen
-    if( ! pInst )
-        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gen" ) ) );
+    // fallback, try everything
+    const char* pPlugin[] = { "gtk", "kde", "gen", 0 };
+
+    for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
+        pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
 
     if( ! pInst )
     {
