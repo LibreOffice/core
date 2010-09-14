@@ -38,11 +38,9 @@
   <implementation name="com.sun.star.comp.dba.OCommandDefinition">
     <service name="com.sun.star.sdb.CommandDefinition"/>
     <service name="com.sun.star.sdb.QueryDefinition"/>
-    <service name="com.sun.star.ucb.Content"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.OComponentDefinition">
     <service name="com.sun.star.sdb.TableDefinition"/>
-    <service name="com.sun.star.ucb.Content"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.ODatabaseContext">
     <service name="com.sun.star.sdb.DatabaseContext"/>

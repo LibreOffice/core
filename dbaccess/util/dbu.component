@@ -39,15 +39,12 @@
     <service name="com.sun.star.sdb.TextConnectionSettings"/>
   </implementation>
   <implementation name="com.sun.star.comp.dbu.OColumnControl">
-    <service name="com.sun.star.awt.UnoControl"/>
     <service name="com.sun.star.sdb.ColumnDescriptorControl"/>
   </implementation>
   <implementation name="com.sun.star.comp.dbu.OColumnControlModel">
-    <service name="com.sun.star.awt.UnoControlModel"/>
     <service name="com.sun.star.sdb.ColumnDescriptorControlModel"/>
   </implementation>
   <implementation name="com.sun.star.comp.dbu.SbaXGridControl">
-    <service name="com.sun.star.awt.UnoControl"/>
     <service name="com.sun.star.form.control.GridControl"/>
     <service name="com.sun.star.form.control.InteractionGridControl"/>
   </implementation>

@@ -38,7 +38,6 @@
     <service name="com.sun.star.report.FormatCondition"/>
   </implementation>
   <implementation name="com.sun.star.comp.report.OFormattedField">
-    <service name="com.sun.star.awt.UnoControlFormattedFieldModel"/>
     <service name="com.sun.star.report.FormattedField"/>
   </implementation>
   <implementation name="com.sun.star.comp.report.OFunction">
