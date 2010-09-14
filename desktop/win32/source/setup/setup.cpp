@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #define WIN // scope W32 API
+#define _WIN32_WINNT 0x0501
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
