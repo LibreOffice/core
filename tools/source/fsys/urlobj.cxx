@@ -2390,7 +2390,7 @@ bool INetURLObject::parseHost(
                     aTheCanonic.append(sal_Unicode('['));
                     eState = STATE_IP6;
                 }
-                else if (INetMIME::isAlpha(*p))
+                else if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                 {
@@ -2408,19 +2408,19 @@ bool INetURLObject::parseHost(
                     eState = STATE_LABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_LABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p))
+                else if (!INetMIME::isAlphanumeric(*p) && *p != '_')
                     goto done;
                 break;
 
             case STATE_LABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p))
+                if (INetMIME::isAlphanumeric(*p) || *p == '_')
                     eState = STATE_LABEL;
                 else if (*p != '-')
                     goto done;
                 break;
 
             case STATE_LABEL_DOT:
-                if (INetMIME::isAlpha(*p))
+                if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                     eState = STATE_LABEL;
@@ -2433,19 +2433,19 @@ bool INetURLObject::parseHost(
                     eState = STATE_TOPLABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_TOPLABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p))
+                else if (!INetMIME::isAlphanumeric(*p) && *p != '_')
                     goto done;
                 break;
 
             case STATE_TOPLABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p))
+                if (INetMIME::isAlphanumeric(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (*p != '-')
                     goto done;
                 break;
 
             case STATE_TOPLABEL_DOT:
-                if (INetMIME::isAlpha(*p))
+                if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                     eState = STATE_LABEL;
@@ -2467,7 +2467,7 @@ bool INetURLObject::parseHost(
                         eState = STATE_LABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_LABEL_HYPHEN;
-                else if (INetMIME::isAlpha(*p))
+                else if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_LABEL;
                 else if (INetMIME::isDigit(*p))
                     if (nDigits < 3)
@@ -2482,7 +2482,7 @@ bool INetURLObject::parseHost(
                 break;
 
             case STATE_IP4_DOT:
-                if (INetMIME::isAlpha(*p))
+                if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                 {
@@ -5372,7 +5372,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
         switch (eState)
         {
             case STATE_DOT:
-                if (p != pEnd && INetMIME::isAlphanumeric(*p))
+                if (p != pEnd && (INetMIME::isAlphanumeric(*p) || *p == '_'))
                 {
                     ++nLabels;
                     eState = STATE_LABEL;
@@ -5386,7 +5386,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
             case STATE_LABEL:
                 if (p != pEnd)
                 {
-                    if (INetMIME::isAlphanumeric(*p))
+                    if (INetMIME::isAlphanumeric(*p) || *p == '_')
                         break;
                     else if (*p == '.')
                     {
@@ -5406,7 +5406,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
             case STATE_HYPHEN:
                 if (p != pEnd)
                 {
-                    if (INetMIME::isAlphanumeric(*p))
+                    if (INetMIME::isAlphanumeric(*p) || *p == '_')
                     {
                         eState = STATE_LABEL;
                         break;
