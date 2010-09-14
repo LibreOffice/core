@@ -762,14 +762,14 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRu
         /*Get defaults if no formatting on ruby text*/
 
         const SfxItemPool *pPool = rNode.GetSwAttrSet().GetPool();
-        const SfxItemPool &rPool = pPool ? *pPool : m_rWW8Export.pDoc->GetAttrPool();
+        pPool = pPool ? pPool : &m_rWW8Export.pDoc->GetAttrPool();
 
-        const SvxFontItem &rFont  = DefaultItemGet< SvxFontItem >( rPool,
+        const SvxFontItem &rFont  = DefaultItemGet< SvxFontItem >( *pPool,
                 GetWhichOfScript( RES_CHRATR_FONT,nRubyScript ) );
         sFamilyName = rFont.GetFamilyName();
 
         const SvxFontHeightItem &rHeight = DefaultItemGet< SvxFontHeightItem >
-            ( rPool, GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
+            ( *pPool, GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
         nHeight = rHeight.GetHeight();
     }
     nHeight = (nHeight + 5)/10;
