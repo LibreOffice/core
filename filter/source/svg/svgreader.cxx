@@ -519,12 +519,12 @@ struct AnnotatingVisitor
                                       rtl::OUString::valueOf(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[0]].maStopColor.a*
-                                          maCurrState.mnFillOpacity*100.0)+USTR("%" ) );
+                                          maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+USTR("%" ) );
                 xAttrs->AddAttribute( USTR( "draw:start" ),
                                       rtl::OUString::valueOf(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[1]].maStopColor.a*
-                                          maCurrState.mnFillOpacity*100.0)+USTR("%" ) );
+                                          maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+USTR("%" ) );
                 xAttrs->AddAttribute( USTR( "draw:border" ), USTR("0%") );
                 mxDocumentHandler->startElement( USTR("draw:opacity"),
                                                  xUnoAttrs );
@@ -616,17 +616,17 @@ struct AnnotatingVisitor
                         xAttrs->AddAttribute( USTR( "draw:opacity-name" ),
                                               getStyleName("svgopacity", rState.maFillGradient.mnId) );
                     }
-                    else if( maCurrState.mnFillOpacity != 1.0 )
+                    else if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                         xAttrs->AddAttribute( USTR( "draw:opacity" ),
-                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity)+USTR("%") );
+                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+USTR("%") );
                 }
                 else
                 {
                     xAttrs->AddAttribute( USTR( "draw:fill" ), USTR("solid"));
                     xAttrs->AddAttribute( USTR( "draw:fill-color" ), getOdfColor(rState.maFillColor));
-                    if( maCurrState.mnFillOpacity != 1.0 )
+                    if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                         xAttrs->AddAttribute( USTR( "draw:opacity" ),
-                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity)+USTR("%") );
+                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+USTR("%") );
                 }
             }
             else
@@ -652,9 +652,9 @@ struct AnnotatingVisitor
                 xAttrs->AddAttribute( USTR( "draw:stroke-linejoin"), USTR("round"));
             else if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_BEVEL )
                 xAttrs->AddAttribute( USTR( "draw:stroke-linejoin"), USTR("bevel"));
-            if( maCurrState.mnStrokeOpacity != 1.0 )
+            if( maCurrState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
                 xAttrs->AddAttribute( USTR("svg:stroke-opacity"),
-                                      rtl::OUString::valueOf(100.0*maCurrState.mnStrokeOpacity)+USTR("%"));
+                                      rtl::OUString::valueOf(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+USTR("%"));
         }
 
         mxDocumentHandler->startElement( USTR("style:graphic-properties"),
@@ -876,6 +876,12 @@ struct AnnotatingVisitor
                     maCurrState.meFillRule = maParentStates.back().meFillRule;
                 break;
             }
+            case XML_OPACITY:
+                if( aValueUtf8 == "inherit" )
+                    maCurrState.mnOpacity = maParentStates.back().mnOpacity;
+                else
+                    maCurrState.mnOpacity = aValueUtf8.toDouble();
+                break;
             case XML_FILL_OPACITY:
                 if( aValueUtf8 == "inherit" )
                     maCurrState.mnFillOpacity = maParentStates.back().mnFillOpacity;
@@ -2540,13 +2546,13 @@ struct ShapeRenderingVisitor
                 const BYTE  cTransStart( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[1]].maStopColor.a*
-                                    aState.mnFillOpacity*255.0));
+                                    aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
                 const Color aTransStart( cTransStart, cTransStart, cTransStart );
 
                 const BYTE  cTransEnd( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[0]].maStopColor.a*
-                                    aState.mnFillOpacity*255.0));
+                                    aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
                 const Color aTransEnd( cTransEnd, cTransEnd, cTransEnd );
 
                 // modulate gradient opacity with overall fill opacity
@@ -2594,10 +2600,10 @@ struct ShapeRenderingVisitor
             else
                 mrOutDev.SetFillColor(getVclColor(aState.maFillColor));
 
-            if( aState.mnFillOpacity != 1.0 )
+            if( aState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                 mrOutDev.DrawTransparent(::PolyPolygon(aPoly),
                                          basegfx::fround(
-                                             (1.0-aState.mnFillOpacity)*100.0));
+                                             (1.0-(aState.mnFillOpacity*maCurrState.mnOpacity))*100.0));
             else
                 mrOutDev.DrawPolyPolygon(::PolyPolygon(aPoly));
         }
@@ -2652,10 +2658,10 @@ struct ShapeRenderingVisitor
 
             for( sal_uInt32 i=0; i<aPolys.size(); ++i )
             {
-                if( aState.mnStrokeOpacity != 1.0 )
+                if( aState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
                     mrOutDev.DrawTransparent(::PolyPolygon(aPolys[i]),
                                              basegfx::fround(
-                                                 (1.0-aState.mnStrokeOpacity)*100.0));
+                                                 (1.0-(aState.mnStrokeOpacity*maCurrState.mnOpacity))*100.0));
                 else
                     mrOutDev.DrawPolyPolygon(::PolyPolygon(aPolys[i]));
 
@@ -2675,10 +2681,10 @@ struct ShapeRenderingVisitor
             else
                 mrOutDev.SetLineColor(getVclColor(aState.maStrokeColor));
 
-            if( aState.mnStrokeOpacity != 1.0 )
+            if( aState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
                 mrOutDev.DrawTransparent(::PolyPolygon(aPoly),
                                          basegfx::fround(
-                                             (1.0-aState.mnStrokeOpacity)*100.0));
+                                             (1.0-(aState.mnStrokeOpacity*maCurrState.mnOpacity))*100.0));
             else
                 mrOutDev.DrawPolyPolygon(::PolyPolygon(aPoly));
         }

@@ -174,6 +174,7 @@ struct State
         mbVisibility(true),
         meFillType(SOLID),
         mnFillOpacity(1.0),
+        mnOpacity(1.0),
         meStrokeType(NONE),
         mnStrokeOpacity(1.0),
         meViewportFillType(NONE),
@@ -220,6 +221,7 @@ struct State
 
     PaintType                   meFillType;
     double                      mnFillOpacity;
+    double                      mnOpacity;
     PaintType                   meStrokeType;
     double                      mnStrokeOpacity;
     PaintType                   meViewportFillType;
