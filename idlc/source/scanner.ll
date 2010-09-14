@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+%option yylineno
+
 %{
 /*
  * scanner.ll - Lexical scanner for IDLC 1.0
