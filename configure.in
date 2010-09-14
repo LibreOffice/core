@@ -5876,10 +5876,7 @@ int main(int argc, char **argv) {
            fi
         else
            BUILD_TYPE="$BUILD_TYPE CAIRO"
-	   dnl === compiler fails on pixman with 64bit architectures...===
-	   if test "$build_cpu" != "x86_64"; then
-	      BUILD_PIXMAN=YES
-	   fi
+           BUILD_PIXMAN=YES
            AC_MSG_RESULT([internal])	   
         fi
     else
