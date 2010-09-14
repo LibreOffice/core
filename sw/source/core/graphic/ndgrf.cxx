@@ -858,6 +858,10 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
     if( !aUserData.Len() )
         return;
 
+    if (aNewStrmName.Len()>0) {
+        aUserData=aNewStrmName;
+    }
+
     String aProt( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.Package:" ) );
     if( 0 == aUserData.CompareTo( aProt, aProt.Len() ) )
     {
