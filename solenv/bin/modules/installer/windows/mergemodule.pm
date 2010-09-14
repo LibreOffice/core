@@ -398,14 +398,14 @@ sub merge_mergemodules_into_msi_database
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: After merging database");
 
             # Saving original idt files
-            if ( -f "File.idt" ) { installer::systemactions::rename_one_file("File.idt", "File.idt.$counter"); }
-            if ( -f "Media.idt" ) { installer::systemactions::rename_one_file("Media.idt", "Media.idt.$counter"); }
-            if ( -f "Directory.idt" ) { installer::systemactions::rename_one_file("Directory.idt", "Directory.idt.$counter"); }
-            if ( -f "Director.idt" ) { installer::systemactions::rename_one_file("Director.idt", "Director.idt.$counter"); }
-            if ( -f "FeatureComponents.idt" ) { installer::systemactions::rename_one_file("FeatureComponents.idt", "FeatureComponents.idt.$counter"); }
-            if ( -f "FeatureC.idt" ) { installer::systemactions::rename_one_file("FeatureC.idt", "FeatureC.idt.$counter"); }
-            if ( -f "MsiAssembly.idt" ) { installer::systemactions::rename_one_file("MsiAssembly.idt", "MsiAssembly.idt.$counter"); }
-            if ( -f "MsiAssem.idt" ) { installer::systemactions::rename_one_file("MsiAssem.idt", "MsiAssem.idt.$counter"); }
+            if ( -f "File.idt" ) { installer::systemactions::rename_one_file("File.idt", "old.File.idt.$counter"); }
+            if ( -f "Media.idt" ) { installer::systemactions::rename_one_file("Media.idt", "old.Media.idt.$counter"); }
+            if ( -f "Directory.idt" ) { installer::systemactions::rename_one_file("Directory.idt", "old.Directory.idt.$counter"); }
+            if ( -f "Director.idt" ) { installer::systemactions::rename_one_file("Director.idt", "old.Director.idt.$counter"); }
+            if ( -f "FeatureComponents.idt" ) { installer::systemactions::rename_one_file("FeatureComponents.idt", "old.FeatureComponents.idt.$counter"); }
+            if ( -f "FeatureC.idt" ) { installer::systemactions::rename_one_file("FeatureC.idt", "old.FeatureC.idt.$counter"); }
+            if ( -f "MsiAssembly.idt" ) { installer::systemactions::rename_one_file("MsiAssembly.idt", "old.MsiAssembly.idt.$counter"); }
+            if ( -f "MsiAssem.idt" ) { installer::systemactions::rename_one_file("MsiAssem.idt", "old.MsiAssem.idt.$counter"); }
 
             # Extracting tables
 
@@ -474,13 +474,13 @@ sub merge_mergemodules_into_msi_database
             # merged into the three ExecuteSequences with the following process (also into InstallUISequence.idt).
 
             # Saving original idt files
-            if ( -f "InstallE.idt" ) { installer::systemactions::rename_one_file("InstallE.idt", "InstallE.idt.$counter"); }
-            if ( -f "InstallU.idt" ) { installer::systemactions::rename_one_file("InstallU.idt", "InstallU.idt.$counter"); }
-            if ( -f "AdminExe.idt" ) { installer::systemactions::rename_one_file("AdminExe.idt", "AdminExe.idt.$counter"); }
-            if ( -f "AdvtExec.idt" ) { installer::systemactions::rename_one_file("AdvtExec.idt", "AdvtExec.idt.$counter"); }
-            if ( -f "ModuleInstallExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleInstallExecuteSequence.idt", "ModuleInstallExecuteSequence.idt.$counter"); }
-            if ( -f "ModuleAdminExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleAdminExecuteSequence.idt", "ModuleAdminExecuteSequence.idt.$counter"); }
-            if ( -f "ModuleAdvtExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleAdvtExecuteSequence.idt", "ModuleAdvtExecuteSequence.idt.$counter"); }
+            if ( -f "InstallE.idt" ) { installer::systemactions::rename_one_file("InstallE.idt", "old.InstallE.idt.$counter"); }
+            if ( -f "InstallU.idt" ) { installer::systemactions::rename_one_file("InstallU.idt", "old.InstallU.idt.$counter"); }
+            if ( -f "AdminExe.idt" ) { installer::systemactions::rename_one_file("AdminExe.idt", "old.AdminExe.idt.$counter"); }
+            if ( -f "AdvtExec.idt" ) { installer::systemactions::rename_one_file("AdvtExec.idt", "old.AdvtExec.idt.$counter"); }
+            if ( -f "ModuleInstallExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleInstallExecuteSequence.idt", "old.ModuleInstallExecuteSequence.idt.$counter"); }
+            if ( -f "ModuleAdminExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleAdminExecuteSequence.idt", "old.ModuleAdminExecuteSequence.idt.$counter"); }
+            if ( -f "ModuleAdvtExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleAdvtExecuteSequence.idt", "old.ModuleAdvtExecuteSequence.idt.$counter"); }
 
             # Extracting tables
             my $moduleexecutetables = "ModuleInstallExecuteSequence ModuleAdminExecuteSequence ModuleAdvtExecuteSequence"; # new tables
@@ -557,16 +557,22 @@ sub merge_mergemodules_into_msi_database
                 my $localworkdir = $workdir;
                 $localmsifilename =~ s/\//\\\\/g;
                 $localworkdir =~ s/\//\\\\/g;
-                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -i " . $workingtables. " " . $executetables;
+        foreach $table (split / /, $workingtables . ' ' . $executetables) {
+          $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -i " . $table;
+          my $retval = system($systemcall);
+          $infoline = "Systemcall returned $retval: $systemcall\n";
+          push( @installer::globals::logfileinfo, $infoline);
+          $returnvalue |= $retval;
+        }
             }
             else
             {
                 $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
-            }
-            $returnvalue = system($systemcall);
+        $returnvalue = system($systemcall);
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
 
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            }
 
             if ($returnvalue)
             {
