@@ -382,7 +382,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     const String& rWndTitle ) :
     SfxPopupWindow( nSlotId,
                     rFrame,
-                    WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
+                    WinBits( WB_STDPOPUP ) ),
     pLineEndList    ( NULL ),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
@@ -404,7 +404,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     pParentWindow,
-                    WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
+                    WinBits( WB_STDPOPUP ) ),
     pLineEndList    ( NULL ),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
