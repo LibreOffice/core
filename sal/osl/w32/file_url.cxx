@@ -89,9 +89,10 @@ static BOOL IsValidFilePathComponent(
                 case '.':
                     if ( dwFlags & VALIDATEPATH_ALLOW_ELLIPSE )
                     {
-                        if ( 1 == lpCurrent - lpComponent )
+                        if ( (dwFlags & VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD) ||
+                             1 == lpCurrent - lpComponent )
                         {
-                            /* Current directory is O.K. */
+                            /* Either do allow periods anywhere, or current directory */
                             lpComponentEnd = lpCurrent;
                             break;
                         }
@@ -104,8 +105,13 @@ static BOOL IsValidFilePathComponent(
                     }
                 case 0:
                 case ' ':
-                    lpComponentEnd = lpCurrent - 1;
-                    fValid = FALSE;
+                    if ( dwFlags & VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD )
+                        lpComponentEnd = lpCurrent;
+                    else
+                    {
+                        lpComponentEnd = lpCurrent - 1;
+                        fValid = FALSE;
+                    }
                     break;
                 default:
                     lpComponentEnd = lpCurrent;
@@ -375,7 +381,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
                 lpComponent = lpszPath + i;
             }
 
-            fValid = IsValidFilePathComponent( lpComponent, &lpComponent, dwFlags );
+            fValid = IsValidFilePathComponent( lpComponent, &lpComponent, dwFlags | VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD);
 
             if ( fValid && lpComponent )
             {
