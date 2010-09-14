@@ -303,7 +303,10 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eL
         case  FONT_OUTLINE_CJK:
         case  FONT_OUTLINE_CTL:
             nRet = FONTSIZE_OUTLINE;
-        break;
+            break;
+        case FONT_STANDARD_CJK:
+            nRet = FONTSIZE_CJK_DEFAULT;
+            break;
     }
     if( eLang == LANGUAGE_THAI && nFontType >= FONT_STANDARD_CTL )
     {

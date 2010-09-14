@@ -58,6 +58,7 @@
 
 //pt-size of fonts
 #define FONTSIZE_DEFAULT            240
+#define FONTSIZE_CJK_DEFAULT        210
 #define FONTSIZE_OUTLINE            280
 
 
