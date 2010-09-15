@@ -212,7 +212,8 @@ GDIMetaFile::GDIMetaFile() :
     pOutDev     ( NULL ),
     pLabelList  ( NULL ),
     bPause      ( FALSE ),
-    bRecord     ( FALSE )
+    bRecord     ( FALSE ),
+    bUseCanvas  ( FALSE )
 {
 }
 
@@ -227,7 +228,8 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     pNext           ( rMtf.pNext ),
     pOutDev         ( NULL ),
     bPause          ( FALSE ),
-    bRecord         ( FALSE )
+    bRecord         ( FALSE ),
+    bUseCanvas      ( rMtf.bUseCanvas )
 {
     // RefCount der MetaActions erhoehen
     for( void* pAct = First(); pAct; pAct = Next() )
@@ -281,6 +283,7 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
         pOutDev = NULL;
         bPause = FALSE;
         bRecord = FALSE;
+        bUseCanvas = rMtf.bUseCanvas;
 
         if( rMtf.bRecord )
         {
@@ -568,7 +571,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     {
         GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
 
-        if( !pMtf && ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
+        if( bUseCanvas && !pMtf && ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
             return;
 
         Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
@@ -3116,4 +3119,9 @@ BOOL GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
     }
 
     return !rBmpEx.IsEmpty();
+}
+
+void GDIMetaFile::UseCanvas( BOOL _bUseCanvas )
+{
+    bUseCanvas = _bUseCanvas;
 }

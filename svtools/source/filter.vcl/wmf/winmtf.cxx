@@ -2230,6 +2230,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     mem << one << zero << zero << one << zero << zero;
 
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const BYTE*) mem.GetData(), mem.GetEndOfData() ) );
+    mpGDIMetaFile->UseCanvas( TRUE );
 }
 
 void WinMtfOutput::PassEMFPlus( void* pBuffer, UINT32 nLength )

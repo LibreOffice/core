@@ -107,6 +107,7 @@ private:
     ImpLabelList*   pLabelList;
     BOOL            bPause;
     BOOL            bRecord;
+    BOOL            bUseCanvas;
 
 //#if 0 // _SOLAR__PRIVATE
 
@@ -246,6 +247,8 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
     BOOL           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+
+    void           UseCanvas( BOOL _bUseCanvas );
 };
 
 #endif // _SV_GDIMTF_HXX
