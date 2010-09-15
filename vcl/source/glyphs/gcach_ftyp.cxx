@@ -523,10 +523,25 @@ void* FreetypeServerFont::GetFtFace() const
 
 FreetypeManager::~FreetypeManager()
 {
-// This crashes on Solaris 10
-// TODO: check which versions have this problem
-//
-// FT_Error rcFT = FT_Done_FreeType( aLibFT );
+    // an application about to exit can omit garbage collecting the heap
+    // since it makes things slower and introduces risks if the heap was not perfect
+    // for debugging, for memory grinding or leak checking the env allows to force GC
+    const char* pEnv = getenv( "SAL_FORCE_GC_ON_EXIT" );
+    if( pEnv && (*pEnv != '0') )
+    {
+        // cleanup container of fontinfos
+        for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+        {
+            FtFontInfo* pInfo = (*it).second;
+            delete pInfo;
+        }
+        maFontList.clear();
+
+#if 0   // FT_Done_FreeType crashes on Solaris 10
+    // TODO: check which versions have this problem
+    FT_Error rcFT = FT_Done_FreeType( aLibFT );
+#endif
+    }
 }
 
 // -----------------------------------------------------------------------
