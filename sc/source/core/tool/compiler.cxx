@@ -2987,7 +2987,7 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
      * spec first. Until then don't pretend to support external names that
      * wouldn't survive a save and reload cycle, return false instead. */
 
-#if 0
+#if 1
     if (!pConv)
         return false;
 

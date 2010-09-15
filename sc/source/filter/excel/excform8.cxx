@@ -636,7 +636,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                              * external name reference can be stored in ODF,
                              * which remains to be done for #i3740#. Until then
                              * create a #NAME? token. */
-#if 0
+#if 1
                             sal_uInt16 nFileId;
                             if (!GetExternalFileIdFromXti(nXtiIndex, nFileId) || !pExtName->HasFormulaTokens())
                             {
