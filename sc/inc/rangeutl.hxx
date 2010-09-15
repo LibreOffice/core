@@ -35,6 +35,11 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
+// Chart always stores cell range addresses using CONV_OOO convention. But
+// if parsing with CONV_OOO fails, try parsing it using the current address
+// convention.
+#define CHART_ADDRESS_CONV_WORKAROUND 1
+
 //------------------------------------------------------------------------
 
 class SvStream;
