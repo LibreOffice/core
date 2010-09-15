@@ -2516,6 +2516,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "show-filter-button",                   XML_SHOW_FILTER_BUTTON ),
         TOKEN( "drill-down-on-double-click",           XML_DRILL_DOWN_ON_DOUBLE_CLICK ),
+        TOKEN( "header-grid-layout",                   XML_HEADER_GRID_LAYOUT ),
         TOKEN( "grouped-by",                           XML_GROUPED_BY ),
         TOKEN( "days",                                 XML_DAYS ),
         TOKEN( "months",                               XML_MONTHS ),
