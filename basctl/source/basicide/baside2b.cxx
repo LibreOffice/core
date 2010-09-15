@@ -1636,9 +1636,10 @@ void __EXPORT StackWindow::UpdateCalls()
                             aEntry += pParam->aName;
                     }
                     aEntry += '=';
-                    if( pVar->GetType() & SbxARRAY )
+                    SbxDataType eType = pVar->GetType();
+                    if( eType & SbxARRAY )
                         aEntry += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-                    else
+                    else if( eType != SbxOBJECT )
                         aEntry += pVar->GetString();
                     if ( nParam < ( pParams->Count() - 1 ) )
                         aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
