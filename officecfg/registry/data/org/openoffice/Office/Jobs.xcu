@@ -35,14 +35,5 @@
     </node>
   </node>
   <node oor:name="Events">
-    <node oor:name="onFirstVisibleTask" oor:op="fuse">
-      <node oor:name="JobList">
-        <node oor:name="RegistrationRequest" oor:op="replace">
-            <prop oor:name="UserTime">
-                <value>2003-01-01T00:00:00+00:01</value>
-            </prop>
-        </node>
-      </node>
-    </node>
   </node>
 </oor:component-data>
