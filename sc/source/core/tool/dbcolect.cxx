@@ -102,6 +102,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bKeepFmt            (rData.bKeepFmt),
     bStripData          (rData.bStripData),
     bSortCaseSens       (rData.bSortCaseSens),
+    bSortNaturalSort    (rData.bSortNaturalSort),
     bIncludePattern     (rData.bIncludePattern),
     bSortInplace        (rData.bSortInplace),
     bSortUserDef        (rData.bSortUserDef),
@@ -196,6 +197,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bKeepFmt            = rData.bKeepFmt;
     bStripData          = rData.bStripData;
     bSortCaseSens       = rData.bSortCaseSens;
+    bSortNaturalSort    = rData.bSortNaturalSort;
     bIncludePattern     = rData.bIncludePattern;
     bSortInplace        = rData.bSortInplace;
     nSortDestTab        = rData.nSortDestTab;
@@ -448,6 +450,7 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
     rSortParam.bByRow = bByRow;
     rSortParam.bHasHeader = bHasHeader;
     rSortParam.bCaseSens = bSortCaseSens;
+    rSortParam.bNaturalSort = bSortNaturalSort;
     rSortParam.bInplace = bSortInplace;
     rSortParam.nDestTab = nSortDestTab;
     rSortParam.nDestCol = nSortDestCol;
@@ -468,6 +471,7 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
 void ScDBData::SetSortParam( const ScSortParam& rSortParam )
 {
     bSortCaseSens = rSortParam.bCaseSens;
+    bSortNaturalSort = rSortParam.bNaturalSort;
     bIncludePattern = rSortParam.bIncludePattern;
     bSortInplace = rSortParam.bInplace;
     nSortDestTab = rSortParam.nDestTab;

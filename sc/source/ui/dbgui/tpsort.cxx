@@ -564,6 +564,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aBtnHeader      ( this, ScResId( BTN_LABEL ) ),
         aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
         aBtnCopyResult  ( this, ScResId( BTN_COPYRESULT ) ),
+        aBtnNaturalSort ( this, ScResId( BTN_NATURALSORT ) ),
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
         aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
         aBtnSortUser    ( this, ScResId( BTN_SORT_USER ) ),
@@ -575,7 +576,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aLineDirection  ( this, ScResId( FL_DIRECTION ) ),
         aBtnTopDown     ( this, ScResId( BTN_TOP_DOWN ) ),
         aBtnLeftRight   ( this, ScResId( BTN_LEFT_RIGHT ) ),
-        aFtAreaLabel    ( this, ScResId( FT_AREA_LABEL ) ),
+//      aFtAreaLabel    ( this, ScResId( FT_AREA_LABEL ) ),
 //      aFtArea         ( this, ScResId( FT_AREA ) ),
         //
 #if ENABLE_LAYOUT_EXPERIMENTAL
@@ -619,8 +620,8 @@ __EXPORT ScTabPageSortOptions::~ScTabPageSortOptions()
 
 void ScTabPageSortOptions::Init()
 {
-    aStrAreaLabel = aFtAreaLabel.GetText();
-    aStrAreaLabel.Append( (sal_Unicode) ' ' );
+//  aStrAreaLabel = aFtAreaLabel.GetText();
+//  aStrAreaLabel.Append( (sal_Unicode) ' ' );
 
     //  CollatorRessource has user-visible names for sort algorithms
     pColRes = new CollatorRessource();
@@ -699,8 +700,8 @@ void ScTabPageSortOptions::Init()
         theArea += ')';
 
         //aFtArea.SetText( theArea );
-        theArea.Insert( aStrAreaLabel, 0 );
-        aFtAreaLabel.SetText( theArea );
+        //theArea.Insert( aStrAreaLabel, 0 );
+        //aFtAreaLabel.SetText( theArea );
 
         aBtnHeader.SetText( aStrColLabel );
     }
@@ -749,9 +750,10 @@ void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
         aLbSortUser.SelectEntryPos( 0 );
     }
 
-    aBtnCase.Check      ( rSortData.bCaseSens );
-    aBtnFormats.Check   ( rSortData.bIncludePattern );
-    aBtnHeader.Check    ( rSortData.bHasHeader );
+    aBtnCase.Check          ( rSortData.bCaseSens );
+    aBtnFormats.Check       ( rSortData.bIncludePattern );
+    aBtnHeader.Check        ( rSortData.bHasHeader );
+    aBtnNaturalSort.Check   ( rSortData.bNaturalSort );
 
     if ( rSortData.bByRow )
     {
@@ -817,6 +819,7 @@ BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     theSortData.bByRow          = aBtnTopDown.IsChecked();
     theSortData.bHasHeader      = aBtnHeader.IsChecked();
     theSortData.bCaseSens       = aBtnCase.IsChecked();
+    theSortData.bNaturalSort    = aBtnNaturalSort.IsChecked();
     theSortData.bIncludePattern = aBtnFormats.IsChecked();
     theSortData.bInplace        = !aBtnCopyResult.IsChecked();
     theSortData.nDestCol        = theOutPos.Col();

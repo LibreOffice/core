@@ -49,6 +49,7 @@ struct SC_DLLPUBLIC ScSortParam
     BOOL        bHasHeader;
     BOOL        bByRow;
     BOOL        bCaseSens;
+    BOOL        bNaturalSort;
     BOOL        bUserDef;
     USHORT      nUserIndex;
     BOOL        bIncludePattern;

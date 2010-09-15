@@ -62,6 +62,143 @@
 
 #include <vector>
 
+using namespace ::com::sun::star;
+
+namespace naturalsort {
+
+using namespace ::com::sun::star::i18n;
+
+/** Splits a given string into three parts: the prefix, number string, and
+    the suffix.
+
+    @param sWhole
+    Original string to be split into pieces
+
+    @param sPrefix
+    Prefix string that consists of the part before the first number token
+
+    @param sSuffix
+    String after the last number token.  This may still contain number strings.
+
+    @param fNum
+    Number converted from the middle number string
+
+    @return Returns TRUE if a numeral element is found in a given string, or
+    FALSE if no numeral element is found.
+*/
+bool SplitString( const rtl::OUString &sWhole,
+    rtl::OUString &sPrefix, rtl::OUString &sSuffix, double &fNum )
+{
+    i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
+
+    // Get prefix element
+    rtl::OUString sEmpty, sUser = rtl::OUString::createFromAscii( "-" );
+    ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
+        KParseType::IDENTNAME, sWhole, 0,
+        KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );
+    sPrefix = sWhole.copy( 0, aPRPre.EndPos );
+
+    // Return FALSE if no numeral element is found
+    if ( aPRPre.EndPos == sWhole.getLength() )
+        return false;
+
+    // Get numeral element
+    sUser = aLocaleItem.decimalSeparator;
+    ParseResult aPRNum = ScGlobal::pCharClass->parsePredefinedToken(
+        KParseType::ANY_NUMBER, sWhole, aPRPre.EndPos,
+        KParseTokens::ANY_NUMBER, sEmpty, KParseTokens::ANY_NUMBER, sUser );
+
+    if ( aPRNum.EndPos == aPRPre.EndPos )
+        return false;
+
+    fNum = aPRNum.Value;
+    sSuffix = sWhole.copy( aPRNum.EndPos );
+
+    return true;
+}
+
+/** Naturally compares two given strings.
+
+    This is the main function that should be called externally.  It returns
+    either 1, 0, or -1 depending on the comparison result of given two strings.
+
+    @param sInput1
+    Input string 1
+
+    @param sInput2
+    Input string 2
+
+    @param bCaseSens
+    Boolean value for case sensitivity
+
+    @param pData
+    Pointer to user defined sort list
+
+    @param pCW
+    Pointer to collator wrapper for normal string comparison
+
+    @return Returnes 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
+    sInput2 is greater.
+*/
+short Compare( const String &sInput1, const String &sInput2,
+               const BOOL bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
+{
+    rtl::OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
+
+    do
+    {
+        double nNum1, nNum2;
+        BOOL bNumFound1 = SplitString( sStr1, sPre1, sSuf1, nNum1 );
+        BOOL bNumFound2 = SplitString( sStr2, sPre2, sSuf2, nNum2 );
+
+        short nPreRes; // Prefix comparison result
+        if ( pData )
+        {
+            if ( bCaseSens )
+            {
+                if ( !bNumFound1 || !bNumFound2 )
+                    return static_cast<short>(pData->Compare( sStr1, sStr2 ));
+                else
+                    nPreRes = pData->Compare( sPre1, sPre2 );
+            }
+            else
+            {
+                if ( !bNumFound1 || !bNumFound2 )
+                    return static_cast<short>(pData->ICompare( sStr1, sStr2 ));
+                else
+                    nPreRes = pData->ICompare( sPre1, sPre2 );
+            }
+        }
+        else
+        {
+            if ( !bNumFound1 || !bNumFound2 )
+                return static_cast<short>(pCW->compareString( sStr1, sStr2 ));
+            else
+                nPreRes = static_cast<short>(pCW->compareString( sPre1, sPre2 ));
+        }
+
+        // Prefix strings differ.  Return immediately.
+        if ( nPreRes != 0 ) return nPreRes;
+
+        if ( nNum1 != nNum2 )
+        {
+            if ( nNum1 < nNum2 ) return -1;
+            return static_cast<short>( nNum1 > nNum2 );
+        }
+
+        // The prefix and the first numerical elements are equal, but the suffix
+        // strings may still differ.  Stay in the loop.
+
+        sStr1 = sSuf1;
+        sStr2 = sSuf2;
+
+    } while (true);
+
+    return 0;
+}
+
+}
+
 // STATIC DATA -----------------------------------------------------------
 
 const USHORT nMaxSorts = 3;     // maximale Anzahl Sortierkriterien in aSortParam
@@ -280,25 +417,40 @@ short ScTable::CompareCell( USHORT nSort,
                     ((ScStringCell*)pCell2)->GetString(aStr2);
                 else
                     GetString(nCell2Col, nCell2Row, aStr2);
-                BOOL bUserDef = aSortParam.bUserDef;
+
+                BOOL bUserDef     = aSortParam.bUserDef;        // custom sort order
+                BOOL bNaturalSort = aSortParam.bNaturalSort;    // natural sort
+                BOOL bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
+
                 if (bUserDef)
                 {
                     ScUserListData* pData =
-                        (ScUserListData*)(ScGlobal::GetUserList()->At(
-                        aSortParam.nUserIndex));
+                        static_cast<ScUserListData*>( (ScGlobal::GetUserList()->At(
+                        aSortParam.nUserIndex)) );
+
                     if (pData)
                     {
-                        if ( aSortParam.bCaseSens )
-                            nRes = sal::static_int_cast<short>( pData->Compare(aStr1, aStr2) );
+                        if ( bNaturalSort )
+                            nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, pData, pSortCollator );
                         else
-                            nRes = sal::static_int_cast<short>( pData->ICompare(aStr1, aStr2) );
+                        {
+                            if ( bCaseSens )
+                                nRes = sal::static_int_cast<short>( pData->Compare(aStr1, aStr2) );
+                            else
+                                nRes = sal::static_int_cast<short>( pData->ICompare(aStr1, aStr2) );
+                        }
                     }
                     else
                         bUserDef = FALSE;
 
                 }
                 if (!bUserDef)
-                    nRes = (short) pSortCollator->compareString( aStr1, aStr2 );
+                {
+                    if ( bNaturalSort )
+                        nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, NULL, pSortCollator );
+                    else
+                        nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
+                }
             }
             else if ( bStr1 )               // String <-> Zahl
                 nRes = 1;                   // Zahl vorne

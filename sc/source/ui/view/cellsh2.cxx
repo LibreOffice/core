@@ -438,6 +438,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aSortParam.bHasHeader       = bHasHeader;
                     aSortParam.bByRow           = TRUE;
                     aSortParam.bCaseSens        = FALSE;
+                    aSortParam.bNaturalSort     = FALSE;
                     aSortParam.bIncludePattern  = TRUE;
                     aSortParam.bInplace         = TRUE;
                     aSortParam.bDoSort[0]       = TRUE;
@@ -489,6 +490,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aSortParam.bHasHeader = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_CASESENS, TRUE, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bCaseSens = ((const SfxBoolItem*)pItem)->GetValue();
+                    if ( pArgs->GetItemState( SID_SORT_NATURALSORT, TRUE, &pItem ) == SFX_ITEM_SET )
+                        aSortParam.bNaturalSort = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_ATTRIBS, TRUE, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bIncludePattern = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_USERDEF, TRUE, &pItem ) == SFX_ITEM_SET )
@@ -552,7 +555,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, RID_SCDLG_SORT );
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-                        pDlg->SetCurPageId(1);
+                    pDlg->SetCurPageId(1);  // 1=sort field tab  2=sort options tab
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -571,6 +574,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     rOutParam.bHasHeader ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
                                     rOutParam.bCaseSens ) );
+                            rReq.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
+                                                rOutParam.bNaturalSort ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
                                     rOutParam.bIncludePattern ) );
                                 USHORT nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;

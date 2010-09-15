@@ -60,6 +60,7 @@ private:
     BOOL            bStripData;
     // SortParam
     BOOL            bSortCaseSens;
+    BOOL            bSortNaturalSort;
     BOOL            bIncludePattern;
     BOOL            bSortInplace;
     BOOL            bSortUserDef;

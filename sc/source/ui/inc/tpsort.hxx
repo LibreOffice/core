@@ -50,7 +50,7 @@ class ScSortDlg;
 struct ScSortParam;
 
 //========================================================================
-// Kriterien
+// Kriterien (Sort Criteria)
 
 class ScTabPageSortFields : public SfxTabPage
 {
@@ -122,7 +122,7 @@ private:
 };
 
 //========================================================================
-// Sortieroptionen:
+// Sortieroptionen (Sort Options)
 
 class ScDocument;
 class ScRangeData;
@@ -164,6 +164,7 @@ private:
     CheckBox            aBtnCase;
     CheckBox            aBtnHeader;
     CheckBox            aBtnFormats;
+    CheckBox            aBtnNaturalSort;
 
     CheckBox            aBtnCopyResult;
     ListBox             aLbOutPos;
@@ -181,7 +182,7 @@ private:
     RadioButton         aBtnTopDown;
     RadioButton         aBtnLeftRight;
 
-    FixedText           aFtAreaLabel;
+//     FixedText           aFtAreaLabel;
 //  FixedInfo           aFtArea;
     LocalizedString aStrRowLabel;
     LocalizedString aStrColLabel;

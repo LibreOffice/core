@@ -1124,6 +1124,7 @@
 #define SID_SORT_CASESENS       (SC_PARAM_START+2)
 #define SID_SORT_ATTRIBS        (SC_PARAM_START+3)
 #define SID_SORT_USERDEF        (SC_PARAM_START+4)
+#define SID_SORT_NATURALSORT    (SC_PARAM_START+5)
 
 // Resourcen -------------------------------------------------------------
 

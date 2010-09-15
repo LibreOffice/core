@@ -48,7 +48,7 @@ ScSortParam::ScSortParam()
 
 ScSortParam::ScSortParam( const ScSortParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),
-        bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
+        bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),bNaturalSort(r.bNaturalSort),
         bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),bIncludePattern(r.bIncludePattern),
         bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
@@ -71,7 +71,7 @@ void ScSortParam::Clear()
     nCompatHeader = 2;
     nDestTab = 0;
     nUserIndex = 0;
-    bHasHeader=bCaseSens=bUserDef = FALSE;
+    bHasHeader=bCaseSens=bUserDef=bNaturalSort = FALSE;
     bByRow=bIncludePattern=bInplace = TRUE;
     aCollatorLocale = ::com::sun::star::lang::Locale();
     aCollatorAlgorithm.Erase();
@@ -94,6 +94,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nRow2           = r.nRow2;
     bHasHeader      = r.bHasHeader;
     bCaseSens       = r.bCaseSens;
+    bNaturalSort    = r.bNaturalSort;
     bByRow          = r.bByRow;
     bUserDef        = r.bUserDef;
     nUserIndex      = r.nUserIndex;
@@ -135,6 +136,7 @@ BOOL ScSortParam::operator==( const ScSortParam& rOther ) const
         && (bHasHeader      == rOther.bHasHeader)
         && (bByRow          == rOther.bByRow)
         && (bCaseSens       == rOther.bCaseSens)
+        && (bNaturalSort    == rOther.bNaturalSort)
         && (bUserDef        == rOther.bUserDef)
         && (nUserIndex      == rOther.nUserIndex)
         && (bIncludePattern == rOther.bIncludePattern)

@@ -63,7 +63,7 @@
 #define LB_SORT_USER        2
 #define LB_OUTAREA          3
 #define ED_OUTAREA          4
-#define FT_AREA_LABEL       5
+//#define FT_AREA_LABEL       5
 //#define FT_AREA             6
 #define BTN_SORT_USER       7
 #define BTN_CASESENSITIVE   8
@@ -78,6 +78,7 @@
 #define LB_LANGUAGE         17
 #define FT_ALGORITHM        18
 #define LB_ALGORITHM        19
+#define BTN_NATURALSORT     20
 
 //#define RID_SCDLG_SORT_WARNING
 #define FT_TEXT             1
