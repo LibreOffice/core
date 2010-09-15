@@ -2504,13 +2504,27 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
         USHORT nParCnt = pEngine->GetParagraphCount();
         if ( nParCnt == 0 )
             nParCnt = 1;
+
+        bool bUniformAttribs = true;
+        SfxItemSet aPara1Attribs = pEngine->GetAttribs(0, 0, pEngine->GetTextLen(0));
+        for (USHORT nPara = 1; nPara < nParCnt; ++nPara)
+        {
+            SfxItemSet aPara2Attribs = pEngine->GetAttribs(nPara, 0, pEngine->GetTextLen(nPara));
+            if (!(aPara1Attribs == aPara2Attribs))
+            {
+                // paragraph format different from that of the 1st paragraph.
+                bUniformAttribs = false;
+                break;
+            }
+        }
+
         ESelection aSel( 0, 0, nParCnt-1, pEngine->GetTextLen(nParCnt-1) );
         SfxItemSet aOldAttribs = pEngine->GetAttribs( aSel );
         const SfxPoolItem* pItem = NULL;
 
         //  find common (cell) attributes before RemoveAdjust
 
-        if ( pActiveViewSh )
+        if ( pActiveViewSh && bUniformAttribs )
         {
             SfxItemSet* pCommonAttrs = NULL;
             for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
