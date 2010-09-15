@@ -590,8 +590,21 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DELETEZ( pPrintFuncCache );
 
             // handle "OnCalculate" sheet events (search also for VBA event handlers)
-            if ( pDocShell && pDocShell->GetDocument()->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true ) )
-                HandleCalculateEvents();
+            if ( pDocShell )
+            {
+                ScDocument* pDoc = pDocShell->GetDocument();
+                if ( pDoc->GetVbaEventProcessor().is() )
+                {
+                    // If the VBA event processor is set, HasAnyCalcNotification is much faster than HasAnySheetEventScript
+                    if ( pDoc->HasAnyCalcNotification() && pDoc->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true ) )
+                        HandleCalculateEvents();
+                }
+                else
+                {
+                    if ( pDoc->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE ) )
+                        HandleCalculateEvents();
+                }
+            }
         }
     }
     else if ( rHint.ISA( ScPointerChangedHint ) )

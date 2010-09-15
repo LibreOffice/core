@@ -748,6 +748,7 @@ public:
     bool            HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents = false ) const;
     bool            HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
 
+    bool            HasAnyCalcNotification() const;
     BOOL            HasCalcNotification( SCTAB nTab ) const;
     void            SetCalcNotification( SCTAB nTab );
     void            ResetCalcNotifications();

@@ -658,7 +658,10 @@ uno::Reference< excel::XRange >
 ScVbaWorksheet::Cells( const ::uno::Any &nRow, const ::uno::Any &nCol )
         throw (uno::RuntimeException)
 {
-    return getSheetRange()->Cells( nRow, nCol );
+    // Performance optimization for often-called Cells method:
+    // Use a common helper method instead of creating a new ScVbaRange object
+    uno::Reference< table::XCellRange > xRange( getSheet(), uno::UNO_QUERY_THROW );
+    return ScVbaRange::CellsHelper( mxParent, mxContext, xRange, nRow, nCol );
 }
 
 uno::Reference< excel::XRange >

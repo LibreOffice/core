@@ -2060,6 +2060,18 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) thr
         return xRange->Cells( nRowIndex, nColumnIndex );
     }
 
+    // Performance: Use a common helper method for ScVbaRange::Cells and ScVbaWorksheet::Cells,
+    // instead of creating a new ScVbaRange object in often-called ScVbaWorksheet::Cells
+    return CellsHelper( mxParent, mxContext, mxRange, nRowIndex, nColumnIndex );
+}
+
+// static
+uno::Reference< excel::XRange >
+ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
+                         const uno::Reference< uno::XComponentContext >& xContext,
+                         const uno::Reference< css::table::XCellRange >& xRange,
+                         const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) throw(uno::RuntimeException)
+{
     sal_Int32 nRow = 0, nColumn = 0;
 
     sal_Bool bIsIndex = nRowIndex.hasValue();
@@ -2071,7 +2083,7 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) thr
     // convertion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, getCppuType((sal_Int32*)0) )
     if ( nRowIndex.hasValue() && !( nRowIndex >>= nRow ) )
     {
-        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
         uno::Any aConverted;
         try
         {
@@ -2082,7 +2094,7 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) thr
     }
     if ( bIsColumnIndex && !( nColumnIndex >>= nColumn ) )
     {
-        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
         uno::Any aConverted;
         try
         {
@@ -2092,17 +2104,17 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) thr
         catch( uno::Exception& ) {} // silence any errors
     }
 
-    RangeHelper thisRange( mxRange );
+    RangeHelper thisRange( xRange );
     table::CellRangeAddress thisRangeAddress =  thisRange.getCellRangeAddressable()->getRangeAddress();
     uno::Reference< table::XCellRange > xSheetRange = thisRange.getCellRangeFromSheet();
     if( !bIsIndex && !bIsColumnIndex ) // .Cells
         // #FIXE needs proper parent ( Worksheet )
-        return uno::Reference< excel::XRange >( new ScVbaRange( mxParent, mxContext, mxRange ) );
+        return uno::Reference< excel::XRange >( new ScVbaRange( xParent, xContext, xRange ) );
 
     sal_Int32 nIndex = --nRow;
     if( bIsIndex && !bIsColumnIndex ) // .Cells(n)
     {
-        uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, ::uno::UNO_QUERY_THROW);
+        uno::Reference< table::XColumnRowRange > xColumnRowRange(xRange, ::uno::UNO_QUERY_THROW);
         sal_Int32 nColCount = xColumnRowRange->getColumns()->getCount();
 
         if ( !nIndex || nIndex < 0 )
@@ -2115,7 +2127,7 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) thr
         --nColumn;
     nRow = nRow + thisRangeAddress.StartRow;
     nColumn =  nColumn + thisRangeAddress.StartColumn;
-    return new ScVbaRange( mxParent, mxContext, xSheetRange->getCellRangeByPosition( nColumn, nRow,                                        nColumn, nRow ) );
+    return new ScVbaRange( xParent, xContext, xSheetRange->getCellRangeByPosition( nColumn, nRow,                                        nColumn, nRow ) );
 }
 
 void
