@@ -572,7 +572,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetEditObject( GetEditObject() );
     aOutputData.SetViewShell( pViewData->GetViewShell() );
 
-    BOOL bGrid = rOpts.GetOption( VOPT_GRID );
+    BOOL bGrid = rOpts.GetOption( VOPT_GRID ) && pViewData->GetShowGrid();
+
     BOOL bPage = rOpts.GetOption( VOPT_PAGEBREAKS );
 
     if ( eMode == SC_UPDATE_CHANGED )

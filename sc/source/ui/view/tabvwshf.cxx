@@ -32,6 +32,7 @@
 
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <layout/layout.hxx>
@@ -691,6 +692,17 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             }
             break;
 
+        case FID_TAB_TOGGLE_GRID:
+            {
+                bool bShowGrid = pViewData->GetShowGrid();
+                pViewData->SetShowGrid(!bShowGrid);
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( FID_TAB_TOGGLE_GRID );
+                PaintGrid();
+                rReq.Done();
+            }
+            break;
+
         case FID_TAB_SET_TAB_BG_COLOR:
         case FID_TAB_MENU_SET_TAB_BG_COLOR:
             {
@@ -953,6 +965,10 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                     aColor = pDoc->GetTabBgColor( nTab );
                     rSet.Put( SvxColorItem( aColor, nWhich ) );
                 }
+                break;
+
+            case FID_TAB_TOGGLE_GRID:
+                rSet.Put( SfxBoolItem(nWhich, pViewData->GetShowGrid()) );
                 break;
         }
         nWhich = aIter.NextWhich();

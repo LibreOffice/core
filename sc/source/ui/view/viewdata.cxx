@@ -101,6 +101,7 @@ ScViewDataTable::ScViewDataTable() :
                 nFixPosY( 0 ),
                 nCurX( 0 ),
                 nCurY( 0 ),
+                bShowGrid( true ),
                 bOldCurValid( FALSE )
 {
     nPosX[0]=nPosX[1]=0;
@@ -160,6 +161,9 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
+
+        pSettings[SC_TABLE_SHOWGRID].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWGRID));
+        pSettings[SC_TABLE_SHOWGRID].Value <<= static_cast<sal_Bool>(bShowGrid);
     }
 }
 
@@ -263,6 +267,10 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             Fraction aZoom(nTemp32, 100);
             aPageZoomX = aPageZoomY = aZoom;
             rHasZoom = true;
+        }
+        else if (sName.compareToAscii(SC_UNO_SHOWGRID) == 0)
+        {
+            aSettings[i].Value >>= bShowGrid;
         }
         else if (sName.compareToAscii(SC_TABLESELECTED) == 0)
         {
@@ -741,6 +749,12 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAl
         }
     }
     SetZoom( rNewX, rNewY, vTabs );
+}
+
+void ScViewData::SetShowGrid( bool bShow )
+{
+    CreateSelectedTabData();
+    pTabData[nTabNo]->bShowGrid = bShow;
 }
 
 void ScViewData::RefreshZoom()
@@ -2526,6 +2540,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 if( rGridColor.GetColor() != SC_STD_GRIDCOLOR )
                     rTabSett.maGridColor = rGridColor;
             }
+            rTabSett.mbShowGrid = pViewTab->bShowGrid;
 
             // view mode and zoom
             rTabSett.mbPageMode = bPagebreak;
@@ -2657,6 +2672,8 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 rViewTab.aZoomX = rViewTab.aZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
             if( rTabSett.mnPageZoom )
                 rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
+
+            rViewTab.bShowGrid = rTabSett.mbShowGrid;
 
             // get some settings from displayed Excel sheet, set at Calc document
             if( nTab == GetTabNo() )

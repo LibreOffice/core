@@ -7799,6 +7799,33 @@ SfxVoidItem ShareDocument SID_SHARE_DOC
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ToggleSheetGrid FID_TAB_TOGGLE_GRID
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+
+
+//--------------------------------------------------------------------------
 SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
 
 [

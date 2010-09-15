@@ -1657,6 +1657,9 @@
 // Autoformat for DataPilot
 #define SID_PIVOT_AFMT              (SC_OOO_BUILD_START + 1)
 
+// Toggle sheet grid
+#define FID_TAB_TOGGLE_GRID         (SC_OOO_BUILD_START + 2)
+
 #endif
 
 

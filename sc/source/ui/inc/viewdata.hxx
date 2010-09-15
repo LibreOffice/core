@@ -139,6 +139,8 @@ private:
     SCCOL           nPosX[2];
     SCROW           nPosY[2];
 
+    bool            bShowGrid;                  // per-sheet show grid-lines option.
+
     BOOL            bOldCurValid;               // "virtuelle" Cursorpos. bei zusammengefassten
 
                     ScViewDataTable();
@@ -319,6 +321,9 @@ public:
     SvxZoomType     GetZoomType() const     { return pThisTab->eZoomType; }
     const Fraction& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
     const Fraction& GetZoomY() const        { return bPagebreak ? pThisTab->aPageZoomY : pThisTab->aZoomY; }
+
+    void            SetShowGrid( bool bShow );
+    bool            GetShowGrid() const { return pThisTab->bShowGrid; }
 
     const MapMode&  GetLogicMode( ScSplitPos eWhich );
     const MapMode&  GetLogicMode();                     // Offset 0

@@ -274,6 +274,9 @@ void XclImpTabViewSettings::Finalize()
     else
         rTabSett.maGridColor = maData.maGridColor;
 
+    // show grid option
+    rTabSett.mbShowGrid      = maData.mbShowGrid;
+
     // view mode and zoom
     if( maData.mnCurrentZoom != 0 )
         (maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom) = maData.mnCurrentZoom;
@@ -288,7 +291,6 @@ void XclImpTabViewSettings::Finalize()
         // set Excel sheet settings globally at Calc document, take settings from displayed sheet
         ScViewOptions aViewOpt( rDoc.GetViewOptions() );
         aViewOpt.SetOption( VOPT_FORMULAS, maData.mbShowFormulas );
-        aViewOpt.SetOption( VOPT_GRID,     maData.mbShowGrid );
         aViewOpt.SetOption( VOPT_HEADER,   maData.mbShowHeadings );
         aViewOpt.SetOption( VOPT_NULLVALS, maData.mbShowZeros );
         aViewOpt.SetOption( VOPT_OUTLINER, maData.mbShowOutline );

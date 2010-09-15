@@ -57,7 +57,8 @@ ScExtTabSettings::ScExtTabSettings() :
     mnPageZoom( 0 ),
     mbSelected( false ),
     mbFrozenPanes( false ),
-    mbPageMode( false )
+    mbPageMode( false ),
+    mbShowGrid( true )
 {
 }
 

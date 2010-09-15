@@ -313,7 +313,6 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
 
     const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
     maData.mbShowFormulas   = rViewOpt.GetOption( VOPT_FORMULAS );
-    maData.mbShowGrid       = rViewOpt.GetOption( VOPT_GRID );
     maData.mbShowHeadings   = rViewOpt.GetOption( VOPT_HEADER );
     maData.mbShowZeros      = rViewOpt.GetOption( VOPT_NULLVALS );
     maData.mbShowOutline    = rViewOpt.GetOption( VOPT_OUTLINER );
@@ -388,6 +387,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
             else
                 maData.maGridColor = rGridColor;
         }
+        maData.mbShowGrid       = rTabSett.mbShowGrid;
 
         // view mode and zoom
         maData.mbPageMode       = (GetBiff() == EXC_BIFF8) && rTabSett.mbPageMode;

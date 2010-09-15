@@ -76,6 +76,7 @@ struct ScExtTabSettings
     bool                mbSelected;         /// true = Sheet is selected.
     bool                mbFrozenPanes;      /// true = Frozen panes; false = Normal splits.
     bool                mbPageMode;         /// true = Pagebreak mode; false = Normal view mode.
+    bool                mbShowGrid;         /// Whether or not to display gridlines.
 
     explicit            ScExtTabSettings();
 };
