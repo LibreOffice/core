@@ -216,8 +216,7 @@ BOOL ScColBar::IsDisabled()
 
 BOOL ScColBar::ResizeAllowed()
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() ) &&
-            !pViewData->GetDocShell()->IsReadOnly();
+    return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
 
 void ScColBar::DrawInvert( long nDragPosP )
@@ -383,8 +382,7 @@ BOOL ScRowBar::IsDisabled()
 
 BOOL ScRowBar::ResizeAllowed()
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() ) &&
-            !pViewData->GetDocShell()->IsReadOnly();
+    return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
 
 void ScRowBar::DrawInvert( long nDragPosP )

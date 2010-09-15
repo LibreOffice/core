@@ -2111,7 +2111,10 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                         bOnlyMatrix;
             }
         }
-    if ( !bAllowed )
+
+    // Allow users to resize cols/rows in readonly docs despite the r/o state.
+    // It is frustrating to be unable to see content in mis-sized cells.
+    if( !bAllowed && !pDocSh->IsReadOnly() )
     {
         ErrorMessage(STR_PROTECTIONERR);
         return;
@@ -2328,6 +2331,7 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             }
 
         pDocSh->UpdateOle(GetViewData());
+        if( !pDocSh->IsReadOnly() )
         aModificator.SetDocumentModified();
 
         ShowCursor();
