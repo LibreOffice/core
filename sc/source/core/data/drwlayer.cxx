@@ -82,6 +82,10 @@
 #include "attrib.hxx"
 #include "charthelper.hxx"
 
+#ifndef _SV_FIELD_HXX //autogen
+#include <vcl/field.hxx>
+#endif
+
 #define DET_ARROW_OFFSET    1000
 
 //  Abstand zur naechsten Zelle beim Loeschen (bShrink), damit der Anker
@@ -170,16 +174,26 @@ __EXPORT ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 #define MAXMM   10000000
 
+inline long TwipsToHmm (long nVal)
+{
+    return static_cast< long >( MetricField::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
+            FUNIT_TWIP, FUNIT_100TH_MM) );
+}
+
+inline long HmmToTwips (long nVal)
+{
+    return static_cast< long > ( MetricField::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
+            FUNIT_100TH_MM, FUNIT_TWIP) );
+}
+
 inline void TwipsToMM( long& nVal )
 {
-    nVal = (long) ( nVal * HMM_PER_TWIPS );
+    nVal = TwipsToHmm (nVal);
 }
 
 inline void ReverseTwipsToMM( long& nVal )
 {
-    //  reverse the effect of TwipsToMM - round up here (add 1)
-
-    nVal = ((long) ( nVal / HMM_PER_TWIPS )) + 1;
+    nVal = HmmToTwips (nVal);
 }
 
 void lcl_TwipsToMM( Point& rPoint )
@@ -571,8 +585,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
 
         //  Berechnung und Werte wie in detfunc.cxx
 
-        Size aSize( (long)(pDoc->GetColWidth( nCol1, nTab1 ) * HMM_PER_TWIPS),
-                    (long)(pDoc->GetRowHeight( nRow1, nTab1 ) * HMM_PER_TWIPS) );
+        Size aSize( (long)( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ) ),
+                    (long)( TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) ) );
         Rectangle aRect( aPos, aSize );
         aRect.Left()    -= 250;
         aRect.Right()   += 250;
@@ -732,16 +746,16 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
         SCCOL nEndCol = rRange.aEnd.Col();
         for (i=nStartCol; i<=nEndCol; i++)
             nEndX += pDoc->GetColWidth(i,nTab);
-        nStartX = (long)(nStartX * HMM_PER_TWIPS);
-        nEndX   = (long)(nEndX   * HMM_PER_TWIPS);
+        nStartX = TwipsToHmm( nStartX );
+        nEndX   = TwipsToHmm( nEndX );
     }
     if (!bSetVer)
     {
         nStartY = pDoc->GetRowHeight( 0, rRange.aStart.Row()-1, nTab);
         nEndY = nStartY + pDoc->GetRowHeight( rRange.aStart.Row(),
                 rRange.aEnd.Row(), nTab);
-        nStartY = (long)(nStartY * HMM_PER_TWIPS);
-        nEndY   = (long)(nEndY   * HMM_PER_TWIPS);
+        nStartY = TwipsToHmm( nStartY );
+        nEndY   = TwipsToHmm( nEndY );
     }
 
     if ( bNegativePage )
@@ -799,8 +813,8 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
 
         if (bSetHor)
         {
-            nStartX = (long) (nStartX / HMM_PER_TWIPS);
-            nEndX = (long) (nEndX / HMM_PER_TWIPS);
+            nStartX = HmmToTwips( nStartX );
+            nEndX = HmmToTwips( nEndX );
             long nWidth;
             SCCOL i;
 
@@ -817,8 +831,8 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
 
         if (bSetVer)
         {
-            nStartY = (long) (nStartY / HMM_PER_TWIPS);
-            nEndY = (long) (nEndY / HMM_PER_TWIPS);
+            nStartY = HmmToTwips( nStartY );
+            nEndY = HmmToTwips( nEndY );
             SCROW nRow = pDoc->GetRowForHeight( nTab, nStartY);
             rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
             nRow = pDoc->GetRowForHeight( nTab, nEndY);
