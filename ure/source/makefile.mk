@@ -64,8 +64,7 @@ $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/services.input
 
-$(MISC)/services.input .ERRREMOVE :
-    - $(RM) $@
+$(MISC)/services.input :
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@

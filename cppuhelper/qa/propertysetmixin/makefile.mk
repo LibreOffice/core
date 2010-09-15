@@ -103,9 +103,8 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE: $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/$(TARGET)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/$(TARGET)/services.input
 
-$(MISC)/$(TARGET)/services.input .ERRREMOVE:
+$(MISC)/$(TARGET)/services.input:
     $(MKDIRHIER) $(@:d)
-    - $(RM) $@
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
