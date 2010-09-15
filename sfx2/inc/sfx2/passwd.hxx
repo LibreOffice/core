@@ -55,6 +55,7 @@ private:
     Edit            maPasswordED;
     FixedText       maConfirmFT;
     Edit            maConfirmED;
+    FixedText       maMinLengthFT;
     FixedLine       maPasswordBox;
 
     OKButton        maOKBtn;
@@ -63,11 +64,16 @@ private:
 
     String          maConfirmStr;
     USHORT          mnMinLen;
+    String          maMinLenPwdStr;
+    String          maEmptyPwdStr;
+    String          maMainPwdStr;
     USHORT          mnExtras;
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
     DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
+
+    void            SetPasswdText();
 
 public:
     SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
