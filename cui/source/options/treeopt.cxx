@@ -451,6 +451,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "Calc",               "View",                 SID_SC_TP_CONTENT },
     { "Calc",               "International",        RID_OFA_TP_INTERNATIONAL },
     { "Calc",               "Calculate",            SID_SC_TP_CALC },
+    { "Calc",               "Formula",              SID_SC_TP_FORMULA },
     { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
     { "Calc",               "Changes",              SID_SC_TP_CHANGES },
     { "Calc",               "Grid",                 SID_SC_TP_GRID },
