@@ -38,6 +38,7 @@
 class OutputDevice;
 class ImpLabelList;
 class MetaAction;
+class MetaCommentAction;
 class SvStream;
 class Color;
 class BitmapEx;
@@ -137,6 +138,7 @@ private:
                                                       const PolyPolygon&    rPolyPoly,
                                                       const Gradient&       rGrad       );
     SAL_DLLPRIVATE bool            ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
+    SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
 //#endif // __PRIVATE
 
@@ -250,6 +252,30 @@ public:
 
     void           UseCanvas( BOOL _bUseCanvas );
 };
+
+/** Create a special metaaction that delegates rendering to specified
+    service.
+
+    This factory function creates a MetaCommentAction that delegates
+    rendering to the specified services, once played back in the
+    metafile.
+
+    @param rRendererServiceName
+    Renderer service. Gets an awt::XGraphic on instantiation
+
+    @param rGraphicServiceName
+    Graphic service. Gets the raw data on instantiation
+
+    @param pData
+    Raw data. Gets copied
+
+    @param nDataSize
+    Length, in byte, of raw data
+ */
+MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererServiceName,
+                                                const rtl::OUString& rGraphicServiceName,
+                                                const void* pData,
+                                                sal_uInt32 nDataSize );
 
 #endif // _SV_GDIMTF_HXX
 
