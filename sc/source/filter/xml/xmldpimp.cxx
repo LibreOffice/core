@@ -139,7 +139,8 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bTargetRangeAddress(sal_False),
     bSourceCellRange(sal_False),
     bShowFilter(sal_True),
-    bDrillDown(sal_True)
+    bDrillDown(sal_True),
+    bHeaderGridLayout(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotTableAttrTokenMap();
@@ -217,6 +218,11 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN :
             {
                 bDrillDown = IsXMLToken(sValue, XML_TRUE);
+            }
+            break;
+            case XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT :
+            {
+                bHeaderGridLayout = IsXMLToken(sValue, XML_TRUE);
             }
             break;
         }
@@ -396,6 +402,7 @@ void ScXMLDataPilotTableContext::EndElement()
         pDPObject->SetName(sDataPilotTableName);
         pDPObject->SetTag(sApplicationData);
         pDPObject->SetOutRange(aTargetRangeAddress);
+        pDPObject->SetHeaderLayout(bHeaderGridLayout);
         switch (nSourceType)
         {
             case SQL :

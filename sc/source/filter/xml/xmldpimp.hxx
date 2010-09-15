@@ -126,6 +126,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     sal_Bool        bSourceCellRange;
     sal_Bool        bShowFilter;
     sal_Bool        bDrillDown;
+    sal_Bool        bHeaderGridLayout;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
