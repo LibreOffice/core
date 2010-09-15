@@ -1314,6 +1314,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
                     pViewData->GetViewShell()->UpdateInputHandler();
                 }
 
+                aParam.bUseDynamicRange = true;
                 pViewData->GetView()->Query( aParam, NULL, TRUE );
                 pDBData->SetQueryParam( aParam );                           // speichern
             }

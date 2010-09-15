@@ -1633,6 +1633,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
     BOOL* pSpecial = new BOOL[nEntryCount];
     lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
 
+    SCROW nEndRow = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
     if (!aParam.bInplace)
     {
         nOutRow = aParam.nDestRow + nHeader;
@@ -1641,7 +1642,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
-    for (SCROW j=aParam.nRow1 + nHeader; j<=aParam.nRow2; j++)
+    for (SCROW j=aParam.nRow1 + nHeader; j<=nEndRow; j++)
     {
         BOOL bResult;                                   // Filterergebnis
         BOOL bValid = ValidQuery(j, aParam, pSpecial);

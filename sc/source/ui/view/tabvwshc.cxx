@@ -175,8 +175,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData( TRUE, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
             pDBData->GetQueryParam( aQueryParam );
+            aQueryParam.bUseDynamicRange = true;
 
             ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
             ScRange aAdvSource;
@@ -200,8 +201,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData( TRUE, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
             pDBData->GetQueryParam( aQueryParam );
+            aQueryParam.bUseDynamicRange = true;
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
                                       GetViewData(),

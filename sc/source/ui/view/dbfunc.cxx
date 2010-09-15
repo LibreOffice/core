@@ -104,7 +104,7 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
 
 //  aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
-ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
+ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool bShrinkToData, bool bExpandRows )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
@@ -179,10 +179,19 @@ ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection e
                              GetViewData()->GetTabNo() ),
                     eMode, SC_DBSEL_KEEP );
 
-    if ( pData && bMark )
+    if (!pData)
+        return NULL;
+
+    if (bExpandRows)
+    {
+        // Dynamically expand rows to include any new data rows that are
+        // immediately below the original range.
+        GetViewData()->GetDocument()->UpdateDynamicEndRow(*pData);
+    }
+    if (bMark)
     {
         ScRange aFound;
-        pData->GetArea(aFound);
+        pData->GetArea(aFound, bExpandRows);
         MarkRange( aFound, FALSE );
     }
     return pData;

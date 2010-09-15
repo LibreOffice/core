@@ -91,6 +91,7 @@ private:
     ScQueryConnect  eQueryConnect[MAXQUERY];
     BOOL            bIsAdvanced;        // TRUE if created by advanced filter
     ScRange         aAdvSource;         // source range
+    SCROW           nDynamicEndRow;
     // SubTotalParam
     BOOL            bSubRemoveOnly;
     BOOL            bSubReplace;
@@ -138,9 +139,10 @@ public:
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
-            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
-            SC_DLLPUBLIC void       GetArea(ScRange& rRange) const;
+            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, bool bUseDynamicRange = false) const;
+            SC_DLLPUBLIC void       GetArea(ScRange& rRange, bool bUseDynamicRange = false) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+            void        SetDynamicEndRow(SCROW nRow);
             void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
             BOOL        IsByRow() const                 { return bByRow; }
             void        SetByRow(BOOL bByR)             { bByRow = bByR; }

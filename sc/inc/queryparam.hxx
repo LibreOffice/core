@@ -86,6 +86,8 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;
+    SCROW           nDynamicEndRow;
+    bool            bUseDynamicRange;
 
     ScQueryParam();
     ScQueryParam( const ScQueryParam& r );
