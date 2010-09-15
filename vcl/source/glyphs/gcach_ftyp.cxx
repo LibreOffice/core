@@ -1745,16 +1745,16 @@ const ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
 const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
 {
     // check if the charmap is already cached
-    if( !mpFontCharMap )
-    {
-        CmapResult aCmapResult;
-        bool bOK = GetFontCodeRanges( aCmapResult );
-        if( bOK )
-            mpFontCharMap = new ImplFontCharMap( aCmapResult );
-        else
-                mpFontCharMap = ImplFontCharMap::GetDefaultMap();
-    }
+    if( mpFontCharMap )
+        return mpFontCharMap;
 
+    // get the charmap and cache it
+    CmapResult aCmapResult;
+    bool bOK = GetFontCodeRanges( aCmapResult );
+    if( bOK )
+        mpFontCharMap = new ImplFontCharMap( aCmapResult );
+    else
+               mpFontCharMap = ImplFontCharMap::GetDefaultMap();
     mpFontCharMap->AddReference();
     return mpFontCharMap;
 }

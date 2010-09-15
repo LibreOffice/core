@@ -118,12 +118,9 @@ static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)
 
 const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
+    // return the cached charmap
     if( mpCharMap )
-    {
-        // return the cached charmap
-        mpCharMap->AddReference();
         return mpCharMap;
-    }
 
     // set the default charmap
     mpCharMap = ImplFontCharMap::GetDefaultMap();
@@ -150,11 +147,14 @@ const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     // parse the CMAP
     CmapResult aCmapResult;
-    mpCharMap->DeReference();
     if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
+    {
+        // create the matching charmap
+        mpCharMap->DeReference();
         mpCharMap = new ImplFontCharMap( aCmapResult );
+        mpCharMap->AddReference();
+    }
 
-    mpCharMap->AddReference();
     return mpCharMap;
 }
 

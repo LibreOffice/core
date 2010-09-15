@@ -436,7 +436,6 @@ bool ImplOs2FontData::IsGSUBstituted( sal_Ucs cChar ) const
 
 const ImplFontCharMap* ImplOs2FontData::GetImplFontCharMap() const
 {
-    mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
 

@@ -533,6 +533,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     // avoid fonts with unknown CMAP subtables for glyph fallback
     if( !pCharMap || pCharMap->IsDefaultMap() )
         return false;
+        pCharMap->AddReference();
 
     int nMatchCount = 0;
     // static const int nMaxMatchCount = 1; // TODO: tolerate more missing characters?
@@ -1211,7 +1212,6 @@ const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
     if( !mpUnicodeMap )
         return NULL;
-    mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
 
@@ -2908,6 +2908,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     {
         pWinFontData->UpdateFromHDC( mhDC );
         const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
+        pCharMap->AddReference();
 
         long nRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
@@ -3174,6 +3175,7 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
             const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFont);
             const ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
+            pMap->AddReference();
 
             int nCharCount = pMap->GetCharCount();
             sal_uInt32 nChar = pMap->GetFirstChar();
