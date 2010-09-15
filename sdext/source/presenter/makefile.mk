@@ -115,12 +115,6 @@ ZIP1LIST=		*
 
 DESCRIPTION:=$(ZIP1DIR)$/description.xml
 
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/license_$i)
-.ELSE
-PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/LICENSE_$i)
-.ENDIF
-
 .IF "$(WITH_LANG)"==""
 FIND_XCU=registry/data
 .ELSE			# "$(WITH_LANG)"==""
@@ -254,7 +248,6 @@ COMPONENT_HELP= 								\
 #	$(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
 
 ZIP1DEPS=					\
-    $(PACKLICS) 			\
     $(DESCRIPTION)			\
     $(COMPONENT_MANIFEST)	\
     $(COMPONENT_FILES)		\
@@ -342,16 +335,6 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
  .ENDIF	#"$(COM)"=="GCC"
 .ENDIF
 
-
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e).txt
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ELSE
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ENDIF
 
 
 $(ZIP1DIR)/%.xcu : %.xcu

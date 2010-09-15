@@ -148,7 +148,6 @@
             <zipfileset dir="${solar.bin}/xslt/export/xsltml" casesensitive="yes" prefix="filter/math"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
-            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>
@@ -171,7 +170,6 @@
             <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp,component.txt" casesensitive="yes" prefix="help"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
-            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>

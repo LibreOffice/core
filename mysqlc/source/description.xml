@@ -5,11 +5,6 @@
     <identifier value="UPDATED_IDENTIFIER"/>
     <version value="#VERSION#" />
     <platform value="UPDATED_SUPPORTED_PLATFORM" />
-    <registration>
-        <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
-        </simple-license>
-    </registration>
     <display-name>
         <name lang="en-US">#TITLE#</name>
     </display-name>
