@@ -39,6 +39,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/alloca.h>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -48,6 +50,7 @@
 #include <implrenderer.hxx>
 #include <outdevstate.hxx>
 #include <polypolyaction.hxx>
+#include <textaction.hxx>
 
 #define EmfPlusRecordTypeHeader 16385
 #define EmfPlusRecordTypeEndOfFile 16386
@@ -727,6 +730,39 @@ namespace cppcanvas
             }
         };
 
+        struct EMFPFont : public EMFPObject
+        {
+            sal_uInt32 version;
+        float emSize;
+        sal_uInt32 sizeUnit;
+        sal_Int32 fontFlags;
+        rtl::OUString family;
+
+            void Read (SvMemoryStream &s)
+            {
+                sal_uInt32 header;
+        sal_uInt32 reserved;
+        sal_uInt32 length;
+
+                s >> header >> emSize >> sizeUnit >> fontFlags >> reserved >> length;
+
+        OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
+
+                EMFP_DEBUG (printf ("EMF+\tfont\nEMF+\theader: 0x%08x version: 0x%08x size: %f unit: 0x%08x\n", header >> 12, header & 0x1fff, emSize, sizeUnit));
+                EMFP_DEBUG (printf ("EMF+\tflags: 0x%08x reserved: 0x%08x length: 0x%08x\n", fontFlags, reserved, length));
+
+        if( length > 0 && length < 0x4000 ) {
+            sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
+
+            for( int i = 0; i < length; i++ )
+            s >> chars[ i ];
+
+            family = ::rtl::OUString( chars, length );
+            EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
+        }
+            }
+        };
+
         void ImplRenderer::ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags)
         {
             if (flags & 0x4000) {
@@ -823,10 +859,22 @@ namespace cppcanvas
             return ::basegfx::B2DRange (x, y, x + w, y + h);
         }
 
+#define COLOR(x) \
+    ::vcl::unotools::colorToDoubleSequence( ::Color (0xff - (x >> 24), \
+                             (x >> 16) & 0xff, \
+                             (x >> 8) & 0xff, \
+                             x & 0xff), \
+                        rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
+#define SET_FILL_COLOR(x) \
+    rState.fillColor = COLOR(x);
+#define SET_LINE_COLOR(x) \
+    rState.lineColor = COLOR(x);
+#define SET_TEXT_COLOR(x) \
+    rState.textColor = COLOR(x);
+
         void ImplRenderer::EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor)
         {
-            sal_uInt8 transparency;
             ::basegfx::B2DPolyPolygon localPolygon (polygon);
 
             EMFP_DEBUG (printf ("EMF+\tfill polygon\n"));
@@ -838,15 +886,9 @@ namespace cppcanvas
             if (isColor) {
                 EMFP_DEBUG (printf ("EMF+\t\tcolor fill\n"));
 
-                transparency = 0xff - (brushIndexOrColor >> 24);
-
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
-                rState.fillColor = ::vcl::unotools::colorToDoubleSequence( ::Color (transparency,
-                                                                                    (brushIndexOrColor >> 16) & 0xff,
-                                                                                    (brushIndexOrColor >> 8) & 0xff,
-                                                                                    brushIndexOrColor & 0xff),
-                                                                           rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
+        SET_FILL_COLOR(brushIndexOrColor);
 
                 pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
 
@@ -1077,6 +1119,14 @@ namespace cppcanvas
                     EMFPImage *image;
                     aObjects [index] = image = new EMFPImage ();
                     image->Read (rObjectStream);
+
+                    break;
+                }
+            case EmfPlusObjectTypeFont:
+                {
+                    EMFPFont *font;
+                    aObjects [index] = font = new EMFPFont ();
+                    font->Read (rObjectStream);
 
                     break;
                 }
@@ -1438,10 +1488,93 @@ namespace cppcanvas
                         EMFP_DEBUG (printf ("EMF+\tTODO\n"));
                     break;
                 }
-                case EmfPlusRecordTypeDrawDriverString:
+            case EmfPlusRecordTypeDrawDriverString: {
                     EMFP_DEBUG (printf ("EMF+ DrawDriverString, flags: 0x%04x\n", flags));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+            sal_uInt32 brushIndexOrColor;
+            sal_uInt32 optionFlags;
+            sal_uInt32 hasMatrix;
+            sal_uInt32 glyphsCount;
+
+            rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
+
+            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
+            EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", optionFlags));
+            EMFP_DEBUG (printf ("EMF+\thas matrix: %d\n", hasMatrix));
+            EMFP_DEBUG (printf ("EMF+\tglyphs: %d\n", glyphsCount));
+
+            if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
+            sal_uInt16 *chars = new sal_uInt16[glyphsCount];
+            float *charsPosX = new float[glyphsCount];
+            float *charsPosY = new float[glyphsCount];
+
+            for( int i=0; i<glyphsCount; i++) {
+                rMF >> chars[i];
+                EMFP_DEBUG (printf ("EMF+\tglyph[%d]: 0x%04x\n",
+                i, chars[i]));
+            }
+            for( int i=0; i<glyphsCount; i++) {
+                rMF >> charsPosX[i] >> charsPosY[i];
+                EMFP_DEBUG (printf ("EMF+\tglyphPosition[%d]: %f, %f\n", i, charsPosX[i], charsPosY[i]));
+            }
+
+            XForm transform;
+            if( hasMatrix ) {
+                rMF >> transform;
+                EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
+            }
+
+            // create and add the text action
+            XubString text( chars, glyphsCount );
+
+                        EMFPFont *font = (EMFPFont*) aObjects[ flags & 0xff ];
+
+            rendering::FontRequest aFontRequest;
+            aFontRequest.FontDescription.FamilyName = font->family;
+            aFontRequest.CellSize = (rState.mapModeTransform*MapSize( font->emSize, 0 )).getX();
+            rState.xFont = rFactoryParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
+                                               uno::Sequence< beans::PropertyValue >(),
+                                               geometry::Matrix2D() );
+            if( flags & 0x8000 )
+                SET_TEXT_COLOR(brushIndexOrColor);
+
+            ActionSharedPtr pTextAction(
+                TextActionFactory::createTextAction(
+                ::vcl::unotools::pointFromB2DPoint ( Map( charsPosX[0], charsPosY[0] ) ),
+                ::Size(),
+                ::Color(),
+                ::Size(),
+                ::Color(),
+                text,
+                0,
+                glyphsCount,
+                NULL,
+                rFactoryParms.mrVDev,
+                rFactoryParms.mrCanvas,
+                rState,
+                rFactoryParms.mrParms,
+                false ) );
+
+            if( pTextAction )
+            {
+                EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+
+                maActions.push_back(
+                MtfAction(
+                    pTextAction,
+                    rFactoryParms.mrCurrActionIndex ) );
+
+                rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
+            }
+
+            delete[] chars;
+            delete[] charsPosX;
+            delete[] charsPosY;
+            } else {
+            EMFP_DEBUG (printf ("EMF+\tTODO: fonts (non-unicode glyphs chars)\n"));
+            }
+
                     break;
+        }
                 default:
                     EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
                     EMFP_DEBUG (printf ("EMF+\tTODO\n"));
