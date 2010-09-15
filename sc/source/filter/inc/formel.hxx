@@ -151,8 +151,8 @@ public:
                                 _ScRangeListTabs( void );
     virtual                     ~_ScRangeListTabs();
 
-    void                        Append( ScSingleRefData aSRD, const BOOL bLimit = TRUE );
-    void                        Append( ScComplexRefData aCRD, const BOOL bLimit = TRUE );
+    void                        Append( ScSingleRefData aSRD, SCsTAB nTab, const BOOL bLimit = TRUE );
+    void                        Append( ScComplexRefData aCRD, SCsTAB nTab, const BOOL bLimit = TRUE );
 
     inline BOOL                 HasRanges( void ) const;
 
@@ -213,7 +213,7 @@ public:
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen,
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 

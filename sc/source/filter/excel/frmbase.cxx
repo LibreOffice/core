@@ -78,7 +78,7 @@ _ScRangeListTabs::~_ScRangeListTabs()
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, const BOOL b )
+void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
 {
     if( b )
     {
@@ -98,19 +98,24 @@ void _ScRangeListTabs::Append( ScSingleRefData a, const BOOL b )
 
     bHasRanges = TRUE;
 
-    if( a.nTab >= 0 )
+    if( nTab == SCTAB_MAX)
+        return;
+    if( nTab < 0)
+        nTab = a.nTab;
+
+    if( nTab >= 0 )
     {
-        _ScRangeList*   p = ppTabLists[ a.nTab ];
+        _ScRangeList*   p = ppTabLists[ nTab ];
 
         if( !p )
-            p = ppTabLists[ a.nTab ] = new _ScRangeList;
+            p = ppTabLists[ nTab ] = new _ScRangeList;
 
         p->Append( a );
     }
 }
 
 
-void _ScRangeListTabs::Append( ScComplexRefData a, const BOOL b )
+void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
 {
     if( b )
     {
@@ -158,12 +163,17 @@ void _ScRangeListTabs::Append( ScComplexRefData a, const BOOL b )
 
     bHasRanges = TRUE;
 
-    if( a.Ref1.nTab >= 0 )
+    if( nTab == SCTAB_MAX)
+        return;
+    if( nTab < -1)
+        nTab = a.Ref1.nTab;
+
+    if( nTab >= 0 )
     {
-        _ScRangeList*   p = ppTabLists[ a.Ref1.nTab ];
+        _ScRangeList*   p = ppTabLists[ nTab ];
 
         if( !p )
-            p = ppTabLists[ a.Ref1.nTab ] = new _ScRangeList;
+            p = ppTabLists[ nTab ] = new _ScRangeList;
 
         p->Append( a );
     }

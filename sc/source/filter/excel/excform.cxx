@@ -898,7 +898,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
+                            SCsTAB nTab, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen;
@@ -1066,7 +1067,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRangeName );
 
-                rRangeList.Append( aSRD );
+                rRangeList.Append( aSRD, nTab );
                 break;
             case 0x45:
             case 0x65:
@@ -1093,7 +1094,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append( aCRD );
+                rRangeList.Append( aCRD, nTab );
             }
                 break;
             case 0x46:
@@ -1130,7 +1131,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRNorSF );
 
-                rRangeList.Append( aSRD );
+                rRangeList.Append( aSRD, nTab );
             }
                 break;
             case 0x4D:
@@ -1156,7 +1157,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append( aCRD );
+                rRangeList.Append( aCRD, nTab );
             }
                 break;
             case 0x49:
@@ -1226,10 +1227,10 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                         b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
                         aCRD.Ref2.SetFlag3D( b3D );
                         aCRD.Ref2.SetTabRel( FALSE );
-                        rRangeList.Append( aCRD );
+                        rRangeList.Append( aCRD, nTab );
                     }
                     else
-                        rRangeList.Append( aSRD );
+                        rRangeList.Append( aSRD, nTab );
                 }
             }
 
@@ -1284,7 +1285,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     else if( IsComplRowRange( nRowFirst, nRowLast ) )
                         SetComplRow( aCRD );
 
-                    rRangeList.Append( aCRD );
+                    rRangeList.Append( aCRD, nTab );
                 }//ENDE in aktuellem Workbook
             }
                 break;

@@ -158,16 +158,18 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     }
     else if( bBuiltIn )
     {
+        SCsTAB const nLocalTab = (nXclTab == EXC_NAME_GLOBAL) ? SCTAB_MAX : (nXclTab - 1);
+
         // --- print ranges or title ranges ---
         rStrm.PushPosition();
         switch( mcBuiltIn )
         {
             case EXC_BUILTIN_PRINTAREA:
-                if( rFmlaConv.Convert( GetPrintAreaBuffer(), rStrm, nFmlaSize, FT_RangeName ) == ConvOK )
+                if( rFmlaConv.Convert( GetPrintAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvOK )
                     nNameType |= RT_PRINTAREA;
             break;
             case EXC_BUILTIN_PRINTTITLES:
-                if( rFmlaConv.Convert( GetTitleAreaBuffer(), rStrm, nFmlaSize, FT_RangeName ) == ConvOK )
+                if( rFmlaConv.Convert( GetTitleAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvOK )
                     nNameType |= RT_COLHEADER | RT_ROWHEADER;
             break;
         }
