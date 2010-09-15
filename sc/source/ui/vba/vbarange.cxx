@@ -123,6 +123,7 @@
 #include <cellsuno.hxx>
 #include <dbcolect.hxx>
 #include "docfunc.hxx"
+#include "transobj.hxx"
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
@@ -4547,10 +4548,8 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
 }
 
 void SAL_CALL
-ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& CopyOrigin ) throw (uno::RuntimeException)
+ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /* CopyOrigin */ ) throw (uno::RuntimeException)
 {
-    sal_Bool bCopyOrigin = sal_True;
-    CopyOrigin >>= bCopyOrigin;
     // It appears ( from the web ) that the undocumented CopyOrigin
     // param should contain member of enum XlInsertFormatOrigin
     // which can have values xlFormatFromLeftOrAbove or xlFormatFromRightOrBelow
@@ -4585,7 +4584,11 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& CopyOrigin ) throw (u
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     uno::Reference< sheet::XCellRangeMovement > xCellRangeMove( thisRange.getSpreadSheet(), uno::UNO_QUERY_THROW );
     xCellRangeMove->insertCells( thisAddress, mode );
-    if ( bCopyOrigin )
+
+    // Paste from clipboard only if the clipboard content was copied via VBA, and not already pasted via VBA again.
+    // "Insert" behavior should not depend on random clipboard content previously copied by the user.
+    ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
+    if ( pClipObj && pClipObj->GetUseInApi() )
     {
         // After the insert ( this range ) actually has moved
         ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
