@@ -67,18 +67,8 @@ struct Implementation {
 
 typedef std::map< rtl::OUString, Implementation > Implementations;
 
-struct Service {
-    std::vector< rtl::OUString > implementations;
-};
-
-typedef std::map< rtl::OUString, Service > Services;
-
-struct Singleton {
-    rtl::OUString service;
-    std::vector< rtl::OUString > implementations;
-};
-
-typedef std::map< rtl::OUString, Singleton > Singletons;
+typedef std::map< rtl::OUString, std::vector< rtl::OUString > >
+    ImplementationMap;
 
 }
 
@@ -86,8 +76,8 @@ class Data: public salhelper::SimpleReferenceObject, private boost::noncopyable
 {
 public:
     Implementations implementations;
-    Services services;
-    Singletons singletons;
+    ImplementationMap services;
+    ImplementationMap singletons;
 };
 
 namespace {
@@ -124,9 +114,7 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
                 "http://openoffice.org/2010/uno-components")));
     enum State {
         STATE_BEGIN, STATE_END, STATE_COMPONENTS, STATE_COMPONENT_INITIAL,
-        STATE_COMPONENT, STATE_IMPLEMENTATION_INITIAL,
-        STATE_IMPLEMENTATION_SERVICE, STATE_IMPLEMENTATION_SINGLETON,
-        STATE_SERVICE, STATE_SINGLETON };
+        STATE_COMPONENT, STATE_IMPLEMENTATION, STATE_SERVICE, STATE_SINGLETON };
     for (State state = STATE_BEGIN;;) {
         xmlreader::Span name;
         int nsId;
@@ -185,7 +173,7 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
                 name.equals(RTL_CONSTASCII_STRINGPARAM("implementation")))
             {
                 handleImplementation();
-                state = STATE_IMPLEMENTATION_INITIAL;
+                state = STATE_IMPLEMENTATION;
                 break;
             }
             throw css::registry::InvalidRegistryException(
@@ -194,23 +182,19 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
                      RTL_CONSTASCII_USTRINGPARAM(
                          ": unexpected item in <component>"))),
                 css::uno::Reference< css::uno::XInterface >());
-        case STATE_IMPLEMENTATION_INITIAL:
-        case STATE_IMPLEMENTATION_SERVICE:
-        case STATE_IMPLEMENTATION_SINGLETON:
+        case STATE_IMPLEMENTATION:
             if (res == xmlreader::XmlReader::RESULT_END) {
                 state = STATE_COMPONENT;
                 break;
             }
-            if (state != STATE_IMPLEMENTATION_SINGLETON &&
-                res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
+            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
                 name.equals(RTL_CONSTASCII_STRINGPARAM("service")))
             {
                 handleService();
                 state = STATE_SERVICE;
                 break;
             }
-            if (state != STATE_IMPLEMENTATION_INITIAL &&
-                res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
+            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId &&
                 name.equals(RTL_CONSTASCII_STRINGPARAM("singleton")))
             {
                 handleSingleton();
@@ -225,7 +209,7 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
                 css::uno::Reference< css::uno::XInterface >());
         case STATE_SERVICE:
             if (res == xmlreader::XmlReader::RESULT_END) {
-                state = STATE_IMPLEMENTATION_SERVICE;
+                state = STATE_IMPLEMENTATION;
                 break;
             }
             throw css::registry::InvalidRegistryException(
@@ -236,7 +220,7 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
                 css::uno::Reference< css::uno::XInterface >());
         case STATE_SINGLETON:
             if (res == xmlreader::XmlReader::RESULT_END) {
-                state = STATE_IMPLEMENTATION_SINGLETON;
+                state = STATE_IMPLEMENTATION;
                 break;
             }
             throw css::registry::InvalidRegistryException(
@@ -345,15 +329,13 @@ void Parser::handleImplementation() {
 void Parser::handleService() {
     rtl::OUString name = getNameAttribute();
     data_->implementations[attrImplementation_].services.push_back(name);
-    data_->services[name].implementations.push_back(attrImplementation_);
+    data_->services[name].push_back(attrImplementation_);
 }
 
 void Parser::handleSingleton() {
     rtl::OUString name = getNameAttribute();
     data_->implementations[attrImplementation_].singletons.push_back(name);
-    data_->singletons[name].service =
-        data_->implementations[attrImplementation_].services[0];
-    data_->singletons[name].implementations.push_back(attrImplementation_);
+    data_->singletons[name].push_back(attrImplementation_);
 }
 
 rtl::OUString Parser::getNameAttribute() {
@@ -710,10 +692,10 @@ css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
     std::vector< rtl::OUString > const * list;
     switch (state) {
     case STATE_SERVICE:
-        list = &data_->services[path_[1]].implementations;
+        list = &data_->services[path_[1]];
         break;
     case STATE_REGISTEREDBY:
-        list = &data_->singletons[path_[1]].implementations;
+        list = &data_->singletons[path_[1]];
         break;
     default:
         throw css::registry::InvalidValueException(
@@ -761,17 +743,23 @@ rtl::OUString Key::getStringValue() throw (
     OSL_VERIFY(find(rtl::OUString(), 0, &state, 0));
     switch (state) {
     case STATE_IMPLEMENTATION_SINGLETON:
-        return data_->implementations[path_[1]].services[0];
     case STATE_SINGLETON:
-        return data_->singletons[path_[1]].service;
-    default:
-        throw css::registry::InvalidValueException(
+        throw css::registry::InvalidRegistryException(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry textual services key"
-                    " getStringValue: wrong type")),
+                    " getStringValue: does not associate singletons with"
+                    " services")),
             static_cast< OWeakObject * >(this));
     }
+    // default case extracted from switch to avoid erroneous compiler warnings
+    // on Solaris:
+    throw css::registry::InvalidValueException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.registry.SimpleRegistry textual services key"
+                " getStringValue: wrong type")),
+        static_cast< OWeakObject * >(this));
 }
 
 void Key::setStringValue(rtl::OUString const &)
@@ -1163,7 +1151,7 @@ css::uno::Sequence< rtl::OUString > Key::getChildren() {
             css::uno::Sequence< rtl::OUString > seq(
                 static_cast< sal_Int32 >(data_->services.size()));
             sal_Int32 i = 0;
-            for (Services::iterator j(data_->services.begin());
+            for (ImplementationMap::iterator j(data_->services.begin());
                  j != data_->services.end(); ++j)
             {
                 seq[i++] = j->first;
@@ -1183,7 +1171,7 @@ css::uno::Sequence< rtl::OUString > Key::getChildren() {
             css::uno::Sequence< rtl::OUString > seq(
                 static_cast< sal_Int32 >(data_->singletons.size()));
             sal_Int32 i = 0;
-            for (Singletons::iterator j(data_->singletons.begin());
+            for (ImplementationMap::iterator j(data_->singletons.begin());
                  j != data_->singletons.end(); ++j)
             {
                 seq[i++] = j->first;
