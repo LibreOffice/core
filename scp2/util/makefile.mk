@@ -181,7 +181,8 @@ SCP1FILES += \
 .ENDIF
 
 SCP1FILES += \
-             vclcanvas.par
+             vclcanvas.par \
+             mtfrenderer.par
 
 .IF "$(ENABLE_CAIRO)" == "TRUE"
 SCP1FILES += cairocanvas.par
