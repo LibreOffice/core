@@ -330,6 +330,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE int               _CreateScrollbar( BOOL bHori );
     SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
+    SW_DLLPRIVATE DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
     SW_DLLPRIVATE BOOL          UpdateScrollbars();
     SW_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 

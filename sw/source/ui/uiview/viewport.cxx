@@ -1135,6 +1135,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             {
                 bShowH = pVOpt->IsViewHScrollBar();
                 bShowV = pVOpt->IsViewVScrollBar();
+                bAuto = bHAuto = TRUE;
                 break;
             }
         }
@@ -1156,10 +1157,10 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     {
         bShowH = bShowV = bHAuto = bAuto = FALSE;
     }
-    if(pHScrollbar->IsVisible(FALSE) != bShowH)
+    if(pHScrollbar->IsVisible(FALSE) != bShowH && !bHAuto)
         ShowHScrollbar(bShowH);
     pHScrollbar->SetAuto( bHAuto );
-    if(pVScrollbar->IsVisible(FALSE) != bShowV)
+    if(pVScrollbar->IsVisible(FALSE) != bShowV && !bAuto)
         ShowVScrollbar(bShowV);
     pVScrollbar->SetAuto(bAuto);
 

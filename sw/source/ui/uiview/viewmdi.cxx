@@ -308,6 +308,35 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
  * Scrollbar - Handler
  */
 
+IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    {
+        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
+        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
+
+        switch ( pVclEvent->GetId() )
+        {
+            case VCLEVENT_WINDOW_HIDE:
+                if( pChildWin == pHScrollbar )
+                    ShowHScrollbar( FALSE );
+                else if( pChildWin == pVScrollbar )
+                    ShowVScrollbar( FALSE );
+                break;
+            case VCLEVENT_WINDOW_SHOW:
+                if( pChildWin == pHScrollbar )
+                    ShowHScrollbar( TRUE );
+                else if( pChildWin == pVScrollbar )
+                    ShowVScrollbar( TRUE );
+                break;
+        }
+    }
+
+    return 0;
+}
+
 int SwView::_CreateScrollbar( BOOL bHori )
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
@@ -327,6 +356,10 @@ int SwView::_CreateScrollbar( BOOL bHori )
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
     (*ppScrollbar)->EnableDrag( TRUE );
+
+    (*ppScrollbar)->SetAuto( TRUE );
+
+    pMDI->AddChildEventListener( LINK( this, SwView, WindowChildEventListener ));
 
     if(GetWindow())
         InvalidateBorder();
