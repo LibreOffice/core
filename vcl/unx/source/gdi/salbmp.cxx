@@ -71,7 +71,8 @@ ULONG               X11SalBitmap::mnCacheInstCount = 0;
 
 X11SalBitmap::X11SalBitmap() :
     mpDIB( NULL ),
-    mpDDB( NULL )
+    mpDDB( NULL ),
+    mbGrey( false )
 {
 }
 
@@ -191,7 +192,8 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
                                            int nScreen,
                                            long nDrawableDepth,
                                            long nX, long nY,
-                                           long nWidth, long nHeight )
+                                           long nWidth, long nHeight,
+                                           bool bGrey )
 {
     BitmapBuffer* pDIB = NULL;
 
@@ -302,6 +304,21 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
                 rPal[ 0 ] = Color( COL_BLACK );
                 rPal[ 1 ] = Color( COL_WHITE );
             }
+            else if( pImage->depth == 8 && bGrey )
+            {
+                rPal.SetEntryCount( 256 );
+                pDstPal = &rPal;
+
+                for( USHORT i = 0; i < 256; i++ )
+                {
+                    BitmapColor&    rBmpCol = rPal[ i ];
+
+                    rBmpCol.SetRed( i );
+                    rBmpCol.SetGreen( i );
+                    rBmpCol.SetBlue( i );
+                }
+
+            }
             else if( aSrcBuf.mnBitCount <= 8 )
             {
                 const SalColormap& rColMap = pSalDisp->GetColormap( nScreen );
@@ -345,7 +362,8 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
                            mpDDB->ImplGetDepth(),
                            0, 0,
                            mpDDB->ImplGetWidth(),
-                           mpDDB->ImplGetHeight() );
+                           mpDDB->ImplGetHeight(),
+                           mbGrey );
     }
 
     if( mpDIB && mpDIB->mnWidth && mpDIB->mnHeight )
@@ -427,6 +445,20 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
                 pPal = new BitmapPalette( 2 );
                 (*pPal)[ 0 ] = Color( COL_BLACK );
                 (*pPal)[ 1 ] = Color( COL_WHITE );
+            }
+            else if( pImage->depth == 8 && mbGrey )
+            {
+                pPal = new BitmapPalette( 256 );
+
+                for( USHORT i = 0; i < 256; i++ )
+                {
+                    BitmapColor&    rBmpCol = (*pPal)[ i ];
+
+                    rBmpCol.SetRed( i );
+                    rBmpCol.SetGreen( i );
+                    rBmpCol.SetBlue( i );
+                }
+
             }
             else if( pImage->depth <= 8 )
             {
@@ -592,7 +624,8 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB( Drawable          aDrawable,
                                                                         mpDDB->ImplGetDepth(),
                                                                         0, 0,
                                                                         mpDDB->ImplGetWidth(),
-                                                                        mpDDB->ImplGetHeight() );
+                                                                        mpDDB->ImplGetHeight(),
+                                                                        mbGrey );
             }
 
             delete mpDDB, const_cast<X11SalBitmap*>(this)->mpDDB = NULL;
@@ -755,6 +788,8 @@ bool X11SalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::s
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
+
+                mbGrey = bMask;
                 bool bSuccess = ImplCreateFromDrawable( pixmapHandle, 0, depth, 0, 0, (long) rSize.Width(), (long) rSize.Height() );
                 bool bFreePixmap;
                 if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
@@ -824,7 +859,7 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
         mpDIB = ImplCreateDIB( mpDDB->ImplGetPixmap(),
                                mpDDB->ImplGetScreen(),
                                mpDDB->ImplGetDepth(),
-                               0, 0, mpDDB->ImplGetWidth(), mpDDB->ImplGetHeight() );
+                               0, 0, mpDDB->ImplGetWidth(), mpDDB->ImplGetHeight(), mbGrey );
     }
 
     return mpDIB;

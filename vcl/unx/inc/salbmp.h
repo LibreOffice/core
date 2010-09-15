@@ -57,7 +57,8 @@ private:
                                                int nScreen,
                                                long nDrawableDepth,
                                                long nX, long nY,
-                                               long nWidth, long nHeight );
+                                               long nWidth, long nHeight,
+                                               bool bGrey );
 
 public:
 
@@ -78,6 +79,7 @@ private:
 
     BitmapBuffer*   mpDIB;
     ImplSalDDB*     mpDDB;
+    bool            mbGrey;
 
 public:
 
