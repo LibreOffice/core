@@ -1502,7 +1502,7 @@
             </node>
             <node oor:name=".uno:InsertBreakMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Manual Break</value>
+                    <value xml:lang="en-US">Page ~Break</value>
                 </prop>
             </node>
             <node oor:name=".uno:DataMenu" oor:op="replace">
@@ -1512,7 +1512,7 @@
             </node>
             <node oor:name=".uno:DelBreakMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete Manual ~Break</value>
+                    <value xml:lang="en-US">Delete Page ~Break</value>
                 </prop>
             </node>
             <node oor:name=".uno:FillCellsMenu" oor:op="replace">
