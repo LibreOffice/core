@@ -1871,14 +1871,14 @@ void ScTable::ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 
 
 void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                     const ScPatternAttr& rAttr )
+                                     const ScPatternAttr& rAttr, ScEditDataArray* pDataArray )
 {
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
-            aCol[i].ApplyPatternArea(nStartRow, nEndRow, rAttr);
+            aCol[i].ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray);
     }
 }
 
@@ -2074,10 +2074,11 @@ void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
 }
 
 
-void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark )
+void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark,
+                                   ScEditDataArray* pDataArray )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].ApplySelectionCache( pCache, rMark );
+        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray );
 }
 
 

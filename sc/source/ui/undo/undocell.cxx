@@ -54,6 +54,8 @@
 #include "sc.hrc"
 #include "docuno.hxx"
 
+using ::boost::shared_ptr;
+
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
@@ -82,6 +84,8 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
+    pOldEditData( static_cast<EditTextObject*>(NULL) ),
+    pNewEditData( static_cast<EditTextObject*>(NULL) ),
     bIsAutomatic( bAutomatic )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
@@ -106,9 +110,21 @@ String __EXPORT ScUndoCursorAttr::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern ) const
+void ScUndoCursorAttr::SetEditData( EditTextObject* pOld, EditTextObject* pNew )
 {
-    pDocShell->GetDocument()->SetPattern( nCol, nRow, nTab, *pWhichPattern, TRUE );
+    pOldEditData.reset(pOld);
+    pNewEditData.reset(pNew);
+}
+
+void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const shared_ptr<EditTextObject>& pEditData ) const
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    pDoc->SetPattern( nCol, nRow, nTab, *pWhichPattern, TRUE );
+
+    ScBaseCell* pCell;
+    pDoc->GetCell(nCol, nRow, nTab, pCell);
+    if (pCell && pCell->GetCellType() == CELLTYPE_EDIT && pEditData.get())
+        static_cast<ScEditCell*>(pCell)->SetData(pEditData.get(), NULL);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -134,7 +150,7 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern ) const
 void __EXPORT ScUndoCursorAttr::Undo()
 {
     BeginUndo();
-    DoChange(pOldPattern);
+    DoChange(pOldPattern, pOldEditData);
 
     if ( bIsAutomatic )
     {
@@ -152,7 +168,7 @@ void __EXPORT ScUndoCursorAttr::Undo()
 void __EXPORT ScUndoCursorAttr::Redo()
 {
     BeginRedo();
-    DoChange(pNewPattern);
+    DoChange(pNewPattern, pNewEditData);
     EndRedo();
 }
 

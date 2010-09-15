@@ -31,6 +31,9 @@
 #include <stddef.h>
 
 #include <set>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
 #include <tools/mempool.hxx>
 #include <svl/listener.hxx>
 #include "global.hxx"
@@ -56,6 +59,7 @@ class SvtBroadcaster;
 class ScCodeArray;
 class ScProgress;
 class ScPostIt;
+class ScPatternAttr;
 
 // ============================================================================
 
@@ -276,6 +280,53 @@ public:
     void            GetString( String& rString ) const;
 
     const EditTextObject* GetData() const   { return pData; }
+
+    /** Removes character attribute based on new pattern attributes. */
+    void            RemoveCharAttribs( const ScPatternAttr& rAttr );
+};
+
+// ============================================================================
+
+class ScEditDataArray
+{
+public:
+    class Item
+    {
+    public:
+        explicit Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
+                      EditTextObject* pOldData, EditTextObject* pNewData);
+        ~Item();
+
+        const EditTextObject* GetOldData() const;
+        const EditTextObject* GetNewData() const;
+        SCTAB GetTab() const;
+        SCCOL GetCol() const;
+        SCROW GetRow() const;
+
+    private:
+        Item(); // disabled
+
+    private:
+        ::boost::shared_ptr<EditTextObject> mpOldData;
+        ::boost::shared_ptr<EditTextObject> mpNewData;
+        SCTAB mnTab;
+        SCCOL mnCol;
+        SCROW mnRow;
+
+    };
+
+    ScEditDataArray();
+    ~ScEditDataArray();
+
+    void AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
+                 EditTextObject* pOldData, EditTextObject* pNewData);
+
+    const Item* First();
+    const Item* Next();
+
+private:
+    ::std::vector<Item>::const_iterator maIter;
+    ::std::vector<Item> maArray;
 };
 
 // ============================================================================

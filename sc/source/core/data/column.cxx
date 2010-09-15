@@ -361,7 +361,7 @@ ULONG ScColumn::GetNumberFormat( SCROW nRow ) const
 }
 
 
-SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark )
+SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray )
 {
     SCROW nTop = 0;
     SCROW nBottom = 0;
@@ -372,7 +372,7 @@ SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData
         ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
         while (aMarkIter.Next( nTop, nBottom ))
         {
-            pAttrArray->ApplyCacheArea( nTop, nBottom, pCache );
+            pAttrArray->ApplyCacheArea( nTop, nBottom, pCache, pDataArray );
             bFound = TRUE;
         }
     }
@@ -446,11 +446,12 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 }
 
 
-void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr )
+void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
+                                 ScEditDataArray* pDataArray )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
     SfxItemPoolCache aCache( pDocument->GetPool(), pSet );
-    pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache );
+    pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache, pDataArray );
 }
 
 

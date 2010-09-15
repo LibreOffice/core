@@ -53,6 +53,7 @@ class ScAttrIterator;
 class ScAttrArray;
 class ScBaseCell;
 class ScDocument;
+class ScEditDataArray;
 class ScFormulaCell;
 class ScMarkData;
 class ScPatternAttr;
@@ -311,7 +312,8 @@ public:
 
     void        ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
-    void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr );
+    void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
+                                  ScEditDataArray* pDataArray = NULL );
     void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );
@@ -343,7 +345,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark );
+    SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
     void        DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark );
 
     void        ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rMark );

@@ -1313,6 +1313,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         SCROW nEndRow = aMarkRange.aEnd.Row();
         SCTAB nEndTab = aMarkRange.aEnd.Tab();
 
+        ScUndoSelectionAttr* pUndoAttr = NULL;
+        ScEditDataArray* pEditDataArray = NULL;
         if (bRecord)
         {
             ScRange aCopyRange = aMarkRange;
@@ -1328,15 +1330,14 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
 
             aFuncMark.MarkToMulti();
 
-            pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionAttr(
-                            pDocSh, aFuncMark,
-                            nStartCol, nStartRow, nStartTab,
-                            nEndCol, nEndRow, nEndTab,
-                            pUndoDoc, bMulti, &rAttr ) );
+            pUndoAttr = new ScUndoSelectionAttr(
+                pDocSh, aFuncMark, nStartCol, nStartRow, nStartTab,
+                nEndCol, nEndRow, nEndTab, pUndoDoc, bMulti, &rAttr );
+            pDocSh->GetUndoManager()->AddUndoAction(pUndoAttr);
+            pEditDataArray = pUndoAttr->GetDataArray();
         }
 
-        pDoc->ApplySelectionPattern( rAttr, aFuncMark );
+        pDoc->ApplySelectionPattern( rAttr, aFuncMark, pEditDataArray );
 
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol,   nEndRow,   nEndTab,
@@ -1350,6 +1351,19 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         SCCOL nCol = pViewData->GetCurX();
         SCROW nRow = pViewData->GetCurY();
         SCTAB nTab = pViewData->GetTabNo();
+
+        ScBaseCell* pCell;
+        pDoc->GetCell(nCol, nRow, nTab, pCell);
+        EditTextObject* pOldEditData = NULL;
+        EditTextObject* pNewEditData = NULL;
+        if (pCell && pCell->GetCellType() == CELLTYPE_EDIT)
+        {
+            ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
+            pOldEditData = pEditCell->GetData()->Clone();
+            pEditCell->RemoveCharAttribs(rAttr);
+            pNewEditData = pEditCell->GetData()->Clone();
+        }
+
         aChangeRanges.Append( ScRange( nCol, nRow, nTab ) );
         ScPatternAttr* pOldPat = new ScPatternAttr(*pDoc->GetPattern( nCol, nRow, nTab ));
 
@@ -1359,11 +1373,10 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
 
         if (bRecord)
         {
-            pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoCursorAttr( pDocSh,
-                                              nCol, nRow, nTab,
-                                              pOldPat, pNewPat, &rAttr,
-                                              FALSE ) );    // FALSE = nicht automatisch
+            ScUndoCursorAttr* pUndo = new ScUndoCursorAttr(
+                pDocSh, nCol, nRow, nTab, pOldPat, pNewPat, &rAttr, false );
+            pUndo->SetEditData(pOldEditData, pNewEditData);
+            pDocSh->GetUndoManager()->AddUndoAction(pUndo);
         }
         delete pOldPat;     // wird im Undo kopiert (Pool)
 

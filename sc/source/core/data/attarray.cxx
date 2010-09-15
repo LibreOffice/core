@@ -38,6 +38,7 @@
 #include <editeng/bolnitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/editobj.hxx>
 #include <svl/poolcach.hxx>
 #include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>
@@ -53,6 +54,7 @@
 #include "rechead.hxx"
 #include "globstr.hrc"
 #include "segmenttree.hxx"
+#include "cell.hxx"
 
 #undef DBG_INVALIDATE
 #define DBGOUTPUT(s) \
@@ -299,8 +301,31 @@ void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, BOOL bP
     SetPatternArea( nRow, nRow, pPattern, bPutToPool );
 }
 
+void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
+                                       const ScPatternAttr* pPattern, ScEditDataArray* pDataArray )
+{
+    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+    {
+        ScBaseCell* pCell;
+        pDocument->GetCell(nCol, nRow, nTab, pCell);
+        if (pCell && pCell->GetCellType() == CELLTYPE_EDIT)
+        {
+            EditTextObject* pOldData = NULL;
+            ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
+            if (pDataArray)
+                pOldData = pEditCell->GetData()->Clone();
+            pEditCell->RemoveCharAttribs(*pPattern);
+            if (pDataArray)
+            {
+                EditTextObject* pNewData = pEditCell->GetData()->Clone();
+                pDataArray->AddItem(nTab, nCol, nRow, pOldData, pNewData);
+            }
+        }
+    }
+}
 
-void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPatternAttr *pPattern, BOOL bPutToPool )
+void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPatternAttr *pPattern,
+                                 BOOL bPutToPool, ScEditDataArray* pDataArray )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
@@ -470,6 +495,12 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                     pData[nInsert-1].nRow = nStartRow - 1;
                 pData[nInsert].nRow = nEndRow;
                 pData[nInsert].pPattern = pPattern;
+
+                // Remove character attributes from these cells if the pattern
+                // is applied during normal session.
+                if (pDataArray)
+                    RemoveCellCharAttribs(nStartRow, nEndRow, pPattern, pDataArray);
+
                 nCount++;
             }
 
@@ -711,7 +742,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
 #undef SET_LINE
 
 
-void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache )
+void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray )
 {
 #ifdef DBG_UTIL
     TestData();
@@ -746,7 +777,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                 {
                     if (nY1 < nStartRow) nY1=nStartRow;
                     if (nY2 > nEndRow) nY2=nEndRow;
-                    SetPatternArea( nY1, nY2, pNewPattern );
+                    SetPatternArea( nY1, nY2, pNewPattern, false, pDataArray );
                     Search( nStart, nPos );
                 }
                 else

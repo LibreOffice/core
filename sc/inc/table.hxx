@@ -64,6 +64,7 @@ class ScAutoFormatData;
 class ScBaseCell;
 class ScDocument;
 class ScDrawLayer;
+class ScEditDataArray;
 class ScFormulaCell;
 class ScOutlineTable;
 class ScPostIt;
@@ -536,7 +537,8 @@ public:
 
     void        ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
-    void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScPatternAttr& rAttr );
+    void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                  const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = NULL );
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, BOOL bPutToPool = FALSE )
                     {
                         if (ValidColRow(rPos.Col(),rPos.Row()))
@@ -567,7 +569,7 @@ public:
     BOOL        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, INT16 nFlags );
     BOOL        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, INT16 nFlags );
 
-    void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark );
+    void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
     void        DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark );
 
     void        ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rMark );

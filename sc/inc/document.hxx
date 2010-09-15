@@ -1206,7 +1206,8 @@ public:
                                     const ScPatternAttr& rAttr );
     SC_DLLPUBLIC void           ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
-                                        const ScMarkData& rMark, const ScPatternAttr& rAttr );
+                                        const ScMarkData& rMark, const ScPatternAttr& rAttr,
+                                        ScEditDataArray* pDataArray = NULL );
     SC_DLLPUBLIC void           ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                             const ScPatternAttr& rAttr );
@@ -1268,7 +1269,8 @@ public:
                             SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                             const String& sValStr, double& nX);
 
-    void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark );
+    void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
+                                           ScEditDataArray* pDataArray = NULL );
     void            DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark );
     void            DeleteSelectionTab( SCTAB nTab, USHORT nDelFlag, const ScMarkData& rMark );
 

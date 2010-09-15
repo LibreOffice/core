@@ -479,6 +479,12 @@ String __EXPORT ScUndoSelectionAttr::GetComment() const
     return ScGlobal::GetRscString( pLineOuter ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
 }
 
+//----------------------------------------------------------------------------
+
+ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
+{
+    return &aDataArray;
+}
 
 //----------------------------------------------------------------------------
 
@@ -496,6 +502,8 @@ void ScUndoSelectionAttr::DoChange( const BOOL bUndo )
 
     USHORT nExtFlags = 0;
     pDocShell->UpdatePaintExt( nExtFlags, aEffRange );
+
+    ChangeEditData(bUndo);
 
     if (bUndo)  // nur bei Undo
     {
@@ -519,6 +527,24 @@ void ScUndoSelectionAttr::DoChange( const BOOL bUndo )
 /*A*/   pDocShell->PostPaint( aEffRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
 
     ShowTable( aRange );
+}
+
+void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    for (const ScEditDataArray::Item* pItem = aDataArray.First(); pItem; pItem = aDataArray.Next())
+    {
+        ScBaseCell* pCell;
+        pDoc->GetCell(pItem->GetCol(), pItem->GetRow(), pItem->GetTab(), pCell);
+        if (!pCell || pCell->GetCellType() != CELLTYPE_EDIT)
+            continue;
+
+        ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
+        if (bUndo)
+            pEditCell->SetData(pItem->GetOldData(), NULL);
+        else
+            pEditCell->SetData(pItem->GetNewData(), NULL);
+    }
 }
 
 

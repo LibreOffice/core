@@ -32,6 +32,7 @@
 #include "attrib.hxx"
 
 class ScDocument;
+class ScEditDataArray;
 class ScMarkArray;
 class ScPatternAttr;
 class ScStyleSheet;
@@ -102,6 +103,9 @@ friend void lcl_IterGetNumberFormat( ULONG& nFormat,
                             SCROW nStartRow, SCROW nEndRow,
                             BOOL bLeft, SCCOL nDistRight, BOOL bTop, SCROW nDistBottom );
 
+    void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
+                              const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
+
 public:
             ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc );
             ~ScAttrArray();
@@ -124,9 +128,11 @@ public:
                             SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight );
 
     void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, BOOL bPutToPool = FALSE );
-    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern, BOOL bPutToPool = FALSE);
+    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
+                            BOOL bPutToPool = FALSE, ScEditDataArray* pDataArray = NULL );
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
-    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache );
+    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
+                            ScEditDataArray* pDataArray = NULL );
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const SvxBorderLine* pLine, BOOL bColorOnly );
 

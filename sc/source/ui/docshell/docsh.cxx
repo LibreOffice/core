@@ -394,6 +394,27 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     aDocument.DisableIdle( FALSE );
 }
 
+namespace {
+
+class LoadMediumGuard
+{
+public:
+    explicit LoadMediumGuard(ScDocument* pDoc) :
+        mpDoc(pDoc)
+    {
+        mpDoc->SetLoadingMedium(true);
+    }
+
+    ~LoadMediumGuard()
+    {
+        mpDoc->SetLoadingMedium(false);
+    }
+private:
+    ScDocument* mpDoc;
+};
+
+}
+
 BOOL ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
@@ -450,7 +471,7 @@ BOOL ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
 BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
-
+    LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
     //  only the latin script language is loaded
@@ -933,7 +954,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
-
+    LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
     WaitObject aWait( GetActiveDialogParent() );
@@ -983,27 +1004,6 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
 
     rLang = static_cast<LanguageType>(aTokens[0].toInt32());
     rDateConvert = static_cast<bool>(aTokens[1].toInt32());
-}
-
-namespace {
-
-class LoadMediumGuard
-{
-public:
-    explicit LoadMediumGuard(ScDocument* pDoc) :
-        mpDoc(pDoc)
-    {
-        mpDoc->SetLoadingMedium(true);
-    }
-
-    ~LoadMediumGuard()
-    {
-        mpDoc->SetLoadingMedium(false);
-    }
-private:
-    ScDocument* mpDoc;
-};
-
 }
 
 BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )

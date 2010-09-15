@@ -32,6 +32,10 @@
 #include "viewutil.hxx"
 #include "spellparam.hxx"
 
+#include "cell.hxx"
+
+#include <boost/shared_ptr.hpp>
+
 class ScDocShell;
 class ScBaseCell;
 class ScDocument;
@@ -351,9 +355,11 @@ public:
 
     virtual String  GetComment() const;
 
+    ScEditDataArray*    GetDataArray();
 private:
     ScMarkData      aMarkData;
     ScRange         aRange;
+    ScEditDataArray aDataArray;
     ScDocument*     pUndoDoc;
     BOOL            bMulti;
     ScPatternAttr*  pApplyPattern;
@@ -361,6 +367,7 @@ private:
     SvxBoxInfoItem* pLineInner;
 
     void            DoChange( const BOOL bUndo );
+    void            ChangeEditData( const bool bUndo );
 };
 
 

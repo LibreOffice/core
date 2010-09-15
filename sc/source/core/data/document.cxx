@@ -3865,12 +3865,13 @@ void ScDocument::ApplyPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatte
 void ScDocument::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark,
-                        const ScPatternAttr& rAttr )
+                        const ScPatternAttr& rAttr,
+                        ScEditDataArray* pDataArray )
 {
     for (SCTAB i=0; i <= MAXTAB; i++)
         if (pTab[i])
             if (rMark.GetTableSelect(i))
-                pTab[i]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr );
+                pTab[i]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr, pDataArray );
 }
 
 
@@ -4805,7 +4806,7 @@ void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
 }
 
 
-void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark )
+void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark, ScEditDataArray* pDataArray )
 {
     const SfxItemSet* pSet = &rAttr.GetItemSet();
     BOOL bSet = FALSE;
@@ -4822,7 +4823,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
             ScRange aRange;
             rMark.GetMarkArea( aRange );
             ApplyPatternArea( aRange.aStart.Col(), aRange.aStart.Row(),
-                              aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rAttr );
+                              aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rAttr, pDataArray );
         }
         else
         {
@@ -4830,7 +4831,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
             for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
                 if (pTab[nTab])
                     if (rMark.GetTableSelect(nTab))
-                        pTab[nTab]->ApplySelectionCache( &aCache, rMark );
+                        pTab[nTab]->ApplySelectionCache( &aCache, rMark, pDataArray );
         }
     }
 }
