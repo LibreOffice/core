@@ -243,35 +243,17 @@ end function
 '
 function hCloseDocument()
 
-    '/// Trigger FileClose slot'
     hUseAsyncSlot( "FileClose")
 
-    '/// Accept to lose changes'
     Kontext "Active"
     if ( Active.Exists( 2 ) ) then
         try
             Active.No
         catch
+            Active.click( 202 )
         endcatch
     end if
 
-    if ( Active.exists() ) then
-        try
-            Active.click( 202 )
-        catch
-        endcatch
-    endif
-
-    if ( Active.exists() ) then
-        try
-            warnlog( "hCloseDocument: Unexpected dialog: " & Active.getText() )
-            Active.ok()
-        catch
-            Active.yes()
-        endcatch
-    endif
-
-    '/// Wait for FileClose to complete'
     WaitSlot( 2000 )
 
 end function
