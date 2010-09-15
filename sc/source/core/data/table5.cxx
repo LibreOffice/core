@@ -135,6 +135,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     bool bSkipColBreaks = false;
     bool bSkipRowBreaks = false;
+    bool bSkipBreaks = false;
 
     if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE, &pItem ) == SFX_ITEM_SET )
     {
@@ -150,6 +151,15 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             bSkipColBreaks = true;
         if ( pScaleToItem->GetHeight() > 0 )
             bSkipRowBreaks = true;
+    }
+
+    if (!bSkipBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SFX_ITEM_SET)
+    {
+        const ScPageScaleToItem& rScaleToItem = static_cast<const ScPageScaleToItem&>(
+            pStyleSet->Get(ATTR_PAGE_SCALETO));
+        if (rScaleToItem.GetWidth() > 0 || rScaleToItem.GetHeight() > 0)
+            // when fitting to a fixed width x height, ignore manual breaks.
+            bSkipBreaks = true;
     }
 
     //--------------------------------------------------------------------------
