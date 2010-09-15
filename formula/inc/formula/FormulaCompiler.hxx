@@ -242,6 +242,8 @@ public:
         including an address reference convention. */
     inline  FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
 
+    static void UpdateSeparatorsNative( const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep );
+
 protected:
     virtual String FindAddInFunction( const String& rUpperName, BOOL bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;

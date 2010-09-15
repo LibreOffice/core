@@ -1678,6 +1678,17 @@ void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String &
         rBuffer.append(sal_Unicode('"'));
     }
 }
+
+void FormulaCompiler::UpdateSeparatorsNative(
+    const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep )
+{
+    NonConstOpCodeMapPtr xSymbolsNative;
+    lcl_fillNativeSymbols(xSymbolsNative);
+    xSymbolsNative->putOpCode(rSep, ocSep);
+    xSymbolsNative->putOpCode(rArrayColSep, ocArrayColSep);
+    xSymbolsNative->putOpCode(rArrayRowSep, ocArrayRowSep);
+}
+
 // -----------------------------------------------------------------------------
 OpCode FormulaCompiler::NextToken()
 {
