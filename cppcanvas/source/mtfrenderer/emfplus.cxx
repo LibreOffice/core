@@ -1,0 +1,1357 @@
+#include <tools/stream.hxx>
+#include <vcl/metaact.hxx>
+#include <svtools/filter.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/tools.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <vcl/canvastools.hxx>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
+
+#include <bitmapaction.hxx>
+#include <implrenderer.hxx>
+#include <outdevstate.hxx>
+#include <polypolyaction.hxx>
+
+#define EmfPlusRecordTypeHeader 16385
+#define EmfPlusRecordTypeEndOfFile 16386
+#define EmfPlusRecordTypeGetDC 16388
+#define EmfPlusRecordTypeObject 16392
+#define EmfPlusRecordTypeFillRects 16394
+#define EmfPlusRecordTypeFillPolygon 16396
+#define EmfPlusRecordTypeDrawLines 16397
+#define EmfPlusRecordTypeFillPath 16404
+#define EmfPlusRecordTypeDrawPath 16405
+#define EmfPlusRecordTypeDrawImagePoints 16411
+#define EmfPlusRecordTypeDrawString 16412
+#define EmfPlusRecordTypeSetRenderingOrigin 16413
+#define EmfPlusRecordTypeSetAntiAliasMode 16414
+#define EmfPlusRecordTypeSetTextRenderingHint 16415
+#define EmfPlusRecordTypeSetInterpolationMode 16417
+#define EmfPlusRecordTypeSetPixelOffsetMode 16418
+#define EmfPlusRecordTypeSetCompositingQuality 16420
+#define EmfPlusRecordTypeSave 16421
+#define EmfPlusRecordTypeSetWorldTransform 16426
+#define EmfPlusRecordTypeResetWorldTransform 16427
+#define EmfPlusRecordTypeSetPageTransform 16432
+#define EmfPlusRecordTypeSetClipPath 16435
+#define EmfPlusRecordTypeSetClipRegion 16436
+#define EmfPlusRecordTypeDrawDriverString 16438
+
+#define EmfPlusObjectTypeBrush 0x100
+#define EmfPlusObjectTypePen 0x200
+#define EmfPlusObjectTypePath 0x300
+#define EmfPlusObjectTypeRegion 0x400
+#define EmfPlusObjectTypeImage 0x500
+#define EmfPlusObjectTypeFont 0x600
+#define EmfPlusObjectTypeStringFormat 0x700
+#define EmfPlusObjectTypeImageAttributes 0x800
+
+#define EmfPlusRegionInitialStateRectangle 0x10000000
+#define EmfPlusRegionInitialStatePath 0x10000001
+#define EmfPlusRegionInitialStateEmpty 0x10000002
+#define EmfPlusRegionInitialStateInfinite 0x10000003
+
+#define EMFP_DEBUG(x)
+//#define EMFP_DEBUG(x) x
+
+using namespace ::com::sun::star;
+
+namespace cppcanvas
+{
+    namespace internal
+    {
+
+        EMFP_DEBUG (void dumpWords (SvStream& s, int i)
+        {
+            sal_uInt32 pos = s.Tell ();
+            INT16 data;
+            for (; i > 0; i --) {
+                s >> data;
+                printf ("EMF+\tdata: %04hX\n", data);
+            }
+            s.Seek (pos);
+        });
+
+        struct EMFPObject
+        {
+        };
+
+        struct EMFPPath : public EMFPObject
+        {
+            ::basegfx::B2DPolyPolygon    aPolygon;
+            sal_Int32                    nPoints;
+            float*                       pPoints;
+            sal_uInt8*                   pPointTypes;
+
+        public:
+            EMFPPath (sal_Int32 _nPoints, bool bLines = false)
+            {
+                nPoints = _nPoints;
+                pPoints = new float [nPoints*2];
+                if (!bLines)
+                    pPointTypes = new sal_uInt8 [_nPoints];
+                else
+                    pPointTypes = NULL;
+            }
+
+            ~EMFPPath ()
+            {
+                delete [] pPoints;
+                delete [] pPointTypes;
+            }
+
+            // TODO: remove rR argument when debug code is not longer needed
+            void Read (SvStream& s, UINT32 pathFlags, ImplRenderer& rR)
+            {
+                for (int i = 0; i < nPoints; i ++) {
+                    if (pathFlags & 0x4000) {
+                        // points are stored in short 16bit integer format
+                        UINT16 x, y;
+
+                        s >> x >> y;
+                        EMFP_DEBUG (printf ("EMF+\tpoint [x,y]: %hd,%hd\n", x, y));
+                        pPoints [i*2] = x;
+                        pPoints [i*2 + 1] = y;
+                    } else {
+                        // points are stored in Single (float) format
+                        s >> pPoints [i*2] >> pPoints [i*2 + 1];
+                        EMFP_DEBUG (printf ("EMF+\tpoint [x,y]: %f,%f\n", pPoints [i*2], pPoints [i*2 + 1]));
+                    }
+                }
+
+                if (pPointTypes)
+                    for (int i = 0; i < nPoints; i ++) {
+                        UINT8 pathType;
+
+                        s >> pPointTypes [i];
+                        EMFP_DEBUG (printf ("EMF+\tpoint type: %x\n", pPointTypes [i]));
+                    }
+
+                aPolygon.clear ();
+
+                // debug code
+                const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (GetPolygon (rR)));
+                EMFP_DEBUG (printf ("EMF+\tpolygon bounding box: %f,%f %fx%f (mapped)\n", aBounds.getMinX (), aBounds.getMinY (), aBounds.getWidth (), aBounds.getHeight ()));
+            }
+
+            ::basegfx::B2DPolyPolygon& GetPolygon (ImplRenderer& rR, bool bMapIt = true)
+            {
+                ::basegfx::B2DPolygon polygon;
+                sal_Int32 points = nPoints;
+
+                aPolygon.clear ();
+
+                int last_normal = 0, p = 0;
+                ::basegfx::B2DPoint prev, mapped;
+                bool hasPrev = false;
+                for (int i = 0; i < nPoints; i ++) {
+                    if (p && pPointTypes && (pPointTypes [i] == 0)) {
+                        aPolygon.append (polygon);
+                        last_normal = i;
+                        p = 0;
+                        polygon.clear ();
+                    }
+
+                    if (bMapIt)
+                        mapped = rR.Map (pPoints [i*2], pPoints [i*2 + 1]);
+                    else
+                        mapped = ::basegfx::B2DPoint (pPoints [i*2], pPoints [i*2 + 1]);
+                    //EMFP_DEBUG (printf ("polygon point: %f,%f mapped: %f,%f\n", pPoints [i*2], pPoints [i*2 + 1], mapped.getX (), mapped.getY ()));
+                    if (pPointTypes) {
+                        if ((pPointTypes [i] & 0x07) == 3) {
+                            if (((i - last_normal )% 3) == 1) {
+                                polygon.setNextControlPoint (p - 1, mapped);
+                                continue;
+                            } else if (((i - last_normal) % 3) == 2) {
+                                prev = mapped;
+                                hasPrev = true;
+                                continue;
+                            }
+                        } else
+                            last_normal = i;
+                    }
+                    polygon.append (mapped);
+                    if (hasPrev) {
+                        polygon.setPrevControlPoint (p, prev);
+                        hasPrev = false;
+                    }
+                    p ++;
+                    if (pPointTypes && (pPointTypes [i] & 0x80)) { // closed polygon
+                        polygon.setClosed (true);
+                        aPolygon.append (polygon);
+                        last_normal = i + 1;
+                        p = 0;
+                        polygon.clear ();
+                    }
+                }
+
+                if (polygon.count ())
+                    aPolygon.append (polygon);
+
+                return aPolygon;
+            }
+        };
+
+        struct EMFPRegion : public EMFPObject
+        {
+            sal_Int32 parts;
+            sal_Int32 *combineMode;
+            sal_Int32 initialState;
+            EMFPPath *initialPath;
+            float ix, iy, iw, ih;
+
+            EMFPRegion ()
+            {
+                combineMode = NULL;
+                initialPath = NULL;
+            }
+
+            ~EMFPRegion ()
+            {
+                if (combineMode) {
+                    delete [] combineMode;
+                    combineMode = NULL;
+                }
+                if (initialPath) {
+                    delete initialPath;
+                    initialPath = NULL;
+                }
+            }
+
+            void Read (SvStream& s)
+            {
+                sal_uInt32 header;
+
+                s >> header >> parts;
+
+                EMFP_DEBUG (printf ("EMF+\tregion\n"));
+                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x parts: %d\n", header, parts));
+
+                if (parts) {
+                    combineMode = new sal_Int32 [parts];
+
+                    for (int i = 0; i < parts; i ++) {
+                        s >> combineMode [i];
+                        EMFP_DEBUG (printf ("EMF+\tcombine mode [%d]: 0x%08x\n", i, combineMode [i]));
+                    }
+                }
+
+                s >> initialState;
+                EMFP_DEBUG (printf ("EMF+\tinitial state: 0x%08x\n", initialState));
+            }
+        };
+
+        struct EMFPBrush : public EMFPObject
+        {
+            ::Color solidColor;
+            sal_uInt32 type;
+            sal_uInt32 additionalFlags;
+
+            /* linear gradient */
+            sal_Int32 wrapMode;
+            float areaX, areaY, areaWidth, areaHeight;
+            ::Color secondColor; // first color is stored in solidColor;
+            XForm transformation;
+            bool hasTransformation;
+            sal_Int32 blendPoints;
+            float* blendPositions;
+            float* blendFactors;
+            sal_Int32 colorblendPoints;
+            float* colorblendPositions;
+            ::Color* colorblendColors;
+            sal_Int32 surroundColorsNumber;
+            ::Color* surroundColors;
+            EMFPPath *path;
+
+        public:
+            EMFPBrush ()
+            {
+                blendPositions = NULL;
+                colorblendPositions = NULL;
+                colorblendColors = NULL;
+                surroundColors = NULL;
+                path = NULL;
+                hasTransformation = false;
+            }
+
+            ~EMFPBrush ()
+            {
+                if (blendPositions != NULL) {
+                    delete[] blendPositions;
+                    blendPositions = NULL;
+                }
+                if (colorblendPositions != NULL) {
+                    delete[] colorblendPositions;
+                    colorblendPositions = NULL;
+                }
+                if (colorblendColors != NULL) {
+                    delete[] colorblendColors;
+                    colorblendColors = NULL;
+                }
+                if (surroundColors != NULL) {
+                    delete[] surroundColors;
+                    surroundColors = NULL;
+                }
+                if (path) {
+                    delete path;
+                    path = NULL;
+                }
+            }
+
+            UINT32 GetType () { return type; }
+            const ::Color& GetColor () { return solidColor; }
+
+            void Read (SvStream& s, ImplRenderer& rR)
+            {
+                UINT32 header;
+
+                s >> header >> type;
+
+                EMFP_DEBUG (printf ("EMF+\tbrush\nEMF+\theader: 0x%08x type: %d\n", header, type));
+
+                switch (type) {
+                case 0:
+                    {
+                        UINT32 color;
+
+                        s >> color;
+                        solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        EMFP_DEBUG (printf ("EMF+\tsolid color: 0x%08x\n", color));
+
+                        break;
+                    }
+                // path gradient
+                case 3:
+                    {
+                        s >> additionalFlags >> wrapMode;
+
+                        EMFP_DEBUG (printf ("EMF+\tpath gradient, additional flags: 0x%02x\n", additionalFlags));
+
+                        UINT32 color;
+
+                        s >> color;
+                        solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        EMFP_DEBUG (printf ("EMF+\tcenter color: 0x%08x\n", color));
+
+                        s >> areaX >> areaY;
+                        EMFP_DEBUG (printf ("EMF+\tcenter point: %f,%f\n", areaX, areaY));
+
+                        s >> surroundColorsNumber;
+                        EMFP_DEBUG (printf ("EMF+\tsurround colors: %d\n", surroundColorsNumber));
+
+                        surroundColors = new ::Color [surroundColorsNumber];
+                        for (int i = 0; i < surroundColorsNumber; i++) {
+                            s >> color;
+                            surroundColors[i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                            if (i == 0)
+                                secondColor = surroundColors [0];
+                            EMFP_DEBUG (printf ("EMF+\tsurround color[%d]: 0x%08x\n", i, color));
+                        }
+
+                        if (additionalFlags & 0x01) {
+                            sal_Int32 pathLength;
+
+                            s >> pathLength;
+                            EMFP_DEBUG (printf ("EMF+\tpath length: %d\n", pathLength));
+
+                            sal_uInt32 pos = s.Tell ();
+                            EMFP_DEBUG (dumpWords (s, 32));
+
+                            sal_uInt32 pathHeader;
+                            sal_Int32 pathPoints, pathFlags;
+                            s >> pathHeader >> pathPoints >> pathFlags;
+
+                            EMFP_DEBUG (printf ("EMF+\tpath (brush path gradient)\n"));
+                            EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", pathHeader, pathPoints, pathFlags));
+
+                            path = new EMFPPath (pathPoints);
+                            path->Read (s, pathFlags, rR);
+
+                            s.Seek (pos + pathLength);
+
+                            const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (path->GetPolygon (rR, false)));
+                            areaWidth = aBounds.getWidth ();
+                            areaHeight = aBounds.getHeight ();
+
+                            EMFP_DEBUG (printf ("EMF+\tpolygon bounding box: %f,%f %fx%f\n", aBounds.getMinX (), aBounds.getMinY (), aBounds.getWidth (), aBounds.getHeight ()));
+
+
+                        if (additionalFlags & 0x02) {
+                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n", color));
+                            s >> transformation;
+                            hasTransformation = true;
+                            EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                                    transformation.eM11, transformation.eM12,
+                                    transformation.eM21, transformation.eM22,
+                                    transformation.eDx, transformation.eDy));
+                        }
+                        if (additionalFlags & 0x08) {
+                            s >> blendPoints;
+                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
+                            blendPositions = new float [2*blendPoints];
+                            blendFactors = blendPositions + blendPoints;
+                            for (int i=0; i < blendPoints; i ++) {
+                                s >> blendPositions [i];
+                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, blendPositions [i]));
+                            }
+                            for (int i=0; i < blendPoints; i ++) {
+                                s >> blendFactors [i];
+                                EMFP_DEBUG (printf ("EMF+\tfactor[%d]: %f\n", i, blendFactors [i]));
+                            }
+                        }
+
+                        if (additionalFlags & 0x04) {
+                            s >> colorblendPoints;
+                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
+                            colorblendPositions = new float [colorblendPoints];
+                            colorblendColors = new ::Color [colorblendPoints];
+                            for (int i=0; i < colorblendPoints; i ++) {
+                                s >> colorblendPositions [i];
+                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, colorblendPositions [i]));
+                            }
+                            for (int i=0; i < colorblendPoints; i ++) {
+                                s >> color;
+                                colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, color));
+                            }
+                        }
+                        } else
+                            EMFP_DEBUG (dumpWords (s, 1024));
+
+                        break;
+                    }
+                // linear gradient
+                case 4:
+                    {
+                        s >> additionalFlags >> wrapMode;
+
+                        EMFP_DEBUG (printf ("EMF+\tlinear gradient, additional flags: 0x%02x\n", additionalFlags));
+
+                        s >> areaX >> areaY >> areaWidth >> areaHeight;
+
+                        EMFP_DEBUG (printf ("EMF+\tarea: %f,%f - %fx%f\n", areaX, areaY, areaWidth, areaHeight));
+
+                        UINT32 color;
+
+                        s >> color;
+                        solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        EMFP_DEBUG (printf ("EMF+\tfirst color: 0x%08x\n", color));
+
+                        s >> color;
+                        secondColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        EMFP_DEBUG (printf ("EMF+\tsecond color: 0x%08x\n", color));
+
+                        // repeated colors, unknown meaning, see http://www.aces.uiuc.edu/~jhtodd/Metafile/MetafileRecords/ObjectBrush.html
+                        s >> color;
+                        s >> color;
+
+                        if (additionalFlags & 0x02) {
+                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n", color));
+                            s >> transformation;
+                            hasTransformation = true;
+                            EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                                    transformation.eM11, transformation.eM12,
+                                    transformation.eM21, transformation.eM22,
+                                    transformation.eDx, transformation.eDy));
+                        }
+                        if (additionalFlags & 0x08) {
+                            s >> blendPoints;
+                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
+                            blendPositions = new float [2*blendPoints];
+                            blendFactors = blendPositions + blendPoints;
+                            for (int i=0; i < blendPoints; i ++) {
+                                s >> blendPositions [i];
+                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, blendPositions [i]));
+                            }
+                            for (int i=0; i < blendPoints; i ++) {
+                                s >> blendFactors [i];
+                                EMFP_DEBUG (printf ("EMF+\tfactor[%d]: %f\n", i, blendFactors [i]));
+                            }
+                        }
+
+                        if (additionalFlags & 0x04) {
+                            s >> colorblendPoints;
+                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
+                            colorblendPositions = new float [colorblendPoints];
+                            colorblendColors = new ::Color [colorblendPoints];
+                            for (int i=0; i < colorblendPoints; i ++) {
+                                s >> colorblendPositions [i];
+                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, colorblendPositions [i]));
+                            }
+                            for (int i=0; i < colorblendPoints; i ++) {
+                                s >> color;
+                                colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, color));
+                            }
+                        }
+
+                        break;
+                    }
+                default:
+                    EMFP_DEBUG (printf ("EMF+\tunhandled brush type: %d\n", type));
+                }
+            }
+        };
+
+        struct EMFPPen : public EMFPBrush
+        {
+            XForm transformation;
+            float width;
+            sal_Int32 startCap;
+            sal_Int32 endCap;
+            sal_Int32 lineJoin;
+            float mitterLimit;
+            sal_Int32 dashStyle;
+            sal_Int32 dashCap;
+            float dashOffset;
+            sal_Int32 dashPatternLen;
+            float *dashPattern;
+            sal_Int32 alignment;
+            sal_Int32 compoundArrayLen;
+            float *compoundArray;
+            sal_Int32 customStartCapLen;
+            sal_uInt8 *customStartCap;
+            sal_Int32 customEndCapLen;
+            sal_uInt8 *customEndCap;
+
+        public:
+            EMFPPen () : EMFPBrush ()
+            {
+            }
+
+            void SetStrokeAttributes (rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
+            {
+                rStrokeAttributes.StrokeWidth = (rState.mapModeTransform * rR.MapSize (width, 0)).getX ();
+            }
+
+            void Read (SvStream& s, ImplRenderer& rR, sal_Int32 nHDPI, sal_Int32 nVDPI)
+            {
+                UINT32 header, unknown, penFlags, unknown2;
+                int i;
+
+                s >> header >> unknown >> penFlags >> unknown2 >> width;
+
+                EMFP_DEBUG (printf ("EMF+\tpen\nEMF+\theader: 0x%08x unknown: 0x%08x additional flags: 0x%08x unknown: 0x%08x width: %f\n", header, unknown, penFlags, unknown2, width));
+
+                if (penFlags & 1)
+                    s >> transformation;
+
+                if (penFlags & 2)
+                    s >> startCap;
+                else
+                    startCap = 0;
+
+                if (penFlags & 4)
+                    s >> endCap;
+                else
+                    endCap = 0;
+
+                if (penFlags & 8)
+                    s >> lineJoin;
+                else
+                    lineJoin = 0;
+
+                if (penFlags & 16)
+                    s >> mitterLimit;
+                else
+                    mitterLimit = 0;
+
+                if (penFlags & 32)
+                    s >> dashStyle;
+                else
+                    dashStyle = 0;
+
+                if (penFlags & 64)
+                    s >> dashCap;
+                else
+                    dashCap = 0;
+
+                if (penFlags & 128)
+                    s >> dashOffset;
+                else
+                    dashOffset = 0;
+
+                if (penFlags & 256) {
+                    s >> dashPatternLen;
+                    dashPattern = new float [dashPatternLen];
+                    for (i = 0; i < dashPatternLen; i++)
+                        s >> dashPattern [i];
+                } else
+                    dashPatternLen = 0;
+
+                if (penFlags & 512)
+                    s >> alignment;
+                else
+                    alignment = 0;
+
+                if (penFlags & 1024) {
+                    s >> compoundArrayLen;
+                    compoundArray = new float [compoundArrayLen];
+                    for (i = 0; i < compoundArrayLen; i++)
+                        s >> compoundArray [i];
+                } else
+                    compoundArrayLen = 0;
+
+                if (penFlags & 2048) {
+                    s >> customStartCapLen;
+                    customStartCap = new sal_uInt8 [customStartCapLen];
+                    for (i = 0; i < customStartCapLen; i++)
+                        s >> customStartCap [i];
+                } else
+                    customStartCapLen = 0;
+
+                if (penFlags & 4096) {
+                    s >> customEndCapLen;
+                    customEndCap = new sal_uInt8 [customEndCapLen];
+                    for (i = 0; i < customEndCapLen; i++)
+                        s >> customEndCap [i];
+                } else
+                    customEndCapLen = 0;
+
+                EMFPBrush::Read (s, rR);
+            }
+        };
+
+        struct EMFPImage : public EMFPObject
+        {
+            sal_uInt32 type;
+            sal_Int32 width;
+            sal_Int32 height;
+            sal_Int32 stride;
+            sal_Int32 pixelFormat;
+            Graphic graphic;
+
+
+            void Read (SvStream &s)
+            {
+                sal_uInt32 header, unknown;
+
+                s >> header >> type;
+
+                EMFP_DEBUG (printf ("EMF+\timage\nEMF+\theader: 0x%08x type: 0x%08x\n", header, type));
+
+                if (type == 1) { // bitmap
+                    s >> width >> height >> stride >> pixelFormat >> unknown;
+                    EMFP_DEBUG (printf ("EMF+\tbitmap width: %d height: %d stride: %d pixelFormat: 0x%08x\n", width, height, stride, pixelFormat));
+                    if (width == 0) { // non native formats
+                        GraphicFilter filter;
+
+                        filter.ImportGraphic (graphic, String (), s);
+                        EMFP_DEBUG (printf ("EMF+\tbitmap width: %d height: %d\n", graphic.GetBitmap ().GetSizePixel ().Width (), graphic.GetBitmap ().GetSizePixel ().Height ()));
+                    }
+
+                }
+            }
+        };
+
+        void ImplRenderer::ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags)
+        {
+            if (flags & 0x4000) {
+                sal_Int16 ix, iy, iw, ih;
+
+                s >> ix >> iy >> iw >> ih;
+
+                x = ix;
+                y = iy;
+                width = iw;
+                height = ih;
+            } else
+                s >> x >> y >> width >> height;
+        }
+
+        void ImplRenderer::ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags)
+        {
+            if (flags & 0x4000) {
+                sal_Int16 ix, iy;
+
+                s >> ix >> iy;
+
+                x = ix;
+                y = iy;
+            } else
+                s >> x >> y;
+        }
+
+        void ImplRenderer::MapToDevice (double& x, double& y)
+        {
+            // TODO: other untis
+            x = 100*nMmX*x/nPixX;
+            y = 100*nMmY*y/nPixY;
+        }
+
+        ::basegfx::B2DPoint ImplRenderer::Map (::basegfx::B2DPoint& p)
+        {
+            return Map (p.getX (), p.getY ());
+        }
+
+        ::basegfx::B2DPoint ImplRenderer::Map (double ix, double iy)
+        {
+            double x, y;
+
+            x = ix*aWorldTransform.eM11 + iy*aWorldTransform.eM21 + aWorldTransform.eDx;
+            y = ix*aWorldTransform.eM12 + iy*aWorldTransform.eM22 + aWorldTransform.eDy;
+
+            MapToDevice (x, y);
+
+            x -= nFrameLeft;
+            y -= nFrameTop;
+
+            x *= aBaseTransform.eM11;
+            y *= aBaseTransform.eM22;
+
+            return ::basegfx::B2DPoint (x, y);
+        }
+
+        ::basegfx::B2DSize ImplRenderer::MapSize (double iwidth, double iheight)
+        {
+            double w, h;
+
+            w = iwidth*aWorldTransform.eM11 + iheight*aWorldTransform.eM21;
+            h = iwidth*aWorldTransform.eM12 + iheight*aWorldTransform.eM22;
+
+            MapToDevice (w, h);
+
+            w *= aBaseTransform.eM11;
+            h *= aBaseTransform.eM22;
+
+            return ::basegfx::B2DSize (w, h);
+        }
+
+        ::basegfx::B2DRange ImplRenderer::MapRectangle (double ix, double iy, double iwidth, double iheight)
+        {
+            double x, y, w, h;
+
+            x = ix*aWorldTransform.eM11 + iy*aWorldTransform.eM21 + aWorldTransform.eDx;
+            y = ix*aWorldTransform.eM12 + iy*aWorldTransform.eM22 + aWorldTransform.eDy;
+            w = iwidth*aWorldTransform.eM11 + iheight*aWorldTransform.eM21;
+            h = iwidth*aWorldTransform.eM12 + iheight*aWorldTransform.eM22;
+
+            MapToDevice (x, y);
+            MapToDevice (w, h);
+
+            x -= nFrameLeft;
+            y -= nFrameTop;
+
+            x *= aBaseTransform.eM11;
+            y *= aBaseTransform.eM22;
+            w *= aBaseTransform.eM11;
+            h *= aBaseTransform.eM22;
+
+            return ::basegfx::B2DRange (x, y, x + w, y + h);
+        }
+
+        void ImplRenderer::EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
+                                                OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor)
+        {
+            sal_uInt8 transparency;
+            ::basegfx::B2DPolyPolygon localPolygon (polygon);
+
+            EMFP_DEBUG (printf ("EMF+\tfill polygon\n"));
+
+            localPolygon.transform( rState.mapModeTransform );
+
+            ActionSharedPtr pPolyAction;
+
+            if (isColor) {
+                EMFP_DEBUG (printf ("EMF+\t\tcolor fill\n"));
+
+                transparency = 0xff - (brushIndexOrColor >> 24);
+
+                rState.isFillColorSet = true;
+                rState.isLineColorSet = false;
+                rState.fillColor = ::vcl::unotools::colorToDoubleSequence( ::Color (transparency,
+                                                                                    (brushIndexOrColor >> 16) & 0xff,
+                                                                                    (brushIndexOrColor >> 8) & 0xff,
+                                                                                    brushIndexOrColor & 0xff),
+                                                                           rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
+
+                pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
+
+            } else {
+                rState.isFillColorSet = true;
+                // extract UseBrush
+                EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor];
+                EMFP_DEBUG (printf ("EMF+\tbrush fill slot: %d (type: %d)\n", brushIndexOrColor, brush->GetType ()));
+
+                rState.isFillColorSet = false;
+                rState.isLineColorSet = false;
+
+                if (brush->type == 3 || brush->type == 4) {
+
+                    if (brush->type == 3 && !(brush->additionalFlags & 0x1))
+                        return;  // we are unable to parse these brushes yet
+
+                ::basegfx::B2DHomMatrix aTextureTransformation;
+                ::basegfx::B2DHomMatrix aWorldTransformation;
+                ::basegfx::B2DHomMatrix aBaseTransformation;
+                rendering::Texture aTexture;
+                double nRotation( 0.0 );
+                const ::basegfx::B2DRectangle aBounds( ::basegfx::tools::getRange( localPolygon ) );
+                const double nScale( ::basegfx::pruneScaleValue( fabs( aBounds.getHeight()*sin(nRotation) ) +
+                                                                 fabs( aBounds.getWidth()*cos(nRotation) )));
+
+                aWorldTransformation.set (0, 0, aWorldTransform.eM11);
+                aWorldTransformation.set (0, 1, aWorldTransform.eM21);
+                aWorldTransformation.set (0, 2, aWorldTransform.eDx);
+                aWorldTransformation.set (1, 0, aWorldTransform.eM12);
+                aWorldTransformation.set (1, 1, aWorldTransform.eM22);
+                aWorldTransformation.set (1, 2, aWorldTransform.eDy);
+
+                aBaseTransformation.set (0, 0, aBaseTransform.eM11);
+                aBaseTransformation.set (0, 1, aBaseTransform.eM21);
+                aBaseTransformation.set (0, 2, aBaseTransform.eDx);
+                aBaseTransformation.set (1, 0, aBaseTransform.eM12);
+                aBaseTransformation.set (1, 1, aBaseTransform.eM22);
+                aBaseTransformation.set (1, 2, aBaseTransform.eDy);
+
+                if (brush->type == 4) {
+                    aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
+                    aTextureTransformation.translate (brush->areaX, brush->areaY);
+                } else {
+                    aTextureTransformation.translate (-0.5, -0.5);
+                    aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
+                    aTextureTransformation.translate (brush->areaX,brush->areaY);
+                }
+
+                if (brush->hasTransformation) {
+                    ::basegfx::B2DHomMatrix aTransformation;
+
+                    aTransformation.set (0, 0, brush->transformation.eM11);
+                    aTransformation.set (0, 1, brush->transformation.eM21);
+                    aTransformation.set (0, 2, brush->transformation.eDx);
+                    aTransformation.set (1, 0, brush->transformation.eM12);
+                    aTransformation.set (1, 1, brush->transformation.eM22);
+                    aTransformation.set (1, 2, brush->transformation.eDy);
+
+                    aTextureTransformation *= aTransformation;
+                }
+
+                aTextureTransformation *= aWorldTransformation;
+                aTextureTransformation.scale (100.0*nMmX/nPixX, 100.0*nMmY/nPixY);
+                aTextureTransformation.translate (-nFrameLeft, -nFrameTop);
+                aTextureTransformation *= rState.mapModeTransform;
+                aTextureTransformation *= aBaseTransformation;
+
+                aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
+                aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
+                aTexture.Alpha = 1.0;
+
+                uno::Reference< rendering::XParametricPolyPolygon2DFactory > xFactory(
+                    rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
+
+                if( xFactory.is() ) {
+                    const uno::Sequence< double > aStartColor(
+                        ::vcl::unotools::colorToDoubleSequence( brush->solidColor,
+                                                                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
+                    const uno::Sequence< double > aEndColor(
+                        ::vcl::unotools::colorToDoubleSequence( brush->secondColor,
+                                                                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
+                    uno::Sequence< uno::Sequence < double > > aColors (2);
+                    uno::Sequence< double > aStops (2);
+
+                    if (brush->blendPositions) {
+                        EMFP_DEBUG (printf ("EMF+\t\tuse blend\n"));
+                        aColors.realloc (brush->blendPoints);
+                        aStops.realloc (brush->blendPoints);
+                        int length = aStartColor.getLength ();
+                        uno::Sequence< double > aColor (length);
+
+                        OSL_ASSERT (length == aEndColor.getLength());
+
+                        for (int i = 0; i < brush->blendPoints; i++) {
+                            aStops[i] = brush->blendPositions [i];
+
+                            for (int j = 0; j < length; j++) {
+                                if (brush->type == 4) {
+//                                     // gamma correction
+//                                     if (brush->additionalFlags & 0x80)
+//                                         aColor [j] = pow (aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i], 1/2.2);
+//                                     else
+                                    aColor [j] = aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i];
+                                } else
+                                    aColor [j] = aStartColor [j]*brush->blendFactors[i] + aEndColor [j]*(1 - brush->blendFactors[i]);
+                            }
+
+                            aColors[i] = aColor;
+                        }
+                    } else if (brush->colorblendPositions) {
+                        EMFP_DEBUG (printf ("EMF+\t\tuse color blend\n"));
+                        aColors.realloc (brush->colorblendPoints);
+                        aStops.realloc (brush->colorblendPoints);
+
+                        for (int i = 0; i < brush->colorblendPoints; i++) {
+                            aStops[i] = brush->colorblendPositions [i];
+                            aColors[(brush->type == 4) ? i : brush->colorblendPoints - 1 - i] = ::vcl::unotools::colorToDoubleSequence( brush->colorblendColors [i],
+                                                                                                                                        rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+                        }
+                    } else {
+                        aStops[0] = 0.0;
+                        aStops[1] = 1.0;
+
+                        if (brush->type == 4) {
+                            aColors[0] = aStartColor;
+                            aColors[1] = aEndColor;
+                        } else {
+                            aColors[1] = aStartColor;
+                            aColors[0] = aEndColor;
+                        }
+                    }
+
+                    EMFP_DEBUG (printf ("EMF+\t\tset gradient\n"));
+                    if (brush->type == 4)
+                        aTexture.Gradient = xFactory->createLinearHorizontalGradient( aColors,
+                                                                                      aStops );
+                    else {
+                        geometry::RealRectangle2D aBoundsRectangle (0, 0, 1, 1);
+                        aTexture.Gradient = xFactory->createEllipticalGradient( aColors,
+                                                                                aStops,
+                                                                                aBoundsRectangle);
+                    }
+                }
+
+                ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
+                                                                aTextureTransformation );
+
+                pPolyAction =
+                    ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
+                                                                                             rParms.mrCanvas,
+                                                                                             rState,
+                                                                                             aTexture ) );
+                }
+            }
+
+            if( pPolyAction )
+            {
+                EMFP_DEBUG (printf ("EMF+\t\tadd poly action\n"));
+
+                maActions.push_back(
+                    MtfAction(
+                        pPolyAction,
+                        rParms.mrCurrActionIndex ) );
+
+                rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+            }
+        }
+
+        void ImplRenderer::processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms,
+                                           OutDevState& rState, const CanvasSharedPtr& rCanvas )
+        {
+            sal_uInt32 length = pAct->GetDataSize ();
+            SvMemoryStream rMF ((void*) pAct->GetData (), length, STREAM_READ);
+
+            length -= 4;
+
+            while (length > 0) {
+                UINT16 type, flags;
+                UINT32 size, dataSize;
+                sal_uInt32 next;
+
+                rMF >> type >> flags >> size >> dataSize;
+
+                next = rMF.Tell() + ( size - 12 );
+
+                EMFP_DEBUG (printf ("EMF+ record size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
+
+                switch (type) {
+                case EmfPlusRecordTypeHeader:
+                    UINT32 header, version;
+
+                    rMF >> header >> version >> nHDPI >> nVDPI;
+
+                    EMFP_DEBUG (printf ("EMF+ Header\n"));
+                    EMFP_DEBUG (printf ("EMF+\theader: 0x%08x version: %d horizontal DPI: %d vertical DPI: %d dual: %d\n", header, version, nHDPI, nVDPI, flags & 1));
+
+                    break;
+                case EmfPlusRecordTypeEndOfFile:
+                    EMFP_DEBUG (printf ("EMF+ EndOfFile\n"));
+                    break;
+                case EmfPlusRecordTypeGetDC:
+                    EMFP_DEBUG (printf ("EMF+ GetDC\n"));
+                    EMFP_DEBUG (printf ("EMF+\talready used in svtools wmf/emf filter parser\n"));
+                    break;
+                case EmfPlusRecordTypeObject:
+                    {
+                        UINT32 objectLen;
+                        sal_uInt32 index;
+
+                        EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
+
+                        index = flags & 0xff;
+                        if (aObjects [index] != NULL) {
+                            delete aObjects [index];
+                            aObjects [index] = NULL;
+                        }
+
+                        switch (flags & 0xff00) {
+                        case EmfPlusObjectTypeBrush:
+                            {
+                                EMFPBrush *brush;
+                                aObjects [index] = brush = new EMFPBrush ();
+                                brush->Read (rMF, *this);
+
+                                break;
+                            }
+                        case EmfPlusObjectTypePen:
+                            {
+                                EMFPPen *pen;
+                                aObjects [index] = pen = new EMFPPen ();
+                                pen->Read (rMF, *this, nHDPI, nVDPI);
+
+                                break;
+                            }
+                        case EmfPlusObjectTypePath:
+                            sal_uInt32 header, pathFlags;
+                            sal_Int32 points;
+
+                            rMF >> header >> points >> pathFlags;
+
+                            EMFP_DEBUG (printf ("EMF+\tpath\n"));
+                            EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", header, points, pathFlags));
+
+                            EMFPPath *path;
+                            aObjects [index] = path = new EMFPPath (points);
+                            path->Read (rMF, pathFlags, *this);
+
+                            break;
+                        case EmfPlusObjectTypeRegion: {
+                            EMFPRegion *region;
+
+                            aObjects [index] = region = new EMFPRegion ();
+                            region->Read (rMF);
+
+                            break;
+                        }
+                        case EmfPlusObjectTypeImage:
+                            {
+                                EMFPImage *image;
+                                aObjects [index] = image = new EMFPImage ();
+                                image->Read (rMF);
+
+                                break;
+                            }
+                        default:
+                            EMFP_DEBUG (printf ("EMF+\tObject unhandled flags: 0x%04x\n", flags & 0xff00));
+                            break;
+                        }
+
+                        break;
+                    }
+                case EmfPlusRecordTypeFillPath:
+                    {
+                        sal_uInt32 index = flags & 0xff;
+                        sal_uInt32 brushIndexOrColor;
+
+                        rMF >> brushIndexOrColor;
+
+                        EMFP_DEBUG (printf ("EMF+ FillPath slot: %d\n", index));
+
+                        EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                    }
+                    break;
+                case EmfPlusRecordTypeFillRects:
+                    {
+                        EMFP_DEBUG (printf ("EMF+ FillRects\n"));
+
+                        sal_uInt32 brushIndexOrColor;
+                        sal_Int32 rectangles;
+                        ::basegfx::B2DPolygon polygon;
+
+                        rMF >> brushIndexOrColor >> rectangles;
+
+                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
+
+                        for (int i=0; i < rectangles; i++) {
+                            if (flags & 0x4000) {
+                                /* 16bit integers */
+                                sal_Int16 x, y, width, height;
+
+                                rMF >> x >> y >> width >> height;
+
+                                polygon.append (Map (x, y));
+                                polygon.append (Map (x + width, y));
+                                polygon.append (Map (x + width, y + height));
+                                polygon.append (Map (x, y + height));
+
+                                EMFP_DEBUG (printf ("EMF+\trectangle: %d,%d %dx%d\n", x, y, width, height));
+                            } else {
+                                /* Single's */
+                                float x, y, width, height;
+
+                                rMF >> x >> y >> width >> height;
+
+                                polygon.append (Map (x, y));
+                                polygon.append (Map (x + width, y));
+                                polygon.append (Map (x + width, y + height));
+                                polygon.append (Map (x, y + height));
+
+                                EMFP_DEBUG (printf ("EMF+\trectangle: %f,%f %fx%f\n", x, y, width, height));
+                            }
+
+                            ::basegfx::B2DPolyPolygon polyPolygon (polygon);
+
+                            EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                        }
+                        break;
+                    }
+                case EmfPlusRecordTypeFillPolygon:
+                    {
+                        sal_uInt8 index = flags & 0xff;
+                        sal_uInt32 brushIndexOrColor;
+                        sal_Int32 brushIndex;
+                        sal_Int32 points;
+                        UINT32 color;
+                        USHORT transparency = 0;
+
+                        rMF >> brushIndexOrColor;
+                        rMF >> points;
+
+                        EMFP_DEBUG (printf ("EMF+ FillPolygon in slot: %d points: %d\n", index, points));
+                        EMFP_DEBUG (printf ("EMF+\twith solid color (ARGB): 0x%08X\n", color));
+
+                        EMFPPath path (points, true);
+                        path.Read (rMF, flags, *this);
+
+
+                        EMFPPlusFillPolygon (path.GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+
+                        break;
+                    }
+                case EmfPlusRecordTypeDrawLines:
+                    {
+                        sal_uInt32 index = flags & 0xff;
+                        sal_uInt32 points;
+
+                        rMF >> points;
+
+                        EMFP_DEBUG (printf ("EMF+ DrawLines in slot: %d points: %d\n", index, points));
+
+                        EMFPPath path (points, true);
+                        path.Read (rMF, flags, *this);
+
+                        EMFPPen* pen = (EMFPPen*) aObjects [index];
+
+                        rState.isFillColorSet = false;
+                        rState.isLineColorSet = true;
+                        rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
+                                                                                   rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace() );
+                        ::basegfx::B2DPolyPolygon& polygon (path.GetPolygon (*this));
+
+                        polygon.transform( rState.mapModeTransform );
+
+                        rendering::StrokeAttributes aStrokeAttributes;
+
+                        pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+
+            ActionSharedPtr pPolyAction(
+                internal::PolyPolyActionFactory::createPolyPolyAction(
+                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
+
+            if( pPolyAction )
+            {
+                maActions.push_back(
+                    MtfAction(
+                        pPolyAction,
+                        rFactoryParms.mrCurrActionIndex ) );
+
+                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+            }
+
+                        break;
+                    }
+                case EmfPlusRecordTypeDrawPath:
+                    {
+                        UINT32 penIndex;
+
+                        rMF >> penIndex;
+
+                        EMFP_DEBUG (printf ("EMF+ DrawPath\n"));
+                        EMFP_DEBUG (printf ("EMF+\tpen: %d\n", penIndex));
+
+                        EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
+                        EMFPPen* pen = (EMFPPen*) aObjects [penIndex];
+
+                        rState.isFillColorSet = false;
+                        rState.isLineColorSet = true;
+                        rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
+                                                                                   rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
+                        ::basegfx::B2DPolyPolygon& polygon (path->GetPolygon (*this));
+
+                        polygon.transform( rState.mapModeTransform );
+                        rendering::StrokeAttributes aStrokeAttributes;
+
+                        pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+
+            ActionSharedPtr pPolyAction(
+                internal::PolyPolyActionFactory::createPolyPolyAction(
+                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
+
+            if( pPolyAction )
+            {
+                maActions.push_back(
+                    MtfAction(
+                        pPolyAction,
+                        rFactoryParms.mrCurrActionIndex ) );
+
+                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+            }
+                        break;
+                    }
+                case EmfPlusRecordTypeDrawImagePoints:
+                    {
+                        sal_uInt32 attrIndex;
+                        sal_Int32 sourceUnit;
+
+                        rMF >> attrIndex >> sourceUnit;
+
+                        EMFP_DEBUG (printf ("EMF+ DrawImagePoints attributes index: %d source unit: %d\n", attrIndex, sourceUnit));
+                        EMFP_DEBUG (printf ("EMF+\tTODO: use image attributes\n"));
+
+                        if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
+                            EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
+                            float sx, sy, sw, sh;
+                            sal_Int32 unknown;
+
+                            ReadRectangle (rMF, sx, sy, sw, sh);
+
+                            rMF >> unknown;
+
+                            EMFP_DEBUG (printf ("EMF+ DrawImagePoints source rectangle: %f,%f %fx%f unknown: 0x%08x\n", sx, sy, sw, sh, unknown));
+
+                            if (unknown == 3) { // it probably means number of points defining destination rectangle
+                                float x1, y1, x2, y2, x3, y3;
+
+                                ReadPoint (rMF, x1, y1);
+                                ReadPoint (rMF, x2, y2);
+                                ReadPoint (rMF, x3, y3);
+
+                                BitmapEx aBmp( image.graphic.GetBitmapEx () );
+                                const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (Map (sx, sy)),
+                                                           ::vcl::unotools::sizeFromB2DSize (MapSize(sw, sh)));
+                                aBmp.Crop( aCropRect );
+
+
+                                ActionSharedPtr pBmpAction (
+                                    internal::BitmapActionFactory::createBitmapAction (
+                                        aBmp,
+                                        rState.mapModeTransform * Map (x1, y1),
+                                        rState.mapModeTransform * MapSize(x2 - x1, y3 - y1),
+                                        rCanvas,
+                                        rState));
+
+                                if( pBmpAction ) {
+                                    maActions.push_back( MtfAction( pBmpAction,
+                                                                    rFactoryParms.mrCurrActionIndex ) );
+
+                                    rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
+                                }
+                            } else
+                                EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
+                        }
+                        break;
+                    }
+                case EmfPlusRecordTypeDrawString:
+                    EMFP_DEBUG (printf ("EMF+ DrawString\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetPageTransform:
+                    rMF >> fPageScale;
+
+                    EMFP_DEBUG (printf ("EMF+ SetPageTransform\n"));
+                    EMFP_DEBUG (printf ("EMF+\tscale: %f unit: %d\n", fPageScale, flags));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetRenderingOrigin:
+                    rMF >> nOriginX >> nOriginY;
+                    EMFP_DEBUG (printf ("EMF+ SetRenderingOrigin\n"));
+                    EMFP_DEBUG (printf ("EMF+\torigin [x,y]: %d,%d\n", nOriginX, nOriginY));
+                    break;
+                case EmfPlusRecordTypeSetTextRenderingHint:
+                    EMFP_DEBUG (printf ("EMF+ SetTextRenderingHint\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetAntiAliasMode:
+                    EMFP_DEBUG (printf ("EMF+ SetAntiAliasMode\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetInterpolationMode:
+                    EMFP_DEBUG (printf ("EMF+ InterpolationMode\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetPixelOffsetMode:
+                    EMFP_DEBUG (printf ("EMF+ SetPixelOffsetMode\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetCompositingQuality:
+                    EMFP_DEBUG (printf ("EMF+ SetCompositingQuality\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSave:
+                    EMFP_DEBUG (printf ("EMF+ Save\n"));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                case EmfPlusRecordTypeSetWorldTransform: {
+                    EMFP_DEBUG (printf ("EMF+ SetWorldTransform\n"));
+                    XForm transform;
+                    rMF >> transform;
+                    aWorldTransform.Set (transform);
+                    EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                            aWorldTransform.eM11, aWorldTransform.eM12,
+                            aWorldTransform.eM21, aWorldTransform.eM22,
+                            aWorldTransform.eDx, aWorldTransform.eDy));
+                    break;
+                }
+                case EmfPlusRecordTypeResetWorldTransform:
+                    EMFP_DEBUG (printf ("EMF+ ResetWorldTransform\n"));
+                    aWorldTransform.SetIdentity ();
+                    break;
+                case EmfPlusRecordTypeSetClipPath:
+                    {
+                        EMFP_DEBUG (printf ("EMF+ SetClipPath\n"));
+                        EMFP_DEBUG (printf ("EMF+\tpath in slot: %d\n", flags & 0xff));
+
+                        EMFPPath& path = *(EMFPPath*) aObjects [flags & 0xff];
+                        ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
+
+                        clipPoly.transform (rState.mapModeTransform);
+                        updateClipping (clipPoly, rFactoryParms, false);
+
+                        break;
+                    }
+                case EmfPlusRecordTypeSetClipRegion: {
+                    EMFP_DEBUG (printf ("EMF+ SetClipRegion\n"));
+                    EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, (flags & 0xff00) >> 8));
+                    EMFPRegion& region = *(EMFPRegion*) aObjects [flags & 0xff];
+
+                    // reset clip
+                    if (region.parts == 0 && region.initialState == EmfPlusRegionInitialStateInfinite) {
+                        updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
+                    } else
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                }
+                case EmfPlusRecordTypeDrawDriverString:
+                    EMFP_DEBUG (printf ("EMF+ DrawDriverString, flags: 0x%04x\n", flags));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    break;
+                default:
+                    EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
+                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                }
+
+                rMF.Seek (next);
+
+                length -= size;
+            }
+        }
+    }
+}

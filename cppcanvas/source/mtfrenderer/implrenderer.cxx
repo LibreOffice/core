@@ -92,6 +92,8 @@
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#define EMFP_DEBUG(x)
+//#define EMFP_DEBUG(x) x
 
 using namespace ::com::sun::star;
 
@@ -1808,6 +1810,33 @@ namespace cppcanvas
                                 }
                             }
                         }
+                        // Handle drawing layer fills
+                        else if( pAct->GetComment().Equals( "EMF_PLUS" ) ) {
+                            static int count = -1, limit = 0x7fffffff;
+                            if (count == -1) {
+                                count = 0;
+                                char *env;
+                                if (env = getenv ("EMF_PLUS_LIMIT")) {
+                                    limit = atoi (env);
+                                }
+                            }
+                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %d\n", pAct->GetDataSize ()));
+                            if (count < limit)
+                            processEMFPlus( pAct, rFactoryParms, getState( rStates ), rCanvas );
+                            count ++;
+                        } else if( pAct->GetComment().Equals( "EMF_PLUS_HEADER_INFO" ) ) {
+                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %d\n", pAct->GetDataSize ()));
+
+                            SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
+
+                            rMF >> nFrameLeft >> nFrameTop >> nFrameRight >> nFrameBottom;
+                            EMFP_DEBUG (printf ("EMF+ picture frame: %d,%d - %d,%d\n", nFrameLeft, nFrameTop, nFrameRight, nFrameBottom));
+                            rMF >> nPixX >> nPixY >> nMmX >> nMmY;
+                            EMFP_DEBUG (printf ("EMF+ ref device pixel size: %dx%d mm size: %dx%d\n", nPixX, nPixY, nMmX, nMmY));
+
+                            rMF >> aBaseTransform;
+                            //aWorldTransform.Set (aBaseTransform);
+                        }
                     }
                     break;
 
@@ -2975,6 +3004,9 @@ namespace cppcanvas
                                            ::Font(), // default font
                                            aParms );
             }
+
+            /* EMF+ */
+            memset (aObjects, 0, sizeof (aObjects));
 
             createActions( const_cast<GDIMetaFile&>(rMtf), // HACK(Q2):
                                                            // we're
