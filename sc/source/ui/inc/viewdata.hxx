@@ -332,6 +332,10 @@ public:
     ScMarkType      GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
                                     SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab ) const;
     ScMarkType      GetSimpleArea( ScRange& rRange ) const;
+
+    void            MoveNextRow();
+    void            MovePrevRow();
+
                     /// May modify rNewMark using MarkToSimple().
     ScMarkType      GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) const;
     void            GetMultiArea( ScRangeListRef& rRange ) const;

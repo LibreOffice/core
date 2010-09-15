@@ -754,6 +754,22 @@ void ScViewData::RefreshZoom()
     aLogicMode.SetScaleY( GetZoomY() );
 }
 
+void ScViewData::MoveNextRow()
+{
+      ScRange aMarkRange;
+      aMarkData.GetMarkArea(aMarkRange);
+      aMarkRange.aStart.Set(aMarkRange.aStart.Col(), aMarkRange.aStart.Row() +1, aMarkRange.aStart.Tab());
+      aMarkData.SetMarkArea(aMarkRange);
+}
+
+void ScViewData::MovePrevRow()
+{
+      ScRange aMarkRange;
+      aMarkData.GetMarkArea(aMarkRange);
+      aMarkRange.aStart.Set(aMarkRange.aStart.Col(), aMarkRange.aStart.Row() -1, aMarkRange.aStart.Tab());
+      aMarkData.SetMarkArea(aMarkRange);
+}
+
 void ScViewData::SetPagebreakMode( BOOL bSet )
 {
     bPagebreak = bSet;

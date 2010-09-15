@@ -86,10 +86,10 @@ public:
     bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
-    // Wang Xu Ming -- 2009-6-17
-    // DataPilot Migration
-    ULONG   RecalcPivotTable();
-    // End Comments
+    ULONG           RecalcPivotTable();
+    void            AutoFormatPivotTable(USHORT nIndex);
+    void            AutoFormatPivotTable(ScDPObject* pDPObj, USHORT nIndex);
+
     BOOL            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
     BOOL            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();

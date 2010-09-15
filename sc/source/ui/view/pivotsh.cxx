@@ -53,6 +53,12 @@
 #include "uiitems.hxx"
 //CHINA001 #include "pfiltdlg.hxx"
 #include "scabstdlg.hxx" //CHINA001
+
+#include "autoform.hxx"
+#include "scuiautofmt.hxx"
+#include "editable.hxx"
+
+
 //------------------------------------------------------------------------
 
 #define ScPivotShell
@@ -99,7 +105,45 @@ void ScPivotShell::Execute( SfxRequest& rReq )
         case SID_PIVOT_RECALC:
             pViewShell->RecalcPivotTable();
             break;
+        case SID_PIVOT_AFMT:
+        {
+            ScViewData* pViewData = pViewShell->GetViewData();
 
+            pViewShell->GetDBData( TRUE, SC_DB_OLD );
+            const ScMarkData& rMark1 = pViewData->GetMarkData();
+            if ( !rMark1.IsMarked() && !rMark1.IsMultiMarked() )
+                pViewShell->MarkDataArea( TRUE );
+
+            Window* pDlgParent = pViewShell->GetDialogParent();
+
+            pViewData->MoveNextRow();
+
+            ScGlobal::ClearAutoFormat();
+            ScAutoFormatData* pNewEntry = pViewShell->CreateAutoFormatData();
+            ScAutoFormatDlg*  pDlg = new ScAutoFormatDlg(
+                pDlgParent, ScGlobal::GetAutoFormat(), pNewEntry, pViewData->GetDocument() );
+
+            if ( pDlg->Execute() == RET_OK )
+            {
+                ScEditableTester aTester( pViewShell );
+                if ( !aTester.IsEditable() )
+                {
+                    pViewShell->ErrorMessage(aTester.GetMessageId());
+                }
+                else
+                {
+                    /* AutoFormat and Store the index */
+                    pViewShell->AutoFormat( pDlg->GetIndex() );
+                    pViewShell->AutoFormatPivotTable( pDlg->GetIndex() );
+                }
+            }
+            delete pDlg;
+            delete pNewEntry;
+
+            //pViewShell->DeletePivotTable();
+            //pViewShell->RecalcPivotTable();
+        }
+        break;
         case SID_PIVOT_KILL:
             pViewShell->DeletePivotTable();
             break;
