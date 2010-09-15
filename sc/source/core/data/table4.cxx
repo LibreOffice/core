@@ -1345,6 +1345,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
+                        if (pDocument->RowFiltered( rInner, nTab))
+                            continue;
                         ULONG nInd = nActFormCnt;
                         FillFormula(nInd, bFirst, (ScFormulaCell*)pSrcCell,
                             static_cast<SCCOL>(nCol), nRow, (rInner == nIEnd) );
@@ -1356,6 +1358,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
+                        if (pDocument->RowFiltered( rInner, nTab))
+                            continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
                         aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
                     }
