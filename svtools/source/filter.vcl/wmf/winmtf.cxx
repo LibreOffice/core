@@ -31,6 +31,7 @@
 
 #include "winmtf.hxx"
 #include <vcl/metaact.hxx>
+#include <vcl/graphictools.hxx>
 #include <vcl/metric.hxx>
 #include <rtl/tencinfo.h>
 
@@ -1041,7 +1042,8 @@ void WinMtfOutput::UpdateFillStyle()
     if (!( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
-        mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
+        if (maFillStyle.aType == FillStyleSolid)
+            mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
     }
 }
 
@@ -1369,7 +1371,35 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
             else
             {
                 UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+
+                if (maLatestFillStyle.aType != FillStylePattern)
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                else {
+                    SvtGraphicFill aFill = SvtGraphicFill( PolyPolygon( rPolygon ),
+                                                           Color(),
+                                                           0.0,
+                                                           SvtGraphicFill::fillNonZero,
+                                                           SvtGraphicFill::fillTexture,
+                                                           SvtGraphicFill::Transform(),
+                                                           true,
+                                                           SvtGraphicFill::hatchSingle,
+                                                           Color(),
+                                                           SvtGraphicFill::gradientLinear,
+                                                           Color(),
+                                                           Color(),
+                                                           0,
+                                                           Graphic (maLatestFillStyle.aBmp) );
+
+                    SvMemoryStream  aMemStm;
+
+                    aMemStm << aFill;
+
+                    mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                                            static_cast<const BYTE*>(aMemStm.GetData()),
+                                                            aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
+                    mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
+                }
+
             }
         }
     }
@@ -1712,7 +1742,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
             if ( ( nRasterOperation & 0xaa ) != ( ( nRasterOperation & 0x55 ) << 1 ) )
                 nUsed |= 4;     // destination is used
 
-            if ( (nUsed & 1) && (( nUsed & 2 ) == 0) )
+            if ( (nUsed & 1) && (( nUsed & 2 ) == 0) && nWinRop != PATINVERT )
             {   // patterns aren't well supported yet
                 sal_uInt32 nOldRop = SetRasterOp( ROP_OVERPAINT );  // in this case nRasterOperation is either 0 or 0xff
                 UpdateFillStyle();

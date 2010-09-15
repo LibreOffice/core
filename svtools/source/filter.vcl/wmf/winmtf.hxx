@@ -364,10 +364,17 @@ struct WinMtfFontStyle
 
 // -----------------------------------------------------------------------------
 
+typedef enum {
+    FillStyleSolid,
+    FillStylePattern
+} WinMtfFillStyleType;
+
 struct WinMtfFillStyle
 {
-    Color   aFillColor;
-    BOOL    bTransparent;
+    Color               aFillColor;
+    BOOL                bTransparent;
+    WinMtfFillStyleType aType;
+    Bitmap              aBmp;
 
     WinMtfFillStyle() :
         aFillColor  ( Color( COL_BLACK ) ),
@@ -377,16 +384,23 @@ struct WinMtfFillStyle
 
     WinMtfFillStyle( const Color& rColor, BOOL bTrans = FALSE ) :
         aFillColor  ( rColor ),
-        bTransparent( bTrans )
+        bTransparent( bTrans ),
+        aType       ( FillStyleSolid )
+    {
+    };
+
+    WinMtfFillStyle( Bitmap& rBmp ) :
+        aBmp ( rBmp ),
+        aType( FillStylePattern )
     {
     };
 
     BOOL operator==( const WinMtfFillStyle& rStyle )
-        { return ( ( aFillColor == rStyle.aFillColor ) && ( bTransparent == rStyle.bTransparent ) ); };
+        { return ( ( aFillColor == rStyle.aFillColor ) && ( bTransparent == rStyle.bTransparent ) && ( aType == rStyle.aType ) ); };
     BOOL operator==( WinMtfFillStyle* pStyle )
-        { return ( ( aFillColor == pStyle->aFillColor ) && ( bTransparent == pStyle->bTransparent ) ); };
-    void operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; };
-    void operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; };
+        { return ( ( aFillColor == pStyle->aFillColor ) && ( bTransparent == pStyle->bTransparent ) && ( aType == pStyle->aType ) ); };
+    void operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; aBmp = rStyle.aBmp; aType = rStyle.aType; };
+    void operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; aBmp = pStyle->aBmp; aType = pStyle->aType; };
 };
 
 // -----------------------------------------------------------------------------
@@ -478,12 +492,13 @@ typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
 
 struct BSaveStruct
 {
-    Bitmap      aBmp;
-    Rectangle   aOutRect;
-    UINT32      nWinRop;
+    Bitmap          aBmp;
+    Rectangle       aOutRect;
+    UINT32          nWinRop;
+    WinMtfFillStyle aStyle;
 
-                BSaveStruct( const Bitmap& rBmp, const Rectangle& rOutRect, UINT32 nRop ) :
-                    aBmp( rBmp ), aOutRect( rOutRect ), nWinRop( nRop ){};
+                BSaveStruct( const Bitmap& rBmp, const Rectangle& rOutRect, UINT32 nRop, WinMtfFillStyle& rStyle ) :
+                    aBmp( rBmp ), aOutRect( rOutRect ), nWinRop( nRop ), aStyle ( rStyle ){};
 };
 
 // -----------------------------------------------------------------------------
@@ -638,6 +653,7 @@ class WinMtfOutput
         void                DeleteObject( INT32 nIndex );
         void                SelectObject( INT32 nIndex );
         CharSet             GetCharSet(){ return maFont.GetCharSet(); };
+        WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
         void                SetFont( const Font& rFont );
         const Font&         GetFont() const;
         void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );

@@ -1008,7 +1008,10 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                             aBitmap.Crop( aCropRect );
                         }
-                         aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
+                    /* Pseudocomment to add more context so that make patch.unapply
+                     * works better. Ha!
+                     */
+                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ), LIST_APPEND );
                     }
                 }
             }
@@ -1062,7 +1065,8 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                             aBitmap.Crop( aCropRect );
                         }
-                        aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
+                    /* Another pseudocomment to make make patch.unapply work better */
+                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ), LIST_APPEND );
                     }
                 }
             }
@@ -1333,6 +1337,54 @@ BOOL EnhWMFReader::ReadEnhWMF()
             }
             break;
 
+            case EMR_CREATEDIBPATTERNBRUSHPT :
+            {
+                static int count = 0;
+                UINT32  nStart = pWMF->Tell() - 8;
+                Bitmap aBitmap;
+
+                *pWMF >> nIndex;
+
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                {
+                    UINT32 usage, offBmi, cbBmi, offBits, cbBits;
+
+                    *pWMF >> usage;
+                    *pWMF >> offBmi;
+                    *pWMF >> cbBmi;
+                    *pWMF >> offBits;
+                    *pWMF >> cbBits;
+
+                    if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
+                       bStatus = FALSE;
+                    else if ( offBmi )
+                    {
+                        UINT32  nSize = cbBmi + cbBits + 14;
+                        if ( nSize <= ( nEndPos - nStartPos ) )
+                        {
+                            char*   pBuf = new char[ nSize ];
+
+                            SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                            aTmp.ObjectOwnsMemory( TRUE );
+                            aTmp << (BYTE)'B'
+                                 << (BYTE)'M'
+                                 << (UINT32)cbBits
+                                 << (UINT16)0
+                                 << (UINT16)0
+                                 << (UINT32)cbBmi + 14;
+                            pWMF->Seek( nStart + offBmi );
+                            pWMF->Read( pBuf + 14, cbBmi );
+                            pWMF->Seek( nStart + offBits );
+                            pWMF->Read( pBuf + 14 + cbBmi, cbBits );
+                            aTmp.Seek( 0 );
+                            aBitmap.Read( aTmp, TRUE );
+                        }
+                    }
+                }
+
+                pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( aBitmap ) );
+            }
+            break;
 
 #ifdef WIN_MTF_ASSERT
             default :                           WinMtfAssertHandler( "Unknown Meta Action" );       break;
@@ -1352,7 +1404,6 @@ BOOL EnhWMFReader::ReadEnhWMF()
             case EMR_ANGLEARC :                 WinMtfAssertHandler( "AngleArc" );                  break;
             case EMR_SETCOLORADJUSTMENT :       WinMtfAssertHandler( "SetColorAdjustment" );        break;
             case EMR_POLYDRAW16 :               WinMtfAssertHandler( "PolyDraw16" );                break;
-            case EMR_CREATEDIBPATTERNBRUSHPT :  WinMtfAssertHandler( "CreateDibPatternBrushPt" );   break;
             case EMR_POLYTEXTOUTA :             WinMtfAssertHandler( "PolyTextOutA" );              break;
             case EMR_POLYTEXTOUTW :             WinMtfAssertHandler( "PolyTextOutW" );              break;
             case EMR_CREATECOLORSPACE :         WinMtfAssertHandler( "CreateColorSpace" );          break;
