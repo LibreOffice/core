@@ -1212,10 +1212,13 @@ FltError ImportExcel8::Read( void )
             GetPivotTableManager().ConvertPivotTables();
 
         pProgress.reset();
-
+#if 0
+        // Excel documents look much better without this call; better in the
+        // sense that the row heights are identical to the original heights in
+        // Excel.
         if (pD->IsAdjustHeightEnabled())
             AdjustRowHeight();
-
+#endif
         PostDocLoad();
 
         pD->CalcAfterLoad();
