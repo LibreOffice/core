@@ -1189,8 +1189,13 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     // instead of a separate progress for each sheet from ScPrintFunc
     pDocShell->UpdatePendingRowHeights( MAXTAB, true );
 
+    ScMarkData aMarkData;
+    aMarkData.SelectTable( GetViewData()->GetTabNo(), TRUE );
+
     for ( SCTAB i=0; i<nTabCount; i++ )
     {
+        if ( !bAllTabs && !aMarkData.GetTableSelect( i ) )
+            continue;
         ScPrintFunc aPrintFunc( pDocShell, pPrinter, i );
         nDocPageMax += aPrintFunc.GetTotalPages();
     }

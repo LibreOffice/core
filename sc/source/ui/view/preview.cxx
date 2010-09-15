@@ -109,6 +109,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     bLocationValid( FALSE ),
     pLocationData( NULL ),
     pDrawView( NULL ),
+    nCurTab ( ScDocShell::GetCurTab() ),
     bInPaint( FALSE ),
     bInGetState( FALSE ),
     pDocShell( pDocSh ),
@@ -249,8 +250,17 @@ void ScPreview::CalcPages( SCTAB /*nToWhichTab*/ )
     //  but always all sheets are used (there is no selected sheet)
     ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
 
+    ScMarkData aMarkData;
+    aMarkData.SelectTable( nCurTab, TRUE );
+
     for (SCTAB i=nStart; i<nAnz; i++)
     {
+        if (!aOptions.GetAllSheets() && !aMarkData.GetTableSelect( i )) {
+            nPages[i] = 0;
+            nFirstAttr[i] = 0;
+            continue;
+        }
+
         long nAttrPage = i > 0 ? nFirstAttr[i-1] : 1;
 
         long nThisStart = nTotalPages;
