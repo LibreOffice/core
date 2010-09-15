@@ -1109,9 +1109,16 @@ input for the following reasons:
                         switch (DateFmt)
                         {
                             case MDY:
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                            case YMD: {
+                                USHORT nDay = ImplGetDay(0);
+                                USHORT nYear = ImplGetYear(0);
+                                if (nDay == 0 || nDay > 32) {
+                                    pCal->setValue( CalendarFieldIndex::YEAR, nYear);
+                                }
+                                else
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
+                            }
                             case DMY:
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
@@ -1550,6 +1557,13 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         }
     }
 
+    // skip any trailing '-' or '/' chars
+    if (nPos < rString.Len())
+    {
+        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos)) {
+            // do nothing
+        }
+    }
     if (nPos < rString.Len())                       // not everything consumed
     {
         // Does input StartString equal StartString of format?
