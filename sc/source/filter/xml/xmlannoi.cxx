@@ -192,6 +192,7 @@ void ScXMLAnnotationContext::EndElement()
     {
         pShapeContext->EndElement();
         delete pShapeContext;
+        pShapeContext = NULL;
     }
 
     mrAnnotationData.maAuthor = maAuthorBuffer.makeStringAndClear();
