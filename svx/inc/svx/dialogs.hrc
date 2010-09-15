@@ -1056,3 +1056,4 @@
 
 #endif
 
+#define SID_SC_TP_FORMULA               (SVX_OOO_BUILD_START + 1)
