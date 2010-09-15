@@ -47,7 +47,7 @@ private:
     OKButton        aOKButton;
     Image           aAppLogo;
 
-    FixedInfo       aVersionText;
+    MultiLineEdit       aVersionText;
     MultiLineEdit   aCopyrightText;
     FixedInfo       aBuildData;
 
@@ -55,6 +55,7 @@ private:
     String          aDevVersionStr;
     String          aAccelStr;
     String          aVersionData;
+    String          aVersionTextStr;
     String          aCopyrightTextStr;
 
     AccelList       aAccelList;

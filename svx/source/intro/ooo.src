@@ -75,21 +75,27 @@ ModalDialog RID_DEFAULTABOUT
         Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    FixedText ABOUT_FTXT_VERSION
+    MultiLineEdit ABOUT_FTXT_VERSION
     {
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 54 , 6 ) ;
         Size = MAP_APPFONT ( 118 , 16 ) ;
-        WordBreak = TRUE ;
-        Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        AutoVScroll = TRUE ;
     };
     MultiLineEdit ABOUT_FTXT_COPYRIGHT
     {
-        Border = TRUE ;
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
+    };
+    String ABOUT_STR_VERSION
+    {
+        Text[ en-US ] = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION";
     };
     String ABOUT_STR_COPYRIGHT
     {

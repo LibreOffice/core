@@ -67,22 +67,6 @@
 #define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
 
 // class AboutDialog -----------------------------------------------------
-static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size )
-{
-    Point aTextPos = rText.GetPosPixel();
-    aTextPos.X() = a6Size.Width() * 2;
-    aTextPos.Y() = nY;
-    rText.SetPosPixel( aTextPos );
-
-    Size aTxtSiz = rText.GetSizePixel();
-    aTxtSiz.Width() = nTextWidth;
-    Size aCalcSize = rText.CalcMinimumSize( nTextWidth );
-    aTxtSiz.Height() = aCalcSize.Height();
-    rText.SetSizePixel( aTxtSiz );
-
-    nY += aTxtSiz.Height();
-}
-
 static bool impl_loadBitmap(
     const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
     Image &rLogo )
@@ -158,10 +142,12 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
+    // FIXME: What is the purpose of the aBuildData when it is not connected to any widget?
     aBuildData      ( this ),
     aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
     aDevVersionStr  ( rVerStr ),
     aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
+    aVersionTextStr(          ResId( ABOUT_STR_VERSION, *rId.GetResMgr() ) ),
     aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
     aTimer          (),
     nOff            ( 0 ),
@@ -181,10 +167,15 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     SetFont( aFont );
 
     // if necessary more info
-    String sVersion = aVersionText.GetText();
+    String sVersion = aVersionTextStr;
     sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
     sVersion += '\n';
     sVersion += rVerStr;
+#ifdef BUILD_VER_STRING
+    String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
+    sVersion += '\n';
+    sVersion += aBuildString;
+#endif
     aVersionText.SetText( sVersion );
 
     // Initialisierung fuer Aufruf Entwickler
@@ -235,28 +226,37 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aNewFont.SetSize( aSmaller );
     aBuildData.SetFont( aNewFont );
     aBuildData.SetBackground( aWall );
-#ifdef BUILD_VER_STRING
-    String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
-#else
-    String aBuildString;
-#endif
-    aBuildData.SetText( aBuildString );
+    // FIXME: What is the purpose of the build data?
+    // they are not showed even when set, so???
+    String aBuildDataString;
+    aBuildData.SetText( aBuildDataString );
     aBuildData.Show();
+
+    aCopyrightText.SetText( aCopyrightTextStr );
 
     // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
     Size aOutSiz     = GetOutputSizePixel();
     aOutSiz.Width()  = aAppLogoSiz.Width();
 
+    // analyze size of the aVersionText widget
+    // character size
     Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    // preferred Version widget size
+    Size aVTSize = aVersionText.CalcMinimumSize();
     long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
-    long nDlgMargin  = a6Size.Width() * 4 ;
-    long nCtrlMargin = a6Size.Height() * 2;
+    long nDlgMargin  = a6Size.Width() * 3 ;
+    long nCtrlMargin = aVTSize.Height() + ( a6Size.Height() * 2 );
     long nTextWidth  = aOutSiz.Width() - nDlgMargin;
 
-    aCopyrightText.SetText( aCopyrightTextStr );
+    // finally set the aVersionText widget position and size
+    Size aVTCopySize = aVTSize;
+    Point aVTCopyPnt;
+    aVTCopySize.Width()  = nTextWidth;
+    aVTCopyPnt.X() = ( aOutSiz.Width() - aVTCopySize.Width() ) / 2;
+    aVTCopyPnt.Y() = nY;
+    aVersionText.SetPosSizePixel( aVTCopyPnt, aVTCopySize );
 
-    layoutText( aVersionText, nY, nTextWidth, a6Size );
     nY += nCtrlMargin;
 
     // OK-Button-Position (at the bottom and centered)
