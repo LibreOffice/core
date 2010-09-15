@@ -223,6 +223,7 @@ public:
 
     void    DrawGrid( BOOL bGrid, BOOL bPage );
     void    DrawStrings( BOOL bPixelToLogic = FALSE );
+    void    DrawDocumentBackground();
     void    DrawBackground();
     void    DrawShadow();
     void    DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBottom);

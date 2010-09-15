@@ -795,14 +795,23 @@ BOOL lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
     return TRUE;
 }
 
+void ScOutputData::DrawDocumentBackground()
+{
+    if ( !bSolidBackground )
+        return;
+
+    Size aOnePixel = pDev->PixelToLogic(Size(1,1));
+    long nOneX = aOnePixel.Width();
+    long nOneY = aOnePixel.Height();
+    Rectangle aRect(nScrX - nOneX, nScrY - nOneY, nScrX + nScrW, nScrY + nScrH);
+    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+    pDev->SetFillColor(aBgColor);
+    pDev->DrawRect(aRect);
+}
+
 void ScOutputData::DrawBackground()
 {
     FindRotated();              //! von aussen ?
-
-    ScModule* pScMod = SC_MOD();
-
-    // used only if bSolidBackground is set (only for ScGridWindow):
-    Color aBgColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
 
     Rectangle aRect;
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
@@ -851,7 +860,7 @@ void ScOutputData::DrawBackground()
                 long nPosX = nScrX;
                 if ( bLayoutRTL )
                     nPosX += nMirrorW - nOneX;
-                aRect = Rectangle( nPosX,nPosY, nPosX,nPosY+nRowHeight-nOneY );
+                aRect = Rectangle( nPosX, nPosY-nOneY, nPosX, nPosY+nRowHeight-nOneY );
 
                 const SvxBrushItem* pOldBackground = NULL;
                 const SvxBrushItem* pBackground;
@@ -899,15 +908,13 @@ void ScOutputData::DrawBackground()
                         if (pOldBackground)             // ==0 if hidden
                         {
                             Color aBackCol = pOldBackground->GetColor();
-                            if ( bSolidBackground && aBackCol.GetTransparency() )
-                                aBackCol = aBgColor;
                             if ( !aBackCol.GetTransparency() )      //! partial transparency?
                             {
                                 pDev->SetFillColor( aBackCol );
                                 pDev->DrawRect( aRect );
                             }
                         }
-                        aRect.Left() = nPosX;
+                        aRect.Left() = nPosX - nSignedOneX;
                         pOldBackground = pBackground;
                     }
                     nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
@@ -916,8 +923,6 @@ void ScOutputData::DrawBackground()
                 if (pOldBackground)
                 {
                     Color aBackCol = pOldBackground->GetColor();
-                    if ( bSolidBackground && aBackCol.GetTransparency() )
-                        aBackCol = aBgColor;
                     if ( !aBackCol.GetTransparency() )      //! partial transparency?
                     {
                         pDev->SetFillColor( aBackCol );

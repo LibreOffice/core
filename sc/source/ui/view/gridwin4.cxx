@@ -729,9 +729,10 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         aOutputData.SetSolidBackground(TRUE);
 
     pContentDev->SetMapMode(MAP_PIXEL);
-    aOutputData.DrawBackground();
+    aOutputData.DrawDocumentBackground();
     if ( bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid( bGrid, bPage );
+    aOutputData.DrawBackground();
     if ( bPageMode )
     {
         // #87655# DrawPagePreview draws complete lines/page numbers, must always be clipped
