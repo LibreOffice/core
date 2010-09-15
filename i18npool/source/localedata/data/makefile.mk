@@ -349,8 +349,7 @@ $(MISC)/saxparser.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/saxparser.input
 
-$(MISC)/saxparser.input .ERRREMOVE :
-    - $(RM) $@
+$(MISC)/saxparser.input :
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@

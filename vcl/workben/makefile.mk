@@ -146,8 +146,7 @@ $(BIN)/applicat.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/applicat.input
 
-$(MISC)/applicat.input .ERRREMOVE :
-    - $(RM) $@
+$(MISC)/applicat.input :
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
