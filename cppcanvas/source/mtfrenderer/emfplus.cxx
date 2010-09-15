@@ -123,6 +123,8 @@ namespace cppcanvas
         public:
             EMFPPath (sal_Int32 _nPoints, bool bLines = false)
             {
+                if( _nPoints<0 || _nPoints>SAL_MAX_INT32/(2*sizeof(float)) )
+                    _nPoints = SAL_MAX_INT32/(2*sizeof(float));
                 nPoints = _nPoints;
                 pPoints = new float [nPoints*2];
                 if (!bLines)
@@ -265,6 +267,9 @@ namespace cppcanvas
                 EMFP_DEBUG (printf ("EMF+\theader: 0x%08x parts: %d\n", header, parts));
 
                 if (parts) {
+                    if( parts<0 || parts>SAL_MAX_INT32/sizeof(sal_Int32) )
+                        parts = SAL_MAX_INT32/sizeof(sal_Int32);
+
                     combineMode = new sal_Int32 [parts];
 
                     for (int i = 0; i < parts; i ++) {
@@ -376,6 +381,9 @@ namespace cppcanvas
                         s >> surroundColorsNumber;
                         EMFP_DEBUG (printf ("EMF+\tsurround colors: %d\n", surroundColorsNumber));
 
+                        if( surroundColorsNumber<0 || surroundColorsNumber>SAL_MAX_INT32/sizeof(::Color) )
+                            surroundColorsNumber = SAL_MAX_INT32/sizeof(::Color);
+
                         surroundColors = new ::Color [surroundColorsNumber];
                         for (int i = 0; i < surroundColorsNumber; i++) {
                             s >> color;
@@ -425,6 +433,8 @@ namespace cppcanvas
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
+                            if( blendPoints<0 || blendPoints>SAL_MAX_INT32/(2*sizeof(float)) )
+                                blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
                             for (int i=0; i < blendPoints; i ++) {
@@ -440,6 +450,10 @@ namespace cppcanvas
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
+                            if( colorblendPoints<0 || colorblendPoints>SAL_MAX_INT32/sizeof(float) )
+                                colorblendPoints = SAL_MAX_INT32/sizeof(float);
+                            if( colorblendPoints>SAL_MAX_INT32/sizeof(::Color) )
+                                colorblendPoints = SAL_MAX_INT32/sizeof(::Color);
                             colorblendPositions = new float [colorblendPoints];
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
@@ -494,6 +508,8 @@ namespace cppcanvas
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
+                            if( blendPoints<0 || blendPoints>SAL_MAX_INT32/(2*sizeof(float)) )
+                                blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
                             for (int i=0; i < blendPoints; i ++) {
@@ -509,6 +525,10 @@ namespace cppcanvas
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
+                            if( colorblendPoints<0 || colorblendPoints>SAL_MAX_INT32/sizeof(float) )
+                                colorblendPoints = SAL_MAX_INT32/sizeof(float);
+                            if( colorblendPoints>SAL_MAX_INT32/sizeof(::Color) )
+                                colorblendPoints = SAL_MAX_INT32/sizeof(::Color);
                             colorblendPositions = new float [colorblendPoints];
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
@@ -610,6 +630,8 @@ namespace cppcanvas
 
                 if (penFlags & 256) {
                     s >> dashPatternLen;
+                    if( dashPatternLen<0 || dashPatternLen>SAL_MAX_INT32/sizeof(float) )
+                        dashPatternLen = SAL_MAX_INT32/sizeof(float);
                     dashPattern = new float [dashPatternLen];
                     for (i = 0; i < dashPatternLen; i++)
                         s >> dashPattern [i];
@@ -623,6 +645,8 @@ namespace cppcanvas
 
                 if (penFlags & 1024) {
                     s >> compoundArrayLen;
+                    if( compoundArrayLen<0 || compoundArrayLen>SAL_MAX_INT32/sizeof(float) )
+                        compoundArrayLen = SAL_MAX_INT32/sizeof(float);
                     compoundArray = new float [compoundArrayLen];
                     for (i = 0; i < compoundArrayLen; i++)
                         s >> compoundArray [i];
@@ -631,6 +655,8 @@ namespace cppcanvas
 
                 if (penFlags & 2048) {
                     s >> customStartCapLen;
+                    if( customStartCapLen<0 )
+                        customStartCapLen=0;
                     customStartCap = new sal_uInt8 [customStartCapLen];
                     for (i = 0; i < customStartCapLen; i++)
                         s >> customStartCap [i];
@@ -639,6 +665,8 @@ namespace cppcanvas
 
                 if (penFlags & 4096) {
                     s >> customEndCapLen;
+                    if( customEndCapLen<0 )
+                        customEndCapLen=0;
                     customEndCap = new sal_uInt8 [customEndCapLen];
                     for (i = 0; i < customEndCapLen; i++)
                         s >> customEndCap [i];
