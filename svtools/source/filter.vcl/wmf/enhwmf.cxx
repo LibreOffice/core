@@ -262,7 +262,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
 
     void *buffer = malloc( length );
 
-    int count = 0, next, pos = pWMF->Tell();
+    int pos = pWMF->Tell();
     pOut->PassEMFPlus( buffer, pWMF->Read( buffer, length ) );
     pWMF->Seek( pos );
 
@@ -318,14 +318,10 @@ void EnhWMFReader::ReadGDIComment()
         break;
     }
     case 3: {
-        sal_uInt32 x, y, w, h;
-
         EMFP_DEBUG(printf ("\t\tENDGROUP\n"));
         break;
     }
     case 0x40000004: {
-        sal_uInt32 x, y, w, h;
-
         EMFP_DEBUG(printf ("\t\tMULTIFORMATS\n"));
         break;
     }
@@ -397,10 +393,11 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 if( id == 0x2B464D45 && nRecSize >= 12 )
                     ReadEMFPlusComment( length, bHaveDC );
                 // GDIC comment, doesn't do anything useful yet => enabled only for debug
-                else if( id == 0x43494447 && nRecSize >= 12 )
+                else if( id == 0x43494447 && nRecSize >= 12 ) {
                     EMFP_DEBUG(ReadGDIComment());
-                else
+                } else {
                     EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n", id));
+        }
             }
         } else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
 
@@ -1339,7 +1336,6 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_CREATEDIBPATTERNBRUSHPT :
             {
-                static int count = 0;
                 UINT32  nStart = pWMF->Tell() - 8;
                 Bitmap aBitmap;
 

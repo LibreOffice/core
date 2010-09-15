@@ -390,8 +390,8 @@ struct WinMtfFillStyle
     };
 
     WinMtfFillStyle( Bitmap& rBmp ) :
-        aBmp ( rBmp ),
-        aType( FillStylePattern )
+        aType( FillStylePattern ),
+        aBmp ( rBmp )
     {
     };
 
