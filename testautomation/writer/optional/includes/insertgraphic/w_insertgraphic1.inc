@@ -520,8 +520,10 @@ endcase
 testcase tInsertGraphic_10
 
     Dim sTestFile as String
+    dim sOutFile as string
 
     sTestFile = ConvertPath(gOfficepath + "user\work\tInsertGraphic_5.sxw")
+    sOutFile  = gOfficepath + "user\work\tInsertGraphic_5.odt"
 
     PrintLog "- Insert linked graphics and break the links via Menu Edit - Link"
     '/// Insert linked graphics and break the links via Menu Edit - Link
@@ -636,13 +638,13 @@ testcase tInsertGraphic_10
     PrintLog "- Save and Reload the file"
 
     '/// Save the file and close the file
-    Call hFileSaveAsWithFilterKill(gOfficepath + "user\work\tInsertGraphic_5.odt", "writer8")
+    Call hFileSaveAsWithFilterKill( sOutFile, "writer8")
     sleep(2)
     Call hCloseDocument
     sleep(2)
 
     '/// Reload the file
-    hFileOpen( gOfficepath & "user\work\tInsertGraphic_5.odt")
+    hFileOpen( sOutFile )
     sleep(2)
     
 
@@ -652,6 +654,10 @@ testcase tInsertGraphic_10
     sleep(1)
     if fFormatGraphic("TabZusaetze") = false then
         Warnlog "#i46300#linked JPEG pictures will disappear when doc is modified."
+
+        kontext "TabZusatze"
+        if ( TabZusaetze.exists() ) then TabZusaetze.close()
+        kontext "DocumentWriter"
         Call hCloseDocument
         goto endsub
     end if
