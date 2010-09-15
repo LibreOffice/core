@@ -47,6 +47,7 @@
 #include <salbmp.h>
 #include <salinst.h>
 #include <vcl/bitmap.hxx>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 
 // -----------
 // - Defines -
@@ -740,6 +741,31 @@ bool X11SalBitmap::Create( const SalBitmap&, SalGraphics* )
 bool X11SalBitmap::Create( const SalBitmap&, USHORT )
 {
     return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+bool X11SalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas, Size& rSize, bool bMask )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+    if( xFastPropertySet.get() ) {
+        long pixmapHandle;
+        sal_Int32 depth;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > args;
+
+        if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
+            if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
+                bool bSuccess = ImplCreateFromDrawable( pixmapHandle, 0, depth, 0, 0, (long) rSize.Width(), (long) rSize.Height() );
+                bool bFreePixmap;
+                if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
+                    XFreePixmap( GetX11SalData()->GetDisplay()->GetDisplay(), pixmapHandle );
+
+                return bSuccess;
+            }
+        }
+    }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------------

@@ -53,6 +53,9 @@ public:
                                     SalGraphics* pGraphics );
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     USHORT nNewBitCount );
+    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+                                    Size& rSize,
+                                    bool bMask = false );
     virtual void            Destroy();
     virtual Size            GetSize() const;
     virtual USHORT          GetBitCount() const;

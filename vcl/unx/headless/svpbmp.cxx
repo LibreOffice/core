@@ -116,6 +116,11 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
     return false;
 }
 
+bool SvpSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+{
+    return false;
+}
+
 void SvpSalBitmap::Destroy()
 {
     m_aBitmap.reset();

@@ -153,6 +153,13 @@ bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 
 // ------------------------------------------------------------------
 
+bool AquaSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+{
+    return false;
+}
+
+// ------------------------------------------------------------------
+
 void AquaSalBitmap::Destroy()
 {
     DestroyContext();

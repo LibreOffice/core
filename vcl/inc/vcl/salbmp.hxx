@@ -33,6 +33,8 @@
 #endif
 #include <vcl/dllapi.h>
 
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+
 struct BitmapBuffer;
 class SalGraphics;
 class BitmapPalette;
@@ -52,6 +54,9 @@ public:
                                     SalGraphics* pGraphics ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     USHORT nNewBitCount ) = 0;
+    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+                                    Size& rSize,
+                                    bool bMask = false ) = 0;
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     virtual USHORT          GetBitCount() const = 0;

@@ -264,6 +264,13 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, USHORT nNewBitCount )
 
 // ------------------------------------------------------------------
 
+bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+{
+    return false;
+}
+
+// ------------------------------------------------------------------
+
 void WinSalBitmap::Destroy()
 {
     if( mhDIB )
