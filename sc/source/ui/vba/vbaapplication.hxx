@@ -56,6 +56,9 @@ public:
     ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~ScVbaApplication();
 
+    /** Returns true, if VBA document events are enabled. */
+    static bool getDocumentEventsEnabled();
+
     virtual SfxObjectShell* GetDocShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 
     // XExactName
