@@ -418,6 +418,8 @@ public:
     /** Converts the number format from the passed property set. */
     void                ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPercent );
 
+    void                AppendString( const String& rStr );
+
     /** Returns true, if this source link contains explicit string data. */
     inline bool         HasString() const { return mxString.is() && !mxString->IsEmpty(); }
 
@@ -529,7 +531,7 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation );
 
     /** Converts all text settings of the passed title text object. */
-    void                ConvertTitle( XTitleRef xTitle, sal_uInt16 nTarget );
+    void                ConvertTitle( XTitleRef xTitle, sal_uInt16 nTarget, const String* pSubTitle = NULL );
     /** Converts all text settings of the passed legend. */
     void                ConvertLegend( const ScfPropertySet& rPropSet );
     /** Converts all settings of the passed data point caption text object. */
