@@ -1108,6 +1108,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         pDocSh->EnableSetModified( sal_True );
     InvalidateBorder();
 
+    if( !pHScrollbar->IsVisible( TRUE ) )
+        ShowHScrollbar( FALSE );
+    if( !pVScrollbar->IsVisible( TRUE ) )
+        ShowVScrollbar( FALSE );
 }
 
 /*--------------------------------------------------------------------
