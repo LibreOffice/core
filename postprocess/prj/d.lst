@@ -3,4 +3,5 @@ mkdir: %_DEST%\xml%_EXT%\ooo
 ..\%__SRC%\misc\*.xcd %_DEST%\xml%_EXT%\
 ..\%__SRC%\misc\lang\*.xcd %_DEST%\xml%_EXT%\
 ..\%__SRC%\misc\ooo-services.rdb %_DEST%\xml%_EXT%\ooo\services.rdb
+..\%__SRC%\misc\services.input %_DEST%\xml%_EXT%\services.input
 ..\%__SRC%\misc\services.rdb %_DEST%\xml%_EXT%\services.rdb
