@@ -252,8 +252,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
             if( pDialogDPObject )
             {
+                // Check for an existing datapilot output.
+                ScViewData* pViewData = GetViewData();
+                ScDPObject* pObj = GetViewData()->GetDocument()->GetDPAtCursor(
+                    pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-                pResult = new ScDPLayoutDlg( pB, pCW, pParent, *pDialogDPObject );
+                pResult = new ScDPLayoutDlg( pB, pCW, pParent, *pDialogDPObject, pObj == NULL);
             }
         }
         break;

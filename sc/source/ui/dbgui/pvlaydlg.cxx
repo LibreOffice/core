@@ -105,7 +105,7 @@ PointerStyle lclGetPointerForField( ScDPFieldType eType )
 //----------------------------------------------------------------------------
 
 ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                    const ScDPObject& rDPObject )
+                                    const ScDPObject& rDPObject, bool bNewOutput )
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_PIVOT_LAYOUT ),
         aFlLayout       ( this, ScResId( FL_LAYOUT ) ),
         aFtPage         ( this, ScResId( FT_PAGE ) ),
@@ -165,7 +165,7 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
     xDlgDPObject->FillLabelData( thePivotData );
 
-    Init();
+    Init(bNewOutput);
     FreeResource();
 }
 
@@ -200,7 +200,7 @@ ScDPFieldWindow& ScDPLayoutDlg::GetFieldWindow( ScDPFieldType eType )
     return aWndSelect;
 }
 
-void __EXPORT ScDPLayoutDlg::Init()
+void __EXPORT ScDPLayoutDlg::Init(bool bNewOutput)
 {
     DBG_ASSERT( pViewData && pDoc,
                 "Ctor-Initialisierung fehlgeschlagen!" );
@@ -301,19 +301,31 @@ void __EXPORT ScDPLayoutDlg::Init()
         }
     }
 
-    if ( thePivotData.nTab != MAXTAB+1 )
+    if (bNewOutput)
     {
-        String aStr;
-        ScAddress( thePivotData.nCol,
-                   thePivotData.nRow,
-                   thePivotData.nTab ).Format( aStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
-        aEdOutPos.SetText( aStr );
-        EdModifyHdl(0);
+        // Output to a new sheet by default for a brand-new output.
+        aLbOutPos.SelectEntryPos(1);
+        aEdOutPos.Disable();
+        aRbOutPos.Disable();
     }
     else
     {
-        aLbOutPos.SelectEntryPos( aLbOutPos.GetEntryCount()-1 );
-        SelAreaHdl(NULL);
+        // Modifying an existing dp output.
+
+        if ( thePivotData.nTab != MAXTAB+1 )
+        {
+            String aStr;
+            ScAddress( thePivotData.nCol,
+                       thePivotData.nRow,
+                       thePivotData.nTab ).Format( aStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
+            aEdOutPos.SetText( aStr );
+            EdModifyHdl(0);
+        }
+        else
+        {
+            aLbOutPos.SelectEntryPos( aLbOutPos.GetEntryCount()-1 );
+            SelAreaHdl(NULL);
+        }
     }
 
     aBtnIgnEmptyRows.Check( thePivotData.bIgnoreEmptyRows );

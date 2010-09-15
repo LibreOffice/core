@@ -87,7 +87,8 @@ public:
                                 SfxBindings* pB,
                                 SfxChildWindow* pCW,
                                 Window* pParent,
-                                const ScDPObject& rDPObject );
+                                const ScDPObject& rDPObject,
+                                bool bNewOutput );
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
@@ -189,7 +190,7 @@ private:
 
 private:
     ScDPFieldWindow&        GetFieldWindow  ( ScDPFieldType eType );
-    void                    Init            ();
+    void                    Init            (bool bNewOutput);
     void                    InitWndSelect   ( const ::std::vector<ScDPLabelDataRef>& rLabels );
     void                    InitWnd         ( PivotField* pArr, long nCount, ScDPFieldType eType );
     void                    InitFocus       ();
