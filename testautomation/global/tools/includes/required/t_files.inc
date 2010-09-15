@@ -554,15 +554,54 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
+function hFileGetLocalPath( sSourcePath as string ) as string
+
+    ' Isolate filename from path, prepend local work directory and return new file path
+    hFileGetLocalPath() = hGetWorkFile( hSplitString( sSourcePath, getPathSeparator, 0 ) )
+    
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hFileListCopyLocal( lsSourceList() as string ) as boolean
+
+    ' Copy a list of files from testautomation to the local work directory
+
+    const CFN = "global::tools::includes::required::t_files.inc:hFileListCopyLocal(): "
+    dim iCurrentPath as integer
+    dim cTargetPath as string
+    dim cSourcePath as string
+
+    hFileListCopyLocal() = true
+
+    for iCurrentPath = 1 to listcount( lsSourceList() )
+
+        cSourcePath = lsSourceList( iCurrentPath )
+        cTargetPath = hFileGetLocalPath( cSourcePath )
+
+        FileCopy( cSourcePath, cTargetPath )
+
+        ' If any one copy operation fails we
+        if ( not FileExists( cTargetPath ) ) then
+            hFileListCopyLocal() = false
+            warnlog( CFN & "File was not copied: " & cSourcePath )
+        endif
+
+    next iCurrentPath
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
 function hFileOpenLocally( byVal sSourcePath as string ) as boolean
 
     ' Issue #i112208# - implement a function that copies a file from testautomation
-    ' into the local work directory to avoid that the document gets opened
-    ' in read-only mode. See details of the implementation in the issue
-    ' description.
+    ' into the local work directory and opens it from there to avoid that the
+    ' document gets opened in read-only mode. See details of the implementation
+    ' in the issue description.
 
     ' Parameters
-    ' 1) Path as string, URLs are untested
+    ' 1) Path as string, URLs are untested.
     ' 2) Separator, usually "getPathSeparator"
     ' 3) Item number, 0 = last item which usually is the file name from a path.
     '    Begin counting with 1, while the function internally accesses item 0
@@ -571,7 +610,6 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     const CFN = "global::tools::includes::required::t_files.inc:hFileOpenLocally(): "
 
     dim sTargetPath as string
-    dim sTargetFile as string
 
     ' If the source file does not exist we quit
     if ( not FileExists( sSourcePath ) ) then
@@ -581,8 +619,7 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     endif
 
     ' Find out what the name of the target file is going to be
-    sTargetFile = hSplitString( sSourcePath, getPathSeparator, 0 ) ' The file
-    sTargetPath = hGetWorkFile( sTargetFile ) ' The path + file
+    sTargetPath = hFileGetLocalPath( sSourcePath ) ' The path + file
 
     ' Copy the file from anywhere to the local user directory if it does not 
     ' exist. This behavior was discussed on IRC
@@ -595,6 +632,14 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
             printlog( CFN & "To..: " & sTargetPath )
         endif
         FileCopy( sSourcePath, sTargetPath )
+    endif
+
+    ' Verify that the file has been created. return an empty string and warn
+    if ( not FileExists( sTargetPath ) ) then
+        warnlog( CFN & "File was not copied: " & sTargetFile )
+        hFileOpenLocally() = false
+        gLastWorkFile = ""
+        exit function
     endif
 
     ' This is a hook that allows to access the filename under which the file
