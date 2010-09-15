@@ -264,6 +264,13 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ALIGN_ANY_VCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_BOTTOM );
 
+    rBindings.Invalidate( SID_NUMBER_CURRENCY );
+    rBindings.Invalidate( SID_NUMBER_SCIENTIFIC );
+    rBindings.Invalidate( SID_NUMBER_DATE );
+    rBindings.Invalidate( SID_NUMBER_CURRENCY );
+    rBindings.Invalidate( SID_NUMBER_PERCENT );
+    rBindings.Invalidate( SID_NUMBER_TIME );
+
 //  rBindings.Invalidate( SID_RANGE_VALUE );
 //  rBindings.Invalidate( SID_RANGE_FORMULA );
 }

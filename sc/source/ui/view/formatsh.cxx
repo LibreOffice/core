@@ -55,6 +55,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
@@ -925,6 +926,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
+    SfxBindings& rBindings          = pTabViewShell->GetViewFrame()->GetBindings();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
@@ -957,6 +959,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         }
     }
 
+    short nType = GetCurrentNumberFormatType();
+    SfxItemSet aSet( GetPool(), nSlot, nSlot );
     switch ( nSlot )
     {
         case SID_NUMBER_TWODEC:
@@ -964,23 +968,48 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_SCIENTIFIC:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
+            if ((nType & NUMBERFORMAT_SCIENTIFIC))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_SCIENTIFIC)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_DATE:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
+            if ((nType & NUMBERFORMAT_DATE))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_DATE)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_TIME:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
+            if ((nType & NUMBERFORMAT_TIME))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_TIME)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_CURRENCY:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
+            if ((nType & NUMBERFORMAT_CURRENCY))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_CURRENCY)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_PERCENT:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
+            if ((nType & NUMBERFORMAT_PERCENT))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_PERCENT)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_STANDARD:
@@ -1986,9 +2015,8 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-
-    // ScViewData* pViewData   = GetViewData();
-    ScDocument* pDoc        = pViewData->GetDocument();
+    ScDocument* pDoc                = pViewData->GetDocument();
+    short nType                     = GetCurrentNumberFormatType();
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -2015,7 +2043,21 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     rSet.Put( SfxStringItem( nWhich, aFormatCode ) );
                 }
                 break;
-
+            case SID_NUMBER_SCIENTIFIC:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_SCIENTIFIC)) );
+                break;
+            case SID_NUMBER_DATE:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_DATE)) );
+                break;
+            case SID_NUMBER_CURRENCY:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_CURRENCY)) );
+                break;
+            case SID_NUMBER_PERCENT:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_PERCENT)) );
+                break;
+            case SID_NUMBER_TIME:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_TIME)) );
+                break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -2166,3 +2208,67 @@ void ScFormatShell::StateFormatPaintbrush( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, pViewData->GetView()->HasPaintBrush() ) );
 }
 
+short ScFormatShell::GetCurrentNumberFormatType()
+{
+    short nType = NUMBERFORMAT_ALL;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScMarkData aMark(GetViewData()->GetMarkData());
+    const SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    if (!pFormatter)
+        return nType;
+
+    // TODO: Find out how to get a selected table range in case multiple tables
+    // are selected.  Currently we only check for the current active table.
+
+    if ( aMark.IsMarked() || aMark.IsMultiMarked() )
+    {
+        aMark.MarkToMulti();
+        ScRange aRange;
+        aMark.GetMultiMarkArea(aRange);
+
+        const ScMarkArray* pArray = aMark.GetArray();
+        if (!pArray)
+            return nType;
+
+        short nComboType = NUMBERFORMAT_ALL;
+        bool bFirstItem = true;
+        for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
+        {
+            const ScMarkArray& rColArray = pArray[nCol];
+            if (!rColArray.HasMarks())
+                continue;
+
+            SCROW nRow1, nRow2;
+            ScMarkArrayIter aMarkIter(&rColArray);
+            while (aMarkIter.Next(nRow1, nRow2))
+            {
+                ScRange aColRange(nCol, nRow1, aRange.aStart.Tab());
+                aColRange.aEnd.SetRow(nRow2);
+                sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aColRange);
+                const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
+                if (!pEntry)
+                    return 0;
+
+                short nThisType = pEntry->GetType();
+                if (bFirstItem)
+                {
+                    bFirstItem = false;
+                    nComboType = nThisType;
+                }
+                else if (nComboType != nThisType)
+                    // mixed number format type.
+                    return NUMBERFORMAT_ALL;
+            }
+        }
+        nType = nComboType;
+    }
+    else
+    {
+        sal_uInt32 nNumFmt;
+        pDoc->GetNumberFormat( pViewData->GetCurX(), pViewData->GetCurY(),
+                               pViewData->GetTabNo(), nNumFmt );
+        const SvNumberformat* pEntry = pFormatter->GetEntry( nNumFmt );
+        nType = pEntry ? pEntry->GetType() : 0;
+    }
+    return nType;
+}

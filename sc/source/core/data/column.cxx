@@ -354,6 +354,22 @@ const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRo
     return pMaxPattern;
 }
 
+sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
+{
+    SCROW nPatStartRow, nPatEndRow;
+    const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nPatStartRow, nPatEndRow, nStartRow);
+    sal_uInt32 nFormat = pPattern->GetNumberFormat(pDocument->GetFormatTable());
+    while (nEndRow > nPatEndRow)
+    {
+        nStartRow = nPatEndRow + 1;
+        pPattern = pAttrArray->GetPatternRange(nPatStartRow, nPatEndRow, nStartRow);
+        sal_uInt32 nTmpFormat = pPattern->GetNumberFormat(pDocument->GetFormatTable());
+        if (nFormat != nTmpFormat)
+            return 0;
+    }
+    return nFormat;
+}
+
 
 ULONG ScColumn::GetNumberFormat( SCROW nRow ) const
 {

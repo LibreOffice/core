@@ -794,6 +794,7 @@ public:
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, ULONG nFormat );
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      sal_uInt32& rFormat );
+    sal_uInt32      GetNumberFormat( const ScRange& rRange ) const;
     SC_DLLPUBLIC sal_uInt32     GetNumberFormat( const ScAddress& ) const;
                     /** If no number format attribute is set and the cell
                         pointer passed is of type formula cell, the calculated

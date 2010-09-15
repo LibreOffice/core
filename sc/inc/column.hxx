@@ -301,6 +301,7 @@ public:
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
     ULONG       GetNumberFormat( SCROW nRow ) const;
+    sal_uInt32  GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const;
 
     void        MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, BOOL bDeep ) const;
     void        MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const;

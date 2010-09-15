@@ -2723,6 +2723,32 @@ void ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
     rFormat = 0;
 }
 
+sal_uInt32 ScDocument::GetNumberFormat( const ScRange& rRange ) const
+{
+    SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
+    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+
+    if (!ValidTab(nTab1) || !ValidTab(nTab2) || !pTab[nTab1] || !pTab[nTab2])
+        return 0;
+
+    sal_uInt32 nFormat = 0;
+    bool bFirstItem = true;
+    for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            sal_uInt32 nThisFormat = pTab[nTab]->GetNumberFormat(nCol, nRow1, nRow2);
+            if (bFirstItem)
+            {
+                nFormat = nThisFormat;
+                bFirstItem = false;
+            }
+            else if (nThisFormat != nFormat)
+                return 0;
+        }
+
+    return nFormat;
+}
 
 sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
 {

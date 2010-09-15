@@ -522,6 +522,7 @@ public:
                                         0;
                                 }
     ULONG                   GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
+    sal_uInt32              GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
     void                    MergeSelectionPattern( ScMergePatternState& rState,
                                                 const ScMarkData& rMark, BOOL bDeep ) const;
     void                    MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,

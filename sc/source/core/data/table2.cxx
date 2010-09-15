@@ -1329,6 +1329,14 @@ ULONG ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
         return 0;
 }
 
+sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
+{
+    if (!ValidCol(nCol) || !ValidRow(nStartRow) || !ValidRow(nEndRow))
+        return 0;
+
+    return aCol[nCol].GetNumberFormat(nStartRow, nEndRow);
+}
+
 
 const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
 {
