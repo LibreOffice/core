@@ -1818,6 +1818,7 @@ namespace cppcanvas
                                 char *env;
                                 if (env = getenv ("EMF_PLUS_LIMIT")) {
                                     limit = atoi (env);
+                                    EMFP_DEBUG (printf ("EMF+ records limit: %d\n", limit));
                                 }
                             }
                             EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %d\n", pAct->GetDataSize ()));

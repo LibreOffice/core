@@ -659,11 +659,9 @@ namespace cppcanvas
             Graphic graphic;
 
 
-            void Read (SvStream &s)
+            void Read (SvMemoryStream &s)
             {
                 sal_uInt32 header, unknown;
-
-                EMFP_DEBUG (dumpWords(s, 16));
 
                 s >> header >> type;
 
@@ -679,6 +677,24 @@ namespace cppcanvas
                         EMFP_DEBUG (printf ("EMF+\tbitmap width: %d height: %d\n", graphic.GetBitmap ().GetSizePixel ().Width (), graphic.GetBitmap ().GetSizePixel ().Height ()));
                     }
 
+                } else if (type == 2) {
+                    sal_Int32 mfType, mfSize;
+
+                    s >> mfType >> mfSize;
+                    EMFP_DEBUG (printf ("EMF+\tmetafile type: %d dataSize: %d\n", mfType, mfSize));
+
+                    GraphicFilter filter;
+                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), mfSize, STREAM_READ);
+
+                    filter.ImportGraphic (graphic, String (), mfStream);
+
+                    // debug code - write the stream to debug file /tmp/emf-stream.emf
+                    EMFP_DEBUG(mfStream.Seek(0);
+                               SvFileStream file( UniString::CreateFromAscii( "/tmp/emf-embedded-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+
+                               mfStream >> file;
+                               file.Flush();
+                               file.Close());
                 }
             }
         };
@@ -1067,7 +1083,7 @@ namespace cppcanvas
                         mMFlags = flags;
                         mMStream.Seek(0);
                     }
-                    EMFP_DEBUG (dumpWords(rMF, 16));
+
                     // 1st 4 bytes are unknown
                     mMStream.Write (((const char *)rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
                     EMFP_DEBUG (printf ("EMF+ read next object part size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
