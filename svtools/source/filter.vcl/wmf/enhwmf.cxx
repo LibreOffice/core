@@ -158,6 +158,8 @@
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
 
+#define EMFP_DEBUG(x)
+//#define EMFP_DEBUG(x) x
 
 //-----------------------------------------------------------------------------------
 
@@ -229,6 +231,110 @@ static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt3
     return bOk;
 }
 
+EMFP_DEBUG(void dumpWords( SvStream& s, int i )
+{
+    sal_uInt32 pos = s.Tell();
+    INT16 data;
+    for( ; i > 0; i -- ) {
+        s >> data;
+        EMFP_DEBUG(printf ("\t\t\tdata: %04hx\n", data));
+    }
+    s.Seek (pos);
+});
+
+void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
+{
+    if (!bEMFPlus) {
+        pOut->PassEMFPlusHeaderInfo();
+
+        // debug code - write the stream to debug file /tmp/emf-stream.emf
+        EMFP_DEBUG(int pos = pWMF->Tell();
+        pWMF->Seek(0);
+        SvFileStream file( UniString::CreateFromAscii( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+
+        *pWMF >> file;
+        file.Flush();
+        file.Close();
+
+        pWMF->Seek( pos );)
+    }
+    bEMFPlus = true;
+
+    void *buffer = malloc( length );
+
+    int count = 0, next, pos = pWMF->Tell();
+    pOut->PassEMFPlus( buffer, pWMF->Read( buffer, length ) );
+    pWMF->Seek( pos );
+
+    bHaveDC = false;
+
+    length -= 4;
+
+    while (length > 0) {
+        UINT16 type, flags;
+        UINT32 size, dataSize;
+        sal_uInt32 next;
+
+        *pWMF >> type >> flags >> size >> dataSize;
+
+        EMFP_DEBUG(printf ("\t\tEMF+ record type: %d\n", type));
+
+        // GetDC
+        if( type == 16388 ) {
+            bHaveDC = true;
+            EMFP_DEBUG(printf ("\t\tEMF+ lock DC (device context)\n", type));
+        }
+
+        next = pWMF->Tell() + ( size - 12 );
+
+        length -= size;
+
+        pWMF->Seek( next );
+    }
+
+    free( buffer );
+}
+
+void EnhWMFReader::ReadGDIComment()
+{
+    sal_uInt32 type;
+
+    *pWMF >> type;
+
+    switch( type ) {
+    case 2: {
+        sal_Int32 x, y, r, b;
+
+        EMFP_DEBUG(printf ("\t\tBEGINGROUP\n"));
+
+        *pWMF >> x >> y >> r >> b;
+        EMFP_DEBUG(printf ("\t\tbounding rectangle: %d,%d x %d,%d\n", x, y, r, b));
+
+        sal_uInt32 l;
+
+        *pWMF >> l;
+        EMFP_DEBUG(printf ("\t\tdescription length: %d\n", l));
+
+        break;
+    }
+    case 3: {
+        sal_uInt32 x, y, w, h;
+
+        EMFP_DEBUG(printf ("\t\tENDGROUP\n"));
+        break;
+    }
+    case 0x40000004: {
+        sal_uInt32 x, y, w, h;
+
+        EMFP_DEBUG(printf ("\t\tMULTIFORMATS\n"));
+        break;
+    }
+    default:
+        EMFP_DEBUG(printf ("\t\tunknown GDIComment\n"));
+        EMFP_DEBUG(dumpWords (*pWMF, 16));
+    }
+}
+
 BOOL EnhWMFReader::ReadEnhWMF()
 {
     sal_uInt32  nStretchBltMode = 0;
@@ -239,6 +345,14 @@ BOOL EnhWMFReader::ReadEnhWMF()
     sal_Int16   nX16, nY16;
 
     sal_Bool    bFlag, bStatus = ReadHeader();
+    sal_Bool    bHaveDC = false;
+
+#ifdef UNX
+    static sal_Bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
+#else
+    // TODO: make it possible to disable emf+ on windows
+    static sal_Bool bEnableEMFPlus = sal_True;
+#endif
 
     while( bStatus && nRecordCount-- )
     {
@@ -262,6 +376,33 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 pOut->ResolveBitmapActions( aBmpSaveList );
 
         bFlag = sal_False;
+
+        EMFP_DEBUG(printf ("0x%04x-0x%04x record type: %d size: %d\n", nNextPos - nRecSize, nNextPos, nRecType, nRecSize));
+
+        if( bEnableEMFPlus && nRecType == EMR_GDICOMMENT ) {
+            sal_uInt32 length;
+
+            *pWMF >> length;
+
+            EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", length));
+
+            if( length >= 4 ) {
+                UINT32 id;
+
+                *pWMF >> id;
+
+                EMFP_DEBUG(printf ("\t\tbegin %c%c%c%c id: 0x%x\n", (char)(id & 0xff), (char)((id & 0xff00) >> 8), (char)((id & 0xff0000) >> 16), (char)((id & 0xff000000) >> 24), id));
+
+                // EMF+ comment (fixme: BE?)
+                if( id == 0x2B464D45 && nRecSize >= 12 )
+                    ReadEMFPlusComment( length, bHaveDC );
+                // GDIC comment, doesn't do anything useful yet => enabled only for debug
+                else if( id == 0x43494447 && nRecSize >= 12 )
+                    EMFP_DEBUG(ReadGDIComment());
+                else
+                    EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n", id));
+            }
+        } else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
 
         switch( nRecType )
         {

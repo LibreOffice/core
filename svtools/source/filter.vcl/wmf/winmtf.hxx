@@ -672,6 +672,9 @@ class WinMtfOutput
         void                UpdateClipRegion();
         void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
 
+        void                PassEMFPlus( void* pBuffer, UINT32 nLength );
+        void                PassEMFPlusHeaderInfo();
+
                             WinMtfOutput( GDIMetaFile& rGDIMetaFile );
         virtual             ~WinMtfOutput();
 };
@@ -710,6 +713,8 @@ class EnhWMFReader : public WinMtf
 {
     sal_Bool        bRecordPath;
     sal_Int32       nRecordCount;
+    BOOL            bEMFPlus;
+
 
     BOOL            ReadHeader();
     Rectangle       ReadRectangle( INT32, INT32, INT32, INT32 );            // Liesst und konvertiert ein Rechteck
@@ -717,10 +722,12 @@ class EnhWMFReader : public WinMtf
 
 public:
                     EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
-                                    : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ), bRecordPath( sal_False ) {};
+                                    : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ), bRecordPath( sal_False ), bEMFPlus (FALSE) {};
                     ~EnhWMFReader();
 
     BOOL            ReadEnhWMF();
+    void            ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC);
+    void            ReadGDIComment();
 };
 
 //============================ WMFReader ==================================

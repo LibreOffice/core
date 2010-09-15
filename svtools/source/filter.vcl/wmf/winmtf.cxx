@@ -38,6 +38,9 @@
 
 #define WIN_MTF_MAX_CLIP_DEPTH 16
 
+#define EMFP_DEBUG(x)
+//#define EMFP_DEBUG(x) x
+
 void WinMtfClipPath::ImpUpdateType()
 {
     if ( !aPolyPoly.Count() )
@@ -2201,3 +2204,36 @@ void WinMtfOutput::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
    rGDIMetaFile.Play( *mpGDIMetaFile, 0xFFFFFFFF );
 }
 
+void WinMtfOutput::PassEMFPlusHeaderInfo()
+{
+    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
+
+    SvMemoryStream mem;
+    sal_Int32 nLeft, nRight, nTop, nBottom;
+
+    nLeft = mrclFrame.Left();
+    nTop = mrclFrame.Top();
+    nRight = mrclFrame.Right();
+    nBottom = mrclFrame.Bottom();
+
+    // emf header info
+    mem << nLeft << nTop << nRight << nBottom;
+    mem << mnPixX << mnPixY << mnMillX << mnMillY;
+
+    float one, zero;
+
+    one = 1;
+    zero = 0;
+
+    // add transformation matrix to be used in vcl's metaact.cxx for
+    // rotate and scale operations
+    mem << one << zero << zero << one << zero << zero;
+
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const BYTE*) mem.GetData(), mem.GetEndOfData() ) );
+}
+
+void WinMtfOutput::PassEMFPlus( void* pBuffer, UINT32 nLength )
+{
+    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %d\n", nLength));
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const BYTE*>(pBuffer), nLength ) );
+}
