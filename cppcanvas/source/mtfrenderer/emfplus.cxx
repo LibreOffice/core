@@ -29,6 +29,7 @@
 #include <vcl/metaact.hxx>
 #include <svtools/filter.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/tools/tools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -44,7 +45,6 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
 #include <bitmapaction.hxx>
 #include <implrenderer.hxx>
@@ -126,7 +126,7 @@ namespace cppcanvas
         public:
             EMFPPath (sal_Int32 _nPoints, bool bLines = false)
             {
-                if( _nPoints<0 || _nPoints>SAL_MAX_INT32/(2*sizeof(float)) )
+                if( _nPoints<0 || sal_uInt32(_nPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                     _nPoints = SAL_MAX_INT32/(2*sizeof(float));
                 nPoints = _nPoints;
                 pPoints = new float [nPoints*2];
@@ -163,8 +163,6 @@ namespace cppcanvas
 
                 if (pPointTypes)
                     for (int i = 0; i < nPoints; i ++) {
-                        UINT8 pathType;
-
                         s >> pPointTypes [i];
                         EMFP_DEBUG (printf ("EMF+\tpoint type: %x\n", pPointTypes [i]));
                     }
@@ -179,7 +177,6 @@ namespace cppcanvas
             ::basegfx::B2DPolyPolygon& GetPolygon (ImplRenderer& rR, bool bMapIt = true)
             {
                 ::basegfx::B2DPolygon polygon;
-                sal_Int32 points = nPoints;
 
                 aPolygon.clear ();
 
@@ -270,7 +267,7 @@ namespace cppcanvas
                 EMFP_DEBUG (printf ("EMF+\theader: 0x%08x parts: %d\n", header, parts));
 
                 if (parts) {
-                    if( parts<0 || parts>SAL_MAX_INT32/sizeof(sal_Int32) )
+                    if( parts<0 || sal_uInt32(parts)>SAL_MAX_INT32/sizeof(sal_Int32) )
                         parts = SAL_MAX_INT32/sizeof(sal_Int32);
 
                     combineMode = new sal_Int32 [parts];
@@ -384,7 +381,7 @@ namespace cppcanvas
                         s >> surroundColorsNumber;
                         EMFP_DEBUG (printf ("EMF+\tsurround colors: %d\n", surroundColorsNumber));
 
-                        if( surroundColorsNumber<0 || surroundColorsNumber>SAL_MAX_INT32/sizeof(::Color) )
+                        if( surroundColorsNumber<0 || sal_uInt32(surroundColorsNumber)>SAL_MAX_INT32/sizeof(::Color) )
                             surroundColorsNumber = SAL_MAX_INT32/sizeof(::Color);
 
                         surroundColors = new ::Color [surroundColorsNumber];
@@ -436,7 +433,7 @@ namespace cppcanvas
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
-                            if( blendPoints<0 || blendPoints>SAL_MAX_INT32/(2*sizeof(float)) )
+                            if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
@@ -453,9 +450,9 @@ namespace cppcanvas
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
-                            if( colorblendPoints<0 || colorblendPoints>SAL_MAX_INT32/sizeof(float) )
+                            if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
-                            if( colorblendPoints>SAL_MAX_INT32/sizeof(::Color) )
+                            if( sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(::Color) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(::Color);
                             colorblendPositions = new float [colorblendPoints];
                             colorblendColors = new ::Color [colorblendPoints];
@@ -469,9 +466,9 @@ namespace cppcanvas
                                 EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, color));
                             }
                         }
-                        } else
+                        } else {
                             EMFP_DEBUG (dumpWords (s, 1024));
-
+            }
                         break;
                     }
                 // linear gradient
@@ -511,7 +508,7 @@ namespace cppcanvas
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
-                            if( blendPoints<0 || blendPoints>SAL_MAX_INT32/(2*sizeof(float)) )
+                            if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
@@ -528,10 +525,10 @@ namespace cppcanvas
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
                             EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
-                            if( colorblendPoints<0 || colorblendPoints>SAL_MAX_INT32/sizeof(float) )
+                            if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
-                            if( colorblendPoints>SAL_MAX_INT32/sizeof(::Color) )
-                                colorblendPoints = SAL_MAX_INT32/sizeof(::Color);
+                            if( sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(::Color) )
+                                colorblendPoints = sal_uInt32(SAL_MAX_INT32)/sizeof(::Color);
                             colorblendPositions = new float [colorblendPoints];
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
@@ -584,7 +581,7 @@ namespace cppcanvas
                 rStrokeAttributes.StrokeWidth = (rState.mapModeTransform * rR.MapSize (width, 0)).getX ();
             }
 
-            void Read (SvStream& s, ImplRenderer& rR, sal_Int32 nHDPI, sal_Int32 nVDPI)
+            void Read (SvStream& s, ImplRenderer& rR, sal_Int32, sal_Int32 )
             {
                 UINT32 header, unknown, penFlags, unknown2;
                 int i;
@@ -633,7 +630,7 @@ namespace cppcanvas
 
                 if (penFlags & 256) {
                     s >> dashPatternLen;
-                    if( dashPatternLen<0 || dashPatternLen>SAL_MAX_INT32/sizeof(float) )
+                    if( dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32/sizeof(float) )
                         dashPatternLen = SAL_MAX_INT32/sizeof(float);
                     dashPattern = new float [dashPatternLen];
                     for (i = 0; i < dashPatternLen; i++)
@@ -648,7 +645,7 @@ namespace cppcanvas
 
                 if (penFlags & 1024) {
                     s >> compoundArrayLen;
-                    if( compoundArrayLen<0 || compoundArrayLen>SAL_MAX_INT32/sizeof(float) )
+                    if( compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32/sizeof(float) )
                         compoundArrayLen = SAL_MAX_INT32/sizeof(float);
                     compoundArray = new float [compoundArrayLen];
                     for (i = 0; i < compoundArrayLen; i++)
@@ -754,7 +751,7 @@ namespace cppcanvas
         if( length > 0 && length < 0x4000 ) {
             sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
 
-            for( int i = 0; i < length; i++ )
+            for( sal_uInt32 i = 0; i < length; i++ )
             s >> chars[ i ];
 
             family = ::rtl::OUString( chars, length );
@@ -914,10 +911,6 @@ namespace cppcanvas
                 ::basegfx::B2DHomMatrix aWorldTransformation;
                 ::basegfx::B2DHomMatrix aBaseTransformation;
                 rendering::Texture aTexture;
-                double nRotation( 0.0 );
-                const ::basegfx::B2DRectangle aBounds( ::basegfx::tools::getRange( localPolygon ) );
-                const double nScale( ::basegfx::pruneScaleValue( fabs( aBounds.getHeight()*sin(nRotation) ) +
-                                                                 fabs( aBounds.getWidth()*cos(nRotation) )));
 
                 aWorldTransformation.set (0, 0, aWorldTransform.eM11);
                 aWorldTransformation.set (0, 1, aWorldTransform.eM21);
@@ -965,10 +958,9 @@ namespace cppcanvas
                 aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
                 aTexture.Alpha = 1.0;
 
-                uno::Reference< rendering::XParametricPolyPolygon2DFactory > xFactory(
-                    rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
+        basegfx::ODFGradientInfo aGradInfo;
+        rtl::OUString aGradientService;
 
-                if( xFactory.is() ) {
                     const uno::Sequence< double > aStartColor(
                         ::vcl::unotools::colorToDoubleSequence( brush->solidColor,
                                                                 rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
@@ -1027,25 +1019,56 @@ namespace cppcanvas
                     }
 
                     EMFP_DEBUG (printf ("EMF+\t\tset gradient\n"));
-                    if (brush->type == 4)
-                        aTexture.Gradient = xFactory->createLinearHorizontalGradient( aColors,
-                                                                                      aStops );
-                    else {
-                        geometry::RealRectangle2D aBoundsRectangle (0, 0, 1, 1);
-                        aTexture.Gradient = xFactory->createEllipticalGradient( aColors,
-                                                                                aStops,
-                                                                                aBoundsRectangle);
+           basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
+                    if (brush->type == 4) {
+           aGradientService = rtl::OUString::createFromAscii("LinearGradient");
+           basegfx::tools::createLinearODFGradientInfo( aGradInfo,
+                                    aBoundsRectangle,
+                                    aStops.getLength(),
+                                    0,
+                                    0 );
+
+                    } else {
+            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
+            basegfx::tools::createEllipticalODFGradientInfo( aGradInfo,
+                                     aBoundsRectangle,
+                                     ::basegfx::B2DVector( 0, 0 ),
+                                     aStops.getLength(),
+                                     0,
+                                     0 );
                     }
-                }
 
-                ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
-                                                                aTextureTransformation );
+            uno::Reference< lang::XMultiServiceFactory > xFactory(
+            rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
 
-                pPolyAction =
-                    ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
-                                                                                             rParms.mrCanvas,
-                                                                                             rState,
-                                                                                             aTexture ) );
+            if( xFactory.is() ) {
+            uno::Sequence<uno::Any> args( 3 );
+            beans::PropertyValue aProp;
+            aProp.Name = rtl::OUString::createFromAscii( "Colors" );
+            aProp.Value <<= aColors;
+            args[0] <<= aProp;
+            aProp.Name = rtl::OUString::createFromAscii( "Stops" );
+            aProp.Value <<= aStops;
+            args[1] <<= aProp;
+            aProp.Name = rtl::OUString::createFromAscii( "AspectRatio" );
+            aProp.Value <<= static_cast<sal_Int32>(1);
+            args[2] <<= aProp;
+
+            aTexture.Gradient.set(
+                xFactory->createInstanceWithArguments( aGradientService,
+                                   args ),
+                uno::UNO_QUERY);
+            }
+
+            ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
+                                    aTextureTransformation );
+
+            if( aTexture.Gradient.is() )
+            pPolyAction =
+                ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
+                                                     rParms.mrCanvas,
+                                                     rState,
+                                                     aTexture ) );
                 }
             }
 
@@ -1064,7 +1087,7 @@ namespace cppcanvas
 
         void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, UINT16 flags)
         {
-            UINT32 objectLen;
+            EMFP_DEBUG (UINT32 objectLen);
             sal_uInt32 index;
 
             EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
@@ -1155,7 +1178,7 @@ namespace cppcanvas
 
                 EMFP_DEBUG (printf ("EMF+ record size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
 
-                if (type == EmfPlusRecordTypeObject && (mbMultipart && flags & 0x7fff == mMFlags & 0x7fff || flags & 0x8000)) {
+                if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000))) {
                     if (!mbMultipart) {
                         mbMultipart = true;
                         mMFlags = flags;
@@ -1254,12 +1277,12 @@ namespace cppcanvas
                     }
                 case EmfPlusRecordTypeFillPolygon:
                     {
-                        sal_uInt8 index = flags & 0xff;
+                        EMFP_DEBUG (sal_uInt8 index = flags & 0xff);
                         sal_uInt32 brushIndexOrColor;
-                        sal_Int32 brushIndex;
+                        EMFP_DEBUG (sal_Int32 brushIndex);
                         sal_Int32 points;
-                        UINT32 color;
-                        USHORT transparency = 0;
+                        EMFP_DEBUG (UINT32 color);
+                        EMFP_DEBUG (USHORT transparency = 0);
 
                         rMF >> brushIndexOrColor;
                         rMF >> points;
@@ -1403,8 +1426,9 @@ namespace cppcanvas
 
                                     rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
                                 }
-                            } else
+                            } else {
                                 EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
+                }
                         }
                         break;
                     }
@@ -1484,8 +1508,9 @@ namespace cppcanvas
                     // reset clip
                     if (region.parts == 0 && region.initialState == EmfPlusRegionInitialStateInfinite) {
                         updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
-                    } else
+                    } else {
                         EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+            }
                     break;
                 }
             case EmfPlusRecordTypeDrawDriverString: {
@@ -1507,12 +1532,12 @@ namespace cppcanvas
             float *charsPosX = new float[glyphsCount];
             float *charsPosY = new float[glyphsCount];
 
-            for( int i=0; i<glyphsCount; i++) {
+            for( sal_uInt32 i=0; i<glyphsCount; i++) {
                 rMF >> chars[i];
                 EMFP_DEBUG (printf ("EMF+\tglyph[%d]: 0x%04x\n",
                 i, chars[i]));
             }
-            for( int i=0; i<glyphsCount; i++) {
+            for( sal_uInt32 i=0; i<glyphsCount; i++) {
                 rMF >> charsPosX[i] >> charsPosY[i];
                 EMFP_DEBUG (printf ("EMF+\tglyphPosition[%d]: %f, %f\n", i, charsPosX[i], charsPosY[i]));
             }
