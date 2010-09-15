@@ -53,6 +53,7 @@
 #include "rangelst.hxx"
 #include "chartarr.hxx"
 #include "chartlock.hxx"
+#include "compiler.hxx"
 #include "refupdat.hxx"
 #include "docoptio.hxx"
 #include "viewopti.hxx"
@@ -1858,6 +1859,12 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     *pDocOptions = rOpt;
 
     xPoolHelper->SetFormTableOpt(rOpt);
+
+    SetGrammar( rOpt.GetFormulaSyntax() );
+
+    // Update the separators.
+    ScCompiler::UpdateSeparatorsNative(
+        rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

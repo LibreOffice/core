@@ -49,6 +49,7 @@
 #define TP_LAYOUT           12
 #define TP_INPUT            13
 #define TP_CHANGES          14
+#define TP_FORMULA          15
 
 // TP_CALC:
 #define BTN_ITERATE         1
@@ -190,3 +191,16 @@
 #define CB_TEXTFMT      78
 #define CB_REPLWARN     79
 
+
+// TP_FORMULA
+#define FL_FORMULA_OPTIONS        80
+#define FT_FORMULA_SYNTAX         81
+#define LB_FORMULA_SYNTAX         82
+#define FL_FORMULA_SEPS           83
+#define FT_FORMULA_SEP_ARG        84
+#define ED_FORMULA_SEP_ARG        85
+#define FT_FORMULA_SEP_ARRAY_R    86
+#define ED_FORMULA_SEP_ARRAY_R    87
+#define FT_FORMULA_SEP_ARRAY_C    88
+#define ED_FORMULA_SEP_ARRAY_C    89
+#define BTN_FORMULA_SEP_RESET     90

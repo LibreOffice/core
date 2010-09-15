@@ -179,6 +179,105 @@ TabPage RID_SCPAGE_CALC
 /*                                                                        */
 /**************************************************************************/
 
+TabPage RID_SCPAGE_FORMULA
+{
+    HelpId = HID_SCPAGE_FORMULA ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    FixedLine FL_FORMULA_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Formula options";
+    };
+
+    FixedText FT_FORMULA_SYNTAX
+    {
+        Pos = MAP_APPFONT ( 21, 16 ) ;
+        Size = MAP_APPFONT ( 80, 8 ) ;
+        Text [ en-US ] = "Formula ~syntax" ;
+    };
+
+    ListBox LB_FORMULA_SYNTAX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 85, 14 ) ;
+        Size = MAP_APPFONT ( 60, 46 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Calc A1" ; Default ; > ;
+            < "Excel A1" ; Default ; > ;
+            < "Excel R1C1" ; Default ; > ;
+        };
+    };
+
+    FixedLine FL_FORMULA_SEPS
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Separators";
+    };
+
+    FixedText FT_FORMULA_SEP_ARG
+    {
+        Pos = MAP_APPFONT ( 21, 45 );
+        Size = MAP_APPFONT ( 40, 8 );
+        Text [ en-US ] = "~Function";
+    };
+
+    Edit ED_FORMULA_SEP_ARG
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 65, 43 );
+        Size = MAP_APPFONT ( 10, 12 );
+    };
+
+    FixedText FT_FORMULA_SEP_ARRAY_C
+    {
+        Pos = MAP_APPFONT ( 21, 63 );
+        Size = MAP_APPFONT ( 40, 8 );
+        Text [ en-US ] = "Array co~lumn";
+    };
+
+    Edit ED_FORMULA_SEP_ARRAY_C
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 65, 61 );
+        Size = MAP_APPFONT ( 10, 12 );
+    };
+
+    FixedText FT_FORMULA_SEP_ARRAY_R
+    {
+        Pos = MAP_APPFONT ( 21, 81 );
+        Size = MAP_APPFONT ( 40, 8 );
+        Text [ en-US ] = "Array ~row";
+    };
+
+    Edit ED_FORMULA_SEP_ARRAY_R
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 65, 79 );
+        Size = MAP_APPFONT ( 10, 12 );
+    };
+
+    PushButton BTN_FORMULA_SEP_RESET
+    {
+        Pos = MAP_APPFONT ( 21, 99 );
+        Size = MAP_APPFONT ( 40, 14 );
+        Text [ en-US ] = "Rese~t";
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
 TabPage RID_SCPAGE_USERLISTS
 {
     HelpId = HID_SCPAGE_USERLISTS ;

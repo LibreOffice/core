@@ -2109,6 +2109,13 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
                                                         pRet = (*ScTpCalcOptionsCreate)(pParent, rSet);
                                 }
                                 break;
+        case SID_SC_TP_FORMULA:
+        {
+            ::CreateTabPage ScTpFormulaOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_FORMULA);
+            if (ScTpFormulaOptionsCreate)
+                pRet = (*ScTpFormulaOptionsCreate)(pParent, rSet);
+        }
+        break;
         case SID_SC_TP_CHANGES:
                                 {           //CHINA001 pRet = ScRedlineOptionsTabPage::Create(pParent, rSet);
                                             ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );

@@ -34,6 +34,8 @@
 #include "scdllapi.h"
 #include "optutil.hxx"
 
+#include "formula/grammar.hxx"
+
 class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // Epsilon-Wert dazu
@@ -51,6 +53,11 @@ class SC_DLLPUBLIC ScDocOptions
     BOOL   bDoAutoSpell;            // Auto-Spelling
     BOOL   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
     BOOL   bFormulaRegexEnabled;    // regular expressions in formulas enabled
+    ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
+
+    ::rtl::OUString aFormulaSepArg;
+    ::rtl::OUString aFormulaSepArrayRow;
+    ::rtl::OUString aFormulaSepArrayCol;
 
 public:
                 ScDocOptions();
@@ -97,6 +104,20 @@ public:
 
     void    SetFormulaRegexEnabled( BOOL bVal ) { bFormulaRegexEnabled = bVal; }
     BOOL    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
+
+    void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
+    ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
+
+    void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
+    ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
+
+    void SetFormulaSepArrayRow(const ::rtl::OUString& rSep) { aFormulaSepArrayRow = rSep; }
+    ::rtl::OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
+
+    void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
+    ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
+
+    const LocaleDataWrapper& GetLocaleDataWrapper() const;
 };
 
 
@@ -117,6 +138,10 @@ inline void ScDocOptions::CopyTo(ScDocOptions& rOpt)
     rOpt.bDoAutoSpell           = bDoAutoSpell;
     rOpt.bLookUpColRowNames     = bLookUpColRowNames;
     rOpt.bFormulaRegexEnabled   = bFormulaRegexEnabled;
+    rOpt.eFormulaGrammar        = eFormulaGrammar;
+    rOpt.aFormulaSepArg         = aFormulaSepArg;
+    rOpt.aFormulaSepArrayRow    = aFormulaSepArrayRow;
+    rOpt.aFormulaSepArrayCol    = aFormulaSepArrayCol;
 }
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
@@ -136,6 +161,10 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
+    eFormulaGrammar     = rCpy.eFormulaGrammar;
+    aFormulaSepArg      = rCpy.aFormulaSepArg;
+    aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
+    aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
 
     return *this;
 }
@@ -158,6 +187,10 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
+            &&  rOpt.eFormulaGrammar        == eFormulaGrammar
+            &&  rOpt.aFormulaSepArg         == aFormulaSepArg
+            &&  rOpt.aFormulaSepArrayRow    == aFormulaSepArrayRow
+            &&  rOpt.aFormulaSepArrayCol    == aFormulaSepArrayCol
             );
 }
 
@@ -197,12 +230,15 @@ private:
 class ScDocCfg : public ScDocOptions
 {
     ScLinkConfigItem    aCalcItem;
+    ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
 
     DECL_LINK( CalcCommitHdl, void* );
+    DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
 
 public:

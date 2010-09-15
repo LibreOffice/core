@@ -1660,6 +1660,10 @@
 // Toggle sheet grid
 #define FID_TAB_TOGGLE_GRID         (SC_OOO_BUILD_START + 2)
 
+// Formula options page
+#define RID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 3)
+#define HID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 4)
+
 #endif
 
 
