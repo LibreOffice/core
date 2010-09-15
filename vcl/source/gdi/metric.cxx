@@ -53,6 +53,7 @@ ImplFontMetric::ImplFontMetric()
 
 inline void ImplFontMetric::AddReference()
 {
+    // TODO: disable refcounting on the default maps?
     ++mnRefCount;
 }
 
@@ -60,6 +61,7 @@ inline void ImplFontMetric::AddReference()
 
 inline void ImplFontMetric::DeReference()
 {
+    // TODO: disable refcounting on the default maps?
     if( --mnRefCount <= 0 )
         delete this;
 }
@@ -301,9 +303,9 @@ namespace
             int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
             CmapResult aDefaultCR( false, pRangeCodes, nCodesCount/2 );
             pDefaultUnicodeImplFontCharMap = new ImplFontCharMap( aDefaultCR );
-            pDefaultUnicodeImplFontCharMap->AddReference();
         }
 
+        pDefaultUnicodeImplFontCharMap->AddReference();
         return pDefaultUnicodeImplFontCharMap;
     }
 
@@ -315,9 +317,9 @@ namespace
             int nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
             CmapResult aDefaultCR( true, pRangeCodes, nCodesCount/2 );
             pDefaultSymbolImplFontCharMap = new ImplFontCharMap( aDefaultCR );
-            pDefaultSymbolImplFontCharMap->AddReference();
         }
 
+        pDefaultSymbolImplFontCharMap->AddReference();
         return pDefaultSymbolImplFontCharMap;
     }
 }
@@ -331,6 +333,7 @@ ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
 
 void ImplFontCharMap::AddReference( void ) const
 {
+    // TODO: disable refcounting on the default maps?
     ++mnRefCount;
 }
 
@@ -833,7 +836,9 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
 FontCharMap::FontCharMap()
 :   mpImpl( ImplFontCharMap::GetDefaultMap() )
-{}
+{
+    mpImpl->AddReference();
+}
 
 // -----------------------------------------------------------------------
 
@@ -861,17 +866,12 @@ int FontCharMap::CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const
 
 void FontCharMap::Reset( const ImplFontCharMap* pNewMap )
 {
+    mpImpl->DeReference();
     if( pNewMap == NULL )
-    {
-        mpImpl->DeReference();
         mpImpl = ImplFontCharMap::GetDefaultMap();
-    }
     else if( pNewMap != mpImpl )
-    {
-        mpImpl->DeReference();
         mpImpl = pNewMap;
-        mpImpl->AddReference();
-    }
+    mpImpl->AddReference();
 }
 
 // -----------------------------------------------------------------------
