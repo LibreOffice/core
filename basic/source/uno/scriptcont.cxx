@@ -315,20 +315,22 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         {
             setVBACompatibilityMode( sal_True );
 
-            Any aGlobs;
-            Sequence< Any > aArgs(1);
-            Reference<frame::XModel > xModel( mxOwnerDocument );
-            aArgs[ 0 ] <<= xModel;
-
-            BasicManager* pBasicMgr = getBasicManager();
-            if( pBasicMgr )
+            /*  Force creation of the VBA Globals object. Each application will
+                create an instance of its own implementation and store it in
+                its Basic manager. Implementations will do all necessary
+                additional initialization, such as registering the global
+                "This***Doc" UNO constant, starting the document events
+                processor etc.
+             */
+            try
             {
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-                pBasicMgr->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+                Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
             }
-            pBasicMgr = BasicManagerRepository::getApplicationBasicManager( sal_False );
-            if( pBasicMgr )
-                pBasicMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[0] );
+            catch( Exception& )
+            {
+            }
         }
 
         script::ModuleInfo aModInfo;
