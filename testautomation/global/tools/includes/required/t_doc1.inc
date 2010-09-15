@@ -252,9 +252,24 @@ function hCloseDocument()
         try
             Active.No
         catch
-            Active.Click( 202 )
         endcatch
     end if
+
+    if ( Active.exists() ) then
+        try
+            Active.click( 202 )
+        catch
+        endcatch
+    endif
+
+    if ( Active.exists() ) then
+        try
+            warnlog( "hCloseDocument: Unexpected dialog: " & Active.getText() )
+            Active.ok()
+        catch
+            Active.yes()
+        endcatch
+    endif
 
     '/// Wait for FileClose to complete'
     WaitSlot( 2000 )
