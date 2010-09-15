@@ -51,16 +51,16 @@ using namespace osl;
 namespace jfw
 {
 
-rtl::OString getElementUpdated()
+rtl::OString getElement(::rtl::OString const & docPath,
+                        xmlChar const * pathExpression, bool bThrowIfEmpty)
 {
     //Prepare the xml document and context
-    rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-    OSL_ASSERT(sSettingsPath.getLength() > 0);
-     jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
+    OSL_ASSERT(docPath.getLength() > 0);
+     jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
     if (doc == NULL)
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElementUpdated "
+            rtl::OString("[Java framework] Error in function getElement "
                          "(elements.cxx)"));
 
     jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
@@ -68,18 +68,40 @@ rtl::OString getElementUpdated()
         (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElementUpdated "
+            rtl::OString("[Java framework] Error in function getElement "
                          "(elements.cxx)"));
+
     CXPathObjectPtr pathObj;
-    pathObj = xmlXPathEvalExpression(
-        (xmlChar*)"/jf:javaSelection/jf:updated/text()", context);
+    pathObj = xmlXPathEvalExpression(pathExpression, context);
+    rtl::OString sValue;
     if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-        throw FrameworkException(
-            JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElementUpdated "
-                         "(elements.cxx)"));
-    rtl::OString sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
+    {
+        if (bThrowIfEmpty)
+            throw FrameworkException(
+                JFW_E_ERROR,
+                rtl::OString("[Java framework] Error in function getElement "
+                             "(elements.cxx)"));
+    }
+    else
+    {
+        sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
+    }
     return sValue;
+}
+
+rtl::OString getElementUpdated()
+{
+    return getElement(jfw::getVendorSettingsPath(),
+                      (xmlChar*)"/jf:javaSelection/jf:updated/text()", true);
+}
+
+// Use only in INSTALL mode !!!
+rtl::OString getElementModified()
+{
+    //The modified element is only written in INSTALL mode.
+    //That is NodeJava::m_layer = INSTALL
+    return getElement(jfw::getInstallSettingsPath(),
+                      (xmlChar*)"/jf:java/jf:modified/text()", false);
 }
 
 
@@ -579,6 +601,21 @@ void NodeJava::write() const
             xmlAddChild(jreLocationsNode, nodeCrLf);
         }
     }
+
+    if (INSTALL == m_layer)
+    {
+        //now write the current system time
+        ::TimeValue curTime = {0,0};
+        if (::osl_getSystemTime(& curTime))
+        {
+            rtl::OUString sSeconds =
+                rtl::OUString::valueOf((sal_Int64) curTime.Seconds);
+            xmlNewTextChild(
+                root,NULL, (xmlChar*) "modified", CXmlCharPtr(sSeconds));
+            xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
+            xmlAddChild(root, nodeCrLf);
+        }
+    }
     if (xmlSaveFormatFile(sSettingsPath.getStr(), docUser, 1) == -1)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
@@ -721,7 +758,7 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
         File::RC rc_stat = item.getFileStatus(stat);
         if (File::E_None == rc_stat)
         {
-            //ToDo we remove the file and create it shortly after. This
+            // This
             //function may be called multiple times when a java is started.
             //If the expiretime is too small then we may loop because everytime
             //the file is deleted and we need to search for a java again.
@@ -732,20 +769,27 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                 //that after removing the file and shortly later creating it again
                 //did not change the creation time. That is the newly created file
                 //had the creation time of the former file.
-//                ::TimeValue time = stat.getCreationTime();
-                ::TimeValue modTime = stat.getModifyTime();
+                // ::TimeValue modTime = stat.getModifyTime();
                 ::TimeValue curTime = {0,0};
+                ret = FILE_OK;
                 if (sal_True == ::osl_getSystemTime(& curTime))
                 {
-                    if ( curTime.Seconds - modTime.Seconds >
+                    //get the modified time recorded in the <modified> element
+                    sal_uInt32 modified = getModifiedTime();
+                    OSL_ASSERT(modified <= curTime.Seconds);
+                    //Only if modified has a valued then NodeJava::write was called,
+                    //then the xml structure was filled with data.
+
+                    if ( modified && curTime.Seconds - modified >
                          BootParams::getInstallDataExpiration())
                     {
 #if OSL_DEBUG_LEVEL >=2
+                        fprintf(stderr, "[Java framework] Settings file is %d seconds old. \n",
+                                (int)( curTime.Seconds - modified));
                         rtl::OString s = rtl::OUStringToOString(sURL, osl_getThreadTextEncoding());
-                        fprintf(stderr, "[Java framework] Deleting settings file at \n%s\n", s.getStr());
+                        fprintf(stderr, "[Java framework] Settings file is exspired. Deleting settings file at \n%s\n", s.getStr());
 #endif
                         //delete file
-//                        File::RC rc_rem = File::remove(sURL);
                         File f(sURL);
                         if (File::E_None == f.open(OpenFlag_Write | OpenFlag_Read)
                             && File::E_None == f.setPos(0, 0)
@@ -1083,6 +1127,17 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     return pInfo;
 }
 
+sal_uInt32 NodeJava::getModifiedTime() const
+{
+    sal_uInt32 ret = 0;
+    if (m_layer != INSTALL)
+    {
+        OSL_ASSERT(0);
+        return ret;
+    }
+    rtl::OString modTimeSeconds = getElementModified();
+    return (sal_uInt32) modTimeSeconds.toInt64();
+}
 
 //================================================================================
 MergedSettings::MergedSettings():
