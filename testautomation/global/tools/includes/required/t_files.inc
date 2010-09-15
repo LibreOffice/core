@@ -611,6 +611,8 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
 
     dim sTargetPath as string
 
+    sSourcePath = convertpath( sSourcePath )
+
     ' If the source file does not exist we quit
     if ( not FileExists( sSourcePath ) ) then
         warnlog( CFN & "Source path/file does not exist: " & sSourcePath )
