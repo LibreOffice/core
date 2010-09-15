@@ -359,8 +359,6 @@ int SwView::_CreateScrollbar( BOOL bHori )
 
     (*ppScrollbar)->SetAuto( TRUE );
 
-    pMDI->AddChildEventListener( LINK( this, SwView, WindowChildEventListener ));
-
     if(GetWindow())
         InvalidateBorder();
 

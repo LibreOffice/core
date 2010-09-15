@@ -1112,6 +1112,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         ShowHScrollbar( FALSE );
     if( !pVScrollbar->IsVisible( TRUE ) )
         ShowVScrollbar( FALSE );
+
+    GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
 
 /*--------------------------------------------------------------------
@@ -1121,6 +1123,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 SwView::~SwView()
 {
+    GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
     delete mpPostItMgr;
     // --> OD 2009-03-10 #i100035#
     mpPostItMgr = 0;
