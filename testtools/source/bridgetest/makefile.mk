@@ -200,8 +200,7 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/uno_services.input
 
-$(MISC)/uno_services.input .ERRREMOVE :
-    - $(RM) $@
+$(MISC)/uno_services.input :
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@

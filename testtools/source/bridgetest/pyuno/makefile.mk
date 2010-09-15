@@ -99,8 +99,7 @@ $(DLLDEST)$/pyuno_services.rdb .ERRREMOVE : \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/pyuno_services.input
 
-$(MISC)/pyuno_services.input .ERRREMOVE :
-    - $(RM) $@
+$(MISC)/pyuno_services.input :
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
