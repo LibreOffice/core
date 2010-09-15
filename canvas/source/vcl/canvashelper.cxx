@@ -156,8 +156,8 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             rOutDev.EnableMapMode( FALSE );
-            rOutDev.SetLineColor( COL_WHITE );
-            rOutDev.SetFillColor( COL_WHITE );
+            rOutDev.SetLineColor( COL_TRANSPARENT );
+            rOutDev.SetFillColor( COL_TRANSPARENT );
             rOutDev.DrawRect( Rectangle( Point(),
                                          rOutDev.GetOutputSizePixel()) );
 
@@ -167,8 +167,8 @@ namespace vclcanvas
 
                 rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
                 rOutDev2.EnableMapMode( FALSE );
-                rOutDev2.SetLineColor( COL_WHITE );
-                rOutDev2.SetFillColor( COL_WHITE );
+                rOutDev2.SetLineColor( COL_TRANSPARENT );
+                rOutDev2.SetFillColor( COL_TRANSPARENT );
                 rOutDev2.DrawRect( Rectangle( Point(),
                                               rOutDev2.GetOutputSizePixel()) );
                 rOutDev2.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
