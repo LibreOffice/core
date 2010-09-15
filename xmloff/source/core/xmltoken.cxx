@@ -3110,6 +3110,9 @@ namespace xmloff { namespace token {
         TOKEN( "diagonal-bl-tr-widths", XML_DIAGONAL_BL_TR_WIDTHS ),
         TOKEN( "diagonal-tl-br-widths", XML_DIAGONAL_TL_BR_WIDTHS ),
 
+        TOKEN( "min-value", XML_MIN_VALUE ),
+        TOKEN( "max-value", XML_MAX_VALUE ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

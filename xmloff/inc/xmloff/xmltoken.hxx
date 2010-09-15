@@ -3110,6 +3110,9 @@ namespace xmloff { namespace token {
         XML_DIAGONAL_BL_TR_WIDTHS,
         XML_DIAGONAL_TL_BR_WIDTHS,
 
+        XML_MIN_VALUE,
+        XML_MAX_VALUE,
+
         XML_TOKEN_END
     };
 

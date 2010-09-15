@@ -28,22 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include <algorithm>
 #include "elementimport.hxx"
-#include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
+#include "xmloff/xmlimp.hxx"
+#include "xmloff/nmspmap.hxx"
+#include "xmloff/xmluconv.hxx"
 #include "strings.hxx"
 #include "callbacks.hxx"
 #include "attriblistmerge.hxx"
 #include "xmlnmspe.hxx"
 #include "eventimport.hxx"
-#include <xmloff/txtstyli.hxx>
+#include "xmloff/txtstyli.hxx"
 #include "formenums.hxx"
-#include <xmloff/xmltoken.hxx>
+#include "xmloff/xmltoken.hxx"
 #include "gridcolumnproptranslator.hxx"
-#include <comphelper/extract.hxx>
-#include <comphelper/types.hxx>
+#include "property_description.hxx"
+#include "property_meta_data.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
@@ -54,9 +53,13 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 /** === end UNO includes === **/
+
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
 #include <rtl/logfile.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/types.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -167,17 +170,41 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::OUString OElementImport::determineDefaultServiceName() const
+    {
+        return ::rtl::OUString();
+    }
+
+    //---------------------------------------------------------------------
     void OElementImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
         ENTER_LOG_CONTEXT( "xmloff::OElementImport - importing one element" );
-        // call the base class. This should give us enough information (especially the service name)
-        // to create our UNO element
-        OPropertyImport::StartElement(_rxAttrList);
 
-        // create the element
+        const SvXMLNamespaceMap& rMap = m_rContext.getGlobalContext().GetNamespaceMap();
+        const ::rtl::OUString sImplNameAttribute = rMap.GetQNameByKey( XML_NAMESPACE_FORM, GetXMLToken( XML_CONTROL_IMPLEMENTATION ) );
+        const ::rtl::OUString sControlImplementation = _rxAttrList->getValueByName( sImplNameAttribute );
+
+        // retrieve the service name
+        if ( sControlImplementation.getLength() > 0 )
+        {
+            ::rtl::OUString sOOoImplementationName;
+            const sal_uInt16 nImplPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sControlImplementation, &sOOoImplementationName );
+            m_sServiceName = ( nImplPrefix == XML_NAMESPACE_OOO ) ? sOOoImplementationName : sControlImplementation;
+        }
+
+        if ( !m_sServiceName.getLength() )
+            determineDefaultServiceName();
+
+        // create the object *now*. This allows setting properties in the various handleAttribute methods.
+        // (Though currently not all code is migrated to this pattern, most attributes are still handled
+        // by remembering the value (via implPushBackPropertyValue), and setting the correct property value
+        // later (in OControlImport::StartElement).)
         m_xElement = createElement();
-        if ( !m_xInfo.is() && m_xElement.is() )
+        if ( m_xElement.is() )
             m_xInfo = m_xElement->getPropertySetInfo();
+
+        // call the base class
+        OPropertyImport::StartElement( _rxAttrList );
     }
 
     //---------------------------------------------------------------------
@@ -352,7 +379,7 @@ namespace xmloff
                     m_xInfo = m_xElement->getPropertySetInfo();
                 }
 
-                // determine the type of the value (source forthe following conversion)
+                // determine the type of the value (source for the following conversion)
                 TypeClass eValueTypeClass = aPropValues->Value.getValueTypeClass();
                 const sal_Bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
                 if ( bValueIsSequence )
@@ -361,7 +388,7 @@ namespace xmloff
                     eValueTypeClass = aSimpleType.getTypeClass();
                 }
 
-                // determine the type of the property (target forthe following conversion)
+                // determine the type of the property (target for the following conversion)
                 const Property aProperty( m_xInfo->getPropertyByName( aPropValues->Name ) );
                 TypeClass ePropTypeClass = aProperty.Type.getTypeClass();
                 const sal_Bool bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
@@ -484,38 +511,109 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    PropertyGroups::const_iterator OElementImport::impl_matchPropertyGroup( const PropertyGroups& i_propertyGroups ) const
     {
-        if (!m_sServiceName.getLength() &&
-            token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION))
-        {   // it's the service name
+        ENSURE_OR_RETURN( m_xInfo.is(), "OElementImport::impl_matchPropertyGroup: no property set info!", i_propertyGroups.end() );
 
-            ::rtl::OUString sImplName;
-            const sal_uInt16 nImplPrefix =
-                GetImport().GetNamespaceMap().GetKeyByAttrName( _rValue,
-                                                                &sImplName );
-            m_sServiceName = XML_NAMESPACE_OOO==nImplPrefix ? sImplName
-                                                            :_rValue;
-        }
-        else
+        for (   PropertyGroups::const_iterator group = i_propertyGroups.begin();
+                group != i_propertyGroups.end();
+                ++group
+            )
         {
-            if (!m_sName.getLength() &&
-                token::IsXMLToken( _rLocalName, token::XML_NAME))
+            bool missingProp = false;
+            for (   PropertyDescriptionList::const_iterator prop = group->begin();
+                    prop != group->end();
+                    ++prop
+                )
+            {
+                if ( !m_xInfo->hasPropertyByName( (*prop)->propertyName ) )
+                {
+                    missingProp = true;
+                    break;
+                }
+            }
+
+            if ( missingProp )
+                // try next group
+                continue;
+
+            return group;
+        }
+
+        OSL_ENSURE( false, "OElementImport::impl_matchPropertyGroup: no group matched!" );
+        return i_propertyGroups.end();
+    }
+
+    //---------------------------------------------------------------------
+    bool OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        if ( token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION ) )
+            // ignore this, it has already been handled in OElementImport::StartElement
+            return true;
+
+        if ( token::IsXMLToken( _rLocalName, token::XML_NAME ) )
+        {
+            if ( !m_sName.getLength() )
                 // remember the name for later use in EndElement
                 m_sName = _rValue;
-
-            // maybe it's the style attribute?
-            if ( token::IsXMLToken( _rLocalName, token::XML_TEXT_STYLE_NAME ) )
-            {
-                const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement( _rValue );
-                OSL_ENSURE( pStyleContext, "OPropertyImport::handleAttribute: do not know the style!" );
-                // remember the element for later usage.
-                m_pStyleElement = PTR_CAST( XMLTextStyleContext, pStyleContext );
-            }
-            else
-                // let the base class handle it
-                OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+            return true;
         }
+
+        // maybe it's the style attribute?
+        if ( token::IsXMLToken( _rLocalName, token::XML_TEXT_STYLE_NAME ) )
+        {
+            const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement( _rValue );
+            OSL_ENSURE( pStyleContext, "OElementImport::handleAttribute: do not know the style!" );
+            // remember the element for later usage.
+            m_pStyleElement = PTR_CAST( XMLTextStyleContext, pStyleContext );
+            return true;
+        }
+
+        // the generic approach (which I hope all props will be migrated to, on the medium term): property handlers
+        const AttributeDescription attribute( metadata::getAttributeDescription( _nNamespaceKey, _rLocalName ) );
+        if ( attribute.attributeToken != XML_TOKEN_INVALID )
+        {
+            PropertyGroups propertyGroups;
+            metadata::getPropertyGroupList( attribute, propertyGroups );
+            const PropertyGroups::const_iterator pos = impl_matchPropertyGroup( propertyGroups );
+            if ( pos == propertyGroups.end() )
+                return OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+
+            do
+            {
+                const PropertyDescriptionList& rProperties( *pos );
+                const PropertyDescription* first = *rProperties.begin();
+                ENSURE_OR_BREAK( first != NULL, "OElementImport::handleAttribute: invalid property description!" );
+                const PPropertyHandler handler = (*first->factory)( first->propertyId );
+                ENSURE_OR_BREAK( handler.get() != NULL, "OElementImport::handleAttribute: invalid property handler!" );
+
+                PropertyValues aValues;
+                for (   PropertyDescriptionList::const_iterator propDesc = rProperties.begin();
+                        propDesc != rProperties.end();
+                        ++propDesc
+                    )
+                {
+                    aValues[ (*propDesc)->propertyId ] = Any();
+                }
+                if ( handler->getPropertyValues( _rValue, aValues ) )
+                {
+                    for (   PropertyDescriptionList::const_iterator propDesc = rProperties.begin();
+                            propDesc != rProperties.end();
+                            ++propDesc
+                        )
+                    {
+                        implPushBackPropertyValue( (*propDesc)->propertyName, aValues[ (*propDesc)->propertyId ] );
+                    }
+                }
+            }
+            while ( false );
+
+            // handled
+            return true;
+        }
+
+        // let the base class handle it
+        return OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
     //---------------------------------------------------------------------
@@ -553,7 +651,7 @@ namespace xmloff
         {
             ::rtl::OUString sLocalAttrName = ::rtl::OUString::createFromAscii(_pAttributeName);
             if ( !encounteredAttribute( sLocalAttrName ) )
-                handleAttribute( XML_NAMESPACE_FORM, sLocalAttrName, ::rtl::OUString::createFromAscii( _pAttributeDefault ) );
+                OSL_VERIFY( handleAttribute( XML_NAMESPACE_FORM, sLocalAttrName, ::rtl::OUString::createFromAscii( _pAttributeDefault ) ) );
         }
     }
 
@@ -577,6 +675,36 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::OUString OControlImport::determineDefaultServiceName() const
+    {
+        const sal_Char* pServiceName = NULL;
+        switch ( m_eElementType )
+        {
+        case OControlElement::TEXT:
+        case OControlElement::TEXT_AREA:
+        case OControlElement::PASSWORD:          pServiceName = "com.sun.star.form.component.TextField"; break;
+        case OControlElement::FILE:              pServiceName = "com.sun.star.form.component.FileControl"; break;
+        case OControlElement::FORMATTED_TEXT:    pServiceName = "com.sun.star.form.component.FormattedField"; break;
+        case OControlElement::FIXED_TEXT:        pServiceName = "com.sun.star.form.component.FixedText"; break;
+        case OControlElement::COMBOBOX:          pServiceName = "com.sun.star.form.component.ComboBox"; break;
+        case OControlElement::LISTBOX:           pServiceName = "com.sun.star.form.component.ListBox"; break;
+        case OControlElement::BUTTON:            pServiceName = "com.sun.star.form.component.CommandButton"; break;
+        case OControlElement::IMAGE:             pServiceName = "com.sun.star.form.component.ImageButton"; break;
+        case OControlElement::CHECKBOX:          pServiceName = "com.sun.star.form.component.CheckBox"; break;
+        case OControlElement::RADIO:             pServiceName = "com.sun.star.form.component.RadioButton"; break;
+        case OControlElement::FRAME:             pServiceName = "com.sun.star.form.component.GroupBox"; break;
+        case OControlElement::IMAGE_FRAME:       pServiceName = "com.sun.star.form.component.DatabaseImageControl"; break;
+        case OControlElement::HIDDEN:            pServiceName = "com.sun.star.form.component.HiddenControl"; break;
+        case OControlElement::GRID:              pServiceName = "com.sun.star.form.component.GridControl"; break;
+        case OControlElement::TIME:              pServiceName = "com.sun.star.form.component.DateField"; break;
+        case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.TimeField"; break;
+        }
+        if ( pServiceName != NULL )
+            return ::rtl::OUString::createFromAscii( pServiceName );
+        return ::rtl::OUString();
+    }
+
+    //---------------------------------------------------------------------
     void OControlImport::addOuterAttributes(const Reference< sax::XAttributeList >& _rxOuterAttribs)
     {
         OSL_ENSURE(!m_xOuterAttributes.is(), "OControlImport::addOuterAttributes: already have these attributes!");
@@ -584,7 +712,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         static const sal_Char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BA_LINKED_CELL);
 
@@ -601,66 +729,84 @@ namespace xmloff
                     m_sControlId = _rValue;
                 }
             }
+            return true;
         }
-        else if ( _rLocalName.equalsAscii( pLinkedCellAttributeName ) )
+
+        if ( _rLocalName.equalsAscii( pLinkedCellAttributeName ) )
         {   // it's the address of a spreadsheet cell
             m_sBoundCellAddress = _rValue;
+            return true;
         }
-        else if ( _nNamespaceKey == XML_NAMESPACE_XFORMS && IsXMLToken( _rLocalName, XML_BIND ) )
+
+        if ( _nNamespaceKey == XML_NAMESPACE_XFORMS && IsXMLToken( _rLocalName, XML_BIND ) )
         {
             m_sBindingID = _rValue;
+            return true;
         }
-        else if ( _nNamespaceKey == XML_NAMESPACE_FORM && IsXMLToken( _rLocalName, XML_XFORMS_LIST_SOURCE )  )
+
+        if ( _nNamespaceKey == XML_NAMESPACE_FORM && IsXMLToken( _rLocalName, XML_XFORMS_LIST_SOURCE )  )
         {
             m_sListBindingID = _rValue;
+            return true;
         }
-        else if ( (_nNamespaceKey == XML_NAMESPACE_FORM && IsXMLToken( _rLocalName, XML_XFORMS_SUBMISSION ) ) ||
-                  ( _nNamespaceKey == XML_NAMESPACE_XFORMS && IsXMLToken( _rLocalName, XML_SUBMISSION ) ) )
+
+        if  (   (   ( _nNamespaceKey == XML_NAMESPACE_FORM )
+                &&  IsXMLToken( _rLocalName, XML_XFORMS_SUBMISSION )
+                )
+            ||  (   ( _nNamespaceKey == XML_NAMESPACE_XFORMS )
+                &&  IsXMLToken( _rLocalName, XML_SUBMISSION )
+                )
+            )
         {
             m_sSubmissionID = _rValue;
+            return true;
         }
-        else
+
+        if ( OElementImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue ) )
+            return true;
+
+        static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE);
+        static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_VALUE);
+        static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MIN_VALUE);
+        static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MAX_VALUE);
+        static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY );
+
+        sal_Int32 nHandle = -1;
+        if ( _rLocalName.equalsAscii( pValueAttributeName ) )
+            nHandle = PROPID_VALUE;
+        else if ( _rLocalName.equalsAscii( pCurrentValueAttributeName ) )
+            nHandle = PROPID_CURRENT_VALUE;
+        else if ( _rLocalName.equalsAscii( pMinValueAttributeName ) )
+            nHandle = PROPID_MIN_VALUE;
+        else if ( _rLocalName.equalsAscii( pMaxValueAttributeName ) )
+            nHandle = PROPID_MAX_VALUE;
+        if ( nHandle != -1 )
         {
-            static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE);
-            static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_VALUE);
-            static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MIN_VALUE);
-            static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MAX_VALUE);
-            static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY );
-
-            sal_Int32 nHandle = -1;
-            if ( _rLocalName.equalsAscii( pValueAttributeName ) )
-                nHandle = PROPID_VALUE;
-            else if ( _rLocalName.equalsAscii( pCurrentValueAttributeName ) )
-                nHandle = PROPID_CURRENT_VALUE;
-            else if ( _rLocalName.equalsAscii( pMinValueAttributeName ) )
-                nHandle = PROPID_MIN_VALUE;
-            else if ( _rLocalName.equalsAscii( pMaxValueAttributeName ) )
-                nHandle = PROPID_MAX_VALUE;
-            if ( nHandle != -1 )
-            {
-                // for the moment, simply remember the name and the value
-                PropertyValue aProp;
-                aProp.Name = _rLocalName;
-                aProp.Handle = nHandle;
-                aProp.Value <<= _rValue;
-                m_aValueProperties.push_back(aProp);
-            }
-            else if ( _rLocalName.equalsAscii( pRepeatDelayAttributeName ) )
-            {
-                ::Time aTime;
-                sal_Int32 nFractions = 0;
-                if ( SvXMLUnitConverter::convertTimeDuration( _rValue, aTime, &nFractions ) )
-                {
-                    PropertyValue aProp;
-                    aProp.Name = PROPERTY_REPEAT_DELAY;
-                    aProp.Value <<= (sal_Int32)( ( ( aTime.GetMSFromTime() / 1000 ) * 1000 ) + nFractions );
-
-                    implPushBackPropertyValue(aProp);
-                }
-            }
-            else
-                OElementImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+            // for the moment, simply remember the name and the value
+            PropertyValue aProp;
+            aProp.Name = _rLocalName;
+            aProp.Handle = nHandle;
+            aProp.Value <<= _rValue;
+            m_aValueProperties.push_back(aProp);
+            return true;
         }
+
+        if ( _rLocalName.equalsAscii( pRepeatDelayAttributeName ) )
+        {
+            ::Time aTime;
+            sal_Int32 nFractions = 0;
+            if ( SvXMLUnitConverter::convertTimeDuration( _rValue, aTime, &nFractions ) )
+            {
+                PropertyValue aProp;
+                aProp.Name = PROPERTY_REPEAT_DELAY;
+                aProp.Value <<= (sal_Int32)( ( ( aTime.GetMSFromTime() / 1000 ) * 1000 ) + nFractions );
+
+                implPushBackPropertyValue(aProp);
+            }
+            return true;
+        }
+
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -980,7 +1126,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
+    bool OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
         const ::rtl::OUString& _rValue )
     {
         if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
@@ -990,16 +1136,19 @@ namespace xmloff
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
             ) >>= m_nImagePosition );
             m_bHaveImagePosition = sal_True;
+            return true;
         }
-        else if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
+
+        if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
                 m_rContext.getGlobalContext(), ::getCppuType( &m_nImageAlign ),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImageAlign )
             ) >>= m_nImageAlign );
+            return true;
         }
-        else
-            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+
+        return OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //---------------------------------------------------------------------
@@ -1047,14 +1196,16 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
+    bool OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
         const ::rtl::OUString& _rValue)
     {
         static const ::rtl::OUString s_sReferenceAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_FOR));
         if (_rLocalName == s_sReferenceAttributeName)
+        {
             m_sReferringControls = _rValue;
-        else
-            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+            return true;
+        }
+        return OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
     //=====================================================================
@@ -1068,7 +1219,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         static const ::rtl::OUString s_sEchoCharAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR));
         if (_rLocalName == s_sEchoCharAttributeName)
@@ -1083,9 +1234,9 @@ namespace xmloff
             else
                 aEchoChar.Value <<= (sal_Int16)0;
             implPushBackPropertyValue(aEchoChar);
+            return true;
         }
-        else
-            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+        return OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
     //=====================================================================
@@ -1099,7 +1250,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void ORadioImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool ORadioImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         // need special handling for the State & CurrentState properties:
         // they're stored as booleans, but expected to be int16 properties
@@ -1122,9 +1273,9 @@ namespace xmloff
 
                 implPushBackPropertyValue(aNewValue);
             }
+            return true;
         }
-        else
-            OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+        return OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //=====================================================================
@@ -1138,7 +1289,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION );
         static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCA_IMAGE_DATA );
@@ -1157,18 +1308,18 @@ namespace xmloff
         if ( bMakeAbsolute && ( _rValue.getLength() > 0  ) )
         {
             // make a global URL out of the local one
-                        ::rtl::OUString sAdjustedValue;
-                        // only resolve image related url
-                        // we don't want say form url targets to be resolved
-                        // using ResolveGraphicObjectURL
-                        if ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
-                                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, FALSE );
-                        else
-                                 sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
-                        OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
+            ::rtl::OUString sAdjustedValue;
+            // only resolve image related url
+            // we don't want say form url targets to be resolved
+            // using ResolveGraphicObjectURL
+            if ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
+                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, FALSE );
+            else
+                sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
+            return OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
         }
-        else
-            OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+
+        return OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //=====================================================================
@@ -1205,14 +1356,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
+    bool OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
     {
         if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ) ) )
         {
             GetImport().GetMM100UnitConverter().convertNumber( m_nStepSizeValue, _rValue );
+            return true;
         }
-        else
-            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+        return OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //---------------------------------------------------------------------
@@ -1535,7 +1686,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         static const sal_Char* pListSourceAttributeName = OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE);
         if ( _rLocalName.equalsAscii(pListSourceAttributeName) )
@@ -1560,12 +1711,16 @@ namespace xmloff
             }
 
             implPushBackPropertyValue( aListSource );
+            return true;
         }
-        else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_CELL_RANGE ) ) )
+
+        if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_CELL_RANGE ) ) )
         {
             m_sCellListSource = _rValue;
+            return true;
         }
-        else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
+
+        if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
         {
             sal_Int16 nLinkageType = 0;
             PropertyConversion::convertString(
@@ -1576,9 +1731,10 @@ namespace xmloff
             ) >>= nLinkageType;
 
             m_bLinkWithIndexes = ( nLinkageType != 0 );
+            return true;
         }
-        else
-            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+
+        return OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
     //---------------------------------------------------------------------
@@ -1776,7 +1932,9 @@ namespace xmloff
                 ||  (OControlElement::FORMATTED_TEXT == _eType)
                 ||  (OControlElement::CHECKBOX == _eType)
                 ||  (OControlElement::LISTBOX == _eType)
-                ||  (OControlElement::COMBOBOX == _eType),
+                ||  (OControlElement::COMBOBOX == _eType)
+                ||  (OControlElement::TIME == _eType)
+                ||  (OControlElement::DATE == _eType),
                 "OColumnWrapperImport::implCreateChildContext: invalid or unrecognized sub element!");
 
         switch (_eType)
@@ -1871,19 +2029,25 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         // handle the master/details field attributes (they're way too special to let the OPropertyImport handle them)
         static const ::rtl::OUString s_sMasterFieldsAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faMasterFields));
         static const ::rtl::OUString s_sDetailFieldsAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faDetailFiels));
 
-        if (s_sMasterFieldsAttributeName == _rLocalName)
+        if ( s_sMasterFieldsAttributeName == _rLocalName )
+        {
             implTranslateStringListProperty(PROPERTY_MASTERFIELDS, _rValue);
-        else if (s_sDetailFieldsAttributeName == _rLocalName)
-            implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+            return true;
+        }
 
-        else
-            OFormImport_Base::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+        if ( s_sDetailFieldsAttributeName == _rLocalName )
+        {
+            implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+            return true;
+        }
+
+        return OFormImport_Base::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
     //---------------------------------------------------------------------

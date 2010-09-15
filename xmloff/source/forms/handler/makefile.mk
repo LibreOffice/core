@@ -25,48 +25,31 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../../..
 
 PRJNAME=xmloff
-TARGET=forms
+TARGET=form_handlers
+
+INCEXT=..
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE: $(PRJ)$/util$/makefile.pmk
+.INCLUDE: $(PRJ)/util/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/officeforms.obj \
-        $(SLO)$/formevents.obj \
-        $(SLO)$/eventimport.obj \
-        $(SLO)$/eventexport.obj \
-        $(SLO)$/controlpropertyhdl.obj \
-        $(SLO)$/controlpropertymap.obj \
-        $(SLO)$/valueproperties.obj \
-        $(SLO)$/attriblistmerge.obj \
-        $(SLO)$/controlelement.obj \
-        $(SLO)$/formlayerexport.obj \
-        $(SLO)$/layerexport.obj \
-        $(SLO)$/elementexport.obj \
-        $(SLO)$/propertyexport.obj \
-        $(SLO)$/elementimport.obj \
-        $(SLO)$/layerimport.obj \
-        $(SLO)$/propertyimport.obj \
-        $(SLO)$/formlayerimport.obj \
-        $(SLO)$/formattributes.obj \
-        $(SLO)$/formenums.obj \
-        $(SLO)$/formsimp.obj \
-        $(SLO)$/strings.obj \
-        $(SLO)$/logging.obj \
-        $(SLO)$/formcellbinding.obj \
-        $(SLO)$/gridcolumnproptranslator.obj \
-        \
-        $(SLO)/property_meta_data.obj
+    $(SLO)/form_handler_factory.obj \
+    $(SLO)/property_handler_base.obj \
+    $(SLO)/vcl_date_handler.obj \
+    $(SLO)/vcl_time_handler.obj
 
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+test:
+    echo $(INCLUDE)
