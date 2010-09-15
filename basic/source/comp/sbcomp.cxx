@@ -32,6 +32,7 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include "sbtrace.hxx"
+#include <basic/sbobjmod.hxx>
 
 
 //==========================================================================
@@ -648,7 +649,8 @@ BOOL SbModule::Compile()
     BOOL bRet = IsCompiled();
     if( bRet )
     {
-        pBasic->ClearAllModuleVars();
+        if( !this->ISA(SbObjModule) )
+            pBasic->ClearAllModuleVars();
         RemoveVars(); // remove 'this' Modules variables
         // clear all method statics
         for( USHORT i = 0; i < pMethods->Count(); i++ )

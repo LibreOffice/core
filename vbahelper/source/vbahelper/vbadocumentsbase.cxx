@@ -213,8 +213,7 @@ VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xP
 {
 }
 
-uno::Any SAL_CALL
-VbaDocumentsBase::Add() throw (uno::RuntimeException)
+uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
 {
      uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
@@ -244,8 +243,7 @@ VbaDocumentsBase::Add() throw (uno::RuntimeException)
     return uno::makeAny( xComponent );
 }
 
-void
-VbaDocumentsBase::Close() throw (uno::RuntimeException)
+void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
 {
 // #FIXME this *MUST* be wrong documents::close surely closes ALL documents
 // in the collection, use of getCurrentDocument here is totally wrong
@@ -259,8 +257,7 @@ VbaDocumentsBase::Close() throw (uno::RuntimeException)
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any
-VbaDocumentsBase::Open( const rtl::OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
+uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
 {
     // we need to detect if this is a URL, if not then assume its a file path
         rtl::OUString aURL;

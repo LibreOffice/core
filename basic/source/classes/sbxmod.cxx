@@ -500,33 +500,26 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
     return 0L;
 }
 
-#if 0
-bool UnlockControllerHack( StarBASIC* pBasic )
+bool VBAUnlockControllers( StarBASIC* pBasic )
 {
     bool bRes = false;
     if ( pBasic && pBasic->IsDocBasic() )
     {
-        uno::Any aUnoVar;
-        ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( "ThisComponent" ) );
-        SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( pBasic->Find( sVarName, SbxCLASS_DONTCARE ) );
-        if ( pGlobs )
-            aUnoVar = pGlobs->getUnoAny();
-        uno::Reference< frame::XModel > xModel( aUnoVar, uno::UNO_QUERY);
-        if ( xModel.is() )
+        SbUnoObject* pGlobs = dynamic_cast< SbUnoObject* >( pBasic->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ), SbxCLASS_DONTCARE ) );
+        if ( pGlobs ) try
         {
-            try
-            {
+            uno::Reference< frame::XModel > xModel( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
+            if ( xModel->hasControllersLocked() )
                 xModel->unlockControllers();
-                bRes = true;
-            }
-            catch( uno::Exception& )
-            {
-            }
+            bRes = true;
+        }
+        catch( uno::Exception& )
+        {
         }
     }
     return bRes;
 }
-#endif
+
 /////////////////////////////////////////////////////////////////////////////
 
 // Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
@@ -1191,6 +1184,10 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
                 GlobalRunDeInit();
 
+                // VBA always ensures screenupdating is enabled after completing
+                if ( mbVBACompat )
+                    VBAUnlockControllers( PTR_CAST( StarBASIC, GetParent() ) );
+
 #ifdef DBG_TRACE_BASIC
                 dbg_DeInitTrace();
 #endif
@@ -1205,12 +1202,7 @@ USHORT SbModule::Run( SbMethod* pMeth )
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
 
-    // VBA always ensure screenupdating is enabled after completing
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
-#if 0
-    if ( pBasic && pBasic->IsDocBasic() && !pINST )
-        UnlockControllerHack( pBasic );
-#endif
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
