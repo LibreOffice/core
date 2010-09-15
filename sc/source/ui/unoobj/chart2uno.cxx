@@ -3690,14 +3690,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
         }
         else
         {
-            for (sal_Int32 nRow = p->aStart.Row(); nRow <= p->aEnd.Row(); ++nRow)
-            {
-                String aString = ScGlobal::GetRscString(STR_ROW);
-                aString += ' ';
-                aString += String::CreateFromInt32( nRow+1 );
-                pArr[nCount] = aString;
-                ++nCount;
-            }
+            sal_Int32 n = p->aEnd.Row() - p->aStart.Row() + 1;
+            for (sal_Int32 i = 0; i < n; ++i)
+                pArr[nCount++] = String::CreateFromInt32( i+1 );
         }
     }
     return aSeq;
