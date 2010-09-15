@@ -65,6 +65,7 @@
 #include "dbdocutl.hxx"
 #include "editable.hxx"
 #include "hints.hxx"
+#include "chgtrack.hxx"
 
 using namespace com::sun::star;
 
@@ -216,6 +217,8 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const SbaSelectionList* pSelection, BOOL bRecord, BOOL bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+    ScChangeTrack *pChangeTrack = NULL;
+    ScRange aChangedRange;
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
@@ -490,11 +493,9 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             nErrStringId = aTester.GetMessageId();
             bSuccess = FALSE;
         }
-        else if ( pDoc->GetChangeTrack() != NULL )
-        {
-            nErrStringId = STR_PROTECTIONERR;
-            bSuccess = FALSE;
-        }
+        else if ( (pChangeTrack = pDoc->GetChangeTrack()) != NULL )
+            aChangedRange = ScRange(rParam.nCol1, rParam.nRow1, nTab,
+                        nEndCol+nFormulaCols, nEndRow, nTab );
     }
 
     if ( bSuccess && bMoveCells )
@@ -711,6 +712,9 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     }
 
     delete pImportDoc;
+
+    if (bSuccess && pChangeTrack)
+        pChangeTrack->AppendInsert ( aChangedRange );
 
     return bSuccess;
 }
