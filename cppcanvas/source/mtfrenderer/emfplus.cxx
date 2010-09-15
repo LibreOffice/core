@@ -810,6 +810,10 @@ namespace cppcanvas
                 EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor];
                 EMFP_DEBUG (printf ("EMF+\tbrush fill slot: %d (type: %d)\n", brushIndexOrColor, brush->GetType ()));
 
+                // give up in case something wrong happened
+                if( !brush )
+                    return;
+
                 rState.isFillColorSet = false;
                 rState.isLineColorSet = false;
 
@@ -1019,7 +1023,8 @@ namespace cppcanvas
                             aObjects [index] = NULL;
                         }
 
-                        switch (flags & 0xff00) {
+                        // not sure yet, what 0x8000 means
+                        switch (flags & 0x7f00) {
                         case EmfPlusObjectTypeBrush:
                             {
                                 EMFPBrush *brush;
