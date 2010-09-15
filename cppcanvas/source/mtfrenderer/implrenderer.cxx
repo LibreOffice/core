@@ -3007,6 +3007,7 @@ namespace cppcanvas
 
             /* EMF+ */
             memset (aObjects, 0, sizeof (aObjects));
+            mbMultipart = false;
 
             createActions( const_cast<GDIMetaFile&>(rMtf), // HACK(Q2):
                                                            // we're

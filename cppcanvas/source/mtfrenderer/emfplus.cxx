@@ -663,6 +663,8 @@ namespace cppcanvas
             {
                 sal_uInt32 header, unknown;
 
+                EMFP_DEBUG (dumpWords(s, 16));
+
                 s >> header >> type;
 
                 EMFP_DEBUG (printf ("EMF+\timage\nEMF+\theader: 0x%08x type: 0x%08x\n", header, type));
@@ -974,6 +976,72 @@ namespace cppcanvas
             }
         }
 
+        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, UINT16 flags)
+        {
+            UINT32 objectLen;
+            sal_uInt32 index;
+
+            EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
+
+            index = flags & 0xff;
+            if (aObjects [index] != NULL) {
+                delete aObjects [index];
+                aObjects [index] = NULL;
+            }
+
+            switch (flags & 0x7f00) {
+            case EmfPlusObjectTypeBrush:
+                {
+                    EMFPBrush *brush;
+                    aObjects [index] = brush = new EMFPBrush ();
+                    brush->Read (rObjectStream, *this);
+
+                    break;
+                }
+            case EmfPlusObjectTypePen:
+                {
+                    EMFPPen *pen;
+                    aObjects [index] = pen = new EMFPPen ();
+                    pen->Read (rObjectStream, *this, nHDPI, nVDPI);
+
+                    break;
+                }
+            case EmfPlusObjectTypePath:
+                sal_uInt32 header, pathFlags;
+                sal_Int32 points;
+
+                rObjectStream >> header >> points >> pathFlags;
+
+                EMFP_DEBUG (printf ("EMF+\tpath\n"));
+                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", header, points, pathFlags));
+
+                EMFPPath *path;
+                aObjects [index] = path = new EMFPPath (points);
+                path->Read (rObjectStream, pathFlags, *this);
+
+                break;
+            case EmfPlusObjectTypeRegion: {
+                EMFPRegion *region;
+
+                aObjects [index] = region = new EMFPRegion ();
+                region->Read (rObjectStream);
+
+                break;
+            }
+            case EmfPlusObjectTypeImage:
+                {
+                    EMFPImage *image;
+                    aObjects [index] = image = new EMFPImage ();
+                    image->Read (rObjectStream);
+
+                    break;
+                }
+            default:
+                EMFP_DEBUG (printf ("EMF+\tObject unhandled flags: 0x%04x\n", flags & 0xff00));
+                break;
+            }
+        }
+
         void ImplRenderer::processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms,
                                            OutDevState& rState, const CanvasSharedPtr& rCanvas )
         {
@@ -993,6 +1061,26 @@ namespace cppcanvas
 
                 EMFP_DEBUG (printf ("EMF+ record size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
 
+                if (type == EmfPlusRecordTypeObject && (mbMultipart && flags & 0x7fff == mMFlags & 0x7fff || flags & 0x8000)) {
+                    if (!mbMultipart) {
+                        mbMultipart = true;
+                        mMFlags = flags;
+                        mMStream.Seek(0);
+                    }
+                    EMFP_DEBUG (dumpWords(rMF, 16));
+                    // 1st 4 bytes are unknown
+                    mMStream.Write (((const char *)rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
+                    EMFP_DEBUG (printf ("EMF+ read next object part size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
+                } else {
+                    if (mbMultipart) {
+                        EMFP_DEBUG (printf ("EMF+ multipart record flags: %04hx\n", mMFlags));
+                        mMStream.Seek (0);
+                        processObjectRecord (mMStream, mMFlags);
+                    }
+                    mbMultipart = false;
+                }
+
+                if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
                 switch (type) {
                 case EmfPlusRecordTypeHeader:
                     UINT32 header, version;
@@ -1011,73 +1099,8 @@ namespace cppcanvas
                     EMFP_DEBUG (printf ("EMF+\talready used in svtools wmf/emf filter parser\n"));
                     break;
                 case EmfPlusRecordTypeObject:
-                    {
-                        UINT32 objectLen;
-                        sal_uInt32 index;
-
-                        EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
-
-                        index = flags & 0xff;
-                        if (aObjects [index] != NULL) {
-                            delete aObjects [index];
-                            aObjects [index] = NULL;
-                        }
-
-                        // not sure yet, what 0x8000 means
-                        switch (flags & 0x7f00) {
-                        case EmfPlusObjectTypeBrush:
-                            {
-                                EMFPBrush *brush;
-                                aObjects [index] = brush = new EMFPBrush ();
-                                brush->Read (rMF, *this);
-
-                                break;
-                            }
-                        case EmfPlusObjectTypePen:
-                            {
-                                EMFPPen *pen;
-                                aObjects [index] = pen = new EMFPPen ();
-                                pen->Read (rMF, *this, nHDPI, nVDPI);
-
-                                break;
-                            }
-                        case EmfPlusObjectTypePath:
-                            sal_uInt32 header, pathFlags;
-                            sal_Int32 points;
-
-                            rMF >> header >> points >> pathFlags;
-
-                            EMFP_DEBUG (printf ("EMF+\tpath\n"));
-                            EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", header, points, pathFlags));
-
-                            EMFPPath *path;
-                            aObjects [index] = path = new EMFPPath (points);
-                            path->Read (rMF, pathFlags, *this);
-
-                            break;
-                        case EmfPlusObjectTypeRegion: {
-                            EMFPRegion *region;
-
-                            aObjects [index] = region = new EMFPRegion ();
-                            region->Read (rMF);
-
-                            break;
-                        }
-                        case EmfPlusObjectTypeImage:
-                            {
-                                EMFPImage *image;
-                                aObjects [index] = image = new EMFPImage ();
-                                image->Read (rMF);
-
-                                break;
-                            }
-                        default:
-                            EMFP_DEBUG (printf ("EMF+\tObject unhandled flags: 0x%04x\n", flags & 0xff00));
-                            break;
-                        }
-
-                        break;
-                    }
+                    processObjectRecord (rMF, flags);
+                    break;
                 case EmfPlusRecordTypeFillPath:
                     {
                         sal_uInt32 index = flags & 0xff;
