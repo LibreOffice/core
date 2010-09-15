@@ -56,10 +56,10 @@ XSL_DIR*:=$(SOLARBINDIR)
 XHPLINKSRC*:=$(XHPDEST)
 STY_SWITCH:= -sty $(XSL_DIR)/embed.xsl
 
-.IF "$(XHPFILES)"!=""
-$(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/{$(aux_alllangiso)}/$i) : $(COMMONMISC)/$(TARGET).done
-LINKDEPS+=$(COMMONMISC)/xhp_changed.flag
-.ENDIF          # "$(XHPFILES)"!=""
+.IF "$(XHPFILES)"!="" && "$(HELP_OUT)"!=""
+$(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/{$(aux_alllangiso)}/$i) : $(HELP_OUT)/$(TARGET).done
+LINKDEPS+=$(HELP_OUT)/xhp_changed.flag
+.ENDIF          # "$(XHPFILES)"!="" && "$(HELP_OUT)"!=""
 
 $(HELPLINKALLTARGETS) : $(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/$$(@:b:s/_/./:e:s/.//)/$i) $(subst,LANGUAGE,$$(@:b:s/_/./:e:s/.//) $(LINKDEPS))
     @echo Building help index for $(@:b:s/_/./:e:s/.//)
