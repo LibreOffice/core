@@ -55,6 +55,11 @@ fi
 sd_prog=`pwd`
 cd "$sd_cwd"
 
+# linked build needs additional settings
+if [ -e ooenv ] ; then
+    source ooenv
+fi
+
 sd_binary=`basename "$0"`.bin
 
 #collect all bootstrap variables specified on the command line
