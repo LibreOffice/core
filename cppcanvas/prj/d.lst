@@ -1,4 +1,5 @@
 ..\%__SRC%\bin\cppcanv*.dll %_DEST%\bin%_EXT%\cppcanv*.dll
+..\%__SRC%\bin\mtfrenderer*.dll %_DEST%\bin%_EXT%\mtfrenderer*.dll
 ..\%__SRC%\lib\icppcanvas.lib %_DEST%\lib%_EXT%\icppcanvas.lib
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 
