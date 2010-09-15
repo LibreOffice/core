@@ -35,12 +35,24 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
-#ifndef _SV_CVTSVM_HXX
 #include <vcl/cvtsvm.hxx>
-#endif
 #include <vcl/virdev.hxx>
+#include <vcl/salbmp.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/salinst.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/unohelp.hxx>
+
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/MtfRenderer.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+using namespace com::sun::star;
 
 // -----------
 // - Defines -
@@ -475,6 +487,76 @@ void GDIMetaFile::Play( OutputDevice* pOut, ULONG nPos )
 
 // ------------------------------------------------------------------------
 
+bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize )
+{
+    const Window* win = dynamic_cast <Window*> ( pOut );
+
+    if (!win)
+        win = Application::GetActiveTopWindow();
+    if (!win)
+        win = Application::GetFirstTopLevelWindow();
+
+    if (win) {
+        const uno::Reference<rendering::XCanvas>& xCanvas = win->GetCanvas ();
+        Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
+        const uno::Reference<rendering::XBitmap>& xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
+        uno::Reference< lang::XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
+        if( xFactory.is() && xBitmap.is () ) {
+            uno::Reference< rendering::XMtfRenderer > xMtfRenderer;
+            uno::Sequence< uno::Any > args (1);
+            uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
+            if( xBitmapCanvas.is() ) {
+                args[0] = uno::Any( xBitmapCanvas );
+                xMtfRenderer.set( xFactory->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.rendering.MtfRenderer" ),
+                                                                         args ), uno::UNO_QUERY );
+
+                if( xMtfRenderer.is() ) {
+                    xBitmapCanvas->clear();
+                    uno::Reference< beans::XFastPropertySet > xMtfFastPropertySet( xMtfRenderer, uno::UNO_QUERY );
+                    if( xMtfFastPropertySet.is() )
+                        // set this metafile to the renderer to
+                        // speedup things (instead of copying data to
+                        // sequence of bytes passed to renderer)
+                        xMtfFastPropertySet->setFastPropertyValue( 0, uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
+
+                    xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
+
+                    uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
+                    if( xFastPropertySet.get() ) {
+                        // 0 means get BitmapEx
+                        uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
+                        BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
+                        if( pBitmapEx ) {
+                            pOut->DrawBitmapEx( rPos, *pBitmapEx );
+                            delete pBitmapEx;
+                            return true;
+                        }
+                    }
+
+                    SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+                    SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+
+                    if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) ) {
+                        Bitmap aBitmap( pSalBmp );
+                        Bitmap aMask( pSalMask );
+                        AlphaMask aAlphaMask( aMask );
+                        BitmapEx aBitmapEx( aBitmap, aAlphaMask );
+                        pOut->DrawBitmapEx( rPos, aBitmapEx );
+                        return true;
+                    }
+
+                    delete pSalBmp;
+                    delete pSalMask;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+// ------------------------------------------------------------------------
+
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
                         const Size& rSize, ULONG nPos )
 {
@@ -484,8 +566,12 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
 
     if( aDestSize.Width() && aDestSize.Height() )
     {
-        Size            aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
         GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
+
+        if( !pMtf && ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
+            return;
+
+        Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
 
         if( !aTmpPrefSize.Width() )
             aTmpPrefSize.Width() = aDestSize.Width();

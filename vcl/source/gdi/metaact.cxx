@@ -4093,6 +4093,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
 // SJ: 25.07.06 #i56656# we are not able to mirrorcertain kind of
 // comments properly, especially the XPATHSTROKE and XPATHFILL lead to
 // problems, so it is better to remove these comments when mirroring
+// FIXME: fake comment to apply the next hunk in the right location
 void MetaCommentAction::Scale( double fXScale, double fYScale )
 {
     if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
@@ -4125,6 +4126,32 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                     aDest << aFill;
                 }
                 delete[] mpData;
+                ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
+            } else if( maComment.Equals( "EMF_PLUS_HEADER_INFO" ) ) {
+                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
+                SvMemoryStream  aDest;
+
+                sal_Int32 nLeft, nRight, nTop, nBottom;
+                sal_Int32 nPixX, nPixY, nMillX, nMillY;
+                float m11, m12, m21, m22, mdx, mdy;
+
+                // read data
+                aMemStm >> nLeft >> nTop >> nRight >> nBottom;
+                aMemStm >> nPixX >> nPixY >> nMillX >> nMillY;
+                aMemStm >> m11 >> m12 >> m21 >> m22 >> mdx >> mdy;
+
+                // add scale to the transformation
+                m11 *= fXScale;
+                m12 *= fXScale;
+                m22 *= fYScale;
+                m21 *= fYScale;
+
+                // prepare new data
+                aDest << nLeft << nTop << nRight << nBottom;
+                aDest << nPixX << nPixY << nMillX << nMillY;
+                aDest << m11 << m12 << m21 << m22 << mdx << mdy;
+
+                // save them
                 ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
             }
         }

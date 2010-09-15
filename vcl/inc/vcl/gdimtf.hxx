@@ -135,6 +135,7 @@ private:
                                                       const OutputDevice&   rMapDev,
                                                       const PolyPolygon&    rPolyPoly,
                                                       const Gradient&       rGrad       );
+    SAL_DLLPRIVATE bool            ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
 
 //#endif // __PRIVATE
 
