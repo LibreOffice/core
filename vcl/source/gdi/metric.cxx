@@ -34,6 +34,8 @@
 #include <vector>
 #include <set>
 
+#include <cstdio>
+
 // =======================================================================
 
 ImplFontMetric::ImplFontMetric()
@@ -857,7 +859,7 @@ int FontCharMap::CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const
 
 // -----------------------------------------------------------------------
 
-void FontCharMap::Reset( ImplFontCharMap* pNewMap )
+void FontCharMap::Reset( const ImplFontCharMap* pNewMap )
 {
     if( pNewMap == NULL )
     {

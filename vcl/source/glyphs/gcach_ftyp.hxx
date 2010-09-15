@@ -186,7 +186,7 @@ public:
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual ImplFontCharMap*    GetImplFontCharMap( void ) const;
+    virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
 
     virtual int                 GetGlyphIndex( sal_UCS4 ) const;
     int                         GetRawGlyphIndex( sal_UCS4 ) const;

@@ -770,12 +770,12 @@ void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
-ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
 
-    ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
     return pIFCMap;
 }
 

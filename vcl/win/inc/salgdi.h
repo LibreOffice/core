@@ -82,7 +82,7 @@ public:
     bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
 #endif
 
-    ImplFontCharMap*        GetImplFontCharMap() const;
+    const ImplFontCharMap*  GetImplFontCharMap() const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {

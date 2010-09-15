@@ -1494,12 +1494,12 @@ void X11SalGraphics::DrawStringUCS2MB( ExtendedFontStruct& rFont,
 
 //--------------------------------------------------------------------------
 
-ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
     if( !mpServerFont[0] )
         return NULL;
 
-    ImplFontCharMap* pIFCMap = mpServerFont[0]->GetImplFontCharMap();
+    const ImplFontCharMap* pIFCMap = mpServerFont[0]->GetImplFontCharMap();
     return pIFCMap;
 }
 

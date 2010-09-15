@@ -116,7 +116,7 @@ inline FourCharCode GetTag(const char aTagName[5])
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 
-ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
     if( mpCharMap )
     {
@@ -1986,7 +1986,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
     if( !mpMacFontData )
         return ImplFontCharMap::GetDefaultMap();

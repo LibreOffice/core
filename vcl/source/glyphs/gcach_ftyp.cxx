@@ -1736,10 +1736,10 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
-/*const*/ ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
+const ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
 {
     const ImplFontCharMap* pIFCMap = mpFontInfo->GetImplFontCharMap();
-    return const_cast<ImplFontCharMap*>(pIFCMap); // TODO: make all GetImplFontCharMap()'s const-correct
+    return pIFCMap;
 }
 
 const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )

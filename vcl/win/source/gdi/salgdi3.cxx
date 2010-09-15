@@ -1207,7 +1207,7 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
     if( !mpUnicodeMap )
         return NULL;
@@ -2062,7 +2062,7 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
 {
     if( !mpWinFontData[0] )
         return ImplFontCharMap::GetDefaultMap();

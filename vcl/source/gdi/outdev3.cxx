@@ -8006,7 +8006,7 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     }
     else            // need to cache
     {
-        ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
+        const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
         rFontCharMap.Reset( pNewMap );
 
         // manage cache round-robin and insert data

@@ -189,7 +189,7 @@ public:
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
-    virtual ImplFontCharMap*    GetImplFontCharMap() const = 0;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
