@@ -185,7 +185,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     }
 
     String aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
-    String aRegHelpText( FwkResId( STR_BACKING_REGHELP ) );
     String aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
     String aTplRepHelpText( FwkResId( STR_BACKING_TPLREP ) );
 
@@ -213,12 +212,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.SetItemText( nItemId_Extensions, aExtHelpText );
     maToolbox.SetItemCommand( nItemId_Extensions, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Extensions" ) ) );
     maToolbox.ShowItem( nItemId_Extensions );
-
-    maToolbox.InsertItem( nItemId_Reg, Image() );
-    maToolbox.SetQuickHelpText( nItemId_Reg, aRegHelpText );
-    maToolbox.SetItemText( nItemId_Reg, aRegHelpText );
-    maToolbox.SetItemCommand( nItemId_Reg, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Register" ) ) );
-    maToolbox.ShowItem( nItemId_Reg );
 
     maToolbox.InsertItem( nItemId_Info, Image() );
     maToolbox.SetItemText( nItemId_Info, aInfoHelpText );
@@ -431,7 +424,6 @@ void BackingWindow::initBackground()
         maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) );
     }
     maToolbox.SetItemImage( nItemId_Extensions, BitmapEx( FwkResId( BMP_BACKING_EXT ) ) );
-    maToolbox.SetItemImage( nItemId_Reg, BitmapEx( FwkResId( BMP_BACKING_REG ) ) );
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );
     maToolbox.SetItemImage( nItemId_TplRep, BitmapEx( FwkResId( BMP_BACKING_TPLREP ) ) );
 

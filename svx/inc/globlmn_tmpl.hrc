@@ -1110,10 +1110,6 @@
                 };\
                 MenuItem\
                 {\
-                    ITEM_HELP_ONLINE_REGISTRATION\
-                };\
-                MenuItem\
-                {\
                     Separator = TRUE ; \
                 };\
                 MenuItem\
