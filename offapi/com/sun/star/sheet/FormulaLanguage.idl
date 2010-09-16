@@ -60,6 +60,10 @@ constants FormulaLanguage
      */
     const long NATIVE   = 3;
 
+    /** Function names and operators as used in the English version of
+        Excel.
+     */
+    const long XL_ENGLISH = 4;
 };
 
 //=============================================================================
