@@ -29,11 +29,6 @@
 '*
 '* short description : will be moved to autocorrection.bas/inc
 '*
-'**************************************************************************************
-' #1 tiToolsThesaurus
-' #1 tiToolsHyphenation1
-' #1 tiToolsHyphenation2
-' #1 tToolsMacro
 '\*************************************************************************************
 '   sFile = gTesttoolpath + "graphics\required\input\silben_"+iSprache+sExt
 
@@ -46,6 +41,7 @@ testcase tiToolsThesaurus
     Dim sAlternativeText as string
     Dim sExt as string
     Dim ZaehlerBedeutung
+    dim sWorkFile as string
 
     'for normal text, the thesaurus is enabled,
     'if the format->character->language of the word has a thesaurus
@@ -113,7 +109,10 @@ testcase tiToolsThesaurus
         sExt = ".odp"
     endif
 
-    Call hFileOpenLocally(gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
+    sWorkFile = gTesttoolPath & "graphics\required\input\recht_" & iSprache & sExt
+    hFileDelete( sWorkFile )
+
+    Call hFileOpenLocally( sWorkFile )
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
@@ -164,9 +163,9 @@ testcase tiToolsThesaurus
         endif
         Thesaurus.OK
 
-        if(Ucase(gApplication) = "DRAW") then
+        if( gApplication = "DRAW" ) then
             Kontext "Draw"
-        elseif(Ucase(gApplication) = "IMPRESS") then
+        elseif( gApplication = "IMPRESS") then
             Kontext "Impress"
         else ' fallback
             warnlog "gApplication is wrong"
