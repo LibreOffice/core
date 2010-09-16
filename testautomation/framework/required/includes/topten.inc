@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Smoke test (load/save/clipboard)
 '*
@@ -33,33 +33,37 @@
 
 sub topten
 
-    gApplication = "WRITER"
-    call Top_ten_test
-    
-    gApplication = "CALC"
-    call Top_ten_test
-    
-    gApplication = "IMPRESS"
-    call Top_ten_test
-    
-    gApplication = "DRAW"
-    call Top_ten_test
-    
-    gApplication = "MATH"
-    call Top_ten_test
-    
-    gApplication = "HTML"
-    call Top_ten_test
-    
-    gApplication = "MASTERDOCUMENT"
-    call Top_ten_test
+    ' we need the binary filters (.sxw etc.) for this test but beginning with
+    ' OOo 3.3 these are optional
+    if ( hCheckForBinfilters() ) then
+        gApplication = "WRITER"
+        call Top_ten_test
 
+        gApplication = "CALC"
+        call Top_ten_test
+
+        gApplication = "IMPRESS"
+        call Top_ten_test
+
+        gApplication = "DRAW"
+        call Top_ten_test
+
+        gApplication = "MATH"
+        call Top_ten_test
+
+        gApplication = "HTML"
+        call Top_ten_test
+
+        gApplication = "MASTERDOCUMENT"
+        call Top_ten_test
+    endif
 end sub
 
 '*******************************************************************************
 
 testcase Top_ten_test
-    dim sUserWorkDirectory as string
+
+    dim sUserWorkDirectory as string
     dim sFilename_native as String
     dim sFilename_export as String
     dim sFilter_native as string

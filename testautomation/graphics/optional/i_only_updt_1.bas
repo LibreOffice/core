@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress Only Required Test (Part 1)
 '*
@@ -58,7 +58,7 @@ sub main
     call im_004_
     call id_004
     call id_005
-    call id_006
+    call id_Tools
 
     Call hStatusOut
 end sub

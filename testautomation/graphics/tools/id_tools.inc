@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : some tools (Functions)
 '*
@@ -264,53 +264,47 @@ function fMakeDocumentWritable() as boolean
         printlog "Document is already writable."
         fMakeDocumentWritable = true
     endif
-
+    sleep(1)
 end function
 
 '-------------------------------------------------------------------------------
 
-function fGetSizeXY (sX as string, sY as string, bRetrieveOnly as boolean) as Boolean
+function fGetSizeXY (sX as string, sY as string, bGet as boolean) as Boolean
+   dim sTx as string
+   dim sTy as string
+   dim bReturn as boolean
 
-    const RC_FAILURE = -1
-
-    dim sTx as string
-    dim sTy as string
-
-    fGetSizeXY() = True
-
-    if ( hUseAsyncSlot( "ContextPositionAndSize" ) <> RC_FAILURE ) then
-
-        kontext
-        active.SetPage TabPositionAndSize
-
-        kontext "TabPositionAndSize"
-        if ( TabPositionAndSize.exists( 2 ) ) then
-            sTx = Width.GetText()
-            sTy = Height.GetText()
-            hCloseDialog( TabPositionAndSize, "ok" )
-        else
-            warnlog "Couldn't switch tab page :-( "
-        endif
-
-        if ( bRetrieveOnly ) then  ' Get the Values only
-            sY = sTy
-            sX = sTx
-        else          ' Get the Values and compare them
-            if ( not LiberalMeasurement (sX,sTx) ) then
-                warnlog "width is different :-( should: '"+sX+"' is: '"+sTx+"'" + "eventually a result of i35519"
-                fGetSizeXY() = False
-            endif
-            if (not LiberalMeasurement (sY,sTy) ) then
-                warnlog "hight is different :-( should: '"+sY+"' is: '"+sTy+"'" + "eventually a result of i35519"
-                fGetSizeXY() = False
-            endif
-        endif
-    else
-        warnlog( "Failed to open <Position And Size> dialog" )
-    endif
-
+   bReturn = True
+   try
+      ContextPositionAndSize
+   catch
+      warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
+   endcatch
+   kontext
+   active.SetPage TabPositionAndSize
+   kontext "TabPositionAndSize"
+   if TabPositionAndSize.exists (5) then
+      sTx = Width.GetText
+      sTy = Height.GetText
+      TabPositionAndSize.OK
+   else
+      warnlog "Couldn't switch tab page :-( "
+   endif
+   if bGet then  ' Get the Values only
+      sY = sTy
+      sX = sTx
+   else          ' Get the Values and COMPARE them
+      if (LiberalMeasurement (sX,sTx) <> TRUE) then
+         warnlog "width is different :-( should: '"+sX+"' is: '"+sTx+"'" + "eventually a result of i35519"
+         bReturn = False
+      endif
+      if (LiberalMeasurement (sY,sTy) <> TRUE) then
+         warnlog "hight is different :-( should: '"+sY+"' is: '"+sTy+"'" + "eventually a result of i35519"
+         bReturn = False
+      endif
+      bGet = bReturn
+   endif
 end function
-
 '-------------------------------------------------------------------------
 
 function hCallExport ( cFileName as String , sFilter as String, optional bSelection as boolean ) as Boolean

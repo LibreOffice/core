@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Checking all gallery themes
 '*
@@ -102,6 +102,7 @@ testcase tLoad100GalleryGraphicFiles
             '///    + Deleting the graphic with &lt;delete&gt; of the keyboard
             '/// <i>Loop ends</i>
             x = LoadGraphic ( lsGraphics(t), corLoad )
+            sleep(1)
             printlog
         catch
             ExceptLog

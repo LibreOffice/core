@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - Edit Menu Part II
 '*
@@ -583,15 +583,15 @@ testcase tEditImageMap
     printlog " Click on 'Active'-button"
     Aktiv.Click
     '/// Click on 'Macro...'-button
-	printlog " Click on 'Macro...'-button"
-	warnlog "#i102720# => crash, therefor this functionality is outcommented"
-'		Makro.Click
-'		Kontext "MakroZuweisen"
-'		Call DialogTest ( MakroZuweisen )
-'		'/// Close 'Assign Macro'-dialog with Cancel
-'		printlog " Close 'Assign Macro'-dialog with Cancel"
-'		MakroZuweisen.Cancel
-'		Kontext "ImageMapEditor"
+    printlog " Click on 'Macro...'-button"
+'    warnlog "#i102720# => crash, therefor this functionality is outcommented"
+    Makro.Click
+    Kontext "MakroZuweisen"
+    Call DialogTest ( MakroZuweisen )
+    '/// Close 'Assign Macro'-dialog with Cancel
+    printlog " Close 'Assign Macro'-dialog with Cancel"
+    MakroZuweisen.Cancel
+    Kontext "ImageMapEditor"
     '/// Click on 'Properties'-button
     printlog " Click on 'Properties'-button"
     Eigenschaften.Click

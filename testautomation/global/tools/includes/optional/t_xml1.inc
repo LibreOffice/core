@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : helge.delfs@sun.com
+'* Owner : helge.delfs@oracle.com
 '*
 '* short description : simple XML-Parser for XML-Files from Registration-Database and Routines to work with SAX-Parser in Testtool
 '*

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress Required Test Library (4)
 '*
@@ -49,6 +49,7 @@ testcase tiInsertSlideExpandSummary
     Kontext "DocumentImpressOutlineView"
     printlog "Type 2 rows "
     DocumentImpressOutlineView.TypeKeys "Herbert<Return>Rudi"
+    sleep(1)
     printlog "View->Master View->Drawing View "
     ViewWorkspaceDrawingView
     WaitSlot()

@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for Basic IDE / Dialog i18n-feature
 '*
@@ -49,6 +49,7 @@ testcase tUpdtBasicDialogI18n
     printlog( "Click Manage Languages on ToolsCollectionBar")
     kontext "ToolsCollectionBar" 
     if ( ToolsCollectionBar.exists( DIALOG_DEFAULT_TIMEOUT ) ) then
+        wait( 500 )
         hClickButton( ManageLanguage )
     else
         warnlog( "<ToolsCollectionBar> is not open, is the test environment dirty?" )

@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner :  helge.delfs@sun.com
+'* owner :  helge.delfs@oracle.com
 '*
 '* short description : Writer Filter Availability Test (Import/Export/Group names)
 '*

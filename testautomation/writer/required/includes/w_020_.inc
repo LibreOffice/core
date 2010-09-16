@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description: Testcases for Toolbars.
 '*
@@ -53,6 +53,8 @@ sub w_020_
     Call tHtmlDoc_TB_Form
     Call tHtmlDoc_TB_Rest
     gApplication = "WRITER"
+
+    Call tUpdtFindBar()
 
 end sub
 

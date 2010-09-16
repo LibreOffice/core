@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - File Menu
 '*
@@ -238,6 +238,7 @@ testcase tFileOpenCSV
     Oeffnen.Click
     Kontext "TextImport"
     TextImport.ok
+    sleep (2)
     Printlog " - CSV import dialog is in function"
     Kontext "DocumentCalc"
     printlog " Close document"
@@ -355,6 +356,11 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileRecentDocuments
+
+if gPlatform = "lin" then
+    warnlog "#110649# Due to bug this testcase is not available"
+    goto endsub
+end if
     
     dim sTestFile as string
       
