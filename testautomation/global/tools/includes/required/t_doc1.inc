@@ -243,20 +243,17 @@ end function
 '
 function hCloseDocument()
 
-    '/// Trigger FileClose slot'
     hUseAsyncSlot( "FileClose")
 
-    '/// Accept to lose changes'
     Kontext "Active"
     if ( Active.Exists( 2 ) ) then
         try
             Active.No
         catch
-            Active.Click( 202 )
+            Active.click( 202 )
         endcatch
     end if
 
-    '/// Wait for FileClose to complete'
     WaitSlot( 2000 )
 
 end function

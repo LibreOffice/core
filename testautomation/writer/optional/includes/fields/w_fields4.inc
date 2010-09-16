@@ -340,6 +340,7 @@ testcase tDocInformationCreated
 	Dim sLastName1    as String
 	Dim sVarResult(3) as String
 	Dim sFixResult(3) as String
+        dim sTestFile as string
 	Dim i as Integer
 	
 	sFirstName1 = "Test1" : sLastName1 = "Test2"
