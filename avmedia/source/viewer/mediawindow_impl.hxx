@@ -29,7 +29,11 @@
 #define _AVMEDIA_MEDIAWINDOW_IMPL_HXX
 
 #include <svtools/transfer.hxx>
+#ifdef GSTREAMER
+#include <vcl/syschild.hxx>
+#else
 #include <vcl/javachild.hxx>
+#endif
 
 #include "mediawindowbase_impl.hxx"
 #include "mediacontrol.hxx"
@@ -61,7 +65,11 @@ namespace avmedia
         // - MediaChildWindow -
         // --------------------
 
+#ifdef GSTREAMER
+        class MediaChildWindow : public SystemChildWindow
+#else
         class MediaChildWindow : public JavaChildWindow
+#endif
         {
         public:
 

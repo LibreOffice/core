@@ -36,6 +36,11 @@
 #include <osl/mutex.hxx>
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
+#ifdef UNX
+#ifndef _SV_SYSDATA_HXX
+#include <vcl/sysdata.hxx>
+#endif
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_SYSTEMPOINTER_HDL_
 #include <com/sun/star/awt/SystemPointer.hdl>
@@ -94,7 +99,11 @@ void  MediaWindowControl::execute( const MediaItem& rItem )
 // --------------------
 
 MediaChildWindow::MediaChildWindow( Window* pParent ) :
+#ifdef GSTREAMER
+    SystemChildWindow( pParent, WB_CLIPCHILDREN )
+#else
     JavaChildWindow( pParent, WB_CLIPCHILDREN )
+#endif
 {
 }
 
@@ -111,7 +120,11 @@ void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                           rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
 
+#ifdef GSTREAMER
+    SystemChildWindow::MouseMove( rMEvt );
+#else
     JavaChildWindow::MouseMove( rMEvt );
+#endif
     GetParent()->MouseMove( aTransformedEvent );
 }
 
@@ -122,7 +135,11 @@ void MediaChildWindow::MouseButtonDown( const MouseEvent& rMEvt )
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                           rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
 
+#ifdef GSTREAMER
+    SystemChildWindow::MouseButtonDown( rMEvt );
+#else
     JavaChildWindow::MouseButtonDown( rMEvt );
+#endif
     GetParent()->MouseButtonDown( aTransformedEvent );
 }
 
@@ -133,7 +150,11 @@ void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                           rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
 
+#ifdef GSTREAMER
+    SystemChildWindow::MouseButtonUp( rMEvt );
+#else
     JavaChildWindow::MouseButtonUp( rMEvt );
+#endif
     GetParent()->MouseButtonUp( aTransformedEvent );
 }
 
@@ -141,7 +162,11 @@ void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
 {
+#ifdef GSTREAMER
+    SystemChildWindow::KeyInput( rKEvt );
+#else
     JavaChildWindow::KeyInput( rKEvt );
+#endif
     GetParent()->KeyInput( rKEvt );
 }
 
@@ -149,7 +174,11 @@ void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
 
 void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
 {
+#ifdef GSTREAMER
+    SystemChildWindow::KeyUp( rKEvt );
+#else
     JavaChildWindow::KeyUp( rKEvt );
+#endif
     GetParent()->KeyUp( rKEvt );
 }
 
@@ -160,7 +189,11 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
     const CommandEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ),
                                             rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
 
+#ifdef GSTREAMER
+    SystemChildWindow::Command( rCEvt );
+#else
     JavaChildWindow::Command( rCEvt );
+#endif
     GetParent()->Command( aTransformedEvent );
 }
 
@@ -229,18 +262,31 @@ void MediaWindowImpl::onURLChanged()
 {
     if( getPlayer().is() )
     {
-        uno::Sequence< uno::Any >              aArgs( 2 );
+        uno::Sequence< uno::Any >              aArgs( 3 );
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
         const Point                            aPoint;
         const Size                             aSize( maChildWindow.GetSizePixel() );
+#ifndef GSTREAMER
         const sal_IntPtr                       nWndHandle = static_cast< sal_IntPtr >( maChildWindow.getParentWindowHandleForJava() );
+#else
+        const sal_Int32                        nWndHandle = 0;
+#endif
 
         aArgs[ 0 ] = uno::makeAny( nWndHandle );
         aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
+#ifdef GSTREAMER
+                const SystemEnvData *pSystemData = maChildWindow.GetSystemData();
+                OSL_TRACE( "MediaWindowImpl::onURLChanged xwindow id: %ld", pSystemData->aWindow );
+                aArgs[ 2 ] = uno::makeAny( pSystemData->aWindow );
+#endif
 
         try
         {
+#ifdef GSTREAMER
+            if( pSystemData->aWindow != 0 )
+#else
             if( nWndHandle != 0 )
+#endif
                 xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
         }
         catch( uno::RuntimeException )

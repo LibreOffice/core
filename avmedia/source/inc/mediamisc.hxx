@@ -29,6 +29,9 @@ class ResMgr;
 
 #define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
 
+#ifdef GSTREAMER
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_GStreamer"
+#else
 #ifdef WNT
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
 #else
@@ -36,6 +39,7 @@ class ResMgr;
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
 #else
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
+#endif
 #endif
 #endif
 
