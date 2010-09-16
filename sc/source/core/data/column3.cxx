@@ -1968,8 +1968,18 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
                 if ( nLen )
                 {
                     if ( nFormat )
-                    {   // more decimals than standard?
-                        sal_uInt16 nPrec = pNumFmt->GetFormatPrecision( nFormat );
+                    {
+                        const SvNumberformat* pEntry = pNumFmt->GetEntry( nFormat );
+                        sal_uInt16 nPrec;
+                        if (pEntry)
+                        {
+                            BOOL bThousand, bNegRed;
+                            USHORT nLeading;
+                            pEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrec, nLeading);
+                        }
+                        else
+                            nPrec = pNumFmt->GetFormatPrecision( nFormat );
+
                         if ( nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > nPrecision )
                             nPrecision = nPrec;
                     }
