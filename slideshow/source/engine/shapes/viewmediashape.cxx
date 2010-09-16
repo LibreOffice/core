@@ -41,6 +41,9 @@
 #include <vcl/window.hxx>
 #include <vcl/javachild.hxx>
 #include <vcl/salbtype.hxx>
+#ifdef GSTREAMER
+#include <vcl/sysdata.hxx>
+#endif
 
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -153,7 +156,11 @@ namespace slideshow
                 mxPlayerWindow.clear();
             }
 
+#ifdef GSTREAMER
+            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >();
+#else
             mpMediaWindow = ::std::auto_ptr< JavaChildWindow >();
+#endif
 
             // shutdown player
             if( mxPlayer.is() )
@@ -304,7 +311,8 @@ namespace slideshow
                             aDeviceParams[ 0 ] >>= aImplName;
 
                             if( aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                    RTL_CONSTASCII_STRINGPARAM("VCL") ))
+                                    RTL_CONSTASCII_STRINGPARAM("VCL") ) || aImplName.endsWithIgnoreAsciiCaseAsciiL(
+                                    RTL_CONSTASCII_STRINGPARAM("Cairo") ) )
                             {
                                 implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams );
                             }
@@ -410,6 +418,7 @@ namespace slideshow
         bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams)
         {
+                    OSL_TRACE( "ViewMediaShape::implInitializeVCLBasedPlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
             {
                 try
@@ -431,28 +440,46 @@ namespace slideshow
 
                         if( !rRangePix.isEmpty() )
                         {
-                            uno::Sequence< uno::Any >   aArgs( 2 );
+                            uno::Sequence< uno::Any >   aArgs( 3 );
                             awt::Rectangle              aAWTRect( rRangePix.getMinX(),
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
 
+#ifdef GSTREAMER
+                                                        OSL_TRACE( "created sys child window for viewmediashape" );
+                            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
+#else
                             mpMediaWindow = ::std::auto_ptr< JavaChildWindow >( new JavaChildWindow( pWindow, WB_CLIPCHILDREN ) );
+#endif
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
                             mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X,
                                                                    aAWTRect.Y ),
                                                             Size( aAWTRect.Width,
                                                                   aAWTRect.Height ));
+                            mpMediaWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+                            mpMediaWindow->EnableEraseBackground( FALSE );
+                            mpMediaWindow->EnablePaint( FALSE );
+                            mpMediaWindow->SetForwardKey( TRUE );
+                            mpMediaWindow->SetMouseTransparent( TRUE );
                             mpMediaWindow->Show();
 
                             if( mxPlayer.is() )
                             {
+#ifndef GSTREAMER
                                 aArgs[ 0 ] = uno::makeAny(
                                     sal::static_int_cast<sal_IntPtr>(
                                         mpMediaWindow->getParentWindowHandleForJava()) );
-
+#else
+                                                                aArgs[ 0 ] = uno::makeAny ( (sal_Int32) 0 );
+#endif
                                 aAWTRect.X = aAWTRect.Y = 0;
                                 aArgs[ 1 ] = uno::makeAny( aAWTRect );
+#ifdef GSTREAMER
+                                                                const SystemEnvData *pSystemData = mpMediaWindow->GetSystemData();
+                                                                OSL_TRACE( "xwindow id: %ld", pSystemData->aWindow );
+                                aArgs[ 2 ] = uno::makeAny( pSystemData->aWindow );
+#endif
 
                                 mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
 
