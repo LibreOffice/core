@@ -49,6 +49,8 @@
 //--------------------------------------------------------------------------
 
 
+using ::com::sun::star::util::SearchOptions;
+
 BOOL lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& rVal )
 {
     //  TRUE = more than 1 paragraph
@@ -657,6 +659,12 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
 
+            if (!aSearchOptions.searchString.getLength())
+            {
+                // Search for empty cells.
+                return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
+            }
+
             //  #107259# reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).
             //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
@@ -683,8 +691,269 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
     return bFound;
 }
 
+bool ScTable::SearchAndReplaceEmptyCells(
+    const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
+    String& rUndoStr, ScDocument* pUndoDoc)
+{
+    SCCOL nColStart, nColEnd;
+    SCROW nRowStart, nRowEnd;
+    GetFirstDataPos(nColStart, nRowStart);
+    GetLastDataPos(nColEnd, nRowEnd);
 
+    ScRangeList aRanges;
+    aRanges.Append(ScRange(nColStart, nRowStart, nTab, nColEnd, nRowEnd, nTab));
 
+    if (rSearchItem.GetSelection())
+    {
+        // current selection only.
+        if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+            // There is no selection.  Bail out.
+            return false;
 
+        ScRangeList aMarkedRanges, aNewRanges;
+        rMark.FillRangeListWithMarks(&aMarkedRanges, true);
+        for (ScRangePtr p = aMarkedRanges.First(); p; p = aMarkedRanges.Next())
+        {
+            if (p->aStart.Col() > nColEnd || p->aStart.Row() > nRowEnd)
+                // This range is outside the data area.  Skip it.
+                continue;
 
+            // Shrink the range into data area only.
+            if (p->aStart.Col() < nColStart)
+                p->aStart.SetCol(rCol);
+            if (p->aStart.Row() < nRowStart)
+                p->aStart.SetRow(rRow);
 
+            if (p->aEnd.Col() > nColEnd)
+                p->aEnd.SetCol(nColEnd);
+            if (p->aEnd.Row() > nRowEnd)
+                p->aEnd.SetRow(nRowEnd);
+
+            aNewRanges.Append(*p);
+        }
+        aRanges = aNewRanges;
+    }
+
+    sal_uInt16 nCommand = rSearchItem.GetCommand();
+    if (nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE)
+    {
+        if (rSearchItem.GetBackward())
+        {
+            for (ScRangePtr p = aRanges.Last(); p; p = aRanges.Prev())
+            {
+                if (SearchRangeForEmptyCell(*p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
+                    return true;
+            }
+        }
+        else
+        {
+            for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+            {
+                if (SearchRangeForEmptyCell(*p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
+                    return true;
+            }
+        }
+    }
+    else if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+    {
+        bool bFound = false;
+        ScMarkData aNewMark(rMark);
+        aNewMark.ResetMark();
+        for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+            bFound |= SearchRangeForAllEmptyCells(*p, rSearchItem, aNewMark, rUndoStr, pUndoDoc);
+        rMark = aNewMark;
+        return bFound;
+    }
+    return false;
+}
+
+bool ScTable::SearchRangeForEmptyCell(
+    const ScRange& rRange, const SvxSearchItem& rSearchItem,
+    SCCOL& rCol, SCROW& rRow, String& rUndoStr, ScDocument* /*pUndoDoc*/)
+{
+    sal_uInt16 nCmd = rSearchItem.GetCommand();
+    if (rSearchItem.GetBackward())
+    {
+        // backward search
+        if (rSearchItem.GetRowDirection())
+        {
+            // row direction.
+            SCROW nBeginRow = rRange.aEnd.Row() > rRow ? rRow : rRange.aEnd.Row();
+            for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
+            {
+                SCCOL nBeginCol = rRange.aEnd.Col();
+                if (nRow == rRow && nBeginCol >= rCol)
+                    // always start from one cell before the cursor.
+                    nBeginCol = rCol - (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+
+                for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
+                {
+                    ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+                    if (!pCell)
+                    {
+                        // empty cell found.
+                        rCol = nCol;
+                        rRow = nRow;
+                        if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
+                            rSearchItem.GetReplaceString().Len())
+                        {
+                            aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                            rUndoStr = String();
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // column direction.
+            SCCOL nBeginCol = rRange.aEnd.Col() > rCol ? rCol : rRange.aEnd.Col();
+            for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
+            {
+                SCROW nBeginRow = rRange.aEnd.Row();
+                if (nCol == rCol && nBeginRow >= rRow)
+                    // always start from one cell before the cursor.
+                    nBeginRow = rRow - (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
+                {
+                    ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+                    if (!pCell)
+                    {
+                        // empty cell found.
+                        rCol = nCol;
+                        rRow = nRow;
+                        if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
+                            rSearchItem.GetReplaceString().Len())
+                        {
+                            aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                            rUndoStr = String();
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        // forward search
+        if (rSearchItem.GetRowDirection())
+        {
+            // row direction.
+            SCROW nBeginRow = rRange.aStart.Row() < rRow ? rRow : rRange.aStart.Row();
+            for (SCROW nRow = nBeginRow; nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                SCCOL nBeginCol = rRange.aStart.Col();
+                if (nRow == rRow && nBeginCol <= rCol)
+                    // always start from one cell past the cursor.
+                    nBeginCol = rCol + (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                for (SCCOL nCol = nBeginCol; nCol <= rRange.aEnd.Col(); ++nCol)
+                {
+                    ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+                    if (!pCell)
+                    {
+                        // empty cell found.
+                        rCol = nCol;
+                        rRow = nRow;
+                        if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
+                            rSearchItem.GetReplaceString().Len())
+                        {
+                            aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                            rUndoStr = String();
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // column direction.
+            SCCOL nBeginCol = rRange.aStart.Col() < rCol ? rCol : rRange.aStart.Col();
+            for (SCCOL nCol = nBeginCol; nCol <= rRange.aEnd.Col(); ++nCol)
+            {
+                SCROW nBeginRow = rRange.aStart.Row();
+                if (nCol == rCol && nBeginRow <= rRow)
+                    // always start from one cell past the cursor.
+                    nBeginRow = rRow + (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                for (SCROW nRow = nBeginRow; nRow <= rRange.aEnd.Row(); ++nRow)
+                {
+                    ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+                    if (!pCell)
+                    {
+                        // empty cell found.
+                        rCol = nCol;
+                        rRow = nRow;
+                        if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
+                            rSearchItem.GetReplaceString().Len())
+                        {
+                            aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                            rUndoStr = String();
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool ScTable::SearchRangeForAllEmptyCells(
+    const ScRange& rRange, const SvxSearchItem& rSearchItem, ScMarkData& rMark,
+    String& rUndoStr, ScDocument* pUndoDoc)
+{
+    bool bFound = false;
+    bool bReplace = (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) &&
+                    (rSearchItem.GetReplaceString().Len() > 0);
+
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        if (aCol[nCol].IsEmptyData())
+        {
+            // The entire column is empty.  Add the whole column and move on.
+            rMark.SetMultiMarkArea(
+                ScRange(nCol, rRange.aStart.Row(), nTab, nCol, rRange.aEnd.Row(), nTab));
+            bFound = true;
+
+            if (bReplace)
+            {
+                const String& rNewStr = rSearchItem.GetReplaceString();
+                for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+                {
+                    aCol[nCol].Insert(nRow, new ScStringCell(rNewStr));
+                    if (pUndoDoc)
+                        // TODO: I'm using a string cell with empty content to
+                        // trigger deletion of cell instance on undo.  Maybe I
+                        // should create a new cell type for this?
+                        pUndoDoc->PutCell(nCol, nRow, nTab, new ScStringCell(String()));
+                }
+                rUndoStr = String();
+            }
+            continue;
+        }
+
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+            if (!pCell)
+            {
+                // empty cell found
+                rMark.SetMultiMarkArea(ScRange(nCol, nRow, nTab));
+                bFound = true;
+
+                if (bReplace)
+                {
+                    aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                    if (pUndoDoc)
+                        // TODO: I'm using a string cell with empty content to
+                        // trigger deletion of cell instance on undo.  Maybe I
+                        // should create a new cell type for this?
+                        pUndoDoc->PutCell(nCol, nRow, nTab, new ScStringCell(String()));
+                }
+            }
+        }
+    }
+    return bFound;
+}

@@ -1354,7 +1354,24 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
                     CloneCell( i, nFlags, *rColumn.pDocument, aDestPos );
 
                 if (pNew)
-                    rColumn.Insert(pItems[i].nRow, pNew);
+                {
+                    // Special case to allow removing of cell instances.  A
+                    // string cell with empty content is used to indicate an
+                    // empty cell.
+                    if (pNew->GetCellType() == CELLTYPE_STRING)
+                    {
+                        String aStr;
+                        static_cast<ScStringCell*>(pNew)->GetString(aStr);
+                        if (aStr.Len() == 0)
+                            // A string cell with empty string.  Delete the cell itself.
+                            rColumn.Delete(pItems[i].nRow);
+                        else
+                            // non-empty string cell
+                            rColumn.Insert(pItems[i].nRow, pNew);
+                    }
+                    else
+                        rColumn.Insert(pItems[i].nRow, pNew);
+                }
             }
         }
     }

@@ -230,8 +230,13 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_SEARCH_ITEM:
-                rSet.Put( ScGlobal::GetSearchItem() );
+            {
+                SvxSearchItem aItem(ScGlobal::GetSearchItem()); // make a copy.
+                // Search on current selection if a range is marked.
+                aItem.SetSelection(rMark.IsMarked());
+                rSet.Put(aItem);
                 break;
+            }
 
             case SID_SEARCH_OPTIONS:
                 {

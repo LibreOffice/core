@@ -820,6 +820,16 @@ private:
     BOOL        SearchAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark);
     BOOL        ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                                 ScDocument* pUndoDoc);
+    bool        SearchAndReplaceEmptyCells(
+                    const SvxSearchItem& rSearchItem,
+                    SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
+                    String& rUndoStr, ScDocument* pUndoDoc);
+    bool        SearchRangeForEmptyCell(const ScRange& rRange,
+                    const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
+                    String& rUndoStr, ScDocument* pUndoDoc);
+    bool        SearchRangeForAllEmptyCells(const ScRange& rRange,
+                    const SvxSearchItem& rSearchItem, ScMarkData& rMark,
+                    String& rUndoStr, ScDocument* pUndoDoc);
 
                                 // benutzen globalen SortParam:
     BOOL        IsSorted(SCCOLROW nStart, SCCOLROW nEnd);
