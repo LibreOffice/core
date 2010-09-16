@@ -1650,6 +1650,7 @@ ToFile( "SERVLETAPI_JAR",    "@SERVLETAPI_JAR@",   "e" );
 ToFile( "ENABLE_DBUS",       "@ENABLE_DBUS@",      "e" );
 ToFile( "ENABLE_GCONF",      "@ENABLE_GCONF@",     "e" );
 ToFile( "ENABLE_GNOMEVFS",   "@ENABLE_GNOMEVFS@",  "e" );
+ToFile( "ENABLE_GSTREAMER",  "@ENABLE_GSTREAMER@", "e" );
 ToFile( "ENABLE_GIO",        "@ENABLE_GIO@",       "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
 ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );

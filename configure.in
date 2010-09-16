@@ -297,6 +297,9 @@ AC_ARG_ENABLE(randr-link,
 [  --disable-randr-link    disable linking with libXrandr, instead dynamically 
                            open it at runtime
 ],,enable_randr_link=yes)
+AC_ARG_ENABLE(gstreamer,
+[  --disable-gstreamer     disable building the gstreamer avmedia backend
+],,enable_gstreamer=yes)
 AC_ARG_WITH(myspell-dicts,
 [  --without-myspell-dicts Removes myspell dictionaries from openoffice.org
                           installation set, for people building for specific
@@ -1004,6 +1007,7 @@ case "$build_os" in
 	solaris*)
 		test_gtk=yes
 		test_cairo=yes
+        build_gstreamer=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -1037,6 +1041,7 @@ case "$build_os" in
 	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
+        build_gstreamer=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
@@ -1078,6 +1083,7 @@ case "$build_os" in
 	freebsd*)
 		test_gtk=yes
 		test_cairo=yes
+        build_gstreamer=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
@@ -1112,6 +1118,7 @@ case "$build_os" in
 	netbsd)
 		test_gtk=yes
 		test_cairo=yes
+        build_gstreamer=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=no
@@ -5944,6 +5951,26 @@ AC_SUBST(BUILD_PIXMAN)
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+
+dnl ===================================================================
+dnl Check whether the GStreamer libraries are available.
+dnl ===================================================================
+
+ENABLE_GSTREAMER=""
+
+if test  "$build_gstreamer" = "yes"; then
+
+    AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
+    if test "x$enable_gstreamer" != "xno" ; then
+        ENABLE_GSTREAMER="TRUE"
+    AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES( GSTREAMER, gstreamer-0.10 gstreamer-plugins-base-0.10 )
+    else
+         AC_MSG_RESULT([no])
+    fi
+fi
+
+AC_SUBST(ENABLE_GSTREAMER)
 
 dnl ===================================================================
 dnl Check whether the OpenGL libraries are available
