@@ -5412,7 +5412,7 @@ problem can be found in issue 49856.])
 	else
 		HAVE_PSDK_H="no"
 	fi
-	if test -f "$PSDK_HOME/lib/unicows.lib"; then
+    if test -f "$PSDK_HOME/lib/user32.lib"; then
 		HAVE_PSDK_LIB="yes"
 	else
 		HAVE_PSDK_LIB="no"
@@ -5693,22 +5693,6 @@ fi
 AC_SUBST(ZIP_HOME)
 
 dnl ===================================================================
-dnl Windows builds need unicows.dll in external/unicows/
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-   AC_MSG_CHECKING([for unicows.dll])
-   if test -x ./external/unicows/unicows.dll; then
-      AC_MSG_RESULT([found])
-   else
-      AC_MSG_ERROR([The Microsoft Layer for Unicode (unicows.dll) is missing in external/unicows/.
-Get it from the Microsoft site and put it into external/unicows.
-(Note: Microsoft seems to enjoy changing the exact location of this file. You
-may have to search Microsoft's website.) Last time it was seen at:
-<http://download.microsoft.com/download/b/7/5/b75eace3-00e2-4aa0-9a6f-0b6882c71642/unicows.exe>.])
-   fi
-fi
-
-dnl ===================================================================
 dnl Windows builds need dbghelp.dll in external/dbghelp/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
@@ -5758,22 +5742,20 @@ if test "$_os" = "WINNT"; then
 fi
 
 dnl ===================================================================
-dnl Windows builds with VS 2003/2005/2008 need instmsia.exe and instmsiw.exe in external/msi
+dnl Windows builds with VS 2003/2005/2008 need instmsiw.exe in external/msi
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    if test  "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
-   AC_MSG_CHECKING([for instmsia.exe/instmsiw.exe])
-   if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then
+   AC_MSG_CHECKING([for instmsiw.exe])
+   if test -x ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
    else
-      MSIAPATH=`/bin/find "$COMPATH/.." -iname instmsia.exe | head -n 1`
       MSIWPATH=`/bin/find "$COMPATH/.." -iname instmsiw.exe | head -n 1`
-      if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
-         cp "$MSIAPATH" ./external/msi/ && chmod +x ./external/msi/instmsia.exe && MSIACOPY="OK"
+      if test -n "$MSIWPATH"; then
          cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"
       fi
-      if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
-         AC_MSG_ERROR([instmsia.exe and/or instmsiw.exe are/is missing in the default location.
+      if test -z "$MSIWCOPY"; then
+         AC_MSG_ERROR([instmsiw.exe is missing in the default location.
 These programs are part of the Visual Studio installation and should be found in a
 directory similar to:
 "c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Common7\\Tools\\Deployment\\MsiRedist\\"
