@@ -62,6 +62,8 @@ public:
     virtual void                    SetBackground();
     virtual void                    SetBackground( SalColor nSalColor );
 
+        virtual void                                    SetForwardKey( BOOL bEnable );
+
     virtual const SystemEnvData*    GetSystemData() const;
 
 };

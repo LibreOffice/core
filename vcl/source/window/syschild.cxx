@@ -190,3 +190,9 @@ BOOL SystemChildWindow::IsEraseBackgroundEnabled()
     else
         return FALSE;
 }
+
+void SystemChildWindow::SetForwardKey( BOOL bEnable )
+{
+       if ( mpWindowImpl->mpSysObj )
+               mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
+}

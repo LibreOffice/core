@@ -209,3 +209,12 @@ void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
         pThis->m_pSocket = NULL;
     }
 }
+
+void GtkSalObject::SetForwardKey( BOOL bEnable )
+{
+    printf ("GtkSalObject::SetForwardKey\n");
+    if( bEnable )
+        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );
+    else
+        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
+}

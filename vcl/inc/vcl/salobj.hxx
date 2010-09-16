@@ -71,6 +71,8 @@ public:
     virtual void                    SetBackground() = 0;
     virtual void                    SetBackground( SalColor nSalColor ) = 0;
 
+        virtual void                                    SetForwardKey( BOOL bEnable ) {}
+
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
     void                    SetCallback( void* pInst, SALOBJECTPROC pProc )

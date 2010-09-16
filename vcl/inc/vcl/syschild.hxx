@@ -62,6 +62,7 @@ public:
     //  however, this might not always be required
     void                    EnableEraseBackground( BOOL bEnable = TRUE );
     BOOL                    IsEraseBackgroundEnabled();
+     void                    SetForwardKey( BOOL bEnable );
 };
 
 #endif // _SV_SYSCHILD_HXX
