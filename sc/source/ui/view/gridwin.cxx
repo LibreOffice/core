@@ -5264,24 +5264,16 @@ void ScGridWindow::UpdateCursorOverlay()
             if ( bLayoutRTL )
                 aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
 
-            BOOL bFix = ( pViewData->GetHSplitMode() == SC_SPLIT_FIX ||
-                            pViewData->GetVSplitMode() == SC_SPLIT_FIX );
-            if ( pViewData->GetActivePart()==eWhich || bFix )
-            {
-                aScrPos.X() -= 2;
-                aScrPos.Y() -= 2;
-                Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+            // Now, draw the cursor.
 
-                aPixelRects.push_back(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
-                aPixelRects.push_back(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
-                aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
-                aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
-            }
-            else
-            {
-                Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1 ) );
-                aPixelRects.push_back( aRect );
-            }
+            aScrPos.X() -= 2;
+            aScrPos.Y() -= 2;
+            Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+
+            aPixelRects.push_back(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
+            aPixelRects.push_back(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
+            aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
+            aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
         }
     }
 
@@ -5292,7 +5284,10 @@ void ScGridWindow::UpdateCursorOverlay()
 
         if(pOverlayManager)
         {
-            const Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            if (pViewData->GetActivePart() != eWhich)
+                // non-active pane uses a different color.
+                aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
@@ -5441,7 +5436,10 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
         if(pOverlayManager)
         {
-            const Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            if (pViewData->GetActivePart() != eWhich)
+                // non-active pane uses a different color.
+                aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
             basegfx::B2DRange aRB(mpAutoFillRect->Left(), mpAutoFillRect->Top(), mpAutoFillRect->Right() + 1, mpAutoFillRect->Bottom() + 1);
