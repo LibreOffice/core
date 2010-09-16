@@ -3,20 +3,20 @@
 SHELL=/bin/sh
 
 all:
-	. ./*Env.Set.sh && \
+	. ./*[Ee]nv.[Ss]et.sh && \
 	./bootstrap && \
 		cd instsetoo_native && ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -P@BUILD_MAX_JOBS@
 
 distclean:
-	. ./*Env.Set.sh && \
+	. ./*[Ee]nv.[Ss]et.sh && \
 	dmake distclean
 
 clean:
-	. ./*Env.Set.sh && \
+	. ./*[Ee]nv.[Ss]et.sh && \
 	dmake clean
-	
+
 dev-install:
-	. ./*Env.Set.sh && \
+	. ./*[Ee]nv.[Ss]et.sh && \
 		cd $$SRC_ROOT/instsetoo_native/util && \
 		LOCALINSTALLDIR=$$SRC_ROOT/install dmake openoffice_en-US PKGFORMAT=installed && \
 		$$SOLARENV/bin/linkoo $$SRC_ROOT/install/OpenOffice/installed/install/en-US $$SRC_ROOT && \
