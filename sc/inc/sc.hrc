@@ -1657,6 +1657,11 @@
 #define MID_3   3
 #define MID_4   4
 
+// ----------------------------------------------------------------------------
+// ooo-build specific resources
+
+#define SC_OOO_BUILD_START          (SC_DIALOGS_END)
+
 // Autoformat for DataPilot
 #define SID_PIVOT_AFMT              (SC_OOO_BUILD_START + 1)
 
