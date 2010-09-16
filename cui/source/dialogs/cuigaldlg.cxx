@@ -959,7 +959,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
      }
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if ( aExtensions.Len() > 240 )
         aExtensions = DEFINE_CONST_UNICODE( "*.*" );
 #endif

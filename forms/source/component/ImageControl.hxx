@@ -140,6 +140,8 @@ protected:
         bound field, or the control itself if there is no bound field
     */
     sal_Bool    impl_updateStreamForURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
+
+    DECL_LINK( OnImageImportDone, ::Graphic* );
 };
 
 //==================================================================
