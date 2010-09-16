@@ -4245,25 +4245,25 @@
 						<info>
 							<desc>Specifies if convertible MathType OLE objects are converted into Math objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="WinWordToWriter" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if convertible WinWord OLE objects are converted into Writer objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="ExcelToCalc" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if convertible Excel OLE objects are converted into Calc objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="PowerPointToImpress" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if convertible PowerPoint OLE objects are converted into Impress objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="ImportWWFieldsAsEnhancedFields" oor:type="xs:boolean">
 						<info>
@@ -4280,25 +4280,25 @@
 						<info>
 							<desc>Specifies if embedded Math objects are converted into MathType objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="WriterToWinWord" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if embedded Writer objects are converted into WinWord objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="CalcToExcel" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if embedded Calc objects are converted into Excel objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="ImpressToPowerPoint" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if embedded Impress objects are converted into PowerPoint objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
                     <prop oor:name="EnablePowerPointPreview" oor:type="xs:boolean">
                         <info>
