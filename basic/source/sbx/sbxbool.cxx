@@ -91,7 +91,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
             {
                 if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_TRUE ) ) )
                     nRes = SbxTRUE;
-                else if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
+                else if( !p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
                 {
                     // Jetzt kann es noch in eine Zahl konvertierbar sein
                     BOOL bError = TRUE;
