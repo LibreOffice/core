@@ -5,6 +5,8 @@
 # the build directories
 /*/unxlng??
 /*/unxlng??.pro
+/*/wntmsci??
+/*/wntmsci??.pro
 
 # autoconf generated stuff
 /ChangeLog
@@ -12,5 +14,3 @@
 /aclocal.m4
 
 /*/*.exe
-/solenv/wntmsci??
-/solenv/wntmsci??.pro
