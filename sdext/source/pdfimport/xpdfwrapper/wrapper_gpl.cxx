@@ -159,11 +159,7 @@ int main(int argc, char **argv)
 
 
    // Check various permissions.
-   if ( !aDoc.isOk()||
-        !aDoc.okToPrint() ||
-        !aDoc.okToChange()||
-        !aDoc.okToCopy()||
-        !aDoc.okToAddNotes() )
+   if ( !aDoc.isOk() )
    {
         pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
 
