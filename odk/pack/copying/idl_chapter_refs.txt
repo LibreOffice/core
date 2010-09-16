@@ -2462,7 +2462,6 @@ LINK:Documentation/DevGuide/Config/Using_a_Data_Source
 DESCR:Config - Using a Data Source
 REF:
 com.sun.star.configuration.ConfigurationUpdateAccess
-com.sun.star.configuration.AdministrationProvider
 com.sun.star.configuration.ConfigurationAccess
 TOPIC:
 
@@ -2504,17 +2503,10 @@ com.sun.star.frame.XFrame
 LINK:Documentation/DevGuide/Config/Connecting_to_a_Data_Source
 DESCR:Config - Connecting to a Data Source
 REF:
-com.sun.star.configuration.backend.LocalSingleBackend
-com.sun.star.configuration.AdministrationProvider
 com.sun.star.lang.XMultiServiceFactory
-com.sun.star.configuration.backend.SingleBackendAdapter
-com.sun.star.configuration.backend.Backend
-com.sun.star.configuration.backend.BackendAdapter
 com.sun.star.configuration.ConfigurationProvider
-com.sun.star.configuration.backend.SingleBackend
 com.sun.star.lang.ServiceManager
 TOPIC:
-com.sun.star.configuration.AdministrationProvider
 com.sun.star.configuration.ConfigurationProvider
 
 LINK:Documentation/DevGuide/Spreadsheets/Creating_a_New_DataPilot_Table
@@ -2924,7 +2916,6 @@ LINK:Documentation/DevGuide/Config/Configuration_Data_Sources
 DESCR:Config - Configuration Data Sources
 REF:
 com.sun.star.configuration.ConfigurationUpdateAccess
-com.sun.star.configuration.AdministrationProvider
 com.sun.star.configuration.ConfigurationProvider
 com.sun.star.configuration.ConfigurationAccess
 TOPIC:
@@ -5128,18 +5119,6 @@ com.sun.star.document.XExporter
 TOPIC:
 com.sun.star.drawing.GraphicExportFilter
 
-LINK:Documentation/DevGuide/Config/Installing_a_Custom_Configuration_Schema
-DESCR:Config - Installing a Custom Configuration Schema
-REF:
-com.sun.star.configuration.backend.MergeImporter
-com.sun.star.configuration.backend.LocalDataImporter
-com.sun.star.configuration.backend.CopyImporter
-com.sun.star.configuration.ConfigurationProvider
-TOPIC:
-com.sun.star.configuration.backend.MergeImporter
-com.sun.star.configuration.backend.LocalDataImporter
-com.sun.star.configuration.backend.CopyImporter
-
 LINK:Documentation/DevGuide/OfficeDev/Component/Getting_Frames%2C_Controllers_and_Models_from_Each_Other
 DESCR:OfficeDev - Component - Getting Frames, Controllers and Models from Each Other
 REF:
@@ -5571,12 +5550,10 @@ LINK:Documentation/DevGuide/Config/Object_Model
 DESCR:Config - Object Model
 REF:
 com.sun.star.configuration.ConfigurationUpdateAccess
-com.sun.star.configuration.AdministrationProvider
 com.sun.star.configuration.ConfigurationProvider
 com.sun.star.configuration.ConfigurationAccess
 TOPIC:
 com.sun.star.configuration.ConfigurationUpdateAccess
-com.sun.star.configuration.AdministrationProvider
 com.sun.star.configuration.ConfigurationProvider
 com.sun.star.configuration.ConfigurationAccess
 
@@ -7177,18 +7154,6 @@ REF:
 com.sun.star.util.XModifiable
 com.sun.star.util.XCloseable
 TOPIC:
-
-LINK:Documentation/DevGuide/Config/Adding_a_Backend_Data_Store
-DESCR:Config - Adding a Backend Data Store
-REF:
-com.sun.star.configuration.backend.SingleBackendAdapter
-com.sun.star.configuration.backend.Backend
-com.sun.star.configuration.ConfigurationProvider
-com.sun.star.configuration.backend.BackendAdapter
-com.sun.star.configuration.backend.SingleBackend
-TOPIC:
-com.sun.star.configuration.backend.Backend
-com.sun.star.configuration.backend.SingleBackend
 
 LINK:Documentation/DevGuide/Charts/Chart_Document_Controller
 DESCR:Charts - Chart Document Controller
