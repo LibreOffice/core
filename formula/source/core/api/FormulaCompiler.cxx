@@ -568,6 +568,11 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
                 InitSymbolsNative();
             xMap = mxSymbolsNative;
             break;
+        case FormulaLanguage::XL_ENGLISH:
+            if (!mxSymbolsEnglishXL)
+                InitSymbolsEnglishXL();
+            xMap = mxSymbolsEnglishXL;
+            break;
         default:
             ;   // nothing, NULL map returned
     }
@@ -680,6 +685,22 @@ void FormulaCompiler::InitSymbolsODFF() const
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF,FormulaGrammar::GRAM_ODFF,s_sSymbol);
     mxSymbolsODFF = s_sSymbol;
 }
+// -----------------------------------------------------------------------------
+void FormulaCompiler::InitSymbolsEnglishXL() const
+{
+    static NonConstOpCodeMapPtr s_sSymbol;
+    if ( !s_sSymbol.get() )
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH,FormulaGrammar::GRAM_ENGLISH,s_sSymbol);
+    mxSymbolsEnglishXL = s_sSymbol;
+
+    // TODO: For now, just replace the separators to the Excel English
+    // variants. Later, if we want to properly map Excel functions with Calc
+    // functions, we'll need to do a little more work here.
+    mxSymbolsEnglishXL->putOpCode(sal_Unicode(','), ocSep);
+    mxSymbolsEnglishXL->putOpCode(sal_Unicode(','), ocArrayColSep);
+    mxSymbolsEnglishXL->putOpCode(sal_Unicode(';'), ocArrayRowSep);
+}
+
 // -----------------------------------------------------------------------------
 void FormulaCompiler::loadSymbols(USHORT _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const
 {
