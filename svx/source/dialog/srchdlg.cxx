@@ -659,6 +659,11 @@ INT32 SvxSearchDialog::GetTransliterationFlags() const
     return nTransliterationFlags;
 }
 
+void SvxSearchDialog::SetSaveToModule(bool b)
+{
+    pImpl->bSaveToModule = b;
+}
+
 // -----------------------------------------------------------------------
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( INT32 nSettings )
@@ -926,9 +931,36 @@ void SvxSearchDialog::CalculateDelta_Impl()
 
 // -----------------------------------------------------------------------
 
+namespace {
+
+class ToggleSaveToModule
+{
+public:
+    ToggleSaveToModule(SvxSearchDialog& rDialog, bool bValue) :
+        mrDialog(rDialog), mbValue(bValue)
+    {
+        mrDialog.SetSaveToModule(mbValue);
+    }
+
+    ~ToggleSaveToModule()
+    {
+        mrDialog.SetSaveToModule(!mbValue);
+    }
+private:
+    SvxSearchDialog& mrDialog;
+    bool mbValue;
+};
+
+}
+
 void SvxSearchDialog::Init_Impl( int bSearchPattern )
 {
     DBG_ASSERT( pSearchItem, "SearchItem == 0" );
+
+    // We don't want to save any intermediate state to the module while the
+    // dialog is being initialized.
+    ToggleSaveToModule aNoModuleSave(*this, false);
+
     bWriter = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_WRITER );
 
     pImpl->bMultiLineEdit = FALSE;
@@ -1078,10 +1110,8 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aSimilarityBox.Check( pSearchItem->IsLevenshtein() );
     bSet = TRUE;
 
-    pImpl->bSaveToModule = FALSE;
     FlagHdl_Impl( &aSimilarityBox );
     FlagHdl_Impl( &aJapOptionsCB );
-    pImpl->bSaveToModule = TRUE;
 
     FASTBOOL bDisableSearch = FALSE;
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -1609,16 +1639,23 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
     else
         bSet = FALSE;
 
+    // Calc allows searching for empty cells.
+    bool bAllowEmptySearch = (pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC);
+
     if ( pEd == &aSearchLB || pEd == &aReplaceLB )
     {
-        xub_StrLen nLBTxtLen = aSearchLB.GetText().Len(), nTxtLen;
+        xub_StrLen nSrchTxtLen = aSearchLB.GetText().Len();
+        xub_StrLen nReplTxtLen = 0;
+        if (bAllowEmptySearch)
+            nReplTxtLen = aReplaceLB.GetText().Len();
+        xub_StrLen nAttrTxtLen = 0;
 
         if ( !pImpl->bMultiLineEdit )
-           nTxtLen = aSearchAttrText.GetText().Len();
+           nAttrTxtLen = aSearchAttrText.GetText().Len();
         else
-            nTxtLen = pImpl->aSearchFormats.GetText().Len();
+            nAttrTxtLen = pImpl->aSearchFormats.GetText().Len();
 
-        if ( nLBTxtLen || nTxtLen )
+        if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen)
         {
             EnableControl_Impl( &aSearchBtn );
             EnableControl_Impl( &aReplaceBtn );

@@ -160,6 +160,8 @@ public:
 
     INT32           GetTransliterationFlags() const;
 
+    void            SetSaveToModule(bool b);
+
 private:
     FixedText       aSearchText;
     ComboBox        aSearchLB;
