@@ -96,6 +96,7 @@ ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
     if( aValue.hasValue() )
         aValue >>= bVisible;
     return bVisible;
+
 }
 void SAL_CALL
 ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
@@ -106,12 +107,16 @@ ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeExc
         setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible"), uno::makeAny( _visible ) );
         ApplyChange();
     }
+
 }
 
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 {
     sal_Bool bEnabled = sal_True;
+    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
+    rtl::OUString aCommandURL ;
+
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
@@ -121,7 +126,14 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
     else
     {
         // emulated with Visible
-        bEnabled = getVisible();
+        //bEnabled = getVisible();
+        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
+        if (aValue >>= aCommandURL){
+            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
+                    bEnabled = sal_False;
+                }
+            }
+
     }
     return bEnabled;
 }
@@ -129,6 +141,9 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 {
+    rtl::OUString aCommandURL ;
+    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
+    rtl::OUStringBuffer aCommandURLSringBuffer;
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
@@ -136,8 +151,20 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     }
     else
     {
+        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
+        if (aValue >>= aCommandURL){
+            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
+                aCommandURL = aCommandURL.copy(3);
+                }
+            if (false == _enabled){
+                aCommandURLSringBuffer = aCommandURLappendix;
+            }
+            aCommandURLSringBuffer.append(aCommandURL);
+            setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURLSringBuffer.makeStringAndClear()) );
+            ApplyChange();
+        }
         // emulated with Visible
-        setVisible( _enabled );
+        //setVisible( _enabled );
     }
 }
 
