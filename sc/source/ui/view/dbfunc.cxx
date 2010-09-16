@@ -344,7 +344,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData( FALSE, SC_DB_MAKE, SC_DBSEL_ROW_DOWN );
+    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, false, true);
 
     pDBData->SetByRow( TRUE );              //! Undo, vorher abfragen ??
     pDBData->GetQueryParam( aParam );
