@@ -994,7 +994,7 @@ $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
 # Location of the solenv tree.
 if ('@LOCAL_SOLENV@' eq "DEFAULT")
-{  $SOLARENV          = $SRC_ROOT.$SOLENV;
+{  $SOLARENV          = PathFormat($SRC_ROOT.$SOLENV);
 }
 else
 {  $SOLARENV          =  PathFormat('@LOCAL_SOLENV@');
@@ -2321,6 +2321,7 @@ sub PathFormat
        # Replace absolute paths or DOS paths with ...
        if ( ( $variable =~ m/^\// ) or ( $variable =~ m/:/ ) ) {
            # mixed mode paths
+           chomp( $variable = qx{realpath "$variable"} );
            chomp( $variable = qx{cygpath -m "$variable"} );
        }
    }
