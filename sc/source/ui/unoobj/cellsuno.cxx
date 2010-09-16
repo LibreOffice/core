@@ -68,6 +68,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include "autoform.hxx"
+#include "cellmergeoption.hxx"
 #include "cellsuno.hxx"
 #include "cursuno.hxx"
 #include "textuno.hxx"
@@ -5342,10 +5343,14 @@ void SAL_CALL ScCellRangeObj::merge( sal_Bool bMerge ) throw(uno::RuntimeExcepti
     if ( pDocSh )
     {
         ScDocFunc aFunc(*pDocSh);
+        ScCellMergeOption aMergeOption(
+            aRange.aStart.Col(), aRange.aStart.Row(),
+            aRange.aEnd.Col(), aRange.aEnd.Row(), false);
+        aMergeOption.maTabs.insert(aRange.aStart.Tab());
         if ( bMerge )
-            aFunc.MergeCells( aRange, FALSE, TRUE, TRUE );
+            aFunc.MergeCells( aMergeOption, FALSE, TRUE, TRUE );
         else
-            aFunc.UnmergeCells( aRange, TRUE, TRUE );
+            aFunc.UnmergeCells( aMergeOption, TRUE, TRUE );
 
         //! Fehler abfangen?
     }

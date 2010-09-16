@@ -239,7 +239,7 @@ public:
     BOOL            TestMergeCells();
     BOOL            TestRemoveMerge();
 
-    BOOL            MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord = TRUE );
+    BOOL            MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord = TRUE, BOOL bCenter = FALSE );
     BOOL            RemoveMerge( BOOL bRecord = TRUE );
 
     void            FillSimple( FillDir eDir, BOOL bRecord = TRUE );

@@ -65,6 +65,7 @@
 #include "dociter.hxx"
 #include "autoform.hxx"
 #include "cell.hxx"
+#include "cellmergeoption.hxx"
 #include "detdata.hxx"
 #include "detfunc.hxx"
 #include "docpool.hxx"
@@ -103,6 +104,7 @@
 #include <memory>
 #include <basic/basmgr.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <set>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -1714,7 +1716,11 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     default:
                         break;
                 }
-                MergeCells(aRange, FALSE, TRUE, TRUE);
+                ScCellMergeOption aMergeOption(
+                    aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aEnd.Col(), aRange.aEnd.Row() );
+                aMergeOption.maTabs.insert(aRange.aStart.Tab());
+                MergeCells(aMergeOption, FALSE, TRUE, TRUE);
             }
             qIncreaseRange.pop_back();
         }
@@ -1763,7 +1769,10 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             while( !qIncreaseRange.empty() )
             {
                 ScRange aRange = qIncreaseRange.back();
-                MergeCells(aRange, FALSE, TRUE, TRUE);
+                 ScCellMergeOption aMergeOption(
+                    aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aEnd.Col(), aRange.aEnd.Row() );
+                MergeCells(aMergeOption, FALSE, TRUE, TRUE);
                 qIncreaseRange.pop_back();
             }
 
@@ -2201,7 +2210,10 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         if( !pDoc->HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
         {
-            MergeCells( aRange, FALSE, TRUE, TRUE );
+            ScCellMergeOption aMergeOption(
+                aRange.aStart.Col(), aRange.aStart.Row(),
+                aRange.aEnd.Col(), aRange.aEnd.Row() );
+            MergeCells( aMergeOption, FALSE, TRUE, TRUE );
         }
         qDecreaseRange.pop_back();
     }
@@ -4338,86 +4350,110 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
 
 //------------------------------------------------------------------------
 
-BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord, BOOL bApi )
+BOOL ScDocFunc::MergeCells( const ScCellMergeOption& rOption, BOOL bContents, BOOL bRecord, BOOL bApi )
 {
+    using ::std::set;
+
     ScDocShellModificator aModificator( rDocShell );
 
+    SCCOL nStartCol = rOption.mnStartCol;
+    SCROW nStartRow = rOption.mnStartRow;
+    SCCOL nEndCol = rOption.mnEndCol;
+    SCROW nEndRow = rOption.mnEndRow;
+    if ((nStartCol == nEndCol && nStartRow == nEndRow) || rOption.maTabs.empty())
+    {
+        // Nothing to do.  Bail out quick.
+        return TRUE;
+    }
+
     ScDocument* pDoc = rDocShell.GetDocument();
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    SCTAB nTab = rRange.aStart.Tab();
+    set<SCTAB>::const_iterator itrBeg = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
+    SCTAB nTab1 = *itrBeg, nTab2 = *rOption.maTabs.rbegin();
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    ScEditableTester aTester( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-    if (!aTester.IsEditable())
+    for (set<SCTAB>::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return FALSE;
-    }
-
-    if ( nStartCol == nEndCol && nStartRow == nEndRow )
-    {
-        // nichts zu tun
-        return TRUE;
-    }
-
-    if ( pDoc->HasAttrib( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                            HASATTR_MERGED | HASATTR_OVERLAPPED ) )
-    {
-        // "Zusammenfassen nicht verschachteln !"
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_MSSG_MERGECELLS_0);
-        return FALSE;
-    }
-
-    BOOL bNeedContents = bContents &&
-            ( !pDoc->IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) ||
-              !pDoc->IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true ) );
-
-    ScDocument* pUndoDoc = 0;
-    if (bRecord)
-    {
-        // test if the range contains other notes which also implies that we need an undo document
-        bool bHasNotes = false;
-        for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
-            for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
-                bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNote( aPos ) != 0);
-
-        if (bNeedContents || bHasNotes)
+        ScEditableTester aTester( pDoc, *itr, nStartCol, nStartRow, nEndCol, nEndRow );
+        if (!aTester.IsEditable())
         {
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab );
-            // note captions are collected by drawing undo
-            pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                    IDF_ALL|IDF_NOCAPTIONS, FALSE, pUndoDoc );
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
+            return FALSE;
         }
-        if( bHasNotes )
-            pDoc->BeginDrawUndo();
+
+        if ( pDoc->HasAttrib( nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr,
+                                HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+        {
+            // "Zusammenfassen nicht verschachteln !"
+            if (!bApi)
+                rDocShell.ErrorMessage(STR_MSSG_MERGECELLS_0);
+            return FALSE;
+        }
     }
 
-    if (bNeedContents)
-        pDoc->DoMergeContents( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
-    pDoc->DoMerge( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
-
-    if( bRecord )
+    ScDocument* pUndoDoc = NULL;
+    bool bNeedContentsUndo = false;
+    for (set<SCTAB>::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
-        SdrUndoGroup* pDrawUndo = pDoc->GetDrawLayer() ? pDoc->GetDrawLayer()->GetCalcUndo() : 0;
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoMerge( &rDocShell,
-                            nStartCol, nStartRow, nTab,
-                            nEndCol, nEndRow, nTab, bNeedContents, pUndoDoc, pDrawUndo ) );
+        SCTAB nTab = *itr;
+        bool bNeedContents = bContents &&
+                ( !pDoc->IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) ||
+                  !pDoc->IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true ) );
+
+        if (bRecord)
+        {
+            // test if the range contains other notes which also implies that we need an undo document
+            bool bHasNotes = false;
+            for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
+                for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
+                    bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNote( aPos ) != 0);
+
+            if (bNeedContents || bHasNotes || rOption.mbCenter)
+            {
+                if (!pUndoDoc)
+                {
+                    pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                    pUndoDoc->InitUndo(pDoc, nTab1, nTab2);
+                }
+                // note captions are collected by drawing undo
+                pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
+                                      IDF_ALL|IDF_NOCAPTIONS, FALSE, pUndoDoc );
+            }
+            if( bHasNotes )
+                pDoc->BeginDrawUndo();
+        }
+
+        if (bNeedContents)
+            pDoc->DoMergeContents( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+        pDoc->DoMerge( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+
+        if (rOption.mbCenter)
+        {
+            pDoc->ApplyAttr( nStartCol, nStartRow, nTab, SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+            pDoc->ApplyAttr( nStartCol, nStartRow, nTab, SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
+        }
+
+        if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab ) ) )
+            rDocShell.PostPaint( nStartCol, nStartRow, nTab,
+                                 nEndCol, nEndRow, nTab, PAINT_GRID );
+        if (bNeedContents || rOption.mbCenter)
+        {
+            ScRange aRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
+            pDoc->SetDirty(aRange);
+        }
+
+        bNeedContentsUndo |= bNeedContents;
     }
 
-    if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab ) ) )
-        rDocShell.PostPaint( nStartCol, nStartRow, nTab,
-                                            nEndCol, nEndRow, nTab, PAINT_GRID );
-    if (bNeedContents)
-        pDoc->SetDirty( rRange );
+    if (pUndoDoc)
+    {
+        SdrUndoGroup* pDrawUndo = pDoc->GetDrawLayer() ? pDoc->GetDrawLayer()->GetCalcUndo() : NULL;
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoMerge(&rDocShell, rOption, bNeedContentsUndo, pUndoDoc, pDrawUndo) );
+    }
+
     aModificator.SetDocumentModified();
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();
@@ -4433,49 +4469,81 @@ BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord,
 
 BOOL ScDocFunc::UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
+    ScCellMergeOption aOption(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
+    for (SCTAB i = nTab1; i <= nTab2; ++i)
+        aOption.maTabs.insert(i);
 
+    return UnmergeCells(aOption, bRecord, bApi);
+}
+
+bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, BOOL bRecord, BOOL bApi )
+{
+    using ::std::set;
+
+    if (rOption.maTabs.empty())
+        // Nothing to unmerge.
+        return true;
+
+    ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
-    SCTAB nTab = rRange.aStart.Tab();
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    if ( pDoc->HasAttrib( rRange, HASATTR_MERGED ) )
+    ScDocument* pUndoDoc = NULL;
+    bool bBeep = false;
+    for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
+          itr != itrEnd; ++itr)
     {
-        ScRange aExtended = rRange;
-        pDoc->ExtendMerge( aExtended );
+        SCTAB nTab = *itr;
+        ScRange aRange = rOption.getSingleRange(nTab);
+        if ( !pDoc->HasAttrib(aRange, HASATTR_MERGED) )
+        {
+            bBeep = true;
+            continue;
+        }
+
+        ScRange aExtended = aRange;
+        pDoc->ExtendMerge(aExtended);
         ScRange aRefresh = aExtended;
-        pDoc->ExtendOverlapped( aRefresh );
+        pDoc->ExtendOverlapped(aRefresh);
 
         if (bRecord)
         {
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab );
-            pDoc->CopyToDocument( aExtended, IDF_ATTRIB, FALSE, pUndoDoc );
-            rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoRemoveMerge( &rDocShell, rRange, pUndoDoc ) );
+            if (!pUndoDoc)
+            {
+                pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                pUndoDoc->InitUndo(pDoc, *rOption.maTabs.begin(), *rOption.maTabs.rbegin());
+            }
+            pDoc->CopyToDocument(aExtended, IDF_ATTRIB, FALSE, pUndoDoc);
         }
 
         const SfxPoolItem& rDefAttr = pDoc->GetPool()->GetDefaultItem( ATTR_MERGE );
         ScPatternAttr aPattern( pDoc->GetPool() );
         aPattern.GetItemSet().Put( rDefAttr );
-        pDoc->ApplyPatternAreaTab( rRange.aStart.Col(), rRange.aStart.Row(),
-                                    rRange.aEnd.Col(), rRange.aEnd.Row(), nTab,
-                                    aPattern );
+        pDoc->ApplyPatternAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                   aRange.aEnd.Col(), aRange.aEnd.Row(), nTab,
+                                   aPattern );
 
         pDoc->RemoveFlagsTab( aExtended.aStart.Col(), aExtended.aStart.Row(),
-                                aExtended.aEnd.Col(), aExtended.aEnd.Row(), nTab,
-                                SC_MF_HOR | SC_MF_VER );
+                              aExtended.aEnd.Col(), aExtended.aEnd.Row(), nTab,
+                              SC_MF_HOR | SC_MF_VER );
 
         pDoc->ExtendMerge( aRefresh, TRUE, FALSE );
 
         if ( !AdjustRowHeight( aExtended ) )
             rDocShell.PostPaint( aExtended, PAINT_GRID );
-        aModificator.SetDocumentModified();
     }
-    else if (!bApi)
-        Sound::Beep();      //! FALSE zurueck???
+    if (bBeep && !bApi)
+        Sound::Beep();
+
+    if (bRecord)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoRemoveMerge( &rDocShell, rOption, pUndoDoc ) );
+    }
+    aModificator.SetDocumentModified();
 
     return TRUE;
 }

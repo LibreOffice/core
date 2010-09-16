@@ -31,6 +31,7 @@
 // INCLUDE -------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -798,14 +799,12 @@ BOOL __EXPORT ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 
 //----------------------------------------------------------------------------
 
-ScUndoMerge::ScUndoMerge( ScDocShell* pNewDocShell,
-                            SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
-                            SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                            bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo )
+ScUndoMerge::ScUndoMerge( ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
+                          bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo )
         //
     :   ScSimpleUndo( pNewDocShell ),
         //
-        maRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
+        maOption(rOption),
         mbMergeContents( bMergeContents ),
         mpUndoDoc( pUndoDoc ),
         mpDrawUndo( pDrawUndo )
@@ -834,51 +833,77 @@ String ScUndoMerge::GetComment() const
 
 void ScUndoMerge::DoChange( bool bUndo ) const
 {
+    using ::std::set;
+
+    if (maOption.maTabs.empty())
+        // Nothing to do.
+        return;
+
     ScDocument* pDoc = pDocShell->GetDocument();
-
-    ScUndoUtil::MarkSimpleBlock( pDocShell, maRange );
-
-    if (bUndo)
-        // remove merge (contents are copied back below from undo document)
-        pDoc->RemoveMerge( maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
-    else
-        // repeat merge, but do not remove note captions (will be done by drawing redo below)
-/*!*/   pDoc->DoMerge( maRange.aStart.Tab(),
-                       maRange.aStart.Col(), maRange.aStart.Row(),
-                       maRange.aEnd.Col(),   maRange.aEnd.Row(), false );
-
-    // undo -> copy back deleted contents
-    if (bUndo && mpUndoDoc)
-    {
-        pDoc->DeleteAreaTab( maRange, IDF_CONTENTS|IDF_NOCAPTIONS );
-        mpUndoDoc->CopyToDocument( maRange, IDF_ALL|IDF_NOCAPTIONS, FALSE, pDoc );
-    }
-
-    // redo -> merge contents again
-    else if (!bUndo && mbMergeContents)
-    {
-/*!*/   pDoc->DoMergeContents( maRange.aStart.Tab(),
-                               maRange.aStart.Col(), maRange.aStart.Row(),
-                               maRange.aEnd.Col(),   maRange.aEnd.Row()   );
-    }
-
-    if (bUndo)
-        DoSdrUndoAction( mpDrawUndo, pDoc );
-    else
-        RedoSdrUndoAction( mpDrawUndo );
-
-    BOOL bDidPaint = FALSE;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( pViewShell )
+
+    ScRange aCurRange = maOption.getSingleRange(pDocShell->GetCurTab());
+    ScUndoUtil::MarkSimpleBlock(pDocShell, aCurRange);
+
+    for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();
+          itr != itrEnd; ++itr)
     {
-        pViewShell->SetTabNo( maRange.aStart.Tab() );
-        bDidPaint = pViewShell->AdjustRowHeight( maRange.aStart.Row(), maRange.aEnd.Row() );
+        SCTAB nTab = *itr;
+        ScRange aRange = maOption.getSingleRange(nTab);
+
+        if (bUndo)
+            // remove merge (contents are copied back below from undo document)
+            pDoc->RemoveMerge( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
+        else
+        {
+            // repeat merge, but do not remove note captions (will be done by drawing redo below)
+            pDoc->DoMerge( aRange.aStart.Tab(),
+                           aRange.aStart.Col(), aRange.aStart.Row(),
+                           aRange.aEnd.Col(),   aRange.aEnd.Row(), false );
+
+            if (maOption.mbCenter)
+            {
+                pDoc->ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
+                                 aRange.aStart.Tab(),
+                                 SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+                pDoc->ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
+                                 aRange.aStart.Tab(),
+                                 SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
+            }
+        }
+
+        // undo -> copy back deleted contents
+        if (bUndo && mpUndoDoc)
+        {
+            pDoc->DeleteAreaTab( aRange, IDF_CONTENTS|IDF_NOCAPTIONS );
+            mpUndoDoc->CopyToDocument( aRange, IDF_ALL|IDF_NOCAPTIONS, FALSE, pDoc );
+        }
+
+        // redo -> merge contents again
+        else if (!bUndo && mbMergeContents)
+        {
+            pDoc->DoMergeContents( aRange.aStart.Tab(),
+                                   aRange.aStart.Col(), aRange.aStart.Row(),
+                                   aRange.aEnd.Col(), aRange.aEnd.Row() );
+        }
+
+        if (bUndo)
+            DoSdrUndoAction( mpDrawUndo, pDoc );
+        else
+            RedoSdrUndoAction( mpDrawUndo );
+
+        bool bDidPaint = false;
+        if ( pViewShell )
+        {
+            pViewShell->SetTabNo(nTab);
+            bDidPaint = pViewShell->AdjustRowHeight(maOption.mnStartRow, maOption.mnEndRow);
+        }
+
+        if (!bDidPaint)
+            ScUndoUtil::PaintMore(pDocShell, aRange);
     }
 
-    if (!bDidPaint)
-        ScUndoUtil::PaintMore( pDocShell, maRange );
-
-    ShowTable( maRange );
+    ShowTable(aCurRange);
 }
 
 

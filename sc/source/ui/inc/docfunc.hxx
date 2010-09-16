@@ -49,13 +49,14 @@ class ScBaseCell;
 class ScTokenArray;
 struct ScTabOpParam;
 class ScTableProtection;
+struct ScCellMergeOption;
 
 // ---------------------------------------------------------------------------
 
 class ScDocFunc
 {
 private:
-    ScDocShell&     rDocShell;
+    ScDocShell&        rDocShell;
 
     BOOL            AdjustRowHeight( const ScRange& rRange, BOOL bPaint = TRUE );
     void            CreateOneName( ScRangeName& rList,
@@ -131,9 +132,9 @@ public:
 
     BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-//UNUSED2009-05 BOOL            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
+//UNUSED2009-05 BOOL             SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
 
-    SC_DLLPUBLIC BOOL           SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+    SC_DLLPUBLIC BOOL            SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
                                     BOOL bRecord, BOOL bApi );
 
@@ -164,7 +165,7 @@ public:
     BOOL            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
                                 FillDir eDir, BOOL bRecord, BOOL bApi );
     BOOL            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
-                                FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
+                                FillDir    eDir, FillCmd eCmd, FillDateCmd    eDateCmd,
                                 double fStart, double fStep, double fMax,
                                 BOOL bRecord, BOOL bApi );
                     // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
@@ -173,9 +174,10 @@ public:
 
     BOOL            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, BOOL bApi );
 
-    BOOL            MergeCells( const ScRange& rRange, BOOL bContents,
+    BOOL            MergeCells( const ScCellMergeOption& rOption, BOOL bContents,
                                 BOOL bRecord, BOOL bApi );
     BOOL            UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    bool            UnmergeCells( const ScCellMergeOption& rOption, BOOL bRecord, BOOL bApi );
 
     BOOL            SetNewRangeNames( ScRangeName* pNewRanges, BOOL bApi );     // takes ownership of pNewRanges
     BOOL            ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi );

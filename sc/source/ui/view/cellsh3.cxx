@@ -769,6 +769,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 // test whether to merge or to split
                 bool bMerge = false;
+                BOOL bCenter = FALSE;
                 switch( nSlot )
                 {
                     case FID_MERGE_ON:
@@ -779,6 +780,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     break;
                     case FID_MERGE_TOGGLE:
                     {
+                        bCenter = TRUE;
                         SfxPoolItem* pItem = 0;
                         if( rBindings.QueryState( nSlot, pItem ) >= SFX_ITEM_DEFAULT )
                             bMerge = !static_cast< SfxBoolItem* >( pItem )->GetValue();
@@ -799,7 +801,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         bMoveContents = ((const SfxBoolItem*)pItem)->GetValue();
                     }
 
-                    if (pTabViewShell->MergeCells( bApi, bMoveContents ))
+                    if (pTabViewShell->MergeCells( bApi, bMoveContents, TRUE, bCenter ))
                     {
                         if (!bApi && bMoveContents)             // "ja" im Dialog geklickt
                             rReq.AppendItem( SfxBoolItem( nSlot, bMoveContents ) );

@@ -31,6 +31,7 @@
 #include "markdata.hxx"
 #include "viewutil.hxx"
 #include "spellparam.hxx"
+#include "cellmergeoption.hxx"
 
 #include "cell.hxx"
 
@@ -452,10 +453,8 @@ class ScUndoMerge: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoMerge( ScDocShell* pNewDocShell,
-                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
-                                 SCCOL nEndX,   SCROW nEndY,   SCTAB nEndZ,
-                                 bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo );
+                    ScUndoMerge( ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
+                                 bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo);
     virtual         ~ScUndoMerge();
 
     virtual void    Undo();
@@ -466,7 +465,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScRange         maRange;
+    ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
     ScDocument*     mpUndoDoc;              // wenn Daten zusammengefasst
     SdrUndoAction*  mpDrawUndo;
@@ -947,7 +946,7 @@ class ScUndoRemoveMerge: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoRemoveMerge( ScDocShell* pNewDocShell,
-                                       const ScRange& rArea,
+                                       const ScCellMergeOption& rOption,
                                        ScDocument* pNewUndoDoc );
     virtual         ~ScUndoRemoveMerge();
 
@@ -959,6 +958,9 @@ public:
     virtual String  GetComment() const;
 
 private:
+    void            SetCurTab();
+
+    ScCellMergeOption maOption;
     ScDocument*     pUndoDoc;
 };
 

@@ -60,6 +60,7 @@
 #include "attrib.hxx"
 #include "autoform.hxx"
 #include "cell.hxx"                 // EnterAutoSum
+#include "cellmergeoption.hxx"
 #include "compiler.hxx"
 #include "docfunc.hxx"
 #include "docpool.hxx"
@@ -1085,7 +1086,7 @@ BOOL ScViewFunc::TestMergeCells()           // Vorab-Test (fuer Menue)
 
 //----------------------------------------------------------------------------
 
-BOOL ScViewFunc::MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord )
+BOOL ScViewFunc::MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord, BOOL bCenter )
 {
     //  Editable- und Verschachtelungs-Abfrage muss vorneweg sein (auch in DocFunc),
     //  damit dann nicht die Inhalte-QueryBox kommt
@@ -1128,10 +1129,26 @@ BOOL ScViewFunc::MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord )
         return FALSE;
     }
 
+    // Check for the contents of all selected tables.
+    bool bAskDialog = false;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    ScCellMergeOption aMergeOption(nStartCol, nStartRow, nEndCol, nEndRow, bCenter);
+    for (SCTAB i = 0; i < nTabCount; ++i)
+    {
+        if (!rMark.GetTableSelect(i))
+            // this table is not selected.
+            continue;
+
+        aMergeOption.maTabs.insert(i);
+
+        if (!pDoc->IsBlockEmpty(i, nStartCol, nStartRow+1, nStartCol, nEndRow) ||
+            !pDoc->IsBlockEmpty(i, nStartCol+1, nStartRow, nEndCol, nEndRow))
+            bAskDialog = true;
+    }
+
     BOOL bOk = TRUE;
 
-    if ( !pDoc->IsBlockEmpty( nStartTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) ||
-         !pDoc->IsBlockEmpty( nStartTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true ) )
+    if (bAskDialog)
     {
         if (!bApi)
         {
@@ -1151,7 +1168,7 @@ BOOL ScViewFunc::MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord )
     if (bOk)
     {
         HideCursor();
-        bOk = pDocSh->GetDocFunc().MergeCells( aMarkRange, rDoContents, bRecord, bApi );
+        bOk = pDocSh->GetDocFunc().MergeCells( aMergeOption, rDoContents, bRecord, bApi );
         ShowCursor();
 
         if (bOk)
@@ -1187,6 +1204,32 @@ BOOL ScViewFunc::TestRemoveMerge()
 
 //----------------------------------------------------------------------------
 
+static bool lcl_extendMergeRange(ScCellMergeOption& rOption, const ScRange& rRange)
+{
+    bool bExtended = false;
+    if (rOption.mnStartCol > rRange.aStart.Col())
+    {
+        rOption.mnStartCol = rRange.aStart.Col();
+        bExtended = true;
+    }
+    if (rOption.mnStartRow > rRange.aStart.Row())
+    {
+        rOption.mnStartRow = rRange.aStart.Row();
+        bExtended = true;
+    }
+    if (rOption.mnEndCol < rRange.aEnd.Col())
+    {
+        rOption.mnEndCol = rRange.aEnd.Col();
+        bExtended = true;
+    }
+    if (rOption.mnEndRow < rRange.aEnd.Row())
+    {
+        rOption.mnEndRow = rRange.aEnd.Row();
+        bExtended = true;
+    }
+    return bExtended;
+}
+
 BOOL ScViewFunc::RemoveMerge( BOOL bRecord )
 {
     ScRange aRange;
@@ -1198,12 +1241,39 @@ BOOL ScViewFunc::RemoveMerge( BOOL bRecord )
     }
     else if (GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE)
     {
+        ScDocument* pDoc = GetViewData()->GetDocument();
         ScRange aExtended( aRange );
-        GetViewData()->GetDocument()->ExtendMerge( aExtended );
+        pDoc->ExtendMerge( aExtended );
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
+        const ScMarkData& rMark = GetViewData()->GetMarkData();
+        SCTAB nTabCount = pDoc->GetTableCount();
+        ScCellMergeOption aOption(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row());
+        bool bExtended = false;
+        do
+        {
+            bExtended = false;
+            for (SCTAB i = 0; i < nTabCount; ++i)
+            {
+                if (!rMark.GetTableSelect(i))
+                    // This table is not selected.
+                    continue;
+
+                aOption.maTabs.insert(i);
+                aExtended.aStart.SetTab(i);
+                aExtended.aEnd.SetTab(i);
+                pDoc->ExtendMerge(aExtended);
+                pDoc->ExtendOverlapped(aExtended);
+
+                // Expand the current range to be inclusive of all merged
+                // areas on all sheets.
+                bExtended = lcl_extendMergeRange(aOption, aExtended);
+            }
+        }
+        while (bExtended);
 
         HideCursor();
-        BOOL bOk = pDocSh->GetDocFunc().UnmergeCells( aRange, bRecord, FALSE );
+        BOOL bOk = pDocSh->GetDocFunc().UnmergeCells(aOption, bRecord, FALSE );
+        aExtended = aOption.getFirstSingleRange();
         MarkRange( aExtended );
         ShowCursor();
 
