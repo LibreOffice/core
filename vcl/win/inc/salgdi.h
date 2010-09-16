@@ -1,5 +1,5 @@
 /*************************************************************************
- *
+ nSalGraphics::GetImplFontCharMap*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -57,10 +57,10 @@ class ImplFontAttrCache;
 class ImplWinFontData : public ImplFontData
 {
 public:
-                            ImplWinFontData( const ImplDevFontAttributes&,
+    explicit                ImplWinFontData( const ImplDevFontAttributes&,
                                 int nFontHeight, WIN_BYTE eWinCharSet,
                                 WIN_BYTE nPitchAndFamily  );
-                            ~ImplWinFontData();
+    virtual                 ~ImplWinFontData();
 
     virtual ImplFontData*   Clone() const;
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
@@ -127,9 +127,9 @@ public:
 #endif // GNG_VERT_HACK
 };
 
-// -------------------
-// - SalGraphicsData -
-// -------------------
+// ------------------
+// - WinSalGraphics -
+// ------------------
 
 class WinSalGraphics : public SalGraphics
 {
@@ -179,7 +179,7 @@ public:
     HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
-    WinSalGraphics();
+    explicit WinSalGraphics();
     virtual ~WinSalGraphics();
 
 protected:
@@ -287,7 +287,7 @@ public:
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -359,11 +359,11 @@ public:
 };
 
 // Init/Deinit Graphics
-void    ImplSalInitGraphics( WinSalGraphics* mpData );
-void    ImplSalDeInitGraphics( WinSalGraphics* mpData );
+void    ImplSalInitGraphics( WinSalGraphics* );
+void    ImplSalDeInitGraphics( WinSalGraphics* );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
-void    ImplGetLogFontFromFontSelect( HDC hDC, const ImplFontSelectData*,
+void    ImplGetLogFontFromFontSelect( HDC, const ImplFontSelectData*,
             LOGFONTW&, bool bTestVerticalAvail );
 
 // -----------
@@ -397,7 +397,10 @@ inline bool ImplWinFontData::HasChar( sal_uInt32 cChar ) const
         cChar -= 0xF000;
     else if( mbAliasSymbolsHigh && (cChar <= 0xFF) )
         cChar += 0xF000;
+    else
+        return false;
     return mpUnicodeMap->HasChar( cChar );
 }
 
 #endif // _SV_SALGDI_H
+
