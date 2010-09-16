@@ -1054,6 +1054,11 @@
 #define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
 
-#endif
+// ----------------------------------------------------------------------------
+// ooo-build specific resources
+
+#define SVX_OOO_BUILD_START             (RID_SVX_START + 1200)
 
 #define SID_SC_TP_FORMULA               (SVX_OOO_BUILD_START + 1)
+
+#endif
