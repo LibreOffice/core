@@ -2189,7 +2189,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
     {
 //      rMark.MarkToSimple();
-        pViewData->GetView()->UpdateAutoFillMark();
+        pViewData->GetView()->SelectionChanged();
 
         SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
         BOOL bFormulaMode = pScMod->IsFormulaMode();
