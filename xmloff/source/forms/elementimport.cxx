@@ -698,6 +698,7 @@ namespace xmloff
         case OControlElement::GRID:              pServiceName = "com.sun.star.form.component.GridControl"; break;
         case OControlElement::TIME:              pServiceName = "com.sun.star.form.component.DateField"; break;
         case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.TimeField"; break;
+        default:                                 break;
         }
         if ( pServiceName != NULL )
             return ::rtl::OUString::createFromAscii( pServiceName );
