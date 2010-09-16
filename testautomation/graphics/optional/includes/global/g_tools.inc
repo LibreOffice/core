@@ -280,16 +280,7 @@ testcase tiToolsThesaurusContextMenu
 
     PrintLog "Thesaurus with 1 word: " + sWord
 
-    if( Ucase(gApplication) = "DRAW" ) then
-        sExt = ".odg"
-        Kontext "DrawDocument"
-    elseif( Ucase(gApplication) = "IMPRESS" ) then
-        sExt = ".odp"
-        Kontext "ImpressDocument"
-    endif
-
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-    call sMakeReadOnlyDocumentEditable
+    Call hNewDocument
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
