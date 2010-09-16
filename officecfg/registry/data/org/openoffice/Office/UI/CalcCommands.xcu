@@ -1608,6 +1608,16 @@
                     <value xml:lang="en-US">Assign Macro...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:MarkPrecedents" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Mark Precedents</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MarkDependents" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Mark Dependents</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>

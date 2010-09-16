@@ -652,6 +652,29 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
 //---------------------------------------------------------------------------
 
+namespace {
+
+/**
+ * Check if a given filter type should open the hyperlinked document
+ * natively.
+ *
+ * @param rFilter filter object
+ */
+bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
+{
+    if (rFilter.IsOwnFormat())
+        return true;
+
+    ::rtl::OUString aName = rFilter.GetFilterName();
+    if (aName.indexOf(::rtl::OUString::createFromAscii("MS Excel")) == 0)
+        // We can handle all Excel variants natively.
+        return true;
+
+    return false;
+}
+
+}
+
 void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -961,7 +984,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
             SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
-            if ( !pFilter || !( pFilter->IsOwnFormat() ))
+            if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
                 Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
