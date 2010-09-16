@@ -47,7 +47,7 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< lang::XMultiServiceFac
 
 bool DocxExportFilter::exportDocument()
 {
-    OSL_TRACE(, "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
+    OSL_TRACE( "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
@@ -76,7 +76,7 @@ bool DocxExportFilter::exportDocument()
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 
-    commit();
+    commitStorage();
 
     // delete the pCurPam
     if ( pCurPam )

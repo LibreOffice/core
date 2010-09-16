@@ -453,7 +453,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRu
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
         // Expand unsupported fields
-        RunText( rInfos.pField->Expand( ) );
+        RunText( rInfos.pField->GetCntnt() );
     }
     else if ( rInfos.eType != ww::eNONE ) // HYPERLINK fields are just commands
     {
@@ -558,7 +558,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
         // Find another way for hyperlinks
-        RunText( rInfos.pField->Expand( ) );
+        RunText( rInfos.pField->GetCntnt() );
         m_pSerializer->endElementNS( XML_w, XML_r );
     }
 
@@ -1125,7 +1125,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     TableBackgrounds( pTableTextNodeInfoInner );
 
     // Cell prefered width
-    SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )[ pTableTextNodeInfoInner->getCell() ];
+    SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
     m_pSerializer->singleElementNS( XML_w, XML_tcW,
            FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
            FSNS( XML_w, XML_type ), "dxa",
@@ -1166,7 +1166,7 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
-    GetTablePageSize( pTableTextNodeInfoInner, nPageSize, bRelBoxSize );
+    GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
     const SwTable* pTable = pTableTextNodeInfoInner->getTable( );
     const SwFrmFmt *pFmt = pTable->GetFrmFmt( );
@@ -1266,7 +1266,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
-    GetTablePageSize( pTableTextNodeInfoInner, nPageSize, bRelBoxSize );
+    GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
     // Output the table prefered width
     if ( nPageSize != 0 )
@@ -1318,8 +1318,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // Write the table grid infos
     m_pSerializer->startElementNS( XML_w, XML_tblGrid, FSEND );
 
-    std::vector<SwTwips> gridCols = GetGridCols( pTableTextNodeInfoInner );
-    for ( std::vector<SwTwips>::const_iterator it = gridCols.begin(); it != gridCols.end(); ++it )
+    ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
+    for ( ww8::GridCols::const_iterator it = pGridCols->begin(); it != pGridCols->end(); ++it )
         m_pSerializer->singleElementNS( XML_w, XML_gridCol,
                FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( *it ) ).getStr( ),
                FSEND );

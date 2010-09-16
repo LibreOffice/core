@@ -30,6 +30,7 @@
 #include <hash_map>
 #include <string>
 #include <map>
+#include <set>
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>

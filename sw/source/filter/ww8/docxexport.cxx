@@ -312,7 +312,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 }
 
 void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
-        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt )
+        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE /*nBreakCode*/ )
 {
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
@@ -333,6 +333,10 @@ void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
+
+#if OSL_DEBUG_LEVEL > 0
+    fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
+#endif
 }
 
 void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, BYTE nMode )
@@ -343,6 +347,13 @@ void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const St
 void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
     OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
+}
+
+void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+{
+#if OSL_DEBUG_LEVEL > 0
+    fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
+#endif
 }
 
 void DocxExport::DoComboBox(const rtl::OUString& rName,
@@ -528,7 +539,7 @@ void DocxExport::InitStyles()
             S( "styles.xml" ) );
 
     ::sax_fastparser::FSHelperPtr pStylesFS =
-        m_pFilter->openOutputStreamWithSerializer( S( "word/styles.xml" ),
+        m_pFilter->openFragmentStreamWithSerializer( S( "word/styles.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml" ) );
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -551,7 +562,7 @@ void DocxExport::WriteFootnotesEndnotes()
                 S( "footnotes.xml" ) );
 
         ::sax_fastparser::FSHelperPtr pFootnotesFS =
-            m_pFilter->openOutputStreamWithSerializer( S( "word/footnotes.xml" ),
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/footnotes.xml" ),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml" ) );
 
         // switch the serializer to redirect the output to word/footnotes.xml
@@ -572,7 +583,7 @@ void DocxExport::WriteFootnotesEndnotes()
                 S( "endnotes.xml" ) );
 
         ::sax_fastparser::FSHelperPtr pEndnotesFS =
-            m_pFilter->openOutputStreamWithSerializer( S( "word/endnotes.xml" ),
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/endnotes.xml" ),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" ) );
 
         // switch the serializer to redirect the output to word/endnotes.xml
@@ -595,7 +606,7 @@ void DocxExport::WriteNumbering()
         S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" ),
         S( "numbering.xml" ) );
 
-    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openOutputStreamWithSerializer( S( "word/numbering.xml" ),
+    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/numbering.xml" ),
         S( "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml" ) );
 
     // switch the serializer to redirect the output to word/nubering.xml
@@ -628,7 +639,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
                 aName );
 
-        pFS = m_pFilter->openOutputStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
         pFS->startElementNS( XML_w, XML_hdr,
@@ -643,7 +654,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
                 aName );
 
-        pFS = m_pFilter->openOutputStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
         pFS->startElementNS( XML_w, XML_ftr,
@@ -686,7 +697,7 @@ void DocxExport::WriteFonts()
             S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable" ),
             S( "fontTable.xml" ) );
 
-    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openOutputStreamWithSerializer(
+    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
             S( "word/fontTable.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" ) );
 
@@ -774,7 +785,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
             S( "word/document.xml" ) );
 
     // the actual document
-    m_pDocumentFS = m_pFilter->openOutputStreamWithSerializer( S( "word/document.xml" ),
+    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/document.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) );
 
     // the DrawingML access
