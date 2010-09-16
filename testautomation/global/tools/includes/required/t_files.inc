@@ -587,16 +587,16 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     ' Copy the file from anywhere to the local user directory if it does not 
     ' exist. This behavior was discussed on IRC
     if ( FileExists( sTargetPath ) ) then
-        printlog( CFN & "Re-using existing local copy of workfile" )
+        'printlog( CFN & "Re-using existing local copy of workfile" )
+        warnlog( CFN & "About to reuse existing file. Please check" )
     else
         if ( GVERBOSE ) then
             printlog( CFN & "Copying file" )
             printlog( CFN & "From: " & sSourcePath )
             printlog( CFN & "To..: " & sTargetPath )
         endif
-        FileCopy( sSourcePath, sTargetPath )
     endif
-
+    FileCopy( sSourcePath, sTargetPath )
     ' This is a hook that allows to access the filename under which the file
     ' has been saved. Due to restrictive coding guidelines we cannot return
     ' the new filename.
