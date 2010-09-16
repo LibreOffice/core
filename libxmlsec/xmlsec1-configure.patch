@@ -590,6 +590,15 @@
          	    		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
                  else
+@@ -13166,7 +13284,7 @@
+ 
+     if test "z$NSS_INCLUDES_FOUND" = "zyes" -a "z$NSS_LIBS_FOUND" = "zyes" ; then
+        OLD_CPPFLAGS=$CPPFLAGS
+-       CPPFLAGS="$NSS_CFLAGS"
++       CPPFLAGS="$NSS_CFLAGS $NSPR_CFLAGS"
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
 @@ -15036,7 +15154,7 @@
  # values after options handling.
  ac_log="
@@ -734,6 +743,15 @@
          	dnl do not add -L/usr/lib because compiler does it anyway
      		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
+@@ -738,7 +761,7 @@
+ 
+     if test "z$NSS_INCLUDES_FOUND" = "zyes" -a "z$NSS_LIBS_FOUND" = "zyes" ; then
+        OLD_CPPFLAGS=$CPPFLAGS
+-       CPPFLAGS="$NSS_CFLAGS"
++       CPPFLAGS="$NSS_CFLAGS $NSPR_CFLAGS"
+        AC_EGREP_CPP(yes,[
+           #include <nss.h>
+           #if NSS_VMAJOR >= 3 && NSS_VMINOR >= 2
 --- misc/xmlsec1-1.2.14/win32/Makefile.msvc	2009-06-25 22:53:18.000000000 +0200
 +++ misc/build/xmlsec1-1.2.14/win32/Makefile.msvc	2009-10-01 10:28:50.997747312 +0200
 @@ -376,7 +376,7 @@

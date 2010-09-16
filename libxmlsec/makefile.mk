@@ -48,6 +48,7 @@ TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
 TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 
 #xmlsec1-configure.patch: Set up the build. Straightforward configuration
+#xmlsec1-configure-libxml-libxslt.patch: empty "$with_libxml" prepends /bin :-(
 #xmlsec1-olderlibxml2.patch: Allow build against older libxml2, for macosx
 #xmlsec1-nssdisablecallbacks.patch: Disable use of smime3 so don't need to package it
 #xmlsec1-customkeymanage.patch: Could we do this alternatively outside xmlsec
@@ -57,6 +58,7 @@ TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 #xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
 PATCH_FILES=\
    xmlsec1-configure.patch \
+   xmlsec1-configure-libxml-libxslt.patch \
    xmlsec1-olderlibxml2.patch \
    xmlsec1-nssdisablecallbacks.patch \
    xmlsec1-customkeymanage.patch \
@@ -102,7 +104,7 @@ CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozi
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=win32
@@ -162,7 +164,7 @@ CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=n
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 

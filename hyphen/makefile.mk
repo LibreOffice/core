@@ -74,7 +74,7 @@ BUILD_ACTION=make hyph_en_US.dic
 @all:
     echo "Nothing to do here."
 .ELSE
-BUILD_ACTION=make && make check
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 OUT2INC += hyphen.h 
 .ENDIF
 
