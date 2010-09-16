@@ -2606,15 +2606,9 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
         }
         else if (bAutoComplete)         // Gross-/Kleinschreibung anpassen
         {
-            if (pColumnData)
-                pColumnData->GetExactMatch( aString );
-
-            //! effizienter in der Liste suchen (ScUserList, nur einmal ToUpper)
-
-            USHORT nIndex;
-            ScUserListData* pData = ScGlobal::GetUserList()->GetData(aString);
-            if ( pData && pData->GetSubIndex( aString, nIndex ) )
-                aString = pData->GetSubStr( nIndex );
+            // Perform case-matching only when the typed text is partial.
+            if (pColumnData && aAutoSearch.Len() < aString.Len())
+                pColumnData->GetExactMatch(aString);
         }
     }
 
