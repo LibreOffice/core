@@ -526,14 +526,14 @@ namespace xmloff
 
                     // retrieve the values for all those properties
                     PropertyValues aValues;
-                    for (   PropertyDescriptionList::iterator prop = descriptions.begin();
-                            prop != descriptions.end();
-                            ++prop
+                    for (   PropertyDescriptionList::iterator desc = descriptions.begin();
+                            desc != descriptions.end();
+                            ++desc
                         )
                     {
                         // TODO: XMultiPropertySet?
-                        const Any propValue = m_xProps->getPropertyValue( (*prop)->propertyName );
-                        aValues[ (*prop)->propertyId ] = propValue;
+                        const Any propValue = m_xProps->getPropertyValue( (*desc)->propertyName );
+                        aValues[ (*desc)->propertyId ] = propValue;
                     }
 
                     // let the handler translate into an XML attribute value
