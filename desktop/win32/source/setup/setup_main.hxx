@@ -33,7 +33,6 @@ class SetupApp
 {
     DWORD           m_nOSVersion;
     DWORD           m_nMinorVersion;
-    boolean         m_bIsWin9x      : 1;
     boolean         m_bNeedReboot   : 1;
     boolean         m_bAdministrative : 1;
 
@@ -57,7 +56,6 @@ public:
     virtual void    DisplayError( UINT nErr ) const = 0;
 
     void            SetError( UINT nErr ) { m_uiRet = nErr; }
-    boolean         IsWin9x() const { return m_bIsWin9x; }
     DWORD           GetOSVersion() const { return m_nOSVersion; }
     DWORD           GetMinorVersion() const { return m_nMinorVersion; }
 
@@ -68,7 +66,6 @@ public:
     boolean         NeedReboot() const { return m_bNeedReboot; }
 };
 
-SetupApp* Create_SetupAppA();
 SetupApp* Create_SetupAppW();
 
 #endif

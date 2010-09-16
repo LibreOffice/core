@@ -1321,9 +1321,7 @@ boolean SetupAppX::AlreadyRunning() const
     const TCHAR sGUniqueName[] = TEXT( "Global\\_MSISETUP_{EA8130C1-8D3D-4338-9309-1A52D530D846}" );
     const TCHAR sUniqueName[]  = TEXT( "_MSISETUP_{EA8130C1-8D3D-4338-9309-1A52D530D846}" );
 
-    if ( IsWin9x() )
-        sMutexName = sUniqueName;
-    else if ( ( GetOSVersion() < 5 ) && ! IsTerminalServerInstalled() )
+    if ( ( GetOSVersion() < 5 ) && ! IsTerminalServerInstalled() )
         sMutexName = sUniqueName;
     else
         sMutexName = sGUniqueName;
@@ -1394,8 +1392,7 @@ void SetupAppX::Log( LPCTSTR pMessage, LPCTSTR pText ) const
         if ( !bInit )
         {
             bInit = true;
-            if ( ! IsWin9x() )
-                _ftprintf( m_pLogFile, TEXT("%c"), 0xfeff );
+            _ftprintf( m_pLogFile, TEXT("%c"), 0xfeff );
 
             _tsetlocale( LC_ALL, TEXT("") );
             _ftprintf( m_pLogFile, TEXT("\nCodepage=%s\nMultiByte Codepage=[%d]\n"),
@@ -1653,9 +1650,6 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
 //--------------------------------------------------------------------------
 boolean SetupAppX::IsAdmin()
 {
-    if ( IsWin9x() )
-        return true;
-
     PSID aPsidAdmin;
     SID_IDENTIFIER_AUTHORITY aAuthority = SECURITY_NT_AUTHORITY;
 

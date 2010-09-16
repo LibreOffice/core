@@ -63,7 +63,6 @@ SetupApp::SetupApp()
 
     m_nOSVersion    = sInfoOS.dwMajorVersion;
     m_nMinorVersion = sInfoOS.dwMinorVersion;
-    m_bIsWin9x      = ( VER_PLATFORM_WIN32_NT != sInfoOS.dwPlatformId );
     m_bNeedReboot   = false;
     m_bAdministrative = false;
 }
@@ -88,14 +87,9 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
 
     GetVersionEx( &sInfoOS );
 
-    boolean bIsWin9x = ( VER_PLATFORM_WIN32_NT != sInfoOS.dwPlatformId );
-
     SetupApp *pSetup;
 
-    if ( bIsWin9x )
-        pSetup = Create_SetupAppA();
-    else
-        pSetup = Create_SetupAppW();
+    pSetup = Create_SetupAppW();
 
     try
     {
