@@ -66,7 +66,7 @@ JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) -Dcommons-codec.jar=$(COMMONS_CODEC_JAR) -f $(ANT_BUILDFILE) dist
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)"  -Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) -Dcommons-codec.jar=$(COMMONS_CODEC_JAR) -f $(ANT_BUILDFILE) dist
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)"  -Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) -Dcommons-codec.jar=$(COMMONS_CODEC_JAR) -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) dist
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
