@@ -77,6 +77,7 @@
 #include "rangeutl.hxx"
 #include "client.hxx"
 #include "tabprotection.hxx"
+#include "formula/FormulaCompiler.hxx"
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
@@ -2188,6 +2189,7 @@ void ScTabView::DoChartSelection(
     const uno::Sequence< chart2::data::HighlightedRange > & rHilightRanges )
 {
     ClearHighlightRanges();
+    const sal_Unicode sep = ::formula::FormulaCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
     for( sal_Int32 i=0; i<rHilightRanges.getLength(); ++i )
     {
@@ -2195,7 +2197,7 @@ void ScTabView::DoChartSelection(
         ScRangeList aRangeList;
         ScDocument* pDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), ';' ))
+                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), sep ))
         {
             for ( ScRangePtr p = aRangeList.First(); p; p = aRangeList.Next())
             {
