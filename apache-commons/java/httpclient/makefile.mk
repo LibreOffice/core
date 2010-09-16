@@ -58,6 +58,9 @@ OUT2CLASS=dist$/commons-httpclient.jar
 COMMONS_LOGGING_JAR=..$/..$/..$/..$/$(INPATH)$/class$/commons-logging-1.1.1-SNAPSHOT.jar
 COMMONS_CODEC_JAR=..$/..$/..$/..$/$/$(INPATH)$/class$/commons-codec-1.3.jar
 
+ANT_OPTS+="-Dfile.encoding=ISO-8859-1"
+.EXPORT : ANT_OPTS
+
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
