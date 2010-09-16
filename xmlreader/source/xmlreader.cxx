@@ -133,7 +133,7 @@ int XmlReader::registerNamespaceIri(Span const & iri) {
         // declaring a corresponding namespace binding, see issue 77174; reading
         // those files during migration would fail without this hack that can be
         // removed once migration is no longer relevant (see
-        // Components::parseModificationLayer):
+        // configmgr::Components::parseModificationLayer):
         namespaces_.push_back(
             NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xsi")), id));
     }
