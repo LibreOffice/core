@@ -368,6 +368,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                         "AU Audio", "au",
                                         "AVI", "avi",
                                         "CD Audio", "cda",
+                                        "FLAC Audio", "flac",
                                         "MIDI Audio", "mid;midi",
                                         "MPEG Audio", "mp2;mp3;mpa",
                                         "MPEG Video", "mpg;mpeg;mpv;mp4",
