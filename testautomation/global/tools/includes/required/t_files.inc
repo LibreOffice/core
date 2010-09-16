@@ -627,14 +627,13 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     ' exist. This behavior was discussed on IRC
     if ( FileExists( sTargetPath ) ) then
         'printlog( CFN & "Re-using existing local copy of workfile" )
-        warnlog( CFN & "About to reuse existing file. Please check" )
-    else
-        if ( GVERBOSE ) then
-            printlog( CFN & "Copying file" )
-            printlog( CFN & "From: " & sSourcePath )
-            printlog( CFN & "To..: " & sTargetPath )
-        endif
+        warnlog( CFN & "Target file exists, it has not been deleted by prior test" )
     endif
+
+    printlog( CFN & "Copying file" )
+    printlog( CFN & "From: " & sSourcePath )
+    printlog( CFN & "To..: " & sTargetPath )
+
     FileCopy( sSourcePath, sTargetPath )
 
     ' Verify that the file has been created. return an empty string and warn
