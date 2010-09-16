@@ -751,6 +751,8 @@ rtl::OUString Key::getStringValue() throw (
                     " getStringValue: does not associate singletons with"
                     " services")),
             static_cast< OWeakObject * >(this));
+    default:
+        break;
     }
     // default case extracted from switch to avoid erroneous compiler warnings
     // on Solaris:
