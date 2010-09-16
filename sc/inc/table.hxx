@@ -85,7 +85,7 @@ class CollatorWrapper;
 class ScFlatUInt16RowSegments;
 class ScFlatBoolRowSegments;
 class ScFlatBoolColSegments;
-
+struct ScSetStringParam;
 
 class ScTable
 {
@@ -301,7 +301,7 @@ public:
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                           SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
+                           ScSetStringParam* pParam = NULL );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, USHORT nError);
 

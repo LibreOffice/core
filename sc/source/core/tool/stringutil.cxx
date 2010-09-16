@@ -40,6 +40,15 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
+ScSetStringParam::ScSetStringParam() :
+    mpNumFormatter(NULL),
+    mbDetectNumberFormat(true),
+    mbSetTextCellFormat(false)
+{
+}
+
+// ============================================================================-
+
 bool ScStringUtil::parseSimpleNumber(
     const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal)
 {

@@ -66,6 +66,7 @@
 #include "drwlayer.hxx"
 #include "rangenam.hxx"
 #include "progress.hxx"
+#include "stringutil.hxx"
 
 #include "globstr.hrc"
 
@@ -329,12 +330,17 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
             // Daten eintragen
             if (bSimple)
             {
+                ScSetStringParam aParam;
+                aParam.mpNumFormatter = pFormatter;
+                aParam.mbDetectNumberFormat = true;
+                aParam.mbSetTextCellFormat = true;
+
                 if ( aValStr.Len() )
                     mpDoc->SetValue( nCol, nRow, nTab, fVal );
                 else if ( !pE->aSel.HasRange() )
                 {
                     // maybe ALT text of IMG or similar
-                    mpDoc->SetString( nCol, nRow, nTab, pE->aAltText, pFormatter );
+                    mpDoc->SetString( nCol, nRow, nTab, pE->aAltText, &aParam );
                     // wenn SelRange komplett leer kann nachfolgender Text im gleichen Absatz liegen!
                 }
                 else
@@ -379,7 +385,10 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                     if (bNumbersEnglishUS && !bEnUsRecognized)
                         mpDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aStr));
                     else
-                        mpDoc->SetString( nCol, nRow, nTab, aStr, pFormatter, bConvertDate );
+                    {
+                        aParam.mbDetectNumberFormat = bConvertDate;
+                        mpDoc->SetString( nCol, nRow, nTab, aStr, &aParam );
+                    }
                 }
             }
             else

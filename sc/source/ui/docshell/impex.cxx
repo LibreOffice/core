@@ -82,6 +82,9 @@ class StarBASIC;
 
 // ause
 #include "editutil.hxx"
+#include "patattr.hxx"
+#include "docpool.hxx"
+#include "stringutil.hxx"
 
 #include "globstr.hrc"
 #include <vcl/msgbox.hxx>
@@ -914,6 +917,18 @@ static bool lcl_PutString(
 
     if ( nColFormat == SC_COL_TEXT )
     {
+        double fDummy;
+        sal_uInt32 nIndex;
+        if (pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
+        {
+            // Set the format of this cell to Text.
+            sal_uInt32 nFormat = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
+            ScPatternAttr aNewAttrs(pDoc->GetPool());
+            SfxItemSet& rSet = aNewAttrs.GetItemSet();
+            rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
+            pDoc->ApplyPattern(nCol, nRow, nTab, aNewAttrs);
+
+        }
         pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( rStr, pDoc ) );
         return bMultiLine;
     }
@@ -1126,7 +1141,13 @@ static bool lcl_PutString(
 
     // Standard or date not determined -> SetString / EditCell
     if( rStr.Search( _LF ) == STRING_NOTFOUND )
-        pDoc->SetString( nCol, nRow, nTab, rStr, pFormatter, bDetectNumFormat );
+    {
+        ScSetStringParam aParam;
+        aParam.mpNumFormatter = pFormatter;
+        aParam.mbDetectNumberFormat = bDetectNumFormat;
+        aParam.mbSetTextCellFormat = true;
+        pDoc->SetString( nCol, nRow, nTab, rStr, &aParam );
+    }
     else
     {
         bMultiLine = true;

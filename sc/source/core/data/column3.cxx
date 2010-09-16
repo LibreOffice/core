@@ -52,6 +52,7 @@
 #include "detfunc.hxx"          // fuer Notizen bei DeleteRange
 #include "postit.hxx"
 #include "stringutil.hxx"
+#include "docpool.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
@@ -1249,7 +1250,7 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 //  TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
-                          SvNumberFormatter* pLangFormatter, bool bDetectNumberFormat )
+                          ScSetStringParam* pParam )
 {
     BOOL bNumFmtSet = FALSE;
     if (VALIDROW(nRow))
@@ -1258,14 +1259,15 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         BOOL bIsLoading = FALSE;
         if (rString.Len() > 0)
         {
+            ScSetStringParam aParam;
+            if (pParam)
+                aParam = *pParam;
+
             double nVal;
             sal_uInt32 nIndex, nOldIndex = 0;
             sal_Unicode cFirstChar;
-            // #i110979# If a different NumberFormatter is passed in (pLangFormatter),
-            // its formats aren't valid in the document.
-            // Only use the language / LocaleDataWrapper from pLangFormatter,
-            // always the document's number formatter for IsNumberFormat.
-            SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+            if (!aParam.mpNumFormatter)
+                aParam.mpNumFormatter = pDocument->GetFormatTable();
             SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
             if ( pDocSh )
                 bIsLoading = pDocSh->IsLoading();
@@ -1274,7 +1276,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             {
                 nIndex = nOldIndex = GetNumberFormat( nRow );
                 if ( rString.Len() > 1
-                        && pFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
+                        && aParam.mpNumFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
                     cFirstChar = rString.GetChar(0);
                 else
                     cFirstChar = 0;                             // Text
@@ -1330,7 +1332,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     }
                     // nIndex fuer IsNumberFormat vorbelegen
                     if ( !bIsText )
-                        nIndex = nOldIndex = pFormatter->GetStandardIndex();
+                        nIndex = nOldIndex = aParam.mpNumFormatter->GetStandardIndex();
                 }
 
                 do
@@ -1338,23 +1340,17 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     if (bIsText)
                         break;
 
-                    if (bDetectNumberFormat)
+                    if (aParam.mbDetectNumberFormat)
                     {
-                        if ( pLangFormatter )
-                        {
-                            // for number detection: valid format index for selected language
-                            nIndex = pFormatter->GetStandardIndex( pLangFormatter->GetLanguage() );
-                        }
-
-                        if (!pFormatter->IsNumberFormat(rString, nIndex, nVal))
+                        if (!aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
                             break;
 
-                        if ( pLangFormatter )
+                        if ( aParam.mpNumFormatter )
                         {
                             // convert back to the original language if a built-in format was detected
-                            const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                            const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
                             if ( pOldFormat )
-                                nIndex = pFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
+                                nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
                         }
 
                         pNewCell = new ScValueCell( nVal );
@@ -1365,21 +1361,21 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                             // Exception: If the new format is boolean, always apply it.
 
                             BOOL bOverwrite = FALSE;
-                            const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                            const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
                             if ( pOldFormat )
                             {
                                 short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
                                 if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
                                      nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
                                 {
-                                    if ( nOldIndex == pFormatter->GetStandardFormat(
+                                    if ( nOldIndex == aParam.mpNumFormatter->GetStandardFormat(
                                                         nOldType, pOldFormat->GetLanguage() ) )
                                     {
                                         bOverwrite = TRUE;      // default of these types can be overwritten
                                     }
                                 }
                             }
-                            if ( !bOverwrite && pFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
+                            if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
                             {
                                 bOverwrite = TRUE;              // overwrite anything if boolean was detected
                             }
@@ -1395,8 +1391,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     else
                     {
                         // Only check if the string is a regular number.
-                        SvNumberFormatter* pLocaleSource = pLangFormatter ? pLangFormatter : pFormatter;
-                        const LocaleDataWrapper* pLocale = pLocaleSource->GetLocaleData();
+                        const LocaleDataWrapper* pLocale = aParam.mpNumFormatter->GetLocaleData();
                         if (!pLocale)
                             break;
 
@@ -1418,7 +1413,19 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 while (false);
 
                 if (!pNewCell)
+                {
+                    if (aParam.mbSetTextCellFormat && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
+                    {
+                        // Set the cell format type to Text.
+                        sal_uInt32 nFormat = aParam.mpNumFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
+                        ScPatternAttr aNewAttrs(pDocument->GetPool());
+                        SfxItemSet& rSet = aNewAttrs.GetItemSet();
+                        rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
+                        ApplyPattern(nRow, aNewAttrs);
+                    }
+
                     pNewCell = new ScStringCell(rString);
+                }
             }
         }
 

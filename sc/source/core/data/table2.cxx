@@ -1015,11 +1015,11 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 
 
 BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
-                         SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
+                         ScSetStringParam* pParam )
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].SetString(
-            nRow, nTabP, rString, pDocument->GetAddressConvention(), pFormatter, bDetectNumberFormat );
+            nRow, nTabP, rString, pDocument->GetAddressConvention(), pParam );
     else
         return FALSE;
 }

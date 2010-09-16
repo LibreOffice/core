@@ -146,6 +146,7 @@ class ScFormulaParserPool;
 struct ScClipParam;
 struct ScClipRangeNameData;
 class ScRowBreakIterator;
+struct ScSetStringParam;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -773,7 +774,7 @@ public:
                     //  return TRUE = Zahlformat gesetzt
     SC_DLLPUBLIC BOOL           SetString(
         SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-        SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
+        ScSetStringParam* pParam = NULL );
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError);
 

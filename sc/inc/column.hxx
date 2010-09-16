@@ -66,6 +66,7 @@ struct ScFunctionData;
 struct ScLineFlags;
 struct ScMergePatternState;
 class ScFlatBoolRowSegments;
+struct ScSetStringParam;
 
 #define COLUMN_DELTA    4
 
@@ -236,8 +237,7 @@ public:
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
                            formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
-                           SvNumberFormatter* pFormatter = NULL,
-                           bool bDetectNumberFormat = true );
+                           ScSetStringParam* pParam = NULL );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const USHORT nError);
 
