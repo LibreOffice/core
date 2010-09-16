@@ -179,11 +179,12 @@ BEGIN
     $rpm = "";
     $rpmcommand = "";
     $rpmquerycommand = "";
+    $rpminfologged = 0;
     $debian = "";
     $installertypedir = "";
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
-    $max_lang_length = 65;
+    $max_lang_length = 50;
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();

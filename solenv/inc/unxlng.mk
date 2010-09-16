@@ -197,6 +197,14 @@ STDLIBCUIMT+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
 STDSHLCUIMT+=-ltcmalloc
 .ENDIF
+
+.IF "$(ALLOC)" == "JEMALLOC"
+STDLIBGUIMT+=-ljemalloc
+STDLIBCUIMT+=-ljemalloc
+STDSHLGUIMT+=-ljemalloc
+STDSHLCUIMT+=-ljemalloc
+.ENDIF
+
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
 LINKFLAGS += -Wl,--hash-style=both
 .ELSE
