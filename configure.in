@@ -3531,6 +3531,16 @@ else
 fi
 
 dnl ===================================================================
+dnl Check for pkg-config
+dnl # Note that if there is a possibility the first call to
+dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
+dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
+dnl ===================================================================
+if test "$_os" != "WNT"; then
+	PKG_PROG_PKG_CONFIG
+fi
+
+dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
