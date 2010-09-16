@@ -11,6 +11,5 @@
 # autoconf generated stuff
 /ChangeLog
 /configure
-/aclocal.m4
 
 /*/*.exe
