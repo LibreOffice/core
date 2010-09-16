@@ -302,9 +302,9 @@ $(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : $(COMMONMISC)/%/com.sun.PresenterScreen/presenter.xhp
+$(ZIP1DIR)/help/%/com.sun.PresenterScreen-$(PLATFORMID)/presenter.xhp : $(COMMONMISC)/%/com.sun.PresenterScreen/presenter.xhp
     @echo creating $@
-    @@-$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(@:d)
     $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" | sed 's/@PRESENTEREXTENSIONPRODUCTNAME@/Presenter Console/g' > $@
 
 $(ZIP1TARGETN) : $(HELPLINKALLTARGETS)
@@ -390,7 +390,7 @@ DESCRIPTION_TMP:=$(ZIP1DIR)$/description.xml.tmp
 PHONYDESC=.PHONY
 .ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(@:d)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $(DESCRIPTION_TMP)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
     $(TYPE) $(DESCRIPTION_TMP) | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
