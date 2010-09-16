@@ -93,6 +93,7 @@ private:
     sal_Bool                mbFakeVideo;
 
     gdouble                 mnUnmutedVolume;
+    sal_Bool                mbPlayPending;
     sal_Bool                mbMuted;
     sal_Bool                mbLooping;
     sal_Bool                mbInitialized;

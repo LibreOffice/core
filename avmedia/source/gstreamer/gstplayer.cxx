@@ -59,6 +59,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mpPlaybin( NULL ),
     mbFakeVideo (sal_False ),
     mnUnmutedVolume( 0 ),
+    mbPlayPending ( false ),
     mbMuted( false ),
     mbLooping( false ),
     mbInitialized( false ),
@@ -132,6 +133,9 @@ void Player::processMessage( GstMessage *message )
     case GST_MESSAGE_EOS:
         //DBG( "EOS, reset state to NULL" );
         gst_element_set_state( mpPlaybin, GST_STATE_READY );
+        mbPlayPending = false;
+        if (mbLooping)
+            start();
         break;
     case GST_MESSAGE_STATE_CHANGED:
         if( message->src == GST_OBJECT( mpPlaybin ) ) {
@@ -143,6 +147,9 @@ void Player::processMessage( GstMessage *message )
                 pendingstate == GST_STATE_VOID_PENDING &&
                 mpXOverlay )
                 gst_x_overlay_expose( mpXOverlay );
+
+        if (mbPlayPending)
+            mbPlayPending = ((newstate == GST_STATE_READY) || (newstate == GST_STATE_PAUSED));
         }
     default:
         break;
@@ -242,6 +249,7 @@ void Player::preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo )
 
         if( mpPlaybin != NULL ) {
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
+            mbPlayPending = false;
             g_object_unref( mpPlaybin );
         }
 
@@ -273,6 +281,7 @@ bool Player::create( const ::rtl::OUString& rURL )
         preparePlaybin( rURL, true );
 
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+        mbPlayPending = false;
 
         bRet = true;
     }
@@ -297,6 +306,7 @@ void SAL_CALL Player::start(  )
     if( mbInitialized && NULL != mpPlaybin )
     {
         gst_element_set_state( mpPlaybin, GST_STATE_PLAYING );
+        mbPlayPending = true;
     }
 }
 
@@ -309,6 +319,7 @@ void SAL_CALL Player::stop(  )
     if( mpPlaybin )
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
+    mbPlayPending = false;
     DBG( "stop %p", mpPlaybin );
 }
 
@@ -317,10 +328,10 @@ void SAL_CALL Player::stop(  )
 sal_Bool SAL_CALL Player::isPlaying()
     throw (uno::RuntimeException)
 {
-    bool            bRet = false;
+    bool            bRet = mbPlayPending;
 
     // return whether the pipeline is in PLAYING STATE or not
-    if( mbInitialized && mpPlaybin )
+    if( !mbPlayPending && mbInitialized && mpPlaybin )
     {
         bRet = GST_STATE_PLAYING == GST_STATE( mpPlaybin );
     }
