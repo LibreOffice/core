@@ -5,6 +5,9 @@
             <prop oor:name="Service">
                 <value>com.sun.star.comp.Draw.framework.PresenterScreenJob</value>
             </prop>
+            <prop oor:name="Context">
+                <value>com.sun.star.presentation.PresentationDocument</value>
+            </prop>
         </node>
     </node>
     <node oor:name="Events">
