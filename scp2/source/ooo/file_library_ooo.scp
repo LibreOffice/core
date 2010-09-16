@@ -1626,6 +1626,9 @@ STD_UNO_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
 // AVMedia
 STD_UNO_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
+#ifdef GSTREAMER
+SPECIAL_UNO_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer, avmediagst )
+#else
 #if defined UNX
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
@@ -1633,6 +1636,7 @@ UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
 #elif defined WNT
 #ifdef ENABLE_DIRECTX
 SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
+#endif
 #endif
 #endif
 
