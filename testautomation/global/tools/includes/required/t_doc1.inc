@@ -357,6 +357,8 @@ end sub
 '
 sub hTypeKeys ( OutputText , optional _iLoop as Integer )
 
+    const CFN & "global::tools::includes::required::t_doc1.inc::hTypeKeys(): "
+
     dim iRepeat as integer
     dim iLoop as integer
     dim oDocument as object
@@ -371,10 +373,14 @@ sub hTypeKeys ( OutputText , optional _iLoop as Integer )
     hSetDocumentContext() ' set kontext to current document type
     oDocument = hSetDocumentObject() ' Get the document object we want to write to
 
-    for iRepeat = 1 to iLoop
-        oDocument.TypeKeys( OutputText )
-        wait( 200 )
-    next iRepeat
+    try
+        for iRepeat = 1 to iLoop
+            oDocument.TypeKeys( OutputText )
+            wait( 200 )
+        next iRepeat
+    catch
+        warnlog( CFN & "Failed to send keystroke to given context" )
+    endcatch
 
 end sub
 
