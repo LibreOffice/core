@@ -34,6 +34,7 @@
 #include <svx/svdmark.hxx>
 #include <tools/link.hxx>
 #include "formatsh.hxx"
+#include "address.hxx"
 
 class SvxClipboardFmtItem;
 class TransferableDataHelper;

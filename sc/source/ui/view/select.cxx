@@ -583,7 +583,10 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 }
             }
             if (bStarted)
+                // If the selection is already started, don't set the cursor.
                 pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab, FALSE, FALSE, TRUE );
+            else
+                pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
         }
         else
         {
@@ -619,9 +622,9 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 
                 bStarted = TRUE;
             }
+            pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
         }
 
-        pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
         pViewData->SetRefStart( nPosX, nPosY, nTab );
         if (bHideCur)
             pView->ShowAllCursors();

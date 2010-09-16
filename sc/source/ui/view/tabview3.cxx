@@ -119,10 +119,7 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, BOOL bControl )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    while (pDoc->IsHorOverlapped( nPosX, nPosY, nTab ))     //! ViewData !!!
-        --nPosX;
-    while (pDoc->IsVerOverlapped( nPosX, nPosY, nTab ))
-        --nPosY;
+    pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
     BOOL bRefMode = SC_MOD()->IsFormulaMode();
 
@@ -901,22 +898,36 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 
     HideAllCursors();
 
-    if ( bShift && bNewStartIfMarking && IsBlockMode() )
-    {
-        //  used for ADD selection mode: start a new block from the cursor position
-        DoneBlockMode( TRUE );
-        InitBlockMode( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo(), TRUE );
-    }
-
         //  aktiven Teil umschalten jetzt in AlignToCursor
 
     AlignToCursor( nCurX, nCurY, eMode );
     //!     auf OS/2: SC_FOLLOW_JUMP statt SC_FOLLOW_LINE, um Nachlaufen zu verhindern ???
 
     if (bKeepSel)
+    {
         SetCursor( nCurX, nCurY );      // Markierung stehenlassen
+
+        // If the cursor is in existing selection, it's a cursor movement by
+        // ENTER or TAB.  If not, then it's a new selection during ADD
+        // selection mode.
+
+        const ScMarkData& rMark = aViewData.GetMarkData();
+        ScRangeList aSelList;
+        rMark.FillRangeListWithMarks(&aSelList, false);
+        if (!aSelList.In(ScRange(nCurX, nCurY, aViewData.GetTabNo())))
+            // Cursor not in existing selection.  Start a new selection.
+            DoneBlockMode(true);
+    }
     else
     {
+        if (!bShift)
+        {
+            // Remove all marked data on cursor movement unless the Shift is locked.
+            ScMarkData aData(aViewData.GetMarkData());
+            aData.ResetMark();
+            SetMarkData(aData);
+        }
+
         BOOL bSame = ( nCurX == aViewData.GetCurX() && nCurY == aViewData.GetCurY() );
         bMoveIsShift = bShift;
         pSelEngine->CursorPosChanging( bShift, bControl );
@@ -1060,68 +1071,18 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
 
 void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, BOOL bShift, BOOL bKeepSel )
 {
-    SCCOL nCurX;
-    SCROW nCurY;
-    aViewData.GetMoveCursor( nCurX,nCurY );
-
-    ScSplitPos eWhich = aViewData.GetActivePart();
-    ScHSplitPos eWhichX = WhichH( eWhich );
-    ScVSplitPos eWhichY = WhichV( eWhich );
-
     SCsCOL nPageX;
     SCsROW nPageY;
-    if (nMovX >= 0)
-        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, 1, eWhichX )) * nMovX;
-    else
-        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, -1, eWhichX )) * nMovX;
-
-    if (nMovY >= 0)
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, 1, eWhichY )) * nMovY;
-    else
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, -1, eWhichY )) * nMovY;
-
-    if (nMovX != 0 && nPageX == 0) nPageX = (nMovX>0) ? 1 : -1;
-    if (nMovY != 0 && nPageY == 0) nPageY = (nMovY>0) ? 1 : -1;
-
+    GetPageMoveEndPosition(nMovX, nMovY, nPageX, nPageY);
     MoveCursorRel( nPageX, nPageY, eMode, bShift, bKeepSel );
 }
 
 void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, BOOL bShift, BOOL bKeepSel )
 {
-    SCCOL nCurX;
-    SCROW nCurY;
-    aViewData.GetMoveCursor( nCurX,nCurY );
-    SCCOL nNewX = nCurX;
-    SCROW nNewY = nCurY;
-
-    ScDocument* pDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
-
-    //  FindAreaPos kennt nur -1 oder 1 als Richtung
-
-    SCsCOLROW i;
-    if ( nMovX > 0 )
-        for ( i=0; i<nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  1,  0 );
-    if ( nMovX < 0 )
-        for ( i=0; i<-nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab, -1,  0 );
-    if ( nMovY > 0 )
-        for ( i=0; i<nMovY; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  0,  1 );
-    if ( nMovY < 0 )
-        for ( i=0; i<-nMovY; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  0, -1 );
-
-    if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
-    {
-        if (nMovX != 0 && nNewX == MAXCOL)
-            eMode = SC_FOLLOW_LINE;
-        if (nMovY != 0 && nNewY == MAXROW)
-            eMode = SC_FOLLOW_LINE;
-    }
-
-    MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY, eMode, bShift, bKeepSel );
+    SCsCOL nNewX;
+    SCsROW nNewY;
+    GetAreaMoveEndPosition(nMovX, nMovY, eMode, nNewX, nNewY, eMode);
+    MoveCursorRel(nNewX, nNewY, eMode, bShift, bKeepSel);
 }
 
 void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, BOOL bShift, BOOL bKeepSel )
@@ -1186,14 +1147,8 @@ void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode
     else if (nMovY>0)
         nNewY=nPosY+nAddY;
 
-//  aViewData.ResetOldCursor();
     aViewData.SetOldCursor( nNewX,nNewY );
-
-    while (pDoc->IsHorOverlapped( nNewX, nNewY, nTab ))
-        --nNewX;
-    while (pDoc->IsVerOverlapped( nNewX, nNewY, nTab ))
-        --nNewY;
-
+    pDoc->SkipOverlapped(nNewX, nNewY, nTab);
     MoveCursorAbs( nNewX, nNewY, eMode, bShift, FALSE, TRUE );
 }
 
@@ -1477,11 +1432,7 @@ void ScTabView::MarkRange( const ScRange& rRange, BOOL bSetCursor, BOOL bContinu
         SCCOL nPosX = rRange.aStart.Col();
         SCROW nPosY = rRange.aStart.Row();
         ScDocument* pDoc = aViewData.GetDocument();
-
-        while (pDoc->IsHorOverlapped( nPosX, nPosY, nTab ))     //! ViewData !!!
-            --nPosX;
-        while (pDoc->IsVerOverlapped( nPosX, nPosY, nTab ))
-            --nPosY;
+        pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
         aViewData.ResetOldCursor();
         SetCursor( nPosX, nPosY );

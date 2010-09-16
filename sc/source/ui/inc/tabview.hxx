@@ -176,7 +176,6 @@ private:
     BOOL                bInActivatePart;
     BOOL                bInZoomUpdate;
     BOOL                bMoveIsShift;
-    BOOL                bNewStartIfMarking;
 
     void            Init();
 
@@ -196,6 +195,10 @@ private:
 
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL );
     static long     GetScrollBarPos( ScrollBar& rScroll, BOOL bLayoutRTL );
+
+    void            GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY);
+    void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+                                           SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode);
 
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,
@@ -385,12 +388,7 @@ public:
 
     void            FindNextUnprot( BOOL bShift, BOOL bInSelection = TRUE );
 
-    void            SetNewStartIfMarking();
-
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    //void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
     SC_DLLPUBLIC void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
     void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );
@@ -480,6 +478,10 @@ public:
     void            DoneBlockMode( BOOL bContinue = FALSE );
 
     BOOL            IsBlockMode() const     { return bIsBlockMode; }
+
+    void            ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode);
+    void            ExpandBlockPage(SCsCOL nMovX, SCsROW nMovY);
+    void            ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY);
 
     void            MarkColumns();
     void            MarkRows();

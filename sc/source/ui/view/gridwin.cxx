@@ -2228,8 +2228,12 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             }
 
             SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
+            // We don't want to align to the cursor position because if the
+            // cell cursor isn't visible after making selection, it would jump
+            // back to the origin of the selection where the cell cursor is.
+            SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
             pDisp->Execute( SID_CURRENTCELL, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                                        &aPosItem, (void*)0L );
+                                        &aPosItem, &aAlignCursorItem, (void*)0L );
 
             pViewData->GetView()->InvalidateAttribs();
         }
@@ -3981,7 +3985,10 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( bDone )
                 {
                     pView->MarkRange( aDest, FALSE, FALSE );
-                    pView->SetCursor( aDest.aEnd.Col(), aDest.aEnd.Row() );
+
+                    SCCOL nDCol = pViewData->GetCurX() - aSource.aStart.Col();
+                    SCROW nDRow = pViewData->GetCurY() - aSource.aStart.Row();
+                    pView->SetCursor( aDest.aStart.Col() + nDCol, aDest.aStart.Row() + nDRow );
                 }
 
                 pDocSh->GetUndoManager()->LeaveListAction();
@@ -4089,7 +4096,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     pView->EnterMatrix( aFormula );
 
                     pView->MarkRange( aDest, FALSE, FALSE );
-                    pView->SetCursor( aDest.aEnd.Col(), aDest.aEnd.Row() );
+                    pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );
                 }
 
                 pDocSh->GetUndoManager()->LeaveListAction();
@@ -4123,7 +4130,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( bDone )
                 {
                     pView->MarkRange( aDest, FALSE, FALSE );
-                    pView->SetCursor( aDest.aEnd.Col(), aDest.aEnd.Row() );
+                    pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );
                 }
             }
 

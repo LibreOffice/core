@@ -265,6 +265,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
                     bUnmark = ((const SfxBoolItem*)pItem)->GetValue();
 
+                bool bAlignToCursor = true;
+                if (pReqArgs->GetItemState(FN_PARAM_2, true, &pItem) == SFX_ITEM_SET)
+                    bAlignToCursor = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
                 if ( nSlot == SID_JUMPTOMARK )
                 {
                     //  #106586# URL has to be decoded for escaped characters (%20)
@@ -385,10 +389,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     // und Cursor setzen
 
                     // zusammengefasste Zellen beruecksichtigen:
-                    while ( pDoc->IsHorOverlapped( nCol, nRow, nTab ) )     //! ViewData !!!
-                        --nCol;
-                    while ( pDoc->IsVerOverlapped( nCol, nRow, nTab ) )
-                        --nRow;
+                    pDoc->SkipOverlapped(nCol, nRow, nTab);
 
                     //  Navigator-Aufrufe sind nicht API!!!
 
@@ -409,9 +410,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         if (!rReq.IsAPI())
                             rReq.Done();
                     }
-                    // align to cursor even if the cursor position hasn't changed,
-                    // because the cursor may be set outside the visible area.
-                    AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
+
+                    if (bAlignToCursor)
+                    {
+                        // align to cursor even if the cursor position hasn't changed,
+                        // because the cursor may be set outside the visible area.
+                        AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
+                    }
 
                     rReq.SetReturnValue( SfxStringItem( SID_CURRENTCELL, aAddress ) );
                 }

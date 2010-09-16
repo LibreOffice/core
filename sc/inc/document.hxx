@@ -866,6 +866,7 @@ public:
                                                 ScRange* pLastRange = NULL,
                                                 Rectangle* pLastMM = NULL ) const;
 
+    void            SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const;
     BOOL            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 

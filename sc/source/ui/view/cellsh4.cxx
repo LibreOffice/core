@@ -49,6 +49,7 @@
 #include "document.hxx"
 #include "sc.hrc"
 
+#include "vcl/svapp.hxx"
 
 //------------------------------------------------------------------
 
@@ -85,8 +86,54 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
             bKeep = TRUE;
-            pTabViewShell->SetNewStartIfMarking();
         }
+    }
+
+    if (bSel)
+    {
+        switch (nSlotId)
+        {
+            case SID_CURSORDOWN:
+                rReq.SetSlot(SID_CURSORDOWN_SEL);
+            break;
+            case SID_CURSORUP:
+                rReq.SetSlot(SID_CURSORUP_SEL);
+            break;
+            case SID_CURSORRIGHT:
+                rReq.SetSlot(SID_CURSORRIGHT_SEL);
+            break;
+            case SID_CURSORLEFT:
+                rReq.SetSlot(SID_CURSORLEFT_SEL);
+            break;
+            case SID_CURSORPAGEDOWN:
+                rReq.SetSlot(SID_CURSORPAGEDOWN_SEL);
+            break;
+            case SID_CURSORPAGEUP:
+                rReq.SetSlot(SID_CURSORPAGEUP_SEL);
+            break;
+            case SID_CURSORPAGERIGHT:
+                rReq.SetSlot(SID_CURSORPAGERIGHT_SEL);
+            break;
+            case SID_CURSORPAGELEFT:
+                rReq.SetSlot(SID_CURSORPAGELEFT_SEL);
+            break;
+            case SID_CURSORBLKDOWN:
+                rReq.SetSlot(SID_CURSORBLKDOWN_SEL);
+            break;
+            case SID_CURSORBLKUP:
+                rReq.SetSlot(SID_CURSORBLKUP_SEL);
+            break;
+            case SID_CURSORBLKRIGHT:
+                rReq.SetSlot(SID_CURSORBLKRIGHT_SEL);
+            break;
+            case SID_CURSORBLKLEFT:
+                rReq.SetSlot(SID_CURSORBLKLEFT_SEL);
+            break;
+            default:
+                ;
+        }
+        ExecuteCursorSel(rReq);
+        return;
     }
 
     SCsCOLROW nRTLSign = 1;
@@ -169,38 +216,64 @@ void ScCellShell::GetStateCursor( SfxItemSet& /* rSet */ )
 
 void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
 {
-    const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    USHORT              nSlotId  = rReq.GetSlot();
-    short               nRepeat = 1;
-
-    if ( pReqArgs != NULL )
+    sal_uInt16 nSlotId  = rReq.GetSlot();
+    ScTabViewShell* pViewShell = GetViewData()->GetViewShell();
+    ScInputHandler* pInputHdl = pViewShell->GetInputHandler();
+    pViewShell->HideAllCursors();
+    if (pInputHdl && pInputHdl->IsInputMode())
     {
-        const   SfxPoolItem* pItem;
-        if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
-            nRepeat = ((const SfxInt16Item*)pItem)->GetValue();
+        // the current cell is in edit mode.  Commit the text before moving on.
+        pViewShell->ExecuteInputDirect();
     }
 
-    switch ( nSlotId )
+    // Horizontal direction depends on whether or not the UI language is RTL.
+    SCsCOL nMovX = 1;
+    if (GetViewData()->GetDocument()->IsLayoutRTL(GetViewData()->GetTabNo()))
+        // mirror horizontal movement for right-to-left mode.
+        nMovX = -1;
+
+    switch (nSlotId)
     {
-        case SID_CURSORDOWN_SEL:        rReq.SetSlot( SID_CURSORDOWN );  break;
-        case SID_CURSORBLKDOWN_SEL:     rReq.SetSlot( SID_CURSORBLKDOWN );  break;
-        case SID_CURSORUP_SEL:          rReq.SetSlot( SID_CURSORUP );  break;
-        case SID_CURSORBLKUP_SEL:       rReq.SetSlot( SID_CURSORBLKUP );  break;
-        case SID_CURSORLEFT_SEL:        rReq.SetSlot( SID_CURSORLEFT );  break;
-        case SID_CURSORBLKLEFT_SEL:     rReq.SetSlot( SID_CURSORBLKLEFT );  break;
-        case SID_CURSORRIGHT_SEL:       rReq.SetSlot( SID_CURSORRIGHT );  break;
-        case SID_CURSORBLKRIGHT_SEL:    rReq.SetSlot( SID_CURSORBLKRIGHT );  break;
-        case SID_CURSORPAGEDOWN_SEL:    rReq.SetSlot( SID_CURSORPAGEDOWN );  break;
-        case SID_CURSORPAGEUP_SEL:      rReq.SetSlot( SID_CURSORPAGEUP );  break;
-        case SID_CURSORPAGERIGHT_SEL:   rReq.SetSlot( SID_CURSORPAGERIGHT_ );  break;
-        case SID_CURSORPAGELEFT_SEL:    rReq.SetSlot( SID_CURSORPAGELEFT_ );  break;
+        case SID_CURSORDOWN_SEL:
+            pViewShell->ExpandBlock(0, 1, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORUP_SEL:
+            pViewShell->ExpandBlock(0, -1, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORRIGHT_SEL:
+            pViewShell->ExpandBlock(nMovX, 0, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORLEFT_SEL:
+            pViewShell->ExpandBlock(-nMovX, 0, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORPAGEUP_SEL:
+            pViewShell->ExpandBlockPage(0, -1);
+        break;
+        case SID_CURSORPAGEDOWN_SEL:
+            pViewShell->ExpandBlockPage(0, 1);
+        break;
+        case SID_CURSORPAGERIGHT_SEL:
+            pViewShell->ExpandBlockPage(nMovX, 0);
+        break;
+        case SID_CURSORPAGELEFT_SEL:
+            pViewShell->ExpandBlockPage(-nMovX, 0);
+        break;
+        case SID_CURSORBLKDOWN_SEL:
+            pViewShell->ExpandBlockArea(0, 1);
+        break;
+        case SID_CURSORBLKUP_SEL:
+            pViewShell->ExpandBlockArea(0, -1);
+        break;
+        case SID_CURSORBLKRIGHT_SEL:
+            pViewShell->ExpandBlockArea(nMovX, 0);
+        break;
+        case SID_CURSORBLKLEFT_SEL:
+            pViewShell->ExpandBlockArea(-nMovX, 0);
+        break;
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (CursorSel)");
-            return;
+            ;
     }
-    rReq.AppendItem( SfxInt16Item(FN_PARAM_1, nRepeat ) );
-    rReq.AppendItem( SfxBoolItem(FN_PARAM_2, TRUE) );
-    ExecuteSlot( rReq, GetInterface() );
+    pViewShell->ShowAllCursors();
 }
 
 void ScCellShell::ExecuteMove( SfxRequest& rReq )
@@ -345,7 +418,6 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
             bKeep = TRUE;
-            pTabViewShell->SetNewStartIfMarking();
         }
     }
 

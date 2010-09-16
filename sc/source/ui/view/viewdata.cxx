@@ -1905,12 +1905,11 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     {
         //! public Methode um Position anzupassen
 
-        BOOL bHOver = FALSE;
-        while (pDoc->IsHorOverlapped( rPosX, rPosY, nTabNo ))
-            { --rPosX; bHOver=TRUE; }
-        BOOL bVOver = FALSE;
-        while (pDoc->IsVerOverlapped( rPosX, rPosY, nTabNo ))
-            { --rPosY; bVOver=TRUE; }
+        SCCOL nOrigX = rPosX;
+        SCROW nOrigY = rPosY;
+        pDoc->SkipOverlapped(rPosX, rPosY, nTabNo);
+        bool bHOver = (nOrigX != rPosX);
+        bool bVOver = (nOrigY != rPosY);
 
         if ( bRepair && ( bHOver || bVOver ) )
         {

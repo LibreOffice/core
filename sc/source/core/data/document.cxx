@@ -4766,6 +4766,13 @@ BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
     return bChange;
 }
 
+void ScDocument::SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const
+{
+    while (IsHorOverlapped(rCol, rRow, nTab))
+        --rCol;
+    while (IsVerOverlapped(rCol, rRow, nTab))
+        --rRow;
+}
 
 BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
