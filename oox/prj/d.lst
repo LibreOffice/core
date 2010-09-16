@@ -4,6 +4,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\core
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml\chart
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml\table
+mkdir: %_DEST%\inc%_EXT%\oox\export
 mkdir: %_DEST%\inc%_EXT%\oox\ole
 mkdir: %_DEST%\inc%_EXT%\oox\vml
 mkdir: %_DEST%\inc%_EXT%\oox\xls
@@ -34,8 +35,10 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 ..\inc\oox\drawingml\chart\chartconverter.hxx %_DEST%\inc%_EXT%\oox\drawingml\chart\chartconverter.hxx
 ..\inc\oox\drawingml\table\tablestylelist.hxx %_DEST%\inc%_EXT%\oox\drawingml\table\tablestylelist.hxx
 ..\inc\oox\ole\vbaproject.hxx %_DEST%\inc%_EXT%\oox\ole\vbaproject.hxx
+..\inc\oox\ole\oleobjecthelper.hxx %_DEST%\inc%_EXT%\oox\ole\oleobjecthelper.hxx
 ..\inc\oox\vml\vmldrawing.hxx %_DEST%\inc%_EXT%\oox\vml\vmldrawing.hxx
 ..\inc\oox\vml\vmlshape.hxx %_DEST%\inc%_EXT%\oox\vml\vmlshape.hxx
+..\inc\oox\export\*.hxx %_DEST%\inc%_EXT%\oox\export\*.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 

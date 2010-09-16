@@ -53,7 +53,8 @@ LIB1FILES=	\
     $(SLB)$/table.lib\
     $(SLB)$/shape.lib\
     $(SLB)$/dump.lib\
-    $(SLB)$/docprop.lib
+    $(SLB)$/docprop.lib\
+    $(SLB)$/export.lib
 
 # --- Shared-Library -----------------------------------------------
 
@@ -69,7 +70,13 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(BASEGFXLIB)	\
         $(SAXLIB)       \
-        $(XMLSCRIPTLIB)
+        $(XMLSCRIPTLIB) \
+        $(VCLLIB)		\
+        $(GOODIESLIB)		\
+        $(SVTOOLLIB)		\
+        $(SVXCORELIB)		\
+        $(SVXMSFILTERLIB)	\
+        $(TOOLSLIB)
 
 # link openssl, copied this bit from ucb/source/ucp/webdav/makefile.mk
 .IF "$(GUI)"=="WNT"
