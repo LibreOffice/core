@@ -303,9 +303,9 @@ namespace
             int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
             CmapResult aDefaultCR( false, pRangeCodes, nCodesCount/2 );
             pDefaultUnicodeImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+            pDefaultUnicodeImplFontCharMap->AddReference();
         }
 
-        pDefaultUnicodeImplFontCharMap->AddReference();
         return pDefaultUnicodeImplFontCharMap;
     }
 
@@ -317,9 +317,9 @@ namespace
             int nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
             CmapResult aDefaultCR( true, pRangeCodes, nCodesCount/2 );
             pDefaultSymbolImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+            pDefaultSymbolImplFontCharMap->AddReference();
         }
 
-        pDefaultSymbolImplFontCharMap->AddReference();
         return pDefaultSymbolImplFontCharMap;
     }
 }
