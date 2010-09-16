@@ -354,7 +354,7 @@ end sub
 '
 sub hTypeKeys ( OutputText , optional _iLoop as Integer )
 
-    const CFN & "global::tools::includes::required::t_doc1.inc::hTypeKeys(): "
+    const CFN = "global::tools::includes::required::t_doc1.inc::hTypeKeys(): "
 
     dim iRepeat as integer
     dim iLoop as integer
