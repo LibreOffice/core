@@ -998,7 +998,6 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
-        case awt::Key::LEFT:
         case awt::Key::PAGEUP:
             if (mxSlideShowController.is())
             {
@@ -1009,6 +1008,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
+        case awt::Key::LEFT:
         case awt::Key::UP:
         case awt::Key::P:
         case awt::Key::BACKSPACE:
