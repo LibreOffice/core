@@ -129,12 +129,12 @@ static string trim_string( const string& rString )
 {
     string temp = rString;
 
-    while ( temp.length() && temp[0] == ' ' || temp[0] == '\t' )
+    while ( temp.length() && (temp[0] == ' ' || temp[0] == '\t') )
         temp.erase( 0, 1 );
 
     string::size_type   len = temp.length();
 
-    while ( len && temp[len-1] == ' ' || temp[len-1] == '\t' )
+    while ( len && (temp[len-1] == ' ' || temp[len-1] == '\t') )
     {
         temp.erase( len - 1, 1 );
         len = temp.length();
