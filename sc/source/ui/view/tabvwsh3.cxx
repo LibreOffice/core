@@ -403,13 +403,15 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         pViewData->ResetOldCursor();
                         SetCursor( nCol, nRow );
-                        AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
                         rBindings.Invalidate( SID_CURRENTCELL );
                         rBindings.Update( nSlot );
 
                         if (!rReq.IsAPI())
                             rReq.Done();
                     }
+                    // align to cursor even if the cursor position hasn't changed,
+                    // because the cursor may be set outside the visible area.
+                    AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
 
                     rReq.SetReturnValue( SfxStringItem( SID_CURRENTCELL, aAddress ) );
                 }

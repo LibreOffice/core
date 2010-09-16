@@ -7853,6 +7853,55 @@ SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem MarkPrecedents SID_DETECTIVE_MARK_PRED
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem MarkDependents SID_DETECTIVE_MARK_SUCC
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+//--------------------------------------------------------------------------
 SfxVoidItem SetTabBgColor FID_TAB_MENU_SET_TAB_BG_COLOR
 (SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR)
 [

@@ -32,6 +32,9 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include "scdllapi.h"
+#include "token.hxx"
+
+#include <vector>
 
 class SdrObject;
 class SdrPage;
@@ -43,6 +46,7 @@ class ScDetectiveData;
 class ScDocument;
 class ScAddress;
 class ScRange;
+class ScRangeList;
 
 #define SC_DET_MAXCIRCLE    1000
 
@@ -143,6 +147,9 @@ public:
     BOOL        DeleteAll( ScDetectiveDelete eWhat );
 
     BOOL        MarkInvalid(BOOL& rOverflow);
+
+    void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScSharedTokenRef>& rRefTokens);
+    void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScSharedTokenRef>& rRefTokens);
 
     static void UpdateAllComments( ScDocument& rDoc );        // on all tables
     void        UpdateAllArrowColors();     // on all tables

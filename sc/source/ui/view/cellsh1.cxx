@@ -1541,6 +1541,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             rReq.Done();
             break;
 
+        case SID_DETECTIVE_MARK_PRED:
+            pTabViewShell->DetectiveMarkPred();
+            break;
+        case SID_DETECTIVE_MARK_SUCC:
+            pTabViewShell->DetectiveMarkSucc();
+            break;
+
         case SID_SPELL_DIALOG:
 //           pTabViewShell->DoSpellingChecker();
             {

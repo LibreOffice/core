@@ -121,6 +121,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/chartlock.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/compiler.obj \
+        $(SLO)$/detfunc.obj \
         $(SLO)$/doubleref.obj \
         $(SLO)$/formulaparserpool.obj \
         $(SLO)$/interpr1.obj \

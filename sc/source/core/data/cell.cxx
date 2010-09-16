@@ -1998,7 +1998,7 @@ BOOL lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
     if ( rRef1.IsColDeleted() || rRef1.IsRowDeleted() || rRef1.IsTabDeleted()
             || !rRef1.Valid() )
         return TRUE;
-    if ( p->GetType() == svDoubleRef )
+    if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
     {
         ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
         if ( rRef2.IsColDeleted() || rRef2.IsRowDeleted() || rRef2.IsTabDeleted()
@@ -2011,7 +2011,20 @@ BOOL lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
 BOOL ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 {
     BOOL bRet = FALSE;
+    ScToken* p = GetNextRefToken();
+    if( p )
+    {
+        SingleDoubleRefProvider aProv( *p );
+        rRange.aStart.Set( aProv.Ref1.nCol, aProv.Ref1.nRow, aProv.Ref1.nTab );
+        rRange.aEnd.Set( aProv.Ref2.nCol, aProv.Ref2.nRow, aProv.Ref2.nTab );
+        bRet = TRUE;
+    }
 
+    return bRet;
+}
+
+ScToken* ScDetectiveRefIter::GetNextRefToken()
+{
     ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
     if (p)
         p->CalcAbsIfRel( aPos );
@@ -2022,16 +2035,7 @@ BOOL ScDetectiveRefIter::GetNextRef( ScRange& rRange )
         if (p)
             p->CalcAbsIfRel( aPos );
     }
-
-    if( p )
-    {
-        SingleDoubleRefProvider aProv( *p );
-        rRange.aStart.Set( aProv.Ref1.nCol, aProv.Ref1.nRow, aProv.Ref1.nTab );
-        rRange.aEnd.Set( aProv.Ref2.nCol, aProv.Ref2.nRow, aProv.Ref2.nTab );
-        bRet = TRUE;
-    }
-
-    return bRet;
+    return p;
 }
 
 // ============================================================================

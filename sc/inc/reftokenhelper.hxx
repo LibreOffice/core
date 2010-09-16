@@ -75,6 +75,9 @@ public:
     static void SC_DLLPUBLIC join(::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
 
     static bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScSharedTokenRef& pToken);
+
+    static ScSharedTokenRef createRefToken(const ScAddress& rAddr);
+    static ScSharedTokenRef createRefToken(const ScRange& rRange);
 };
 
 #endif

@@ -328,6 +328,8 @@ public:
     void            DetectiveMarkInvalid();
     void            DetectiveDelAll();
     void            DetectiveRefresh();
+    void            DetectiveMarkPred();
+    void            DetectiveMarkSucc();
 
     void            ShowNote( bool bShow = true );
     inline void     HideNote() { ShowNote( false ); }
@@ -361,6 +363,8 @@ private:
     BOOL            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bAttrChanged );
     void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                         BOOL bAttrChanged, BOOL bAddUndo );
+
+    void            MarkAndJumpToRanges(const ScRangeList& rRanges);
 };
 
 

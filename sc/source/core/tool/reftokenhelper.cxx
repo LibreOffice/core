@@ -477,3 +477,19 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
     }
     return true;
 }
+
+ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScAddress& rAddr)
+{
+    ScSingleRefData aRefData;
+    aRefData.InitAddress(rAddr);
+    ScSharedTokenRef pRef(new ScSingleRefToken(aRefData));
+    return pRef;
+}
+
+ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScRange& rRange)
+{
+    ScComplexRefData aRefData;
+    aRefData.InitRange(rRange);
+    ScSharedTokenRef pRef(new ScDoubleRefToken(aRefData));
+    return pRef;
+}

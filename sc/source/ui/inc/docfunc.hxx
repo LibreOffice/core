@@ -32,6 +32,9 @@
 #include "global.hxx"
 #include "formula/grammar.hxx"
 #include "tabbgcolor.hxx"
+#include "token.hxx"
+
+#include <vector>
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -40,6 +43,7 @@ class ScDocShell;
 class ScMarkData;
 class ScPatternAttr;
 class ScRange;
+class ScRangeList;
 class ScRangeName;
 class ScBaseCell;
 class ScTokenArray;
@@ -74,6 +78,8 @@ public:
     BOOL            DetectiveMarkInvalid(SCTAB nTab);
     BOOL            DetectiveDelAll(SCTAB nTab);
     BOOL            DetectiveRefresh(BOOL bAutomatic = FALSE);
+    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScSharedTokenRef>& rRefTokens);
+    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScSharedTokenRef>& rRefTokens);
 
     BOOL            DeleteContents( const ScMarkData& rMark, USHORT nFlags,
                                     BOOL bRecord, BOOL bApi );

@@ -106,6 +106,7 @@
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
+using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -534,6 +535,44 @@ BOOL ScDocFunc::DetectiveRefresh( BOOL bAutomatic )
         bDone = TRUE;
     }
     return bDone;
+}
+
+static void lcl_collectAllPredOrSuccRanges(
+    const ScRangeList& rSrcRanges, vector<ScSharedTokenRef>& rRefTokens, ScDocShell& rDocShell,
+    bool bPred)
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    vector<ScSharedTokenRef> aRefTokens;
+    ScRangeList aSrcRanges(rSrcRanges);
+    ScRange* p = aSrcRanges.First();
+    if (!p)
+        return;
+    ScDetectiveFunc aDetFunc(pDoc, p->aStart.Tab());
+    ScRangeList aDestRanges;
+    for (; p; p = aSrcRanges.Next())
+    {
+        if (bPred)
+        {
+            aDetFunc.GetAllPreds(
+                p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), aRefTokens);
+        }
+        else
+        {
+            aDetFunc.GetAllSuccs(
+                p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), aRefTokens);
+        }
+    }
+    rRefTokens.swap(aRefTokens);
+}
+
+void ScDocFunc::DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, vector<ScSharedTokenRef>& rRefTokens)
+{
+    lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, true);
+}
+
+void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, vector<ScSharedTokenRef>& rRefTokens)
+{
+    lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, false);
 }
 
 //------------------------------------------------------------------------

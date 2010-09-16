@@ -549,6 +549,7 @@ private:
 public:
                 ScDetectiveRefIter( ScFormulaCell* pCell );
     BOOL        GetNextRef( ScRange& rRange );
+    ScToken*    GetNextRefToken();
 };
 
 // ============================================================================

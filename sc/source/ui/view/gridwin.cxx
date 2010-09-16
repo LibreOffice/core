@@ -3117,6 +3117,17 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 ShowNoteMarker( pViewData->GetCurX(), pViewData->GetCurY(), TRUE );
             return;
         }
+        if (aCode.GetCode() == KEY_BRACKETLEFT && aCode.GetModifier() == KEY_MOD1)
+        {
+            pViewSh->DetectiveMarkPred();
+            return;
+        }
+        if (aCode.GetCode() == KEY_BRACKETRIGHT && aCode.GetModifier() == KEY_MOD1)
+        {
+            pViewSh->DetectiveMarkSucc();
+            return;
+        }
+
     }
 
     Window::KeyInput(rKEvt);

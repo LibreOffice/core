@@ -47,6 +47,13 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "fusel.hxx"
+#include "reftokenhelper.hxx"
+#include "externalrefmgr.hxx"
+
+#include <vector>
+
+using ::rtl::OUStringBuffer;
+using ::std::vector;
 
 //==================================================================
 
@@ -135,6 +142,136 @@ void ScViewFunc::DetectiveRefresh()
         Sound::Beep();
 
     RecalcPPT();
+}
+
+static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument* pDoc)
+{
+    String aAddrText;
+    rRange.Format(aAddrText, SCR_ABS_3D, pDoc);
+    SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
+    SfxBoolItem aUnmarkItem(FN_PARAM_1, TRUE);        // remove existing selection
+    pView->GetDispatcher().Execute(
+        SID_CURRENTCELL, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+        &aPosItem, &aUnmarkItem, 0L);
+}
+
+void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
+{
+    ScViewData* pView = GetViewData();
+    ScDocShell* pDocSh = pView->GetDocShell();
+
+    ScRangeList aRanges(rRanges);
+    ScRange* p = aRanges.First();
+    ScRangeList aRangesToMark;
+    ScAddress aCurPos = pView->GetCurPos();
+    for (; p; p = aRanges.Next())
+    {
+        // Collect only those ranges that are on the same sheet as the current
+        // cursor.
+
+        if (p->aStart.Tab() == aCurPos.Tab())
+            aRangesToMark.Append(*p);
+    }
+
+    if (!aRangesToMark.Count())
+        return;
+
+    // Jump to the first range of all precedent ranges.
+    p = aRangesToMark.First();
+    lcl_jumpToRange(*p, pView, pDocSh->GetDocument());
+
+    for (; p; p = aRangesToMark.Next())
+        MarkRange(*p, false, true);
+}
+
+void ScViewFunc::DetectiveMarkPred()
+{
+    ScViewData* pView = GetViewData();
+    ScDocShell* pDocSh = pView->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScMarkData& rMarkData = pView->GetMarkData();
+    ScAddress aCurPos = pView->GetCurPos();
+    ScRangeList aRanges;
+    if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
+        rMarkData.FillRangeListWithMarks(&aRanges, false);
+    else
+        aRanges.Append(aCurPos);
+
+    vector<ScSharedTokenRef> aRefTokens;
+    pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
+
+    if (aRefTokens.empty())
+        // No precedents found.  Nothing to do.
+        return;
+
+    ScSharedTokenRef p = aRefTokens.front();
+    if (ScRefTokenHelper::isExternalRef(p))
+    {
+        // This is external.  Open the external document if available, and
+        // jump to the destination.
+
+        sal_uInt16 nFileId = p->GetIndex();
+        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        const String* pPath = pRefMgr->getExternalFileName(nFileId);
+
+        ScRange aRange;
+        if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, true))
+        {
+            const String& rTabName = p->GetString();
+            OUStringBuffer aBuf;
+            aBuf.append(*pPath);
+            aBuf.append(sal_Unicode('#'));
+            aBuf.append(rTabName);
+            aBuf.append(sal_Unicode('.'));
+
+            String aRangeStr;
+            aRange.Format(aRangeStr, SCA_VALID);
+            aBuf.append(aRangeStr);
+
+            ScGlobal::OpenURL(aBuf.makeStringAndClear(), String());
+        }
+        return;
+    }
+    else
+    {
+        ScRange aRange;
+        ScRefTokenHelper::getRangeFromToken(aRange, p, false);
+        if (aRange.aStart.Tab() != aCurPos.Tab())
+        {
+            // The first precedent range is on a different sheet.  Jump to it
+            // immediately and forget the rest.
+            lcl_jumpToRange(aRange, pView, pDoc);
+            return;
+        }
+    }
+
+    ScRangeList aDestRanges;
+    ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens);
+    MarkAndJumpToRanges(aDestRanges);
+}
+
+void ScViewFunc::DetectiveMarkSucc()
+{
+    ScViewData* pView = GetViewData();
+    ScDocShell* pDocSh = pView->GetDocShell();
+    ScMarkData& rMarkData = pView->GetMarkData();
+    ScAddress aCurPos = pView->GetCurPos();
+    ScRangeList aRanges;
+    if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
+        rMarkData.FillRangeListWithMarks(&aRanges, false);
+    else
+        aRanges.Append(aCurPos);
+
+    vector<ScSharedTokenRef> aRefTokens;
+    pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
+
+    if (aRefTokens.empty())
+        // No dependants found.  Nothing to do.
+        return;
+
+    ScRangeList aDestRanges;
+    ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens);
+    MarkAndJumpToRanges(aDestRanges);
 }
 
 //---------------------------------------------------------------------------
