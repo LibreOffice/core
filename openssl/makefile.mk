@@ -53,7 +53,7 @@ TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
-CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared 
+CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared no-idea
 
 BUILD_DIR=.
 BUILD_ACTION=make CC='$(CC)'
@@ -152,7 +152,7 @@ OUT2BIN += out/libeay32.dll
 
         #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
         CONFIGURE_ACTION=$(PERL) configure
-        CONFIGURE_FLAGS=VC-WIN32
+        CONFIGURE_FLAGS=VC-WIN32 no-idea
         BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
 
         OUT2LIB = out32dll$/ssleay32.lib
