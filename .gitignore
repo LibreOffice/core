@@ -5,7 +5,9 @@
 # the build directories
 /*/unxlng??
 /*/unxlng??.pro
+/*/wntmsci??
+/*/wntmsci??.pro
 
-# autoconf generated stuff
-/ChangeLog
-/configure
+/external/*/*.dll
+/external/msi/*.exe
+/external/msv*/*.manifest
