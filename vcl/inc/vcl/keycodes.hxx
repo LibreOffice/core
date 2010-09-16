@@ -155,6 +155,8 @@
 #define KEY_DECIMAL     ((USHORT)::com::sun::star::awt::Key::DECIMAL)
 #define KEY_TILDE       ((USHORT)::com::sun::star::awt::Key::TILDE)
 #define KEY_QUOTELEFT   ((USHORT)::com::sun::star::awt::Key::QUOTELEFT)
+#define KEY_BRACKETLEFT ((USHORT)::com::sun::star::awt::Key::BRACKETLEFT)
+#define KEY_BRACKETRIGHT ((USHORT)::com::sun::star::awt::Key::BRACKETRIGHT)
 
 #define KEY_CODE        ((USHORT)0x0FFF)
 
