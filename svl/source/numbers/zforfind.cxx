@@ -84,7 +84,9 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         pUpperMonthText( NULL ),
         pUpperAbbrevMonthText( NULL ),
         pUpperDayText( NULL ),
-        pUpperAbbrevDayText( NULL )
+        pUpperAbbrevDayText( NULL ),
+        eScannedType( NUMBERFORMAT_UNDEFINED ),
+        eSetType( NUMBERFORMAT_UNDEFINED )
 {
     pFormatter = pFormatterP;
     pNullDate = new Date(30,12,1899);
