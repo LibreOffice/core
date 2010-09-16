@@ -4209,18 +4209,8 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
                     DBG_ERROR("svx::ImpEditEngine::GetXPos(), index out of range!");
                 }
 
-#if 0
+                // old code restored see #i112788 (which leaves #i74188 unfixed again)
                 long nPosInPortion = pLine->GetCharPosArray().GetObject( nPos );
-#else
-                // #i74188# (positioning the cursor after deleting components of combined indic characters)
-                SvxFont aTmpFont( pParaPortion->GetNode()->GetCharAttribs().GetDefFont() );
-                SeekCursor( pParaPortion->GetNode(), nPos+1, aTmpFont );
-                aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
-                String sSegment(*pParaPortion->GetNode(), pLine->GetStart(), nPos+1);
-                long nPosInPortion = aTmpFont.QuickGetTextSize( GetRefDevice(),
-                    sSegment, 0, nPos+1, NULL ).Width();
-#endif
 
                 if ( !pPortion->IsRightToLeft() )
                 {

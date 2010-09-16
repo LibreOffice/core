@@ -634,10 +634,16 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     {
         if( rSettings.mbExportOnlyBackground )
         {
-            pTempBackgroundShape = new SdrRectObj(Rectangle(Point(0,0), pPage->GetSize()));
-            pTempBackgroundShape->SetMergedItemSet(pPage->getSdrPageProperties().GetItemSet());
-            pTempBackgroundShape->SetMergedItem(XLineStyleItem(XLINE_NONE));
-            aShapes.push_back(pTempBackgroundShape);
+            const SdrPageProperties* pCorrectProperties = pPage->getCorrectSdrPageProperties();
+
+            if(pCorrectProperties)
+            {
+                pTempBackgroundShape = new SdrRectObj(Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
+                pTempBackgroundShape->SetMergedItem(XLineStyleItem(XLINE_NONE));
+                pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
+                aShapes.push_back(pTempBackgroundShape);
+            }
         }
         else
         {

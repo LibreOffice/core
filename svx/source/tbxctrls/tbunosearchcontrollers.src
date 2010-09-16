@@ -25,39 +25,9 @@
  *
  ************************************************************************/
 
-#ifndef UUI_PASSCRTDLG_HXX
-#define UUI_PASSCRTDLG_HXX
+#include <svx/dialogs.hrc>
 
-#include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <svtools/stdctrl.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-
-//============================================================================
-class PasswordCreateDialog : public ModalDialog
+String RID_SVXSTR_FINDBAR_FIND
 {
-    FixedText       aFTPasswordCrt;
-    Edit            aEDPasswordCrt;
-    FixedText       aFTPasswordRepeat;
-    Edit            aEDPasswordRepeat;
-    FixedText       aFTWarning;
-    FixedLine       aFixedLine1;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-
-    ResMgr*                                         pResourceMgr;
-    sal_uInt16                                      nMinLen;
-
-    DECL_LINK( OKHdl_Impl, OKButton * );
-    DECL_LINK( EditHdl_Impl, Edit * );
-
-public:
-    PasswordCreateDialog( Window* pParent, ResMgr * pResMgr, bool bMSCryptoMode = false );
-
-    String          GetPassword() const { return aEDPasswordCrt.GetText(); }
+    Text [ en-US ] = "Find" ;
 };
-
-#endif // UUI_PASSCRTDLG_HXX
