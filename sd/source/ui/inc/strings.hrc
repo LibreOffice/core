@@ -28,7 +28,6 @@
 #ifndef _SD_CFGID_HXX
 #include "cfgids.hxx"
 #endif
-#define STR_DEFAULTVIEW         (RID_APP_START)
 #define STR_NULL                (RID_APP_START+3)
 #define STR_INSERTPAGE          (RID_APP_START+35)
 #define STR_INSERTLAYER         (RID_APP_START+37)

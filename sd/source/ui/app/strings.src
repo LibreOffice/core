@@ -86,10 +86,6 @@ String RID_APPTITLE
 {
     Text = "StarImpress 4.0" ;
 };
-String STR_DEFAULTVIEW
-{
-    Text [ en-US ] = "Default" ;
-};
 String STR_NULL
 {
     Text [ en-US ] = "None" ;

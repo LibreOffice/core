@@ -351,6 +351,9 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
             // delete interfaces in temporary list
             for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
                 delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
+
+            if ( maDoneHdl.IsSet() )
+                maDoneHdl.Call( NULL );
         }
     }
 }

@@ -1366,10 +1366,12 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 w = aCtrlBoundRect.GetWidth();
                 if( w < 3+2*FOCUS_RING_WIDTH )
                     w = 3+2*FOCUS_RING_WIDTH;
-                h = TEXT_EDIT_HEIGHT_NORMAL;
+                h = TEXT_EDIT_HEIGHT_NORMAL+2*FOCUS_RING_WIDTH;
+                if( h < aCtrlBoundRect.GetHeight() )
+                    h = aCtrlBoundRect.GetHeight();
 
-                rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*FOCUS_RING_WIDTH-2, h-2 ) );
-                rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
+                rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*(FOCUS_RING_WIDTH+1), h-2*(FOCUS_RING_WIDTH+1) ) );
+                rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
                 toReturn = TRUE;
             }

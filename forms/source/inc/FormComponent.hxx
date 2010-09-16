@@ -759,6 +759,18 @@ protected:
                                 sal_Int32 _nValuePropertyExternalHandle
                             );
 
+    /** initializes the part of the class which is related to the control value.
+
+        <p>In opposite to ->initValueProperty, this method is to be used for value properties which are <em>not</em>
+        implemented by our aggregate, but by ourselves.</p>
+
+        <p>Certain functionality is not available when using own value properties. This includes binding to an external
+        value and external validation. (This is not a conceptual limit, but simply missing implementation.)</p>
+    */
+    void                    initOwnValueProperty(
+                                const ::rtl::OUString& i_rValuePropertyName
+                            );
+
     /** suspends listening at the value property
 
         <p>As long as this listening is suspended, changes in the value property will not be
@@ -781,6 +793,16 @@ protected:
         @see resumeValueListening
     */
     void                    resumeValueListening( );
+
+    /** (to be) called when the value property changed
+
+        Normally, this is done automatically, since the value property is a property of our aggregate, and we're
+        a listener at this property.
+        However, in some cases the value property might not be an aggregate property, but a property of the
+        delegator instance. In this case, you'll need to call <code>onValuePropertyChange</code> whenever this
+        property changes.
+    */
+    void                    onValuePropertyChange( ControlModelLock& i_rControLock );
 
     /** starts listening at the aggregate, for changes in the given property
 

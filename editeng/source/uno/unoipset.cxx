@@ -71,15 +71,7 @@ SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, Sfx
 //----------------------------------------------------------------------
 SvxItemPropertySet::~SvxItemPropertySet()
 {
-/*
-    if(pItemPool)
-        delete pItemPool;
-    pItemPool = NULL;
-*/
-
-    if(pCombiList)
-        delete pCombiList;
-    pCombiList = NULL;
+    ClearAllUsrAny();
 }
 
 //----------------------------------------------------------------------
@@ -110,6 +102,17 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
     pNew->aAny = rAny;
     pCombiList->Insert(pNew);
 }
+
+//----------------------------------------------------------------------
+
+void SvxItemPropertySet::ClearAllUsrAny()
+{
+    if(pCombiList)
+        delete pCombiList;
+    pCombiList = NULL;
+}
+
+//----------------------------------------------------------------------
 
 sal_Bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
 {

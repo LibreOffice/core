@@ -41,15 +41,36 @@ namespace toolkit
     class ReleaseSolarMutex
     {
         sal_uInt32  mnLockCount;
+        const bool  mbRescheduleDuringAcquire;
+
     public:
-        ReleaseSolarMutex()
+        enum
         {
-            mnLockCount = Application::ReleaseSolarMutex();
+            RescheduleDuringAcquire = true
+        };
+
+    public:
+        ReleaseSolarMutex( const bool i_rescheduleDuringAcquire = false )
+            :mnLockCount( Application::ReleaseSolarMutex() )
+            ,mbRescheduleDuringAcquire( i_rescheduleDuringAcquire )
+        {
+
         }
 
         ~ReleaseSolarMutex()
         {
-            Application::AcquireSolarMutex( mnLockCount );
+            if ( mnLockCount > 0 )
+            {
+                if ( mbRescheduleDuringAcquire )
+                {
+                    while ( !Application::GetSolarMutex().tryToAcquire() )
+                    {
+                        Application::Reschedule();
+                    }
+                    --mnLockCount;
+                }
+                Application::AcquireSolarMutex( mnLockCount );
+            }
         }
     };
 

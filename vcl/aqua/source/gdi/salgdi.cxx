@@ -1453,16 +1453,24 @@ BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
     // prepare the target context
     NSGraphicsContext* pOrigNSCtx = [NSGraphicsContext currentContext];
+    [pOrigNSCtx retain];
+
+    // create new context
     NSGraphicsContext* pDrawNSCtx = [NSGraphicsContext graphicsContextWithGraphicsPort: mrContext flipped: IsFlipped()];
+    // set it, setCurrentContext also releases the prviously set one
     [NSGraphicsContext setCurrentContext: pDrawNSCtx];
+
     // draw the EPS
     const NSRect aDstRect = {{nX,nY},{nWidth,nHeight}};
     const BOOL bOK = [xEpsImage drawInRect: aDstRect];
+
+    // restore the NSGraphicsContext
+    [NSGraphicsContext setCurrentContext: pOrigNSCtx];
+    [pOrigNSCtx release]; // restore the original retain count
+
     CGContextRestoreGState( mrContext );
     // mark the destination rectangle as updated
        RefreshRect( aDstRect );
-    // restore the NSGraphicsContext, TODO: do we need this?
-    [NSGraphicsContext setCurrentContext: pOrigNSCtx];
 
     return bOK;
 }

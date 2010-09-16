@@ -503,9 +503,13 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
 
 void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
 {
-    rtl::OUStringBuffer sBuffer;
-    SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
+    // #i114202# GetShowEmpty is only valid if HasShowEmpty is true.
+    if (pDim->HasShowEmpty())
+    {
+        rtl::OUStringBuffer sBuffer;
+        SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
+    }
     SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, sal_True, sal_True);
 
     WriteSubTotals(pDim);

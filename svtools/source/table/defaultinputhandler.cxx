@@ -173,6 +173,7 @@ namespace svt { namespace table
             if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetAllModifier() ) )
             {
                 bHandled = _rControl.dispatchAction( pActions->eAction );
+                bHandled = true; // always handled  issue #i114340
                 break;
             }
         }

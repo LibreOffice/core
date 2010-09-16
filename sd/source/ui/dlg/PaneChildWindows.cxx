@@ -37,6 +37,9 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
+
 #include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
@@ -47,6 +50,9 @@ namespace sd {
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::framework::XResourceId;
+using ::com::sun::star::drawing::framework::XConfigurationController;
+using ::com::sun::star::drawing::framework::ResourceActivationMode_ADD;
+using ::com::sun::star::drawing::framework::ResourceActivationMode_REPLACE;
 
 SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
@@ -151,6 +157,26 @@ ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_
     :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
         FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_RIGHT )
 {
+    // just in case this window has been created by SFX, instead our resource framework: Ensure that the resource framework
+    // activates the task pane, so it is really filled with content (in opposite to the other SFX applications, the
+    // child window registered for SID_TASKPANE is not responsible for its content, but here in SD, it's the ToolPanelViewShell
+    // which has this responsibility. And this view shell is created implicitly via the resource framework.)
+    // #i113788# / 2010-09-03 / frank.schoenheit@oracle.com
+    SfxDockingWindow* pDockingWindow = dynamic_cast< SfxDockingWindow* >( GetWindow() );
+    ViewShellBase* pViewShellBase = ViewShellBase::GetViewShellBase( pDockingWindow->GetBindings().GetDispatcher()->GetFrame() );
+    ENSURE_OR_RETURN_VOID( pViewShellBase != NULL, "ToolPanelChildWindow::ToolPanelChildWindow: no view shell access!" );
+
+    const ::boost::shared_ptr< framework::FrameworkHelper > pFrameworkHelper( framework::FrameworkHelper::Instance( *pViewShellBase ) );
+    ENSURE_OR_RETURN_VOID( pFrameworkHelper.get(), "ToolPanelChildWindow::ToolPanelChildWindow: no framework helper for the view shell!" );
+    Reference<XConfigurationController> xConfigController( pFrameworkHelper->GetConfigurationController() );
+    ENSURE_OR_RETURN_VOID( xConfigController.is(), "ToolPanelChildWindow::ToolPanelChildWindow: no config controller!" );
+    xConfigController->requestResourceActivation(
+        framework::FrameworkHelper::CreateResourceId( framework::FrameworkHelper::msRightPaneURL ),
+        ResourceActivationMode_ADD );
+    xConfigController->requestResourceActivation(
+        framework::FrameworkHelper::CreateResourceId( framework::FrameworkHelper::msTaskPaneURL, framework::FrameworkHelper::msRightPaneURL ),
+        ResourceActivationMode_REPLACE
+    );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -140,6 +140,7 @@ public:
     void                    SetSubTotals(long nCount, const USHORT* pFuncs);
     long                    GetSubTotalsCount() const { return nSubTotalCount; }
     USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
+    bool                    HasShowEmpty() const;
     void                    SetShowEmpty(BOOL bSet);
     BOOL                    GetShowEmpty() const { return BOOL(nShowEmptyMode); }
     void                    SetFunction(USHORT nNew);       // enum GeneralFunction

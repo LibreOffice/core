@@ -126,8 +126,8 @@ public class JPropEx
         {
             key         = (String)      e.nextElement();
             currentStr  = (SdfEntity)   dolly.clone();
-            // Set the new LID and the string text
-            currentStr.setLid( key );
+            // Set the new GID and the string text
+            currentStr.setGid( key );
             value            = prop.getProperty( key , "" );
             //if( value.equals("") )  System.err.println("Warning: in file "+inputFileArg+" the string with the key "+key+" has a empty string!");
             str = (prop.getProperty( key )).replaceAll("\t" , " " );    // remove tab
@@ -211,7 +211,7 @@ public class JPropEx
             key          = (String) e.nextElement();
             sourceString = sourceProp.getProperty( key );
             curStr       = (SdfEntity) dolly.clone();
-            curStr.setLid( key );
+            curStr.setGid( key );
             for( Enumeration lang = langs.elements(); lang.hasMoreElements(); ) // merge in every language
             {
                 curEntity   = (SdfEntity) curStr.clone();
@@ -221,12 +221,12 @@ public class JPropEx
                 if( mergedEntity == null )
                 {
                     // in case there is no translation then fallback to the en-US source string
-                    ( (java.util.Properties) props.get( curLang )).setProperty( curEntity.getLid() , sourceString  );
+                    ( (java.util.Properties) props.get( curLang )).setProperty( curEntity.getGid() , sourceString  );
                 }
                 else
                 {
                     // Set the merged text from the sdf file
-                    ( (java.util.Properties) props.get( curLang )).setProperty( mergedEntity.getLid() , mergedEntity.getText() );  // TODO: Quoting ???
+                    ( (java.util.Properties) props.get( curLang )).setProperty( mergedEntity.getGid() , mergedEntity.getText() );  // TODO: Quoting ???
                 }
             }
 
