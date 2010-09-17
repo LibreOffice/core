@@ -872,7 +872,6 @@ ImplRemoteControl::ImplRemoteControl()
 #else
         pServiceMgr = new RemoteControlCommunicationManager();
 #endif
-            fprintf(stderr, "%s\n", "Start RemoteControlCommunicationManager");
         pServiceMgr->SetDataReceivedHdl( LINK( this, ImplRemoteControl, QueCommandsEvent ) );
         pServiceMgr->StartCommunication();
 
@@ -886,7 +885,6 @@ ImplRemoteControl::ImplRemoteControl()
     }
     if ( RemoteControlCommunicationManager::nComm )
         new ExtraIdle( this );      // Setzt die Bearbeitung wieder auf
-    fprintf(stderr, "%s\n", "end of ImplRemoteControl::ImplRemoteControl()");
 }
 
 ImplRemoteControl::~ImplRemoteControl()
@@ -956,7 +954,6 @@ static ::osl::Mutex aMutex;
 static RemoteControl* pRemoteControl = 0;
 extern "C" void CreateRemoteControl()
 {
-    fprintf(stderr, "%s\n", "CreateRemoteControl");
     if ( !pRemoteControl )
     {
         ::osl::MutexGuard aGuard( aMutex );
