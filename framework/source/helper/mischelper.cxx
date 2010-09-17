@@ -127,14 +127,17 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
             {
                 rtl::OUString aStr;
                 Sequence< PropertyValue > aPropSeq;
-                if ( _xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+                if( _xUICommandLabels->hasByName( aCmdURL ) )
                 {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    if ( _xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
                     {
-                        if ( aPropSeq[i].Name.equalsAscii( _pName/*"Label"*/ ))
+                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                         {
-                            aPropSeq[i].Value >>= aStr;
-                            break;
+                            if ( aPropSeq[i].Name.equalsAscii( _pName/*"Label"*/ ))
+                            {
+                                aPropSeq[i].Value >>= aStr;
+                                break;
+                            }
                         }
                     }
                 }

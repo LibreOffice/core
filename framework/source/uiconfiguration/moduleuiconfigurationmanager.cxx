@@ -723,8 +723,9 @@ void ModuleUIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                Any a = xNameAccess->getByName( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ));
-                a >>= xElementTypeStorage;
+                const OUString sName( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ) );
+                if( xNameAccess->hasByName( sName ) )
+                    xNameAccess->getByName( sName ) >>= xElementTypeStorage;
             }
             catch ( com::sun::star::container::NoSuchElementException& )
             {
