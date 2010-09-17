@@ -59,6 +59,7 @@ namespace drawinglayer { namespace primitive2d {
     class SdrContourTextPrimitive2D;
     class SdrPathTextPrimitive2D;
     class SdrBlockTextPrimitive2D;
+    class SdrAutoFitTextPrimitive2D;
     class SdrStretchTextPrimitive2D;
 }}
 
@@ -254,6 +255,9 @@ protected:
     // Flag for allowing text animation. Default is sal_true.
     BOOL                        mbTextAnimationAllowed : 1;
 
+    // flag for preventing recursive onEditOutlinerStatusEvent calls
+    BOOL                        mbInDownScale : 1;
+
     SdrOutliner& ImpGetDrawOutliner() const;
 
 private:
@@ -267,6 +271,8 @@ private:
                                        Rectangle&       rAnchorRect,
                                        Rectangle&       rPaintRect,
                                        Fraction&        aFitXKorreg ) const;
+    void ImpAutoFitText( SdrOutliner& rOutliner ) const;
+    static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
     SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpLinkAnmeldung();
     SVX_DLLPRIVATE void ImpLinkAbmeldung();
@@ -278,7 +284,7 @@ protected:
     SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr = sal_False) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const;
     void ImpSetTextStyleSheetListeners();
-    void ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& rTextRect, const Rectangle& rAnchorRect, Fraction& rFitXKorreg) const;
+    void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg) const;
     void ImpJustifyRect(Rectangle& rRect) const;
     void ImpCheckShear();
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
@@ -340,6 +346,10 @@ public:
     void NbcResizeTextAttributes(const Fraction& xFact, const Fraction& yFact);
     FASTBOOL IsTextFrame() const { return bTextFrame; }
     FASTBOOL IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
+    /// returns true if the PPT autofit of text into shape bounds is enabled. implies IsFitToSize()==false!
+    FASTBOOL IsAutoFit() const;
+    /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!
+    FASTBOOL IsFitToSize() const;
     SdrObjKind GetTextKind() const { return eTextKind; }
 
     virtual bool HasText() const;
@@ -581,6 +591,10 @@ public:
     void impDecomposeBlockTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    void impDecomposeAutoFitTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeStretchTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,

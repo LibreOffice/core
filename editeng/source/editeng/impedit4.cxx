@@ -1159,7 +1159,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
     // Schwelle rauf setzen, wenn Olli die Absaetze nicht mehr zerhackt!
     if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && GetUpdateMode() && ( nTextPortions >= nBigObjectStart ) )
     {
-        XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), aPaperSize.Width() );
+        XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), aPaperSize.Width(), nStretchX, nStretchY );
         pTxtObj->SetPortionInfo( pXList );
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
@@ -1250,7 +1250,9 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     XParaPortionList* pPortionInfo = rTextObject.GetPortionInfo();
 
     if ( pPortionInfo && ( (long)pPortionInfo->GetPaperWidth() == aPaperSize.Width() )
-            && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() ) )
+            && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
+            && ( pPortionInfo->GetStretchX() == nStretchX )
+            && ( pPortionInfo->GetStretchY() == nStretchY ) )
     {
         if ( ( pPortionInfo->GetRefDevPtr() == (sal_uIntPtr)GetRefDevice() ) ||
              ( ( pPortionInfo->GetRefDevType() == OUTDEV_VIRDEV ) &&

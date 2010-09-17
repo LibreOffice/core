@@ -71,6 +71,7 @@ namespace drawinglayer
             // bitfield
             unsigned                            mbContour : 1;
             unsigned                            mbFitToSize : 1;
+            unsigned                            mbAutoFit : 1;
             unsigned                            mbHideContour : 1;
             unsigned                            mbBlink : 1;
             unsigned                            mbScroll : 1;
@@ -91,6 +92,7 @@ namespace drawinglayer
                 SdrTextVertAdjust aSdrTextVertAdjust,
                 bool bContour,
                 bool bFitToSize,
+                bool bAutoFit,
                 bool bHideContour,
                 bool bBlink,
                 bool bScroll,
@@ -110,6 +112,7 @@ namespace drawinglayer
                 maSdrTextVertAdjust(aSdrTextVertAdjust),
                 mbContour(bContour),
                 mbFitToSize(bFitToSize),
+                mbAutoFit(bAutoFit),
                 mbHideContour(bHideContour),
                 mbBlink(bBlink),
                 mbScroll(bScroll),
@@ -147,6 +150,7 @@ namespace drawinglayer
                 maSdrTextVertAdjust(SDRTEXTVERTADJUST_TOP),
                 mbContour(false),
                 mbFitToSize(false),
+                mbAutoFit(false),
                 mbHideContour(false),
                 mbBlink(false),
                 mbScroll(false),
@@ -177,6 +181,7 @@ namespace drawinglayer
             }
             bool isContour() const { return mbContour; }
             bool isFitToSize() const { return mbFitToSize; }
+            bool isAutoFit() const { return mbAutoFit; }
             bool isHideContour() const { return mbHideContour; }
             bool isBlink() const { return mbBlink; }
             bool isScroll() const { return mbScroll; }
@@ -235,6 +240,7 @@ namespace drawinglayer
 
                     && isContour() == rCandidate.isContour()
                     && isFitToSize() == rCandidate.isFitToSize()
+                    && isAutoFit() == rCandidate.isAutoFit()
                     && isHideContour() == rCandidate.isHideContour()
                     && isBlink() == rCandidate.isBlink()
                     && isScroll() == rCandidate.isScroll()
@@ -272,6 +278,7 @@ namespace drawinglayer
             SdrTextVertAdjust aSdrTextVertAdjust,
             bool bContour,
             bool bFitToSize,
+            bool bAutoFit,
             bool bHideContour,
             bool bBlink,
             bool bScroll,
@@ -281,7 +288,7 @@ namespace drawinglayer
         :   mpSdrTextAttribute(new ImpSdrTextAttribute(
                 &rSdrText, rOutlinerParaObject, eFormTextStyle, aTextLeftDistance, aTextUpperDistance,
                 aTextRightDistance, aTextLowerDistance, aSdrTextHorzAdjust, aSdrTextVertAdjust, bContour,
-                bFitToSize, bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell))
+                bFitToSize, bAutoFit, bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell))
         {
         }
 
@@ -367,6 +374,11 @@ namespace drawinglayer
         bool SdrTextAttribute::isFitToSize() const
         {
             return mpSdrTextAttribute->isFitToSize();
+        }
+
+        bool SdrTextAttribute::isAutoFit() const
+        {
+            return mpSdrTextAttribute->isAutoFit();
         }
 
         bool SdrTextAttribute::isHideContour() const

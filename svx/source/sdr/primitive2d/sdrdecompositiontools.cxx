@@ -281,6 +281,11 @@ namespace drawinglayer
                         aAnchorTransform,
                         rText.isFixedCellHeight());
                 }
+                else if(rText.isAutoFit())
+                {
+                    // isotrophically scaled text in range
+                    pNew = new SdrAutoFitTextPrimitive2D(&rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, bWordWrap);
+                }
                 else // text in range
                 {
                     // build new primitive

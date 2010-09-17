@@ -925,7 +925,10 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     }
 
     // #107508# Use original scale...
-    USHORT nScale = /* pEditEngine->IsFlatMode() ? DEFAULT_SCALE : */ pFmt->GetBulletRelSize();
+    USHORT nStretchX, nStretchY;
+    const_cast<Outliner*>(this)->GetGlobalCharStretching(nStretchX, nStretchY);
+
+    USHORT nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
     ULONG nScaledLineHeight = aStdFont.GetSize().Height();
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
@@ -968,6 +971,12 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
         BOOL bRightToLeftPara = pEditEngine->IsRightToLeft( nPara );
 
         Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE, FALSE ) );
+        USHORT nStretchX, nStretchY;
+        GetGlobalCharStretching(nStretchX, nStretchY);
+        aBulletArea = Rectangle( Point(aBulletArea.Left()*nStretchX/100,
+                                       aBulletArea.Top()),
+                                 Size(aBulletArea.GetWidth()*nStretchX/100,
+                                      aBulletArea.GetHeight()) );
 
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );

@@ -137,6 +137,7 @@ SdrTextObj::SdrTextObj()
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_True;
+    mbInDownScale = sal_False;
 }
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
@@ -162,6 +163,7 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
 
     // #111096#
     mbTextAnimationAllowed = sal_True;
+    mbInDownScale = sal_False;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -192,6 +194,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
 
     // #111096#
     mbTextAnimationAllowed = sal_True;
+    mbInDownScale = sal_False;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -224,6 +227,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
 
     // #111096#
     mbTextAnimationAllowed = sal_True;
+    mbInDownScale = sal_False;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -258,6 +262,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
     // #111096#
     mbTextAnimationAllowed = sal_True;
+    mbInDownScale = sal_False;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -834,8 +839,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
     SdrTextAniKind      eAniKind=GetTextAniKind();
     SdrTextAniDirection eAniDirection=GetTextAniDirection();
 
-    SdrFitToSizeType eFit=GetFitToSize();
-    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+    FASTBOOL bFitToSize(IsFitToSize());
     FASTBOOL bContourFrame=IsContourTextFrame();
 
     FASTBOOL bFrame=IsTextFrame();
@@ -996,7 +1000,7 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
     return pPara;
 }
 
-void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& rTextRect, const Rectangle& rAnchorRect, Fraction& rFitXKorreg) const
+void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg) const
 {
     OutputDevice* pOut = rOutliner.GetRefDevice();
     BOOL bNoStretching(FALSE);
@@ -1041,12 +1045,12 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
     unsigned nLoopCount=0;
     FASTBOOL bNoMoreLoop=FALSE;
     long nXDiff0=0x7FFFFFFF;
-    long nWantWdt=rAnchorRect.Right()-rAnchorRect.Left();
-    long nIsWdt=rTextRect.Right()-rTextRect.Left();
+    long nWantWdt=rShapeSize.Width();
+    long nIsWdt=rTextSize.Width();
     if (nIsWdt==0) nIsWdt=1;
 
-    long nWantHgt=rAnchorRect.Bottom()-rAnchorRect.Top();
-    long nIsHgt=rTextRect.Bottom()-rTextRect.Top();
+    long nWantHgt=rShapeSize.Height();
+    long nIsHgt=rTextSize.Height();
     if (nIsHgt==0) nIsHgt=1;
 
     long nXTolPl=nWantWdt/100; // Toleranz +1%
@@ -1274,8 +1278,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         Rectangle aR;
         TakeTextRect(rOutliner,aR,FALSE,&aAnchor2);
         rOutliner.Clear();
-        SdrFitToSizeType eFit=GetFitToSize();
-        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        FASTBOOL bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
         Polygon aPol(aR);
         if (aGeo.nDrehWink!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -1392,8 +1395,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
     if (!bContourFrame)
     {
         // FitToSize erstmal nicht mit ContourFrame
-        SdrFitToSizeType eFit=GetFitToSize();
-        if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+        if (IsFitToSize() || IsAutoFit())
         {
             ULONG nStat=rOutliner.GetControlWord();
             nStat|=EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE;
@@ -1407,13 +1409,73 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
     if (!bContourFrame)
     {
         // FitToSize erstmal nicht mit ContourFrame
-        SdrFitToSizeType eFit=GetFitToSize();
-        if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+        if (IsFitToSize())
         {
-            ImpSetCharStretching(rOutliner,rTextRect,rAnchorRect,rFitXKorreg);
+            ImpSetCharStretching(rOutliner,rTextRect.GetSize(),rAnchorRect.GetSize(),rFitXKorreg);
             rPaintRect=rAnchorRect;
         }
+        else if (IsAutoFit())
+        {
+            ImpAutoFitText(rOutliner);
+        }
     }
+}
+
+void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
+{
+    const Size aShapeSize=GetSnapRect().GetSize();
+    ImpAutoFitText( rOutliner,
+                    Size(aShapeSize.Width()-GetTextLeftDistance()-GetTextRightDistance(),
+                         aShapeSize.Height()-GetTextUpperDistance()-GetTextLowerDistance()),
+                    IsVerticalWriting() );
+}
+
+void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, bool bIsVerticalWriting )
+{
+    // EditEngine formatting is unstable enough for
+    // line-breaking text that we need some more samples
+
+    // loop early-exits if we detect an already attained value
+    USHORT nMinStretchX=0, nMinStretchY=0;
+    USHORT aOldStretchXVals[]={0,0,0,0,0,0,0,0,0,0};
+    const size_t aStretchArySize=sizeof(aOldStretchXVals)/sizeof(*aOldStretchXVals);
+    for(int i=0; i<aStretchArySize; ++i)
+    {
+        const Size aCurrTextSize = rOutliner.CalcTextSize();
+        double fFactor(1.0);
+        if( bIsVerticalWriting )
+            fFactor = double(rTextSize.Width())/aCurrTextSize.Width();
+        else
+            fFactor = double(rTextSize.Height())/aCurrTextSize.Height();
+
+        USHORT nCurrStretchX, nCurrStretchY;
+        rOutliner.GetGlobalCharStretching(nCurrStretchX, nCurrStretchY);
+
+        if (fFactor >= 1.0 )
+        {
+            // resulting text area fits into available shape rect -
+            // err on the larger streching, to optimally fill area
+            nMinStretchX = std::max(nMinStretchX,nCurrStretchX);
+            nMinStretchY = std::max(nMinStretchY,nCurrStretchY);
+        }
+
+        aOldStretchXVals[i] = nCurrStretchX;
+        if( std::find(aOldStretchXVals, aOldStretchXVals+i, nCurrStretchX) != aOldStretchXVals+i )
+            break; // same value already attained once; algo is looping, exit
+
+        if (fFactor < 1.0 || (fFactor >= 1.0 && nCurrStretchX != 100))
+        {
+            nCurrStretchX = sal::static_int_cast<USHORT>(nCurrStretchX*fFactor);
+            nCurrStretchY = sal::static_int_cast<USHORT>(nCurrStretchY*fFactor);
+            rOutliner.SetGlobalCharStretching(std::min(USHORT(100),nCurrStretchX),
+                                              std::min(USHORT(100),nCurrStretchY));
+            OSL_TRACE("SdrTextObj::onEditOutlinerStatusEvent(): zoom is %d", nCurrStretchX);
+        }
+    }
+
+    OSL_TRACE("---- SdrTextObj::onEditOutlinerStatusEvent(): final zoom is %d ----", nMinStretchX);
+    rOutliner.SetGlobalCharStretching(std::min(USHORT(100),nMinStretchX),
+                                      std::min(USHORT(100),nMinStretchY));
 }
 
 void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const
@@ -1992,6 +2054,17 @@ bool SdrTextObj::IsTextAnimationAllowed() const
     return mbTextAnimationAllowed;
 }
 
+FASTBOOL SdrTextObj::IsAutoFit() const
+{
+    return GetFitToSize()==SDRTEXTFIT_AUTOFIT;
+}
+
+FASTBOOL SdrTextObj::IsFitToSize() const
+{
+    const SdrFitToSizeType eFit=GetFitToSize();
+    return (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+}
+
 void SdrTextObj::SetTextAnimationAllowed(sal_Bool bNew)
 {
     if(mbTextAnimationAllowed != bNew)
@@ -2009,12 +2082,20 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     const bool bGrowY=(nStat & EE_STAT_TEXTHEIGHTCHANGED) !=0;
     if(bTextFrame && (bGrowX || bGrowY))
     {
-        const bool bAutoGrowHgt= bTextFrame && IsAutoGrowHeight();
-        const bool bAutoGrowWdt= bTextFrame && IsAutoGrowWidth();
-
-        if ((bGrowX && bAutoGrowWdt) || (bGrowY && bAutoGrowHgt))
+        if ((bGrowX && IsAutoGrowWidth()) || (bGrowY && IsAutoGrowHeight()))
         {
             AdjustTextFrameWidthAndHeight();
+        }
+        else if (IsAutoFit() && !mbInDownScale)
+        {
+            OSL_ASSERT(pEdtOutl);
+            mbInDownScale = sal_True;
+
+            // sucks that we cannot disable paints via
+            // pEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
+            // formatting as well, then.
+            ImpAutoFitText(*pEdtOutl);
+            mbInDownScale = sal_False;
         }
     }
 }

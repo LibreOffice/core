@@ -2657,36 +2657,44 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             }
             if ( nStretchX != 100 )
             {
-                aRealSz.Width() *= nStretchX;
-                aRealSz.Width() /= 100;
+                if ( nStretchX == nStretchY &&
+                     nRelWidth == 100 )
+                {
+                    aRealSz.Width() = 0;
+                }
+                else
+                {
+                    aRealSz.Width() *= nStretchX;
+                    aRealSz.Width() /= 100;
 
-                // Auch das Kerning: (long wegen Zwischenergebnis)
-                long nKerning = rFont.GetFixKerning();
+                    // Auch das Kerning: (long wegen Zwischenergebnis)
+                    long nKerning = rFont.GetFixKerning();
 /*
-                Die Ueberlegung war: Wenn neg. Kerning, aber StretchX = 200
-                => Nicht das Kerning verdoppelt, also die Buchstaben weiter
-                zusammenziehen
-                ---------------------------
-                Kern    StretchX    =>Kern
-                ---------------------------
-                 >0     <100        < (Proportional)
-                 <0     <100        < (Proportional)
-                 >0     >100        > (Proportional)
-                 <0     >100        < (Der Betrag, also Antiprop)
+  Die Ueberlegung war: Wenn neg. Kerning, aber StretchX = 200
+  => Nicht das Kerning verdoppelt, also die Buchstaben weiter
+  zusammenziehen
+  ---------------------------
+  Kern  StretchX    =>Kern
+  ---------------------------
+  >0        <100        < (Proportional)
+  <0        <100        < (Proportional)
+  >0        >100        > (Proportional)
+  <0        >100        < (Der Betrag, also Antiprop)
 */
-                if ( ( nKerning < 0  ) && ( nStretchX > 100 ) )
-                {
-                    // Antiproportional
-                    nKerning *= 100;
-                    nKerning /= nStretchX;
+                    if ( ( nKerning < 0  ) && ( nStretchX > 100 ) )
+                    {
+                        // Antiproportional
+                        nKerning *= 100;
+                        nKerning /= nStretchX;
+                    }
+                    else if ( nKerning )
+                    {
+                        // Proportional
+                        nKerning *= nStretchX;
+                        nKerning /= 100;
+                    }
+                    rFont.SetFixKerning( (short)nKerning );
                 }
-                else if ( nKerning )
-                {
-                    // Proportional
-                    nKerning *= nStretchX;
-                    nKerning /= 100;
-                }
-                rFont.SetFixKerning( (short)nKerning );
             }
         }
         if ( nRelWidth != 100 )
@@ -4095,20 +4103,25 @@ void ImpEditEngine::SetFlatMode( sal_Bool bFlat )
 
 void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
 {
+    bool bChanged(false);
     if ( !IsVertical() )
     {
+        bChanged = nStretchX!=nX || nStretchY!=nY;
         nStretchX = nX;
         nStretchY = nY;
     }
     else
     {
+        bChanged = nStretchX!=nY || nStretchY!=nX;
         nStretchX = nY;
         nStretchY = nX;
     }
 
-    if ( aStatus.DoStretch() )
+    if (bChanged && aStatus.DoStretch())
     {
         FormatFullDoc();
+        // (potentially) need everything redrawn
+        aInvalidRec=Rectangle(0,0,1000000,1000000);
         UpdateViews( GetActiveView() );
     }
 }

@@ -112,12 +112,16 @@ class XParaPortionList : public  XBaseParaPortionList
     ULONG       nRefDevPtr;
     OutDevType  eRefDevType;
     MapMode     aRefMapMode;
+    sal_uInt16  nStretchX;
+    sal_uInt16  nStretchY;
     ULONG       nPaperWidth;
 
 
 public:
-            XParaPortionList( OutputDevice* pRefDev, ULONG nPW ) :
-                aRefMapMode( pRefDev->GetMapMode() )
+            XParaPortionList( OutputDevice* pRefDev, ULONG nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY ) :
+                aRefMapMode( pRefDev->GetMapMode() ),
+                nStretchX(_nStretchX),
+                nStretchY(_nStretchY)
                 {
                     nRefDevPtr = (ULONG)pRefDev; nPaperWidth = nPW;
                     eRefDevType = pRefDev->GetOutDevType();
@@ -127,6 +131,8 @@ public:
     ULONG           GetPaperWidth() const       { return nPaperWidth; }
     OutDevType      GetRefDevType() const       { return eRefDevType; }
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
+    sal_uInt16  GetStretchX() const         { return nStretchX; }
+    sal_uInt16  GetStretchY() const         { return nStretchY; }
 };
 
 /* cl removed because not needed anymore since binfilter

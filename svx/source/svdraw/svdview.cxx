@@ -502,8 +502,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
 
                 // FitToSize berueksichtigen
-                SdrFitToSizeType eFit=pTextObj->GetFitToSize();
-                BOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+                BOOL bFitToSize(pTextObj->IsFitToSize());
                 if (bFitToSize) {
                     Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
                     Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);

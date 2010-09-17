@@ -79,8 +79,7 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
 {
     if (bTextFrame && pModel!=NULL && !rR.IsEmpty())
     {
-        SdrFitToSizeType eFit=GetFitToSize();
-        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        FASTBOOL bFitToSize(IsFitToSize());
         FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
         FASTBOOL bHgtGrow=bHgt && IsAutoGrowHeight();
         SdrTextAniKind eAniKind=GetTextAniKind();

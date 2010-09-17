@@ -73,15 +73,17 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.Init( nOutlinerMode );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
-    SdrFitToSizeType eFit=GetFitToSize();
-    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+    FASTBOOL bFitToSize(IsFitToSize());
     FASTBOOL bContourFrame=IsContourTextFrame();
     ImpSetTextEditParams();
 
     if (!bContourFrame) {
         ULONG nStat=rOutl.GetControlWord();
         nStat|=EE_CNTRL_AUTOPAGESIZE;
-        if (bFitToSize) nStat|=EE_CNTRL_STRETCHING; else nStat&=~EE_CNTRL_STRETCHING;
+        if (bFitToSize || IsAutoFit())
+            nStat|=EE_CNTRL_STRETCHING;
+        else
+            nStat&=~EE_CNTRL_STRETCHING;
         rOutl.SetControlWord(nStat);
     }
 
@@ -119,7 +121,11 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         TakeTextRect(rOutl, aTextRect, FALSE,
             &aAnchorRect/* #97097# give TRUE here, not FALSE */);
         Fraction aFitXKorreg(1,1);
-        ImpSetCharStretching(rOutl,aTextRect,aAnchorRect,aFitXKorreg);
+        ImpSetCharStretching(rOutl,aTextRect.GetSize(),aAnchorRect.GetSize(),aFitXKorreg);
+    }
+    else if (IsAutoFit())
+    {
+        ImpAutoFitText(rOutl);
     }
 
     if(pOutlinerParaObject)
@@ -146,8 +152,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
 {
-    SdrFitToSizeType eFit=GetFitToSize();
-    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+    FASTBOOL bFitToSize(IsFitToSize());
     Size aPaperMin,aPaperMax;
     Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);

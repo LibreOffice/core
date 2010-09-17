@@ -75,6 +75,7 @@ namespace drawinglayer
                 SdrTextVertAdjust aSdrTextVertAdjust,
                 bool bContour,
                 bool bFitToSize,
+                bool bAutoFit,
                 bool bHideContour,
                 bool bBlink,
                 bool bScroll,
@@ -97,6 +98,7 @@ namespace drawinglayer
             const OutlinerParaObject& getOutlinerParaObject() const;
             bool isContour() const;
             bool isFitToSize() const;
+            bool isAutoFit() const;
             bool isHideContour() const;
             bool isBlink() const;
             bool isScroll() const;

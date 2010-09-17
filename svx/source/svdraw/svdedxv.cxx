@@ -316,7 +316,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     {
         const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
         bool bTextFrame(pText && pText->IsTextFrame());
-        bool bFitToSize(0 != (pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING));
+        bool bFitToSize(pText && pText->IsFitToSize());
         bool bModifyMerk(pTextEditOutliner->IsModified()); // #43095#
         Rectangle aBlankRect(rOutlView.GetOutputArea());
         aBlankRect.Union(aMinTextEditArea);
@@ -385,7 +385,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
     {
         const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
         bool bTextFrame(pText && pText->IsTextFrame());
-        bool bFitToSize(0 != (pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING));
+        bool bFitToSize(pText && pText->IsFitToSize());
 
         if(bTextFrame && !bFitToSize)
         {
@@ -650,8 +650,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if ( !pTextObj->IsContourTextFrame() )
             {
                 // FitToSize erstmal nicht mit ContourFrame
-                SdrFitToSizeType eFit = pTextObj->GetFitToSize();
-                if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+                if (pTextObj->IsFitToSize())
                     aTextRect = aAnchorRect;
             }
 
@@ -719,8 +718,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
                 // #71519#
                 if(!bExtraInvalidate)
                 {
-                    SdrFitToSizeType eFit = pTextObj->GetFitToSize();
-                    if(eFit == SDRTEXTFIT_PROPORTIONAL || eFit == SDRTEXTFIT_ALLLINES)
+                    if(pTextObj->IsFitToSize())
                         bExtraInvalidate = sal_True;
                 }
 

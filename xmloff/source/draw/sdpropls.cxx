@@ -625,8 +625,8 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_FitToSize_Enum[] =
 {
     { XML_FALSE,        drawing::TextFitToSizeType_NONE },
     { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
-    { XML_TRUE,         drawing::TextFitToSizeType_ALLLINES },
-    { XML_TRUE,         drawing::TextFitToSizeType_RESIZEATTR },
+    { XML_ALL,          drawing::TextFitToSizeType_ALLLINES },
+    { XML_SHRINK_TO_FIT,drawing::TextFitToSizeType_AUTOFIT },
     { XML_TOKEN_INVALID, 0 }
 };
 
