@@ -60,13 +60,14 @@
 #include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/escherex.hxx>
-#include <svx/svxenum.hxx>
+#include <filter/msfilter/escherex.hxx>
+#include <editeng/svxenum.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -473,7 +474,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
             }
 
             aData = aStream.GetData();
-            nDataSize = aStream.GetSize();
+            nDataSize = aStream.GetEndOfData();
             break;
             }
     }

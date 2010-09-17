@@ -128,7 +128,7 @@ void VMLExport::CloseContainer()
 
 UINT32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
 {
-    UINT32 nShapeId = GetShapeID();
+    sal_uInt32 nShapeId = GenerateShapeId();
 
     OStringBuffer aStyle( 200 );
     FastAttributeList *pAttrList = m_pSerializer->createAttrList();
