@@ -70,7 +70,7 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 #-------------------------------------------
 #
 # Help variables.
-my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
+my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
@@ -79,7 +79,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
-     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
+     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, $SOLARDEFIMG,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
@@ -907,6 +907,7 @@ $OPT                  = $ds."opt";
 $LOCAL                = $ds."local";
 $SOLENV               = $ds."solenv";
 $SOLVER               = $ds."solver";
+$DEFIMGS              = $ds."default_images";
 $CONFIG               = $ds."config";
 $USR_BIN              = $USR.$BIN;
 $USR_LIB              = $USR.$LIB64;
@@ -1008,6 +1009,9 @@ else
 }
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
+
+#Some directories that are symlinks under rawbuild, have to use realpath on Cygwin
+$SOLARDEFIMG          = PathFormat($SRC_ROOT.$DEFIMGS);
 
 $SOLARENVINC          = '$SOLARENV'.$INC;
 # Location of 
@@ -1731,6 +1735,7 @@ ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
+ToFile( "SOLARDEFIMG",       $SOLARDEFIMG,       "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
 ToFile( "LOCALINI",          $LOCALINI,          "e" );
 ToFile( "STAR_INIROOT",      $STAR_INIROOT,      "e" );
