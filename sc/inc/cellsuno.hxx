@@ -205,7 +205,6 @@ private:
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
     SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
-    const ScMarkData*       GetMarkData();
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
 
@@ -218,6 +217,8 @@ private:
                                     const ScAddress* pLastPos);
 
 protected:
+    const ScMarkData*       GetMarkData();
+
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
@@ -873,6 +874,8 @@ public:
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
                                 const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
+
+    SC_DLLPUBLIC void       InputEnglishString( const ::rtl::OUString& rText );
 
                             // XText
     virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<

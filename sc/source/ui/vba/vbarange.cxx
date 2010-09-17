@@ -740,8 +740,26 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
             rtl::OUString aString;
             if ( aValue >>= aString )
             {
-                uno::Reference< text::XTextRange > xTextRange( xCell, uno::UNO_QUERY_THROW );
-                xTextRange->setString( aString );
+                // The required behavior for a string value is:
+                // 1. If the first character is a single quote, use the rest as a string cell, regardless of the cell's number format.
+                // 2. Otherwise, if the cell's number format is "text", use the string value as a string cell.
+                // 3. Otherwise, parse the string value in English locale, and apply a corresponding number format with the cell's locale
+                //    if the cell's number format was "General".
+                // Case 1 is handled here, the rest in ScCellObj::InputEnglishString
+
+                if ( aString.toChar() == '\'' )     // case 1 - handle with XTextRange
+                {
+                    rtl::OUString aRemainder( aString.copy(1) );    // strip the quote
+                    uno::Reference< text::XTextRange > xTextRange( xCell, uno::UNO_QUERY_THROW );
+                    xTextRange->setString( aRemainder );
+                }
+                else
+                {
+                    // call implementation method InputEnglishString
+                    ScCellObj* pCellObj = dynamic_cast< ScCellObj* >( xCell.get() );
+                    if ( pCellObj )
+                        pCellObj->InputEnglishString( aString );
+                }
             }
             else
                 isExtracted = false;
