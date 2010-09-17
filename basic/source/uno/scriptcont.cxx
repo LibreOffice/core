@@ -311,26 +311,21 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     // aMod.aName ignored
     if( aMod.aModuleType.getLength() > 0 )
     {
-        if( !getVBACompatibilityMode() )
+        /*  If in VBA compatibility mode, force creation of the VBA Globals
+            object. Each application will create an instance of its own
+            implementation and store it in its Basic manager. Implementations
+            will do all necessary additional initialization, such as
+            registering the global "This***Doc" UNO constant, starting the
+            document events processor etc.
+         */
+        if( getVBACompatibilityMode() ) try
         {
-            setVBACompatibilityMode( sal_True );
-
-            /*  Force creation of the VBA Globals object. Each application will
-                create an instance of its own implementation and store it in
-                its Basic manager. Implementations will do all necessary
-                additional initialization, such as registering the global
-                "This***Doc" UNO constant, starting the document events
-                processor etc.
-             */
-            try
-            {
-                Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
-                Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
-            }
-            catch( Exception& )
-            {
-            }
+            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
         }
 
         script::ModuleInfo aModInfo;
