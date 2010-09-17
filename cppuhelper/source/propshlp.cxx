@@ -605,6 +605,10 @@ void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newVal
     ::std::copy( m_pReserved->m_oldValues.begin(), m_pReserved->m_oldValues.end(), allOldValues.begin() );
     ::std::copy( i_oldValues, i_oldValues + i_count, allOldValues.begin() + additionalEvents );
 
+    m_pReserved->m_handles.clear();
+    m_pReserved->m_newValues.clear();
+    m_pReserved->m_oldValues.clear();
+
     aGuard.clear();
     fire( &allHandles[0], &allNewValues[0], &allOldValues[0], additionalEvents + i_count, sal_False );
 }
