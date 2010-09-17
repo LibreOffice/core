@@ -1800,8 +1800,7 @@ struct SvxStyleToolBoxControl::Impl
                 static const sal_Char* aCalcStyles[] =
                 {
                     "Default",
-                    "Heading 1",
-                    "Heading 2",
+                    "Heading1",
                     "Result",
                     "Result2"
                 };
@@ -1813,12 +1812,15 @@ struct SvxStyleToolBoxControl::Impl
                 {
                     try
                     {
-                        Reference< beans::XPropertySet > xStyle;
-                        xCellStyles->getByName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] )) >>= xStyle;
-                        ::rtl::OUString sName;
-                        xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")))>>= sName;
-                        if( sName.getLength() )
-                            aDefaultStyles.push_back(sName);
+                        const rtl::OUString sStyleName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] ) );
+                        if( xCellStyles->hasByName( sStyleName ) )
+                        {
+                            Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
+                            ::rtl::OUString sName;
+                            xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
+                            if( sName.getLength() )
+                                aDefaultStyles.push_back(sName);
+                        }
                     }
                     catch( const uno::Exception& )
                     {}
