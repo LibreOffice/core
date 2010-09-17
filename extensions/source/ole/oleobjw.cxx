@@ -1860,22 +1860,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 throw IllegalArgumentException( buf.makeStringAndClear(),
                                                 Reference<XInterface>(), (sal_Int16) i);
             }
-            //make sure we get no void any for an in parameter. In StarBasic
-            //this may be caused by
-            // Dim arg
-            // obj.func(arg)
-            //A void any is allowed if the parameter is optional
-            if ( ! (aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags & PARAMFLAG_FOPT)
-                && (i < nUnoArgs) && (paramFlags & PARAMFLAG_FIN) &&
-                Params.getConstArray()[i].getValueTypeClass() == TypeClass_VOID)
-            {
-                OUStringBuffer buf(256);
-                buf.appendAscii("ole automation bridge: The argument at position: ");
-                buf.append(OUString::valueOf((sal_Int32) i));
-                buf.appendAscii(" (index starts with 0) is uninitialized.");
-                throw IllegalArgumentException( buf.makeStringAndClear(),
-                                                Reference<XInterface>(), (sal_Int16) i);
-            }
 
             // Property Put arguments
             if (anyArg.getValueType() == getCppuType((PropertyPutArgument*)0))
@@ -1988,11 +1972,15 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                         & aFuncDesc->lprgelemdescParam[i].paramdesc.
                             pparamdescex->varDefaultValue);
                 }
-                else
+                else if (paramFlags & PARAMFLAG_FOPT)
                 {
-                    OSL_ASSERT(paramFlags & PARAMFLAG_FOPT);
                     arArgs[revIndex].vt = VT_ERROR;
                     arArgs[revIndex].scode = DISP_E_PARAMNOTFOUND;
+                }
+                else
+                {
+                    arArgs[revIndex].vt = VT_EMPTY;
+                    arArgs[revIndex].lVal = 0;
                 }
             }
         }
