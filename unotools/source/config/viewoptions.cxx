@@ -781,7 +781,7 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSet
             xNode = ::comphelper::ConfigurationHelper::makeSureSetNodeExists(m_xRoot, m_sListName, sNode);
         else
         {
-            if (m_xSet.is())
+            if (m_xSet.is() && m_xSet->hasByName(sNode) )
                 m_xSet->getByName(sNode) >>= xNode;
         }
     }
