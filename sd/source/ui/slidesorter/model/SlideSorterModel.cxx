@@ -700,6 +700,7 @@ void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
     {
         SharedPageDescriptor& rpDescriptor (maPageDescriptors[nDescriptorIndex]);
         if (rpDescriptor)
+        {
             if (nDescriptorIndex < nFirstIndex)
             {
                 if (rpDescriptor->GetPageIndex()!=nDescriptorIndex)
@@ -711,6 +712,7 @@ void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
             {
                 rpDescriptor->SetPageIndex(nDescriptorIndex);
             }
+        }
     }
 }
 
