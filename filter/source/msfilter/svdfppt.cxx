@@ -1115,6 +1115,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 aTextObj.SetDestinationInstance( (sal_uInt16)nDestinationInstance );
 
+                bool bAutoFit = false; // auto-scale text into shape box
                 switch ( aTextObj.GetInstance() )
                 {
                     case TSS_TYPE_PAGETITLE :
@@ -1122,7 +1123,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     case TSS_TYPE_SUBTITLE : eTextKind = OBJ_TEXT; break;
                     case TSS_TYPE_BODY :
                     case TSS_TYPE_HALFBODY :
-                    case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
+                    case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
                 }
                 if ( aTextObj.GetDestinationInstance() != TSS_TYPE_TEXT_IN_SHAPE )
                 {
@@ -1176,6 +1177,15 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                 }
                 pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+
+                if (bAutoFit)
+                {
+                    // disable both, defeats purpose of autofit
+                    // otherwise
+                    bAutoGrowHeight = sal_False;
+                    bAutoGrowWidth = sal_False;
+                    pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
+                }
 
             if ( !pTObj->ISA( SdrObjCustomShape ) )
             {
