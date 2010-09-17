@@ -4746,19 +4746,14 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
         // Only for native COM objects
         if( pUnoObj->isNativeCOMObject() )
         {
-            // For now assume success in any case
-            bSuccess = true;
-            pVal->PutString( String() );
-
-            // TODO: Try to find and execute "toString"
-            //SbxVariableRef pMeth = pObj->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "toString" ) ), SbxCLASS_METHOD );
-            //bSuccess = pMeth.Is();
-            //if( bSuccess )
-            //{
-            //  SbxValues aRes;
-            //  pMeth->Get( aRes );
-            //  pVal->Put( aRes );
-            //}
+            SbxVariableRef pMeth = pObj->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "toString" ) ), SbxCLASS_METHOD );
+            if ( pMeth.Is() )
+            {
+                SbxValues aRes;
+                pMeth->Get( aRes );
+                pVal->Put( aRes );
+                bSuccess = true;
+            }
         }
     }
     return bSuccess;
