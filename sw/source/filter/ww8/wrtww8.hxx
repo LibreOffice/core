@@ -35,6 +35,7 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #endif
+#include <editeng/editdata.hxx>
 
 #include <map>
 #include <vector>
@@ -55,6 +56,7 @@
 class SwAttrIter;
 class AttributeOutputBase;
 class DocxAttributeOutput;
+class RtfAttributeOutput;
 class BitmapPalette;
 class SwEscherEx;
 class DateTime;
@@ -294,6 +296,7 @@ public:
         rtl_TextEncoding eChrSet, bool bWrtWW8 );
     bool Write( SvStream *pTableStram ) const;
     void WriteDocx( const DocxAttributeOutput* rAttrOutput ) const;
+    void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
     rtl::OUString GetFamilyName() const { return rtl::OUString( msFamilyNm ); }
     friend bool operator < (const wwFont &r1, const wwFont &r2);
 };
@@ -309,7 +312,7 @@ private:
     ::std::vector< const wwFont* > AsVector() const;
 
 public:
-    wwFontHelper() : mbWrtWW8(false) {}
+    wwFontHelper() : mbWrtWW8(false), bLoadAllFonts(false) {}
     /// rDoc used only to get the initial standard font(s) in use.
     void InitFontTable(bool bWrtWW8, const SwDoc& rDoc);
     USHORT GetId(const Font& rFont);
@@ -317,6 +320,10 @@ public:
     USHORT GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );
     void WriteFontTable( const DocxAttributeOutput& rAttrOutput );
+    void WriteFontTable( const RtfAttributeOutput& rAttrOutput );
+
+    /// If true, all fonts are loaded before processing the document.
+    BYTE bLoadAllFonts: 1;
 };
 
 class DrawObj
@@ -535,12 +542,18 @@ public:
     BYTE bEndAtTxtEnd : 1;      // true: all END at Textend
     BYTE bHasHdr : 1;
     BYTE bHasFtr : 1;
+    BYTE bSubstituteBullets : 1; // true: SubstituteBullet() gets called
 
     SwDoc *pDoc;
     SwPaM *pCurPam, *pOrigPam;
 
     /// Stack to remember the nesting (see MSWordSaveData for more)
     ::std::stack< MSWordSaveData > maSaveData;
+
+    /// Used to split the runs according to the bookmarks start and ends
+    typedef std::vector< ::sw::mark::IMark* > IMarkVector;
+    IMarkVector m_rSortedMarksStart;
+    IMarkVector m_rSortedMarksEnd;
 
 public:
     /// The main function to export the document.
@@ -780,6 +793,17 @@ protected:
     ///
     /// One of OutputTextNode(), OutputGrfNode(), or OutputOLENode()
     void OutputContentNode( const SwCntntNode& );
+
+    /// Find the nearest bookmark from the current position.
+    ///
+    /// Returns false when there is no bookmark.
+    bool NearestBookmark( xub_StrLen& rNearest );
+
+    void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
+                xub_StrLen nLen );
+
+    bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
+            IMarkVector& rArr );
 
 public:
     MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );
@@ -1344,6 +1368,47 @@ public:
 
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const = 0;
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const = 0;
+};
+
+class MSWord_SdrAttrIter : public MSWordAttrIter
+{
+private:
+    const EditTextObject* pEditObj;
+    const SfxItemPool* pEditPool;
+    EECharAttribArray aTxtAtrArr;
+    SvPtrarr aChrTxtAtrArr;
+    SvUShorts aChrSetArr;
+    USHORT nPara;
+    xub_StrLen nAktSwPos;
+    xub_StrLen nTmpSwPos;                   // for HasItem()
+    rtl_TextEncoding eNdChrSet;
+    USHORT nScript;
+    BYTE mnTyp;
+
+    xub_StrLen SearchNext( xub_StrLen nStartPos );
+    void SetCharSet(const EECharAttrib& rTxtAttr, bool bStart);
+
+    //No copying
+    MSWord_SdrAttrIter(const MSWord_SdrAttrIter&);
+    MSWord_SdrAttrIter& operator=(const MSWord_SdrAttrIter&);
+public:
+    MSWord_SdrAttrIter( MSWordExportBase& rWr, const EditTextObject& rEditObj,
+        BYTE nType );
+    void NextPara( USHORT nPar );
+    void OutParaAttr(bool bCharAttr);
+    void OutEEField(const SfxPoolItem& rHt);
+
+    bool IsTxtAttr(xub_StrLen nSwPos);
+
+    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+
+    void OutAttr( xub_StrLen nSwPos );
+    virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
+    virtual const SfxPoolItem& GetItem( USHORT nWhich ) const;
+    bool OutAttrWithRange(xub_StrLen nPos);
+    xub_StrLen WhereNext() const                { return nAktSwPos; }
+    rtl_TextEncoding GetNextCharSet() const;
+    rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
 };
 
 /// Class to collect and output the styles table.

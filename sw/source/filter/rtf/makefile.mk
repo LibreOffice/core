@@ -46,18 +46,15 @@ CDEFS=$(CDEFS) -Dmydebug
 EXCEPTIONSFILES=	\
         $(SLO)$/rtffly.obj \
         $(SLO)$/rtfnum.obj \
-        $(SLO)$/swparrtf.obj \
-        $(SLO)$/wrtrtf.obj
+        $(SLO)$/swparrtf.obj
 
 
-SLOFILES =	\
-        $(SLO)$/rtfatr.obj \
+SLOFILES = \
         $(SLO)$/rtffld.obj \
         $(SLO)$/rtffly.obj \
         $(SLO)$/rtfnum.obj \
         $(SLO)$/rtftbl.obj \
-        $(SLO)$/swparrtf.obj \
-        $(SLO)$/wrtrtf.obj
+        $(SLO)$/swparrtf.obj
 
 # --- Tagets -------------------------------------------------------
 

@@ -22,7 +22,6 @@
 #include <fltini.hxx>
 #include <swtypes.hxx>
 #include <swparrtf.hxx>
-#include <wrtrtf.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -1102,6 +1101,7 @@ BOOL lcl_IsExportNumRule( const SwNumRule& rRule, BYTE* pEnd = 0 )
     return nLvl != nEnd;
 }
 
+#if 0
 void SwRTFWriter::OutRTFListTab()
 {
     ByteString sOverrideList;
@@ -1430,3 +1430,4 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
     }
     return bRet;
 }
+#endif

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -25,19 +25,23 @@
  *
  ************************************************************************/
 
-#ifndef _DOCXEXPORT_HXX_
-#define _DOCXEXPORT_HXX_
+#ifndef _RTFEXPORT_HXX_
+#define _RTFEXPORT_HXX_
 
-#include "docxattributeoutput.hxx"
+#include <set>
+#include "rtfattributeoutput.hxx"
 #include "wrtww8.hxx"
 
-#include <sax/fshelper.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cstdio>
-#include <vector>
+#include <map>
 
-class DocxExportFilter;
+class RtfExportFilter;
+class RtfSdrExport;
+typedef std::map<USHORT,Color> RtfColorTbl;
+typedef std::map<USHORT,rtl::OString> RtfStyleTbl;
+typedef std::map<String,USHORT> RtfRedlineTbl;
 class SwNode;
 class SwEndNode;
 class SwTableNode;
@@ -47,37 +51,24 @@ class SwOLENode;
 class SwSectionNode;
 class SwNumRuleTbl;
 
-namespace oox {
-    namespace drawingml { class DrawingML; }
-    namespace vml { class VMLExport; }
-}
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+} } }
 
-/// The class that does all the actual DOCX export-related work.
-class DocxExport : public MSWordExportBase
+/// The class that does all the actual RTF export-related work.
+class RtfExport : public MSWordExportBase
 {
     /// Pointer to the filter that owns us.
-    DocxExportFilter *m_pFilter;
-
-    /// Fast serializer for the document output.
-    ::sax_fastparser::FSHelperPtr m_pDocumentFS;
-
-    /// Access to the DrawingML writer.
-    oox::drawingml::DrawingML *m_pDrawingML;
+    RtfExportFilter *m_pFilter;
+    Writer* m_pWriter;
 
     /// Attribute output for document.
-    DocxAttributeOutput *m_pAttrOutput;
+    RtfAttributeOutput *m_pAttrOutput;
 
     /// Sections/headers/footers
     MSWordSections *m_pSections;
 
-    /// Header counter.
-    sal_Int32 m_nHeaders;
-
-    /// Footer counter.
-    sal_Int32 m_nFooters;
-
-    /// Exporter of the VML shapes.
-    oox::vml::VMLExport *m_pVMLExport;
+    RtfSdrExport *m_pSdrExport;
 
 public:
     /// Access to the attribute output class.
@@ -86,8 +77,10 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const;
 
+    /// Access to the Rtf Sdr exporter.
+    virtual RtfSdrExport& SdrExporter() const;
+
     /// Hack, unfortunately necessary at some places for now.
-    /// FIXME remove it when possible.
     virtual bool HackIsWW8OrHigher() const { return true; }
 
     /// Guess the script (asian/western).
@@ -97,14 +90,14 @@ public:
 
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
 
-    /// Returns the relationd id
-    rtl::OString AddRelation( const rtl::OUString& rType, const rtl::OUString& rTarget, const rtl::OUString& rMode );
+    virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) { /* no-op for rtf, most probably should not even be in MSWordExportBase */ }
+    virtual void WriteChar( sal_Unicode );
 
-    virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) { /* FIXME no-op for docx, most probably should not even be in MSWordExportBase */ }
-    virtual void WriteChar( sal_Unicode ) { /* FIXME */ fprintf( stderr, "HACK! WriteChar() has nothing to do for docx.\n" ); }
+    /// Write the numbering table.
+    virtual void WriteNumbering();
 
-    /// Return value indicates if an inherited outline numbering is suppressed.
-    virtual bool DisallowInheritingOutlineNumbering( const SwFmt &rFmt );
+    /// Write the revision table.
+    virtual void WriteRevTab();
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
@@ -132,24 +125,6 @@ protected:
     /// Format-dependant part of the actual export.
     virtual void ExportDocument_Impl();
 
-    /// Output page/section breaks
-    virtual void OutputPageSectionBreaks( const SwTxtNode& );
-
-    /// Output SwEndNode
-    virtual void OutputEndNode( const SwEndNode& );
-
-    /// Output SwTableNode
-    virtual void OutputTableNode( const SwTableNode& );
-
-    /// Output SwGrfNode
-    virtual void OutputGrfNode( const SwGrfNode& );
-
-    /// Output SwOLENode
-    virtual void OutputOLENode( const SwOLENode& );
-
-
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
-
     virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
 
     /// Get ready for a new section.
@@ -158,47 +133,79 @@ protected:
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
                                      const SwPageDesc* pNewPgDesc = 0 );
 
-private:
-    /// Setup pStyles and write styles.xml
-    void InitStyles();
+    /// Return value indicates if an inherited outline numbering is suppressed.
+    virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
 
-    /// Write footnotes.xml and endnotes.xml.
-    void WriteFootnotesEndnotes();
+    /// Output SwGrfNode
+    virtual void OutputGrfNode( const SwGrfNode& );
 
-    /// Write the numbering table.
-    virtual void WriteNumbering();
+    /// Output SwOLENode
+    virtual void OutputOLENode( const SwOLENode& );
 
-    /// Write reference to a header/foorter + the actual xml containing the text.
-    void WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char* pType );
-
-    /// Write word/fontTable.xml.
-    void WriteFonts();
-
-    /// Write docProps/core.xml
-    void WriteProperties();
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
 public:
-    /// FIXME this is temporary, remotely reminding the method of the same
-    /// name in WW8Export.
-    void WriteMainText();
-
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
-    DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument,
-            SwPaM *pCurrentPam, SwPaM *pOriginalPam );
+    RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument,
+            SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter );
 
     /// Destructor.
-    virtual ~DocxExport();
+    virtual ~RtfExport();
 
-    /// Reference to the VMLExport instance for the main document.
-    oox::vml::VMLExport& VMLExporter();
+#if defined(UNX)
+    static const sal_Char sNewLine; // \012 or \015
+#else
+    static const sal_Char __FAR_DATA sNewLine[]; // \015\012
+#endif
+
+    rtl_TextEncoding eDefaultEncoding;
+    rtl_TextEncoding eCurrentEncoding;
+    /// This is used by OutputFlyFrame_Impl() to control the written syntax
+    bool bRTFFlySyntax;
+
+    BOOL m_bOutStyleTab : 1;
+    SvStream& Strm();
+    SvStream& OutULong( ULONG nVal );
+    SvStream& OutLong( long nVal );
+    void OutUnicode(const sal_Char *pToken, const String &rContent);
+    void OutDateTime(const sal_Char* pStr, const util::DateTime& rDT );
+    rtl::OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc);
+    rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
+    rtl::OString OutHex(ULONG nHex, BYTE nLen);
+    void OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage );
+    void OutContent( const SwNode& rNode );
+
+    USHORT GetColor( const Color& rColor ) const;
+    void InsColor( const Color& rCol );
+    void InsColorLine( const SvxBoxItem& rBox );
+    void OutColorTable();
+    USHORT GetRedline( const String& rAuthor );
+
+    void InsStyle( USHORT nId, const rtl::OString& rStyle );
+    rtl::OString* GetStyle( USHORT nId );
 
 private:
     /// No copying.
-    DocxExport( const DocxExport& );
+    RtfExport( const RtfExport& );
 
     /// No copying.
-    DocxExport& operator=( const DocxExport& );
+    RtfExport& operator=( const RtfExport& );
+
+    void WriteFonts();
+    void WriteStyles();
+    void WriteMainText();
+    void WriteInfo();
+    /// Writes the writer-specific \pgdsctbl group.
+    void WritePageDescTable();
+    /// This is necessary to have the numbering table ready before the main text is being processed.
+    void BuildNumbering();
+    void WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader);
+    void WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr);
+
+    RtfColorTbl m_aColTbl;
+    RtfStyleTbl m_aStyTbl;
+    RtfRedlineTbl m_aRedlineTbl;
 };
 
-#endif // _DOCXEXPORT_HXX_
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+#endif // _RTFEXPORT_HXX_
+/* vi:set shiftwidth=4 expandtab: */

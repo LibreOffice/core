@@ -721,6 +721,9 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     StarSymbolToMSMultiFont *pConvert = 0;
     FontFamily eFamily = FAMILY_DECORATIVE;
 
+    if (!bSubstituteBullets)
+        return;
+
     if (!pConvert)
     {
         pConvert = CreateStarSymbolToMSMultiFont();
