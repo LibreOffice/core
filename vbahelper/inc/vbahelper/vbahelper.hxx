@@ -90,6 +90,13 @@ namespace ooo
         VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell* pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, sal_Bool bSelection  );
         VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const css::uno::Any& EnableChanges,  SfxViewShell* );
 
+        /** Extracts a boolean value from the passed Any, which may contain sal_Bool or an integer or floating-point value.
+            Returns false, if the Any is empty or contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( bool& rbValue, const css::uno::Any& rAny );
+        /** Extracts a boolean value from the passed Any, which may contain sal_Bool or an integer or floating-point value.
+            Throws, if the Any is empty or contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
+
         VBAHELPER_DLLPUBLIC rtl::OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike = false); // needs to be in an uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
