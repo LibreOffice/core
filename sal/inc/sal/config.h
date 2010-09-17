@@ -28,14 +28,6 @@
 #ifndef _SAL_CONFIG_H_
 #define _SAL_CONFIG_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
 #define INCLUDED_STDLIB_H
