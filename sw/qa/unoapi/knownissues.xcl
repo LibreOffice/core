@@ -178,3 +178,6 @@ sw.XMLStylesExporter::com::sun::star::document::XFilter
 sw.SwXTextEmbeddedObject::com::sun::star::beans::XPropertySet
 sw.SwXTextGraphicObject::com::sun::star::beans::XPropertySet
 sw.SwXTextFrame::com::sun::star::beans::XPropertySet
+
+### i113136 ###
+sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleEditableText
