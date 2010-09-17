@@ -429,19 +429,12 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
         Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
 
-        // set library container to VBA compatibility mode
+        /*  Set library container to VBA compatibility mode. This will create
+            the VBA Globals object and store it in the Basic manager of the
+            document. */
         try
         {
             Reference< XVBACompatibility >( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW )->setVBACompatibilityMode( sal_True );
-        }
-        catch( Exception& )
-        {
-        }
-
-        // create the VBAGlobals object, the model will store it in the Basic manager
-        try
-        {
-            xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAGlobals" ) );
         }
         catch( Exception& )
         {
@@ -483,7 +476,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
     {
         // try to open the element as storage
-        if( !aIt->equals( CREATE_OUSTRING( "VBA" ) ) )
+        if( !aIt->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VBA" ) ) )
         {
             StorageRef xSubStrg = rVbaPrjStrg.openSubStorage( *aIt, false );
             if( xSubStrg.get() ) try
