@@ -24,24 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <docuno.hxx>
+
 #include "excelvbahelper.hxx"
+
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/sheet/XSheetCellRange.hpp>
+#include "docuno.hxx"
 #include "tabvwsh.hxx"
 #include "transobj.hxx"
 #include "scmod.hxx"
 #include "cellsuno.hxx"
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/sheet/XSheetCellRange.hpp>
+
+namespace ooo {
+namespace vba {
+namespace excel {
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-namespace ooo
-{
-namespace vba
-{
-namespace excel
-{
+// ============================================================================
 
 ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
 {
@@ -246,11 +247,10 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
     return NULL;
 }
 
-uno::Reference< XHelperInterface >
-getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+uno::Reference< vba::XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) throw ( uno::RuntimeException )
 {
-    uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
     rtl::OUString sCodeName;
     xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CodeName") ) ) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
@@ -258,9 +258,16 @@ getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw 
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
     // the document in the future could fix this, especially IF the switching of the vba mode takes care to
     // create the special document module objects if they don't exist.
-    uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xRange ) ), uno::UNO_QUERY );
-
+    uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) ), uno::UNO_QUERY );
     return xParent;
+}
+
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xSheetRange->getSpreadsheet(), uno::UNO_SET_THROW );
+    return getUnoSheetModuleObj( xSheet );
 }
 
 uno::Reference< XHelperInterface >
@@ -269,8 +276,24 @@ getUnoSheetModuleObj( const uno::Reference< sheet::XSheetCellRangeContainer >& x
     uno::Reference< container::XEnumerationAccess > xEnumAccess( xRanges, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
     uno::Reference< table::XCellRange > xRange( xEnum->nextElement(), uno::UNO_QUERY_THROW );
-
     return getUnoSheetModuleObj( xRange );
+}
+
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< table::XCell >& xCell ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XSheetCellRange > xSheetRange( xCell, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xSheetRange->getSpreadsheet(), uno::UNO_SET_THROW );
+    return getUnoSheetModuleObj( xSheet );
+}
+
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< frame::XModel >& xModel, SCTAB nTab ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc( xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xSheets( xDoc->getSheets(), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xSheets->getByIndex( nTab ), uno::UNO_QUERY_THROW );
+    return getUnoSheetModuleObj( xSheet );
 }
 
 SfxItemSet*
@@ -279,7 +302,8 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
     return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
 }
 
+// ============================================================================
 
-} //excel
-} //vba
-} //ooo
+} // namespace excel
+} // namespace vba
+} // namespace ooo

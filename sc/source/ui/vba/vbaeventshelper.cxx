@@ -691,27 +691,9 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
 uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // Eventually we will be able to pull the Workbook/Worksheet objects
-    // directly from basic and register them as listeners
-
     // extract sheet index, will throw, if parameter is invalid
     SCTAB nTab = lclGetTabFromArgs( rArgs, nIndex );
-
-    // create Workbook
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= uno::Reference< uno::XInterface >();
-    aArgs[ 1 ] <<= mxModel;
-    uno::Reference< uno::XInterface > xWorkbook( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Workbook", aArgs ), uno::UNO_SET_THROW );
-
-    // create WorkSheet
-    String aSheetName;
-    mpDoc->GetName( nTab, aSheetName );
-    aArgs = uno::Sequence< uno::Any >( 3 );
-    aArgs[ 0 ] <<= xWorkbook;
-    aArgs[ 1 ] <<= mxModel;
-    aArgs[ 2 ] <<= ::rtl::OUString( aSheetName );
-    uno::Reference< uno::XInterface > xWorksheet( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Worksheet", aArgs ), uno::UNO_SET_THROW );
-    return uno::Any( xWorksheet );
+    return uno::Any( excel::getUnoSheetModuleObj( mxModel, nTab ) );
 }
 
 uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
@@ -723,11 +705,16 @@ uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs,
         throw lang::IllegalArgumentException();
 
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= uno::Reference< uno::XInterface >(); // dummy parent
     if ( xRanges.is() )
+    {
+        aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRanges );
         aArgs[ 1 ] <<= xRanges;
+    }
     else
+    {
+        aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRange );
         aArgs[ 1 ] <<= xRange;
+    }
     uno::Reference< uno::XInterface > xVbaRange( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Range", aArgs ), uno::UNO_SET_THROW );
     return uno::Any( xVbaRange );
 }
@@ -735,9 +722,10 @@ uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs,
 uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
+    uno::Reference< table::XCell > xCell = getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= uno::Reference< uno::XInterface >(); // dummy parent
-    aArgs[ 1 ] <<= getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
+    aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xCell );
+    aArgs[ 1 ] <<= xCell;
     uno::Reference< uno::XInterface > xHyperlink( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Hyperlink", aArgs ), uno::UNO_SET_THROW );
     return uno::Any( xHyperlink );
 }
