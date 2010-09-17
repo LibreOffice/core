@@ -25,18 +25,6 @@
  *
  ************************************************************************/
 
-enum SdrFitToSizeType
-{
-    SDRTEXTFIT_NONE ,
-    SDRTEXTFIT_PROPORTIONAL ,
-    SDRTEXTFIT_ALLLINES ,
-    SDRTEXTFIT_RESIZEATTR
-}
-item UINT32 SvxObjectItem ;
-item BOOL SdrShadowItem ;
-item SdrFitToSizeType SdrTextFitToSizeTypeItem ;
-
-
 interface DrawView
 {
     SID_JUMPTOMARK // ole : no, status : ?
@@ -672,6 +660,11 @@ interface DrawView
     SID_TEXT_FITTOSIZE // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTLINE_TEXT_AUTOFIT // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
     SID_TEXT_FITTOSIZE_VERTICAL // ole : no, status : ?

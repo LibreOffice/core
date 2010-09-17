@@ -208,9 +208,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_CHANGEPOLYGON );
             }
 
-            if(nInv == SdrInventor && (nId == OBJ_TITLETEXT || nId == OBJ_OUTLINETEXT))
-                rSet.DisableItem( SID_TEXTATTR_DLG );
-
             if(nInv == SdrInventor && nId == OBJ_TABLE )
             {
                 rSet.DisableItem( SID_TEXTATTR_DLG );
@@ -303,6 +300,17 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             else
                 rSet.DisableItem( SID_MODIFY_FIELD );
         }
+        if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_TEXT_AUTOFIT ) )
+        {
+            bool bSet = false;
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+            }
+            rSet.Put(SfxBoolItem(SID_OUTLINE_TEXT_AUTOFIT, bSet));
+        }
 
         rSet.DisableItem( SID_GROUP );
         rSet.DisableItem( SID_COMBINE );
@@ -352,7 +360,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             BOOL bGraf = FALSE;
             BOOL bDrawObj = FALSE;
             BOOL b3dObj = FALSE;
-            BOOL bTitOutText = FALSE;
             bool bTable = false;
             BOOL bMeasureObj = FALSE;
             BOOL bEdgeObj = FALSE; // Connector
@@ -392,8 +399,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
                         case OBJ_GRAF: bGraf = TRUE; break;
 
-                        case OBJ_TITLETEXT:
-                        case OBJ_OUTLINETEXT: bTitOutText = TRUE; break;
                         case OBJ_TABLE: bTable = true; break;
                     }
                 }
@@ -441,7 +446,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem( SID_UNGROUP );
             }
-            if( bTitOutText || bTable )
+            if( bTable )
                 rSet.DisableItem( SID_TEXTATTR_DLG );
 
             if( !bMeasureObj )

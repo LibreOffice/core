@@ -6351,6 +6351,33 @@ SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 TbxImageItem TextToolbox SID_DRAWTBX_TEXT
 
 [

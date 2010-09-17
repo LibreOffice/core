@@ -304,6 +304,14 @@
         Text [ en-US ] = "~Text..." ; \
     };
 
+#define MN_OUTLINE_TEXT_AUTOFIT \
+    MenuItem\
+    {\
+        Identifier = SID_OUTLINE_TEXT_AUTOFIT ; \
+        HelpID = SID_OUTLINE_TEXT_AUTOFIT ; \
+        Text [ en-US ] = "~Autofit Text" ; \
+    };
+
 #define MN_CONNECTION \
     MenuItem\
     {\

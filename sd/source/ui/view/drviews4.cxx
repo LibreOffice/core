@@ -679,9 +679,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             {
                                 switch ( nId )
                                 {
+                                    case OBJ_OUTLINETEXT:
+                                        nSdResId = bGraphicShell ? RID_GRAPHIC_OUTLINETEXTOBJ_POPUP :
+                                                                    RID_DRAW_OUTLINETEXTOBJ_POPUP;
+                                        break;
+
                                     case OBJ_CAPTION:
                                     case OBJ_TITLETEXT:
-                                    case OBJ_OUTLINETEXT:
                                     case OBJ_TEXT:
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_TEXTOBJ_POPUP :
                                                                     RID_DRAW_TEXTOBJ_POPUP;

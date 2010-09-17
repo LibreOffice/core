@@ -130,6 +130,31 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
     switch ( nSId )
     {
+        case SID_OUTLINE_TEXT_AUTOFIT:
+        {
+            SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+            SdrObject* pObj = NULL;
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                pUndoManager->EnterListAction( String(), String() );
+                mpDrawView->BegUndo();
+
+                pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+
+                mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+
+                pObj->SetMergedItem(SdrTextFitToSizeTypeItem(bSet ? SDRTEXTFIT_NONE : SDRTEXTFIT_AUTOFIT));
+
+                mpDrawView->EndUndo();
+                pUndoManager->LeaveListAction();
+            }
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
         // Flaechen und Linien-Attribute:
         // Sollten (wie StateMethode) eine eigene
         // Execute-Methode besitzen
