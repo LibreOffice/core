@@ -7,7 +7,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 class Graphic;
 class String;
