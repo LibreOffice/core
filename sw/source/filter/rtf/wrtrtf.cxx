@@ -85,8 +85,6 @@ const sal_Char SwRTFWriter::sNewLine = '\012';
 const sal_Char __FAR_DATA SwRTFWriter::sNewLine[] = "\015\012";
 #endif
 
-SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
-SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
 SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL ) :
@@ -638,13 +636,18 @@ void SwRTFWriter::OutDocInfoStat()
 
 static void InsColor( RTFColorTbl& rTbl, const Color& rCol )
 {
-    USHORT n;
-    for( n = 0; n < rTbl.Count(); ++n )
+    for( size_t n = 0; n < rTbl.size(); ++n )
         if( rTbl[n] == rCol )
-            return;         // schon vorhanden, zurueck
+            return;         // already exists, return
 
-    n = COL_AUTO == rCol.GetColor() ? 0 : rTbl.Count();
-    rTbl.Insert( rCol, n );
+    if ( COL_AUTO == rCol.GetColor() )
+    {
+        rTbl.push_front( rCol );
+    }
+    else
+    {
+        rTbl.push_back( rCol );
+    }
 }
 
 static void InsColorLine( RTFColorTbl& rTbl, const SvxBoxItem& rBox )
@@ -663,11 +666,12 @@ static void InsColorLine( RTFColorTbl& rTbl, const SvxBoxItem& rBox )
 
 void SwRTFWriter::OutRTFColorTab()
 {
-    ASSERT( pColTbl, "Wo ist meine Color-Tabelle?" );
+    ASSERT( pColTbl, "Where's table color?" );
 
     // dann baue die ColorTabelle aus allen Attributen, die Colors
     // enthalten und im Pool angemeldet sind auf.
-    USHORT n, nMaxItem;
+    size_t n;
+    USHORT nMaxItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
 
     // das Charakter - Color Attribut
@@ -765,7 +769,7 @@ void SwRTFWriter::OutRTFColorTab()
     // und raus damit
     Strm() << SwRTFWriter::sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
 
-    for( n = 0; n < pColTbl->Count(); n++ )
+    for( n = 0; n < pColTbl->size(); n++ )
     {
         const Color& rCol = (*pColTbl)[ n ];
         if( n || COL_AUTO != rCol.GetColor() )
@@ -1345,12 +1349,12 @@ void SwRTFWriter::OutFlyFrm()
 
 USHORT SwRTFWriter::GetId( const Color& rColor ) const
 {
-    ASSERT( pColTbl, "Wo ist meine Color-Tabelle?" );
-    for( USHORT n = 0; n < pColTbl->Count(); n++ )
+    ASSERT( pColTbl, "Where's color table?" );
+    for( size_t n = 0; n < pColTbl->size(); n++ )
         if( rColor == (*pColTbl)[ n ] )
             return n;
 
-    ASSERT( FALSE, "Color nicht in der Tabelle" );
+    ASSERT( FALSE, "Color not exists in the pColTbl table" );
     return 0;
 }
 

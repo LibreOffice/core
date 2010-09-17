@@ -32,6 +32,7 @@
 #ifndef _MATH_CFGITEM_HXX_
 #define _MATH_CFGITEM_HXX_
 
+#include <deque>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -41,7 +42,6 @@
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 
 #include <symbol.hxx>
@@ -82,14 +82,10 @@ struct SmFntFmtListEntry
     SmFntFmtListEntry( const String &rId, const SmFontFormat &rFntFmt );
 };
 
-
-SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 )
-
-
 class SmFontFormatList
 {
-    SmFntFmtListEntryArr    aEntries;
-    BOOL                    bModified;
+    std::deque<SmFntFmtListEntry> aEntries;
+    BOOL                          bModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmFontFormatList( const SmFontFormatList & );
@@ -103,12 +99,12 @@ public:
     void    RemoveFontFormat( const String &rFntFmtId );
 
     const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
-    const SmFontFormat *    GetFontFormat( USHORT nPos ) const;
+    const SmFontFormat *    GetFontFormat( size_t nPos ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt, BOOL bAdd );
-    const String            GetFontFormatId( USHORT nPos ) const;
+    const String            GetFontFormatId( size_t nPos ) const;
     const String            GetNewFontFormatId() const;
-    USHORT                  GetCount() const    { return aEntries.Count(); }
+    size_t                  GetCount() const    { return aEntries.size(); }
 
     BOOL    IsModified() const          { return bModified; }
     void    SetModified( BOOL bVal )    { bModified = bVal; }
