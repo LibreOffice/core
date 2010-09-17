@@ -147,6 +147,9 @@ JAVAI:=$(JAVAINTERPRETER)
 .IF "$(JAVACISGCJ)" == "yes"
 JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
 .ENDIF
+.IF "$(JDK)" != "gcj" && $(JAVACISKAFFE) != "yes"
+JAVAC+=-source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
+.ENDIF
 
 #classpath and response
 .IF "$(JDK)" == "J++"

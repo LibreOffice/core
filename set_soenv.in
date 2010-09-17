@@ -1747,6 +1747,7 @@ ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
 if ( $JDK ne "gcj" ) {
    ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
    ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
+   ToFile( "JAVACISKAFFE",     '@JAVACISKAFFE@',    "e" );
 }
 else {
    ToFile( "JAVACISGCJ",       '@JAVACISGCJ@',      "e" );
@@ -1758,6 +1759,8 @@ if ( '@JDK@' ne '' )
 { 
    ToFile( "JDK",             "@JDK@",           "e" );
    ToFile( "JAVAFLAGS",             "@JAVAFLAGS@",           "e" );
+   ToFile( "JAVA_SOURCE_VER", "@JAVA_SOURCE_VER@","e" );
+   ToFile( "JAVA_TARGET_VER", "@JAVA_TARGET_VER@","e" );
    ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
    ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
