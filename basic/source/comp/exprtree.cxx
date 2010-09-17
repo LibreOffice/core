@@ -578,9 +578,19 @@ SbiExprNode* SbiExpression::Unary()
     {
         case MINUS:
             eTok = NEG;
-        case NOT:
             pParser->Next();
             pNd = new SbiExprNode( pParser, Unary(), eTok, NULL );
+            break;
+        case NOT:
+            if( pParser->IsVBASupportOn() )
+            {
+                pNd = Operand();
+            }
+            else
+            {
+                pParser->Next();
+                pNd = new SbiExprNode( pParser, Unary(), eTok, NULL );
+            }
             break;
         case PLUS:
             pParser->Next();
@@ -725,9 +735,26 @@ SbiExprNode* SbiExpression::Comp()
     return pNd;
 }
 
+SbiExprNode* SbiExpression::VBA_Not()
+{
+    SbiExprNode* pNd = NULL;
+
+    SbiToken eTok = pParser->Peek();
+    if( eTok == NOT )
+    {
+        pParser->Next();
+        pNd = new SbiExprNode( pParser, VBA_Not(), eTok, NULL );
+    }
+    else
+    {
+        pNd = Comp();
+    }
+    return pNd;
+}
+
 SbiExprNode* SbiExpression::Like()
 {
-    SbiExprNode* pNd = Comp();
+    SbiExprNode* pNd = pParser->IsVBASupportOn() ? VBA_Not() : Comp();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         short nCount = 0;
