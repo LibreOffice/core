@@ -64,6 +64,7 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlArray.hpp>
@@ -2291,26 +2292,36 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     }
                     else if( bInvocation && mxInvocation.is() )
                     {
-                        Sequence< INT16 > OutParamIndex;
-                        Sequence< Any > OutParam;
-                        Any aRetAny = mxInvocation->invoke( pMeth->GetName(), args, OutParamIndex, OutParam );
+                        Reference< XDirectInvocation > xDirectInvoke;
+                        if ( pMeth->needsDirectInvocation() )
+                            xDirectInvoke.set( mxInvocation, UNO_QUERY );
+
+                        Any aRetAny;
+                        if ( xDirectInvoke.is() )
+                            aRetAny = xDirectInvoke->directInvoke( pMeth->GetName(), args );
+                        else
+                        {
+                            Sequence< INT16 > OutParamIndex;
+                            Sequence< Any > OutParam;
+                            aRetAny = mxInvocation->invoke( pMeth->GetName(), args, OutParamIndex, OutParam );
+
+                            const INT16* pIndices = OutParamIndex.getConstArray();
+                            UINT32 nLen = OutParamIndex.getLength();
+                            if( nLen )
+                            {
+                                const Any* pNewValues = OutParam.getConstArray();
+                                for( UINT32 j = 0 ; j < nLen ; j++ )
+                                {
+                                    INT16 iTarget = pIndices[ j ];
+                                    if( iTarget >= (INT16)nParamCount )
+                                        break;
+                                    unoToSbxValue( (SbxVariable*)pParams->Get( (USHORT)(j+1) ), pNewValues[ j ] );
+                                }
+                            }
+                        }
 
                         // Wert von Uno nach Sbx uebernehmen
                         unoToSbxValue( pVar, aRetAny );
-
-                        const INT16* pIndices = OutParamIndex.getConstArray();
-                        UINT32 nLen = OutParamIndex.getLength();
-                        if( nLen )
-                        {
-                            const Any* pNewValues = OutParam.getConstArray();
-                            for( UINT32 j = 0 ; j < nLen ; j++ )
-                            {
-                                INT16 iTarget = pIndices[ j ];
-                                if( iTarget >= (INT16)nParamCount )
-                                    break;
-                                unoToSbxValue( (SbxVariable*)pParams->Get( (USHORT)(j+1) ), pNewValues[ j ] );
-                            }
-                        }
                     }
 
                     // #55460, Parameter hier weghauen, da das in unoToSbxValue()
@@ -2571,10 +2582,12 @@ SbUnoMethod::SbUnoMethod
     const String& aName_,
     SbxDataType eSbxType,
     Reference< XIdlMethod > xUnoMethod_,
-    bool bInvocation
+    bool bInvocation,
+    bool bDirect
 )
     : SbxMethod( aName_, eSbxType )
     , mbInvocation( bInvocation )
+    , mbDirectInvocation( bDirect )
 {
     m_xUnoMethod = xUnoMethod_;
     pParamInfoSeq = NULL;
@@ -2775,6 +2788,17 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                     SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true );
                     QuickInsert( (SbxVariable*)xMethRef );
                     pRes = xMethRef;
+                }
+                else
+                {
+                    Reference< XDirectInvocation > xDirectInvoke( mxInvocation, UNO_QUERY );
+                    if ( xDirectInvoke.is() && xDirectInvoke->hasMember( aUName ) )
+                    {
+                        SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true, true );
+                        QuickInsert( (SbxVariable*)xMethRef );
+                        pRes = xMethRef;
+                    }
+
                 }
             }
             catch( RuntimeException& e )
