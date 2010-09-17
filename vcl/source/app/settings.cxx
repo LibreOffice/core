@@ -858,6 +858,9 @@ ULONG StyleSettings::GetAutoSymbolsStyle() const
 
 bool StyleSettings::CheckSymbolStyle( ULONG nStyle ) const
 {
+    if ( nStyle == STYLE_SYMBOLS_INDUSTRIAL )
+        return false; // industrial is dead
+
     static ImplImageTreeSingletonRef aImageTree;
     return aImageTree->checkStyle( ImplSymbolsStyleToName( nStyle ) );
 }
