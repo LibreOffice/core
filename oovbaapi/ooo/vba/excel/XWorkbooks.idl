@@ -44,7 +44,7 @@ module ooo {  module vba {  module excel {
 
 interface XWorkbooks : com::sun::star::uno::XInterface
 {
-    any Add();
+    any Add([in] any Template);
     any Open([in] string Filename, [in] any UpdateLinks, [in] any ReadOnly, [in] any Format, [in] any Password, [in] any WriteResPassword, [in] any IgnoreReadOnlyRecommended, [in] any Origin, [in] any Delimiter, [in] any Editable, [in] any Notify, [in] any Converter, [in] any AddToMru);
 
     void Close();

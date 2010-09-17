@@ -4432,6 +4432,19 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
     ::rtl::OUString aFunctionName = m_aPrefix;
     aFunctionName += rFunction;
 
+    sal_Bool bSetRescheduleBack = sal_False;
+    sal_Bool bOldReschedule = sal_True;
+    SbiInstance* pInst = pINST;
+    if( pInst && pInst->IsCompatibility() )
+    {
+        bOldReschedule = pInst->IsReschedule();
+        if ( bOldReschedule )
+        {
+            pInst->EnableReschedule( sal_False );
+            bSetRescheduleBack = sal_True;
+        }
+    }
+
     SbxVariable* p = xScopeObj->Find( aFunctionName, SbxCLASS_METHOD );
     SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
     if( pMeth == NULL )
@@ -4463,6 +4476,9 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
     pMeth->Call( xValue );
     aRet = sbxToUnoValue( xValue );
     pMeth->SetParameters( NULL );
+
+    if( bSetRescheduleBack )
+        pInst->EnableReschedule( bOldReschedule );
 
     // TODO: OutParameter?
 

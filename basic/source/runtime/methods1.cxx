@@ -655,6 +655,7 @@ RTLFUNC(DoEvents)
     //aTimer.Start();
     //while ( aTimer.IsActive() )
     //  Application::Reschedule();
+    Application::Reschedule( true );
 }
 
 RTLFUNC(GetGUIVersion)
