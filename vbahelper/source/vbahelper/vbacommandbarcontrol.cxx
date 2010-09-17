@@ -91,23 +91,24 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
 {
-    sal_Bool bVisible = sal_True;
+    /*sal_Bool bVisible = sal_True;
     uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
     if( aValue.hasValue() )
         aValue >>= bVisible;
-    return bVisible;
+    return bVisible;*/
+    return getEnabled();
 
 }
 void SAL_CALL
 ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 {
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
+    /*uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
     if( aValue.hasValue() )
     {
         setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible"), uno::makeAny( _visible ) );
         ApplyChange();
-    }
-
+    }*/
+    setEnabled( _visible);
 }
 
 ::sal_Bool SAL_CALL
