@@ -56,7 +56,7 @@ RES1FILELIST=\
     $(SRS)$/$(TARGET).srs
 
 RESLIB1NAME=$(TARGET)
-RESLIB1IMAGES=$(SOLARSRC)$/$(RSCDEFIMG)$/database
+RESLIB1IMAGES=$(SOLARDEFIMG)$/database
 RESLIB1SRSFILES=$(RES1FILELIST)
 
 # Note that the resource file built here is currently *not* included
