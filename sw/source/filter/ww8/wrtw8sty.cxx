@@ -300,7 +300,7 @@ void WW8AttributeOutput::EndStyle()
 }
 
 void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, USHORT nWwBase,
-    USHORT nWwNext, USHORT nWwId, USHORT /*nId*/ )
+    USHORT nWwNext, USHORT nWwId, USHORT /*nId*/, bool bAutoUpdate )
 {
     BYTE aWW8_STD[ sizeof( WW8_STD ) ];
     BYTE* pData = aWW8_STD;
@@ -322,12 +322,12 @@ void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, USHORT n
 
     if( m_rWW8Export.bWrtWW8 )
     {
+        nBit16 = bAutoUpdate ? 1 : 0;  // fAutoRedef : 1
+        Set_UInt16( pData, nBit16 );
         //-------- jetzt neu:
         // ab Ver8 gibts zwei Felder mehr:
-        //UINT16    fAutoRedef : 1;    /* auto redefine style when appropriate */
         //UINT16    fHidden : 1;       /* hidden from UI? */
         //UINT16    : 14;              /* unused bits */
-        pData += sizeof( UINT16 );
     }
 
 
@@ -525,8 +525,13 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, USHORT nPos )
 
         GetStyleData( pFmt, bFmtColl, nBase, nWwNext );
 
-        m_rExport.AttrOutput().StartStyle( pFmt->GetName(), bFmtColl,
-                nBase, nWwNext, GetWWId( *pFmt ), nPos );
+        String aName = pFmt->GetName();
+        if ( aName.EqualsAscii( "Default" ) )
+            aName = String::CreateFromAscii( "Normal" );
+
+        m_rExport.AttrOutput().StartStyle( aName, bFmtColl,
+                nBase, nWwNext, GetWWId( *pFmt ), nPos,
+                pFmt->IsAutoUpdateFmt() );
 
         if ( bFmtColl )
             WriteProperties( pFmt, true, nPos, nBase==0xfff );           // UPX.papx

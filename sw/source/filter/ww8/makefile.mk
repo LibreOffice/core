@@ -58,6 +58,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/wrtw8num.obj \
         $(SLO)$/wrtw8sty.obj \
         $(SLO)$/wrtww8.obj \
+        $(SLO)$/docxattributeoutput.obj \
         $(SLO)$/docxexportfilter.obj \
         $(SLO)$/ww8atr.obj \
         $(SLO)$/ww8par.obj \

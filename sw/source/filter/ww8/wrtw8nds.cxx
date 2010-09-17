@@ -168,76 +168,6 @@ MSWordAttrIter::~MSWordAttrIter()
     m_rExport.pChpIter = pOld;
 }
 
-// Die Klasse SwAttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
-// Dabei werden nur Zeichen-Attribute beachtet; Absatz-Attribute brauchen
-// diese Behandlung nicht.
-// Die Absatz- und Textattribute des Writers kommen rein, und es wird
-// mit Where() die naechste Position geliefert, an der sich die Attribute
-// aendern. IsTxtAtr() sagt, ob sich an der mit Where() gelieferten Position
-// ein Attribut ohne Ende und mit \xff im Text befindet.
-// Mit OutAttr() werden die Attribute an der angegebenen SwPos
-// ausgegeben.
-
-class SwAttrIter : public MSWordAttrIter
-{
-private:
-    const SwTxtNode& rNd;
-
-    CharRuns maCharRuns;
-    cCharRunIter maCharRunIter;
-
-    rtl_TextEncoding meChrSet;
-    sal_uInt16 mnScript;
-    bool mbCharIsRTL;
-
-    const SwRedline* pCurRedline;
-    xub_StrLen nAktSwPos;
-    USHORT nCurRedlinePos;
-
-    bool mbParaIsRTL;
-
-    const SwFmtDrop &mrSwFmtDrop;
-
-    sw::Frames maFlyFrms;     // #i2916#
-    sw::FrameIter maFlyIter;
-
-    xub_StrLen SearchNext( xub_StrLen nStartPos );
-    void FieldVanish( const String& rTxt );
-
-    void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
-
-    void IterToCurrent();
-
-    //No copying
-    SwAttrIter(const SwAttrIter&);
-    SwAttrIter& operator=(const SwAttrIter&);
-public:
-    SwAttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
-
-    bool IsTxtAttr( xub_StrLen nSwPos );
-    bool IsRedlineAtEnd( xub_StrLen nPos ) const;
-    bool IsDropCap( int nSwPos );
-    bool RequiresImplicitBookmark();
-
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
-
-    void OutAttr( xub_StrLen nSwPos );
-    virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
-    virtual const SfxPoolItem& GetItem( USHORT nWhich ) const;
-    int OutAttrWithRange(xub_StrLen nPos);
-    const SwRedlineData* GetRedline( xub_StrLen nPos );
-    void OutFlys(xub_StrLen nSwPos);
-
-    xub_StrLen WhereNext() const    { return nAktSwPos; }
-    sal_uInt16 GetScript() const { return mnScript; }
-    bool IsCharRTL() const { return mbCharIsRTL; }
-    bool IsParaRTL() const { return mbParaIsRTL; }
-    rtl_TextEncoding GetCharSet() const { return meChrSet; }
-    String GetSnippet(const String &rStr, xub_StrLen nAktPos,
-        xub_StrLen nLen) const;
-    const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
-};
-
 class sortswflys :
     public std::binary_function<const sw::Frame&, const sw::Frame&, bool>
 {
@@ -456,7 +386,14 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
     return nMinPos;
 }
 
-void SwAttrIter::OutAttr( xub_StrLen nSwPos )
+bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
+{
+    return ( rItem.Which( ) == RES_CHRATR_FONTSIZE ||
+            rItem.Which( ) == RES_CHRATR_CJK_FONTSIZE ||
+            rItem.Which( ) == RES_CHRATR_CTL_FONTSIZE );
+}
+
+void SwAttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
 {
     m_rExport.AttrOutput().RTLAndCJKState( IsCharRTL(), GetScript() );
 
@@ -544,7 +481,10 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
 
     sw::cPoolItemIter aEnd = aRangeItems.end();
     for ( sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
-        aExportItems[aI->first] = aI->second;
+    {
+        if ( !bRuby || !lcl_isFontsizeItem( *aI->second ) )
+            aExportItems[aI->first] = aI->second;
+    }
 
     if ( !aExportItems.empty() )
     {
@@ -697,7 +637,7 @@ const SfxPoolItem& SwAttrIter::GetItem(USHORT nWhich) const
     return pRet ? *pRet : rNd.SwCntntNode::GetAttr(nWhich);
 }
 
-void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby )
+void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/, const SwFmtRuby& rRuby )
 {
     String aStr( FieldString( ww::eEQ ) );
     aStr.APPEND_CONST_ASC( "\\* jc" );
@@ -1217,7 +1157,7 @@ int SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
                 case RES_TXTATR_CJK_RUBY:
                     if ( nPos == *pHt->GetStart() )
                     {
-                        m_rExport.AttrOutput().StartRuby( rNd, *static_cast< const SwFmtRuby* >( pItem ) );
+                        m_rExport.AttrOutput().StartRuby( rNd, nPos, *static_cast< const SwFmtRuby* >( pItem ) );
                         ++nRet;
                     }
                     if ( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )

@@ -102,7 +102,7 @@ public:
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby );
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
 
     /// Output ruby end.
     virtual void EndRuby();
@@ -175,7 +175,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId );
+            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId,
+            bool bAutoUpdate );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
@@ -541,6 +542,7 @@ private:
     ::sax_fastparser::FastAttributeList *m_pCharLangAttrList;
     ::sax_fastparser::FastAttributeList *m_pSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
+    ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
@@ -582,6 +584,8 @@ private:
     // Remember that a column break has to be opened at the
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
+
+    const sw::Frame *m_pParentFrame;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );

@@ -31,6 +31,13 @@
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
+#include "fmtcntnt.hxx"
+#include "fmtsrnd.hxx"
+#include "fchrfmt.hxx"
+#include "tgrditem.hxx"
+#include "fmtruby.hxx"
+#include "charfmt.hxx"
+#include "breakit.hxx"
 
 #include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
@@ -207,6 +214,25 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     FinishTableRowCell( pTextNodeInfoInner );
 
     m_bParagraphOpened = false;
+
+    // Write the anchored frame if any
+    if ( m_pParentFrame )
+    {
+        const SwFrmFmt& rFrmFmt = m_pParentFrame->GetFrmFmt( );
+        const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+
+        ULONG nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+        ULONG nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+        m_rExport.SaveData( nStt, nEnd );
+
+        m_rExport.mpParentFrame = m_pParentFrame;
+        m_pParentFrame = NULL;
+
+        m_rExport.WriteText( );
+
+        m_rExport.RestoreData();
+    }
 }
 
 void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph )
@@ -286,6 +312,14 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
+    if ( m_pFlyAttrList )
+    {
+        XFastAttributeListRef xAttrList( m_pFlyAttrList );
+        m_pFlyAttrList = NULL;
+
+        m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
+    }
+
     if ( m_pSpacingAttrList )
     {
         XFastAttributeListRef xAttrList( m_pSpacingAttrList );
@@ -745,14 +779,75 @@ void DocxAttributeOutput::RawText( const String& /*rText*/, bool /*bForceUnicode
     OSL_TRACE("TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )\n" );
 }
 
-void DocxAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, const SwFmtRuby& /*rRuby*/ )
+void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby )
 {
     OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby )\n" );
+    m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_rubyPr, FSEND );
+    // hps
+    // hpsBaseText
+    // hpsRaise
+    // lid
+    lang::Locale aLocale( SwBreakIt::Get()->GetLocale(
+                rNode.GetLang( nPos ) ) );
+    OUString sLang( aLocale.Language );
+    if ( aLocale.Country.getLength( ) > 0 )
+        sLang += OUString::createFromAscii( "-" ) + OUString( aLocale.Country );
+    m_pSerializer->singleElementNS( XML_w, XML_lid,
+            FSNS( XML_w, XML_val ),
+            OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
+
+
+    OString sAlign ( "center" );
+    switch ( rRuby.GetAdjustment( ) )
+    {
+        case 0:
+            sAlign = OString( "left" );
+            break;
+        case 1:
+            // Defaults to center
+            break;
+        case 2:
+            sAlign = OString( "right" );
+            break;
+        case 3:
+            sAlign = OString( "distributeLetter" );
+            break;
+        case 4:
+            sAlign = OString( "distributeSpace" );
+            break;
+        default:
+            break;
+    }
+    m_pSerializer->singleElementNS( XML_w, XML_rubyAlign,
+            FSNS( XML_w, XML_val ), sAlign.getStr(), FSEND );
+    m_pSerializer->endElementNS( XML_w, XML_rubyPr );
+
+    m_pSerializer->startElementNS( XML_w, XML_rt, FSEND );
+    StartRun( NULL );
+    StartRunProperties( );
+    SwAttrIter aAttrIt( m_rExport, rNode );
+    aAttrIt.OutAttr( nPos, true );
+    USHORT nStyle = m_rExport.GetId( *rRuby.GetTxtRuby()->GetCharFmt() );
+    OString aStyleId( "style" );
+    aStyleId += OString::valueOf( sal_Int32( nStyle ) );
+    m_pSerializer->singleElementNS( XML_w, XML_rStyle,
+            FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
+    EndRunProperties( NULL );
+    RunText( rRuby.GetText( ) );
+    EndRun( );
+    m_pSerializer->endElementNS( XML_w, XML_rt );
+
+    m_pSerializer->startElementNS( XML_w, XML_rubyBase, FSEND );
+    StartRun( NULL );
 }
 
 void DocxAttributeOutput::EndRuby()
 {
     OSL_TRACE( "TODO DocxAttributeOutput::EndRuby()\n" );
+    EndRun( );
+    m_pSerializer->endElementNS( XML_w, XML_rubyBase );
+    m_pSerializer->endElementNS( XML_w, XML_ruby );
 }
 
 bool DocxAttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget, String* pLinkURL, String* pMark )
@@ -1693,6 +1788,12 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 }
             }
             break;
+        case sw::Frame::eTxtBox:
+            {
+                // The frame output is postponed at the end of the anchor paragraph
+                m_pParentFrame = &rFrame;
+            }
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 0
             OSL_TRACE( "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& rNdTopLeft ) - frame type '%s'\n",
@@ -1707,7 +1808,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
 }
 
 void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
-        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId )
+        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId, bool bAutoUpdate )
 {
     OString aStyle( "style" );
 
@@ -1730,6 +1831,9 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
     m_pSerializer->singleElementNS( XML_w, XML_next,
             FSNS( XML_w, XML_val ), ( aStyle + OString::valueOf( sal_Int32( nNext ) ) ).getStr(),
             FSEND );
+
+    if ( bAutoUpdate )
+        m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );
 }
 
 void DocxAttributeOutput::EndStyle()
@@ -2247,11 +2351,43 @@ void DocxAttributeOutput::CharCrossedOut( const SvxCrossedOutItem& rCrossedOut )
     }
 }
 
-void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& /*rEscapement*/ )
+void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::CharEscapement()\n" );
-#endif
+    OString sIss;
+    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProp();
+    if ( !nEsc )
+    {
+        sIss = OString( "baseline" );
+        nEsc = 0;
+        nProp = 100;
+    }
+    else if ( DFLT_ESC_PROP == nProp )
+    {
+        if ( DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc )
+            sIss = OString( "subscript" );
+        else if ( DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc )
+            sIss = OString( "superscript" );
+    }
+
+    if ( sIss.getLength( ) > 0 )
+        m_pSerializer->singleElementNS( XML_w, XML_vertAlign,
+           FSNS( XML_w, XML_val ), sIss.getStr(), FSEND );
+
+    if ( sIss.getLength() == 0 || sIss.match( OString( "baseline" ) ) )
+    {
+        long nHeight = ((SvxFontHeightItem&)m_rExport.GetItem(
+                                    RES_CHRATR_FONTSIZE )).GetHeight();
+        OString sPos = OString::valueOf( ( nHeight * nEsc + 500 ) / 1000 );
+        m_pSerializer->singleElementNS( XML_w, XML_position,
+                FSNS( XML_w, XML_val ), sPos.getStr( ), FSEND );
+
+        if( 100 != nProp || sIss.match( OString( "baseline" ) ) )
+        {
+            OString sSize = OString::valueOf( ( nHeight * nProp + 500 ) / 1000 );
+                m_pSerializer->singleElementNS( XML_w, XML_sz,
+                    FSNS( XML_w, XML_val ), sSize.getStr( ), FSEND );
+        }
+    }
 }
 
 void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
@@ -2283,7 +2419,7 @@ void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
 void DocxAttributeOutput::CharKerning( const SvxKerningItem& rKerning )
 {
     OString aKerning = OString::valueOf( ( sal_Int32 ) rKerning.GetValue() );
-    m_pSerializer->singleElementNS( XML_w, XML_kern, FSNS(XML_w, XML_val), aKerning.getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_spacing, FSNS(XML_w, XML_val), aKerning.getStr(), FSEND );
 }
 
 void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
@@ -2536,11 +2672,12 @@ void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& )
+void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::TextCharFormat()\n" );
-#endif
+    OString aStyleId( "style" );
+    aStyleId += OString::valueOf( sal_Int32( m_rExport.GetId( *rCharFmt.GetCharFmt() ) ) );
+
+    m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
 void DocxAttributeOutput::RefField( const SwField&  rFld, const String& rRef )
@@ -2954,9 +3091,22 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 {
     if ( m_rExport.bOutFlyFrmAttrs )
     {
- #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatFrameSize() - Fly frames\n" );
- #endif
+        if ( !m_pFlyAttrList )
+            m_pFlyAttrList = m_pSerializer->createAttrList( );
+
+        if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE )
+        {
+            m_pFlyAttrList->add( FSNS( XML_w, XML_w ), OString::valueOf( rSize.GetWidth( ) ) );
+        }
+
+        if ( rSize.GetHeight() )
+        {
+            OString sRule( "exact" );
+            if ( rSize.GetHeightSizeType() == ATT_MIN_SIZE )
+                sRule = OString( "atLeast" );
+            m_pFlyAttrList->add( FSNS( XML_w, XML_hRule ), sRule );
+            m_pFlyAttrList->add( FSNS( XML_w, XML_h ), OString::valueOf( rSize.GetHeight( ) ) );
+        }
     }
     else if ( m_rExport.bOutPageDescs )
     {
@@ -2986,9 +3136,12 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 {
     if ( m_rExport.bOutFlyFrmAttrs )
     {
-#if OSL_DEBUG_LEVEL > 0
-        OSL_TRACE( "DocxAttributeOutput::FormatLRSpace() - Fly frames\n" );
-#endif
+        if ( !m_pFlyAttrList )
+            m_pFlyAttrList = m_pSerializer->createAttrList();
+
+        m_pFlyAttrList->add( FSNS( XML_w, XML_hSpace ),
+                OString::valueOf(
+                    sal_Int32( ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ) ) );
     }
     else if ( m_rExport.bOutPageDescs )
     {
@@ -3029,11 +3182,17 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
 void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 {
-    if (!m_pSpacingAttrList)
+    if ( !m_pSpacingAttrList && !m_rExport.bOutFlyFrmAttrs )
         m_pSpacingAttrList = m_pSerializer->createAttrList();
 
     if ( m_rExport.bOutFlyFrmAttrs )
     {
+        if ( !m_pFlyAttrList )
+            m_pFlyAttrList = m_pSerializer->createAttrList();
+
+        m_pFlyAttrList->add( FSNS( XML_w, XML_vSpace ),
+                OString::valueOf(
+                    sal_Int32( ( rULSpace.GetLower() + rULSpace.GetUpper() ) / 2 ) ) );
     }
     else if (m_rExport.bOutPageDescs )
     {
@@ -3075,32 +3234,150 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     }
 }
 
-void DocxAttributeOutput::FormatSurround( const SwFmtSurround& )
+void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatSurround()\n" );
-#endif
+    if ( m_rExport.bOutFlyFrmAttrs )
+    {
+        if ( !m_pFlyAttrList )
+            m_pFlyAttrList = m_pSerializer->createAttrList();
+
+        OString sWrap( "auto" );
+        switch ( rSurround.GetSurround( ) )
+        {
+            case SURROUND_NONE:
+                sWrap = OString( "none" );
+                break;
+            case SURROUND_THROUGHT:
+                sWrap = OString( "through" );
+                break;
+            case SURROUND_IDEAL:
+            case SURROUND_PARALLEL:
+            case SURROUND_LEFT:
+            case SURROUND_RIGHT:
+            default:
+                sWrap = OString( "around" );
+        }
+
+        m_pFlyAttrList->add( FSNS( XML_w, XML_wrap ), sWrap );
+    }
 }
 
-void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& )
+void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert )
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatVertOrientation()\n" );
-#endif
+    if ( m_rExport.bOutFlyFrmAttrs )
+    {
+        if ( !m_pFlyAttrList )
+            m_pFlyAttrList = m_pSerializer->createAttrList();
+
+        OString sAlign;
+        switch( rFlyVert.GetVertOrient() )
+        {
+            case text::VertOrientation::NONE:
+                break;
+            case text::VertOrientation::CENTER:
+            case text::VertOrientation::LINE_CENTER:
+                sAlign = OString( "center" );
+                break;
+            case text::VertOrientation::BOTTOM:
+            case text::VertOrientation::LINE_BOTTOM:
+                sAlign = OString( "bottom" );
+                break;
+            case text::VertOrientation::TOP:
+            case text::VertOrientation::LINE_TOP:
+            default:
+                sAlign = OString( "top" );
+                break;
+        }
+
+        if ( sAlign.getLength() > 0 )
+            m_pFlyAttrList->add( FSNS( XML_w, XML_yAlign ), sAlign );
+        else
+            m_pFlyAttrList->add( FSNS( XML_w, XML_y ),
+                OString::valueOf( sal_Int32( rFlyVert.GetPos() ) ) );
+
+        OString sVAnchor( "page" );
+        switch ( rFlyVert.GetRelationOrient( ) )
+        {
+            case text::RelOrientation::CHAR:
+            case text::RelOrientation::PRINT_AREA:
+            case text::RelOrientation::TEXT_LINE:
+                sVAnchor = OString( "column" );
+                break;
+            case text::RelOrientation::FRAME:
+            case text::RelOrientation::PAGE_LEFT:
+            case text::RelOrientation::PAGE_RIGHT:
+            case text::RelOrientation::FRAME_LEFT:
+            case text::RelOrientation::FRAME_RIGHT:
+                sVAnchor = OString( "margin" );
+                break;
+            case text::RelOrientation::PAGE_FRAME:
+            case text::RelOrientation::PAGE_PRINT_AREA:
+            default:
+                break;
+        }
+
+        m_pFlyAttrList->add( FSNS( XML_w, XML_vAnchor ), sVAnchor );
+    }
 }
 
-void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& )
+void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori )
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatHorizOrientation()\n" );
-#endif
+    if ( m_rExport.bOutFlyFrmAttrs )
+    {
+        if ( !m_pFlyAttrList )
+            m_pFlyAttrList = m_pSerializer->createAttrList();
+
+        OString sAlign;
+        switch( rFlyHori.GetHoriOrient() )
+        {
+            case text::HoriOrientation::NONE:
+                break;
+            case text::HoriOrientation::LEFT:
+                sAlign = OString( rFlyHori.IsPosToggle( ) ? "inside" : "left" );
+                break;
+            case text::HoriOrientation::RIGHT:
+                sAlign = OString( rFlyHori.IsPosToggle( ) ? "outside" : "right" );
+                break;
+            case text::HoriOrientation::CENTER:
+            case text::HoriOrientation::FULL: // FULL only for tables
+            default:
+                sAlign = OString( "center" );
+                break;
+        }
+
+        if ( sAlign.getLength() > 0 )
+            m_pFlyAttrList->add( FSNS( XML_w, XML_xAlign ), sAlign );
+        else
+            m_pFlyAttrList->add( FSNS( XML_w, XML_x ),
+                OString::valueOf( sal_Int32( rFlyHori.GetPos() ) ) );
+
+        OString sHAnchor( "page" );
+        switch ( rFlyHori.GetRelationOrient( ) )
+        {
+            case text::RelOrientation::CHAR:
+            case text::RelOrientation::PRINT_AREA:
+                sHAnchor = OString( "text" );
+                break;
+            case text::RelOrientation::FRAME:
+            case text::RelOrientation::PAGE_LEFT:
+            case text::RelOrientation::PAGE_RIGHT:
+            case text::RelOrientation::FRAME_LEFT:
+            case text::RelOrientation::FRAME_RIGHT:
+                sHAnchor = OString( "margin" );
+                break;
+            case text::RelOrientation::PAGE_FRAME:
+            case text::RelOrientation::PAGE_PRINT_AREA:
+            default:
+                break;
+        }
+
+        m_pFlyAttrList->add( FSNS( XML_w, XML_hAnchor ), sHAnchor );
+    }
 }
 
 void DocxAttributeOutput::FormatAnchor( const SwFmtAnchor& )
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatAnchor()\n" );
-#endif
+    // Fly frames: anchors here aren't matching the anchors in docx
 }
 
 void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
@@ -3112,10 +3389,6 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
                 FSNS( XML_w, XML_fill ), sColor.getStr( ),
                 FSEND );
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatBackground()\n" );
-#endif
 }
 
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
@@ -3198,9 +3471,52 @@ void DocxAttributeOutput::FormatKeep( const SvxFmtKeepItem& )
     m_pSerializer->singleElementNS( XML_w, XML_keepNext, FSEND );
 }
 
-void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& )
+void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatTextGrid()\n" );
+    FastAttributeList *pGridAttrList = m_pSerializer->createAttrList();
+
+    OString sGridType;
+    switch ( rGrid.GetGridType( ) )
+    {
+        default:
+        case GRID_NONE:
+            sGridType = OString( "default" );
+            break;
+        case GRID_LINES_ONLY:
+            sGridType = OString( "lines" );
+            break;
+        case GRID_LINES_CHARS:
+            if ( rGrid.IsSnapToChars( ) )
+                sGridType = OString( "snapToChars" );
+            else
+                sGridType = OString( "linesAndChars" );
+            break;
+    }
+    pGridAttrList->add( FSNS( XML_w, XML_type ), sGridType.getStr( ) );
+
+    UINT16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
+    pGridAttrList->add( FSNS( XML_w, XML_linePitch ),
+            OString::valueOf( sal_Int32( nHeight ) ).getStr( ) );
+
+    MSWordStyles * pStyles = m_rExport.pStyles;
+    SwFmt * pSwFmt = pStyles->GetSwFmt();
+
+    sal_uInt32 nPageCharSize = 0;
+
+    if (pSwFmt != NULL)
+    {
+        nPageCharSize = ItemGet<SvxFontHeightItem>
+        (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
+    }
+
+    sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
+        rGrid.GetBaseWidth( );
+    INT32 nCharSpace = ( nPitch - nPageCharSize ) * 4096 / 20;
+
+    pGridAttrList->add( FSNS( XML_w, XML_charSpace ),
+            OString::valueOf( sal_Int32( nCharSpace ) ).getStr( ) );
+
+    m_pSerializer->singleElementNS( XML_w, XML_docGrid, pGridAttrList );
 }
 
 void DocxAttributeOutput::FormatLineNumbering( const SwFmtLineNumber& rNumbering )
@@ -3258,6 +3574,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pCharLangAttrList( NULL ),
       m_pSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
+      m_pFlyAttrList( NULL ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_pSectionInfo( NULL ),
@@ -3270,7 +3587,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bTableCellOpen( false ),
       m_nTableDepth( 0 ),
       m_bParagraphOpened( false ),
-      m_nColBreakStatus( COLBRK_NONE )
+      m_nColBreakStatus( COLBRK_NONE ),
+      m_pParentFrame( NULL )
 {
 }
 
@@ -3281,11 +3599,13 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pCharLangAttrList, m_pCharLangAttrList = NULL;
     delete m_pSpacingAttrList, m_pSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
+    delete m_pFlyAttrList, m_pFlyAttrList = NULL;
 
     delete m_pFootnotesList, m_pFootnotesList = NULL;
     delete m_pEndnotesList, m_pEndnotesList = NULL;
 
     delete m_pTableWrt, m_pTableWrt = NULL;
+    m_pParentFrame = NULL;
 }
 
 MSWordExportBase& DocxAttributeOutput::GetExport()

@@ -435,7 +435,7 @@ void RtfAttributeOutput::RawText( const String& rText, bool /*bForceUnicode*/, r
     m_aRunText.append(m_rExport.OutString(rText, eCharSet));
 }
 
-void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, const SwFmtRuby& /*rRuby*/ )
+void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, xub_StrLen /*nPos*/, const SwFmtRuby& /*rRuby*/ )
 {
     OSL_TRACE("TODO: %s", OSL_THIS_FUNC);
 }
@@ -1000,7 +1000,7 @@ void RtfAttributeOutput::DefaultStyle( USHORT /*nStyle*/ )
 }
 
 void RtfAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
-        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId )
+        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId, bool /*bAutoUpdate*/ )
 {
     OSL_TRACE("%s, rName = '%s'", OSL_THIS_FUNC,
             OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ).getStr());

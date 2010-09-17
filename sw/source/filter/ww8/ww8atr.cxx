@@ -3774,25 +3774,12 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         if (pSwFmt != NULL)
         {
             nPageCharSize = ItemGet<SvxFontHeightItem>
-            (*pSwFmt, RES_CHRATR_CJK_FONTSIZE).GetHeight();
+            (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
         }
+        sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
+            rGrid.GetBaseWidth( );
+        INT32 nCharSpace = ( nPitch - nPageCharSize ) * 4096 / 20;
 
-        INT32 nCharWidth = rGrid.GetBaseWidth() - nPageCharSize;
-        INT32 nFraction = 0;
-        nFraction = nCharWidth % 20;
-        if ( nCharWidth < 0 )
-            nFraction = 20 + nFraction;
-        nFraction = ( nFraction * 0xFFF ) / 20;
-        nFraction = ( nFraction & 0x00000FFF );
-
-        INT32 nMain = 0;
-        nMain = nCharWidth / 20;
-        if ( nCharWidth < 0 )
-            nMain -= 1;
-        nMain = nMain * 0x1000;
-        nMain = ( nMain & 0xFFFFF000 );
-
-        UINT32 nCharSpace = nFraction + nMain;
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDxtCharSpace );
         m_rWW8Export.InsUInt32( nCharSpace );
     }
