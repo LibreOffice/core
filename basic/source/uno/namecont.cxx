@@ -2828,6 +2828,23 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
 
         if( StarBASIC* pBasic = pBasMgr->GetLib( aLibName ) )
             pBasic->SetVBAEnabled( _vbacompatmodeon );
+
+        /*  If in VBA compatibility mode, force creation of the VBA Globals
+            object. Each application will create an instance of its own
+            implementation and store it in its Basic manager. Implementations
+            will do all necessary additional initialization, such as
+            registering the global "This***Doc" UNO constant, starting the
+            document events processor etc.
+         */
+        if( mbVBACompat ) try
+        {
+            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
     }
 }
 
