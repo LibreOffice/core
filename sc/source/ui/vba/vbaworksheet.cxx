@@ -917,7 +917,8 @@ ScVbaWorksheet::getFormControls()
         // get the www-standard container ( maybe we should access the
         // 'www-standard' by name rather than index, this seems an
         // implementation detail
-        xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
+        if( xIndexAccess->hasElements() )
+            xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
 
     }
     catch( uno::Exception& )
