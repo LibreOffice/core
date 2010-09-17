@@ -451,8 +451,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
             default: ; //prevent warning
                 DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
-            //case STATE_CHECK: eFTS = SDRTEXTFIT_RESIZEATTR; break;
-            case STATE_CHECK: eFTS = SDRTEXTFIT_PROPORTIONAL; break;
+            case STATE_CHECK: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }
         rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
