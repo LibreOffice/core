@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #include <svl/brdcst.hxx>
+#include <boost/shared_ptr.hpp>
 
 
 #ifndef DELETEZ
@@ -54,7 +55,9 @@ struct SfxPoolVersion_Impl
 };
 
 SV_DECL_PTRARR( SfxPoolItemArrayBase_Impl, SfxPoolItem*, 0, 5 )
-SV_DECL_PTRARR_DEL( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl*, 0, 2 )
+
+typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
+typedef std::vector< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
 
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {

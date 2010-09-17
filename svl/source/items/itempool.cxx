@@ -39,13 +39,7 @@
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
 #include <algorithm>
-
-// STATIC DATA -----------------------------------------------------------
-
-
-//========================================================================
-
-SV_IMPL_PTRARR( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl* );
+#include <vector>
 
 //========================================================================
 
@@ -275,13 +269,12 @@ SfxItemPool::SfxItemPool
             (*( ppPoolDefaults + n ))->SetKind( SFX_ITEMS_POOLDEFAULT );
         }
 
-    // Version-Map kopieren
-    USHORT nVerCount = rPool.pImp->aVersions.Count();
-    for ( USHORT nVer = 0; nVer < nVerCount; ++nVer )
+    // Copy Version-Map
+    for ( size_t nVer = 0; nVer < rPool.pImp->aVersions.size(); ++nVer )
     {
-        const SfxPoolVersion_Impl *pOld = rPool.pImp->aVersions.GetObject(nVer);
-        const SfxPoolVersion_Impl *pNew = new SfxPoolVersion_Impl( *pOld );
-        pImp->aVersions.Insert( pNew, nVer );
+        const SfxPoolVersion_ImplPtr pOld = rPool.pImp->aVersions[nVer];
+        SfxPoolVersion_ImplPtr pNew = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl( *pOld ) );
+        pImp->aVersions.push_back( pNew );
     }
 
     // Verkettung wiederherstellen

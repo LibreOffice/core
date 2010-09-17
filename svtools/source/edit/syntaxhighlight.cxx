@@ -34,9 +34,6 @@
 #include <tools/debug.hxx>
 
 
-SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
-
-
 // ##########################################################################
 // ATTENTION: all these words needs to be in small caps
 // ##########################################################################
@@ -849,7 +846,7 @@ void SimpleTokenizer_Impl::getHighlightPortions( UINT32 nParseLine, const String
         portion.nEnd = (UINT16)(pEndPos - mpStringBegin);
         portion.tokenType = eType;
 
-        portions.Insert(portion, portions.Count());
+        portions.push_back(portion);
     }
 }
 

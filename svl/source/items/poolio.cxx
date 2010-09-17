@@ -178,10 +178,10 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     // Version-Maps
     {
         SfxMultiVarRecordWriter aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP, 0 );
-        for ( USHORT nVerNo = 0; nVerNo < pImp->aVersions.Count(); ++nVerNo )
+        for ( size_t nVerNo = 0; nVerNo < pImp->aVersions.size(); ++nVerNo )
         {
             aVerRec.NewContent();
-            SfxPoolVersion_Impl *pVer = pImp->aVersions[nVerNo];
+            SfxPoolVersion_ImplPtr pVer = pImp->aVersions[nVerNo];
             rStream << pVer->_nVer << pVer->_nStart << pVer->_nEnd;
             USHORT nCount = pVer->_nEnd - pVer->_nStart + 1;
             USHORT nNewWhich = 0;
@@ -611,10 +611,10 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             rStream >> nVersion >> nHStart >> nHEnd;
             USHORT nCount = nHEnd - nHStart + 1;
 
-            // Version neuer als bekannt?
-            if ( nVerNo >= pImp->aVersions.Count() )
+            // Is new version is known?
+            if ( nVerNo >= pImp->aVersions.size() )
             {
-                // neue Version hinzufuegen
+                // Add new Version
                 USHORT *pMap = new USHORT[nCount];
                 for ( USHORT n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
@@ -799,10 +799,10 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             USHORT nCount = nHEnd - nHStart + 1;
             USHORT nBytes = (nCount)*sizeof(USHORT);
 
-            // Version neuer als bekannt?
-            if ( nVerNo >= pImp->aVersions.Count() )
+            // Is new version is known?
+            if ( nVerNo >= pImp->aVersions.size() )
             {
-                // neue Version hinzufuegen
+                // Add new Version
                 USHORT *pMap = new USHORT[nCount];
                 for ( USHORT n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
@@ -1326,10 +1326,10 @@ void SfxItemPool::SetVersionMap
 */
 
 {
-    // neuen Map-Eintrag erzeugen und einf"ugen
-    const SfxPoolVersion_Impl *pVerMap = new SfxPoolVersion_Impl(
-                nVer, nOldStart, nOldEnd, pOldWhichIdTab );
-    pImp->aVersions.Insert( pVerMap, pImp->aVersions.Count() );
+    // create new map entry to insert
+    const SfxPoolVersion_ImplPtr pVerMap = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl(
+                nVer, nOldStart, nOldEnd, pOldWhichIdTab ) );
+    pImp->aVersions.push_back( pVerMap );
 
     DBG_ASSERT( nVer > pImp->nVersion, "Versions not sorted" );
     pImp->nVersion = nVer;
@@ -1398,9 +1398,9 @@ USHORT SfxItemPool::GetNewWhich
     if ( nDiff > 0 )
     {
         // von der Top-Version bis runter zur File-Version stufenweise mappen
-        for ( USHORT nMap = pImp->aVersions.Count(); nMap > 0; --nMap )
+        for ( size_t nMap = pImp->aVersions.size(); nMap > 0; --nMap )
         {
-            SfxPoolVersion_Impl *pVerInfo = pImp->aVersions[nMap-1];
+            SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap-1];
             if ( pVerInfo->_nVer > pImp->nVersion )
             {   USHORT nOfs;
                 USHORT nCount = pVerInfo->_nEnd - pVerInfo->_nStart + 1;
@@ -1424,9 +1424,9 @@ USHORT SfxItemPool::GetNewWhich
     else if ( nDiff < 0 )
     {
         // von der File-Version bis zur aktuellen Version stufenweise mappen
-        for ( USHORT nMap = 0; nMap < pImp->aVersions.Count(); ++nMap )
+        for ( size_t nMap = 0; nMap < pImp->aVersions.size(); ++nMap )
         {
-            SfxPoolVersion_Impl *pVerInfo = pImp->aVersions[nMap];
+            SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap];
             if ( pVerInfo->_nVer > pImp->nLoadingVersion )
             {
                 DBG_ASSERT( nFileWhich >= pVerInfo->_nStart &&

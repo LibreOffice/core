@@ -29,12 +29,23 @@
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
+#include <vector>
 
-class SfxItemModifyArr_Impl;
+//------------------------------------------------------------------------
+
 class SfxItemPool;
 class SfxItemSet;
 class SfxPoolItem;
 class SfxSetItem;
+
+struct SfxItemModifyImpl
+{
+    const SfxSetItem  *pOrigItem;
+    SfxSetItem        *pPoolItem;
+};
+
+typedef std::vector<SfxItemModifyImpl> SfxItemModifyArr_Impl;
+
 
 class SVL_DLLPUBLIC SfxItemPoolCache
 {
