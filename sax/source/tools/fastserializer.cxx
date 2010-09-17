@@ -34,6 +34,10 @@
 
 #include <string.h>
 
+#if DEBUG
+#include <cstdio>
+#endif
+
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -321,6 +325,28 @@ namespace sax_fastparser {
         maMarkStack.push( ForMerge() );
     }
 
+#if DEBUG
+    void FastSaxSerializer::printMarkStack( )
+    {
+        ::std::stack< ForMerge > aCopy( maMarkStack );
+        int nSize = aCopy.size();
+        int i = 0;
+        while ( !aCopy.empty() )
+        {
+            fprintf( stderr, "%d\n", nSize - i );
+
+            ForMerge aMarks = aCopy.top( );
+            aMarks.print();
+
+
+            fprintf( stderr, "\n" );
+
+            aCopy.pop( );
+            i++;
+        }
+    }
+#endif
+
     void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {
         if ( maMarkStack.empty() )
@@ -359,6 +385,25 @@ namespace sax_fastparser {
 
         return maData;
     }
+
+#if DEBUG
+    void FastSaxSerializer::ForMerge::print( )
+    {
+        fprintf( stderr, "Data: " );
+        for ( sal_Int32 i=0, len=maData.getLength(); i < len; i++ )
+        {
+            fprintf( stderr, "%c", maData[i] );
+        }
+
+        fprintf( stderr, "\nPostponed: " );
+        for ( sal_Int32 i=0, len=maPostponed.getLength(); i < len; i++ )
+        {
+            fprintf( stderr, "%c", maPostponed[i] );
+        }
+
+        fprintf( stderr, "\n" );
+    }
+#endif
 
     void FastSaxSerializer::ForMerge::prepend( const Int8Sequence &rWhat )
     {

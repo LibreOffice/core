@@ -134,6 +134,9 @@ private:
         ForMerge() : maData(), maPostponed() {}
 
         Int8Sequence& getData();
+#if DEBUG
+        void print();
+#endif
 
         void prepend( const Int8Sequence &rWhat );
         void append( const Int8Sequence &rWhat );
@@ -142,6 +145,10 @@ private:
     private:
         static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
     };
+
+#if DEBUG
+        void printMarkStack( );
+#endif
 
     ::std::stack< ForMerge > maMarkStack;
 
