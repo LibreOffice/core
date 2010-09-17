@@ -99,7 +99,7 @@ SV_DECL_VARARR(SbiBreakpoints,USHORT,4,4)
 SV_IMPL_VARARR(SbiBreakpoints,USHORT)
 
 
-SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
+typedef std::vector<HighlightPortion> HighlightPortions;
 
 bool getDefaultVBAMode( StarBASIC* pb )
 {
