@@ -4338,15 +4338,20 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
                     ++nPropsToAdd;
             }
 
+            bool bVBACompat = false;
             uno::Reference <container::XNameAccess> xCodeNameAccess;
             DBG_ASSERT( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
             if( pDoc && pDoc->IsInVBAMode() )
             {
+                // VBA compatibility mode
+                bVBACompat = true;
+                ++nPropsToAdd;
+                // code names
                 xCodeNameAccess = new XMLCodeNameProvider( pDoc );
-                if( xCodeNameAccess.is() && xCodeNameAccess->hasElements() )
+                if( xCodeNameAccess->hasElements() )
                     ++nPropsToAdd;
                 else
-                    xCodeNameAccess = 0;
+                    xCodeNameAccess.clear();
             }
 
             if( nPropsToAdd > 0 )
@@ -4359,10 +4364,17 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
                     rProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
                     ++nCount;
                 }
+                if( bVBACompat )
+                {
+                    rProps[nCount].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBACompatibilityMode"));
+                    rProps[nCount].Value <<= bVBACompat;
+                    ++nCount;
+                }
                 if( xCodeNameAccess.is() )
                 {
                     rProps[nCount].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
                     rProps[nCount].Value <<= xCodeNameAccess;
+                    ++nCount;
                 }
             }
         }

@@ -75,11 +75,15 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     ScDocShell* pShell = excel::getDocShell( xModel );
     if ( pShell )
     {
+        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        pShell->GetBasicManager()->SetName( aPrjName );
+
+        /*  Set library container to VBA compatibility mode. This will create
+            the VBA Globals object and store it in the Basic manager of the
+            document. */
         uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
         uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
         xVBACompat->setVBACompatibilityMode( sal_True );
-        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        pShell->GetBasicManager()->SetName( aPrjName );
 
         if( xLibContainer.is() )
         {
@@ -92,8 +96,6 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             {
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-                // bootstrap vbaglobals
-                 xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals")));
                 uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY_THROW );
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet

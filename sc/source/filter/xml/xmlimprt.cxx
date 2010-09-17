@@ -2219,6 +2219,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         {
             sal_Int32 nCount(aConfigProps.getLength());
             rtl::OUString sCTName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            rtl::OUString sVBName(RTL_CONSTASCII_USTRINGPARAM("VBACompatibilityMode"));
             rtl::OUString sSCName(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
@@ -2243,26 +2244,15 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                         }
                     }
                 }
-                else if (aConfigProps[i].Name == sSCName)
+                // store the following items for later use (after document is loaded)
+                else if ((aConfigProps[i].Name == sVBName) || (aConfigProps[i].Name == sSCName))
                 {
-                    uno::Type aType = aConfigProps[i].Value.getValueType();
-                    uno::Reference<beans::XPropertySet> xImportInfo =
-                        getImportInfo();
-
-                    if (xImportInfo.is() &&
-                        (aType.equals(getCppuType(
-                          (uno::Reference<container::XNameContainer> *)0 ) ) ||
-                        aType.equals(getCppuType(
-                          (uno::Reference<container::XNameAccess> *)0 ) ) ) )
+                    uno::Reference< beans::XPropertySet > xImportInfo = getImportInfo();
+                    if (xImportInfo.is())
                     {
-                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
-                            xImportInfo->getPropertySetInfo();
-                        if (xPropertySetInfo.is() &&
-                            xPropertySetInfo->hasPropertyByName(sSCName) )
-                        {
-                            xImportInfo->setPropertyValue(sSCName,
-                                    aConfigProps[i].Value );
-                        }
+                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+                        if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName(aConfigProps[i].Name))
+                            xImportInfo->setPropertyValue( aConfigProps[i].Name, aConfigProps[i].Value );
                     }
                 }
             }
