@@ -79,7 +79,7 @@ void RetStream::GenReturn ( USHORT nRet, USHORT nMethod, SbxValue &aValue )
 {
     Write(USHORT(SIReturn));
     Write(nRet);
-    Write((ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
     Write(USHORT(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
     Write(aValue);
 }
