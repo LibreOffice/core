@@ -150,7 +150,14 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     if ( pViewShell )
+    {
         pViewShell->CopyToClip(NULL,false,false,true);
+
+        // mark the copied transfer object so it is used in ScVbaRange::Insert
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
+        if (pClipObj)
+            pClipObj->SetUseInApi( true );
+    }
 }
 
 void
@@ -158,7 +165,14 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
     if ( pViewShell )
+    {
         pViewShell->CutToClip( NULL, TRUE );
+
+        // mark the copied transfer object so it is used in ScVbaRange::Insert
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
+        if (pClipObj)
+            pClipObj->SetUseInApi( true );
+    }
 }
 
 void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
@@ -181,7 +195,10 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, USHORT nFl
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 ScDocument* pDoc = NULL;
                 if ( pOwnClip )
+                {
                     pDoc = pOwnClip->GetDocument();
+                    pOwnClip->SetUseInApi( false );     // don't use in Insert after it was pasted once
+                }
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
                     eMoveMode, IDF_NONE, TRUE );

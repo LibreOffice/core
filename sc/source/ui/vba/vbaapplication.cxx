@@ -60,6 +60,7 @@
 #include "sc.hrc"
 
 #include <osl/file.hxx>
+#include <rtl/instance.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
@@ -108,16 +109,42 @@ public:
     ActiveWorkbook( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) : ScVbaWorkbook(  xParent, xContext ){}
 };
 
+// ============================================================================
+
+/** Global application settings shared by all open workbooks. */
+struct ScVbaAppSettings
+{
+    sal_Int32 mnCalculation;
+    sal_Bool mbDisplayAlerts;
+    sal_Bool mbEnableEvents;
+
+    explicit ScVbaAppSettings();
+};
+
+ScVbaAppSettings::ScVbaAppSettings() :
+    mnCalculation( excel::XlCalculation::xlCalculationAutomatic ),
+    mbDisplayAlerts( sal_True ),
+    mbEnableEvents( sal_True )
+{
+}
+
+struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaStaticAppSettings > {};
+
+// ============================================================================
+
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
-    m_xCalculation( excel::XlCalculation::xlCalculationAutomatic ),
-    m_bDisplayAlerts( sal_True ),
-    m_bEnableEvents( sal_True )
+    mrAppSettings( ScVbaStaticAppSettings::get() )
 {
 }
 
 ScVbaApplication::~ScVbaApplication()
 {
+}
+
+/*static*/ bool ScVbaApplication::getDocumentEventsEnabled()
+{
+    return ScVbaStaticAppSettings::get().mbEnableEvents;
 }
 
 SfxObjectShell* ScVbaApplication::GetDocShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
@@ -396,8 +423,10 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     if( _statusbar >>= sText )
     {
         setDisplayStatusBar( sal_True );
-        xStatusIndicator->start( sText, 100 );
-        //xStatusIndicator->setText( sText );
+        if ( sText.getLength() )
+            xStatusIndicator->start( sText, 100 );
+        else
+            xStatusIndicator->end();        // restore normal state for empty text
     }
     else if( _statusbar >>= bDefault )
     {
@@ -415,6 +444,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
 ::sal_Int32 SAL_CALL
 ScVbaApplication::getCalculation() throw (uno::RuntimeException)
 {
+    // TODO: in Excel, this is an application-wide setting
     uno::Reference<sheet::XCalculatable> xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
     if(xCalc->isAutomaticCalculationEnabled())
         return excel::XlCalculation::xlCalculationAutomatic;
@@ -425,6 +455,7 @@ ScVbaApplication::getCalculation() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setCalculation( ::sal_Int32 _calculation ) throw (uno::RuntimeException)
 {
+    // TODO: in Excel, this is an application-wide setting
     uno::Reference< sheet::XCalculatable > xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
     switch(_calculation)
     {
@@ -704,25 +735,25 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts) throw (uno::RuntimeException)
 {
-    m_bDisplayAlerts = displayAlerts;
+    mrAppSettings.mbDisplayAlerts = displayAlerts;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getDisplayAlerts() throw (uno::RuntimeException)
 {
-    return m_bDisplayAlerts;
+    return mrAppSettings.mbDisplayAlerts;
 }
 
 void SAL_CALL
 ScVbaApplication::setEnableEvents(sal_Bool bEnable) throw (uno::RuntimeException)
 {
-    m_bEnableEvents = bEnable;
+    mrAppSettings.mbEnableEvents = bEnable;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
 {
-    return m_bEnableEvents;
+    return mrAppSettings.mbEnableEvents;
 }
 
 void SAL_CALL

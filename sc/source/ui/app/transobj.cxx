@@ -134,7 +134,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     nDragHandleY( 0 ),
     nDragSourceFlags( 0 ),
     bDragWasInternal( FALSE ),
-    bUsedForLink( FALSE )
+    bUsedForLink( FALSE ),
+    bUseInApi( false )
 {
     DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
 
@@ -538,6 +539,11 @@ void ScTransferObj::SetDragSourceFlags( USHORT nFlags )
 void ScTransferObj::SetDragWasInternal()
 {
     bDragWasInternal = TRUE;
+}
+
+void ScTransferObj::SetUseInApi( bool bSet )
+{
+    bUseInApi = bSet;
 }
 
 ScDocument* ScTransferObj::GetSourceDocument()

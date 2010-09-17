@@ -851,13 +851,13 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     return TRUE;
 }
 
-void ScDocFunc::NotifyInputHandler( const ScAddress& /* rPos */ )
+void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh && pViewSh->GetViewData()->GetDocShell() == &rDocShell )
     {
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-        if ( pInputHdl )
+        if ( pInputHdl && pInputHdl->GetCursorPos() == rPos )
         {
             sal_Bool bIsEditMode(pInputHdl->IsEditMode());
 

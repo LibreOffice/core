@@ -149,6 +149,12 @@ public:
         const rtl::OUString& sRangeName, ScDocShell* pDocSh,
         formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
 
+    static css::uno::Reference< ov::excel::XRange > CellsHelper(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::table::XCellRange >& xRange,
+        const css::uno::Any &nRowIndex, const css::uno::Any &nColumnIndex ) throw(css::uno::RuntimeException);
+
     // Attributes
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void   SAL_CALL setValue( const css::uno::Any& aValue ) throw ( css::uno::RuntimeException);
