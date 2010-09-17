@@ -60,9 +60,10 @@ published enum TextFitToSizeType
 
     //-------------------------------------------------------------------------
 
-    /** if the shape is scaled, the font attributes are scaled and hard set
-        on the text */
-    RESIZEATTR
+    /** if the shape is scaled, the font is scaled isotrophically to
+        fit the avaiable space. Auto line-breaks will keep working
+   */
+    AUTOFIT
 
 };
 
