@@ -988,6 +988,9 @@ public:
 */
 class WW8Fib
 {
+private:
+    sal_Unicode nNumDecimalSep;
+
 public:
     /**
         Program-Version asked for by us:
@@ -1445,6 +1448,7 @@ public:
     static rtl_TextEncoding GetFIBCharset(UINT16 chs);
     ww::WordVersion GetFIBVersion() const;
     WW8_CP GetBaseCp(ManTypes nType) const;
+    sal_Unicode getNumDecimalSep() const;
 };
 
 class WW8Style

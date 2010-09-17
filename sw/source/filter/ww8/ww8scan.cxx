@@ -47,8 +47,11 @@
 #include <swtypes.hxx>      // DELETEZ
 
 #endif                      // dump
+#include <comphelper/processfactory.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/lang.h>
+#include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>    // Application  #i90932#
 
 #include <stdio.h>
@@ -57,6 +60,8 @@
     ASSERT(aCon, aError); \
     if (!(aCon)) \
         return aRet;
+
+using namespace ::com::sun::star::lang;
 
 //-begin
 namespace SL
@@ -5649,6 +5654,16 @@ WW8Fib::WW8Fib(BYTE nVer)
             break;
     };
     // <-- #i90932#
+
+    Locale aTempLocale;
+    SvxLanguageToLocale( aTempLocale, lid );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+    nNumDecimalSep = aLocaleWrapper.getNumDecimalSep().GetChar( 0 );
+}
+
+sal_Unicode WW8Fib::getNumDecimalSep() const
+{
+    return nNumDecimalSep;
 }
 
 bool WW8Fib::WriteHeader(SvStream& rStrm)

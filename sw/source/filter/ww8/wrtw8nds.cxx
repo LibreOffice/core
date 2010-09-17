@@ -741,7 +741,14 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
     aStr += String::CreateFromInt32(nHeight);
     aStr += '(';
     aStr += rRuby.GetText();
-    aStr.APPEND_CONST_ASC( ");" );
+    aStr.APPEND_CONST_ASC( ")" );
+
+    // The parameter separator depends on the FIB.lid
+    if ( m_rWW8Export.pFib->getNumDecimalSep() == '.' )
+        aStr.APPEND_CONST_ASC( "," );
+    else
+        aStr.APPEND_CONST_ASC( ";" );
+
     m_rWW8Export.OutputField( 0, ww::eEQ, aStr,
             WRITEFIELD_START | WRITEFIELD_CMD_START );
 }
