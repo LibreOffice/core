@@ -97,7 +97,7 @@ SRSFILELIST=\
 
 
 RESLIB1NAME=cui
-RESLIB1IMAGES=$(SOLARSRC)/$(RSCDEFIMG)/svx/res
+RESLIB1IMAGES=$(SOLARDEFIMG)/svx/res
 RESLIB1SRSFILES= $(SRSFILELIST)
 
 # --- Targets -------------------------------------------------------
