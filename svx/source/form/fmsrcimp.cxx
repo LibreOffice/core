@@ -906,7 +906,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             }
             // set the field selection back to the first
             pFieldNames = seqFieldNames.getArray();;
-            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Es wurden ungueltige Feldnamen angegeben !");
+            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Invalid field name were given !");
             m_arrFieldMapping.push_back(nFoundIndex);
         }
     }
