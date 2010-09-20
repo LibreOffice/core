@@ -28,8 +28,8 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/awt/AsyncCallback.hpp"
 #include "com/sun/star/awt/XCallback.hpp"
-#include "com/sun/star/awt/XRequestCallback.hpp"
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/document/MacroExecMode.hpp"
@@ -186,11 +186,8 @@ void Test::test() {
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):
-    css::uno::Reference< css::awt::XRequestCallback >(
-        connection_.getFactory()->createInstance( //TODO: AsyncCallback ctor
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AsyncCallback"))),
-        css::uno::UNO_QUERY_THROW)->addCallback(
+    com::sun::star::awt::AsyncCallback::create(
+        connection_.getComponentContext())->addCallback(
             new Callback(
                 disp, url, css::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),
