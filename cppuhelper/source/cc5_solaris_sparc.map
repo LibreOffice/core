@@ -390,6 +390,6 @@ UDK_3.7 { # OOo 3.3
 
 UDK_3.8 { # OOo 3.4
     global:
-        __1cEcppuSOPropertySetHelperbDsetDependentFastPropertyValue6MklrknDcomDsunEstarDunoDAny__v_;
+        __1cEcppuSOPropertySetHelperbDsetDependentFastPropertyValue6MlrknDcomDsunEstarDunoDAny__v_;
 } UDK_3.7;
 
