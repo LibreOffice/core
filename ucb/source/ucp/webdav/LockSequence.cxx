@@ -35,6 +35,8 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
+#define BEEHIVE_BUGS_WORKAROUND
+
 //////////////////////////////////////////////////////////////////////////
 
 struct LockSequenceParseContext
@@ -128,13 +130,26 @@ extern "C" int LockSequence_startelement_callback(
 extern "C" int LockSequence_chardata_callback(
     void *userdata,
     int state,
+#ifdef BEEHIVE_BUGS_WORKAROUND
+    const char *buf1,
+#else
     const char *buf,
+#endif
     size_t len )
 {
     LockSequenceParseContext * pCtx
                     = static_cast< LockSequenceParseContext * >( userdata );
     if ( !pCtx->pLock )
         pCtx->pLock = new ucb::Lock;
+
+#ifdef BEEHIVE_BUGS_WORKAROUND
+    // Beehive sends XML values containing trailing newlines.
+    if ( buf1[ len - 1 ] == 0x0a )
+        len--;
+
+    char * buf = new char[ len + 1 ]();
+    strncpy( buf, buf1, len );
+#endif
 
     switch ( state )
     {
@@ -203,12 +218,8 @@ extern "C" int LockSequence_chardata_callback(
 //              @@@
 //          }
             else
-            {
-                pCtx->pLock->Timeout = sal_Int64( -1 );
-                pCtx->hasTimeout = true;
                 OSL_ENSURE( sal_False,
                         "LockSequence_chardata_callback - Unknown timeout!" );
-            }
             break;
 
         case STATE_HREF:
@@ -223,6 +234,11 @@ extern "C" int LockSequence_chardata_callback(
         }
 
     }
+
+#ifdef BEEHIVE_BUGS_WORKAROUND
+    delete [] buf;
+#endif
+
     return 0; // zero to continue, non-zero to abort parsing
 }
 
