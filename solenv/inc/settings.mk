@@ -1020,9 +1020,9 @@ LNTFLAGSOUTOBJ=-os
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR to the end of a (potentially previously undefined) library
 # path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
-# the end over adding at the start); the ": &&" in the bash case enables this to
-# work at the start of a recipe line that is not prefixed by "+" as well as in
-# the middle of an existing && chain:
+# the end over adding at the start); the ": &&" enables this to work at the
+# start of a recipe line that is not prefixed by "+" as well as in the middle of
+# an existing && chain:
 AUGMENT_LIBRARY_PATH = : && \
     $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
