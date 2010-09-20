@@ -747,8 +747,6 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     {
         pSBFAC = new SbiFactory;
         AddFactory( pSBFAC );
-        pUNOFAC = new SbUnoFactory;
-        AddFactory( pUNOFAC );
         pTYPEFAC = new SbTypeFactory;
         AddFactory( pTYPEFAC );
         pCLASSFAC = new SbClassFactory;
@@ -757,6 +755,8 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
         AddFactory( pOLEFAC );
         pFORMFAC = new SbFormFactory;
         AddFactory( pFORMFAC );
+        pUNOFAC = new SbUnoFactory;
+        AddFactory( pUNOFAC );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Search via StarBasic is always global
