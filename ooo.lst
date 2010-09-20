@@ -42,14 +42,12 @@ a06a496d7a43cbdc35e69dbe678efadb-libloader.zip
 a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
 a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
 a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
-abc405d0bdd3ee22782d7aa20e440f08-zlib-1.1.4.tar.gz
 ada24d37d8d638b3d8a9985e80bc2978-source-9.0.0.7-bj.zip
 af3c3acf618de6108d65fcdc92b492e1-commons-codec-1.3-src.tar.gz
 ba1015b59c112d44d7797b62fe7bee51-neon-0.29.3.tar.gz
 bc702168a2af16869201dbe91e46ae48-LICENSE_Python-2.6.1
 c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz
-cd5997284f4ba1e8dde5d1e5869fc342-libwpd-0.8.8.tar.gz
 d0b5af6e408b8d2958f3d83b5244f5e8-hyphen-2.4.tar.gz
 d1a3205871c3c52e8a50c9f18510ae12-libformula.zip
 d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
@@ -73,3 +71,12 @@ fe5b3e2b7c4577f30dc001054365653e-dejavu-fonts-ttf-2.30.zip
 831126a1ee5af269923cfab6050769fe-mysql-connector-cpp.zip
 067201ea8b126597670b5eff72e1f66c-mythes-1.2.0.tar.gz
 cf8a6967f7de535ae257fa411c98eb88-mdds_0.3.0.tar.bz2
+http://download.go-oo.org/src
+47e1edaa44269bc537ae8cabebb0f638-JLanguageTool-1.0.0.tar.bz2
+90401bca927835b6fbae4a707ed187c8-nlpsolver-0.9.tar.bz2
+debc62758716a169df9f62e6ab2bc634-zlib-1.2.3.tar.gz
+http://download.go-oo.org/SRC680
+799fc3b835a79adce8c88a3fee0150c1-libwps-0.1.2.tar.gz
+db556b750bf3eac8481a4cc5e29e5af1-libwpg-0.1.3.tar.gz
+http://download.go-oo.org/libwpd
+64d66018897d759358f454010b6e75d2-libwpd-0.8.14.tar.gz
