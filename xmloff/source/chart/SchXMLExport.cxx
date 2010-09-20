@@ -1688,20 +1688,16 @@ void SchXMLExportHelper_Impl::exportTable()
         {
             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
             SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
-            // write the original range name as id into the local table
-            // to allow a correct re-association when copying via clipboard
-            if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
-            {
-                if ((*aColumnDescriptions_RangeIter).getLength())
-                {
-                    mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
-                        *aColumnDescriptions_RangeIter);
-                }
-                ++aColumnDescriptions_RangeIter;
-            }
             exportText( *aIt );
             if( nC < nComplexCount )
                 lcl_exportComplexLabel( rComplexColumnDescriptions[nC++], mrExport );
+            if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
+            {
+                // remind the original range to allow a correct re-association when copying via clipboard
+                if ((*aColumnDescriptions_RangeIter).getLength())
+                    SchXMLTools::exportRangeToSomewhere( mrExport, *aColumnDescriptions_RangeIter );
+                ++aColumnDescriptions_RangeIter;
+            }
         }
         OSL_ASSERT( bHasOwnData || aColumnDescriptions_RangeIter == aColumnDescriptions_RangeEnd );
     } // closing row and header-rows elements
@@ -1725,17 +1721,15 @@ void SchXMLExportHelper_Impl::exportTable()
                 SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
                 if( aRowDescriptionsIter != aData.aRowDescriptions.end())
                 {
-                    // write the original range name as id into the local table
-                    // to allow a correct re-association when copying via clipboard
-                    if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
-                    {
-                        mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
-                            *aRowDescriptions_RangeIter++);
-                    }
                     exportText( *aRowDescriptionsIter );
                     ++aRowDescriptionsIter;
                     if( nC < nComplexCount )
                         lcl_exportComplexLabel( rComplexRowDescriptions[nC++], mrExport );
+                    if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
+                    {
+                        // remind the original range to allow a correct re-association when copying via clipboard
+                        SchXMLTools::exportRangeToSomewhere( mrExport, *aRowDescriptions_RangeIter++ );
+                    }
                 }
             }
 
@@ -1748,19 +1742,15 @@ void SchXMLExportHelper_Impl::exportTable()
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
                 SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
-                // write the original range name as id into the local table to
-                // allow a correct re-association when copying via clipboard
+                exportText( msString, false ); // do not convert tabs and lfs
                 if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
-                    ( mbRowSourceColumns || (aColIt == aRowIt->begin())) )
+                    ( mbRowSourceColumns || (aColIt == aRowIt->begin()) ) )
                 {
+                    // remind the original range to allow a correct re-association when copying via clipboard
                     if ((*aDataRangeIter).getLength())
-                    {
-                        mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
-                            *aDataRangeIter);
-                    }
+                        SchXMLTools::exportRangeToSomewhere( mrExport, *aDataRangeIter );
                     ++aDataRangeIter;
                 }
-                exportText( msString, false ); // do not convert tabs and lfs
             }
         }
     }
@@ -3063,6 +3053,10 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     // add style name attribute
                                     AddAutoStyleAttribute( aPropertyStates );
+
+                                    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                                    if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
+                                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );//#i114149#
                                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
                                 }
                                 else    // autostyles
