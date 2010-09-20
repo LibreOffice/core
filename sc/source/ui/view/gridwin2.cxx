@@ -309,10 +309,17 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
                                                 aPosRect, nOrient, nDimPos );
     UpdateDragRect( bHasRange && bMove, aPosRect );
 
+    BOOL bIsDataLayout;
+    sal_Int32 nDimFlags = 0;
+    String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout, &nDimFlags );
+    bool bAllowed = !bHasRange || ScDPObject::IsOrientationAllowed( nOrient, nDimFlags );
+
     if (bMove)          // set mouse pointer
     {
         PointerStyle ePointer = POINTER_PIVOT_DELETE;
-        if ( bHasRange )
+        if ( !bAllowed )
+            ePointer = POINTER_NOTALLOWED;
+        else if ( bHasRange )
             switch (nOrient)
             {
                 case sheet::DataPilotFieldOrientation_COLUMN: ePointer = POINTER_PIVOT_COL; break;
@@ -327,15 +334,13 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         if (!bHasRange)
             nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
 
-        BOOL bIsDataLayout;
-        String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout );
         if ( bIsDataLayout && ( nOrient != sheet::DataPilotFieldOrientation_COLUMN &&
                                 nOrient != sheet::DataPilotFieldOrientation_ROW ) )
         {
             //  removing data layout is not allowed
             pViewData->GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
         }
-        else
+        else if ( bAllowed )
         {
             ScDPSaveData aSaveData( *pDragDPObj->GetSaveData() );
 

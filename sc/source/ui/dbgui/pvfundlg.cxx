@@ -735,8 +735,9 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
     for (long nDim=0; nDim<nDimCount; nDim++)
     {
         BOOL bIsDataLayout;
-        String aName = rDPObj.GetDimName( nDim, bIsDataLayout );
-        if ( !bIsDataLayout && !rDPObj.IsDuplicated( nDim ) )
+        sal_Int32 nDimFlags = 0;
+        String aName = rDPObj.GetDimName( nDim, bIsDataLayout, &nDimFlags );
+        if ( !bIsDataLayout && !rDPObj.IsDuplicated( nDim ) && ScDPObject::IsOrientationAllowed( nOrient, nDimFlags ) )
         {
             const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
             if ( !pDimension || (pDimension->GetOrientation() != nOrient) )
