@@ -347,7 +347,18 @@ SbxObject* SbFormFactory::CreateObject( const String& rClassName )
         {
             if( SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pVar->GetObject() ) )
             {
-                pFormModule->Load();
+                bool bInitState = pFormModule->getInitState();
+                if( bInitState )
+                {
+                    // Not the first instantiate, reset
+                    bool bTriggerTerminateEvent = false;
+                    pFormModule->ResetApiObj( bTriggerTerminateEvent );
+                    pFormModule->setInitState( false );
+                }
+                else
+                {
+                    pFormModule->Load();
+                }
                 return pFormModule->CreateInstance();
             }
         }

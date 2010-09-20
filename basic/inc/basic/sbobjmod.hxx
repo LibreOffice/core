@@ -89,7 +89,7 @@ public:
     SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
-    void ResetApiObj();
+    void ResetApiObj( bool bTriggerTerminateEvent = true );
     void Unload();
     void Load();
     void triggerMethod( const String& );
@@ -100,6 +100,11 @@ public:
     void triggerTerminateEvent();
     void triggerLayoutEvent();
     void triggerResizeEvent();
+
+    bool getInitState( void )
+        { return mbInit; }
+    void setInitState( bool bInit )
+        { mbInit = bInit; }
 
     class SbUserFormModuleInstance* CreateInstance();
 };

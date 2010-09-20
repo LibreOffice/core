@@ -2301,9 +2301,9 @@ SbUserFormModule::~SbUserFormModule()
 {
 }
 
-void SbUserFormModule::ResetApiObj()
+void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
 {
-    if (  m_xDialog.is() ) // probably someone close the dialog window
+    if ( bTriggerTerminateEvent && m_xDialog.is() ) // probably someone close the dialog window
     {
         triggerTerminateEvent();
     }
