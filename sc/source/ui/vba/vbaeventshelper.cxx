@@ -59,7 +59,7 @@ using namespace ::ooo::vba;
 namespace {
 
 /** Extracts a sheet index from the specified element of the passed sequence.
-    The element may be an integer, or a Calc range or ranges object. */
+    The element may be an integer, a Calc range or ranges object, or a VBA Range object. */
 SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException)
 {
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );
@@ -69,12 +69,23 @@ SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nInde
     if( rArgs[ nIndex ] >>= nTab )
         return nTab;
 
-    // next, try single range object
+    // try VBA Range object
+    uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
+    if( xVbaRange.is() )
+    {
+        uno::Reference< XHelperInterface > xVbaHelper( xVbaRange, uno::UNO_QUERY_THROW );
+        // TODO: in the future, the parent may be an excel::XChart (chart sheet) -> will there be a common base interface?
+        uno::Reference< excel::XWorksheet > xVbaSheet( xVbaHelper->getParent(), uno::UNO_QUERY_THROW );
+        // VBA sheet index is 1-based
+        return static_cast< SCTAB >( xVbaSheet->getIndex() - 1 );
+    }
+
+    // try single UNO range object
     uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable = getXSomethingFromArgs< sheet::XCellRangeAddressable >( rArgs, nIndex );
     if( xCellRangeAddressable.is() )
         return xCellRangeAddressable->getRangeAddress().Sheet;
 
-    // at last, try range list
+    // at last, try UNO range list
     uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
     if( xRanges.is() )
     {
@@ -321,7 +332,7 @@ void SAL_CALL ScVbaEventsListener::changesOccurred( const util::ChangesEvent& aE
         aChange.ReplacedElement >>= xRangeObj;
         if( xRangeObj.is() )
         {
-            uno::Sequence< uno::Any > aArgs(1);
+            uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[0] <<= xRangeObj;
             mrVbaEvents.processVbaEvent( WORKSHEET_CHANGE, aArgs );
         }
@@ -699,23 +710,28 @@ uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rA
 uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
-    uno::Reference< table::XCellRange > xRange = getXSomethingFromArgs< table::XCellRange >( rArgs, nIndex );
-    if ( !xRanges.is() && !xRange.is() )
-        throw lang::IllegalArgumentException();
+    // it is possible to pass an existing VBA Range object
+    uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
+    if( !xVbaRange.is() )
+    {
+        uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
+        uno::Reference< table::XCellRange > xRange = getXSomethingFromArgs< table::XCellRange >( rArgs, nIndex );
+        if ( !xRanges.is() && !xRange.is() )
+            throw lang::IllegalArgumentException();
 
-    uno::Sequence< uno::Any > aArgs( 2 );
-    if ( xRanges.is() )
-    {
-        aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRanges );
-        aArgs[ 1 ] <<= xRanges;
+        uno::Sequence< uno::Any > aArgs( 2 );
+        if ( xRanges.is() )
+        {
+            aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRanges );
+            aArgs[ 1 ] <<= xRanges;
+        }
+        else
+        {
+            aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRange );
+            aArgs[ 1 ] <<= xRange;
+        }
+        xVbaRange.set( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Range", aArgs ), uno::UNO_QUERY_THROW );
     }
-    else
-    {
-        aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRange );
-        aArgs[ 1 ] <<= xRange;
-    }
-    uno::Reference< uno::XInterface > xVbaRange( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Range", aArgs ), uno::UNO_SET_THROW );
     return uno::Any( xVbaRange );
 }
 

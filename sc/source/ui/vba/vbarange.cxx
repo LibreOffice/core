@@ -24,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include "vbarange.hxx"
+
 #include <vbahelper/helperdecl.hxx>
 
 #include <comphelper/unwrapargs.hxx>
@@ -31,6 +34,8 @@
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XGoalSeek.hpp>
@@ -135,7 +140,7 @@
 #include <globstr.hrc>
 #include <unonames.hxx>
 
-#include "vbarange.hxx"
+#include "vbaapplication.hxx"
 #include "vbafont.hxx"
 #include "vbacomment.hxx"
 #include "vbainterior.hxx"
@@ -266,6 +271,26 @@ SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw ( uno::RuntimeException )
     if ( !pDataSet )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't access Itemset for range" ) ), uno::Reference< uno::XInterface >() );
     return pDataSet;
+}
+
+void ScVbaRange::fireChangeEvent()
+{
+    if( ScVbaApplication::getDocumentEventsEnabled() )
+    {
+        if( ScDocument* pDoc = getScDocument() )
+        {
+            uno::Reference< script::vba::XVBAEventProcessor > xVBAEvents = pDoc->GetVbaEventProcessor();
+            if( xVBAEvents.is() ) try
+            {
+                uno::Sequence< uno::Any > aArgs( 1 );
+                aArgs[ 0 ] <<= uno::Reference< excel::XRange >( this );
+                xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
 }
 
 class SingleRangeEnumeration : public EnumerationHelper_BASE
@@ -1498,7 +1523,7 @@ ScVbaRange::getValue() throw (uno::RuntimeException)
 
 
 void
-ScVbaRange::setValue(  const uno::Any  &aValue,  ValueSetter& valueSetter ) throw (uno::RuntimeException)
+ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFireEvent ) throw (uno::RuntimeException)
 {
     uno::TypeClass aClass = aValue.getValueTypeClass();
     if ( aClass == uno::TypeClass_SEQUENCE )
@@ -1533,6 +1558,7 @@ ScVbaRange::setValue(  const uno::Any  &aValue,  ValueSetter& valueSetter ) thro
     {
         visitArray( valueSetter );
     }
+    if( bFireEvent ) fireChangeEvent();
 }
 
 void SAL_CALL
@@ -1547,20 +1573,20 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
         return;
     }
     CellValueSetter valueSetter( aValue );
-    setValue( aValue, valueSetter );
+    setValue( aValue, valueSetter, true );
 }
 
-void
+void SAL_CALL
 ScVbaRange::Clear() throw (uno::RuntimeException)
 {
     using namespace ::com::sun::star::sheet::CellFlags;
     sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
-    ClearContents( nFlags );
+    ClearContents( nFlags, true );
 }
 
 //helper ClearContent
 void
-ScVbaRange::ClearContents( sal_Int32 nFlags ) throw (uno::RuntimeException)
+ScVbaRange::ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (uno::RuntimeException)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1574,40 +1600,44 @@ ScVbaRange::ClearContents( sal_Int32 nFlags ) throw (uno::RuntimeException)
             uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny(index), uno::Any() ), uno::UNO_QUERY_THROW );
             ScVbaRange* pRange = getImplementation( xRange );
             if ( pRange )
-                pRange->ClearContents( nFlags );
+                pRange->ClearContents( nFlags, false ); // do not fire for single ranges
         }
+        // fire change event for the entire range list
+        if( bFireEvent ) fireChangeEvent();
         return;
     }
 
 
     uno::Reference< sheet::XSheetOperation > xSheetOperation(mxRange, uno::UNO_QUERY_THROW);
     xSheetOperation->clearContents( nFlags );
+    if( bFireEvent ) fireChangeEvent();
 }
-void
+
+void SAL_CALL
 ScVbaRange::ClearComments() throw (uno::RuntimeException)
 {
-    ClearContents( sheet::CellFlags::ANNOTATION );
+    ClearContents( sheet::CellFlags::ANNOTATION, false );
 }
 
-void
+void SAL_CALL
 ScVbaRange::ClearContents() throw (uno::RuntimeException)
 {
-    sal_Int32 nClearFlags = ( sheet::CellFlags::VALUE |
-        sheet::CellFlags::STRING |  sheet::CellFlags::DATETIME |
-        sheet::CellFlags::FORMULA );
-    ClearContents( nClearFlags );
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = VALUE | STRING |  DATETIME | FORMULA;
+    ClearContents( nFlags, true );
 }
 
-void
+void SAL_CALL
 ScVbaRange::ClearFormats() throw (uno::RuntimeException)
 {
-    //FIXME: need to check if we need to combine sheet::CellFlags::FORMATTED
-    sal_Int32 nClearFlags = sheet::CellFlags::HARDATTR | sheet::CellFlags::FORMATTED | sheet::CellFlags::EDITATTR;
-    ClearContents( nClearFlags );
+    //FIXME: need to check if we need to combine FORMATTED
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = HARDATTR | FORMATTED | EDITATTR;
+    ClearContents( nFlags, false );
 }
 
 void
-ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram ) throw (uno::RuntimeException)
+ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram, bool bFireEvent ) throw (uno::RuntimeException)
 {
     // If this is a multiple selection apply setFormula over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1618,7 +1648,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
         return;
     }
     CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eGram );
-    setValue( rFormula, formulaValueSetter );
+    setValue( rFormula, formulaValueSetter, bFireEvent );
 }
 
 uno::Any
@@ -1642,7 +1672,7 @@ void
 ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException)
 {
     // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );;
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
 }
 
 uno::Any
@@ -1654,7 +1684,7 @@ ScVbaRange::getFormulaR1C1() throw (::com::sun::star::uno::RuntimeException)
 void
 ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeException)
 {
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
 }
 
 uno::Any
@@ -3273,7 +3303,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("That command cannot be used on multiple selections" ) ), uno::Reference< uno::XInterface >() );
 
     sal_Int16 nDataOption1 = excel::XlSortDataOption::xlSortNormal;
-    sal_Int16 nDataOption2 = excel::XlSortDataOption::xlSortNormal;;
+    sal_Int16 nDataOption2 = excel::XlSortDataOption::xlSortNormal;
     sal_Int16 nDataOption3 = excel::XlSortDataOption::xlSortNormal;
 
     ScDocument* pDoc = getScDocument();
@@ -4428,7 +4458,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
     // Use the normal uno api, sometimes e.g. when you want to use ALL as the filter
     // we can't use refresh as the uno interface doesn't have a concept of ALL
     // in this case we just call the core calc functionality -
-    bool bAll = false;;
+    bool bAll = false;
     if ( ( Field >>= nField )  )
     {
         uno::Reference< sheet::XSheetFilterDescriptor2 > xDesc(
