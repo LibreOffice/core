@@ -30,7 +30,6 @@
 
 #include "pppoptimizerdialog.hxx"
 #include "optimizerdialog.hxx"
-#include "aboutdialog.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -174,11 +173,6 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
         {
             if ( mpOptimizerDialog )
                 mpOptimizerDialog->UpdateStatus( rArguments );
-        }
-        else if ( rURL.Path.compareToAscii( "about" ) == 0 )
-        {
-            AboutDialog aAboutDialog( mxMSF, mxFrame );
-            aAboutDialog.execute();
         }
     }
 }
