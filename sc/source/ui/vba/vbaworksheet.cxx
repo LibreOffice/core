@@ -195,7 +195,7 @@ ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent
 ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
     uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
 {
-    if ( args.getLength() < 2 )
+    if ( args.getLength() < 3 )
         throw lang::IllegalArgumentException();
 
     rtl::OUString sSheetName;
