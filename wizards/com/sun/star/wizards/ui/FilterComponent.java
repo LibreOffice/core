@@ -27,7 +27,6 @@
 package com.sun.star.wizards.ui;
 
 // import java.util.Vector;
-import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControl;
@@ -40,6 +39,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.SQLFilterOperator;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
@@ -53,6 +53,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
+import com.sun.star.wizards.db.SQLQueryComposer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -119,7 +120,6 @@ public class FilterComponent
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
-
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
@@ -237,6 +237,7 @@ public class FilterComponent
         int nFilterCount = getFilterCount();
         if (nFilterCount > 0)
         {
+            final SQLQueryComposer composer = oQueryMetaData.getSQLQueryComposer();
             try
             {
                 final String serviceName = "com.sun.star.beans.PropertyBag";
@@ -247,29 +248,29 @@ public class FilterComponent
                 column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), null );
                 final XPropertySet columnSet = UnoRuntime.queryInterface(XPropertySet.class, column);
 
-                if ( oQueryMetaData.getSQLQueryComposer().getQuery().length() == 0)
+                if ( composer.getQuery().length() == 0)
                 {
-                    final String fromClause = oQueryMetaData.getSQLQueryComposer().getFromClause();
+                    final String fromClause = composer.getFromClause();
                     StringBuilder sql = new StringBuilder();
-                    sql.append(oQueryMetaData.getSQLQueryComposer().getSelectClause(true));
+                    sql.append(composer.getSelectClause(true));
                     sql.append(' ');
                     sql.append(fromClause);
-                    oQueryMetaData.getSQLQueryComposer().getQueryComposer().setElementaryQuery(sql.toString());
+                    composer.getQueryComposer().setElementaryQuery(sql.toString());
                 }
-                oQueryMetaData.getSQLQueryComposer().getQueryComposer().setStructuredFilter( new PropertyValue[][] {} );
+                composer.getQueryComposer().setStructuredFilter( new PropertyValue[][] {} );
                 for (int i = 0; i < RowCount; i++)
                 {
-                    ControlRow CurControlRow = oControlRows[i];
-                    if (CurControlRow.isEnabled())
+                    ControlRow currentControlRow = oControlRows[i];
+                    if (currentControlRow.isEnabled())
                     {
-                        if (CurControlRow.isConditionComplete())
+                        if (currentControlRow.isConditionComplete())
                         {
-                            String sFieldName = CurControlRow.getSelectedFieldName();
-                            int nOperator = (int) CurControlRow.getSelectedOperator();
+                            String sFieldName = currentControlRow.getSelectedFieldName();
+                            int nOperator = (int) currentControlRow.getSelectedOperator();
                             FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
                             columnSet.setPropertyValue("Name", aFieldColumn.getFieldName());
                             columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
-                            Object value = CurControlRow.getValue();
+                            Object value = currentControlRow.getValue();
                             switch(aFieldColumn.getFieldType())
                             {
                                 case DataType.TIMESTAMP:
@@ -278,14 +279,23 @@ public class FilterComponent
                                     break;
                             }
                             column.removeProperty( "Value" );
-                            column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), value );
+                            final short operator = currentControlRow.getSelectedOperator();
+                            if  (   ( operator == SQLFilterOperator.SQLNULL )
+                                ||  ( operator == SQLFilterOperator.NOT_SQLNULL )
+                                ||  AnyConverter.isVoid( value )
+                                )
+                            {
+                                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), new String() );
+                                value = new Any( new Type( TypeClass.VOID ), null );
+                            }
+                            else
+                                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), value );
                             columnSet.setPropertyValue("Value", value);
-                            oQueryMetaData.getSQLQueryComposer().getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL,nOperator);
+                            composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL,nOperator);
                         }
                     }
                 }
-                final String test = oQueryMetaData.getSQLQueryComposer().getQueryComposer().getQuery();
-                filterconditions = oQueryMetaData.getSQLQueryComposer().getQueryComposer().getStructuredFilter();
+                filterconditions = composer.getNormalizedStructuredFilter();
                 int[] iduplicate = JavaTools.getDuplicateFieldIndex(filterconditions);
                 if (iduplicate[0] != -1)
                 {
@@ -520,7 +530,6 @@ public class FilterComponent
     // -------------------------------------------------------------------------
     final class ControlRow
     {
-
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
@@ -936,9 +945,9 @@ public class FilterComponent
 
         protected String getDateTimeString(boolean bgetDate)
         {
-                double dblValue = ((Double) getValue()).doubleValue();
-                NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
-                return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
+            double dblValue = ((Double) getValue()).doubleValue();
+            NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
+            return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
         }
     }
 }
