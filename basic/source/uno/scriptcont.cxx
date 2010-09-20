@@ -80,10 +80,9 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
-using com::sun::star::uno::Reference;
+using ::rtl::OUString;
 
 //============================================================================
 // Implementation class SfxScriptLibraryContainer
@@ -350,25 +349,21 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
                     RTL_CONSTASCII_STRINGPARAM("document") ))
         {
             aModInfo.ModuleType = ModuleType::DOCUMENT;
-            Reference<frame::XModel > xModel( mxOwnerDocument );
-            Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY);
-            Reference< container::XNameAccess > xVBACodeNameAccess;
-            if( xSF.is() )
+
+            // #163691# use the same codename access instance for all document modules
+            if( !mxCodeNameAccess.is() ) try
             {
-                try
-                {
-                    xVBACodeNameAccess.set( xSF->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "ooo.vba.VBAObjectModuleObjectProvider"))),
-                        UNO_QUERY );
-                }
-                catch(uno::Exception&) {}
+                Reference<frame::XModel > xModel( mxOwnerDocument );
+                Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY_THROW );
+                mxCodeNameAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider" ) ) ), UNO_QUERY );
             }
-            if( xVBACodeNameAccess.is() )
+            catch( Exception& ) {}
+
+            if( mxCodeNameAccess.is() )
             {
                 try
                 {
-                    aModInfo.ModuleObject.set( xVBACodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
+                    aModInfo.ModuleObject.set( mxCodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
                 }
                 catch(uno::Exception&)
                 {
