@@ -762,7 +762,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                 }
                 else if ( (aValue >>= aNativeObjectWrapper) )
                 {
-                    sal_uInt32 nIndex;
+                    sal_uInt32 nIndex = 0;
                     if( (aNativeObjectWrapper.ObjectId >>= nIndex) )
                     {
                         SbxObject* pObj = lcl_getNativeObject( nIndex );
