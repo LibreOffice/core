@@ -5,4 +5,6 @@ mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin%_EXT%\pdfimport\pdfimport.oxt
 ..\%__SRC%\bin\presentation-minimizer.oxt %_DEST%\bin%_EXT%\minimizer\presentation-minimizer.oxt
+..\%__SRC%\bin\presentation_minimizer_develop.zip %_DEST%\bin%_EXT%\minimizer\presentation_minimizer_develop.zip
 ..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin%_EXT%\presenter\presenter-screen.oxt
+..\%__SRC%\bin\presenter-screen_develop.zip %_DEST%\bin%_EXT%\presenter\presenter-screen_develop.zip

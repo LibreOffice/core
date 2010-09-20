@@ -565,6 +565,7 @@
 #define SC_UNO_FIELD_SUBTOTALNAME   "FieldSubtotalName"
 #define SC_UNO_GRANDTOTAL_NAME      "GrandTotalName"
 #define SC_UNO_HAS_HIDDEN_MEMBER    "HasHiddenMember"
+#define SC_UNO_FLAGS                "Flags"
 
 //  (preliminary:)
 #define SC_UNO_REFVALUE             "ReferenceValue"

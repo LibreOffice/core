@@ -173,13 +173,6 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
             bFirstActivate = FALSE;
 
-            if ( aPendingUserData.hasElements() )
-            {
-                //  #89897# read user data from print preview now, after ctor
-                DoReadUserDataSequence( aPendingUserData );
-                aPendingUserData.realloc( 0 );
-            }
-
             // #116278# ReadExtOptions (view settings from Excel import) must also be done
             // after the ctor, because of the potential calls to Window::Show.
             // Even after the fix for #104887# (Window::Show no longer notifies the access
@@ -1924,7 +1917,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
     {
         ScPreviewShell* pPreviewShell = ((ScPreviewShell*)pOldSh);
-        aPendingUserData = pPreviewShell->GetSourceData();      // used in Activate
         nForceDesignMode = pPreviewShell->GetSourceDesignMode();
     }
 

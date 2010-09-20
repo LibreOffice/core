@@ -50,9 +50,15 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
+typedef ::std::vector< String > StringVector;
+
 struct SbClassData
 {
     SbxArrayRef     mxIfaces;
+
+    // types this module depends on because of use in Dim As New <type>
+    // needed for initialization order of class modules
+    StringVector    maRequiredTypes;
 
     SbClassData( void );
     ~SbClassData( void )

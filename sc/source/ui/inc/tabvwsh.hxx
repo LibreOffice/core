@@ -144,7 +144,6 @@ private:
     ScNavigatorSettings*    pNavSettings;
 
     // used in first Activate
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aPendingUserData;
     BOOL                    bFirstActivate;
 
     BOOL                    bActiveDrawSh;

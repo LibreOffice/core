@@ -90,7 +90,8 @@ namespace dbaui
         bool        activateSubFrame(
                         const ::rtl::OUString& _rName,
                         const sal_Int32 _nComponentType,
-                        const ElementOpenMode _eOpenMode
+                        const ElementOpenMode _eOpenMode,
+                              ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rComponent
                     ) const;
 
         /** closes all frames of the given component

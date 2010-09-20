@@ -141,6 +141,7 @@ struct ScDPLabelData
     SCsCOL              mnCol;
     USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
+    sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
     bool                mbShowAll;      /// true = Show all (also empty) results.
     bool                mbIsValue;      /// true = Sum or count in data field.
 

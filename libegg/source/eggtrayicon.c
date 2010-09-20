@@ -230,10 +230,11 @@ egg_tray_icon_manager_filter (GdkXEvent *xevent, GdkEvent *event, gpointer user_
 {
   EggTrayIcon *icon = user_data;
   XEvent *xev = (XEvent *)xevent;
+  (void)event;
 
   if (xev->xany.type == ClientMessage &&
       xev->xclient.message_type == icon->manager_atom &&
-      xev->xclient.data.l[1] == icon->selection_atom)
+      (Atom)(xev->xclient.data.l[1]) == icon->selection_atom)
     {
       egg_tray_icon_update_manager_window (icon, TRUE);
     }
@@ -383,6 +384,7 @@ egg_tray_icon_manager_window_destroyed (EggTrayIcon *icon)
 static gboolean
 transparent_expose_event (GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
+  (void)user_data;
   gdk_window_clear_area (widget->window, event->area.x, event->area.y,
              event->area.width, event->area.height);
   return FALSE;
@@ -392,6 +394,8 @@ static void
 make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
             gpointer user_data)
 {
+  (void)previous_style;
+  (void)user_data;
   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
@@ -401,6 +405,7 @@ make_transparent (GtkWidget *widget, gpointer user_data)
   if (GTK_WIDGET_NO_WINDOW (widget) || GTK_WIDGET_APP_PAINTABLE (widget))
     return;
 
+  (void)user_data;
   gtk_widget_set_app_paintable (widget, TRUE);
   gtk_widget_set_double_buffered (widget, FALSE);
   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);

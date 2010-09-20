@@ -41,16 +41,11 @@ SOLARINC+=-I../../inc
 # --- Files --------------------------------------------------------
 
 SRS1NAME=$(TARGET)
-SRC1FILES= strings.src			\
-          dlgexpor.src			\
-          dlgepng.src			\
-          dlgejpg.src
+SRC1FILES=exportdialog.src
 
 SLOFILES= $(SLO)$/filter.obj				\
           $(SLO)$/filter2.obj				\
-          $(SLO)$/dlgexpor.obj				\
-          $(SLO)$/dlgejpg.obj				\
-          $(SLO)$/dlgepng.obj				\
+          $(SLO)$/exportdialog.obj			\
           $(SLO)$/sgfbram.obj				\
           $(SLO)$/sgvmain.obj				\
           $(SLO)$/sgvtext.obj				\
@@ -59,28 +54,26 @@ SLOFILES= $(SLO)$/filter.obj				\
           $(SLO)$/FilterConfigCache.obj		\
           $(SLO)$/SvFilterOptionsDialog.obj
 
+EXCEPTIONSFILES=		$(SLO)$/exportdialog.obj
+
 EXCEPTIONSNOOPTFILES=	$(SLO)$/filter.obj				\
                         $(SLO)$/FilterConfigItem.obj	\
                         $(SLO)$/FilterConfigCache.obj	\
                         $(SLO)$/SvFilterOptionsDialog.obj
 
 LIB1TARGET=		$(SLB)$/$(TARGET).uno.lib
-LIB1OBJFILES=	\
-          $(SLO)$/dlgexpor.obj				\
-          $(SLO)$/dlgejpg.obj				\
-          $(SLO)$/dlgepng.obj				\
-    $(SLO)$/SvFilterOptionsDialog.obj
+LIB1OBJFILES=	$(SLO)$/exportdialog.obj		\
+                $(SLO)$/SvFilterOptionsDialog.obj
 
 LIB2TARGET=		$(SLB)$/$(TARGET).lib
-LIB2OBJFILES=	\
-    $(SLO)$/filter.obj				\
-    $(SLO)$/filter2.obj				\
-          $(SLO)$/sgfbram.obj				\
-          $(SLO)$/sgvmain.obj				\
-          $(SLO)$/sgvtext.obj				\
-          $(SLO)$/sgvspln.obj				\
-          $(SLO)$/FilterConfigItem.obj		\
-          $(SLO)$/FilterConfigCache.obj
+LIB2OBJFILES=	$(SLO)$/filter.obj				\
+                $(SLO)$/filter2.obj				\
+                $(SLO)$/sgfbram.obj				\
+                $(SLO)$/sgvmain.obj				\
+                $(SLO)$/sgvtext.obj				\
+                $(SLO)$/sgvspln.obj				\
+                $(SLO)$/FilterConfigItem.obj	\
+                $(SLO)$/FilterConfigCache.obj
 
 # --- Targets -------------------------------------------------------
 

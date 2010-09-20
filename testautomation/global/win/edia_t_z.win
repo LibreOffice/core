@@ -236,6 +236,11 @@ NextBtn HID_FIRSTSTART_NEXT
 OKBtn HID_FIRSTSTART_FINISH
 CancelBtn HID_FIRSTSTART_CANCEL
 
+*WMFOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+
 *XFormAddInstance HID_XFORMS_ADDINSTANCE_DLG
 InstanceName svx:Edit:RID_SVXDLG_ADD_INSTANCE:ED_INST_NAME
 InstanceURL SID_OPENURL

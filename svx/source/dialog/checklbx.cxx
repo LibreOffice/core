@@ -212,7 +212,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
     {
-        Point aPnt = rMEvt.GetPosPixel();
+        const Point aPnt = rMEvt.GetPosPixel();
         SvLBoxEntry* pEntry = GetEntry( aPnt );
 
         if ( pEntry )
@@ -230,6 +230,13 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 ToggleCheckButton( pEntry );
                 SvTreeListBox::MouseButtonDown( rMEvt );
+
+                // check if the entry below the mouse changed during the base method call. This is possible if,
+                // for instance, a handler invoked by the base class tampers with the list entries.
+                const SvLBoxEntry* pNewEntry = GetEntry( aPnt );
+                if ( pNewEntry != pEntry )
+                    return;
+
                 if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
                     CheckButtonHdl();
                 return;

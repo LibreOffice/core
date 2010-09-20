@@ -1347,7 +1347,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 InvalidateAll();
                 break;
             case SID_DB_APP_DSRELDESIGN:
-                if ( !m_pSubComponentManager->activateSubFrame( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN ) )
+            {
+                Reference< XComponent > xRelationDesigner;
+                if ( !m_pSubComponentManager->activateSubFrame( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xRelationDesigner ) )
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
@@ -1359,7 +1361,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         onDocumentOpened( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
-                break;
+            }
+            break;
             case SID_DB_APP_DSUSERADMIN:
                 {
                     SharedConnection xConnection( ensureConnection() );
@@ -1844,7 +1847,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     case E_REPORT:
     case E_FORM:
     {
-        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode ) )
+        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
             ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
@@ -1861,7 +1864,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     case E_QUERY:
     case E_TABLE:
     {
-        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode ) )
+        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
             SharedConnection xConnection( ensureConnection() );
             if ( !xConnection.is() )

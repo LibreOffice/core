@@ -39,9 +39,9 @@ else
 fi
 else
 if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
-    exec python -B  $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
+    exec python $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
 else
-    exec python -B $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
+    exec python $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
 fi
 fi
 

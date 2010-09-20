@@ -48,9 +48,6 @@
 #include <vcl/gdimtf.hxx>
 
 #include <tools/bigint.hxx>
-#include "strings.hrc"
-#include "dlgepct.hrc"
-#include "dlgepct.hxx"
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -2331,28 +2328,3 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport(SvStream & rStream, Graphic & rGra
     }
 }
 
-//================== GraphicDialog - die exportierte Funktion ================
-
-extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL    bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString  aResMgrName( "ept" );
-        ResMgr* pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-
-        if( pResMgr )
-        {
-            rPara.pResMgr = pResMgr;
-            bRet = ( DlgExportEPCT( rPara ).Execute() == RET_OK );
-            delete pResMgr;
-        }
-        else
-            bRet = TRUE;
-    }
-
-    return bRet;
-}

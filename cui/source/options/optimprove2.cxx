@@ -52,6 +52,7 @@
 #include <comphelper/synchronousdispatch.hxx>
 #include <comphelper/uieventslogger.hxx>
 #include <tools/testtoolloader.hxx>
+#include <osl/file.hxx>
 
 #define C2S(s)  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -60,6 +61,18 @@ namespace lang  = ::com::sun::star::lang;
 namespace uno   = ::com::sun::star::uno;
 namespace util  = ::com::sun::star::util;
 using namespace com::sun::star::system;
+
+
+namespace
+{
+    bool lcl_doesLogfileExist(const ::rtl::OUString& sLogPath)
+    {
+        ::rtl::OUString sLogFile( sLogPath );
+        sLogFile += C2S("/Current.csv");
+        ::osl::File aLogFile(sLogFile);
+        return aLogFile.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None;
+    }
+}
 
 // class SvxImprovementOptionsPage ---------------------------------------
 
@@ -143,7 +156,10 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
         uno::Reference< lang::XComponent > xDoc = ::comphelper::SynchronousDispatch::dispatch(
             xDesktop, sLogFile, C2S("_default"), 0, aArgs );
         if ( xDoc.is() )
+        {
+            dynamic_cast<Dialog*>(GetParent())->EndDialog( RET_CANCEL );
             return 1;
+        }
     }
 
     return 0;
@@ -244,11 +260,13 @@ void SvxImprovementOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
                 if ( xSubst.is() )
                     sPath = xSubst->substituteVariables( sPath, sal_False );
                 m_sLogPath = sPath;
+                m_aShowDataPB.Enable(lcl_doesLogfileExist(m_sLogPath));
             }
         }
     }
     catch( uno::Exception& )
     {
+        m_aShowDataPB.Enable(false);
     }
 }
 

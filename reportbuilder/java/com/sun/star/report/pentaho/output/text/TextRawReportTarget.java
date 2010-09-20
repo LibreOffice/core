@@ -1269,7 +1269,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             rootAttributes.addNamespaceDeclaration("office", OfficeNamespaces.OFFICE_NS);
             rootAttributes.addNamespaceDeclaration("config", OfficeNamespaces.CONFIG);
             rootAttributes.addNamespaceDeclaration("ooo", OfficeNamespaces.OO2004_NS);
-            rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version", "1.0");
+            rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version",
+                   OfficeDocumentReportTarget.ODF_VERSION);
             final OutputStream outputStream = getOutputRepository().createOutputStream("settings.xml", "text/xml");
             final XmlWriter xmlWriter = new XmlWriter(new OutputStreamWriter(outputStream, "UTF-8"), createTagDescription());
             xmlWriter.setAlwaysAddNamespace(true);

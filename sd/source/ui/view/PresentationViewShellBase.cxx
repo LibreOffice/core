@@ -70,7 +70,7 @@ SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
 void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+        &CreateInstance,&InitFactory,nPrio,"FullScreenPresentation");
     InitFactory();
 }
 void PresentationViewShellBase::InitFactory()

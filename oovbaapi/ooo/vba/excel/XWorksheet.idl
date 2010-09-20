@@ -66,12 +66,14 @@ interface XWorksheet
     [attribute, readonly] boolean ProtectionMode;
     [attribute, readonly] boolean ProtectContents;
     [attribute, readonly] boolean ProtectDrawingObjects;
+    [attribute, readonly] boolean ProtectScenarios;
     [attribute, readonly] XRange UsedRange;
     [attribute, readonly] XWorksheet Next;
     [attribute, readonly] XWorksheet Previous;
     [attribute, readonly] string CodeName;
      [attribute, readonly] short Index;
      [attribute] long EnableSelection;
+    [attribute] boolean AutoFilterMode;
 
     void Activate();
     void Calculate( );

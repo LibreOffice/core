@@ -95,6 +95,7 @@
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/ucbhelper.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -2648,7 +2649,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
       && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && SfxMedium::EqualURLs( getLocation(), sURL ) )
+      && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
         // this is the same file URL as the current document location, try to use storeOwn if possible
 
@@ -3811,7 +3812,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
 
     Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
     for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
-        aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetViewName();
+        aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
     return aViewNames;
 }
 
@@ -3825,7 +3826,7 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDef
     SfxModelGuard aGuard( *this );
 
     const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const ::rtl::OUString sDefaultViewName = rDocumentFactory.GetViewFactory( 0 ).GetViewName();
+    const ::rtl::OUString sDefaultViewName = rDocumentFactory.GetViewFactory( 0 ).GetAPIViewName();
 
     aGuard.clear();
 

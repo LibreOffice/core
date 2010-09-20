@@ -512,12 +512,20 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "ToolPanelViewShell" ) ) );
 
+    // Some recent changes to the toolpanel make it necessary to create the
+    // accessibility object now.  Creating it on demand would lead to a
+    // pointer cycle in the tree of accessibility objects and would lead
+    // e.g. the accerciser AT tool into an infinite loop.
+    // It would be nice to get rid of this workaround in the future.
+    if (mpContentWindow.get())
+        mpContentWindow->SetAccessible(mpImpl->CreateAccessible(*mpContentWindow));
+
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
     // view shell.  (One is created earlier while the construtor of the base
     // class is executed.  At that time the correct accessibility object can
     // not be constructed.)
-    if ( mpContentWindow.get() )
+    if (mpContentWindow.get())
     {
         mpContentWindow->Hide();
         mpContentWindow->Show();
@@ -633,7 +641,12 @@ DockingWindow* ToolPanelViewShell::GetDockingWindow()
 Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd::Window* i_pWindow )
 {
     ENSURE_OR_RETURN( i_pWindow, "ToolPanelViewShell::CreateAccessibleDocumentView: illegal window!", NULL );
-    return mpImpl->CreateAccessible( *i_pWindow );
+    // As said above, we have to create the accessibility object
+    // (unconditionally) in the constructor, not here on demand, or
+    // otherwise we would create a cycle in the tree of accessible objects
+    // which could lead to infinite loops in AT tools.
+    // return mpImpl->CreateAccessible( *i_pWindow );
+    return Reference<XAccessible>();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

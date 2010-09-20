@@ -62,9 +62,9 @@ testcase tConditionalFormating
         sleep(1)
     
     Kontext "ReportDesign"    
-        ReportDesign.MouseDown ( 30, 50 )            
-        ReportDesign.MouseMove ( 40, 60 )            
-        ReportDesign.MouseUp ( 40, 60 )            
+        ReportDesign.MouseDown ( 30, 40 )
+        ReportDesign.MouseMove ( 40, 50 )
+        ReportDesign.MouseUp ( 40, 50 )
     sleep(1)  
     
     '/// open the conditional formating dialog via the menu
@@ -129,9 +129,9 @@ testcase tGrowAndShrink
         sleep(1)
     
     Kontext "ReportDesign"    
-        ReportDesign.MouseDown ( 30, 50 )            
-        ReportDesign.MouseMove ( 40, 60 )            
-        ReportDesign.MouseUp ( 40, 60 )            
+        ReportDesign.MouseDown ( 30, 40 )
+        ReportDesign.MouseMove ( 40, 50 )
+        ReportDesign.MouseUp ( 40, 50 )
     sleep(1)                        
     
     '/// open the conditional formating dialog via the menu

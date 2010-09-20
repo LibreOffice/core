@@ -873,8 +873,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             {
                 aOffset = aMapVDev.LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev.GetMapMode() );
-                aOffset.Width() = aOffset.Width() * (double)aMap.GetScaleX();
-                aOffset.Height() = aOffset.Height() * (double)aMap.GetScaleY();
+                aOffset.Width() = static_cast<long>(aOffset.Width() * (double)aMap.GetScaleX());
+                aOffset.Height() = static_cast<long>(aOffset.Height() * (double)aMap.GetScaleY());
             }
             else
                 aOffset = aMapVDev.LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev.GetMapMode() );

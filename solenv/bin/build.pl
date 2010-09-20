@@ -670,7 +670,9 @@ sub build_all {
             prepare_build_from_with_branches(\%global_deps_hash, \%reversed_full_deps_hash);
         }
         if ($build_all_cont || $build_since) {
+            store_weights(\%global_deps_hash);
             prepare_build_all_cont(\%global_deps_hash);
+            %weights_hash = ();
         };
         if ($generate_config) {
             %add_to_config = %global_deps_hash;
@@ -1322,7 +1324,10 @@ sub find_indep_prj {
     $Dependencies = shift;
     if (scalar keys %$Dependencies) {
         foreach my $job (keys %$Dependencies) {
-            push(@candidates, $job) if (!scalar keys %{$$Dependencies{$job}});
+            if (!scalar keys %{$$Dependencies{$job}}) {
+                push(@candidates, $job);
+                last if (!$processes_to_run);
+            };
         };
         if (scalar @candidates) {
             $all_dependent = 0;

@@ -2,7 +2,7 @@
         <prop oor:name="Type"><value>ras_Sun_Rasterfile</value></prop>
         <prop oor:name="FormatName"><value>era</value></prop>
         <prop oor:name="RealFilterName"/>
-        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
         <prop oor:name="UIName">
             <value xml:lang="en-US">RAS - Sun Raster Image</value>
         </prop>

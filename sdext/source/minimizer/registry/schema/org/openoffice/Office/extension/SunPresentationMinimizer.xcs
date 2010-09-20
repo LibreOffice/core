@@ -106,7 +106,7 @@
         <prop oor:name="HelpFile" oor:type="xs:string"/>
 		<group oor:name="Strings">
 			<prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2" oor:type="xs:string" oor:localized="true">
-				<value>Oracle Presentation Minimizer</value>
+				<value>Presentation Minimizer</value>
 			</prop>
 			<prop oor:name="STR_STEPS" oor:type="xs:string" oor:localized="true">
 				<value>Steps</value>
@@ -130,7 +130,7 @@
 				<value>Introduction</value>
 			</prop>
 			<prop oor:name="STR_INTRODUCTION_T" oor:type="xs:string" oor:localized="true">
-				<value>The Oracle Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
+				<value>The Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
 
           At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
 			</prop>
@@ -279,32 +279,20 @@ The current presentation contains no OLE objects.</value>
 			<prop oor:name="STR_YES" oor:type="xs:string" oor:localized="true">
 				<value>~Yes</value>
 			</prop>			
-			<prop oor:name="STR_ABOUT2" oor:type="xs:string" oor:localized="true">
-				<value>Oracle Presentation Minimizer</value>
-			</prop>
-            <prop oor:name="STR_ABOUT_VERSION2" oor:type="xs:string" oor:localized="true">
-                <value>About Oracle Presentation Minimizer 1.0.2</value>
-           </prop>
-            <prop oor:name="STR_ABOUT_PRN" oor:type="xs:string" oor:localized="true">
-                <value>Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.
-
-This product has been created with contributions from the OpenOffice.org community, of which Oracle is a principal member. OpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html/value>
-                </value>
-              </prop>
             <prop oor:name="STR_OK" oor:type="xs:string" oor:localized="true">
                 <value>OK</value>
            </prop>
             <prop oor:name="STR_INFO_1" oor:type="xs:string" oor:localized="true">
-                <value>The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
+                <value>The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
            </prop>
             <prop oor:name="STR_INFO_2" oor:type="xs:string" oor:localized="true">
-                <value>The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
+                <value>The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
            </prop>
             <prop oor:name="STR_INFO_3" oor:type="xs:string" oor:localized="true">
-                <value>The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed to %NEWFILESIZE MB.</value>
+                <value>The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed to %NEWFILESIZE MB.</value>
            </prop>
             <prop oor:name="STR_INFO_4" oor:type="xs:string" oor:localized="true">
-                <value>The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed to approximated %NEWFILESIZE MB.</value>
+                <value>The Presentation Minimizer has successfully updated the presentation '%TITLE'. The file size has changed to approximated %NEWFILESIZE MB.</value>
            </prop>
             <prop oor:name="STR_DUPLICATING_PRESENTATION" oor:type="xs:string" oor:localized="true">
                 <value>Duplicating presentation...</value>

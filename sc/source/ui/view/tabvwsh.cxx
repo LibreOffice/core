@@ -102,7 +102,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
-SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )
+SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )
 {
     SFX_VIEW_REGISTRATION(ScDocShell);
 }

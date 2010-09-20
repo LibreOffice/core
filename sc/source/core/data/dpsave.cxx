@@ -410,6 +410,11 @@ void ScDPSaveDimension::SetSubTotals(long nCount, const USHORT* pFuncs)
     bSubTotalDefault = FALSE;
 }
 
+bool ScDPSaveDimension::HasShowEmpty() const
+{
+    return nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW;
+}
+
 void ScDPSaveDimension::SetShowEmpty(BOOL bSet)
 {
     nShowEmptyMode = bSet;

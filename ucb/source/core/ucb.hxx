@@ -40,7 +40,6 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
@@ -203,11 +202,6 @@ private:
             ucbhelper::ContentProviderDataList & rListToFill);
 
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);
-
-    void createContentProviderData(
-    const rtl::OUString& rProvider,
-    const com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >& rxHierNameAccess,
-    ucbhelper::ContentProviderData& rInfo);
 
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;

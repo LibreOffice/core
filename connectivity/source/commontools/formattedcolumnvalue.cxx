@@ -326,9 +326,16 @@ namespace dbtools
         ::rtl::OUString sStringValue;
         if ( m_pData->m_xColumn.is() )
         {
-            sStringValue = DBTypeConversion::getValue(
-                m_pData->m_xColumn, m_pData->m_xFormatter, m_pData->m_aNullDate, m_pData->m_nFormatKey, m_pData->m_nKeyType
-            );
+            if ( m_pData->m_bNumericField )
+            {
+                sStringValue = DBTypeConversion::getValue(
+                    m_pData->m_xColumn, m_pData->m_xFormatter, m_pData->m_aNullDate, m_pData->m_nFormatKey, m_pData->m_nKeyType
+                );
+            }
+            else
+            {
+                sStringValue = m_pData->m_xColumn->getString();
+            }
         }
         return sStringValue;
     }

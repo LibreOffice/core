@@ -704,6 +704,7 @@ namespace vclcanvas
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DRectangle aTextureDeviceRect;
+                ::basegfx::B2DHomMatrix aTextureTransform;
                 ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
                                                             aRect,
                                                             aTextureTransform );

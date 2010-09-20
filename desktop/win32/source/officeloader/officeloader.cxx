@@ -339,6 +339,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 p = desktop_win32::commandLineAppend(p, argv[i]);
             }
         }
+
         p = desktop_win32::commandLineAppend(
             p, MY_STRING(L"\" \"-env:OOO_CWD="));
         if (cwdLen == 0) {

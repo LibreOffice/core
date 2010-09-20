@@ -31,17 +31,19 @@
 #include "sal/config.h"
 
 #include <climits>
+#include <map>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "salhelper/simplereferenceobject.hxx"
 
+#include "additions.hxx"
 #include "modifications.hxx"
 #include "nodemap.hxx"
 #include "path.hxx"
-
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -49,6 +51,11 @@ class Node;
 
 struct Data: private boost::noncopyable {
     enum { NO_LAYER = INT_MAX };
+
+    struct ExtensionXcu: public salhelper::SimpleReferenceObject {
+        int layer;
+        Additions additions;
+    };
 
     NodeMap templates;
 
@@ -80,6 +87,18 @@ struct Data: private boost::noncopyable {
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
+
+    Additions * addExtensionXcuAdditions(
+        rtl::OUString const & url, int layer);
+
+    rtl::Reference< ExtensionXcu > removeExtensionXcuAdditions(
+        rtl::OUString const & url);
+
+private:
+    typedef std::map< rtl::OUString, rtl::Reference< ExtensionXcu > >
+        ExtensionXcuAdditions;
+
+    ExtensionXcuAdditions extensionXcuAdditions_;
 };
 
 }

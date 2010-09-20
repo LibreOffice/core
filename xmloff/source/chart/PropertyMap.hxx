@@ -223,6 +223,8 @@ SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
     { ::xmloff::token::XML_NEAR_AXIS_OTHER_SIDE,    ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE },
     { ::xmloff::token::XML_OUTSIDE_START,           ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START },
     { ::xmloff::token::XML_OUTSIDE_END,             ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END },
+    { ::xmloff::token::XML_OUTSIDE_MINIMUM,         ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START },//#i114142#
+    { ::xmloff::token::XML_OUTSIDE_MAXIMUM,         ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END },//#i114142#
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 

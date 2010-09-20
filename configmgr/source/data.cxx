@@ -36,11 +36,13 @@
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
+#include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include "additions.hxx"
 #include "data.hxx"
 #include "groupnode.hxx"
 #include "node.hxx"
@@ -323,6 +325,48 @@ rtl::Reference< Node > Data::getTemplate(
     int layer, rtl::OUString const & fullName) const
 {
     return findNode(layer, templates, fullName);
+}
+
+Additions * Data::addExtensionXcuAdditions(
+    rtl::OUString const & url, int layer)
+{
+    rtl::Reference< ExtensionXcu > item(new ExtensionXcu);
+    ExtensionXcuAdditions::iterator i(
+        extensionXcuAdditions_.insert(
+            ExtensionXcuAdditions::value_type(
+                url, rtl::Reference< ExtensionXcu >())).first);
+    if (i->second.is()) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "already added extension xcu ")) +
+             url),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    i->second = item;
+    item->layer = layer;
+    return &item->additions;
+}
+
+rtl::Reference< Data::ExtensionXcu > Data::removeExtensionXcuAdditions(
+    rtl::OUString const & url)
+{
+    ExtensionXcuAdditions::iterator i(extensionXcuAdditions_.find(url));
+    if (i == extensionXcuAdditions_.end()) {
+        // This can happen, as migration of pre OOo 3.3 UserInstallation
+        // extensions in dp_registry::backend::configuration::BackendImpl::
+        // PackageImpl::processPackage_ can cause just-in-time creation of
+        // extension xcu files that are never added via addExtensionXcuAdditions
+        // (also, there might be url spelling differences between calls to
+        // addExtensionXcuAdditions and removeExtensionXcuAdditions?):
+        OSL_TRACE(
+            "unknown configmgr::Data::removeExtensionXcuAdditions(%s)",
+            rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr());
+        return rtl::Reference< ExtensionXcu >();
+    }
+    rtl::Reference< ExtensionXcu > item(i->second);
+    extensionXcuAdditions_.erase(i);
+    return item;
 }
 
 }

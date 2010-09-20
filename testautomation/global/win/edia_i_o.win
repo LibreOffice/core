@@ -152,6 +152,15 @@ FielsInvolved HID_RELDLG_KEYFIELDS
 LeftFieldCell HID_RELATIONDIALOG_LEFTFIELDCELL
 RightFieldCell HID_RELATIONDIALOG_RIGHTFIELDCELL
 
+*JPGOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Colordepth svtools:ListBox:DLG_EXPORT:LB_COLOR_DEPTH
+Quality svtools:NumericField:DLG_EXPORT:NF_COMPRESSION
+
 *LabelFieldSelection extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL
 
 *LicenseAgreementDialog HID_LICENSEDIALOG
@@ -225,6 +234,11 @@ PhonePrivate HID_MM_HEADER_10
 PhoneBusiness HID_MM_HEADER_11
 Email HID_MM_HEADER_12
 Gender HID_MM_HEADER_13
+
+*METOptions   svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
 
 *Mplayer HID_AVMEDIA_PLAYERWINDOW
 Mopen HID_AVMEDIA_TOOLBOXITEM_OPEN

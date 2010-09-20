@@ -25,6 +25,20 @@ OldPassword svx:Edit:RID_SVXDLG_PASSWORD:ED_OLD_PASSWD
 NewPassword svx:Edit:RID_SVXDLG_PASSWORD:ED_NEW_PASSWD
 Confirm svx:Edit:RID_SVXDLG_PASSWORD:ED_REPEAT_PASSWD
 
+*PBMOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+QualityBinary svtools:RadioButton:DLG_EXPORT:RB_BINARY
+QualityText svtools:RadioButton:DLG_EXPORT:RB_TEXT
+
+*PCTOptions  svtools:ModalDialog:DLG_EXPORT
+ Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+ Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+ Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+
 *PDFOptions HID_FILTER_PDF_OPTIONS
 RangeAll filter:RadioButton:RID_PDF_TAB_GENER:RB_ALL
 RangePages filter:RadioButton:RID_PDF_TAB_GENER:RB_RANGE
@@ -62,6 +76,34 @@ DisplayDocumentTitle filter:CheckBox:RID_PDF_TAB_VPREFER:CB_DISPDOCTITLE
 HideMenubar filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVMENUBAR
 HideToolbar filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVTOOLBAR
 HideWindowControls filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVWINCTRL
+
+*PGMOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+QualityBinary svtools:RadioButton:DLG_EXPORT:RB_BINARY
+QualityText svtools:RadioButton:DLG_EXPORT:RB_TEXT
+
+*PNGOptions  svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Compression svtools:NumericField:DLG_EXPORT:NF_COMPRESSION
+Interlaced svtools:CheckBox:DLG_EXPORT:CB_INTERLACED
+
+
+*PPMOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+QualityBinary svtools:RadioButton:DLG_EXPORT:RB_BINARY
+QualityText svtools:RadioButton:DLG_EXPORT:RB_TEXT
 
 *Posterize SID_GRFFILTER_POSTER
 PosterColors cui:NumericField:RID_SVX_GRFFILTER_DLG_POSTER:DLG_FILTERPOSTER_NUM_POSTER
@@ -625,3 +667,7 @@ Remove cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVE
 RemoveAll cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVEALL
 changePassword cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_CHANGE
 
+*SVMOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY

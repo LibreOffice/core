@@ -3100,10 +3100,13 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
     {
-        long x = GetColOffset( MAXCOL + 1 );
-        long y = GetRowOffset( MAXROW + 1 );
-        x = (long) ((double) x * HMM_PER_TWIPS);
-        y = (long) ((double) y * HMM_PER_TWIPS);
+        double fValX = GetColOffset( MAXCOL + 1 ) * HMM_PER_TWIPS;
+        double fValY = GetRowOffset( MAXROW + 1 ) * HMM_PER_TWIPS;
+        const long nMax = ::std::numeric_limits<long>::max();
+        // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
+        // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
+        long x = ( fValX > (double)nMax ) ? nMax : (long) fValX;
+        long y = ( fValY > (double)nMax ) ? nMax : (long) fValY;
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;

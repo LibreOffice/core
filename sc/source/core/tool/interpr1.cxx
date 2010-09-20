@@ -2481,22 +2481,13 @@ void ScInterpreter::ScN()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScN" );
     USHORT nErr = nGlobalError;
     nGlobalError = 0;
-    double fVal;
-    if ( GetRawStackType() == svString )
-    {
-        fVal = 0.0;
-        Pop();
-    }
-    else
-    {
-        // Temporarily override the ConvertStringToValue() error for
-        // GetCellValue() / GetCellValueOrZero()
-        USHORT nSErr = mnStringNoValueError;
-        mnStringNoValueError = errCellNoValue;
-        fVal = GetDouble();
-        mnStringNoValueError = nSErr;
-    }
-    if ( nGlobalError == NOTAVAILABLE || nGlobalError == errIllegalArgument )
+    // Temporarily override the ConvertStringToValue() error for
+    // GetCellValue() / GetCellValueOrZero()
+    USHORT nSErr = mnStringNoValueError;
+    mnStringNoValueError = errCellNoValue;
+    double fVal = GetDouble();
+    mnStringNoValueError = nSErr;
+    if ( nGlobalError == NOTAVAILABLE || nGlobalError == errCellNoValue )
         nGlobalError = 0;       // N(#NA) and N("text") are ok
     if ( !nGlobalError && nErr != NOTAVAILABLE )
         nGlobalError = nErr;
@@ -7091,10 +7082,6 @@ void ScInterpreter::ScText()
                 break;
             case svDouble:
                 fVal = PopDouble();
-                break;
-            case svString:
-                aStr = PopString();
-                bString = true;
                 break;
             default:
                 {

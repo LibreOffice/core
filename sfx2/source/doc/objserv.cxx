@@ -1344,8 +1344,13 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
 {
     // Check if it is stored in OASIS format...
-    if ( GetMedium() && GetMedium()->GetFilter()
-      && ( !GetMedium()->GetFilter()->IsOwnFormat() || !GetMedium()->HasStorage_Impl() ) )
+    if  (   GetMedium()
+        &&  GetMedium()->GetFilter()
+        &&  GetMedium()->GetName().Len()
+        &&  (   !GetMedium()->GetFilter()->IsOwnFormat()
+            ||  !GetMedium()->HasStorage_Impl()
+            )
+        )
     {
         // Only OASIS and OOo6.x formats will be handled further
         InfoBox( NULL, SfxResId( RID_XMLSEC_INFO_WRONGDOCFORMAT ) ).Execute();

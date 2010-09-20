@@ -198,6 +198,7 @@ private:
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( SCsCOL nCol );
+    bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
     String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
     BOOL                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );

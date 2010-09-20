@@ -39,7 +39,11 @@ fixme4=$(fixme:n)
 $(EXTENSIONDIR)/$(COMPONENT_CONFIGDEST)/%.xcu : %.xcu
 # ugly hacking to workaround prepended first source path
     @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
+.IF "$(COMPONENT_XCU_REPLACEMENT)"!=""
+    $(TYPE) $< | sed '$(COMPONENT_XCU_REPLACEMENT)' > $(subst,$(fixme2),$(MISC) $@)
+.ELSE          # "$(COMPONENT_REPLACEMENT)"!=""
     $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
+.ENDIF          # "$(COMPONENT_REPLACEMENT)"!=""
     
 $(EXTENSIONDIR)/$(COMPONENT_CONFIGDESTSCHEMA)/%.xcs : %.xcs
     @@-$(MKDIRHIER) $(subst,$(fixme4),$(MISC) $(@:d))
