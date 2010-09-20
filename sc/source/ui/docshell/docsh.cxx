@@ -553,6 +553,13 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
                 }
                 break;
+                case SFX_EVENT_CLOSEDOC:
+                {
+                    // #163655# prevent event processing after model is disposed
+                    aDocument.SetVbaEventProcessor( uno::Reference< script::vba::XVBAEventProcessor >() );
+                    uno::Reference< lang::XEventListener >( xVbaEvents, uno::UNO_QUERY_THROW )->disposing( lang::EventObject() );
+                }
+                break;
             }
         }
     }
@@ -617,19 +624,6 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             // TODO/LATER: And error message should be shown here probably
                             SetReadOnlyUI( sal_True );
                         }
-                    }
-
-                    // VBA specific initialization
-                    if( aDocument.IsInVBAMode() ) try
-                    {
-                        uno::Reference< frame::XModel > xModel( GetModel(), uno::UNO_SET_THROW );
-
-                        // create VBAGlobals object if not yet done (this also creates the "ThisExcelDoc" symbol and the event processor)
-                        uno::Reference< lang::XMultiServiceFactory > xFactory( xModel, uno::UNO_QUERY_THROW );
-                        xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
-                    }
-                    catch( uno::Exception& )
-                    {
                     }
                 }
                 break;
