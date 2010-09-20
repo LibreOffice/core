@@ -31,10 +31,12 @@
 #include "dbastrings.hrc"
 #include "cppuhelper/implbase1.hxx"
 #include <comphelper/types.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -205,22 +207,24 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
     osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     if ( createDataSourcePossible(_aArguments) )
     {
-        sal_Bool bHasCategories = sal_True;
-        uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames;
-        const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
-        const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
-        for(;pArgIter != pArgEnd;++pArgIter)
+        try
         {
-            if ( pArgIter->Name.equalsAscii("HasCategories") )
-            {
-                pArgIter->Value >>= bHasCategories;
-
-            }
-            else if ( pArgIter->Name.equalsAscii("ComplexColumnDescriptions") )
-            {
-                pArgIter->Value >>= aColumnNames;
-            }
+            uno::Reference< chart::XChartDataArray> xChartData( m_xInternal, uno::UNO_QUERY_THROW );
+            xChartData->setData( uno::Sequence< uno::Sequence< double > >() );
+            xChartData->setColumnDescriptions( uno::Sequence< ::rtl::OUString >() );
+            if ( m_xInternal->hasDataByRangeRepresentation( ::rtl::OUString::valueOf( sal_Int32(0) ) ) )
+                m_xInternal->deleteSequence(0);
         }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        ::comphelper::NamedValueCollection aArgs( _aArguments );
+        const sal_Bool bHasCategories = aArgs.getOrDefault( "HasCategories", sal_True );
+        uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames =
+            aArgs.getOrDefault( "ComplexColumnDescriptions", uno::Sequence< uno::Sequence< ::rtl::OUString > >() );
+
         bool bRet = false;
         if ( m_Command.getLength() != 0 && m_xActiveConnection.is() )
         {
