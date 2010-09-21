@@ -6613,6 +6613,14 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
    fi
 
+   if test -n "$QTDIR" ; then
+      qt_incdirs="$QTDIR/include $qt_incdirs"
+      if test "$build_cpu" != "x86_64" ; then
+         qt_libdirs="$QTDIR/lib $qt_libdirs"
+      else
+         qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
+      fi
+   fi
    if test -n "$QT4DIR" ; then
       qt_incdirs="$QT4DIR/include $qt_incdirs"
       if test "$build_cpu" != "x86_64" ; then
@@ -6622,6 +6630,14 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
       fi
    fi
 
+   if test -n "$KDEDIR" ; then
+      kde_incdirs="$KDEDIR/include $kde_incdirs"
+      if test "$build_cpu" != "x86_64" ; then
+         kde_libdirs="$KDEDIR/lib $kde_libdirs"
+      else
+         kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
+      fi
+   fi
    if test -n "$KDE4DIR" ; then
       kde_incdirs="$KDE4DIR/include $kde_incdirs"
       if test "$build_cpu" != "x86_64" ; then
@@ -6633,8 +6649,8 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
 
    qt_test_include="Qt/qobject.h"
    qt_test_library="libQtCore.so"
-   kde_test_include="ksharedptr.h"
-   kde_test_library="libkdeui.so"
+   kde_test_include="kwindowsystem.h"
+   kde_test_library="libkcmutils.so"
    
    AC_MSG_CHECKING([for Qt4 headers])
    qt_header_dir="no"
