@@ -41,25 +41,6 @@
 namespace sd { namespace toolpanel {
 
 ScrollPanel::ScrollPanel (
-    TreeNode* pParent)
-    : Control (pParent->GetWindow(), WB_DIALOGCONTROL),
-      TreeNode(pParent),
-      maScrollWindow(this, WB_DIALOGCONTROL),
-      maVerticalScrollBar(this, WB_VERT),
-      maHorizontalScrollBar(this, WB_HORZ),
-      maScrollBarFiller(this),
-      maScrollWindowFiller(&maScrollWindow),
-      mbIsRearrangePending(true),
-      mbIsLayoutPending(true),
-      mnChildrenWidth(0),
-      mnVerticalBorder(2),
-      mnVerticalGap(3),
-      mnHorizontalBorder(2)
-{
-    Construct();
-}
-
-ScrollPanel::ScrollPanel (
     ::Window& i_rParentWindow)
     : Control (&i_rParentWindow, WB_DIALOGCONTROL),
       TreeNode(NULL),

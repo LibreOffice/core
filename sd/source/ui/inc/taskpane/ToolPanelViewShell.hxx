@@ -95,9 +95,6 @@ public:
     virtual SdPage* GetActualPage (void);
     virtual SdPage* getCurrentPage (void) const;
 
-    void Execute (SfxRequest& rRequest);
-    void GetState (SfxItemSet& rItemSet);
-
     virtual void ArrangeGUIElements (void);
 
     TaskPaneShellManager& GetSubShellManager (void) const;
