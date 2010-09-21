@@ -26,7 +26,7 @@
  *************************************************************************/
 
 #define VERSION         3
-#define SUBVERSION      3
+#define SUBVERSION      4
 //#define VERVARIANT    0 // never define this one, will be provided by build environment (BUILD_ID)
 // .0 + VER_CONCEPT
 // .100 + VER_ALPHA
