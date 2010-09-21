@@ -58,8 +58,8 @@ using namespace ::xmloff::token;
 ::rtl::OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
 ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context)
-    :m_xContext(context)
-    ,m_bImportedChart( false )
+    :m_bImportedChart( false )
+    ,m_xContext(context)
 {
 }
 // -----------------------------------------------------------------------------
