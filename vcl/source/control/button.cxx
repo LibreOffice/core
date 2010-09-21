@@ -896,7 +896,8 @@ void PushButton::ImplInitSettings( BOOL bFont,
         // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
         // otherwise the formcontrol button will be overdrawn due to PARENTCLIPMODE_NOCLIP
         // for radio and checkbox this is ok as they shoud appear transparent in documents
-        if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) )
+        if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) ||
+             (GetStyle() & WB_FLATBUTTON) != 0 )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -1155,7 +1156,9 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 
 void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags,
                                             const Rectangle& rRect,
-                                            bool bLayout )
+                                            bool bLayout,
+                                            bool bMenuBtnSep
+                                            )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
@@ -1203,19 +1206,22 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             aSize.Width()      -= ( 5 + nSymbolSize );
 
             ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
-                                  nDrawFlags, nTextStyle, NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
+                                  nDrawFlags, nTextStyle, NULL, true );
         }
         else
             ImplCalcSymbolRect( aInRect );
 
         if( ! bLayout )
         {
-            DecorationView aDecoView( pDev );
             long nDistance = (aInRect.GetHeight() > 10) ? 2 : 1;
-            long nX = aInRect.Left() - 2*nDistance;;
-            Point aStartPt( nX, aInRect.Top()+nDistance );
-            Point aEndPt( nX, aInRect.Bottom()-nDistance );
-            aDecoView.DrawSeparator( aStartPt, aEndPt );
+            DecorationView aDecoView( pDev );
+            if( bMenuBtnSep )
+            {
+                long nX = aInRect.Left() - 2*nDistance;;
+                Point aStartPt( nX, aInRect.Top()+nDistance );
+                Point aEndPt( nX, aInRect.Bottom()-nDistance );
+                aDecoView.DrawSeparator( aStartPt, aEndPt );
+            }
             aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
             aInRect.Left() -= 2*nDistance;
             ImplSetSymbolRect( aInRect );
@@ -1227,7 +1233,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         // FIXME: (GetStyle() & WB_FLATBUTTON) != 0 is preliminary
         // in the next major this should be replaced by "true"
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
-                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
+                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL, true );
 
         if ( IsSymbol() && ! bLayout )
         {
@@ -1356,6 +1362,12 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         return;
 
     bool bRollOver = (IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ));
+    bool bDrawMenuSep = true;
+    if( (GetStyle() & WB_FLATBUTTON) )
+    {
+        if( ! bRollOver && ! HasFocus() )
+            bDrawMenuSep = false;
+    }
     if ( (bNativeOK=IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
     {
         PushButtonValue aControlValue;
@@ -1406,7 +1418,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent( this,
                                    (nState&CTRL_STATE_ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
-                                   aInRect, bLayout );
+                                   aInRect, bLayout, bDrawMenuSep );
 
         if ( HasFocus() )
             ShowFocus( ImplGetFocusRect() );
@@ -1432,7 +1444,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         }
 
         // draw content
-        ImplDrawPushButtonContent( this, 0, aInRect, bLayout );
+        ImplDrawPushButtonContent( this, 0, aInRect, bLayout, bDrawMenuSep );
 
         if( ! bLayout && HasFocus() )
         {
@@ -1753,7 +1765,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         nButtonStyle |= BUTTON_DRAW_CHECKED;
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
-    ImplDrawPushButtonContent( pDev, nFlags, aRect, false );
+    ImplDrawPushButtonContent( pDev, nFlags, aRect, false, true );
     pDev->Pop();
 }
 

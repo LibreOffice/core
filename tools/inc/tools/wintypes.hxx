@@ -274,9 +274,14 @@ typedef sal_Int64 WinBits;
 #define WB_STDTABCONTROL        0
 
 // For TreeListBox
-#define WB_HASBUTTONS           ((WinBits)0x00800000)
-#define WB_HASLINES             ((WinBits)0x01000000)
-#define WB_HASLINESATROOT       ((WinBits)0x02000000)
+#define WB_HASBUTTONS           ((WinBits)SAL_CONST_INT64(0x0100000000))
+#define WB_HASLINES             ((WinBits)SAL_CONST_INT64(0x0200000000))
+#define WB_HASLINESATROOT       ((WinBits)SAL_CONST_INT64(0x0400000000))
+#define WB_HASBUTTONSATROOT     ((WinBits)SAL_CONST_INT64(0x0800000000))
+#define WB_NOINITIALSELECTION   ((WinBits)SAL_CONST_INT64(0x1000000000))
+#define WB_HIDESELECTION        ((WinBits)SAL_CONST_INT64(0x2000000000))
+#define WB_FORCE_MAKEVISIBLE    ((WinBits)SAL_CONST_INT64(0x4000000000))
+
 
 // For FileOpen Dialog
 #define WB_PATH                 ((WinBits)0x00100000)

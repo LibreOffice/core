@@ -312,7 +312,7 @@ SHL2STDLIBS=\
 # prepare linking of Xinerama
 .IF "$(USE_XINERAMA)" != "NO"
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)$(CPU)" == "LINUXX"
 XINERAMALIBS=-lXinerama
 .ELSE
 .IF "$(OS)" != "SOLARIS" || "$(USE_XINERAMA_VERSION)" == "Xorg"
@@ -391,12 +391,18 @@ SHL4STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 .ENDIF
 
+.IF "$(OS)$(CPU)" == "LINUXX"
+EXTRALIBPATHS+=-L$(LIBRARY_PATH)
+.ENDIF # "$(OS)$(CPU)" == "LINUXX"
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""
 EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
+.IF "$(OS)$(CPU)" == "LINUXX"
+EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib64
+.ENDIF
 .ENDIF
 LIB5TARGET=$(SLB)$/ikde_plug_
 LIB5FILES=$(SLB)$/kdeplug.lib

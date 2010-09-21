@@ -33,11 +33,6 @@
 
 #include <tools/poly.hxx>
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVTOOLS_FILTER2", "SVTOOLS_CODE" )
-#pragma optimize( "", off )
-#endif
-
 #if defined( PM2 ) && defined( __BORLANDC__ )
 #pragma option -Od
 #endif

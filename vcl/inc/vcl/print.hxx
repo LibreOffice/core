@@ -478,6 +478,7 @@ public:
     */
     void enableUIOption( const rtl::OUString& rPropName, bool bEnable );
     bool isUIOptionEnabled( const rtl::OUString& rPropName ) const;
+    bool isUIChoiceEnabled( const rtl::OUString& rPropName, sal_Int32 nChoice ) const;
     /* returns the property name rPropName depends on or an empty string
        if no dependency exists.
     */
@@ -650,6 +651,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                          const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
                                                          sal_Int32 i_nValue,
                                                          const rtl::OUString& i_rType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                                         const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
                                                          const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                          );
 

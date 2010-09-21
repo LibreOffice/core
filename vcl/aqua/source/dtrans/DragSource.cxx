@@ -38,6 +38,7 @@
 #include "DragSourceContext.hxx"
 #include "aqua_clipboard.hxx"
 #include "DragActionConversion.hxx"
+#include "salframe.h"
 
 #include <rtl/ustring.h>
 #include <memory>
@@ -158,6 +159,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 DragSource::DragSource():
   WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
   mView(NULL),
+  mpFrame(NULL),
   mLastMouseEventBeforeStartDrag(nil),
   m_MouseButton(0)
 {
@@ -166,8 +168,9 @@ DragSource::DragSource():
 
 DragSource::~DragSource()
 {
-  [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
-  [mDragSourceHelper release];
+    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+        [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
+    [mDragSourceHelper release];
 }
 
 
@@ -197,6 +200,13 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
       throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view doesn't support mouse listener")),
                       static_cast<OWeakObject*>(this));
     }
+  NSWindow* pWin = [mView window];
+  if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
+  {
+      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view is not attached to a vcl frame")),
+                      static_cast<OWeakObject*>(this));
+  }
+  mpFrame = (AquaSalFrame*)[pWin performSelector: @selector(getSalFrame)];
 
   mDragSourceHelper = [[DragSourceHelper alloc] initWithDragSource: this];
 

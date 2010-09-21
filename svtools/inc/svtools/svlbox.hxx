@@ -290,7 +290,6 @@ class SVT_DLLPUBLIC SvLBox
 
 protected:
 
-    WinBits         nWindowStyle;
     Link            aExpandedHdl;
     Link            aExpandingHdl;
     Link            aSelectHdl;
