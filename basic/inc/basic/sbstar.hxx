@@ -79,6 +79,8 @@ class StarBASIC : public SbxObject
     SbxObjectRef pVBAGlobals;
     SbxObject* getVBAGlobals( );
 
+    void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
+
 protected:
     BOOL            CError( SbError, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
 private:

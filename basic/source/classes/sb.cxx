@@ -734,6 +734,9 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
     return pMod;
 }
 
+typedef std::vector< StarBASIC* > DocBasicVector;
+static DocBasicVector GaDocBasics;
+
 StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
 {
@@ -763,6 +766,9 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     SetFlag( SBX_GBLSEARCH );
     pVBAGlobals = NULL;
     bQuit = FALSE;
+
+    if( bDocBasic )
+        GaDocBasics.push_back( this );
 }
 
 // #51727 Override SetModified so that the modified state
@@ -802,6 +808,29 @@ StarBASIC::~StarBASIC()
     }
 #endif
     }
+    else if( bDocBasic )
+    {
+        SbxError eOld = SbxBase::GetError();
+
+        DocBasicVector::iterator it;
+        for( it = GaDocBasics.begin() ; it != GaDocBasics.end() ; ++it )
+        {
+            if( *it == this )
+            {
+                GaDocBasics.erase( it );
+                break;
+            }
+        }
+        for( it = GaDocBasics.begin() ; it != GaDocBasics.end() ; ++it )
+        {
+            StarBASIC* pBasic = *it;
+            pBasic->implClearDependingVarsOnDelete( this );
+        }
+
+        SbxBase::ResetError();
+        if( eOld != SbxERR_OK )
+            SbxBase::SetError( eOld );
+    }
 
     // #100326 Set Parent NULL in registered listeners
     if( xUnoListeners.Is() )
@@ -834,6 +863,27 @@ void StarBASIC::operator delete( void* p )
 {
     ::operator delete( p );
 }
+
+void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
+{
+    if( this != pDeletedBasic )
+    {
+        for( USHORT i = 0; i < pModules->Count(); i++ )
+        {
+            SbModule* p = (SbModule*)pModules->Get( i );
+            p->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
+        }
+    }
+
+    for( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
+    {
+        SbxVariable* pVar = pObjs->Get( nObj );
+        StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
+        if( pBasic && pBasic != pDeletedBasic )
+            pBasic->implClearDependingVarsOnDelete( pDeletedBasic );
+    }
+}
+
 
 /**************************************************************************
 *

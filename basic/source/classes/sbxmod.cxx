@@ -1334,6 +1334,61 @@ void SbModule::ClearPrivateVars()
     }
 }
 
+void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic )
+{
+    if( pVar->SbxValue::GetType() != SbxOBJECT || pVar->ISA( SbProcedureProperty ) )
+        return;
+
+    SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
+    if( pObj != NULL )
+    {
+        SbxObject* p = pObj;
+
+        SbModule* pMod = PTR_CAST( SbModule, p );
+        if( pMod != NULL )
+            pMod->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
+
+        while( (p = p->GetParent()) != NULL )
+        {
+            StarBASIC* pBasic = PTR_CAST( StarBASIC, p );
+            if( pBasic != NULL && pBasic == pDeletedBasic )
+            {
+                pVar->SbxValue::Clear();
+                break;
+            }
+        }
+    }
+}
+
+void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
+{
+    (void)pDeletedBasic;
+
+    for( USHORT i = 0 ; i < pProps->Count() ; i++ )
+    {
+        SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
+        if( p )
+        {
+            if( p->GetType() & SbxARRAY )
+            {
+                SbxArray* pArray = PTR_CAST(SbxArray,p->GetObject());
+                if( pArray )
+                {
+                    for( USHORT j = 0 ; j < pArray->Count() ; j++ )
+                    {
+                        SbxVariable* pVar = PTR_CAST(SbxVariable,pArray->Get( j ));
+                        implClearIfVarDependsOnDeletedBasic( pVar, pDeletedBasic );
+                    }
+                }
+            }
+            else
+            {
+                implClearIfVarDependsOnDeletedBasic( p, pDeletedBasic );
+            }
+        }
+    }
+}
+
 // Zunaechst in dieses Modul, um 358-faehig zu bleiben
 // (Branch in sb.cxx vermeiden)
 void StarBASIC::ClearAllModuleVars( void )
@@ -2494,7 +2549,6 @@ void SbUserFormModule::InitObject()
 {
     try
     {
-
         String aHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
         SbUnoObject* pGlobs = (SbUnoObject*)GetParent()->Find( aHook, SbxCLASS_DONTCARE );
         if ( m_xModel.is() && pGlobs )

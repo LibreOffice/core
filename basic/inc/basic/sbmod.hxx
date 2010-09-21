@@ -61,6 +61,8 @@ class SbModule : public SbxObject
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
 
+    void            implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
+
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     ::rtl::OUString     aOUSource;
@@ -83,6 +85,7 @@ protected:
     USHORT          Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
+    void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
     void            GlobalRunInit( BOOL bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
     const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT& ) const;
