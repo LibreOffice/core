@@ -98,6 +98,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <framework/framelistanalyzer.hxx>
 
 #include <boost/optional.hpp>
 
@@ -2089,7 +2090,25 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
         {
             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
             Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
-            xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+
+            if ( !i_bHidden )
+            {
+                try
+                {
+                    // if there is a backing component, use it
+                    Reference< XFramesSupplier > xTaskSupplier( xDesktop , css::uno::UNO_QUERY_THROW );
+                    ::framework::FrameListAnalyzer aAnalyzer( xTaskSupplier, Reference< XFrame >(), ::framework::FrameListAnalyzer::E_BACKINGCOMPONENT );
+
+                    if ( aAnalyzer.m_xBackingComponent.is() )
+                        xFrame = aAnalyzer.m_xBackingComponent;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !xFrame.is() )
+                xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+
             bOwnFrame = true;
         }
 
