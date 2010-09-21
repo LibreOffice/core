@@ -363,19 +363,19 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
         implPushBackPropertyValue( aNewValue );
         return true;
     }
-#if OSL_DEBUG_LEVEL > 0
     if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
     {
+#if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
         sMessage += ::rtl::OString( "  Attribute name: " );
         sMessage += ::rtl::OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
         sMessage += ::rtl::OString( "\n  value: " );
         sMessage += ::rtl::OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
         OSL_ENSURE( sal_False, sMessage.getStr() );
+#endif
         return false;
     }
     return true;
-#endif
 }
 
 //=====================================================================
