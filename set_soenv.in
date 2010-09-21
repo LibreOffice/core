@@ -2118,9 +2118,6 @@ print "*********************************************************".
       "******************* $newline";
 
 print "\nTo build, do:\n";
-print "  \$ source $outfile.sh\n";
-print "  \$ ./bootstrap\n";
-print "  \$ ./fetch_tarballs.sh\n";
 print "  \$ make\n\n";
 print "Developer installation (after you have built):\n";
 print "  \$ make dev-install\n\n";

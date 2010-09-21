@@ -4,6 +4,7 @@ SHELL=/bin/sh
 
 all:
 	. ./*[Ee]nv.[Ss]et.sh && \
+	./fetch_tarballs.sh ooo.lst && \
 	./bootstrap && \
 		cd instsetoo_native && ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -P@BUILD_MAX_JOBS@
 
