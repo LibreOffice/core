@@ -143,15 +143,19 @@ SbxVariable* SbiRuntime::FindElement
                     else
                         pElem = getVBAConstant( aName );
                 }
-                // #72382 VORSICHT! Liefert jetzt wegen unbekannten
-                // Modulen IMMER ein Ergebnis!
-                SbUnoClass* pUnoClass = findUnoClass( aName );
-                if( pUnoClass )
+
+                if( !pElem )
                 {
-                    pElem = new SbxVariable( t );
-                    SbxValues aRes( SbxOBJECT );
-                    aRes.pObj = pUnoClass;
-                    pElem->SbxVariable::Put( aRes );
+                    // #72382 VORSICHT! Liefert jetzt wegen unbekannten
+                    // Modulen IMMER ein Ergebnis!
+                    SbUnoClass* pUnoClass = findUnoClass( aName );
+                    if( pUnoClass )
+                    {
+                        pElem = new SbxVariable( t );
+                        SbxValues aRes( SbxOBJECT );
+                        aRes.pObj = pUnoClass;
+                        pElem->SbxVariable::Put( aRes );
+                    }
                 }
 
                 // #62939 Wenn eine Uno-Klasse gefunden wurde, muss
