@@ -231,7 +231,7 @@ public class UCB  {
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             //TODO error message;
             System.out.println("Correct exception thrown: " + ex.getClass().toString());
-        } catch(com.sun.star.ucb.InteractiveNetworkResolveNameException ex) {
+        } catch(com.sun.star.ucb.InteractiveNetworkException ex) {
             System.out.println("This Exception is correctly thrown when no Proxy in StarOffice is used.");
             System.out.println("To reproduce the bug behaviour, use a Proxy and try again.");
         } catch (Exception ex) {
