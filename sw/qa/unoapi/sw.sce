@@ -6,7 +6,7 @@
 #i86751 -o sw.SwAccessibleDocumentView
 -o sw.SwAccessibleEndnoteView
 #i113142 -o sw.SwAccessibleFooterView
--o sw.SwAccessibleFootnoteView
+#i114637 -o sw.SwAccessibleFootnoteView
 #i113142 -o sw.SwAccessibleHeaderView
 #i89022 -o sw.SwAccessiblePageView
 -o sw.SwAccessibleParagraphView
