@@ -30,7 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <svtools/svparser.hxx>
-#include <svl/svarray.hxx>
+#include <stack>
 
 struct RtfParserState_Impl
 {
@@ -42,7 +42,7 @@ struct RtfParserState_Impl
     {}
 };
 
-SV_DECL_VARARR( RtfParserStates_Impl, RtfParserState_Impl, 16, 16 )
+typedef std::stack< RtfParserState_Impl > RtfParserStates_Impl;
 
 class SVT_DLLPUBLIC SvRTFParser : public SvParser
 {
