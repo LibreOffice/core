@@ -130,7 +130,7 @@ SvxRTFParser::~SvxRTFParser()
         ClearFontTbl();
     if( aStyleTbl.Count() )
         ClearStyleTbl();
-    if( aAttrStack.Count() )
+    if( !aAttrStack.empty() )
         ClearAttrStack();
 
     delete pRTFDefaults;
@@ -149,7 +149,7 @@ void SvxRTFParser::SetInsPos( const SvxPosition& rNew )
 
 SvParserState SvxRTFParser::CallParser()
 {
-    DBG_ASSERT( pInsPos, "keine Einfuegeposition" );
+    DBG_ASSERT( pInsPos, "no insertion" );
 
     if( !pInsPos )
         return SVPAR_ERROR;
@@ -160,7 +160,7 @@ SvParserState SvxRTFParser::CallParser()
         ClearFontTbl();
     if( aStyleTbl.Count() )
         ClearStyleTbl();
-    if( aAttrStack.Count() )
+    if( !aAttrStack.empty() )
         ClearAttrStack();
 
     bIsSetDfltTab = FALSE;
@@ -836,9 +836,10 @@ void SvxRTFParser::ClearStyleTbl()
 void SvxRTFParser::ClearAttrStack()
 {
     SvxRTFItemStackType* pTmp;
-    for( ULONG nCnt = aAttrStack.Count(); nCnt; --nCnt )
+    for( size_t nCnt = aAttrStack.size(); nCnt; --nCnt )
     {
-        pTmp = aAttrStack.Pop();
+        pTmp = aAttrStack.back();
+        aAttrStack.pop_back();
         delete pTmp;
     }
 }
@@ -872,7 +873,7 @@ const Font& SvxRTFParser::GetFont( USHORT nId )
 
 SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.Top();
+    SvxRTFItemStackType* pAkt = aAttrStack.back();
     SvxRTFItemStackType* pNew;
     if( pAkt )
         pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, bCopyAttr );
@@ -881,7 +882,7 @@ SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
                                         *pInsPos );
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
-    aAttrStack.Push( pNew );
+    aAttrStack.push_back( pNew );
     bNewGroup = FALSE;
     return pNew;
 }
@@ -936,10 +937,11 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
 
 void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
 {
-    if( aAttrStack.Count() )
+    if( !aAttrStack.empty() )
     {
-        SvxRTFItemStackType *pOld = aAttrStack.Pop();
-        SvxRTFItemStackType *pAkt = aAttrStack.Top();
+        SvxRTFItemStackType *pOld = aAttrStack.back();
+        aAttrStack.pop_back();
+        SvxRTFItemStackType *pAkt = aAttrStack.back();
 
         do {        // middle check loop
             ULONG nOldSttNdIdx = pOld->pSttNd->GetIdx();
@@ -1114,9 +1116,9 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
 
                         // alle bis hierher gueltigen Attribute "setzen"
                         AttrGroupEnd();
-                        pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
+                        pAkt = aAttrStack.back();  // can be changed after AttrGroupEnd!
                         pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
-                        aAttrStack.Push( pNew );
+                        aAttrStack.push_back( pNew );
                         pAkt = pNew;
                     }
                 }
@@ -1144,8 +1146,8 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
 
 void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc
 {
-    // noch alle Attrbute vom Stack holen !!
-    while( aAttrStack.Count() )
+    // repeat until all attributes will be taken from stack
+    while( !aAttrStack.empty() )
         AttrGroupEnd();
 
     for( USHORT n = aAttrSetList.Count(); n; )
@@ -1174,10 +1176,10 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
             SetAttrSet( *(*rSet.pChildList)[ n ] );
 }
 
-    // wurde noch kein Text eingefuegt ? (SttPos vom obersten StackEintrag!)
+    // Is text wasn't inserted? (Get SttPos from the top of stack!)
 int SvxRTFParser::IsAttrSttPos()
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.Top();
+    SvxRTFItemStackType* pAkt = aAttrStack.back();
     return !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
         pAkt->nSttCnt == pInsPos->GetCntIdx());
 }
