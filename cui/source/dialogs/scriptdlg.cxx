@@ -99,7 +99,7 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
     FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
 
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
@@ -367,15 +367,6 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
     }
 }
 
-void SFTreeListBox::UpdateEntries()
-{
-}
-
-SvLBoxEntry* SFTreeListBox::FindEntry( SvLBoxEntry* , const String& , BYTE  )
-{
-    return 0;
-}
-
 long SFTreeListBox::ExpandingHdl()
 {
     return TRUE;
@@ -624,10 +615,6 @@ short SvxScriptOrgDialog::Execute()
     short nRet = ModalDialog::Execute();
     Application::SetDefDialogParent( pPrevDlgParent );
     return nRet;
-}
-
-void SvxScriptOrgDialog::EnableButton( Button& , BOOL  )
-{
 }
 
 void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
@@ -919,38 +906,6 @@ Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
     }
 
     return model;
-}
-
-Reference< XInterface  >
-SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
-{
-    Reference< XInterface > xModel;
-    Reference< lang::XMultiComponentFactory > mcf =
-            xCtx->getServiceManager();
-    Reference< frame::XDesktop > desktop (
-        mcf->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), xCtx ),
-            UNO_QUERY );
-
-    Reference< container::XEnumerationAccess > componentsAccess =
-        desktop->getComponents();
-    Reference< container::XEnumeration > components =
-        componentsAccess->createEnumeration();
-    while (components->hasMoreElements())
-    {
-        Reference< frame::XModel > model(
-            components->nextElement(), UNO_QUERY );
-        if ( model.is() )
-        {
-            ::rtl::OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
-            if( sTdocUrl.equals( docName ) )
-            {
-                xModel = model;
-                break;
-            }
-        }
-    }
-    return xModel;
 }
 
 void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
@@ -1369,28 +1324,6 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         aScriptsBox.RequestingChilds( pEntry );
     }
     aScriptsBox.SetCurEntry( pEntry );
-}
-
-BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1,
-    Reference< browse::XBrowseNode > node2 )
-{
-    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
-    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
-    if( node1->getName().equals( userStr ) )
-        return true;
-    if( node2->getName().equals( userStr ) )
-        return false;
-    if( node1->getName().equals( shareStr ) )
-        return true;
-    if( node2->getName().equals( shareStr ) )
-        return false;
-    return dialogSort2( node1, node2 );
-}
-
-BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
-    Reference< browse::XBrowseNode > node2 )
-{
-    return ( node1->getName().compareTo( node2->getName() ) < 0 );
 }
 
 ::rtl::OUString ReplaceString(

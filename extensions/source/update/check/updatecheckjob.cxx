@@ -327,13 +327,14 @@ void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & rEvt )
+void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
     throw ( uno::RuntimeException )
 {
     if ( m_pInitThread.get() != 0 )
+    {
         m_pInitThread->setTerminating();
-
-    disposing( rEvt );
+        m_pInitThread->join();
+    }
 }
 
 } // anonymous namespace

@@ -89,8 +89,6 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     BOOL                IsCreateNew() const { return aRbNewObject.IsChecked(); }
 
 public:
-    static void         FillObjectServerList( SvObjectServerList* );
-
                         SvInsertOleDlg( Window* pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                             const SvObjectServerList* pServers = NULL );

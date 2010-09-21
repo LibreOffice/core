@@ -90,7 +90,7 @@ SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, c
     , pCurEntry( 0 )
     , m_pDraggingEntry( 0 )
 {
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
     // Timer f"ur die BallonHelp
@@ -152,42 +152,6 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
 
     aArr.Remove( 0, nCount );
     Clear();
-}
-
-SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( const String& rName )
-{
-    SvLBoxEntry *pEntry = First();
-    while ( pEntry )
-    {
-        if ( GetEntryText( pEntry ) == rName )
-            return pEntry;
-        pEntry = Next( pEntry );
-    }
-
-    return NULL;
-}
-
-SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
-{
-    SvLBoxEntry *pEntry = First();
-    while ( pEntry )
-    {
-        SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData && pData->nOrd == nId )
-            return pEntry;
-        pEntry = Next( pEntry );
-    }
-
-    return NULL;
-}
-
-USHORT SvxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
-{
-    SvxGroupInfo_Impl *pData = pEntry ?
-        (SvxGroupInfo_Impl*) pEntry->GetUserData() : 0;
-    if ( pData )
-        return pData->nOrd;
-    return 0;
 }
 
 String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
@@ -262,7 +226,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         m_xFrame.set( xFrame );
     }
 
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
     ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
 
@@ -1212,12 +1176,6 @@ void
 SvxScriptSelectorDialog::SetDialogDescription( const String& rDescription )
 {
     aDialogDescription.SetText( rDescription );
-}
-
-USHORT
-SvxScriptSelectorDialog::GetSelectedId()
-{
-    return aCommands.GetId( aCommands.GetLastSelectedEntry() );
 }
 
 String

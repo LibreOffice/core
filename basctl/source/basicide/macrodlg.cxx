@@ -121,9 +121,10 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
     aMacroBox.SetSelectHdl( LINK( this, MacroChooser, MacroSelectHdl ) );
 
     aBasicBox.SetMode( BROWSEMODE_MODULES );
-    aBasicBox.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
-                             WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                             WB_HSCROLL );
+    aBasicBox.SetStyle( WB_TABSTOP | WB_BORDER |
+                        WB_HASLINES | WB_HASLINESATROOT |
+                        WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                        WB_HSCROLL );
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;

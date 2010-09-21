@@ -690,12 +690,6 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversionDialog::SetOptionsHdl( const Link& _rHdl )
-    {
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions, _rHdl );
-    }
-
-    //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetFindHdl( const Link& _rHdl )
     {
         m_aFind.SetClickHdl( _rHdl );
@@ -865,11 +859,6 @@ namespace svx
         m_aSuggestions.DisplayListBox( !_bByCharacter );
     }
 
-    //-------------------------------------------------------------------------
-    sal_Bool HangulHanjaConversionDialog::GetByCharacter( ) const
-    {
-        return m_aReplaceByChar.IsChecked();
-    }
     //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetConversionDirectionState(
             sal_Bool _bTryBothDirections,
@@ -1169,7 +1158,7 @@ namespace svx
         ,m_pCheckButtonData     ( NULL )
         ,m_xConversionDictionaryList( NULL )
     {
-        m_aDictsLB.SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+        m_aDictsLB.SetStyle( m_aDictsLB.GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
         m_aDictsLB.SetSelectionMode( SINGLE_SELECTION );
         m_aDictsLB.SetHighlightRange();
 //      m_aDictsLB.SetHelpId( xxx );

@@ -1523,47 +1523,6 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharNamePage::FillItemSetColor_Impl( SfxItemSet& rSet )
-{
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
-    const SvxColorItem* pOld = (const SvxColorItem*)GetOldItem( rSet, SID_ATTR_CHAR_COLOR );
-    const SvxColorItem* pItem = NULL;
-    BOOL bChanged = TRUE;
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
-    const SfxItemSet& rOldSet = GetItemSet();
-
-    Color aSelectedColor;
-    if ( m_pColorLB->GetSelectEntry() == m_pImpl->m_aTransparentText )
-        aSelectedColor = Color( COL_TRANSPARENT );
-    else
-        aSelectedColor = m_pColorLB->GetSelectEntryColor();
-
-    if ( pOld && pOld->GetValue() == aSelectedColor )
-        bChanged = FALSE;
-
-    if ( !bChanged )
-        bChanged = ( m_pColorLB->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
-
-    if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pItem ) == SFX_ITEM_SET &&
-         ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
-        bChanged = TRUE;
-
-    BOOL bModified = FALSE;
-
-    if ( bChanged && m_pColorLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-    {
-        rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
-        bModified = TRUE;
-    }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
-        CLEARTITEM;
-
-    return bModified;
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( SvxCharNamePage, UpdateHdl_Impl, Timer*, EMPTYARG )
 {
     UpdatePreview_Impl();
@@ -1656,7 +1615,6 @@ BOOL SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
     BOOL bModified = FillItemSet_Impl( rSet, Western );
     bModified |= FillItemSet_Impl( rSet, Asian );
     bModified |= FillItemSet_Impl( rSet, Ctl );
-//! bModified |= FillItemSetColor_Impl( rSet );
     return bModified;
 }
 

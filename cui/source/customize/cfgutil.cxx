@@ -287,7 +287,7 @@ SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, c
     , pCurEntry( 0 )
     , pStylesInfo( 0 )
 {
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
     // Timer f"ur die BallonHelp
@@ -376,40 +376,6 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     Clear();
 }
 
-SvLBoxEntry* SfxConfigFunctionListBox_Impl::GetEntry_Impl( const String& rName )
-/*  Beschreibung
-    Ermittelt den SvLBoxEntry zu einem "ubergebenen String. Das setzt voraus, da\s
-    die Namen eindeutig sind.
-*/
-{
-    SvLBoxEntry *pEntry = First();
-    while ( pEntry )
-    {
-        if ( GetEntryText( pEntry ) == rName )
-            return pEntry;
-        pEntry = Next( pEntry );
-    }
-
-    return NULL;
-}
-
-SvLBoxEntry* SfxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
-/*  Beschreibung
-    Ermittelt den SvLBoxEntry zu einer "ubergebenen Id.
-*/
-{
-    SvLBoxEntry *pEntry = First();
-    while ( pEntry )
-    {
-        SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData && pData->nOrd == nId )
-            return pEntry;
-        pEntry = Next( pEntry );
-    }
-
-    return NULL;
-}
-
 SfxMacroInfo* SfxConfigFunctionListBox_Impl::GetMacroInfo()
 /*  Beschreibung
     Gibt die MacroInfo des selektierten Entry zur"uck ( sofern vorhanden ).
@@ -450,60 +416,6 @@ String SfxConfigFunctionListBox_Impl::GetCurLabel()
         return pData->sLabel;
     return pData->sCommand;
 }
-
-USHORT SfxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
-/*  Beschreibung
-    Gibt die Ordnungsnummer ( SlotId oder Macro-Nummer ) des Eintrags zur"uck.
-*/
-{
-    SfxGroupInfo_Impl *pData = pEntry ?
-        (SfxGroupInfo_Impl*) pEntry->GetUserData() : 0;
-    if ( pData )
-        return pData->nOrd;
-    return 0;
-}
-
-/*
-String SfxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
-{
-    // Information zum selektierten Entry aus den Userdaten holen
-    SfxGroupInfo_Impl *pInfo = pEntry ? (SfxGroupInfo_Impl*) pEntry->GetUserData(): 0;
-    if ( pInfo )
-    {
-        switch ( pInfo->nKind )
-        {
-            case SFX_CFGGROUP_FUNCTION :
-            case SFX_CFGFUNCTION_SLOT :
-            {
-                // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
-                USHORT nId = pInfo->nOrd;
-                String aText = Application::GetHelp()->GetHelpText( nId, this );
-
-                if ( !aText.Len() )
-                    aText = SFX_SLOTPOOL().GetSlotHelpText_Impl( nId );
-                return aText;
-            }
-
-            case SFX_CFGGROUP_SCRIPTCONTAINER :
-            case SFX_CFGFUNCTION_SCRIPT :
-            case SFX_CFGGROUP_BASICMGR :
-            case SFX_CFGGROUP_DOCBASICMGR :
-            case SFX_CFGGROUP_BASICLIB :
-            case SFX_CFGGROUP_BASICMOD :
-            case SFX_CFGFUNCTION_MACRO :
-            {
-                // Eintrag ist ein Macro, Hilfe aus der MacroInfo
-                SfxMacroInfo *pMacInfo = (SfxMacroInfo*) pInfo->pObject;
-                return pMacInfo->GetHelpText();
-            }
-
-            case SFX_CFGGROUP_STYLES :
-                return String();
-        }
-    }
-
-    return String();
-}*/
 
 void SfxConfigFunctionListBox_Impl::FunctionSelected()
 /*  Beschreibung
@@ -576,7 +488,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
         : SvTreeListBox( pParent, rResId )
         , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ), pStylesInfo(0)
 {
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage, BMP_COLOR_NORMAL );
     SetNodeBitmaps( pImp->m_collapsedImage_hc, pImp->m_expandedImage_hc, BMP_COLOR_HIGHCONTRAST );
 
@@ -1245,25 +1157,6 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
         }
     }
     return xModel;
-}
-
-::rtl::OUString SfxConfigGroupListBox_Impl::parseLocationName( const ::rtl::OUString& location )
-{
-    // strip out the last leaf of location name
-    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-    ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
-
-    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
-    {
-        temp = temp.copy( lastSlashIndex + 1 );
-    }
-    // maybe we should throw here!!!
-    else
-    {
-        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
-    }
-    return temp;
 }
 
 //-----------------------------------------------

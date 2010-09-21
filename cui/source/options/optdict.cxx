@@ -256,7 +256,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     aWordsLB.SetTabs(nStaticTabs);
 
     //! we use an algorithm of our own to insert elements sorted
-    aWordsLB.SetWindowBits(/*WB_SORT|*/WB_HSCROLL|WB_CLIPCHILDREN);
+    aWordsLB.SetStyle(aWordsLB.GetStyle()|/*WB_SORT|*/WB_HSCROLL|WB_CLIPCHILDREN);
 
 
     nWidth=aWordED.GetSizePixel().Width();
