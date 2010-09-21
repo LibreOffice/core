@@ -239,7 +239,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, BOOL bIsSaveVersion
     aVersionBox.SetDoubleClickHdl( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
 
     aVersionBox.GrabFocus();
-    aVersionBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
+    aVersionBox.SetStyle( aVersionBox.GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
     aVersionBox.SetSelectionMode( SINGLE_SELECTION );
     aVersionBox.SetTabs( &nTabs_Impl[0], MAP_APPFONT );
     aVersionBox.Resize();   // OS: Hack fuer richtige Selektion

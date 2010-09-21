@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,39 +24,33 @@
  *
  ************************************************************************/
 
-#ifndef UUI_PASSCRTDLG_HXX
-#define UUI_PASSCRTDLG_HXX
+#ifndef XMLOFF_PROPERTY_IDS_HXX
+#define XMLOFF_PROPERTY_IDS_HXX
 
-#include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <svtools/stdctrl.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-
-//============================================================================
-class PasswordCreateDialog : public ModalDialog
+//......................................................................................................................
+namespace xmloff
 {
-    FixedText       aFTPasswordCrt;
-    Edit            aEDPasswordCrt;
-    FixedText       aFTPasswordRepeat;
-    Edit            aEDPasswordRepeat;
-    FixedText       aFTWarning;
-    FixedLine       aFixedLine1;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+//......................................................................................................................
 
-    ResMgr*                                         pResourceMgr;
-    sal_uInt16                                      nMinLen;
+    //==================================================================================================================
+    //= PropertyId
+    //==================================================================================================================
+    enum PropertyId
+    {
+        PID_DATE_MIN,
+        PID_DATE_MAX,
+        PID_DEFAULT_DATE,
+        PID_DATE,
+        PID_TIME_MIN,
+        PID_TIME_MAX,
+        PID_DEFAULT_TIME,
+        PID_TIME,
 
-    DECL_LINK( OKHdl_Impl, OKButton * );
-    DECL_LINK( EditHdl_Impl, Edit * );
+        PID_INVALID
+    };
 
-public:
-    PasswordCreateDialog( Window* pParent, ResMgr * pResMgr, bool bMSCryptoMode = false );
+//......................................................................................................................
+} // namespace xmloff
+//......................................................................................................................
 
-    String          GetPassword() const { return aEDPasswordCrt.GetText(); }
-};
-
-#endif // UUI_PASSCRTDLG_HXX
+#endif // XMLOFF_PROPERTY_IDS_HXX

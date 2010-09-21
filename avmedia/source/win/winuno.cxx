@@ -62,7 +62,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                 static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString::createFromAscii( "/com.sun.star.comp.media.Manager_DirectX/UNO/SERVICES/com.sun.star.media.Manager_DirectX" ) ) );
+                ::rtl::OUString::createFromAscii( "/com.sun.star.comp.avmedia.Manager_DirectX/UNO/SERVICES/com.sun.star.media.Manager_DirectX" ) ) );
 
             bRet = sal_True;
         }
@@ -84,13 +84,13 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
 
-    if( rtl_str_compare( pImplName, "com.sun.star.comp.media.Manager_DirectX" ) == 0 )
+    if( rtl_str_compare( pImplName, "com.sun.star.comp.avmedia.Manager_DirectX" ) == 0 )
     {
         const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( "com.sun.star.media.Manager_DirectX" ) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString::createFromAscii( "com.sun.star.comp.media.Manager_DirectX" ),
+                        ::rtl::OUString::createFromAscii( "com.sun.star.comp.avmedia.Manager_DirectX" ),
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
     }
 

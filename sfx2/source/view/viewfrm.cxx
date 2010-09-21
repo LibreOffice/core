@@ -1184,10 +1184,6 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
     DBG_CHKTHIS(SfxViewFrame, 0);
     SFX_APP();
 
-#ifdef WIN
-    pSfxApp->TestFreeResources_Impl();
-#endif
-
     pDispatcher->DoActivate_Impl( bUI, pOldFrame );
 
     // Wenn ich einen parent habe und dieser ist kein parent des alten
@@ -1252,9 +1248,6 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
             pFrame = pFrame->GetParentViewFrame();
         }
     }
-#ifdef WIN
-    pSfxApp->TestFreeResources_Impl();
-#endif
 }
 
 //------------------------------------------------------------------------

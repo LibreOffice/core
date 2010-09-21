@@ -32,6 +32,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <basic/sbmeth.hxx>
+#include <svl/lstner.hxx>
 
 
 class BasicManager;
@@ -49,7 +50,7 @@ namespace basprov
         ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
 
 
-    class BasicScriptImpl : public BasicScriptImpl_BASE
+    class BasicScriptImpl : public BasicScriptImpl_BASE, public SfxListener
     {
     private:
         SbMethodRef         m_xMethod;
@@ -80,6 +81,9 @@ namespace basprov
                     ::com::sun::star::script::provider::ScriptFrameworkErrorException,
                     ::com::sun::star::reflection::InvocationTargetException,
                     ::com::sun::star::uno::RuntimeException );
+
+        // SfxListener
+        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     };
 
 //.........................................................................

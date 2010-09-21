@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,45 +24,27 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
+#ifndef XMLOFF_FORM_HANDLER_FACTORY_HXX
+#define XMLOFF_FORM_HANDLER_FACTORY_HXX
 
-#ifdef WIN
-#include <svwin.h>
-#endif
+#include "property_handler.hxx"
 
-#ifndef GCC
-#endif
-
-#ifdef WIN
-
-// Statische DLL-Verwaltungs-Variablen
-static HINSTANCE hDLLInst = 0;
-
-//==========================================================================
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
+//......................................................................................................................
+namespace xmloff
 {
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
+//......................................................................................................................
 
-    hDLLInst = hDLL;
+    //==================================================================================================================
+    //= FormHandlerFactory
+    //==================================================================================================================
+    class FormHandlerFactory
+    {
+    public:
+        static PPropertyHandler getFormPropertyHandler( const PropertyId i_propertyId );
+    };
 
-    return TRUE;
-}
+//......................................................................................................................
+} // namespace xmloff
+//......................................................................................................................
 
-
-//--------------------------------------------------------------------------
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-
-//==========================================================================
-
-#endif
-
+#endif // XMLOFF_FORM_HANDLER_FACTORY_HXX

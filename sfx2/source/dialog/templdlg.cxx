@@ -780,7 +780,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
 {
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
-    aFmtLb.SetWindowBits( WB_SORT | WB_HIDESELECTION );
+    aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT | WB_HIDESELECTION );
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb.SetFont( aFont );
@@ -823,7 +823,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     bBindingUpdate          ( TRUE )
 
 {
-    aFmtLb.SetWindowBits( WB_SORT );
+    aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT );
 }
 
 //-------------------------------------------------------------------------

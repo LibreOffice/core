@@ -64,6 +64,8 @@ SLOFILES =	\
         $(SLO)$/logging.obj \
         $(SLO)$/formcellbinding.obj \
         $(SLO)$/gridcolumnproptranslator.obj \
+        \
+        $(SLO)/property_meta_data.obj
 
 # --- Tagets -------------------------------------------------------
 

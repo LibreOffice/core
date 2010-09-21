@@ -31,6 +31,9 @@
 #include "propertyimport.hxx"
 #include "controlelement.hxx"
 #include "valueproperties.hxx"
+#include "eventimport.hxx"
+#include "logging.hxx"
+#include "property_description.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -39,9 +42,8 @@
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 /** === end UNO includes === **/
+
 #include <comphelper/stl_types.hxx>
-#include "eventimport.hxx"
-#include "logging.hxx"
 
 class XMLTextStyleContext;
 //.........................................................................
@@ -132,7 +134,7 @@ namespace xmloff
         virtual void    EndElement();
 
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -165,6 +167,10 @@ namespace xmloff
         /** sets the style properties which have been read for the element (if any)
         */
         void implSetStyleProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
+
+        PropertyGroups::const_iterator impl_matchPropertyGroup( const PropertyGroups& i_propertyGroups ) const;
+
+        virtual ::rtl::OUString determineDefaultServiceName() const;
     };
 
     //=====================================================================
@@ -225,7 +231,7 @@ namespace xmloff
         virtual void    EndElement();
 
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -238,6 +244,8 @@ namespace xmloff
         void implTranslateValueProperty(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
+
+        virtual ::rtl::OUString determineDefaultServiceName() const;
 
         /** registers the given cell address as value binding address for our element
 
@@ -265,7 +273,6 @@ namespace xmloff
         // OElementImport overridables
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         createElement();
-
     };
 
     // TODO:
@@ -295,7 +302,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         // OPropertyImport overridables
-        virtual void    handleAttribute( sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute( sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue
        );
@@ -321,7 +328,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -339,7 +346,7 @@ namespace xmloff
         );
 
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -358,7 +365,7 @@ namespace xmloff
 
     protected:
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -380,7 +387,7 @@ namespace xmloff
 
     protected:
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -430,7 +437,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
 
         // OPropertyImport overridables
-        virtual void    handleAttribute( sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute( sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue );
     };
@@ -516,7 +523,7 @@ namespace xmloff
         virtual void    EndElement();
 
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -715,7 +722,7 @@ namespace xmloff
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName);
 
         // OPropertyImport overridables
-        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 

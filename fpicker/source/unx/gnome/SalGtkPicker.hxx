@@ -53,7 +53,7 @@
 class SalGtkPicker
 {
     public:
-        SalGtkPicker() : m_pDialog(0) {}
+        SalGtkPicker(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceMgr);
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;

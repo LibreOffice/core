@@ -2746,6 +2746,11 @@ String SIP_SA_GRAFRESERVE4 { Text = "" ; };
 String SIP_SA_GRAFRESERVE5 { Text = "" ; };
 String SIP_SA_GRAFRESERVE6 { Text = "" ; };
 
+Bitmap SIP_SA_PAGESHADOW35X35
+{
+    File = "pageshadow35x35.png";
+};
+
 Bitmap SIP_SA_MARKERS
 {
     File = "markers.bmp";

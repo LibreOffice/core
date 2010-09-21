@@ -90,7 +90,6 @@ double ImpGetDate( const SbxValues* p )
                 nRes = 0;
             else
             {
-#ifndef DOS
                 LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
 
                 SvNumberFormatter* pFormatter;
@@ -141,9 +140,6 @@ double ImpGetDate( const SbxValues* p )
                 }
 
                 delete pFormatter;
-#else
-                SbxBase::SetError( SbxERR_CONVERSION ); nRes = 0;
-#endif
             }
             break;
         case SbxOBJECT:
@@ -246,7 +242,6 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-#ifndef DOS
         {
             if( !p->pOUString )
                 p->pOUString = new ::rtl::OUString;
@@ -303,11 +298,8 @@ start:
             pFormatter->GetOutputString( n, nIndex, aTmpString, &pColor );
             *p->pOUString = aTmpString;
             delete pFormatter;
-#endif
             break;
-#ifndef DOS
         }
-#endif
         case SbxOBJECT:
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);

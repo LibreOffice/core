@@ -358,6 +358,21 @@ void SdrPageView::PrePaint()
     }
 }
 
+void SdrPageView::PostPaint()
+{
+    const sal_uInt32 nCount(PageWindowCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        SdrPageWindow* pCandidate = GetPageWindow(a);
+
+        if(pCandidate)
+        {
+            pCandidate->PostPaint();
+        }
+    }
+}
+
 void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     if(GetPage())
@@ -580,10 +595,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         rOut.SetLineColor( aColor );
 
         bool bMap0=rOut.IsMapModeEnabled();
-#ifdef WIN // SetPixel-Profiling fuer Windows
-       COLORREF aWinColRef=PALETTERGB(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
-       HDC aWinhDC=Sysdepen::GethDC(rOut);
-#endif
 
         long nWrX=0;//aWriterPageOffset.X();
         long nWrY=0;//aWriterPageOffset.Y();
