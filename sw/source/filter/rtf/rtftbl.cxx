@@ -861,7 +861,7 @@ void SwRTFParser::ReadTable( int nToken )
         //which were intended to be inside the tablerow are now left outside
         //the table after the row was placed before the current insertion point
         SvxRTFItemStack& rAttrStk = GetAttrStack();
-        for (USHORT n = 0; n < rAttrStk.Count(); ++n)
+        for (size_t n = 0; n < rAttrStk.size(); ++n)
         {
             SvxRTFItemStackType* pStk = rAttrStk[n];
             pStk->MoveFullNode(aOldPos, aNewPos);
@@ -1002,11 +1002,10 @@ void SwRTFParser::NewTblLine()
         pPam->DeleteMark();
     }
 
-    // alle Attribute, die schon auf den nachfolgen zeigen auf die neue
-    // Box umsetzen !!
+    // all attributes which will be displayed in new Box
     SvxRTFItemStack& rAttrStk = GetAttrStack();
     const SvxRTFItemStackType* pStk;
-    for( USHORT n = 0; n < rAttrStk.Count(); ++n )
+    for( size_t n = 0; n < rAttrStk.size(); ++n )
         if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == ULONG(nOldPos) &&
             !pStk->GetSttCnt() )
             ((SvxRTFItemStackType*)pStk)->SetStartPos( SwxPosition( pPam ) );
