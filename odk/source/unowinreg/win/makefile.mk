@@ -69,7 +69,7 @@ $(BIN)$/unowinreg.dll : unowinreg.cxx
 
 .ELSE
 
-$(BIN)$/unowinreg.dll : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/unowinreg.dll
+$(BIN)$/unowinreg.dll : $(TARFILE_LOCATION)/185d60944ea767075d27247c3162b3bc-unowinreg.dll
     @@-rm -f $@
     $(GNUCOPY) $< $@
 
