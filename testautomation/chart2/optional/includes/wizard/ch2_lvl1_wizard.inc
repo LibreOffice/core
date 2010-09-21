@@ -199,7 +199,7 @@ testcase tCreateNew3DChart
     endif    
     printlog "Check that 3D look is 'simple' (=default)"
     if Scheme3D.GetSelIndex <> 1 then
-        qaerrorlog "#i112522# - Default 3D Look ('simple') has not been preserved after save and reload."
+        warnlog "#i112522# - Default 3D Look ('simple') has not been preserved after save and reload."
     endif    
     printlog "Check that 3D shape 'cone' is selected"
     if BarColumnShape.GetSelIndex <> 3 Then

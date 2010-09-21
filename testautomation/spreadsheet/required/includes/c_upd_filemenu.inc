@@ -238,6 +238,7 @@ testcase tFileOpenCSV
     Oeffnen.Click
     Kontext "TextImport"
     TextImport.ok
+    sleep (2)
     Printlog " - CSV import dialog is in function"
     Kontext "DocumentCalc"
     printlog " Close document"
@@ -357,7 +358,7 @@ endcase
 testcase tFileRecentDocuments
 
 if gPlatform = "lin" then
-    qaerrorlog "#110649# Due to bug this testcase is not available"
+    warnlog "#110649# Due to bug this testcase is not available"
     goto endsub
 end if
     

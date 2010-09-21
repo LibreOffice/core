@@ -30,7 +30,6 @@
 '* short description :
 '*
 '\**********************************************************************************
-
 sub id_Tools
     printLog "---------    id_006    ----------"
     call tiToolsSpellchecking
