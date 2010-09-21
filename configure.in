@@ -7387,7 +7387,7 @@ BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
 if test "z$with_num_cpus" != "z"; then
     BUILD_NCPUS=$with_num_cpus
 fi
-if test "$BUILD_NCPUS" = "0" ; then
+if echo "$BUILD_NCPUS" | $EGREP -q '^[[[:space:]]]*0[[[:space:]]]*$' ; then
    BUILD_NCPUS=1
 fi
 AC_MSG_RESULT([$BUILD_NCPUS])
