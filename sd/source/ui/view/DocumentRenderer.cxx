@@ -468,6 +468,7 @@ namespace {
                                     GetSlidesPerPageSequence(),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                    Sequence< sal_Bool >(),
                                     aContentOpt
                                     )
                                 );
@@ -481,6 +482,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                    Sequence< sal_Bool >(),
                                     aSlidesPerPageOpt )
                                 );
             }
@@ -556,6 +558,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                    Sequence< sal_Bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -571,6 +574,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                    Sequence< sal_Bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -602,6 +606,7 @@ namespace {
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                Sequence< sal_Bool >(),
                                 aIncludeOpt
                                 )
                             );
@@ -1245,6 +1250,7 @@ public:
             return;
 
         bool bIsValueChanged = processProperties( rOptions );
+        bool bIsPaperChanged = false;
 
         // The RenderDevice property is handled specially: its value is
         // stored in mpPrinter instead of being retrieved on demand.
@@ -1256,14 +1262,21 @@ public:
             VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
             OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
             mpPrinter = dynamic_cast<Printer*>(pOut);
+            Size aPageSizePixel = mpPrinter ? mpPrinter->GetPaperSizePixel() : Size();
+            if( aPageSizePixel != maPrinterPageSizePixel )
+            {
+                bIsPaperChanged = true;
+                maPrinterPageSizePixel = aPageSizePixel;
+            }
         }
 
         if (bIsValueChanged)
         {
             if ( ! mpOptions )
                 mpOptions.reset(new PrintOptions(*this, maSlidesPerPage));
-            PreparePages();
         }
+        if( bIsValueChanged || bIsPaperChanged )
+            PreparePages();
     }
 
 
@@ -1393,6 +1406,7 @@ private:
     ViewShellBase& mrBase;
     bool mbIsDisposed;
     Printer* mpPrinter;
+    Size maPrinterPageSizePixel;
     ::boost::scoped_ptr<PrintOptions> mpOptions;
     ::std::vector< ::boost::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
     ::boost::scoped_ptr<DrawView> mpPrintView;

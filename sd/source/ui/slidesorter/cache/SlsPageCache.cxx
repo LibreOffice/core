@@ -44,10 +44,12 @@ namespace sd { namespace slidesorter { namespace cache {
 
 PageCache::PageCache (
     const Size& rPreviewSize,
+    const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
    : mpImplementation(
         new GenericPageCache(
             rPreviewSize,
+            bDoSuperSampling,
             rpCacheContext))
 {
 }
@@ -62,26 +64,66 @@ PageCache::~PageCache (void)
 
 
 
-void PageCache::ChangeSize(const Size& rPreviewSize)
+void PageCache::ChangeSize (
+    const Size& rPreviewSize,
+    const bool bDoSuperSampling)
 {
-    mpImplementation->ChangePreviewSize(rPreviewSize);
+    mpImplementation->ChangePreviewSize(rPreviewSize, bDoSuperSampling);
 }
 
 
 
 
-BitmapEx PageCache::GetPreviewBitmap (
-    CacheKey aKey,
-    const Size& rSize)
+Bitmap PageCache::GetPreviewBitmap (
+    const CacheKey aKey,
+    const bool bResize)
 {
-    return mpImplementation->GetPreviewBitmap(aKey, rSize);
+    return mpImplementation->GetPreviewBitmap(aKey, bResize);
 }
 
 
 
 
-void PageCache::ReleasePreviewBitmap (
-    CacheKey aKey)
+Bitmap PageCache::GetMarkedPreviewBitmap (
+    const CacheKey aKey,
+    const bool bResize)
+{
+    return mpImplementation->GetMarkedPreviewBitmap(aKey, bResize);
+}
+
+
+
+
+void PageCache::SetMarkedPreviewBitmap (
+    const CacheKey aKey,
+    const Bitmap& rMarkedBitmap)
+{
+    mpImplementation->SetMarkedPreviewBitmap(aKey, rMarkedBitmap);
+}
+
+
+
+
+void PageCache::RequestPreviewBitmap (const CacheKey aKey)
+{
+    return mpImplementation->RequestPreviewBitmap(aKey);
+}
+
+
+
+
+void PageCache::InvalidatePreviewBitmap (
+    const CacheKey aKey,
+    const bool bRequestPreview)
+{
+    if (mpImplementation->InvalidatePreviewBitmap(aKey) && bRequestPreview)
+        RequestPreviewBitmap(aKey);
+}
+
+
+
+
+void PageCache::ReleasePreviewBitmap (const CacheKey aKey)
 {
     mpImplementation->ReleasePreviewBitmap(aKey);
 }
@@ -89,7 +131,7 @@ void PageCache::ReleasePreviewBitmap (
 
 
 
-void PageCache::InvalidateCache (bool bUpdateCache)
+void PageCache::InvalidateCache (const bool bUpdateCache)
 {
     mpImplementation->InvalidateCache(bUpdateCache);
 }
@@ -98,8 +140,8 @@ void PageCache::InvalidateCache (bool bUpdateCache)
 
 
 void PageCache::SetPreciousFlag (
-    CacheKey aKey,
-    bool bIsPrecious)
+    const CacheKey aKey,
+    const bool bIsPrecious)
 {
     mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }

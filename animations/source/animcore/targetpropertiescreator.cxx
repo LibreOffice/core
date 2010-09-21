@@ -42,7 +42,6 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <comphelper/optionalvalue.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sequence.hxx>
 
