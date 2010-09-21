@@ -1,148 +1,148 @@
-*TabelleAuftrennen FN_TABLE_SPLIT_TABLE
+*TabelleAuftrennen .uno:SplitTable
 UeberschriftKopieren SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_CNTNT
 EigeneMitVorlage SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BOX_PARA
 Eigene SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BOX_NOPARA
 Keine SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BORDER
 
-*TabelleAusblenden FID_TABLE_HIDE
+*TabelleAusblenden .uno:Hide
 
-*TabellenFormat HID_FORMAT_TABLE
+*TabellenFormat SW_HID_FORMAT_TABLE
 
-*TabelleEinblenden FID_TABLE_SHOW
-AusgeblendeteTabelle SC:MULTILISTBOX:RID_SCDLG_SHOW_TAB:LB_ENTRYLIST HID_SC_SELENTRY_LIST
+*TabelleEinblenden .uno:Show
+AusgeblendeteTabelle SC:MULTILISTBOX:RID_SCDLG_SHOW_TAB:LB_ENTRYLIST SC_HID_SC_SELENTRY_LIST
 
-*TabelleEinfuegenCalc sc:ModalDialog:RID_SCDLG_INSERT_TABLE
-Vor sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_BEFORE
-Nach sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_BEHIND
-Anzahl sc:NumericField:RID_SCDLG_INSERT_TABLE:NF_COUNT
-NeuErstellen sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_NEW
-AusDateiErstellen sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_FROMFILE
-TabellenName sc:Edit:RID_SCDLG_INSERT_TABLE:ED_TABNAME
-Auswahl sc:MultiListBox:RID_SCDLG_INSERT_TABLE:LB_TABLES
-Verknuepfen sc:CheckBox:RID_SCDLG_INSERT_TABLE:CB_LINK
-Durchsuchen sc:PushButton:RID_SCDLG_INSERT_TABLE:BTN_BROWSE
-Tabellen sc:PushButton:RID_SCDLG_INSERT_TABLE:BTN_BROWSE
+*TabelleEinfuegenCalc sc.ModalDialog.25646
+Vor sc.RadioButton.25646.11
+Nach sc.RadioButton.25646.12
+Anzahl sc.NumericField.25646.23
+NeuErstellen sc.RadioButton.25646.21
+AusDateiErstellen sc.RadioButton.25646.26
+TabellenName sc.Edit.25646.25
+Auswahl sc.MultiListBox.25646.27
+Verknuepfen sc.CheckBox.25646.29
+Durchsuchen sc.PushButton.25646.28
+Tabellen sc.PushButton.25646.28
 
-*TabelleEinfuegenWriter FN_INSERT_TABLE
-TabellenName sw:Edit:DLG_INSERT_TABLE:ED_NAME
-Spalten sw:NumericField:DLG_INSERT_TABLE:ED_COL
-Zeilen sw:NumericField:DLG_INSERT_TABLE:ED_ROW
-UeberschriftWiederholen sw:CheckBox:DLG_INSERT_TABLE:CB_REPEAT_HEADER
-TabelleNichtTrennen sw:CheckBox:DLG_INSERT_TABLE:CB_DONT_SPLIT
-Umrandung sw:CheckBox:DLG_INSERT_TABLE:CB_BORDER
+*TabelleEinfuegenWriter .uno:InsertTable
+TabellenName sw.Edit.21450.11
+Spalten sw.NumericField.21450.4
+Zeilen sw.NumericField.21450.5
+UeberschriftWiederholen sw.CheckBox.21450.14
+TabelleNichtTrennen sw.CheckBox.21450.15
+Umrandung sw.CheckBox.21450.16
 Autoformat SW:PUSHBUTTON:DLG_INSERT_TABLE:BT_AUTOFORMAT
-Ueberschrift sw:CheckBox:DLG_INSERT_TABLE:CB_HEADER
+Ueberschrift sw.CheckBox.21450.13
 
-*TabellenFuellen FID_INS_CELL_CONTENTS
-AuswahlAllesEinfuegen sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSALL
-AuswahlZeichenketten sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSSTRINGS
-AuswahlZahlen sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSNUMBERS
-AuswahlDatumZeit sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSDATETIME
-AuswahlFormeln sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSFORMULAS
-AuswahlNotizen sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSNOTES
-AuswahlFormate sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSATTRS
-Objects sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSOBJECTS
-RechenopperationenKeine sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_NOOP
-RechenopperationenAddieren sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_ADD
-RechenopperationenSubtrahieren sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_SUB
-RechenopperationenMultiplizieren sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_MUL
-RechenopperationenDividieren sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_DIV
-LeerzeilenUeberspringen sc:CheckBox:RID_SCDLG_INSCONT:BTN_SKIP_EMPTY
-Verknuepfen sc:CheckBox:RID_SCDLG_INSCONT:BTN_LINK
-Transponieren sc:CheckBox:RID_SCDLG_INSCONT:BTN_TRANSPOSE
+*TabellenFuellen .uno:InsertContents
+AuswahlAllesEinfuegen sc.CheckBox.25618.20
+AuswahlZeichenketten sc.CheckBox.25618.21
+AuswahlZahlen sc.CheckBox.25618.22
+AuswahlDatumZeit sc.CheckBox.25618.23
+AuswahlFormeln sc.CheckBox.25618.24
+AuswahlNotizen sc.CheckBox.25618.26
+AuswahlFormate sc.CheckBox.25618.25
+Objects sc.CheckBox.25618.41
+RechenopperationenKeine sc.RadioButton.25618.27
+RechenopperationenAddieren sc.RadioButton.25618.28
+RechenopperationenSubtrahieren sc.RadioButton.25618.29
+RechenopperationenMultiplizieren sc.RadioButton.25618.30
+RechenopperationenDividieren sc.RadioButton.25618.31
+LeerzeilenUeberspringen sc.CheckBox.25618.33
+Verknuepfen sc.CheckBox.25618.35
+Transponieren sc.CheckBox.25618.34
 NichtVerschieben SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_NONE
 NachUnten SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_DOWN
 NachRechts SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_RIGHT
 
-*TabelleSchuetzen FID_PROTECT_TABLE
-Passwort HID_PASSWD_TABLE
-Bestaetigung sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
-IstVerdeckt sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
+*TabelleSchuetzen .uno:Protect
+Passwort SC_HID_PASSWD_TABLE
+Bestaetigung sfx2.Edit.2316.16
+IstVerdeckt sfx2.Edit.2316.12
 
-*TabelleUmbenennen FID_TAB_RENAME
-TabellenName HID_SC_RENAME_NAME sc:Edit:RID_SCDLG_STRINPUT:ED_INPUT
+*TabelleUmbenennen .uno:Name
+TabellenName SC_HID_SC_RENAME_NAME sc.Edit.25620.10
 
-*TabellenVerbinden FN_TABLE_MERGE_TABLE
-MitVorherigerTabelleVerbinden sw:RadioButton:DLG_MERGE_TABLE:RB_MERGE_PREV
-MitNachfolgenderTabelleVerbinden sw:RadioButton:DLG_MERGE_TABLE:RB_MERGE_NEXT
+*TabellenVerbinden .uno:MergeTable
+MitVorherigerTabelleVerbinden sw.RadioButton.21465.5
+MitNachfolgenderTabelleVerbinden sw.RadioButton.21465.6
 
-*TabelleVerschiebenKopieren FID_TAB_MOVE
-InsDokument sc:ListBox:RID_SCDLG_MOVETAB:LB_DEST
-EinfuegenVor sc:ListBox:RID_SCDLG_MOVETAB:LB_INSERT
-Kopieren sc:CheckBox:RID_SCDLG_MOVETAB:BTN_COPY
+*TabelleVerschiebenKopieren .uno:Move
+InsDokument sc.ListBox.25619.2
+EinfuegenVor sc.ListBox.25619.4
+Kopieren sc.CheckBox.25619.5
 
-*TB_SC_Themenauswahl HID_DLGSTYLES_DIALOG
-ThemenListe HID_DLGSTYLES_LISTBOX
-Schliessen HID_DLGSTYLES_CANCEL
-Uebernehmen HID_DLGSTYLES_OKAY
+*TB_SC_Themenauswahl WIZARDS_HID_DLGSTYLES_DIALOG
+ThemenListe WIZARDS_HID_DLGSTYLES_LISTBOX
+Schliessen WIZARDS_HID_DLGSTYLES_CANCEL
+Uebernehmen WIZARDS_HID_DLGSTYLES_OKAY
 
-*TB_Farbe HID_POPUP_COLOR
-Automatic HID_POPUP_COLOR_CTRL
+*TB_Farbe SVX_HID_POPUP_COLOR
+Automatic SVX_HID_POPUP_COLOR_CTRL
 
-*TB_ImagemapEditor HID_IMAPDLG_TOOLBOX
-Zuweisen HID_IMAPDLG_APPLY
-Oeffnen HID_IMAPDLG_OPEN
-Speichern HID_IMAPDLG_SAVEAS
-Auswahl HID_IMAPDLG_SELECT
-Rechteck HID_IMAPDLG_RECT
-Ellipse HID_IMAPDLG_CIRCLE
-Polygon HID_IMAPDLG_POLY
-Freihandpolygon HID_IMAPDLG_FREEPOLY
-Punktebearbeiten HID_IMAPDLG_POLYEDIT
-Punkteverschieben HID_IMAPDLG_POLYMOVE
-Punkteeinfuegen HID_IMAPDLG_POLYINSERT
-Punkteloeschen HID_IMAPDLG_POLYDELETE
-Rueckgaengig HID_IMAPDLG_UNDO
-Wiederholen HID_IMAPDLG_REDO
-Aktiv HID_IMAPDLG_ACTIVE
-Makro HID_IMAPDLG_MACRO
-Eigenschaften HID_IMAPDLG_PROPERTY
+*TB_ImagemapEditor SVX_HID_IMAPDLG_TOOLBOX
+Zuweisen SVX_HID_IMAPDLG_APPLY
+Oeffnen SVX_HID_IMAPDLG_OPEN
+Speichern SVX_HID_IMAPDLG_SAVEAS
+Auswahl SVX_HID_IMAPDLG_SELECT
+Rechteck SVX_HID_IMAPDLG_RECT
+Ellipse SVX_HID_IMAPDLG_CIRCLE
+Polygon SVX_HID_IMAPDLG_POLY
+Freihandpolygon SVX_HID_IMAPDLG_FREEPOLY
+Punktebearbeiten SVX_HID_IMAPDLG_POLYEDIT
+Punkteverschieben SVX_HID_IMAPDLG_POLYMOVE
+Punkteeinfuegen SVX_HID_IMAPDLG_POLYINSERT
+Punkteloeschen SVX_HID_IMAPDLG_POLYDELETE
+Rueckgaengig SVX_HID_IMAPDLG_UNDO
+Wiederholen SVX_HID_IMAPDLG_REDO
+Aktiv SVX_HID_IMAPDLG_ACTIVE
+Makro SVX_HID_IMAPDLG_MACRO
+Eigenschaften SVX_HID_IMAPDLG_PROPERTY
 
-*TB_Umrandung HID_POPUP_FRAME
+*TB_Umrandung SVX_HID_POPUP_FRAME
 
-*TB_Umrandungsstil HID_POPUP_LINE
+*TB_Umrandungsstil SVX_HID_POPUP_LINE
 
-*TextbausteineUmbenennen HID_RENAME_GLOSSARY
+*TextbausteineUmbenennen SW_HID_RENAME_GLOSSARY
 Name SW:EDIT:DLG_RENAME_GLOS:ED_ON
 Neu SW:EDIT:DLG_RENAME_GLOS:ED_NN
 KuerzelAlt SW:EDIT:DLG_RENAME_GLOS:ED_OS
 KuerzelNeu SW:EDIT:DLG_RENAME_GLOS:ED_NS
 
-*TextInTabelleUmwandeln FN_CONVERT_TEXT_TABLE sw:ModalDialog:DLG_CONV_TEXT_TABLE
-Tabulator sw:RadioButton:DLG_CONV_TEXT_TABLE:CB_TAB
-Semikolon sw:RadioButton:DLG_CONV_TEXT_TABLE:CB_SEMI
-Absatz sw:RadioButton:DLG_CONV_TEXT_TABLE:CB_PARA
+*TextInTabelleUmwandeln .uno:ConvertTableText sw:ModalDialog:DLG_CONV_TEXT_TABLE
+Tabulator sw.RadioButton.21452.1
+Semikolon sw.RadioButton.21452.3
+Absatz sw.RadioButton.21452.4
 Andere SW:RADIOBUTTON:DLG_CONV_TEXT_TABLE:RB_OTHER
 AndereText SW:EDIT:DLG_CONV_TEXT_TABLE:ED_OTHER
 GleicheBreite SW:CHECKBOX:DLG_CONV_TEXT_TABLE:CB_KEEPCOLUMN
 Autoformat SW:PUSHBUTTON:DLG_CONV_TEXT_TABLE:BT_AUTOFORMAT
-Ueberschrift   sw:CheckBox:DLG_CONV_TEXT_TABLE:CB_HEADER
-Wiederholen   sw:CheckBox:DLG_CONV_TEXT_TABLE:CB_REPEAT_HEADER
-NichtTrennen   sw:CheckBox:DLG_CONV_TEXT_TABLE:CB_DONT_SPLIT
-Umrandung   sw:CheckBox:DLG_CONV_TEXT_TABLE:CB_BORDER
+Ueberschrift   sw.CheckBox.21452.13
+Wiederholen   sw.CheckBox.21452.14
+NichtTrennen   sw.CheckBox.21452.15
+Umrandung   sw.CheckBox.21452.16
 
-*TextmarkeEinfuegen FN_INSERT_BOOKMARK
-Textmarken sw:ComboBox:DLG_INSERT_BOOKMARK:CB_BOOKMARK
-Loeschen sw:PushButton:DLG_INSERT_BOOKMARK:BT_DELETE
+*TextmarkeEinfuegen .uno:InsertBookmark
+Textmarken sw.ComboBox.21667.1
+Loeschen sw.PushButton.21667.22
 
-*Ueberblenden SID_POLYGON_MORPHING
-Attributierung sd:CheckBox:DLG_MORPH:CBX_ATTRIBUTES
-GleicheOrientierung sd:CheckBox:DLG_MORPH:CBX_ORIENTATION
-Schritte sd:MetricField:DLG_MORPH:MTF_STEPS
+*Ueberblenden .uno:Morphing
+Attributierung sd.CheckBox.653.1
+GleicheOrientierung sd.CheckBox.653.2
+Schritte sd.MetricField.653.1
 
-*UeberStarCalc SID_ABOUT
+*UeberStarCalc .uno:About
 
-*UeberStarChart SID_ABOUT
+*UeberStarChart .uno:About
 
-*UeberStarDraw SID_ABOUT
+*UeberStarDraw .uno:About
 
-*UeberStarImage SID_ABOUT
+*UeberStarImage .uno:About
 
-*UeberStarMath SID_ABOUT
+*UeberStarMath .uno:About
 
-*UeberStarWriter SID_ABOUT
+*UeberStarWriter .uno:About
 
-*UmbruchEinfuegen FN_INSERT_BREAK_DLG
+*UmbruchEinfuegen .uno:InsertBreak
 Zeilenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_LINE
 Spaltenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_COL
 Seitenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_PAGE
@@ -150,19 +150,19 @@ Vorlage SW:LISTBOX:DLG_BREAK:LB_COLL
 SeitennummerAendern SW:CHECKBOX:DLG_BREAK:CB_PAGENUM
 Seitennummer SW:NUMERICFIELD:DLG_BREAK:ED_PAGENUM
 
-*UmwandelnInPolygon SID_VECTORIZE
-Farbanzahl sd:NumericField:DLG_VECTORIZE:NM_LAYERS
-Punktreduktion sd:MetricField:DLG_VECTORIZE:MT_REDUCE
-LoecherFuellen sd:CheckBox:DLG_VECTORIZE:CB_FILLHOLES
-Kachelgroesse sd:MetricField:DLG_VECTORIZE:MT_FILLHOLES
-Vorschau sd:PushButton:DLG_VECTORIZE:BTN_PREVIEW
+*UmwandelnInPolygon SD_HID_VECTORIZE_DLG
+Farbanzahl sd.NumericField.654.1
+Punktreduktion sd.MetricField.654.3
+LoecherFuellen sd.CheckBox.654.1
+Kachelgroesse sd.MetricField.654.4
+Vorschau sd.PushButton.654.1
 
-*UntenFuellen FID_FILL_TO_BOTTOM
+*UntenFuellen .uno:FillDown
 
-*UndoRedoBox HID_SVXTBX_UNDO_REDO_CTRL
-UndoRedoList svx:ListBox:RID_SVXTBX_UNDO_REDO_CTRL:LB_SVXTBX_UNDO_REDO_CTRL
+*UndoRedoBox SVX_HID_SVXTBX_UNDO_REDO_CTRL
+UndoRedoList svx.ListBox.10845.11
 
-*Verbinder HID_PAGE_CONNECTION SVX:TABPAGE:RID_SVXPAGE_CONNECTION
+*Verbinder CUI_HID_PAGE_CONNECTION SVX:TABPAGE:RID_SVXPAGE_CONNECTION
 Linie1 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_1
 Linie2 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_2
 Linie3 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_3
@@ -171,18 +171,18 @@ AnfangHorizontal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_HORZ_1
 AnfangVertikal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_VERT_1
 EndeHorizontal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_HORZ_2
 EndeVertikal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_VERT_2
-Vorschau HID_PAGE_CONNECTION_CTL_PREVIEW
+Vorschau CUI_HID_PAGE_CONNECTION_CTL_PREVIEW
 
-*VerknuepfungenBearbeiten cui:ModalDialog:MD_UPDATE_BASELINKS
-Liste HID_LINKDLG_TABLB
-VerknuepfungBearbeiten cui:PushButton:MD_UPDATE_BASELINKS:PB_OPEN_SOURCE
-Automatisch cui:RadioButton:MD_UPDATE_BASELINKS:RB_AUTOMATIC
-Manuell cui:RadioButton:MD_UPDATE_BASELINKS:RB_MANUAL
-Aktualisieren cui:PushButton:MD_UPDATE_BASELINKS:PB_UPDATE_NOW
-Aendern cui:PushButton:MD_UPDATE_BASELINKS:PB_CHANGE_SOURCE
-Loesen cui:PushButton:MD_UPDATE_BASELINKS:PB_BREAK_LINK
+*VerknuepfungenBearbeiten cui.ModalDialog.32002
+Liste CUI_HID_LINKDLG_TABLB
+VerknuepfungBearbeiten cui.PushButton.32002.36
+Automatisch cui.RadioButton.32002.42
+Manuell cui.RadioButton.32002.43
+Aktualisieren cui.PushButton.32002.35
+Aendern cui.PushButton.32002.37
+Loesen cui.PushButton.32002.38
 
-*VersendenMonitor HID_MERGE_PRINTMONITOR
+*VersendenMonitor SW_HID_MERGE_PRINTMONITOR
 
 *Versionen SFX2:MODALDIALOG:DLG_VERSIONS
 Speichern SFX2:PUSHBUTTON:DLG_VERSIONS:PB_SAVE
@@ -190,143 +190,143 @@ ImmerVersionSpeichern SFX2:CHECKBOX:DLG_VERSIONS:CB_SAVEONCLOSE
 Anzeigen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_VIEW
 Loeschen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_DELETE
 Oeffnen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_OPEN
-Vergleichen sfx2:PushButton:DLG_VERSIONS:PB_COMPARE
+Vergleichen sfx2.PushButton.2377.17
 
 *VersionskommentarEingeben SFX2:MODALDIALOG:DLG_COMMENTS
 Kommentar SFX2:MULTILINEEDIT:DLG_COMMENTS:ME_VERSIONS
 Schliessen SFX2:PUSHBUTTON:DLG_COMMENTS:PB_CLOSE
 
-*VerteilenDlg HID_PAGE_DISTRIBUTE
-KeineHorizontal cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_NONE
-Links cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_LEFT
-MitteHorizontal cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_CENTER
-AbstandHorizontal cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_DISTANCE
-Rechts cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_RIGHT
-KeineVertikal cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_NONE
-Oben cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_TOP
-MitteVertikal cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_CENTER
-AbstandVertikal cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_DISTANCE
-Unten cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_BOTTOM
+*VerteilenDlg CUI_HID_PAGE_DISTRIBUTE
+KeineHorizontal cui.RadioButton.10236.2
+Links cui.RadioButton.10236.3
+MitteHorizontal cui.RadioButton.10236.4
+AbstandHorizontal cui.RadioButton.10236.5
+Rechts cui.RadioButton.10236.6
+KeineVertikal cui.RadioButton.10236.8
+Oben cui.RadioButton.10236.9
+MitteVertikal cui.RadioButton.10236.10
+AbstandVertikal cui.RadioButton.10236.11
+Unten cui.RadioButton.10236.12
 
-*VerzeichniseintragEinfuegen FN_INSERT_IDX_ENTRY_DLG
-EintragOk HID_INSERT_IDX_MRK_OK
-EinfuegenSchliessen HID_INSERT_IDX_MRK_CLOSE
-Verzeichniseintrag HID_INSERT_IDX_MRK_ENTRY
-Verzeichnis HID_INSERT_IDX_MRK_TYPE
-Schluessel1 HID_INSERT_IDX_MRK_PRIM_KEY
-Schluessel2 HID_INSERT_IDX_MRK_SEC_KEY
-Stufe HID_INSERT_IDX_MRK_LEVEL
-EintragLoeschen HID_INSERT_IDX_MRK_DELETE
-EintragNeu HID_INSERT_IDX_MRK_NEW
-Haupteintrag HID_INSERT_IDX_MRK_MAIN_ENTRY
-AufAlleGleichenAnwenden HID_INSERT_IDX_MRK_APPLY_ALL
-EntryPhoneticReading HID_INSERT_IDX_MRK_PHONETIC_READING
+*VerzeichniseintragEinfuegen .uno:InsertIndexesEntry
+EintragOk SW_HID_INSERT_IDX_MRK_OK
+EinfuegenSchliessen SW_HID_INSERT_IDX_MRK_CLOSE
+Verzeichniseintrag SW_HID_INSERT_IDX_MRK_ENTRY
+Verzeichnis SW_HID_INSERT_IDX_MRK_TYPE
+Schluessel1 SW_HID_INSERT_IDX_MRK_PRIM_KEY
+Schluessel2 SW_HID_INSERT_IDX_MRK_SEC_KEY
+Stufe SW_HID_INSERT_IDX_MRK_LEVEL
+EintragLoeschen SW_HID_INSERT_IDX_MRK_DELETE
+EintragNeu SW_HID_INSERT_IDX_MRK_NEW
+Haupteintrag SW_HID_INSERT_IDX_MRK_MAIN_ENTRY
+AufAlleGleichenAnwenden SW_HID_INSERT_IDX_MRK_APPLY_ALL
+EntryPhoneticReading SW_HID_INSERT_IDX_MRK_PHONETIC_READING
 
-*VerzeichniseintragBearbeiten FN_EDIT_IDX_ENTRY_DLG
-EintragOk HID_INSERT_IDX_MRK_OK
-BearbeitenSchliessen HID_INSERT_IDX_MRK_CLOSE
-Verzeichnis HID_INSERT_IDX_MRK_TYPE
-Verzeichniseintrag HID_INSERT_IDX_MRK_ENTRY
-Schluessel1 HID_INSERT_IDX_MRK_PRIM_KEY
-Schluessel2 HID_INSERT_IDX_MRK_SEC_KEY
-Stufe HID_INSERT_IDX_MRK_LEVEL
-EintragLoeschen HID_INSERT_IDX_MRK_DELETE
-EintragNeu HID_INSERT_IDX_MRK_NEW
-Naechster HID_INSERT_IDX_MRK_NEXT
-Vorheriger HID_INSERT_IDX_MRK_PREV
+*VerzeichniseintragBearbeiten .uno:IndexEntryDialog
+EintragOk SW_HID_INSERT_IDX_MRK_OK
+BearbeitenSchliessen SW_HID_INSERT_IDX_MRK_CLOSE
+Verzeichnis SW_HID_INSERT_IDX_MRK_TYPE
+Verzeichniseintrag SW_HID_INSERT_IDX_MRK_ENTRY
+Schluessel1 SW_HID_INSERT_IDX_MRK_PRIM_KEY
+Schluessel2 SW_HID_INSERT_IDX_MRK_SEC_KEY
+Stufe SW_HID_INSERT_IDX_MRK_LEVEL
+EintragLoeschen SW_HID_INSERT_IDX_MRK_DELETE
+EintragNeu SW_HID_INSERT_IDX_MRK_NEW
+Naechster SW_HID_INSERT_IDX_MRK_NEXT
+Vorheriger SW_HID_INSERT_IDX_MRK_PREV
 
-*VorlageErzeugen SID_STYLE_NEW_BY_EXAMPLE SID_TEMPLATE_NEW_BY_EXAMPLE
-Vorlagenname sfx2:ComboBox:DLG_NEW_STYLE_BY_EXAMPLE:LB_COL
+*VorlageErzeugen .uno:StyleNewByExample SID_TEMPLATE_NEW_BY_EXAMPLE
+Vorlagenname sfx2.ComboBox.2323.1
 
-*Vorlagenkatalog SID_STYLE_CATALOG
-Vorlagen sfx2:ListBox:RID_STYLECATALOG:BT_TOOL
-Ansicht HID_TEMPLATE_FMT
-Bereich sfx2:ListBox:RID_STYLECATALOG:BT_FLIST
-Neu sfx2:PushButton:RID_STYLECATALOG:BT_NEW
-Aendern sfx2:PushButton:RID_STYLECATALOG:BT_EDIT
-Loeschen sfx2:PushButton:RID_STYLECATALOG:BT_DEL
-Verwalten sfx2:PushButton:RID_STYLECATALOG:BT_ORG
+*Vorlagenkatalog .uno:StyleCatalog
+Vorlagen sfx2.ListBox.1461.10
+Ansicht SFX2_HID_TEMPLATE_FMT
+Bereich sfx2.ListBox.1461.8
+Neu sfx2.PushButton.1461.6
+Aendern sfx2.PushButton.1461.5
+Loeschen sfx2.PushButton.1461.4
+Verwalten sfx2.PushButton.1461.3
 
-*Vorschau SID_PREVIEW_WIN
+*Vorschau .uno:PreviewWindow
 
-*VorlageZuweisen HID_DLG_ADD_IDX_STYLES
-ZuweisenLinks sw:ImageButton:DLG_ADD_IDX_STYLES:PB_LEFT
-ZuweisenRechts sw:ImageButton:DLG_ADD_IDX_STYLES:PB_RIGHT
+*VorlageZuweisen SW_HID_DLG_ADD_IDX_STYLES
+ZuweisenLinks sw.ImageButton.20894.110
+ZuweisenRechts sw.ImageButton.20894.111
 
-*WBereicheBearbeiten HID_BIB_BASE
+*WBereicheBearbeiten SW_HID_BIB_BASE
 Bereichname SW:EDIT:DLG_BIB_BASE:ED_NAME
 Bereich SW:LISTBOX:DLG_BIB_BASE:LB_PATH
-Liste HID_GLOS_GROUP_TREE
-Neu sw:PushButton:DLG_BIB_BASE:PB_NEW
-Loeschen sw:PushButton:DLG_BIB_BASE:PB_DELETE
-Umbenennen sw:PushButton:DLG_BIB_BASE:PB_RENAME
+Liste SW_HID_GLOS_GROUP_TREE
+Neu sw.PushButton.21666.3
+Loeschen sw.PushButton.21666.4
+Umbenennen sw.PushButton.21666.11
 
-*WMFOptionen svtools:ModalDialog:DLG_EXPORT_VEC
-Original svtools:RadioButton:DLG_EXPORT_VEC:RB_ORIGINAL_VEC
-Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
-Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
-Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
+*WMFOptionen svtools.ModalDialog.16372
+Original svtools.RadioButton.16372.1
+Groesse svtools.RadioButton.16372.2
+Breite svtools.MetricField.16372.1
+Hoehe svtools.MetricField.16372.2
 
-*Zahlenformat HID_NUMBERFORMAT
-Kategorie cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_CATEGORY
-KategorieFormat HID_NUMBERFORMAT_LB_FORMAT
+*Zahlenformat CUI_HID_NUMBERFORMAT
+Kategorie cui.ListBox.10041.9
+KategorieFormat CUI_HID_NUMBERFORMAT_LB_FORMAT
 'FormatZahl
-FormatCode cui:Edit:RID_SVXPAGE_NUMBERFORMAT:ED_FORMAT
-Hinzufuegen HID_NUMBERFORMAT_TBI_ADD
-Entfernen HID_NUMBERFORMAT_TBI_REMOVE
-Sprache cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_LANGUAGE
-Nachkommastellen cui:NumericField:RID_SVXPAGE_NUMBERFORMAT:ED_DECIMALS
-FuehrendeNullen cui:NumericField:RID_SVXPAGE_NUMBERFORMAT:ED_LEADZEROES
-NegativInRot cui:CheckBox:RID_SVXPAGE_NUMBERFORMAT:BTN_NEGRED
-Tausenderpunkt cui:CheckBox:RID_SVXPAGE_NUMBERFORMAT:BTN_THOUSAND
+FormatCode cui.Edit.10041.14
+Hinzufuegen CUI_HID_NUMBERFORMAT_TBI_ADD
+Entfernen CUI_HID_NUMBERFORMAT_TBI_REMOVE
+Sprache cui.ListBox.10041.13
+Nachkommastellen cui.NumericField.10041.22
+FuehrendeNullen cui.NumericField.10041.24
+NegativInRot cui.CheckBox.10041.25
+Tausenderpunkt cui.CheckBox.10041.26
 
-*ZeileAusblenden FID_ROW_HIDE
+*ZeileAusblenden .uno:HideRow
 
-*Zeilenhoehe FID_ROW_HEIGHT
-Hoehe sc:MetricField:RID_SCDLG_ROW_MAN:ED_VALUE HID_SC_MTRIN_VAL
-Standwardwert sc:CheckBox:RID_SCDLG_ROW_MAN:BTN_DEFVAL HID_SC_MTRIN_DEF
+*Zeilenhoehe .uno:RowHeight
+Hoehe sc.MetricField.25710.1 HID_SC_MTRIN_VAL
+Standwardwert sc.CheckBox.25710.1 HID_SC_MTRIN_DEF
 
-*ZeileOptimaleHoehe FID_ROW_OPT_HEIGHT
-Extra sc:MetricField:RID_SCDLG_ROW_OPT:ED_VALUE HID_SC_MTRIN_VAL
-Standardwert sc:CheckBox:RID_SCDLG_ROW_OPT:BTN_DEFVAL HID_SC_MTRIN_DEF
+*ZeileOptimaleHoehe .uno:SetOptimalRowHeight
+Extra sc.MetricField.25711.1 HID_SC_MTRIN_VAL
+Standardwert sc.CheckBox.25711.1 HID_SC_MTRIN_DEF
 
-*ZellvorlageCalc HID_MANAGE_STYLES
+*ZellvorlageCalc SFX2_HID_MANAGE_STYLES
 
-*ZeileEinblenden FID_ROW_SHOW
+*ZeileEinblenden .uno:ShowRow
 
-*ZellenEinfuegen FID_INS_CELL
-ZellenNachUnten sc:RadioButton:RID_SCDLG_INSCELL:BTN_CELLSDOWN
-ZellenNachRechts sc:RadioButton:RID_SCDLG_INSCELL:BTN_CELLSRIGHT
-GanzeZeile sc:RadioButton:RID_SCDLG_INSCELL:BTN_INSROWS
-GanzeSpalte sc:RadioButton:RID_SCDLG_INSCELL:BTN_INSCOLS
+*ZellenEinfuegen .uno:InsertCell
+ZellenNachUnten sc.RadioButton.25616.11
+ZellenNachRechts sc.RadioButton.25616.12
+GanzeZeile sc.RadioButton.25616.16
+GanzeSpalte sc.RadioButton.25616.17
 
-*ZellenLoeschen FID_DELETE_CELL
-Auswahl sc:RadioButton:RID_SCDLG_DELCELL:BTN_CELLSUP
-Zellennachoben sc:RadioButton:RID_SCDLG_DELCELL:BTN_CELLSUP
-Zellennachlinks sc:RadioButton:RID_SCDLG_DELCELL:BTN_CELLSLEFT
-GanzeZeilen sc:RadioButton:RID_SCDLG_DELCELL:BTN_DELROWS
-GanzeSpalten sc:RadioButton:RID_SCDLG_DELCELL:BTN_DELCOLS
+*ZellenLoeschen .uno:DeleteCell
+Auswahl sc.RadioButton.25615.10
+Zellennachoben sc.RadioButton.25615.10
+Zellennachlinks sc.RadioButton.25615.13
+GanzeZeilen sc.RadioButton.25615.14
+GanzeSpalten sc.RadioButton.25615.15
 
-*ZellenHoehe FN_TABLE_SET_ROW_HEIGHT
-Hoehe sw:MetricField:DLG_ROW_HEIGHT:ED_HEIGHT
-Dynamisch sw:CheckBox:DLG_ROW_HEIGHT:CB_AUTOHEIGHT
+*ZellenHoehe .uno:SetRowHeight
+Hoehe sw.MetricField.21454.1
+Dynamisch sw.CheckBox.21454.2
 
-*ZellenTeilen cui:ModalDialog:RID_SVX_SPLITCELLDLG
-Anzahl cui:NumericField:RID_SVX_SPLITCELLDLG:ED_COUNT
-Horizontal cui:ImageRadioButton:RID_SVX_SPLITCELLDLG:RB_HORZ
-Vertikal cui:ImageRadioButton:RID_SVX_SPLITCELLDLG:RB_VERT
-GleichmaessigTeilen cui:CheckBox:RID_SVX_SPLITCELLDLG:CB_PROP
+*ZellenTeilen cui.ModalDialog.10043
+Anzahl cui.NumericField.10043.2
+Horizontal cui.ImageRadioButton.10043.10
+Vertikal cui.ImageRadioButton.10043.12
+GleichmaessigTeilen cui.CheckBox.10043.11
 
-*ZielImDokument HID_HYPERLINK_MARKWND
+*ZielImDokument CUI_HID_HYPERLINK_MARKWND
 'Uebernehmen Kein Eintrag in Hid.Lst
 'Schliessen Kein Eintrag in Hid.Lst
 
-*Zielwertsuche SID_OPENDLG_SOLVE
-Formelzelle sc:Edit:RID_SCDLG_SOLVER:ED_FORMULACELL
-Vorgaben1 sc:ImageButton:RID_SCDLG_SOLVER:RB_FORMULACELL
-Zielwert sc:Edit:RID_SCDLG_SOLVER:ED_TARGETVAL
-VariableZelle sc:Edit:RID_SCDLG_SOLVER:ED_VARCELL
-Vorgaben2 sc:ImageButton:RID_SCDLG_SOLVER:RB_VARCELL
+*Zielwertsuche .uno:GoalSeekDialog
+Formelzelle sc.Edit.25630.1
+Vorgaben1 sc.ImageButton.25630.1
+Zielwert sc.Edit.25630.2
+VariableZelle sc.Edit.25630.3
+Vorgaben2 sc.ImageButton.25630.2
 
-*Zusammenfassen SID_AUTOFORMAT
+*Zusammenfassen .uno:AutoFormat
 Mindestgroesse cui:METRICFIELD:RID_OFADLG_PRCNT_SET:ED_RIGHT_MARGIN
