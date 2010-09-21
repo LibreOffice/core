@@ -80,10 +80,6 @@
 *           Basiert auf einem VARARR.
 *           Sortierung mit Hilfe der Object-operatoren "<" und "=="
 *
-* JP 23.12.94 neu:
-*       SV_DECL_PTRARR_STACK(nm, AE, IS, GS)
-*           ein Stack mit einem PtrArray als Grundlage.
-*
 * JP 09.10.96:  vordefinierte Arrays:
 *   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
 *   PtrArr:     SvStrings, SvStringsDtor
@@ -794,69 +790,21 @@ SV_IMPL_VARARR(nm##_SAR, AE)\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
 _SV_SEEK_OBJECT( nm,AE )
 
-#define SV_DECL_PTRARR_STACK(nm, AE, IS, GS)\
-class nm: private SvPtrarr \
-{\
-public:\
-    nm( USHORT nIni=IS, BYTE nG=GS )\
-        : SvPtrarr(nIni,nG) {}\
-    void Insert( const nm *pI, USHORT nP,\
-                USHORT nS = 0, USHORT nE = USHRT_MAX ) {\
-        SvPtrarr::Insert( pI, nP, nS, nE ); \
-    }\
-    void Remove( USHORT nP, USHORT nL = 1 ) {\
-        SvPtrarr::Remove( nP, nL ); \
-    }\
-    void Push( const AE &aE ) {\
-        SvPtrarr::Insert( (const VoidPtr &)aE, SvPtrarr::Count() );\
-    }\
-    USHORT Count() const { return SvPtrarr::Count(); }\
-    AE operator[](USHORT nP) const {\
-        return (AE)SvPtrarr::operator[]( nP );\
-    }\
-    AE GetObject(USHORT nP) const {\
-        return (AE)SvPtrarr::GetObject( nP );\
-    }\
-    AE Pop(){\
-        AE pRet = 0;\
-        if( SvPtrarr::Count() ){\
-            pRet = GetObject( SvPtrarr::Count()-1 );\
-            SvPtrarr::Remove(Count()-1);\
-        }\
-        return pRet;\
-    }\
-    AE Top() const {\
-        AE pRet = 0;\
-        if( SvPtrarr::Count() )\
-            pRet = GetObject( SvPtrarr::Count()-1 ); \
-        return pRet;\
-    }\
-};
-
 #if defined (C40) || defined (C41) || defined (C42) || defined(C50) || defined(C52)
 #define C40_INSERT( c, p, n) Insert( (c const *) p, n )
-#define C40_PUSH( c, p) Push( (c const *) p )
 #define C40_PTR_INSERT( c, p) Insert( (c const *) p )
-#define C40_REMOVE( c, p ) Remove( (c const *) p )
 #define C40_REPLACE( c, p, n) Replace( (c const *) p, n )
-#define C40_PTR_REPLACE( c, p) Replace( (c const *) p )
 #define C40_GETPOS( c, r) GetPos( (c const *)r )
 #else
 #if defined WTC || defined ICC || defined HPUX || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
-#define C40_PUSH( c, p) Push( (c const *&) p )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )
-#define C40_REMOVE( c, p ) Remove( (c const *&) p )
 #define C40_REPLACE( c, p, n ) Replace( (c const *&) p, n )
-#define C40_PTR_REPLACE( c, p ) Replace( (c const *&) p )
 #define C40_GETPOS( c, r) GetPos( (c const *&) r )
 #else
 #define C40_INSERT( c, p, n ) Insert( p, n )
-#define C40_PUSH( c, p) Push( p )
 #define C40_PTR_INSERT( c, p ) Insert( p )
-#define C40_REMOVE( c, p) Remove( p )
 #define C40_REPLACE( c, p, n ) Replace( p, n )
-#define C40_PTR_REPLACE( c, p ) Replace( p )
 #define C40_GETPOS( c, r) GetPos( r )
 #endif
 #endif
