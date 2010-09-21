@@ -819,6 +819,12 @@ AC_ARG_WITH(zip-home,
 
                           Usage: --with-zip-home=<path to zip executable>
 ],,)
+AC_ARG_ENABLE(build-unowinreg,
+[  --enable-build-unowinreg Do not use the prebuilt unowinreg.dll. Build it instead.
+                          The MinGW C++ compiler is needed on Linux.
+
+                          Usage: --enable-build-unowinreg
+],,)
 AC_ARG_WITH(mingwin,
 [  --with-mingwin          For Windows users, use the mingwin32 compiler within
                           cygwin environment
@@ -3622,21 +3628,16 @@ AC_MSG_CHECKING([whether to build the ODK])
 if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
    if test "$WITH_JAVA" != "no"; then
-   AC_MSG_CHECKING([for external/unowinreg/unowinreg.dll])
-   if ! test -f "./external/unowinreg/unowinreg.dll"; then
-      HAVE_UNOWINREG_DLL=no
-   else
-      HAVE_UNOWINREG_DLL=yes
+   AC_MSG_CHECKING([whether to build unowinreg.dll])
+   if test "$_os" = "WINNT" -a "z$enable_build_unowinreg" = "z" ; then
+        # build on Win by default
+        enable_build_unowinreg=yes
    fi
-   if test "$HAVE_UNOWINREG_DLL" = "yes"; then
-      AC_MSG_RESULT([found])
+   if test "z$enable_build_unowinreg" = "z" -o "$enable_build_unowinreg" = "no"; then
+      AC_MSG_RESULT([no])
       BUILD_UNOWINREG=NO
    else
-      if test "$_os" = "WINNT"; then
-         AC_MSG_RESULT([not found, will be built])
-      else
-         AC_MSG_WARN([not found, will be cross-built using mingw32])
-      fi
+      AC_MSG_RESULT([yes])
       BUILD_UNOWINREG=YES
    fi
    if test "$_os" != "WINNT" && test "$BUILD_UNOWINREG" = "YES"; then
