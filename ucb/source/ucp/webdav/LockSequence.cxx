@@ -218,8 +218,12 @@ extern "C" int LockSequence_chardata_callback(
 //              @@@
 //          }
             else
+            {
+                pCtx->pLock->Timeout = sal_Int64( -1 );
+                pCtx->hasTimeout = true;
                 OSL_ENSURE( sal_False,
-                        "LockSequence_chardata_callback - Unknown timeout!" );
+                            "LockSequence_chardata_callback - Unknown timeout!" );
+            }
             break;
 
         case STATE_HREF:
