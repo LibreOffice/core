@@ -377,7 +377,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
 
     //////////////////////////////////////////////////////////////////////
     m_aTableList.EnableInplaceEditing( FALSE );
-    m_aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
+    m_aTableList.SetStyle(m_aTableList.GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
     m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
     m_aTableList.SetSelectionMode( SINGLE_SELECTION );
     m_aTableList.notifyHiContrastChanged();
