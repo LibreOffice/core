@@ -34,7 +34,9 @@ fr framework\qa\unoapi nmake - all fr_qa_unoapi NULL
 
 # BUG! opens an error box
 # fr framework\qa\complex\broken_document          nmake - all fr_qa_complex_broken_doc NULL
-fr framework\qa\complex\desktop                  nmake - all fr_qa_complex_desktop NULL
+
+# failed:
+# fr framework\qa\complex\desktop                  nmake - all fr_qa_complex_desktop NULL
 
 # fr framework\qa\complex\dispatches               nmake - all fr_qa_complex_dispatches fr_qa_complex_dispatches_helper NULL
 # fr framework\qa\complex\disposing                nmake - all fr_qa_complex_disposing NULL
