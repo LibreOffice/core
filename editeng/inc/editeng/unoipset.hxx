@@ -64,6 +64,7 @@ public:
     sal_Bool AreThereOwnUsrAnys() const { return (pCombiList ? sal_True : sal_False); }
     ::com::sun::star::uno::Any* GetUsrAnyForID(sal_uInt16 nWID) const;
     void AddUsrAnyForID(const ::com::sun::star::uno::Any& rAny, sal_uInt16 nWID);
+    void ClearAllUsrAny();
 
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
     const SfxItemPropertyMapEntry* getPropertyMapEntries() const {return _pMap;}

@@ -321,15 +321,19 @@ void XcsParser::endElement(XmlReader const & reader) {
     } else {
         switch (state_) {
         case STATE_COMPONENT_SCHEMA:
+            // To support old, broken extensions with .xcs files that contain
+            // empty <component-schema> elements:
+            state_ = STATE_COMPONENT_DONE;
+            break;
+        case STATE_TEMPLATES:
+            state_ = STATE_TEMPLATES_DONE;
+            break;
         case STATE_TEMPLATES_DONE:
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("no component element in ")) +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
-        case STATE_TEMPLATES:
-            state_ = STATE_TEMPLATES_DONE;
-            break;
         case STATE_COMPONENT_DONE:
             break;
         default:
