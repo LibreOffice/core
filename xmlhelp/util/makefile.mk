@@ -74,5 +74,11 @@ DEF1NAME=$(SHL1TARGET)
 
 # --- Targets ----------------------------------------------------------
 
+ZIP1TARGET=helpxsl
+ZIP1FLAGS= -u -r
+#ZIP1DIR=$(PRJ)$/source$/auxiliary
+ZIP1LIST=main_transform*.xsl idxcaption.xsl idxcontent.xsl
+
+
 .INCLUDE: target.mk
 
