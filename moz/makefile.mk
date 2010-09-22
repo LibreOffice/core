@@ -86,7 +86,8 @@ PATCH_FILES = \
     patches/dtoa.patch \
     patches/respect_disable_pango.patch \
     patches/arm_build_fix.patch \
-    patches/link_fontconfig.patch
+    patches/link_fontconfig.patch \
+    patches/brokenmakefile.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
