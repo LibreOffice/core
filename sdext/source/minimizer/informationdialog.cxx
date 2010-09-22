@@ -265,7 +265,7 @@ void InformationDialog::InitDialog()
         Any( sal_True ),
         Any( sal_Int32( 245 ) ),
         Any( sal_Int32( 115 ) ),
-        Any( getString( STR_ABOUT2 ) ),
+        Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
@@ -321,7 +321,6 @@ void InformationDialog::InitDialog()
     const OUString aOldSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLDFILESIZE" ) );
     const OUString aNewSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%NEWFILESIZE" ) );
     const OUString aTitlePlaceholder( aTitle.getLength() ? OUString::createFromAscii( "%TITLE" ) : OUString::createFromAscii( "'%TITLE'" ) );
-    const OUString aExtensionPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%EXTENSIONNAME" ) );
 
     sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder, 0 );
     if ( i >= 0 )
@@ -334,10 +333,6 @@ void InformationDialog::InitDialog()
     sal_Int32 k = aInfoString.indexOf( aTitlePlaceholder, 0 );
     if ( k >= 0 )
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
-
-    sal_Int32 l = aInfoString.indexOf( aExtensionPlaceholder, 0 );
-    if ( l >= 0 )
-        aInfoString = aInfoString.replaceAt( l, aExtensionPlaceholder.getLength(), getString( STR_SUN_OPTIMIZATION_WIZARD2 ) );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
     InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), ImpGetStandardImage( rtl::OUString::createFromAscii( "private:standardimage/query" ) ), 5, 5, 25, 25 );
