@@ -13,7 +13,7 @@ SunOS)
   PRODUCTINSTALLLOCATION="$$BASEDIR"
   ;;
 Linux)
-  BASISPACKAGE=openoffice.org-core01
+  BASISPACKAGE=libreoffice-core01
   BASISDIR=`rpm -q --queryformat "%{INSTALLPREFIX}" $$BASISPACKAGE`
   PRODUCTINSTALLLOCATION="$$RPM_INSTALL_PREFIX"
   ;;
@@ -23,11 +23,11 @@ Linux)
 esac
 
 # creating link to basis layer
-if [ -d $$BASISDIR/openoffice.org/basisBASISDIRECTORYVERSION ]
+if [ -d $$BASISDIR/libreoffice/basisBASISDIRECTORYVERSION ]
 then
-      ln -s $$BASISDIR/openoffice.org/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+      ln -s $$BASISDIR/libreoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
 else
-      ln -s ../openoffice.org/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+      ln -s ../libreoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
 fi
 
 exit 0

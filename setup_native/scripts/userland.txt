@@ -25,4 +25,4 @@
 #
 #*************************************************************************
 
-USERLANDPACKAGENAME=openoffice.org-userland-1.0-0.noarch.rpm
+USERLANDPACKAGENAME=libreoffice-userland-1.0-0.noarch.rpm

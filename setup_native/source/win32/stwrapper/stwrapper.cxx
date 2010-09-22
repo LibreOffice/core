@@ -424,7 +424,7 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                     _tcscat( lpCommandLine, TEXT( "\"" ));
                     _tcscat( lpCommandLine, szParentProductName );
                     _tcscat( lpCommandLine, TEXT( "\"" ));
-                    _tcscat( lpCommandLine, TEXT( " -m \"Sun Microsystems, Inc.\"" ));
+                    _tcscat( lpCommandLine, TEXT( " -m \"The Document Foundation\"" ));
                     _tcscat( lpCommandLine, TEXT( " -A " ));
                     _tcscat( lpCommandLine, TEXT( "\"" ));
                     _tcscat( lpCommandLine, GetOperatingSystemString() );
