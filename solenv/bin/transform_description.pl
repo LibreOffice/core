@@ -55,9 +55,9 @@ sub parse_args
 
     # check which languages to use
     my $languages = $ENV{WITH_LANG};
-    if ( ! defined $languages )
+    if ( ( ! defined $languages ) || ( "$languages" eq "" ) )
     {
-        print STDERR "$0: WITH_LANG not set, defaulting to 'en-US'\n";
+        print STDERR "$0: WITH_LANG not set or empty, defaulting to 'en-US'\n";
         $languages = "en-US";
     }
     @languages = split ( ' ', $languages );
