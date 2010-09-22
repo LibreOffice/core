@@ -86,7 +86,7 @@ testcase tCertificationDialogs
     kontext "DigitalSignature"
     if ( DigitalSignature.exists( 2 ) ) then
         printlog( CFN & "Digital signatures is open" )
-        DigitalSignature.cancel()
+        DigitalSignature.close()
     else
         if ( gApplication <> "MASTERDOCUMENT" ) then
             warnlog( CFN & "Digital Signatures Dialog is not open" )
