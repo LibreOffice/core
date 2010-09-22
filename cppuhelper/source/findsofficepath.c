@@ -90,7 +90,7 @@ static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
  */
 static char* platformSpecific()
 {
-    const char* SUBKEYNAME = "Software\\OpenOffice.org\\UNO\\InstallPath";
+    const char* SUBKEYNAME = "Software\\LibreOffice\\UNO\\InstallPath";
 
     char* path = NULL;
 
