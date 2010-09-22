@@ -44,12 +44,10 @@ CDEFS+= -DEDITDEBUG
 .ENDIF
 
 SRS1NAME=$(TARGET)
-SRC1FILES =	dlgeps.src \
-            epsstr.src
+SRC1FILES =	epsstr.src
 .IF "$(L10N_framework)"==""
 EXCEPTIONSFILES=$(SLO)$/eps.obj
-SLOFILES =	$(SLO)$/eps.obj \
-            $(SLO)$/dlgeps.obj
+SLOFILES =	$(SLO)$/eps.obj
 .ENDIF
 
 # ==========================================================================
