@@ -29,11 +29,13 @@
 
 #include <saldisp.hxx>
 
+class VCLKDEApplication;
+
 class KDEXLib : public SalXLib
 {
     private:
         bool m_bStartupDone;
-        void* m_pApplication;
+        VCLKDEApplication* m_pApplication;
         char** m_pFreeCmdLineArgs;
         char** m_pAppCmdLineArgs;
         int m_nFakeCmdLineArgs;

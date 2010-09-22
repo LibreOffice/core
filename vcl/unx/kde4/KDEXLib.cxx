@@ -59,7 +59,7 @@ KDEXLib::KDEXLib() :
 
 KDEXLib::~KDEXLib()
 {
-    delete (VCLKDEApplication*)m_pApplication;
+    delete m_pApplication;
 
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
@@ -146,7 +146,7 @@ void KDEXLib::Init()
     Display* pDisp = QX11Info::display();
     SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);
 
-    ((VCLKDEApplication*)m_pApplication)->disp = pSalDisplay;
+    m_pApplication->disp = pSalDisplay;
 
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
