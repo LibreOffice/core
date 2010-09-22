@@ -414,7 +414,7 @@ namespace svt { namespace uno
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
-        ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::getCurrentPage: invalid dialog implementation!" );
+        ENSURE_OR_RETURN( pWizardImpl, "Wizard::getCurrentPage: invalid dialog implementation!", Reference< XWizardPage >() );
 
         return pWizardImpl->getCurrentWizardPage();
     }
