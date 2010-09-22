@@ -55,7 +55,6 @@
 using namespace ::com::sun::star;
 
 
-SV_IMPL_PTRARR( SvxRTFColorTbl, ColorPtr )
 SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
 
 CharSet lcl_GetDefaultTextEncodingForRTF()
@@ -83,7 +82,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
             int bReadNewDoc )
     : SvRTFParser( rIn, 5 ),
     rStrm(rIn),
-    aColorTbl( 16, 4 ),
     aFontTbl( 16, 4 ),
     pInsPos( 0 ),
     pAttrPool( &rPool ),
@@ -124,7 +122,7 @@ void SvxRTFParser::ResetPard()
 
 SvxRTFParser::~SvxRTFParser()
 {
-    if( aColorTbl.Count() )
+    if( !aColorTbl.empty() )
         ClearColorTbl();
     if( aFontTbl.Count() )
         ClearFontTbl();
@@ -154,7 +152,7 @@ SvParserState SvxRTFParser::CallParser()
     if( !pInsPos )
         return SVPAR_ERROR;
 
-    if( aColorTbl.Count() )
+    if( !aColorTbl.empty() )
         ClearColorTbl();
     if( aFontTbl.Count() )
         ClearFontTbl();
@@ -488,10 +486,10 @@ void SvxRTFParser::ReadColorTable()
                 // eine Farbe ist Fertig, in die Tabelle eintragen
                 // versuche die Werte auf SV interne Namen zu mappen
                 ColorPtr pColor = new Color( nRed, nGreen, nBlue );
-                if( !aColorTbl.Count() &&
+                if( aColorTbl.empty() &&
                     BYTE(-1) == nRed && BYTE(-1) == nGreen && BYTE(-1) == nBlue )
                     pColor->SetColor( COL_AUTO );
-                aColorTbl.Insert( pColor, aColorTbl.Count() );
+                aColorTbl.push_back( pColor );
                 nRed = 0, nGreen = 0, nBlue = 0;
 
                 // Color konnte vollstaendig gelesen werden,
@@ -818,7 +816,11 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 
 void SvxRTFParser::ClearColorTbl()
 {
-    aColorTbl.DeleteAndDestroy( 0, aColorTbl.Count() );
+    for( size_t n = 0; n < aColorTbl.size(); n++ )
+    {
+        delete aColorTbl.back();
+        aColorTbl.pop_back();
+    }
 }
 
 void SvxRTFParser::ClearFontTbl()
