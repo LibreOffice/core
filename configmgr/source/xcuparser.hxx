@@ -36,6 +36,7 @@
 #include "rtl/ustring.hxx"
 #include "xmlreader/xmlreader.hxx"
 
+#include "additions.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "parser.hxx"
@@ -60,7 +61,7 @@ class XcuParser: public Parser {
 public:
     XcuParser(
         int layer, Data & data, Partial const * partial,
-        Modifications * broadcastModifications);
+        Modifications * broadcastModifications, Additions * additions);
 
 private:
     virtual ~XcuParser();
@@ -110,7 +111,7 @@ private:
 
     void handleSetNode(xmlreader::XmlReader & reader, SetNode * set);
 
-    void recordModification();
+    void recordModification(bool addition);
 
     struct State {
         rtl::Reference< Node > node; // empty iff ignore or <items>
@@ -143,6 +144,7 @@ private:
     Data & data_;
     Partial const * partial_;
     Modifications * broadcastModifications_;
+    Additions * additions_;
     bool recordModifications_;
     bool trackPath_;
     rtl::OUString componentName_;

@@ -139,7 +139,7 @@ bool XcdParser::startElement(
         if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
         {
-            nestedParser_ = new XcuParser(layer_ + 1, data_, 0, 0);
+            nestedParser_ = new XcuParser(layer_ + 1, data_, 0, 0, 0);
             nesting_ = 1;
             return nestedParser_->startElement(reader, nsId, name);
         }

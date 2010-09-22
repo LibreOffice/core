@@ -69,12 +69,13 @@ namespace css = com::sun::star;
 
 XcuParser::XcuParser(
     int layer, Data & data, Partial const * partial,
-    Modifications * broadcastModifications):
+    Modifications * broadcastModifications, Additions * additions):
     valueParser_(layer), data_(data),
     partial_(partial), broadcastModifications_(broadcastModifications),
-    recordModifications_(layer == Data::NO_LAYER),
+    additions_(additions), recordModifications_(layer == Data::NO_LAYER),
     trackPath_(
-        partial_ != 0 || broadcastModifications_ != 0 || recordModifications_)
+        partial_ != 0 || broadcastModifications_ != 0 || additions_ != 0 ||
+        recordModifications_)
 {}
 
 XcuParser::~XcuParser() {}
@@ -627,7 +628,7 @@ void XcuParser::handleLocpropValue(
                 pop = true;
             }
             if (trackPath_) {
-                recordModification();
+                recordModification(false);
                 if (pop) {
                     path_.pop_back();
                 }
@@ -641,7 +642,7 @@ void XcuParser::handleLocpropValue(
             locprop->getMembers().erase(i);
         }
         state_.push(State(true));
-        recordModification();
+        recordModification(false);
         break;
     default:
         throw css::uno::RuntimeException(
@@ -755,7 +756,7 @@ void XcuParser::handleUnknownGroupProp(
                 prop->setFinalized(valueParser_.getLayer());
             }
             state_.push(State(prop, name, state_.top().locked));
-            recordModification();
+            recordModification(false);
             break;
         }
         // fall through
@@ -805,7 +806,7 @@ void XcuParser::handlePlainGroupProp(
                 property,
                 (state_.top().locked ||
                  finalizedLayer < valueParser_.getLayer())));
-        recordModification();
+        recordModification(false);
         break;
     case OPERATION_REMOVE:
         if (!property->isExtension()) {
@@ -819,7 +820,7 @@ void XcuParser::handlePlainGroupProp(
         }
         group->getMembers().erase(propertyIndex);
         state_.push(State(true)); // ignore children
-        recordModification();
+        recordModification(false);
         break;
     }
 }
@@ -868,7 +869,7 @@ void XcuParser::handleLocalizedGroupProp(
                     replacement, name,
                     (state_.top().locked ||
                      finalizedLayer < valueParser_.getLayer())));
-            recordModification();
+            recordModification(false);
         }
         break;
     case OPERATION_REMOVE:
@@ -1073,7 +1074,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
             state_.push(State(member, name, false));
-            recordModification();
+            recordModification(i == set->getMembers().end());
         }
         break;
     case OPERATION_FUSE:
@@ -1087,7 +1088,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
                 member->setFinalized(finalizedLayer);
                 member->setMandatory(mandatoryLayer);
                 state_.push(State(member, name, false));
-                recordModification();
+                recordModification(true);
             }
         } else {
             state_.push(
@@ -1107,14 +1108,17 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             set->getMembers().erase(i);
         }
         state_.push(State(true));
-        recordModification();
+        recordModification(false);
         break;
     }
 }
 
-void XcuParser::recordModification() {
+void XcuParser::recordModification(bool addition) {
     if (broadcastModifications_ != 0) {
         broadcastModifications_->add(path_);
+    }
+    if (addition && additions_ != 0) {
+        additions_->push_back(path_);
     }
     if (recordModifications_) {
         data_.modifications.add(path_);
