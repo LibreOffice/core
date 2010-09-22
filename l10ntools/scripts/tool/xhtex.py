@@ -108,7 +108,7 @@ class Xhtex(AbstractL10nTool):
     def parse_file(self, filename):
         document = ""
         try:
-            f = open(filename,"r+")
+            f = open(filename,"r")
             document = f.read()
         except IOError:
             print "ERROR: Can not read file " + filename

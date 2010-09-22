@@ -2180,6 +2180,15 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
     if( m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
     {
         pFrame->mbFullScreen = bFullScreen;
+        if( bFullScreen )
+        {
+            if( m_aWMAtoms[ MOTIF_WM_HINTS ] )
+            {
+                XDeleteProperty( m_pDisplay,
+                                 pFrame->GetShellWindow(),
+                                m_aWMAtoms[ MOTIF_WM_HINTS ] );
+            }
+        }
         if( pFrame->bMapped_ )
         {
             // window already mapped, send WM a message
