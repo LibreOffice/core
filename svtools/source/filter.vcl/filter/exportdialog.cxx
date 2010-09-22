@@ -396,7 +396,7 @@ awt::Size ExportDialog::GetOriginalSize()
             }
         }
     }
-    return awt::Size( aShapesRange.getWidth(), aShapesRange.getHeight() );
+    return awt::Size( static_cast<sal_Int32>(aShapesRange.getWidth()), static_cast<sal_Int32>(aShapesRange.getHeight()) );
 }
 
 void ExportDialog::GetGraphicSource()
@@ -1227,23 +1227,23 @@ void ExportDialog::updatePreview()
         if ( fXRatio > 1.0 )
         {
             aSize.Width() =  maSize.Width > aFixedBitmapSize.Width() ? maSize.Width : aFixedBitmapSize.Width();
-            aSize.Width() /= fXRatio;
+            aSize.Width() /= static_cast<long int>(fXRatio);
         }
         else
         {
             aSize.Width() =  maSize.Width < aFixedBitmapSize.Width() ? maSize.Width : aFixedBitmapSize.Width();
-            aSize.Width() /= fXRatio;
+            aSize.Width() /= static_cast<long int>(fXRatio);
         }
 
         if ( fYRatio > 1.0 )
         {
             aSize.Height() =  maSize.Height > aFixedBitmapSize.Height() ? maSize.Height : aFixedBitmapSize.Height();
-            aSize.Height() /= fYRatio;
+            aSize.Height() /= static_cast<long int>(fYRatio);
         }
         else
         {
             aSize.Height() =  maSize.Height < aFixedBitmapSize.Height() ? maSize.Height : aFixedBitmapSize.Height();
-            aSize.Height() /= fYRatio;
+            aSize.Height() /= static_cast<long int>(fYRatio);
         }
 
         if ( aSize.Width() < maSize.Width )
@@ -1260,7 +1260,7 @@ void ExportDialog::updatePreview()
         Bitmap aCroppedBitmap( maBitmap );
         aCroppedBitmap.Crop( Rectangle( aPos, aSize ) );
         aSize = aCroppedBitmap.GetSizePixel();
-        aSize = Size( aSize.Width() * fXRatio, aSize.Height() * fYRatio );
+        aSize = Size( static_cast<long int>(aSize.Width() * fXRatio), static_cast<long int>(aSize.Height() * fYRatio) );
         aCroppedBitmap.Scale( aSize );
 
         if ( aSize.Width() > aFixedBitmapSize.Width() )
@@ -1347,7 +1347,7 @@ void ExportDialog::updateControls()
         case 0 : nResolution = maResolution.Width / 100; break;     // pixels / cm
         case 2 : nResolution = maResolution.Width; break;           // pixels / meter
         default:
-        case 1 : nResolution = maResolution.Width * 0.0254; break;  // pixels / inch
+        case 1 : nResolution = static_cast< sal_Int32 >(maResolution.Width * 0.0254); break;    // pixels / inch
     }
     maNfResolution.SetValue( nResolution );
 
