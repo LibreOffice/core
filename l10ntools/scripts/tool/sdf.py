@@ -26,6 +26,7 @@
 #*************************************************************************
 
 from pseudo import PseudoSet,PseudoOrderedDict
+from time import gmtime, strftime
 
 class SdfData:
     _filename        = "";
@@ -113,8 +114,8 @@ class SdfEntity:
     const._TITLE_POS           = 13
     const._DATE_POS            = 14
         
-    def __init__(self, project="", source_file="", dummy1="", resource_type="", gid="", lid="", helpid="", platform="", dummy2="", langid="", 
-                       text="", helptext="", quickhelptext="", title="", date="2002-02-02 02:02:02"):
+    def __init__(self, project="", source_file="", dummy1="0", resource_type="", gid="", lid="", helpid="", platform="", dummy2="0", langid="", 
+                       text="", helptext="", quickhelptext="", title="", date=""):
         self.project        = project;
         self.source_file    = source_file;
         self.dummy1         = dummy1;
@@ -129,7 +130,11 @@ class SdfEntity:
         self.helptext       = helptext;
         self.quickhelptext  = quickhelptext;
         self.title          = title;
-        self.date           = date;
+        if date != "":
+            self.date = date;
+        else:
+            self.date = strftime("%Y-%m-%d %H:%M:%S",gmtime())
+
 
     def set_properties(self, line):
         splitted = line.split("\t")

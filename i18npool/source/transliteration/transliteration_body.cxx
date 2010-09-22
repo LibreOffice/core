@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
+#include <string.h>
 
 #include "characterclassificationImpl.hxx"
 #include "breakiteratorImpl.hxx"
@@ -96,7 +97,7 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
             nRes = MappingTypeLowerToUpper;
         else
         {
-            OSL_ENSURE( nType & 0x01 /* upper case */, "uppercase character expected! 'Toggle case' failed?" );
+            // should also work properly for non-upper characters like white spacs, numbers, ...
             nRes = MappingTypeUpperToLower;
         }
     }
@@ -330,18 +331,124 @@ Transliteration_titlecase::Transliteration_titlecase()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
 }
 
-rtl::OUString SAL_CALL Transliteration_titlecase::transliterate(
-    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& /*offset*/ )
-    throw(RuntimeException)
+#if 0
+struct LigatureData
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    CharacterClassificationImpl aCharClassImpl( xMSF );
+    sal_uInt32  cChar;
+    sal_Char *  pUtf8Text;
+};
 
-    // possible problem: the locale is not exactly specific for each word in the text...
-    OUString aRes( aCharClassImpl.toTitle( inStr, startPos, nCount, aLocale ) );
+// available Unicode ligatures:
+// http://www.unicode.org/charts
+// http://www.unicode.org/charts/PDF/UFB00.pdf
+static LigatureData aLigatures[] =
+{
+    { 0x0FB00,     "ff" },
+    { 0x0FB01,     "fi" },
+    { 0x0FB02,     "fl" },
+    { 0x0FB03,     "ffi" },
+    { 0x0FB04,     "ffl" },
+    { 0x0FB05,     "ft" },
+    { 0x0FB06,     "st" },
+
+    { 0x0FB13,     "\xD5\xB4\xD5\xB6" },     // Armenian small men now
+    { 0x0FB14,     "\xD5\xB4\xD5\xA5" },     // Armenian small men ech
+    { 0x0FB15,     "\xD5\xB4\xD5\xAB" },     // Armenian small men ini
+    { 0x0FB16,     "\xD5\xBE\xD5\xB6" },     // Armenian small vew now
+    { 0x0FB17,     "\xD5\xB4\xD5\xAD" },     // Armenian small men xeh
+    { 0x00000,     "" }
+};
+
+static inline bool lcl_IsLigature( sal_uInt32 cChar )
+{
+    return (0x0FB00 <= cChar && cChar <= 0x0FB06) || (0x0FB13 <= cChar && cChar <= 0x0FB17);
+}
+
+static rtl::OUString lcl_ResolveLigature( sal_uInt32 cChar )
+{
+    rtl::OUString aRes;
+    if (lcl_IsLigature( cChar ))
+    {
+        LigatureData *pFound = NULL;
+        LigatureData *pData = aLigatures;
+        while (!pFound && pData->cChar != 0)
+        {
+            if (pData->cChar == cChar)
+                pFound = pData;
+            ++pData;
+        }
+        if (pFound)
+            aRes = rtl::OUString( pFound->pUtf8Text, strlen( pFound->pUtf8Text ), RTL_TEXTENCODING_UTF8 );
+    }
+    else
+        aRes = rtl::OUString( &cChar, 1 );
     return aRes;
 }
+#endif // if 0
+
+static rtl::OUString transliterate_titlecase_Impl(
+    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    const Locale &rLocale,
+    Sequence< sal_Int32 >& offset )
+    throw(RuntimeException)
+{
+    const OUString aText( inStr.copy( startPos, nCount ) );
+
+    OUString aRes;
+    if (aText.getLength() > 0)
+    {
+        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        CharacterClassificationImpl aCharClassImpl( xMSF );
+
+        // because aCharClassImpl.toTitle does not handle ligatures or ß but will raise
+        // an exception we need to handle the first chara manually...
+
+        // we don't want to change surrogates by accident, thuse we use proper code point iteration
+        sal_Int32 nPos = 0;
+        sal_uInt32 cFirstChar = aText.iterateCodePoints( &nPos );
+        OUString aResolvedLigature( &cFirstChar, 1 ); //lcl_ResolveLigature( cFirstChar ) );
+        // toUpper can be used to properly resolve ligatures and characters like ß
+        aResolvedLigature = aCharClassImpl.toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
+        // since toTitle will leave all-uppercase text unchanged we first need to
+        // use toLower to bring possible 2nd and following charas in lowercase
+        aResolvedLigature = aCharClassImpl.toLower( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
+        sal_Int32 nResolvedLen = aResolvedLigature.getLength();
+
+        // now we can properly use toTitle to get the expected result for the resolved string.
+        // The rest of the text should just become lowercase.
+        aRes = aCharClassImpl.toTitle( aResolvedLigature, 0, nResolvedLen, rLocale );
+        aRes += aCharClassImpl.toLower( aText, 1, aText.getLength() - 1, rLocale );
+        offset.realloc( aRes.getLength() );
+
+        sal_Int32 *pOffset = offset.getArray();
+        sal_Int32 nLen = offset.getLength();
+        for (sal_Int32 i = 0; i < nLen; ++i)
+        {
+            sal_Int32 nIdx = 0;
+            if (i >= nResolvedLen)
+                nIdx = i - nResolvedLen + 1;
+            pOffset[i] = nIdx;
+        }
+    }
+#if OSL_DEBUG_LEVEL > 1
+    const sal_Int32 *pCOffset = offset.getConstArray();
+    (void) pCOffset;
+#endif
+
+    return aRes;
+}
+
+
+// this function expects to be called on a word-by-word basis,
+// namely that startPos points to the first char of the word
+rtl::OUString SAL_CALL Transliteration_titlecase::transliterate(
+    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    Sequence< sal_Int32 >& offset )
+    throw(RuntimeException)
+{
+    return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
+}
+
 
 Transliteration_sentencecase::Transliteration_sentencecase()
 {
@@ -350,165 +457,17 @@ Transliteration_sentencecase::Transliteration_sentencecase()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_sentencecase";
 }
 
+
+// this function expects to be called on a sentence-by-sentence basis,
+// namely that startPos points to the first word (NOT first char!) in the sentence
 rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset )
     throw(RuntimeException)
 {
-    // inspired from Transliteration_body::transliterate
-    sal_Int32 nOffCount = 0, i;
-    bool bPoint = true;
-    if (useOffset)
-    {
-        for( i = 0; i < nCount; ++i ) {
-            sal_Unicode c = inStr.getStr()[ i + startPos ];
-            if( sal_Unicode('.') == c || sal_Unicode('!') == c || sal_Unicode('?') == c ) {
-                bPoint = true;
-                nOffCount++;
-            }
-            else if( unicode::isAlpha( c ) || unicode::isDigit( c ) )
-            {
-                const Mapping* map = 0;
-                if( bPoint && unicode::isLower( c ))
-                {
-                    map = &casefolding::getValue(&c, 0, 1, aLocale, MappingTypeLowerToUpper);
-                    bPoint = false;
-                }
-                else if (!bPoint && unicode::isUpper( c ))
-                {
-                    map = &casefolding::getValue(&c, 0, 1, aLocale, MappingTypeUpperToLower);
-                }
-
-                if(map == 0)
-                {
-                    nOffCount++;
-                }
-                else
-                {
-                    nOffCount += map->nmap;
-                }
-            }
-            else
-            {
-                nOffCount++;
-            }
-        }
-    }
-
-    bPoint = true;
-    rtl::OUStringBuffer result;
-
-    if (useOffset)
-    {
-        result.ensureCapacity(nOffCount);
-        if ( nOffCount != offset.getLength() )
-            offset.realloc( nOffCount );
-    }
-
-
-    sal_Int32 j = 0;
-    sal_Int32 * pArr = offset.getArray();
-    for(  i = 0; i < nCount; ++i ) {
-        sal_Unicode c = inStr.getStr()[ i + startPos ];
-        if( sal_Unicode('.') == c || sal_Unicode('!') == c || sal_Unicode('?') == c ) {
-            bPoint = true;
-            result.append(c);
-            pArr[j++] = i + startPos;
-        }
-        else if( unicode::isAlpha( c ) || unicode::isDigit( c ) )
-        {
-            const Mapping* map = 0;
-            if( bPoint && unicode::isLower( c ))
-            {
-                map = &casefolding::getValue(&c, 0, 1, aLocale, MappingTypeLowerToUpper);
-            }
-            else if (!bPoint && unicode::isUpper( c ))
-            {
-                map = &casefolding::getValue(&c, 0, 1, aLocale, MappingTypeUpperToLower);
-            }
-
-            if(map == 0)
-            {
-                result.append( c );
-                pArr[j++] = i + startPos;
-            }
-            else
-            {
-                for (sal_Int32 k = 0; k < map->nmap; k++)
-                {
-                    result.append( map->map[k] );
-                    pArr[j++] = i + startPos;
-                }
-            }
-            bPoint = false;
-        }
-        else
-        {
-            result.append( c );
-            pArr[j++] = i + startPos;
-        }
-    }
-    return result.makeStringAndClear();
+    return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
 }
 
-#if 0
-// TL: alternative implemntation try. But breakiterator has its problem too since
-// beginOfSentence does not work as expected with '.'. See comment below.
-// For the time being I will leave this code here as a from-scratch sample if the
-// breakiterator works better at some point...
-rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate(
-    const OUString& inStr, sal_Int32 nStartPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& /*offset*/ )
-    throw(RuntimeException)
-{
-    OUString aRes( inStr.copy( nStartPos, nCount ) );
-
-    if (nStartPos >= 0 && nStartPos < inStr.getLength() && nCount > 0)
-    {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        BreakIteratorImpl brk( xMSF );
-
-        sal_Int32 nSentenceStart = -1, nOldSentenceStart = -1;
-        sal_Int32 nPos = nStartPos + nCount - 1;
-        while (nPos >= nStartPos && nPos != -1)
-        {
-            // possible problem: the locale is not exactly specific for each sentence in the text,
-            // but it is the only one we have...
-            nOldSentenceStart = nSentenceStart;
-            nSentenceStart = brk.beginOfSentence( inStr, nPos, aLocale );
-
-            // since the breakiterator completely ignores '.' characvters as end-of-sentence when
-            // the next word is lower case we need to take care of that ourself. The drawback:
-            // la mid-sentence abbreviation like e.g. will now be identified as end-of-sentence. :-(
-            // Well, at least the other product does it in the same way...
-            sal_Int32 nFullStopPos = inStr.lastIndexOf( (sal_Unicode)'.', nPos );
-            nPos = nSentenceStart;
-            if (nFullStopPos > 0 && nFullStopPos > nSentenceStart)
-            {
-                Boundary aBd2 = brk.nextWord( inStr, nFullStopPos, aLocale, WordType::DICTIONARY_WORD );
-                nSentenceStart = aBd2.startPos;
-                nPos = nFullStopPos;
-            }
-
-            if (nSentenceStart < nOldSentenceStart || nOldSentenceStart == -1)
-            {
-                // the sentence start might be a quotation mark or some kind of bracket, thus
-                // we need the first dictionary word starting or following this position
-    //            Boundary aBd1 = brk.nextWord( inStr, nSentenceStart, aLocale, WordType::DICTIONARY_WORD );
-                Boundary aBd2 = brk.getWordBoundary( inStr, nSentenceStart, aLocale, WordType::DICTIONARY_WORD, true );
-    //            OUString aWord1( inStr.copy( aBd1.startPos, aBd1.endPos - aBd1.startPos + 1 ) );
-                OUString aWord2( inStr.copy( aBd2.startPos, aBd2.endPos - aBd2.startPos + 1 ) );
-            }
-            else
-                break;  // prevent endless loop
-
-            // continue with previous sentence
-            if (nPos != -1)
-                --nPos;
-        }
-    }
-    return aRes;
-}
-#endif
 
 } } } }
+

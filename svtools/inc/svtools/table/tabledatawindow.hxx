@@ -55,7 +55,6 @@ namespace svt { namespace table
         Link                m_aMouseButtonDownHdl;
          Link               m_aMouseButtonUpHdl;
         Link                m_aSelectHdl;
-        RowPos              m_nRowAlreadySelected;
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
         inline void         SetMouseButtonDownHdl( const Link& rLink )  { m_aMouseButtonDownHdl = rLink; }
