@@ -88,7 +88,7 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
     bool bLoadResult = aParser.LoadFile(i_rCommandLine.XmlSrcFile());
     if (! bLoadResult)
     {
-        std::cerr << "Error: File %s could not be loaded." << i_rCommandLine.XmlSrcFile() << std::endl;
+        std::cerr << "Error: File " << i_rCommandLine.XmlSrcFile() << " could not be loaded." << std::endl;
         return 1;
     }
 
