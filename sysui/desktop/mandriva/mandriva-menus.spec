@@ -13,7 +13,7 @@ BuildArch: noarch
 #        here and check for the 'mandriva-release' in the future (next year).
 #
 Requires: mandrake-release
-Provides: openoffice.org3-desktop-integration
+Provides: libreoffice-desktop-integration
 
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1
@@ -107,7 +107,7 @@ if [ "$1" = 1 ]
 then
   # backing out existing entries to avoid duplicates
   sed '
-/^# OpenOffice.org/d
+/^# LibreOffice/d
 /^application\/vnd\.oasis\.opendocument/d
 /^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
@@ -309,7 +309,7 @@ fi
 
 
 %files
-%attr(0755,root,root) /usr/bin/soffice
+%attr(0755,root,root) /usr/bin/%unixfilename
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)

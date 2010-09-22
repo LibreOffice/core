@@ -43,7 +43,7 @@ RPMMACROS= \
 PKGDIR=$(BIN)
 .ENDIF
 
-PRODUCTLIST = openoffice.org broffice.org
+PRODUCTLIST = libreoffice broffice.org
 
 # default values to minimize maintainance effort 
 PRODUCTVERSION = 3.3
@@ -61,12 +61,12 @@ ICONVERSION = $(PRODUCTVERSIONSHORT:s/.//g)
 # which is need by other distributors, see http://www.openoffice.org/issues/show_bug.cgi?id=75366
 UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
 
-PRODUCTNAME.openoffice.org = OpenOffice.org
-PRODUCTVERSION.openoffice.org = $(PRODUCTVERSION)
-PRODUCTVERSIONSHORT.openoffice.org = $(PRODUCTVERSIONSHORT)
-PKGVERSION.openoffice.org = $(PKGVERSION)
-UNIXFILENAME.openoffice.org = $(PRODUCTNAME.openoffice.org:l)$(PRODUCTVERSIONSHORT.openoffice.org)
-ICONPREFIX.openoffice.org = $(UNIXFILENAME.openoffice.org:s/.//g)
+PRODUCTNAME.libreoffice = LibreOffice
+PRODUCTVERSION.libreoffice = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.libreoffice = $(PRODUCTVERSIONSHORT)
+PKGVERSION.libreoffice = $(PKGVERSION)
+UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)$(PRODUCTVERSIONSHORT.libreoffice)
+ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
 
 PRODUCTNAME.broffice.org = BrOffice.org
 PRODUCTVERSION.broffice.org = $(PRODUCTVERSION)

@@ -5,14 +5,14 @@ Summary: %productname desktop integration
 Name: %pkgprefix-suse-menus
 Group: Office
 License: LGPL
-Vendor: OpenOffice.org
+Vendor: The Document Foundation
 AutoReqProv: no
 BuildArch: noarch
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
 Requires: /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
-Provides: openoffice.org3-desktop-integration
+Provides: libreoffice-desktop-integration
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1
 %define _binary_payload w9.gzdio

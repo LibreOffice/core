@@ -1,39 +1,39 @@
-?package(openoffice.org-writer):needs="X11" section="Apps/Editors"\
+?package(libreoffice-writer):needs="X11" section="Apps/Editors"\
   title="%PRODUCTNAME Writer" command="%PREFIX -writer"\
   hints="Word Processors"\
   kderemove="y"\
   icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-writer.png"\
   icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-writer.png"
 
-?package(openoffice.org-calc):needs="X11" section="Apps/Math"\
+?package(libreoffice-calc):needs="X11" section="Apps/Math"\
   title="%PRODUCTNAME Calc" command="%PREFIX -calc"\
   hints="Spreadsheets"\
   kderemove="y"\
   icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-calc.png"\
   icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-calc.png"
 
-?package(openoffice.org-draw):needs="X11" section="Apps/Graphics"\
+?package(libreoffice-draw):needs="X11" section="Apps/Graphics"\
   title="%PRODUCTNAME Draw" command="%PREFIX -draw"\
   hints="Drawing"\
   kderemove="y"\
   icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-draw.png"\
   icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-draw.png"
 
-?package(openoffice.org-impress):needs="X11" section="Apps/Graphics"\
+?package(libreoffice-impress):needs="X11" section="Apps/Graphics"\
   title="%PRODUCTNAME Impress" command="%PREFIX -impress"\
   hints="Presentation"\
   kderemove="y"\
   icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-impress.png"\
   icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-impress.png"
 
-?package(openoffice.org-base):needs="X11" section="Apps/Databases"\
+?package(libreoffice-base):needs="X11" section="Apps/Databases"\
   title="%PRODUCTNAME Base" command="%PREFIX -base"\
   hints="Database"\
   kderemove="y"\
   icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-base.png"\
   icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-base.png"
 
-?package(openoffice.org-core02):needs="X11" section="Apps/System"\
+?package(libreoffice-core02):needs="X11" section="Apps/System"\
   title="%PRODUCTNAME Printer Administration"\
   command="%PREFIX-printeradmin"\
   hints="Setup,Printer,Config"\

@@ -5,11 +5,11 @@ Summary: %productname desktop integration
 Name: %pkgprefix-redhat-menus
 Group: Office
 License: LGPL
-Vendor: OpenOffice.org
+Vendor: LibreOffice
 AutoReqProv: no
 BuildArch: noarch
 Requires: redhat-release
-Provides: openoffice.org3-desktop-integration
+Provides: libreoffice-desktop-integration
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1
 %define _binary_payload w9.gzdio
@@ -146,7 +146,7 @@ if [ "$1" = 1 ]
 then
   # backing out existing entries to avoid duplicates
   sed '
-/^# OpenOffice.org/d
+/^# LibreOffice/d
 /^application\/vnd\.oasis\.opendocument/d
 /^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
@@ -162,7 +162,7 @@ then
 
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
-# OpenOffice.org
+# LibreOffice
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-web; %unixfilename -view %s
@@ -268,7 +268,7 @@ for theme in gnome hicolor locolor; do
 done
 
 %files
-%attr(0755,root,root) /usr/bin/soffice
+%attr(0755,root,root) /usr/bin/%unixfilename
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)

@@ -1,4 +1,4 @@
-This product is made available subject to the terms of GNU Lesser General Public License Version 3. A copy of the LGPL license can be found at http://www.openoffice.org/license.html
+This product is made available subject to the terms of GNU Lesser General Public License Version 3. A copy of the LGPL license can be found at http://www.gnu.org/licenses/lgpl-3.0-standalone.html
 
 ------------------------------------
 Third Party Code. Additional copyright notices and license terms applicable to portions of the Software are set forth in the THIRDPARTYLICENSEREADME.html file.
@@ -9,7 +9,7 @@ All trademarks and registered trademarks mentioned herein are the property of th
 ------------------------------------
 Copyright (c) 2000,2010 Oracle and/or it affiliates. All rights reserved.
 
-This product has been created with contributions from the OpenOffice.org community, of which Oracle is a principal member. OpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.
+This product has been created with contributions from the OpenOffice.org community. We acknowledge all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.
 
 ------------------------------------
 

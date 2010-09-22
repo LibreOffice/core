@@ -36,7 +36,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 
 my ($prefix, $ext, $key);
-$productname = "OpenOffice.org";
+$productname = "LibreOffice";
 $workdir = ".";
 
 while ($_ = $ARGV[0], /^-/) {
