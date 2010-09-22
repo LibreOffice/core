@@ -349,14 +349,14 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     if ( xDataProvider.is() )
     {
         m_aColumns.realloc(1);
-        uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames = xDataProvider->getComplexColumnDescriptions();
+        uno::Sequence< ::rtl::OUString > aColumnNames = xDataProvider->getColumnDescriptions();
         for(sal_Int32 i = 0 ; i < aColumnNames.getLength();++i)
         {
             if ( aColumnNames[i].getLength() )
             {
                 sal_Int32 nCount = m_aColumns.getLength();
                 m_aColumns.realloc(nCount+1);
-                m_aColumns[nCount] = aColumnNames[i][0];
+                m_aColumns[nCount] = aColumnNames[i];
             }
         }
     }

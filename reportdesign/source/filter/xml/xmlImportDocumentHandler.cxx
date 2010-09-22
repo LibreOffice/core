@@ -135,8 +135,8 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
         uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
         if ( xDataProvider.is() )
         {
-            const uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames = xDataProvider->getComplexColumnDescriptions();
-            aArgs.put( "ComplexColumnDescriptions", uno::makeAny( aColumnNames ) );
+            const uno::Sequence< ::rtl::OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+            aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
         }
 
         xReceiver->attachDataProvider( m_xDatabaseDataProvider.get() );
