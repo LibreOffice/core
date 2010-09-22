@@ -29,7 +29,7 @@
 
 RegistryItem gid_Regitem_Software_OpenOffice_Quickstarterinstalled
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\OpenOffice.org";
+    Subkey = "Software\LibreOffice";
     ModuleID = gid_Module_Optional_Quickstart;
     Name = "QuickStarterInstalled";
     Value = "1";

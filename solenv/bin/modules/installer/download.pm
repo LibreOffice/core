@@ -467,17 +467,17 @@ sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
-    my $start = "OOo";
+    my $start = "LO";
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $start = "OOo"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LO"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) { $start = "OOo-Dev"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LO-dev" ) { $start = "LO-Dev"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "OOo-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LO-SDK"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "OOo-Dev-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "LO-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LO-Dev-SDK"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "OOo-URE"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "LO-URE"; }
 
     if ( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) { $start = "BrOo"; }
 
@@ -1887,7 +1887,7 @@ sub create_link_tree
 {
     my ($sourcedownloadfile, $destfilename, $versionstring) = @_;
 
-    if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for OOo upload not defined!", "create_link_tree"); }
+    if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for LO upload not defined!", "create_link_tree"); }
     my $versiondir = $installer::globals::ooouploaddir . $installer::globals::separator . $versionstring;
     my $infoline = "Directory for the link: $versiondir\n";
     push(@installer::globals::logfileinfo, $infoline);
@@ -1906,7 +1906,7 @@ sub create_link_tree
 }
 
 #######################################################
-# Setting supported platform for Sun OpenOffice.org
+# Setting supported platform for LibreOffice
 # builds
 #######################################################
 
@@ -2104,7 +2104,7 @@ sub create_download_sets
 }
 
 ####################################################
-# Creating OOo upload tree
+# Creating LO upload tree
 ####################################################
 
 sub create_download_link_tree

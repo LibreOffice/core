@@ -330,11 +330,11 @@ sub create_epm_header
     my $line = "";
     my $infoline = "";
 
-    # %product OpenOffice.org Software
+    # %product LibreOffice Software
     # %version 2.0
     # %description A really great software
     # %copyright 1999-2003 by OOo
-    # %vendor OpenOffice.org
+    # %vendor LibreOffice
     # %license /test/replace/01/LICENSE01
     # %readme /test/replace/01/README01
     # %requires foo
@@ -560,11 +560,11 @@ sub create_epm_header
                 }
             }
 
-            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'openoffice.org' )
+            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'libreoffice' )
             {
-                $line = "%provides" . " openoffice.org-unbundled\n";
+                $line = "%provides" . " libreoffice-unbundled\n";
                 push(@epmheader, $line);
-                $line = "%incompat" . " openoffice.org-bundled\n";
+                $line = "%incompat" . " libreoffice-bundled\n";
                 push(@epmheader, $line);
             }
         }
