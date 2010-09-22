@@ -76,7 +76,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
         uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
         uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
         xVBACompat->setVBACompatibilityMode( sal_True );
-        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "VBAProject" ) );
+        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
         pShell->GetBasicManager()->SetName( aPrjName );
 
         if( xLibContainer.is() )

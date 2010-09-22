@@ -81,6 +81,11 @@ ScMatrix* ScMatrix::Clone() const
     return pScMat;
 }
 
+ScMatrix* ScMatrix::CloneIfConst()
+{
+    return (mbCloneIfConst || IsEternalRef()) ? Clone() : this;
+}
+
 void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)
 {
     Clear();

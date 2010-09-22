@@ -80,6 +80,15 @@ ScVbaGlobals::getApplication() throw (uno::RuntimeException)
        return mxApplication;
 }
 
+
+uno::Reference<excel::XApplication > SAL_CALL
+ScVbaGlobals::getExcel() throw (uno::RuntimeException)
+{
+       return getApplication();
+}
+
+
+
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
@@ -217,6 +226,25 @@ ScVbaGlobals::Rows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     return getApplication()->getActiveSheet()->Rows( aIndex );
 
+}
+
+
+uno::Any SAL_CALL
+ScVbaGlobals::getDebug() throw (uno::RuntimeException)
+{
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.Debug" ) ), aArgs, mxContext );
+        return uno::Any( xVBADebug );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL
