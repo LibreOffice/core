@@ -234,10 +234,12 @@ void PageObjectPainter::PaintPreview (
 
         const Bitmap aPreview (GetPreviewBitmap(rpDescriptor, &rDevice));
         if ( ! aPreview.IsEmpty())
+        {
             if (aPreview.GetSizePixel() != aBox.GetSize())
                 rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aPreview);
             else
                 rDevice.DrawBitmap(aBox.TopLeft(), aPreview);
+        }
     }
 }
 
@@ -342,10 +344,12 @@ void PageObjectPainter::PaintPageNumber (
             // (preferred) or brighter font color.
             const sal_Int32 nFontLuminance (aPageNumberColor.GetLuminance());
             if (abs(nBackgroundLuminance - nFontLuminance) < 60)
+            {
                 if (nBackgroundLuminance > nFontLuminance-30)
                     aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberBrightBackground));
                 else
                     aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberDarkBackground));
+            }
         }
     }
 
@@ -387,10 +391,10 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
     const OutputDevice& rReferenceDevice)
 {
     enum State { None = 0x00, Selected = 0x01, MouseOver = 0x02, Focused = 0x04 };
-    const State eState (State(
+    const int eState =
           (rpDescriptor->HasState(model::PageDescriptor::ST_Selected) ? Selected : None)
         | (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver) ? MouseOver : None)
-        | (rpDescriptor->HasState(model::PageDescriptor::ST_Focused) ? Focused : None)));
+        | (rpDescriptor->HasState(model::PageDescriptor::ST_Focused) ? Focused : None);
 
     switch (eState)
     {

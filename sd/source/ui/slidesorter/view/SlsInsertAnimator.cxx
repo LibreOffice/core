@@ -450,6 +450,7 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
     {
         model::SharedPageDescriptor pDescriptor(rModel.GetPageDescriptor(nIndex+mnStartIndex));
         if (pDescriptor)
+        {
             if (eMode == controller::Animator::AM_Animated)
                 maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
             else
@@ -459,6 +460,7 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
                 rView.RequestRepaint(aOldBoundingBox);
                 rView.RequestRepaint(pDescriptor);
             }
+        }
         maEndOffset[nIndex] = Point(0,0);
     }
     if (eMode == controller::Animator::AM_Animated)
