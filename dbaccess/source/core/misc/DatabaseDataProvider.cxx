@@ -244,10 +244,10 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )
             {
-                uno::Sequence< uno::Any > aArgs(1);
+                uno::Sequence< uno::Any > aInitArgs(1);
                 beans::NamedValue aParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),uno::makeAny(sal_True));
-                aArgs[0] <<= aParam;
-                xIni->initialize(aArgs);
+                aInitArgs[0] <<= aParam;
+                xIni->initialize(aInitArgs);
             }
         }
 
