@@ -330,6 +330,16 @@ Custom3 HID_BIB_CUSTOM3_POS
 Custom4 HID_BIB_CUSTOM4_POS
 Custom5 HID_BIB_CUSTOM5_POS
 
+*BMPOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Colordepth svtools:ListBox:DLG_EXPORT:LB_COLOR_DEPTH
+Compression svtools:CheckBox:DLG_EXPORT:CB_RLE_ENCODING
+
+
 *Breakpoints basctl:ModalDialog:RID_BASICIDE_BREAKPOINTDLG
 BreakpointsList basctl:ComboBox:RID_BASICIDE_BREAKPOINTDLG:RID_CB_BRKPOINTS
 NewButton basctl:PushButton:RID_BASICIDE_BREAKPOINTDLG:RID_PB_NEW
