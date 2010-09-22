@@ -298,7 +298,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 xObj->setVisualAreaSize( nAspect, aSz );
 
             pPage->InsertObject( pObj );
-            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
+            pModel->AddUndo( new SdrUndoNewObj( *pObj ) );
 
             // Dies veranlaesst Chart zum sofortigen Update
             //SvData aEmpty;
@@ -318,7 +318,7 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
         ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
-        pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );   //! Undo-Kommentar?
+        pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
         pPage->RemoveObject( pObj->GetOrdNum() );
 
         //! Notify etc.???
