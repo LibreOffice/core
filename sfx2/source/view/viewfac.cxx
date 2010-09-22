@@ -49,7 +49,7 @@ void SfxViewFactory::InitFactory()
     (*fnInit)();
 }
 
-String SfxViewFactory::GetViewName() const
+String SfxViewFactory::GetLegacyViewName() const
 {
     ::rtl::OUStringBuffer aViewName;
     aViewName.appendAscii( "view" );
@@ -57,18 +57,27 @@ String SfxViewFactory::GetViewName() const
     return aViewName.makeStringAndClear();
 }
 
+String SfxViewFactory::GetAPIViewName() const
+{
+    if ( m_sViewName.Len() > 0 )
+        return m_sViewName;
+
+    if ( GetOrdinal() == 0 )
+        return String::CreateFromAscii( "Default" );
+
+    return GetLegacyViewName();
+}
+
 // CTOR / DTOR -----------------------------------------------------------
 
 SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                                USHORT nOrdinal, const ResId& aDescrResId ):
+                                USHORT nOrdinal, const sal_Char* asciiViewName ):
     fnCreate(fnC),
     fnInit(fnI),
     nOrd(nOrdinal),
-    aDescription(aDescrResId.GetId(), *aDescrResId.GetResMgr())
+    m_sViewName( String::CreateFromAscii( asciiViewName ) )
 {
-    aDescription.SetRT(aDescrResId.GetRT());
     DBG_CTOR(SfxViewFactory, 0);
-//  SFX_APP()->RegisterViewFactory_Impl(*this);
 }
 
 SfxViewFactory::~SfxViewFactory()
