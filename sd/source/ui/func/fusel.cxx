@@ -436,6 +436,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 mpView->BegMarkObj(aMDPos);
                         }
                     }
+
+                    if( bMarked && (nSlotId == SID_OBJECT_ROTATE) && !rMEvt.IsShift() )
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SYNCHRON);
                 }
             }
         }
