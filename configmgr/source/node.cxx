@@ -101,8 +101,4 @@ Node::~Node() {}
 
 void Node::clear() {}
 
-rtl::Reference< Node > Node::findMember(rtl::OUString const &) {
-    return rtl::Reference< Node >();
-}
-
 }
