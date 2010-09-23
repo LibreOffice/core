@@ -1,122 +1,122 @@
-*TabHintergrund CUI_HID_BACKGROUND
-Als cui.ListBox.10001.1
-Fuer cui.ListBox.10001.32
+*TabHintergrund sym:CUI_HID_BACKGROUND
+Als sym:cui.ListBox.10001.1
+Fuer sym:cui.ListBox.10001.32
 FuerAbsatz cui:LISTBOX:RID_SVXPAGE_BACKGROUND:LB_PARA_BOX
-Hintergrundfarbe CUI_HID_BACKGROUND_CTL_BGDCOLORSET
-Verknuepfen cui.CheckBox.10001.22
-Vorschau cui.CheckBox.10001.23
-Durchsuchen cui.PushButton.10001.20
-Position cui.RadioButton.10001.27
-Flaeche cui.RadioButton.10001.25
-Kachel cui.RadioButton.10001.26
-ArtPosition CUI_HID_BACKGROUND_CTL_POSITION
-'ArtPosition cui.RadioButton.10001.27
+Hintergrundfarbe sym:CUI_HID_BACKGROUND_CTL_BGDCOLORSET
+Verknuepfen sym:cui.CheckBox.10001.22
+Vorschau sym:cui.CheckBox.10001.23
+Durchsuchen sym:cui.PushButton.10001.20
+Position sym:cui.RadioButton.10001.27
+Flaeche sym:cui.RadioButton.10001.25
+Kachel sym:cui.RadioButton.10001.26
+ArtPosition sym:CUI_HID_BACKGROUND_CTL_POSITION
+'ArtPosition sym:cui.RadioButton.10001.27
 'Muster HID_BACKGROUND_CTL_PATTERNSET
 'Musterfarbe HID_BACKGROUND_CTL_PATCOLORSET
 
-*TabHTML cui.TabPage.17000
-Groesse1 cui.NumericField.17000.3
-Groesse2 cui.NumericField.17000.5
-Groesse3 cui.NumericField.17000.7
-Groesse4 cui.NumericField.17000.9
-Groesse5 cui.NumericField.17000.11
-Groesse6 cui.NumericField.17000.13
-Groesse7 cui.NumericField.17000.15
-UnbekannteHTML cui.CheckBox.17000.21
-FontEinstellungen cui.CheckBox.17000.22
+*TabHTML sym:cui.TabPage.17000
+Groesse1 sym:cui.NumericField.17000.3
+Groesse2 sym:cui.NumericField.17000.5
+Groesse3 sym:cui.NumericField.17000.7
+Groesse4 sym:cui.NumericField.17000.9
+Groesse5 sym:cui.NumericField.17000.11
+Groesse6 sym:cui.NumericField.17000.13
+Groesse7 sym:cui.NumericField.17000.15
+UnbekannteHTML sym:cui.CheckBox.17000.21
+FontEinstellungen sym:cui.CheckBox.17000.22
 Export cui:LISTBOX:RID_OFAPAGE_HTMLOPT:LB_EXPORT
-StarBasic cui.CheckBox.17000.31
-Grafikenkopieren cui.CheckBox.17000.37
+StarBasic sym:cui.CheckBox.17000.31
+Grafikenkopieren sym:cui.CheckBox.17000.37
 Drucklayout cui:CHECKBOX:RID_OFAPAGE_HTMLOPT:CB_PRINT_EXTENSION
-WarnungAnzeigen cui.CheckBox.17000.32
-Zeichensatz cui.ListBox.17000.41
-UseEnglishLocaleForNumbers cui.CheckBox.17000.23
+WarnungAnzeigen sym:cui.CheckBox.17000.32
+Zeichensatz sym:cui.ListBox.17000.41
+UseEnglishLocaleForNumbers sym:cui.CheckBox.17000.23
 
-*TabHyperlinkRahmen SW_HID_FRM_URL
-URL sw.Edit.20842.59
-Durchsuchen sw.PushButton.20842.103
-NameText sw.Edit.20842.111
-Frame sw.ComboBox.20842.96
-Server sw.CheckBox.20842.98
-Client sw.CheckBox.20842.99
+*TabHyperlinkRahmen sym:SW_HID_FRM_URL
+URL sym:sw.Edit.20842.59
+Durchsuchen sym:sw.PushButton.20842.103
+NameText sym:sw.Edit.20842.111
+Frame sym:sw.ComboBox.20842.96
+Server sym:sw.CheckBox.20842.98
+Client sym:sw.CheckBox.20842.99
 
-*TabHyperlinkZeichen SW_HID_CHAR_URL
-URLName sw.Edit.20843.52
-Durchsuchen sw.PushButton.20843.60
-Ereignisse sw.PushButton.20843.59
-Hinweis sw.Edit.20843.64
-Targetframe sw.ComboBox.20843.61
-BesuchterLink sw.ListBox.20843.56
-UnbesuchterLink sw.ListBox.20843.58
-NameText sw.Edit.20843.66
-Zurueck SFX2_HID_TABDLG_RESET_BTN
+*TabHyperlinkZeichen sym:SW_HID_CHAR_URL
+URLName sym:sw.Edit.20843.52
+Durchsuchen sym:sw.PushButton.20843.60
+Ereignisse sym:sw.PushButton.20843.59
+Hinweis sym:sw.Edit.20843.64
+Targetframe sym:sw.ComboBox.20843.61
+BesuchterLink sym:sw.ListBox.20843.56
+UnbesuchterLink sym:sw.ListBox.20843.58
+NameText sym:sw.Edit.20843.66
+Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
-*Hyperlink CUI_HID_HYPERLINK_INTERNET
-Auswahl CUI_HID_ICCDIALOG_CHOICECTRL
-Zurueck CUI_HID_ICCDIALOG_RESET_BTN
-Uebernehmen CUI_HID_ICCDIALOG_OK_BTN
+*Hyperlink sym:CUI_HID_HYPERLINK_INTERNET
+Auswahl sym:CUI_HID_ICCDIALOG_CHOICECTRL
+Zurueck sym:CUI_HID_ICCDIALOG_RESET_BTN
+Uebernehmen sym:CUI_HID_ICCDIALOG_OK_BTN
 
 +TabHyperlinkInternet Hyperlink
-Internet cui.RadioButton.10228.2
-FTP cui.RadioButton.10228.3
-Telnet cui.RadioButton.10228.4
-ZielUrl CUI_HID_HYPERDLG_INET_PATH
-Frame cui.ComboBox.10228.32
-Form cui.ListBox.10228.34
-Hinweis cui.Edit.10228.36
-NameText cui.Edit.10228.38
-Ereignisse cui.ImageButton.10228.39
-Loginname cui.Edit.10228.8
-Passwort cui.Edit.10228.10
-AnonymerBenutzer cui.CheckBox.10228.11
-WWWBrowser cui.ImageButton.10228.12
-Target cui.ImageButton.10228.13
+Internet sym:cui.RadioButton.10228.2
+FTP sym:cui.RadioButton.10228.3
+Telnet sym:cui.RadioButton.10228.4
+ZielUrl sym:CUI_HID_HYPERDLG_INET_PATH
+Frame sym:cui.ComboBox.10228.32
+Form sym:cui.ListBox.10228.34
+Hinweis sym:cui.Edit.10228.36
+NameText sym:cui.Edit.10228.38
+Ereignisse sym:cui.ImageButton.10228.39
+Loginname sym:cui.Edit.10228.8
+Passwort sym:cui.Edit.10228.10
+AnonymerBenutzer sym:cui.CheckBox.10228.11
+WWWBrowser sym:cui.ImageButton.10228.12
+Target sym:cui.ImageButton.10228.13
 
-*TabHyperlinkMailUndNews CUI_HID_HYPERLINK_MAIL
-EMail cui.RadioButton.10229.2
-News cui.RadioButton.10229.3
-Receiver CUI_HID_HYPERDLG_MAIL_PATH
-Betreff cui.Edit.10229.7
-Adressbuch cui.ImageButton.10229.8
-Frame cui.ComboBox.10229.32
-Form cui.ListBox.10229.34
-Hinweis cui.Edit.10229.36
-NameText cui.Edit.10229.38
-Ereignisse cui.ImageButton.10229.39
-Auswahl CUI_HID_ICCDIALOG_CHOICECTRL
-Zurueck CUI_HID_ICCDIALOG_RESET_BTN
-Uebernehmen CUI_HID_ICCDIALOG_OK_BTN
+*TabHyperlinkMailUndNews sym:CUI_HID_HYPERLINK_MAIL
+EMail sym:cui.RadioButton.10229.2
+News sym:cui.RadioButton.10229.3
+Receiver sym:CUI_HID_HYPERDLG_MAIL_PATH
+Betreff sym:cui.Edit.10229.7
+Adressbuch sym:cui.ImageButton.10229.8
+Frame sym:cui.ComboBox.10229.32
+Form sym:cui.ListBox.10229.34
+Hinweis sym:cui.Edit.10229.36
+NameText sym:cui.Edit.10229.38
+Ereignisse sym:cui.ImageButton.10229.39
+Auswahl sym:CUI_HID_ICCDIALOG_CHOICECTRL
+Zurueck sym:CUI_HID_ICCDIALOG_RESET_BTN
+Uebernehmen sym:CUI_HID_ICCDIALOG_OK_BTN
 
-*TabHyperlinkDokument CUI_HID_HYPERLINK_DOCUMENT
-Path CUI_HID_HYPERDLG_DOC_PATH
-DateiOeffnen cui.ImageButton.10230.4
-Ziel cui.Edit.10230.7
-Target cui.ImageButton.10230.12
-Frame cui.ComboBox.10230.32
-Form cui.ListBox.10230.34
-Hinweis cui.Edit.10230.36
-NameText cui.Edit.10230.38
-Ereignisse cui.ImageButton.10230.39
-Auswahl CUI_HID_ICCDIALOG_CHOICECTRL
-Zurueck CUI_HID_ICCDIALOG_RESET_BTN
-Uebernehmen CUI_HID_ICCDIALOG_OK_BTN
+*TabHyperlinkDokument sym:CUI_HID_HYPERLINK_DOCUMENT
+Path sym:CUI_HID_HYPERDLG_DOC_PATH
+DateiOeffnen sym:cui.ImageButton.10230.4
+Ziel sym:cui.Edit.10230.7
+Target sym:cui.ImageButton.10230.12
+Frame sym:cui.ComboBox.10230.32
+Form sym:cui.ListBox.10230.34
+Hinweis sym:cui.Edit.10230.36
+NameText sym:cui.Edit.10230.38
+Ereignisse sym:cui.ImageButton.10230.39
+Auswahl sym:CUI_HID_ICCDIALOG_CHOICECTRL
+Zurueck sym:CUI_HID_ICCDIALOG_RESET_BTN
+Uebernehmen sym:CUI_HID_ICCDIALOG_OK_BTN
 
-*TabHyperlinkNeuesDokument CUI_HID_HYPERLINK_NEWDOCUMENT
-SofortBearbeiten cui.RadioButton.10231.2
-SpaeterBearbeiten cui.RadioButton.10231.3
-Datei cui.Edit.10231.5
-Dateityp cui.ListBox.10231.7
-Pfad cui.ImageButton.10231.8
-Frame cui.ComboBox.10231.32
-Form cui.ListBox.10231.34
-Hinweis cui.Edit.10231.36
-NameText cui.Edit.10231.38
-Ereignisse cui.ImageButton.10231.39
-Auswahl CUI_HID_ICCDIALOG_CHOICECTRL
-Zurueck CUI_HID_ICCDIALOG_RESET_BTN
-Uebernehmen CUI_HID_ICCDIALOG_OK_BTN
+*TabHyperlinkNeuesDokument sym:CUI_HID_HYPERLINK_NEWDOCUMENT
+SofortBearbeiten sym:cui.RadioButton.10231.2
+SpaeterBearbeiten sym:cui.RadioButton.10231.3
+Datei sym:cui.Edit.10231.5
+Dateityp sym:cui.ListBox.10231.7
+Pfad sym:cui.ImageButton.10231.8
+Frame sym:cui.ComboBox.10231.32
+Form sym:cui.ListBox.10231.34
+Hinweis sym:cui.Edit.10231.36
+NameText sym:cui.Edit.10231.38
+Ereignisse sym:cui.ImageButton.10231.39
+Auswahl sym:CUI_HID_ICCDIALOG_CHOICECTRL
+Zurueck sym:CUI_HID_ICCDIALOG_RESET_BTN
+Uebernehmen sym:CUI_HID_ICCDIALOG_OK_BTN
 
-*TabInhaltCalc SC_HID_SCPAGE_CONTENT
+*TabInhaltCalc sym:SC_HID_SCPAGE_CONTENT
 Formeln SC:CHECKBOX:RID_SCPAGE_CONTENT:CB_FORMULA
 Nullwerte SC:CHECKBOX:RID_SCPAGE_CONTENT:CB_NIL
 Notizanzeiger SC:CHECKBOX:RID_SCPAGE_CONTENT:CB_ANNOT
@@ -139,81 +139,81 @@ Tabellenregister SC:CHECKBOX:RID_SCPAGE_CONTENT:CB_TBLREG
 Gliederungssymbole SC:CHECKBOX:RID_SCPAGE_CONTENT:CB_OUTLINE
 Referenzenfarbig SC:CHECKBOX:RID_SCPAGE_CONTENT:CB_RFIND
 
-*TabInhalteDraw SD_HID_SD_OPTIONS_CONTENTS SD_HID_SD_OPTIONS_SNAP
-LinealeSichtbar sd.CheckBox.597.14
-HilfslinienBeimBewegen sd.CheckBox.597.1
-KontrolpunkteImBezierEditor sd.CheckBox.597.2
-KonturFuerIndividuelleObjekte sd.CheckBox.597.15
+*TabInhalteDraw sym:SD_HID_SD_OPTIONS_CONTENTS sym:SD_HID_SD_OPTIONS_SNAP
+LinealeSichtbar sym:sd.CheckBox.597.14
+HilfslinienBeimBewegen sym:sd.CheckBox.597.1
+KontrolpunkteImBezierEditor sym:sd.CheckBox.597.2
+KonturFuerIndividuelleObjekte sym:sd.CheckBox.597.15
 
-*TabInhalteHTML SW_HID_CONTENT_OPT
+*TabInhalteHTML sym:SW_HID_CONTENT_OPT
 GrafikenUndObjekte SW:CHECKBOX:TP_CONTENT_OPT:CB_GRF
 Tabellen SW:CHECKBOX:TP_CONTENT_OPT:CB_TBL
 Zeichnungen SW:CHECKBOX:TP_CONTENT_OPT:CB_DRWFAST
 Feldnamen SW:CHECKBOX:TP_CONTENT_OPT:CB_FIELD
 Notizen SW:CHECKBOX:TP_CONTENT_OPT:CB_POSTIT
-Hilfslinien sw.CheckBox.20845.14
+Hilfslinien sym:sw.CheckBox.20845.14
 FarbigeHandles SW:CHECKBOX:TP_CONTENT_OPT:CB_HANDLE
 GrosseHandles SW:CHECKBOX:TP_CONTENT_OPT:CB_BIGHANDLE
-HorizontaleBildlaufleiste sw.CheckBox.20845.15
+HorizontaleBildlaufleiste sym:sw.CheckBox.20845.15
 VertikaleBildlaufleiste SW:CHECKBOX:TP_CONTENT_OPT:CB_VSCROLL
-HorizontalesLineal sw.CheckBox.20845.17
-VertikalesLineal sw.CheckBox.20845.18
-RechtsAusgerichtet sw.CheckBox.20845.24
+HorizontalesLineal sym:sw.CheckBox.20845.17
+VertikalesLineal sym:sw.CheckBox.20845.18
+RechtsAusgerichtet sym:sw.CheckBox.20845.24
 WeichesScrollen SW:CHECKBOX:TP_CONTENT_OPT:CB_SMOOTH_SCROLL
-Lineal sw.CheckBox.20845.12
-HorizontalesLinealMasseinheit sw.ListBox.20845.88
-VertikalesLinealMasseinheit sw.ListBox.20845.89
-Masseinheit sw.ListBox.20845.27
+Lineal sym:sw.CheckBox.20845.12
+HorizontalesLinealMasseinheit sym:sw.ListBox.20845.88
+VertikalesLinealMasseinheit sym:sw.ListBox.20845.89
+Masseinheit sym:sw.ListBox.20845.27
 
-*TabInhalteWriter SW_HID_CONTENT_OPT
+*TabInhalteWriter sym:SW_HID_CONTENT_OPT
 GrafikenUndObjekte SW:CHECKBOX:TP_CONTENT_OPT:CB_GRF
 Tabellen SW:CHECKBOX:TP_CONTENT_OPT:CB_TBL
 Zeichnungen SW:CHECKBOX:TP_CONTENT_OPT:CB_DRWFAST
 Feldname SW:CHECKBOX:TP_CONTENT_OPT:CB_FIELD
 Notizen SW:CHECKBOX:TP_CONTENT_OPT:CB_POSTIT
-Hilfslinien sw.CheckBox.20845.14
+Hilfslinien sym:sw.CheckBox.20845.14
 FarbigeHandles SW:CHECKBOX:TP_CONTENT_OPT:CB_HANDLE
 GrosseHandles SW:CHECKBOX:TP_CONTENT_OPT:CB_BIGHANDLE
-HorizontaleBildlaufleiste sw.CheckBox.20845.15
+HorizontaleBildlaufleiste sym:sw.CheckBox.20845.15
 VertikaleBildlaufleiste SW:CHECKBOX:TP_CONTENT_OPT:CB_VSCROLL
-HorizontalesLineal sw.CheckBox.20845.17
-VertikalesLineal sw.CheckBox.20845.18
-RechtsAusgerichtet sw.CheckBox.20845.24
+HorizontalesLineal sym:sw.CheckBox.20845.17
+VertikalesLineal sym:sw.CheckBox.20845.18
+RechtsAusgerichtet sym:sw.CheckBox.20845.24
 WeichesScrollen SW:CHECKBOX:TP_CONTENT_OPT:CB_SMOOTH_SCROLL
-Lineal sw.CheckBox.20845.12
-HorizontalesLinealMasseinheit sw.ListBox.20845.88
-VertikalesLinealMasseinheit sw.ListBox.20845.89
+Lineal sym:sw.CheckBox.20845.12
+HorizontalesLinealMasseinheit sym:sw.ListBox.20845.88
+VertikalesLinealMasseinheit sym:sw.ListBox.20845.89
 
-*TabInitialen SW_HID_DROPCAPS
-Anzeigen sw.CheckBox.20810.13
-Anzahl sw.NumericField.20810.2
-AbstandZumText sw.MetricField.20810.6
-Zeilen sw.NumericField.20810.4
-Initialentext sw.Edit.20810.9
-Zeichenvorlage sw.ListBox.20810.11
-GanzesWort sw.CheckBox.20810.16
+*TabInitialen sym:SW_HID_DROPCAPS
+Anzeigen sym:sw.CheckBox.20810.13
+Anzahl sym:sw.NumericField.20810.2
+AbstandZumText sym:sw.MetricField.20810.6
+Zeilen sym:sw.NumericField.20810.4
+Initialentext sym:sw.Edit.20810.9
+Zeichenvorlage sym:sw.ListBox.20810.11
+GanzesWort sym:sw.CheckBox.20810.16
 
-*TabInteraktion .uno:AnimationEffects
-AktionBeiMausklick sd.ListBox.787.3
-ListeSprungZuDokument SD_HID_CTL_ACTION_DLG_2
-ListeSprungZuSeiteObjekt SD_HID_CTL_ACTION_DLG_1
-ListeObjektAktion sd.ListBox.787.4
-Durchsuchen sd.PushButton.787.1
-Suchen sd.PushButton.787.2
-Effekt sd.ListBox.787.4
+*TabInteraktion sym:.uno:AnimationEffects
+AktionBeiMausklick sym:sd.ListBox.787.3
+ListeSprungZuDokument sym:SD_HID_CTL_ACTION_DLG_2
+ListeSprungZuSeiteObjekt sym:SD_HID_CTL_ACTION_DLG_1
+ListeObjektAktion sym:sd.ListBox.787.4
+Durchsuchen sym:sd.PushButton.787.1
+Suchen sym:sd.PushButton.787.2
+Effekt sym:sd.ListBox.787.4
 'Effekt sd:ListBox:TP_ANIMATION:LB_EFFECT
 'Langsam sd:RadioButton:TP_ANIMATION:RBT_SLOW
 'Schnell sd:RadioButton:TP_ANIMATION:RBT_MEDIUM
 'Mittel sd:RadioButton:TP_ANIMATION:RBT_FAST
 'KlangbeiObjektausblenden sd:TriStateBox:TP_ANIMATION:TSB_SOUND
-Seite sd.Edit.787.2
-Dokument sd.Edit.787.3
-Objekt sd.Edit.787.4
-Makro sd.Edit.787.5
-KlangWahl sd.Edit.787.1
+Seite sym:sd.Edit.787.2
+Dokument sym:sd.Edit.787.3
+Objekt sym:sd.Edit.787.4
+Makro sym:sd.Edit.787.5
+KlangWahl sym:sd.Edit.787.1
 'KlangVollstaendigAbspielen sd:TriStateBox:TP_ANIMATION:TSB_PLAY_FULL
 
-*TabKapitelnumerierung SW_HID_TP_OUTLINE_NUM
+*TabKapitelnumerierung sym:SW_HID_TP_OUTLINE_NUM
 Ebene SW:LISTBOX:TP_OUTLINE_NUM:LB_LEVEL
 Absatzvorlage SW:LISTBOX:TP_OUTLINE_NUM:LB_COLL
 Zeichenvorlage SW:LISTBOX:TP_OUTLINE_NUM:LB_CHARFMT
@@ -222,70 +222,70 @@ Vollstaendig SW:NUMERICFIELD:TP_OUTLINE_NUM:NF_ALL_LEVEL
 Davor SW:EDIT:TP_OUTLINE_NUM:ED_PREFIX
 Dahinter SW:EDIT:TP_OUTLINE_NUM:ED_SUFFIX
 BeginBei SW:NUMERICFIELD:TP_OUTLINE_NUM:ED_START
-Form SW_HID_OUTLINE_FORM
+Form sym:SW_HID_OUTLINE_FORM
 
-*TabKopfzeile SVX_HID_FORMAT_HEADER
-KopfzeileMitAbstand svx.CheckBox.10027.10 svx:CheckBox:RID_SVXPAGE_HEADER:CB_HEADER
-Abstand svx.MetricField.10027.12
-Hoehe svx.MetricField.10027.14
-Hoehedynamisch svx.CheckBox.10027.15
-RechterRandKopfzeile svx.MetricField.10027.19
-LinkerRandKopfzeile svx.MetricField.10027.17
-InhaltLinksRechtsGleich svx.CheckBox.10027.20
-Zusaetze svx.PushButton.10027.40
-Bearbeiten SC_HID_SC_HEADER_EDIT
+*TabKopfzeile sym:SVX_HID_FORMAT_HEADER
+KopfzeileMitAbstand sym:svx.CheckBox.10027.10 svx:CheckBox:RID_SVXPAGE_HEADER:CB_HEADER
+Abstand sym:svx.MetricField.10027.12
+Hoehe sym:svx.MetricField.10027.14
+Hoehedynamisch sym:svx.CheckBox.10027.15
+RechterRandKopfzeile sym:svx.MetricField.10027.19
+LinkerRandKopfzeile sym:svx.MetricField.10027.17
+InhaltLinksRechtsGleich sym:svx.CheckBox.10027.20
+Zusaetze sym:svx.PushButton.10027.40
+Bearbeiten sym:SC_HID_SC_HEADER_EDIT
 
-*TabKopfzeileCalc SC_HID_SCPAGE_HFED_HR
-LinkerBereich SC_HID_SC_HF_HRL
-MittlererBereich SC_HID_SC_HF_HRC
-RechterBereich SC_HID_SC_HF_HRR
-PredefinedHeader SC_HID_SC_HF_HR_DEFINED
-TextAttribute SC_HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
-Datei SC_HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
-Tabelle SC_HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
-Seitennummer SC_HID_SC_HF_PAGE sc:ImageButton:RID_HFBASE:BTN_PAGE
-Seitenanzahl SC_HID_SC_HF_PAGES sc:ImageButton:RID_HFBASE:BTN_PAGES
-Datum SC_HID_SC_HF_DATE sc:ImageButton:RID_HFBASE:BTN_DATE
-Zeit SC_HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
+*TabKopfzeileCalc sym:SC_HID_SCPAGE_HFED_HR
+LinkerBereich sym:SC_HID_SC_HF_HRL
+MittlererBereich sym:SC_HID_SC_HF_HRC
+RechterBereich sym:SC_HID_SC_HF_HRR
+PredefinedHeader sym:SC_HID_SC_HF_HR_DEFINED
+TextAttribute sym:SC_HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
+Datei sym:SC_HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
+Tabelle sym:SC_HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
+Seitennummer sym:SC_HID_SC_HF_PAGE sc:ImageButton:RID_HFBASE:BTN_PAGE
+Seitenanzahl sym:SC_HID_SC_HF_PAGES sc:ImageButton:RID_HFBASE:BTN_PAGES
+Datum sym:SC_HID_SC_HF_DATE sc:ImageButton:RID_HFBASE:BTN_DATE
+Zeit sym:SC_HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
 
-*TabKopfzeileCalcLinks SC_HID_SCPAGE_HFED_HL
-LinkerBereich SC_HID_SC_HF_HLL
-MittlererBereich SC_HID_SC_HF_HLC
-RechterBereich SC_HID_SC_HF_HLR
-PredefinedHeaderLeft SC_HID_SC_HF_HL_DEFINED
-TextAttribute SC_HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
-Datei SC_HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
-Tabelle SC_HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
-Seitennummer SC_HID_SC_HF_PAGE sc:ImageButton:RID_HFBASE:BTN_PAGE
-Seitenanzahl SC_HID_SC_HF_PAGES sc:ImageButton:RID_HFBASE:BTN_PAGES
-Datum SC_HID_SC_HF_DATE sc:ImageButton:RID_HFBASE:BTN_DATE
-Zeit SC_HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
+*TabKopfzeileCalcLinks sym:SC_HID_SCPAGE_HFED_HL
+LinkerBereich sym:SC_HID_SC_HF_HLL
+MittlererBereich sym:SC_HID_SC_HF_HLC
+RechterBereich sym:SC_HID_SC_HF_HLR
+PredefinedHeaderLeft sym:SC_HID_SC_HF_HL_DEFINED
+TextAttribute sym:SC_HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
+Datei sym:SC_HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
+Tabelle sym:SC_HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
+Seitennummer sym:SC_HID_SC_HF_PAGE sc:ImageButton:RID_HFBASE:BTN_PAGE
+Seitenanzahl sym:SC_HID_SC_HF_PAGES sc:ImageButton:RID_HFBASE:BTN_PAGES
+Datum sym:SC_HID_SC_HF_DATE sc:ImageButton:RID_HFBASE:BTN_DATE
+Zeit sym:SC_HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
 
-*TabLaden SW_HID_OPTLOAD_PAGE
-Immer sw.RadioButton.20880.12
-AufNachfrage sw.RadioButton.20880.13
-Nie sw.RadioButton.20880.14
-Feldbefehle sw.CheckBox.20880.16
-Diagramme sw.CheckBox.20880.17
-Masseinheit sw.ListBox.20880.19
-Tabulatorenabstand sw.MetricField.20880.22
+*TabLaden sym:SW_HID_OPTLOAD_PAGE
+Immer sym:sw.RadioButton.20880.12
+AufNachfrage sym:sw.RadioButton.20880.13
+Nie sym:sw.RadioButton.20880.14
+Feldbefehle sym:sw.CheckBox.20880.16
+Diagramme sym:sw.CheckBox.20880.17
+Masseinheit sym:sw.ListBox.20880.19
+Tabulatorenabstand sym:sw.MetricField.20880.22
 
-*TabLauftext cui.TabPage.10184 .
-Effekt cui.ListBox.10184.1
-NachOben cui.ImageButton.10184.1
-NachLinks cui.ImageButton.10184.2
-NachUnten cui.ImageButton.10184.4
-NachRechts cui.ImageButton.10184.3
-TextSichtbarBeimStarten cui.TriStateBox.10184.1
-TextSichtbarBeimBeenden cui.TriStateBox.10184.2
-Endlos cui.TriStateBox.10184.3
-Anzahl cui.NumericField.10184.1
-Automatisch cui.TriStateBox.10184.5
-Verzoegerung cui.MetricField.10184.2
-Pixel cui.TriStateBox.10184.4
-Schrittweite cui.MetricField.10184.1
+*TabLauftext sym:cui.TabPage.10184 .
+Effekt sym:cui.ListBox.10184.1
+NachOben sym:cui.ImageButton.10184.1
+NachLinks sym:cui.ImageButton.10184.2
+NachUnten sym:cui.ImageButton.10184.4
+NachRechts sym:cui.ImageButton.10184.3
+TextSichtbarBeimStarten sym:cui.TriStateBox.10184.1
+TextSichtbarBeimBeenden sym:cui.TriStateBox.10184.2
+Endlos sym:cui.TriStateBox.10184.3
+Anzahl sym:cui.NumericField.10184.1
+Automatisch sym:cui.TriStateBox.10184.5
+Verzoegerung sym:cui.MetricField.10184.2
+Pixel sym:cui.TriStateBox.10184.4
+Schrittweite sym:cui.MetricField.10184.1
 
-*TabLayoutCalc SC_HID_SCPAGE_LAYOUT
+*TabLayoutCalc sym:SC_HID_SCPAGE_LAYOUT
 Masseinheit SC:LISTBOX:RID_SCPAGE_LAYOUT:LB_UNIT
 Tabulator SC:METRICFIELD:RID_SCPAGE_LAYOUT:MF_TAB
 Eingabebestaetigung SC:CHECKBOX:RID_SCPAGE_LAYOUT:CB_ALIGN
@@ -293,121 +293,121 @@ Eingabetaste SC:CHECKBOX:RID_SCPAGE_LAYOUT:CB_EDITMODE
 FormatierungAusdehnen SC:CHECKBOX:RID_SCPAGE_LAYOUT:CB_FORMAT
 SelektionNach SC:LISTBOX:RID_SCPAGE_LAYOUT:LB_ALIGN
 ' Referenzenfarbig sc:CheckBox:RID_SCPAGE_LAYOUT:CB_RFIND
-Referenzenausdehnen sc.CheckBox.25718.76
-SelektionHervorheben sc.CheckBox.25718.77
-ImmerAktualisieren sc.RadioButton.25718.2
-AufNachfrageAktualisieren sc.RadioButton.25718.3
-NieAktualisieren sc.RadioButton.25718.4
-Druckermasse sc.CheckBox.25718.78
-Ueberschreibwarnung sc.CheckBox.25718.79
+Referenzenausdehnen sym:sc.CheckBox.25718.76
+SelektionHervorheben sym:sc.CheckBox.25718.77
+ImmerAktualisieren sym:sc.RadioButton.25718.2
+AufNachfrageAktualisieren sym:sc.RadioButton.25718.3
+NieAktualisieren sym:sc.RadioButton.25718.4
+Druckermasse sym:sc.CheckBox.25718.78
+Ueberschreibwarnung sym:sc.CheckBox.25718.79
 
-*TabLegende CUI_HID_CAPTION
-Art CUI_HID_CAPTION_CTL_TYPE
+*TabLegende sym:CUI_HID_CAPTION
+Art sym:CUI_HID_CAPTION_CTL_TYPE
 Abstand cui:METRICFIELD:RID_SVXPAGE_CAPTION:MF_ABSTAND
 Ansatz cui:LISTBOX:RID_SVXPAGE_CAPTION:LB_ANSATZ
 Laenge cui:METRICFIELD:RID_SVXPAGE_CAPTION:MF_LAENGE
 Position cui:LISTBOX:RID_SVXPAGE_CAPTION:LB_ANSATZ_REL
 Optimal cui:CHECKBOX:RID_SVXPAGE_CAPTION:CB_LAENGE
 
-*TabLinguistik CUI_HID_OPTIONS_LINGU
-Sprachmodule CUI_HID_CLB_LINGU_MODULES
-SprachmoduleBearbeiten cui.PushButton.12007.113
-Optionen CUI_HID_CLB_LINGU_OPTIONS
-OptionenBearbeiten cui.PushButton.12007.123
-Benutzerwoerterbuch CUI_HID_CLB_EDIT_MODULES_DICS
-Neu cui.PushButton.12007.314
-Bearbeiten cui.PushButton.12007.315
-Loeschen cui.PushButton.12007.316
+*TabLinguistik sym:CUI_HID_OPTIONS_LINGU
+Sprachmodule sym:CUI_HID_CLB_LINGU_MODULES
+SprachmoduleBearbeiten sym:cui.PushButton.12007.113
+Optionen sym:CUI_HID_CLB_LINGU_OPTIONS
+OptionenBearbeiten sym:cui.PushButton.12007.123
+Benutzerwoerterbuch sym:CUI_HID_CLB_EDIT_MODULES_DICS
+Neu sym:cui.PushButton.12007.314
+Bearbeiten sym:cui.PushButton.12007.315
+Loeschen sym:cui.PushButton.12007.316
 
-*TabLinie CUI_HID_LINE_LINE
-Breite cui.MetricField.10051.1
-BreiteLinks cui.MetricField.10051.3
-BreiteRechts cui.MetricField.10051.2
-EndenSynchronisieren cui.CheckBox.10051.1
-Farbe cui.ListBox.10051.1
-Stil cui.ListBox.10051.2
-StilLinks cui.ListBox.10051.3
-StilRechts cui.ListBox.10051.4
-Transparenz cui.MetricField.10051.5
-ZentriertLinks cui.TriStateBox.10051.4
-ZentriertRechts cui.TriStateBox.10051.5
-CornerStyle cui.ListBox.10051.5
+*TabLinie sym:CUI_HID_LINE_LINE
+Breite sym:cui.MetricField.10051.1
+BreiteLinks sym:cui.MetricField.10051.3
+BreiteRechts sym:cui.MetricField.10051.2
+EndenSynchronisieren sym:cui.CheckBox.10051.1
+Farbe sym:cui.ListBox.10051.1
+Stil sym:cui.ListBox.10051.2
+StilLinks sym:cui.ListBox.10051.3
+StilRechts sym:cui.ListBox.10051.4
+Transparenz sym:cui.MetricField.10051.5
+ZentriertLinks sym:cui.TriStateBox.10051.4
+ZentriertRechts sym:cui.TriStateBox.10051.5
+CornerStyle sym:cui.ListBox.10051.5
 
-*TabLinienenden CUI_HID_LINE_ENDDEF
-Aendern cui.PushButton.10053.2
-Hinzufuegen cui.PushButton.10053.1
-Liste cui.ListBox.10053.1
-Loeschen cui.PushButton.10053.3
-Oeffnen cui.ImageButton.10053.5
-Speichern cui.ImageButton.10053.6
-Textfeld cui.Edit.10053.1
+*TabLinienenden sym:CUI_HID_LINE_ENDDEF
+Aendern sym:cui.PushButton.10053.2
+Hinzufuegen sym:cui.PushButton.10053.1
+Liste sym:cui.ListBox.10053.1
+Loeschen sym:cui.PushButton.10053.3
+Oeffnen sym:cui.ImageButton.10053.5
+Speichern sym:cui.ImageButton.10053.6
+Textfeld sym:cui.Edit.10053.1
 
-*TabLinienstile CUI_HID_LINE_DEF
-Abstand cui.MetricField.10052.1
-Aendern cui.PushButton.10052.2
-AnLinienbreite cui.CheckBox.10052.1
-AnzahlLinks cui.NumericField.10052.1
-AnzahlRechts cui.NumericField.10052.2
-Hinzufuegen cui.PushButton.10052.1
-LaengeLinks cui.MetricField.10052.3
-LaengeRechts cui.MetricField.10052.4
-Linienstil cui.ListBox.10052.2
-Loeschen cui.PushButton.10052.3
-Oeffnen cui.ImageButton.10052.5
-Speichern cui.ImageButton.10052.6
-TypLinks cui.ListBox.10052.3
-TypRechts cui.ListBox.10052.1
+*TabLinienstile sym:CUI_HID_LINE_DEF
+Abstand sym:cui.MetricField.10052.1
+Aendern sym:cui.PushButton.10052.2
+AnLinienbreite sym:cui.CheckBox.10052.1
+AnzahlLinks sym:cui.NumericField.10052.1
+AnzahlRechts sym:cui.NumericField.10052.2
+Hinzufuegen sym:cui.PushButton.10052.1
+LaengeLinks sym:cui.MetricField.10052.3
+LaengeRechts sym:cui.MetricField.10052.4
+Linienstil sym:cui.ListBox.10052.2
+Loeschen sym:cui.PushButton.10052.3
+Oeffnen sym:cui.ImageButton.10052.5
+Speichern sym:cui.ImageButton.10052.6
+TypLinks sym:cui.ListBox.10052.3
+TypRechts sym:cui.ListBox.10052.1
 
-*TabLiteraturAllgemein EXTENSIONS_HID_BIB_CONTROL_PAGE
+*TabLiteraturAllgemein sym:EXTENSIONS_HID_BIB_CONTROL_PAGE
 
-*TabMakro cui.TabPage.10303
-Ereignis CUI_HID_MACRO_LB_EVENT
-Bereich CUI_HID_MACRO_GROUP SFX2:LISTBOX:RID_SFX_TP_MACROASSIGN:LB_GROUP
-Makroname CUI_HID_MACRO_MACROS SFX2:LISTBOX:RID_SFX_TP_MACROASSIGN:LB_MACROS
-Zuweisen cui.PushButton.10303.3
-Aufheben cui.PushButton.10303.4
-Scripttyp cui.ListBox.10303.8
+*TabMakro sym:cui.TabPage.10303
+Ereignis sym:CUI_HID_MACRO_LB_EVENT
+Bereich sym:CUI_HID_MACRO_GROUP SFX2:LISTBOX:RID_SFX_TP_MACROASSIGN:LB_GROUP
+Makroname sym:CUI_HID_MACRO_MACROS SFX2:LISTBOX:RID_SFX_TP_MACROASSIGN:LB_MACROS
+Zuweisen sym:cui.PushButton.10303.3
+Aufheben sym:cui.PushButton.10303.4
+Scripttyp sym:cui.ListBox.10303.8
 
-*TabMicrosoftOffice97 cui.TabPage.17020
-WinwordBasicLaden cui.CheckBox.17020.1
-WinwordBasicSpeichern cui.CheckBox.17020.2
-ExcelBasicLaden cui.CheckBox.17020.3
-ExecutableCode cui.CheckBox.17020.4
-ExcelBasicSpeichern cui.CheckBox.17020.5
-PowerpointBasicLaden cui.CheckBox.17020.6
-PowerpointBasicSpeichern cui.CheckBox.17020.7
+*TabMicrosoftOffice97 sym:cui.TabPage.17020
+WinwordBasicLaden sym:cui.CheckBox.17020.1
+WinwordBasicSpeichern sym:cui.CheckBox.17020.2
+ExcelBasicLaden sym:cui.CheckBox.17020.3
+ExecutableCode sym:cui.CheckBox.17020.4
+ExcelBasicSpeichern sym:cui.CheckBox.17020.5
+PowerpointBasicLaden sym:cui.CheckBox.17020.6
+PowerpointBasicSpeichern sym:cui.CheckBox.17020.7
 
-*TabMicrosoftOffice2 cui.TabPage.17021
-Auswahl CUI_HID_OFAPAGE_MSFLTR2_CLB
+*TabMicrosoftOffice2 sym:cui.TabPage.17021
+Auswahl sym:CUI_HID_OFAPAGE_MSFLTR2_CLB
 
-*TabModule basctl.TabPage.14887
-Modulliste BASCTL_HID_BASICIDE_MODULES_TREE
-Bearbeiten basctl.PushButton.14887.4
-NeuesModul basctl.PushButton.14887.6
-NeuerDialog basctl.PushButton.14887.7
-Loeschen basctl.PushButton.14887.8
+*TabModule sym:basctl.TabPage.14887
+Modulliste sym:BASCTL_HID_BASICIDE_MODULES_TREE
+Bearbeiten sym:basctl.PushButton.14887.4
+NeuesModul sym:basctl.PushButton.14887.6
+NeuerDialog sym:basctl.PushButton.14887.7
+Loeschen sym:basctl.PushButton.14887.8
 
-*TabNumerierungsart CUI_HID_SVXPAGE_PICK_SINGLE_NUM
-Auswahl CUI_HID_VALUESET_SINGLENUM
-Optionen SW_HID_NUM_FORMAT_BTN
-Zurueck SFX2_HID_TABDLG_RESET_BTN
+*TabNumerierungsart sym:CUI_HID_SVXPAGE_PICK_SINGLE_NUM
+Auswahl sym:CUI_HID_VALUESET_SINGLENUM
+Optionen sym:SW_HID_NUM_FORMAT_BTN
+Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
-*TabNumerierung CUI_HID_SVXPAGE_PICK_NUM
-Auswahl CUI_HID_VALUESET_NUM
-Optionen SW_HID_NUM_FORMAT_BTN
-Zurueck SFX2_HID_TABDLG_RESET_BTN
+*TabNumerierung sym:CUI_HID_SVXPAGE_PICK_NUM
+Auswahl sym:CUI_HID_VALUESET_NUM
+Optionen sym:SW_HID_NUM_FORMAT_BTN
+Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
 +TabGliederung TabNumerierung
 
 *TabNumerierungAbsatz Hid_NUMPARA
 Vorlage SW:LISTBOX:TP_NUMPARA:LB_NUMBER_STYLE
 NumerierungNeuBeginnen SW:TRISTATEBOX:TP_NUMPARA:CB_NEW_START SW:CHECKBOX:TP_NUMPARA:CB_NEW_START
-StartWith sw.TriStateBox.20873.4
+StartWith sym:sw.TriStateBox.20873.4
 NumerierungBeginnenBei SW:NUMERICFIELD:TP_NUMPARA:NF_NEW_START
 ZeilenumerierungZeilenMitzaehlen SW:TRISTATEBOX:TP_NUMPARA:CB_COUNT_PARA SW:CHECKBOX:TP_NUMPARA:CB_COUNT_PARA
 ZeilenumerierungNeuBeginnen SW:TRISTATEBOX:TP_NUMPARA:CB_RESTART_PARACOUNT SW:CHECKBOX:TP_NUMPARA:CB_RESTART_PARACOUNT
 ZeilenumerierungBeginnenBei SW:NUMERICFIELD:TP_NUMPARA:NF_RESTART_PARA
-OutlineLevel sw.ListBox.20873.13
+OutlineLevel sym:sw.ListBox.20873.13
 
 +TabNumerierungKapitelnumerierung TabKapitelnumerierung
 
@@ -422,24 +422,24 @@ OutlineLevel sw.ListBox.20873.13
 ' Brennweite svx:MetricField:RID_SVXPAGE_3DATTR:MTR_FLD_FOCAL_LENGTH
 ' BrennweiteTyp HID_3DATTR_CTL_FOCALLENGTH
 
-*TabOptionen CUI_HID_OFAPAGE_AUTOCORR_OPTIONS
-Einstellungen CUI_HID_OFAPAGE_AUTOCORR_CLB
+*TabOptionen sym:CUI_HID_OFAPAGE_AUTOCORR_OPTIONS
+Einstellungen sym:CUI_HID_OFAPAGE_AUTOCORR_CLB
 
-*TabOptionenAutokorrektur CUI_HID_OFAPAGE_AUTOFMT_OPTIONS
-Einstellungen CUI_HID_OFAPAGE_AUTOFORMAT_CLB
+*TabOptionenAutokorrektur sym:CUI_HID_OFAPAGE_AUTOFMT_OPTIONS
+Einstellungen sym:CUI_HID_OFAPAGE_AUTOFORMAT_CLB
 Bearbeiten cui:PUSHBUTTON:RID_OFAPAGE_AUTOFMT_APPLY:PB_EDIT
 
-*TabOptionenTeilergebnisse SC_HID_SCPAGE_SUBT_OPTIONS
-NeueSeiteBeiGruppenwechsel sc.CheckBox.25633.21
-GrossKleinschreibung sc.CheckBox.25633.22
-BereichVorherNachSortieren sc.CheckBox.25633.23
-FormateEinschliessen sc.CheckBox.25633.33
-BenutzerdefinierteSortierreihenfolge sc.CheckBox.25633.34
+*TabOptionenTeilergebnisse sym:SC_HID_SCPAGE_SUBT_OPTIONS
+NeueSeiteBeiGruppenwechsel sym:sc.CheckBox.25633.21
+GrossKleinschreibung sym:sc.CheckBox.25633.22
+BereichVorherNachSortieren sym:sc.CheckBox.25633.23
+FormateEinschliessen sym:sc.CheckBox.25633.33
+BenutzerdefinierteSortierreihenfolge sym:sc.CheckBox.25633.34
 SortierreihenfolgeAnzeige SC:LISTBOX:RID_SCPAGE_SUBT_OPTIONS:LB_USERDEF
-Aufsteigend sc.RadioButton.25633.31
+Aufsteigend sym:sc.RadioButton.25633.31
 Absteigend SC:RADIOBUTTON:RID_SCPAGE_SUBT_OPTIONS:BTN_DESCENDING
 
-*TabOptionenNumerierung CUI_HID_SVXPAGE_NUM_OPTIONS
+*TabOptionenNumerierung sym:CUI_HID_SVXPAGE_NUM_OPTIONS
 Ebene cui:MULTILISTBOX:RID_SVXPAGE_NUM_OPTIONS:LB_LEVEL
 Numerierung cui:LISTBOX:RID_SVXPAGE_NUM_OPTIONS:LB_FMT
 Davor cui:EDIT:RID_SVXPAGE_NUM_OPTIONS:ED_PREFIX
@@ -455,35 +455,35 @@ Hoehe cui:METRICFIELD:RID_SVXPAGE_NUM_OPTIONS:MF_HEIGHT
 Abgleich cui:CHECKBOX:RID_SVXPAGE_NUM_OPTIONS:CB_RATIO
 Ausrichtung cui:LISTBOX:RID_SVXPAGE_NUM_OPTIONS:LB_ORIENT
 
-*TabHeaderFooterSlide SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE
-DateTime sd.CheckBox.1000.2
-DateTimeFixed sd.RadioButton.1000.3
-DateTimeFixedText sd.Edit.1000.4
-DateTimeVariable sd.RadioButton.1000.5
-DateTimeFormat sd.ListBox.1000.6
-DateTimeLanguage sd.ListBox.1000.8
-Header sd.CheckBox.1000.22
-HeaderFixedText sd.Edit.1000.24
-Footer sd.CheckBox.1000.10
-FooterFixedText sd.Edit.1000.12
-Slidenumber sd.CheckBox.1000.14
-Donotshowonfirstslide sd.CheckBox.1000.16
-Applytoall sd.PushButton.1000.17
-Apply sd.PushButton.1000.18
+*TabHeaderFooterSlide sym:SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE
+DateTime sym:sd.CheckBox.1000.2
+DateTimeFixed sym:sd.RadioButton.1000.3
+DateTimeFixedText sym:sd.Edit.1000.4
+DateTimeVariable sym:sd.RadioButton.1000.5
+DateTimeFormat sym:sd.ListBox.1000.6
+DateTimeLanguage sym:sd.ListBox.1000.8
+Header sym:sd.CheckBox.1000.22
+HeaderFixedText sym:sd.Edit.1000.24
+Footer sym:sd.CheckBox.1000.10
+FooterFixedText sym:sd.Edit.1000.12
+Slidenumber sym:sd.CheckBox.1000.14
+Donotshowonfirstslide sym:sd.CheckBox.1000.16
+Applytoall sym:sd.PushButton.1000.17
+Apply sym:sd.PushButton.1000.18
 
-*TabHeaderFooterNotesHandout SD_HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT
-Header sd.CheckBox.1000.22
-HeaderFixedText sd.Edit.1000.24
-DateTime sd.CheckBox.1000.2
-DateTimeFixed sd.RadioButton.1000.3
-DateTimeFixedText sd.Edit.1000.4
-DateTimeVariable sd.RadioButton.1000.5
-DateTimeFormat sd.ListBox.1000.6
-DateTimeLanguage sd.ListBox.1000.8
-Footer sd.CheckBox.1000.10
-FooterFixedText sd.Edit.1000.12
-Slidenumber sd.CheckBox.1000.14
-Donotshowonfirstslide sd.CheckBox.1000.16
-Applytoall sd.PushButton.1000.17
-Apply sd.PushButton.1000.18
+*TabHeaderFooterNotesHandout sym:SD_HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT
+Header sym:sd.CheckBox.1000.22
+HeaderFixedText sym:sd.Edit.1000.24
+DateTime sym:sd.CheckBox.1000.2
+DateTimeFixed sym:sd.RadioButton.1000.3
+DateTimeFixedText sym:sd.Edit.1000.4
+DateTimeVariable sym:sd.RadioButton.1000.5
+DateTimeFormat sym:sd.ListBox.1000.6
+DateTimeLanguage sym:sd.ListBox.1000.8
+Footer sym:sd.CheckBox.1000.10
+FooterFixedText sym:sd.Edit.1000.12
+Slidenumber sym:sd.CheckBox.1000.14
+Donotshowonfirstslide sym:sd.CheckBox.1000.16
+Applytoall sym:sd.PushButton.1000.17
+Apply sym:sd.PushButton.1000.18
 

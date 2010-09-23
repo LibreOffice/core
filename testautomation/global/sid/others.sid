@@ -4,37 +4,36 @@
 ' ***************************************************
 
 ' ** to create a new document
-NeuDirekt .uno:AddDirect
-NewDirect .uno:AddDirect
+NeuDirekt sym:.uno:AddDirect
+NewDirect sym:.uno:AddDirect
 
 ' ** slots for file import
-FileName .uno:FileName
-FilterName SID_FILTER_NAME
+FileName sym:.uno:FileName
 
 ' ** slots for file printing
-PrinterName .uno:Printer
+PrinterName sym:.uno:Printer
 
 ' ** to jump to a new table in calc
-GeheZuTabelle .uno:JumpToTable
-GeheZuZelle .uno:GoToCell
-GeheZuDokument .uno:GotoDocument
-GeheZuObjekt .uno:GoToObject
-GoToTable .uno:JumpToTable
-GoToCell .uno:GoToCell
-GoToDocument .uno:GotoDocument
-GoToObject .uno:GoToObject
+GeheZuTabelle sym:.uno:JumpToTable
+GeheZuZelle sym:.uno:GoToCell
+GeheZuDokument sym:.uno:GotoDocument
+GeheZuObjekt sym:.uno:GoToObject
+GoToTable sym:.uno:JumpToTable
+GoToCell sym:.uno:GoToCell
+GoToDocument sym:.uno:GotoDocument
+GoToObject sym:.uno:GoToObject
 
 ' ** activate OLE-Object
-CalcOLEAktivieren .uno:ActivateOLE
-CalcOLEDeaktivieren .uno:Deactivate
-CalcActivateOLE .uno:ActivateOLE
-CalcDeactivateOLE .uno:Deactivate
+CalcOLEAktivieren sym:.uno:ActivateOLE
+CalcOLEDeaktivieren sym:.uno:Deactivate
+CalcActivateOLE sym:.uno:ActivateOLE
+CalcDeactivateOLE sym:.uno:Deactivate
 
 ' **  show office version
-GetVersion .uno:VersionVisible
+GetVersion sym:.uno:VersionVisible
 
 ' ** Load / Save
-IsDocImageLoading .uno:IsLoadingImages
-IsDocLoading .uno:IsLoading
-IsDocSaving .uno:Saved
+IsDocImageLoading sym:.uno:IsLoadingImages
+IsDocLoading sym:.uno:IsLoading
+IsDocSaving sym:.uno:Saved
 

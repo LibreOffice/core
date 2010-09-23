@@ -1,148 +1,148 @@
-*TabelleAuftrennen .uno:SplitTable
+*TabelleAuftrennen sym:.uno:SplitTable
 UeberschriftKopieren SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_CNTNT
 EigeneMitVorlage SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BOX_PARA
 Eigene SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BOX_NOPARA
 Keine SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BORDER
 
-*TabelleAusblenden .uno:Hide
+*TabelleAusblenden sym:.uno:Hide
 
-*TabellenFormat SW_HID_FORMAT_TABLE
+*TabellenFormat sym:SW_HID_FORMAT_TABLE
 
-*TabelleEinblenden .uno:Show
-AusgeblendeteTabelle SC:MULTILISTBOX:RID_SCDLG_SHOW_TAB:LB_ENTRYLIST SC_HID_SC_SELENTRY_LIST
+*TabelleEinblenden sym:.uno:Show
+AusgeblendeteTabelle SC:MULTILISTBOX:RID_SCDLG_SHOW_TAB:LB_ENTRYLIST sym:SC_HID_SC_SELENTRY_LIST
 
-*TabelleEinfuegenCalc sc.ModalDialog.25646
-Vor sc.RadioButton.25646.11
-Nach sc.RadioButton.25646.12
-Anzahl sc.NumericField.25646.23
-NeuErstellen sc.RadioButton.25646.21
-AusDateiErstellen sc.RadioButton.25646.26
-TabellenName sc.Edit.25646.25
-Auswahl sc.MultiListBox.25646.27
-Verknuepfen sc.CheckBox.25646.29
-Durchsuchen sc.PushButton.25646.28
-Tabellen sc.PushButton.25646.28
+*TabelleEinfuegenCalc sym:sc.ModalDialog.25646
+Vor sym:sc.RadioButton.25646.11
+Nach sym:sc.RadioButton.25646.12
+Anzahl sym:sc.NumericField.25646.23
+NeuErstellen sym:sc.RadioButton.25646.21
+AusDateiErstellen sym:sc.RadioButton.25646.26
+TabellenName sym:sc.Edit.25646.25
+Auswahl sym:sc.MultiListBox.25646.27
+Verknuepfen sym:sc.CheckBox.25646.29
+Durchsuchen sym:sc.PushButton.25646.28
+Tabellen sym:sc.PushButton.25646.28
 
-*TabelleEinfuegenWriter .uno:InsertTable
-TabellenName sw.Edit.21450.11
-Spalten sw.NumericField.21450.4
-Zeilen sw.NumericField.21450.5
-UeberschriftWiederholen sw.CheckBox.21450.14
-TabelleNichtTrennen sw.CheckBox.21450.15
-Umrandung sw.CheckBox.21450.16
+*TabelleEinfuegenWriter sym:.uno:InsertTable
+TabellenName sym:sw.Edit.21450.11
+Spalten sym:sw.NumericField.21450.4
+Zeilen sym:sw.NumericField.21450.5
+UeberschriftWiederholen sym:sw.CheckBox.21450.14
+TabelleNichtTrennen sym:sw.CheckBox.21450.15
+Umrandung sym:sw.CheckBox.21450.16
 Autoformat SW:PUSHBUTTON:DLG_INSERT_TABLE:BT_AUTOFORMAT
-Ueberschrift sw.CheckBox.21450.13
+Ueberschrift sym:sw.CheckBox.21450.13
 
-*TabellenFuellen .uno:InsertContents
-AuswahlAllesEinfuegen sc.CheckBox.25618.20
-AuswahlZeichenketten sc.CheckBox.25618.21
-AuswahlZahlen sc.CheckBox.25618.22
-AuswahlDatumZeit sc.CheckBox.25618.23
-AuswahlFormeln sc.CheckBox.25618.24
-AuswahlNotizen sc.CheckBox.25618.26
-AuswahlFormate sc.CheckBox.25618.25
-Objects sc.CheckBox.25618.41
-RechenopperationenKeine sc.RadioButton.25618.27
-RechenopperationenAddieren sc.RadioButton.25618.28
-RechenopperationenSubtrahieren sc.RadioButton.25618.29
-RechenopperationenMultiplizieren sc.RadioButton.25618.30
-RechenopperationenDividieren sc.RadioButton.25618.31
-LeerzeilenUeberspringen sc.CheckBox.25618.33
-Verknuepfen sc.CheckBox.25618.35
-Transponieren sc.CheckBox.25618.34
+*TabellenFuellen sym:.uno:InsertContents
+AuswahlAllesEinfuegen sym:sc.CheckBox.25618.20
+AuswahlZeichenketten sym:sc.CheckBox.25618.21
+AuswahlZahlen sym:sc.CheckBox.25618.22
+AuswahlDatumZeit sym:sc.CheckBox.25618.23
+AuswahlFormeln sym:sc.CheckBox.25618.24
+AuswahlNotizen sym:sc.CheckBox.25618.26
+AuswahlFormate sym:sc.CheckBox.25618.25
+Objects sym:sc.CheckBox.25618.41
+RechenopperationenKeine sym:sc.RadioButton.25618.27
+RechenopperationenAddieren sym:sc.RadioButton.25618.28
+RechenopperationenSubtrahieren sym:sc.RadioButton.25618.29
+RechenopperationenMultiplizieren sym:sc.RadioButton.25618.30
+RechenopperationenDividieren sym:sc.RadioButton.25618.31
+LeerzeilenUeberspringen sym:sc.CheckBox.25618.33
+Verknuepfen sym:sc.CheckBox.25618.35
+Transponieren sym:sc.CheckBox.25618.34
 NichtVerschieben SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_NONE
 NachUnten SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_DOWN
 NachRechts SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_RIGHT
 
-*TabelleSchuetzen .uno:Protect
-Passwort SC_HID_PASSWD_TABLE
-Bestaetigung sfx2.Edit.2316.16
-IstVerdeckt sfx2.Edit.2316.12
+*TabelleSchuetzen sym:.uno:Protect
+Passwort sym:SC_HID_PASSWD_TABLE
+Bestaetigung sym:sfx2.Edit.2316.16
+IstVerdeckt sym:sfx2.Edit.2316.12
 
-*TabelleUmbenennen .uno:Name
-TabellenName SC_HID_SC_RENAME_NAME sc.Edit.25620.10
+*TabelleUmbenennen sym:.uno:Name
+TabellenName sym:SC_HID_SC_RENAME_NAME sym:sc.Edit.25620.10
 
-*TabellenVerbinden .uno:MergeTable
-MitVorherigerTabelleVerbinden sw.RadioButton.21465.5
-MitNachfolgenderTabelleVerbinden sw.RadioButton.21465.6
+*TabellenVerbinden sym:.uno:MergeTable
+MitVorherigerTabelleVerbinden sym:sw.RadioButton.21465.5
+MitNachfolgenderTabelleVerbinden sym:sw.RadioButton.21465.6
 
-*TabelleVerschiebenKopieren .uno:Move
-InsDokument sc.ListBox.25619.2
-EinfuegenVor sc.ListBox.25619.4
-Kopieren sc.CheckBox.25619.5
+*TabelleVerschiebenKopieren sym:.uno:Move
+InsDokument sym:sc.ListBox.25619.2
+EinfuegenVor sym:sc.ListBox.25619.4
+Kopieren sym:sc.CheckBox.25619.5
 
-*TB_SC_Themenauswahl WIZARDS_HID_DLGSTYLES_DIALOG
-ThemenListe WIZARDS_HID_DLGSTYLES_LISTBOX
-Schliessen WIZARDS_HID_DLGSTYLES_CANCEL
-Uebernehmen WIZARDS_HID_DLGSTYLES_OKAY
+*TB_SC_Themenauswahl sym:WIZARDS_HID_DLGSTYLES_DIALOG
+ThemenListe sym:WIZARDS_HID_DLGSTYLES_LISTBOX
+Schliessen sym:WIZARDS_HID_DLGSTYLES_CANCEL
+Uebernehmen sym:WIZARDS_HID_DLGSTYLES_OKAY
 
-*TB_Farbe SVX_HID_POPUP_COLOR
-Automatic SVX_HID_POPUP_COLOR_CTRL
+*TB_Farbe sym:SVX_HID_POPUP_COLOR
+Automatic sym:SVX_HID_POPUP_COLOR_CTRL
 
-*TB_ImagemapEditor SVX_HID_IMAPDLG_TOOLBOX
-Zuweisen SVX_HID_IMAPDLG_APPLY
-Oeffnen SVX_HID_IMAPDLG_OPEN
-Speichern SVX_HID_IMAPDLG_SAVEAS
-Auswahl SVX_HID_IMAPDLG_SELECT
-Rechteck SVX_HID_IMAPDLG_RECT
-Ellipse SVX_HID_IMAPDLG_CIRCLE
-Polygon SVX_HID_IMAPDLG_POLY
-Freihandpolygon SVX_HID_IMAPDLG_FREEPOLY
-Punktebearbeiten SVX_HID_IMAPDLG_POLYEDIT
-Punkteverschieben SVX_HID_IMAPDLG_POLYMOVE
-Punkteeinfuegen SVX_HID_IMAPDLG_POLYINSERT
-Punkteloeschen SVX_HID_IMAPDLG_POLYDELETE
-Rueckgaengig SVX_HID_IMAPDLG_UNDO
-Wiederholen SVX_HID_IMAPDLG_REDO
-Aktiv SVX_HID_IMAPDLG_ACTIVE
-Makro SVX_HID_IMAPDLG_MACRO
-Eigenschaften SVX_HID_IMAPDLG_PROPERTY
+*TB_ImagemapEditor sym:SVX_HID_IMAPDLG_TOOLBOX
+Zuweisen sym:SVX_HID_IMAPDLG_APPLY
+Oeffnen sym:SVX_HID_IMAPDLG_OPEN
+Speichern sym:SVX_HID_IMAPDLG_SAVEAS
+Auswahl sym:SVX_HID_IMAPDLG_SELECT
+Rechteck sym:SVX_HID_IMAPDLG_RECT
+Ellipse sym:SVX_HID_IMAPDLG_CIRCLE
+Polygon sym:SVX_HID_IMAPDLG_POLY
+Freihandpolygon sym:SVX_HID_IMAPDLG_FREEPOLY
+Punktebearbeiten sym:SVX_HID_IMAPDLG_POLYEDIT
+Punkteverschieben sym:SVX_HID_IMAPDLG_POLYMOVE
+Punkteeinfuegen sym:SVX_HID_IMAPDLG_POLYINSERT
+Punkteloeschen sym:SVX_HID_IMAPDLG_POLYDELETE
+Rueckgaengig sym:SVX_HID_IMAPDLG_UNDO
+Wiederholen sym:SVX_HID_IMAPDLG_REDO
+Aktiv sym:SVX_HID_IMAPDLG_ACTIVE
+Makro sym:SVX_HID_IMAPDLG_MACRO
+Eigenschaften sym:SVX_HID_IMAPDLG_PROPERTY
 
-*TB_Umrandung SVX_HID_POPUP_FRAME
+*TB_Umrandung sym:SVX_HID_POPUP_FRAME
 
-*TB_Umrandungsstil SVX_HID_POPUP_LINE
+*TB_Umrandungsstil sym:SVX_HID_POPUP_LINE
 
-*TextbausteineUmbenennen SW_HID_RENAME_GLOSSARY
+*TextbausteineUmbenennen sym:SW_HID_RENAME_GLOSSARY
 Name SW:EDIT:DLG_RENAME_GLOS:ED_ON
 Neu SW:EDIT:DLG_RENAME_GLOS:ED_NN
 KuerzelAlt SW:EDIT:DLG_RENAME_GLOS:ED_OS
 KuerzelNeu SW:EDIT:DLG_RENAME_GLOS:ED_NS
 
-*TextInTabelleUmwandeln .uno:ConvertTableText sw:ModalDialog:DLG_CONV_TEXT_TABLE
-Tabulator sw.RadioButton.21452.1
-Semikolon sw.RadioButton.21452.3
-Absatz sw.RadioButton.21452.4
+*TextInTabelleUmwandeln sym:.uno:ConvertTableText sw:ModalDialog:DLG_CONV_TEXT_TABLE
+Tabulator sym:sw.RadioButton.21452.1
+Semikolon sym:sw.RadioButton.21452.3
+Absatz sym:sw.RadioButton.21452.4
 Andere SW:RADIOBUTTON:DLG_CONV_TEXT_TABLE:RB_OTHER
 AndereText SW:EDIT:DLG_CONV_TEXT_TABLE:ED_OTHER
 GleicheBreite SW:CHECKBOX:DLG_CONV_TEXT_TABLE:CB_KEEPCOLUMN
 Autoformat SW:PUSHBUTTON:DLG_CONV_TEXT_TABLE:BT_AUTOFORMAT
-Ueberschrift   sw.CheckBox.21452.13
-Wiederholen   sw.CheckBox.21452.14
-NichtTrennen   sw.CheckBox.21452.15
-Umrandung   sw.CheckBox.21452.16
+Ueberschrift   sym:sw.CheckBox.21452.13
+Wiederholen   sym:sw.CheckBox.21452.14
+NichtTrennen   sym:sw.CheckBox.21452.15
+Umrandung   sym:sw.CheckBox.21452.16
 
-*TextmarkeEinfuegen .uno:InsertBookmark
-Textmarken sw.ComboBox.21667.1
-Loeschen sw.PushButton.21667.22
+*TextmarkeEinfuegen sym:.uno:InsertBookmark
+Textmarken sym:sw.ComboBox.21667.1
+Loeschen sym:sw.PushButton.21667.22
 
-*Ueberblenden .uno:Morphing
-Attributierung sd.CheckBox.653.1
-GleicheOrientierung sd.CheckBox.653.2
-Schritte sd.MetricField.653.1
+*Ueberblenden sym:.uno:Morphing
+Attributierung sym:sd.CheckBox.653.1
+GleicheOrientierung sym:sd.CheckBox.653.2
+Schritte sym:sd.MetricField.653.1
 
-*UeberStarCalc .uno:About
+*UeberStarCalc sym:.uno:About
 
-*UeberStarChart .uno:About
+*UeberStarChart sym:.uno:About
 
-*UeberStarDraw .uno:About
+*UeberStarDraw sym:.uno:About
 
-*UeberStarImage .uno:About
+*UeberStarImage sym:.uno:About
 
-*UeberStarMath .uno:About
+*UeberStarMath sym:.uno:About
 
-*UeberStarWriter .uno:About
+*UeberStarWriter sym:.uno:About
 
-*UmbruchEinfuegen .uno:InsertBreak
+*UmbruchEinfuegen sym:.uno:InsertBreak
 Zeilenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_LINE
 Spaltenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_COL
 Seitenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_PAGE
@@ -150,19 +150,19 @@ Vorlage SW:LISTBOX:DLG_BREAK:LB_COLL
 SeitennummerAendern SW:CHECKBOX:DLG_BREAK:CB_PAGENUM
 Seitennummer SW:NUMERICFIELD:DLG_BREAK:ED_PAGENUM
 
-*UmwandelnInPolygon SD_HID_VECTORIZE_DLG
-Farbanzahl sd.NumericField.654.1
-Punktreduktion sd.MetricField.654.3
-LoecherFuellen sd.CheckBox.654.1
-Kachelgroesse sd.MetricField.654.4
-Vorschau sd.PushButton.654.1
+*UmwandelnInPolygon sym:SD_HID_VECTORIZE_DLG
+Farbanzahl sym:sd.NumericField.654.1
+Punktreduktion sym:sd.MetricField.654.3
+LoecherFuellen sym:sd.CheckBox.654.1
+Kachelgroesse sym:sd.MetricField.654.4
+Vorschau sym:sd.PushButton.654.1
 
-*UntenFuellen .uno:FillDown
+*UntenFuellen sym:.uno:FillDown
 
-*UndoRedoBox SVX_HID_SVXTBX_UNDO_REDO_CTRL
-UndoRedoList svx.ListBox.10845.11
+*UndoRedoBox sym:SVX_HID_SVXTBX_UNDO_REDO_CTRL
+UndoRedoList sym:svx.ListBox.10845.11
 
-*Verbinder CUI_HID_PAGE_CONNECTION SVX:TABPAGE:RID_SVXPAGE_CONNECTION
+*Verbinder sym:CUI_HID_PAGE_CONNECTION SVX:TABPAGE:RID_SVXPAGE_CONNECTION
 Linie1 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_1
 Linie2 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_2
 Linie3 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_3
@@ -171,18 +171,18 @@ AnfangHorizontal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_HORZ_1
 AnfangVertikal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_VERT_1
 EndeHorizontal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_HORZ_2
 EndeVertikal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_VERT_2
-Vorschau CUI_HID_PAGE_CONNECTION_CTL_PREVIEW
+Vorschau sym:CUI_HID_PAGE_CONNECTION_CTL_PREVIEW
 
-*VerknuepfungenBearbeiten cui.ModalDialog.32002
-Liste CUI_HID_LINKDLG_TABLB
-VerknuepfungBearbeiten cui.PushButton.32002.36
-Automatisch cui.RadioButton.32002.42
-Manuell cui.RadioButton.32002.43
-Aktualisieren cui.PushButton.32002.35
-Aendern cui.PushButton.32002.37
-Loesen cui.PushButton.32002.38
+*VerknuepfungenBearbeiten sym:cui.ModalDialog.32002
+Liste sym:CUI_HID_LINKDLG_TABLB
+VerknuepfungBearbeiten sym:cui.PushButton.32002.36
+Automatisch sym:cui.RadioButton.32002.42
+Manuell sym:cui.RadioButton.32002.43
+Aktualisieren sym:cui.PushButton.32002.35
+Aendern sym:cui.PushButton.32002.37
+Loesen sym:cui.PushButton.32002.38
 
-*VersendenMonitor SW_HID_MERGE_PRINTMONITOR
+*VersendenMonitor sym:SW_HID_MERGE_PRINTMONITOR
 
 *Versionen SFX2:MODALDIALOG:DLG_VERSIONS
 Speichern SFX2:PUSHBUTTON:DLG_VERSIONS:PB_SAVE
@@ -190,143 +190,143 @@ ImmerVersionSpeichern SFX2:CHECKBOX:DLG_VERSIONS:CB_SAVEONCLOSE
 Anzeigen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_VIEW
 Loeschen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_DELETE
 Oeffnen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_OPEN
-Vergleichen sfx2.PushButton.2377.17
+Vergleichen sym:sfx2.PushButton.2377.17
 
 *VersionskommentarEingeben SFX2:MODALDIALOG:DLG_COMMENTS
 Kommentar SFX2:MULTILINEEDIT:DLG_COMMENTS:ME_VERSIONS
 Schliessen SFX2:PUSHBUTTON:DLG_COMMENTS:PB_CLOSE
 
-*VerteilenDlg CUI_HID_PAGE_DISTRIBUTE
-KeineHorizontal cui.RadioButton.10236.2
-Links cui.RadioButton.10236.3
-MitteHorizontal cui.RadioButton.10236.4
-AbstandHorizontal cui.RadioButton.10236.5
-Rechts cui.RadioButton.10236.6
-KeineVertikal cui.RadioButton.10236.8
-Oben cui.RadioButton.10236.9
-MitteVertikal cui.RadioButton.10236.10
-AbstandVertikal cui.RadioButton.10236.11
-Unten cui.RadioButton.10236.12
+*VerteilenDlg sym:CUI_HID_PAGE_DISTRIBUTE
+KeineHorizontal sym:cui.RadioButton.10236.2
+Links sym:cui.RadioButton.10236.3
+MitteHorizontal sym:cui.RadioButton.10236.4
+AbstandHorizontal sym:cui.RadioButton.10236.5
+Rechts sym:cui.RadioButton.10236.6
+KeineVertikal sym:cui.RadioButton.10236.8
+Oben sym:cui.RadioButton.10236.9
+MitteVertikal sym:cui.RadioButton.10236.10
+AbstandVertikal sym:cui.RadioButton.10236.11
+Unten sym:cui.RadioButton.10236.12
 
-*VerzeichniseintragEinfuegen .uno:InsertIndexesEntry
-EintragOk SW_HID_INSERT_IDX_MRK_OK
-EinfuegenSchliessen SW_HID_INSERT_IDX_MRK_CLOSE
-Verzeichniseintrag SW_HID_INSERT_IDX_MRK_ENTRY
-Verzeichnis SW_HID_INSERT_IDX_MRK_TYPE
-Schluessel1 SW_HID_INSERT_IDX_MRK_PRIM_KEY
-Schluessel2 SW_HID_INSERT_IDX_MRK_SEC_KEY
-Stufe SW_HID_INSERT_IDX_MRK_LEVEL
-EintragLoeschen SW_HID_INSERT_IDX_MRK_DELETE
-EintragNeu SW_HID_INSERT_IDX_MRK_NEW
-Haupteintrag SW_HID_INSERT_IDX_MRK_MAIN_ENTRY
-AufAlleGleichenAnwenden SW_HID_INSERT_IDX_MRK_APPLY_ALL
-EntryPhoneticReading SW_HID_INSERT_IDX_MRK_PHONETIC_READING
+*VerzeichniseintragEinfuegen sym:.uno:InsertIndexesEntry
+EintragOk sym:SW_HID_INSERT_IDX_MRK_OK
+EinfuegenSchliessen sym:SW_HID_INSERT_IDX_MRK_CLOSE
+Verzeichniseintrag sym:SW_HID_INSERT_IDX_MRK_ENTRY
+Verzeichnis sym:SW_HID_INSERT_IDX_MRK_TYPE
+Schluessel1 sym:SW_HID_INSERT_IDX_MRK_PRIM_KEY
+Schluessel2 sym:SW_HID_INSERT_IDX_MRK_SEC_KEY
+Stufe sym:SW_HID_INSERT_IDX_MRK_LEVEL
+EintragLoeschen sym:SW_HID_INSERT_IDX_MRK_DELETE
+EintragNeu sym:SW_HID_INSERT_IDX_MRK_NEW
+Haupteintrag sym:SW_HID_INSERT_IDX_MRK_MAIN_ENTRY
+AufAlleGleichenAnwenden sym:SW_HID_INSERT_IDX_MRK_APPLY_ALL
+EntryPhoneticReading sym:SW_HID_INSERT_IDX_MRK_PHONETIC_READING
 
-*VerzeichniseintragBearbeiten .uno:IndexEntryDialog
-EintragOk SW_HID_INSERT_IDX_MRK_OK
-BearbeitenSchliessen SW_HID_INSERT_IDX_MRK_CLOSE
-Verzeichnis SW_HID_INSERT_IDX_MRK_TYPE
-Verzeichniseintrag SW_HID_INSERT_IDX_MRK_ENTRY
-Schluessel1 SW_HID_INSERT_IDX_MRK_PRIM_KEY
-Schluessel2 SW_HID_INSERT_IDX_MRK_SEC_KEY
-Stufe SW_HID_INSERT_IDX_MRK_LEVEL
-EintragLoeschen SW_HID_INSERT_IDX_MRK_DELETE
-EintragNeu SW_HID_INSERT_IDX_MRK_NEW
-Naechster SW_HID_INSERT_IDX_MRK_NEXT
-Vorheriger SW_HID_INSERT_IDX_MRK_PREV
+*VerzeichniseintragBearbeiten sym:.uno:IndexEntryDialog
+EintragOk sym:SW_HID_INSERT_IDX_MRK_OK
+BearbeitenSchliessen sym:SW_HID_INSERT_IDX_MRK_CLOSE
+Verzeichnis sym:SW_HID_INSERT_IDX_MRK_TYPE
+Verzeichniseintrag sym:SW_HID_INSERT_IDX_MRK_ENTRY
+Schluessel1 sym:SW_HID_INSERT_IDX_MRK_PRIM_KEY
+Schluessel2 sym:SW_HID_INSERT_IDX_MRK_SEC_KEY
+Stufe sym:SW_HID_INSERT_IDX_MRK_LEVEL
+EintragLoeschen sym:SW_HID_INSERT_IDX_MRK_DELETE
+EintragNeu sym:SW_HID_INSERT_IDX_MRK_NEW
+Naechster sym:SW_HID_INSERT_IDX_MRK_NEXT
+Vorheriger sym:SW_HID_INSERT_IDX_MRK_PREV
 
-*VorlageErzeugen .uno:StyleNewByExample SID_TEMPLATE_NEW_BY_EXAMPLE
-Vorlagenname sfx2.ComboBox.2323.1
+*VorlageErzeugen sym:.uno:StyleNewByExample SID_TEMPLATE_NEW_BY_EXAMPLE
+Vorlagenname sym:sfx2.ComboBox.2323.1
 
-*Vorlagenkatalog .uno:StyleCatalog
-Vorlagen sfx2.ListBox.1461.10
-Ansicht SFX2_HID_TEMPLATE_FMT
-Bereich sfx2.ListBox.1461.8
-Neu sfx2.PushButton.1461.6
-Aendern sfx2.PushButton.1461.5
-Loeschen sfx2.PushButton.1461.4
-Verwalten sfx2.PushButton.1461.3
+*Vorlagenkatalog sym:.uno:StyleCatalog
+Vorlagen sym:sfx2.ListBox.1461.10
+Ansicht sym:SFX2_HID_TEMPLATE_FMT
+Bereich sym:sfx2.ListBox.1461.8
+Neu sym:sfx2.PushButton.1461.6
+Aendern sym:sfx2.PushButton.1461.5
+Loeschen sym:sfx2.PushButton.1461.4
+Verwalten sym:sfx2.PushButton.1461.3
 
-*Vorschau .uno:PreviewWindow
+*Vorschau sym:.uno:PreviewWindow
 
-*VorlageZuweisen SW_HID_DLG_ADD_IDX_STYLES
-ZuweisenLinks sw.ImageButton.20894.110
-ZuweisenRechts sw.ImageButton.20894.111
+*VorlageZuweisen sym:SW_HID_DLG_ADD_IDX_STYLES
+ZuweisenLinks sym:sw.ImageButton.20894.110
+ZuweisenRechts sym:sw.ImageButton.20894.111
 
-*WBereicheBearbeiten SW_HID_BIB_BASE
+*WBereicheBearbeiten sym:SW_HID_BIB_BASE
 Bereichname SW:EDIT:DLG_BIB_BASE:ED_NAME
 Bereich SW:LISTBOX:DLG_BIB_BASE:LB_PATH
-Liste SW_HID_GLOS_GROUP_TREE
-Neu sw.PushButton.21666.3
-Loeschen sw.PushButton.21666.4
-Umbenennen sw.PushButton.21666.11
+Liste sym:SW_HID_GLOS_GROUP_TREE
+Neu sym:sw.PushButton.21666.3
+Loeschen sym:sw.PushButton.21666.4
+Umbenennen sym:sw.PushButton.21666.11
 
-*WMFOptionen svtools.ModalDialog.16372
-Original svtools.RadioButton.16372.1
-Groesse svtools.RadioButton.16372.2
-Breite svtools.MetricField.16372.1
-Hoehe svtools.MetricField.16372.2
+*WMFOptionen sym:svtools.ModalDialog.16372
+Original sym:svtools.RadioButton.16372.1
+Groesse sym:svtools.RadioButton.16372.2
+Breite sym:svtools.MetricField.16372.1
+Hoehe sym:svtools.MetricField.16372.2
 
-*Zahlenformat CUI_HID_NUMBERFORMAT
-Kategorie cui.ListBox.10041.9
-KategorieFormat CUI_HID_NUMBERFORMAT_LB_FORMAT
+*Zahlenformat sym:CUI_HID_NUMBERFORMAT
+Kategorie sym:cui.ListBox.10041.9
+KategorieFormat sym:CUI_HID_NUMBERFORMAT_LB_FORMAT
 'FormatZahl
-FormatCode cui.Edit.10041.14
-Hinzufuegen CUI_HID_NUMBERFORMAT_TBI_ADD
-Entfernen CUI_HID_NUMBERFORMAT_TBI_REMOVE
-Sprache cui.ListBox.10041.13
-Nachkommastellen cui.NumericField.10041.22
-FuehrendeNullen cui.NumericField.10041.24
-NegativInRot cui.CheckBox.10041.25
-Tausenderpunkt cui.CheckBox.10041.26
+FormatCode sym:cui.Edit.10041.14
+Hinzufuegen sym:CUI_HID_NUMBERFORMAT_TBI_ADD
+Entfernen sym:CUI_HID_NUMBERFORMAT_TBI_REMOVE
+Sprache sym:cui.ListBox.10041.13
+Nachkommastellen sym:cui.NumericField.10041.22
+FuehrendeNullen sym:cui.NumericField.10041.24
+NegativInRot sym:cui.CheckBox.10041.25
+Tausenderpunkt sym:cui.CheckBox.10041.26
 
-*ZeileAusblenden .uno:HideRow
+*ZeileAusblenden sym:.uno:HideRow
 
-*Zeilenhoehe .uno:RowHeight
-Hoehe sc.MetricField.25710.1 HID_SC_MTRIN_VAL
-Standwardwert sc.CheckBox.25710.1 HID_SC_MTRIN_DEF
+*Zeilenhoehe sym:.uno:RowHeight
+Hoehe sym:sc.MetricField.25710.1 HID_SC_MTRIN_VAL
+Standwardwert sym:sc.CheckBox.25710.1 HID_SC_MTRIN_DEF
 
-*ZeileOptimaleHoehe .uno:SetOptimalRowHeight
-Extra sc.MetricField.25711.1 HID_SC_MTRIN_VAL
-Standardwert sc.CheckBox.25711.1 HID_SC_MTRIN_DEF
+*ZeileOptimaleHoehe sym:.uno:SetOptimalRowHeight
+Extra sym:sc.MetricField.25711.1 HID_SC_MTRIN_VAL
+Standardwert sym:sc.CheckBox.25711.1 HID_SC_MTRIN_DEF
 
-*ZellvorlageCalc SFX2_HID_MANAGE_STYLES
+*ZellvorlageCalc sym:SFX2_HID_MANAGE_STYLES
 
-*ZeileEinblenden .uno:ShowRow
+*ZeileEinblenden sym:.uno:ShowRow
 
-*ZellenEinfuegen .uno:InsertCell
-ZellenNachUnten sc.RadioButton.25616.11
-ZellenNachRechts sc.RadioButton.25616.12
-GanzeZeile sc.RadioButton.25616.16
-GanzeSpalte sc.RadioButton.25616.17
+*ZellenEinfuegen sym:.uno:InsertCell
+ZellenNachUnten sym:sc.RadioButton.25616.11
+ZellenNachRechts sym:sc.RadioButton.25616.12
+GanzeZeile sym:sc.RadioButton.25616.16
+GanzeSpalte sym:sc.RadioButton.25616.17
 
-*ZellenLoeschen .uno:DeleteCell
-Auswahl sc.RadioButton.25615.10
-Zellennachoben sc.RadioButton.25615.10
-Zellennachlinks sc.RadioButton.25615.13
-GanzeZeilen sc.RadioButton.25615.14
-GanzeSpalten sc.RadioButton.25615.15
+*ZellenLoeschen sym:.uno:DeleteCell
+Auswahl sym:sc.RadioButton.25615.10
+Zellennachoben sym:sc.RadioButton.25615.10
+Zellennachlinks sym:sc.RadioButton.25615.13
+GanzeZeilen sym:sc.RadioButton.25615.14
+GanzeSpalten sym:sc.RadioButton.25615.15
 
-*ZellenHoehe .uno:SetRowHeight
-Hoehe sw.MetricField.21454.1
-Dynamisch sw.CheckBox.21454.2
+*ZellenHoehe sym:.uno:SetRowHeight
+Hoehe sym:sw.MetricField.21454.1
+Dynamisch sym:sw.CheckBox.21454.2
 
-*ZellenTeilen cui.ModalDialog.10043
-Anzahl cui.NumericField.10043.2
-Horizontal cui.ImageRadioButton.10043.10
-Vertikal cui.ImageRadioButton.10043.12
-GleichmaessigTeilen cui.CheckBox.10043.11
+*ZellenTeilen sym:cui.ModalDialog.10043
+Anzahl sym:cui.NumericField.10043.2
+Horizontal sym:cui.ImageRadioButton.10043.10
+Vertikal sym:cui.ImageRadioButton.10043.12
+GleichmaessigTeilen sym:cui.CheckBox.10043.11
 
-*ZielImDokument CUI_HID_HYPERLINK_MARKWND
+*ZielImDokument sym:CUI_HID_HYPERLINK_MARKWND
 'Uebernehmen Kein Eintrag in Hid.Lst
 'Schliessen Kein Eintrag in Hid.Lst
 
-*Zielwertsuche .uno:GoalSeekDialog
-Formelzelle sc.Edit.25630.1
-Vorgaben1 sc.ImageButton.25630.1
-Zielwert sc.Edit.25630.2
-VariableZelle sc.Edit.25630.3
-Vorgaben2 sc.ImageButton.25630.2
+*Zielwertsuche sym:.uno:GoalSeekDialog
+Formelzelle sym:sc.Edit.25630.1
+Vorgaben1 sym:sc.ImageButton.25630.1
+Zielwert sym:sc.Edit.25630.2
+VariableZelle sym:sc.Edit.25630.3
+Vorgaben2 sym:sc.ImageButton.25630.2
 
-*Zusammenfassen .uno:AutoFormat
+*Zusammenfassen sym:.uno:AutoFormat
 Mindestgroesse cui:METRICFIELD:RID_OFADLG_PRCNT_SET:ED_RIGHT_MARGIN

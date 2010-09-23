@@ -1,374 +1,374 @@
-*TabEffect sd.TabPage.20871
-Sound sd.ListBox.20871.11
-Play sd.PushButton.20871.12
-AfterAnimation sd.ListBox.20871.14
-Dimcolor sd.ListBox.20871.16
-TextAnimation sd.ListBox.20871.18
-DelayBetweenCharacters sd.MetricField.20871.19
+*TabEffect sym:sd.TabPage.20871
+Sound sym:sd.ListBox.20871.11
+Play sym:sd.PushButton.20871.12
+AfterAnimation sym:sd.ListBox.20871.14
+Dimcolor sym:sd.ListBox.20871.16
+TextAnimation sym:sd.ListBox.20871.18
+DelayBetweenCharacters sym:sd.MetricField.20871.19
 
-*TabEmail CUI_HID_OPTIONS_MAIL
-EmailProgram cui.Edit.10155.4
-EmailOpen cui.PushButton.10155.5
+*TabEmail sym:CUI_HID_OPTIONS_MAIL
+EmailProgram sym:cui.Edit.10155.4
+EmailOpen sym:cui.PushButton.10155.5
 
-*TabEntrance SD_HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE
-Effects sd.ListBox.20874.1
-Speed sd.ComboBox.20874.3
-AutomaticPreview  sd.CheckBox.20874.4
+*TabEntrance sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE
+Effects sym:sd.ListBox.20874.1
+Speed sym:sd.ComboBox.20874.3
+AutomaticPreview  sym:sd.CheckBox.20874.4
 
-*TabEmphasis SD_HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS
-Effects sd.ListBox.20874.1
-Speed sd.ComboBox.20874.3
-AutomaticPreview  sd.CheckBox.20874.4
+*TabEmphasis sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS
+Effects sym:sd.ListBox.20874.1
+Speed sym:sd.ComboBox.20874.3
+AutomaticPreview  sym:sd.CheckBox.20874.4
 
-*TabExit SD_HID_SD_CUSTOMANIMATIONDIALOG_EXIT
-Effects sd.ListBox.20874.1
-Speed sd.ComboBox.20874.3
-AutomaticPreview  sd.CheckBox.20874.4
+*TabExit sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_EXIT
+Effects sym:sd.ListBox.20874.1
+Speed sym:sd.ComboBox.20874.3
+AutomaticPreview  sym:sd.CheckBox.20874.4
 
-*TabMotionPaths SD_HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH
-Effects sd.ListBox.20874.1
-Speed sd.ComboBox.20874.3
-AutomaticPreview  sd.CheckBox.20874.4
+*TabMotionPaths sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH
+Effects sym:sd.ListBox.20874.1
+Speed sym:sd.ComboBox.20874.3
+AutomaticPreview  sym:sd.CheckBox.20874.4
 
-*TabEnvelope SW_HID_ENV_ENV
-Addressee sw.MultiLineEdit.22752.2
-Sender sw.CheckBox.22752.10
-SenderText sw.MultiLineEdit.22752.11
-Database sw.ListBox.22752.4
-Table sw.ListBox.22752.6
-Datenbasefield sw.ListBox.22752.9
-Apply sw.ImageButton.22752.7
-Print SW_HID_ENVELOP_PRINT
-Insert SW_HID_ENVELOP_INSERT
-Back SFX2_HID_TABDLG_RESET_BTN
+*TabEnvelope sym:SW_HID_ENV_ENV
+Addressee sym:sw.MultiLineEdit.22752.2
+Sender sym:sw.CheckBox.22752.10
+SenderText sym:sw.MultiLineEdit.22752.11
+Database sym:sw.ListBox.22752.4
+Table sym:sw.ListBox.22752.6
+Datenbasefield sym:sw.ListBox.22752.9
+Apply sym:sw.ImageButton.22752.7
+Print sym:SW_HID_ENVELOP_PRINT
+Insert sym:SW_HID_ENVELOP_INSERT
+Back sym:SFX2_HID_TABDLG_RESET_BTN
 
-*TabEventsControl EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
-evtActionPerformed EXTENSIONS_HID_EVT_ACTIONPERFORMED
-evtFocusGained EXTENSIONS_HID_EVT_FOCUSGAINED
-evtFocusLost EXTENSIONS_HID_EVT_FOCUSLOST
-evtKeyTyped EXTENSIONS_HID_EVT_KEYTYPED
-evtKeyUp EXTENSIONS_HID_EVT_KEYUP
-evtMouseEntered EXTENSIONS_HID_EVT_MOUSEENTERED
-evtMouseDragged EXTENSIONS_HID_EVT_MOUSEDRAGGED
-evtMouseMoved EXTENSIONS_HID_EVT_MOUSEMOVED
-evtMousePressed EXTENSIONS_HID_EVT_MOUSEPRESSED
-evtMouseRelesased EXTENSIONS_HID_EVT_MOUSERELEASED
-evtMouseExited EXTENSIONS_HID_EVT_MOUSEEXITED
-ScriptSelectorButton EXTENSIONS_UID_EVT_MACRODLG
-PBActionPerformed EXTENSIONS_UID_BRWEVT_ACTIONPERFORMED
-PBFocusGained EXTENSIONS_UID_BRWEVT_FOCUSGAINED
-PBFocusLost EXTENSIONS_UID_BRWEVT_FOCUSLOST
-PBKeyTyped EXTENSIONS_UID_BRWEVT_KEYTYPED
-PBKeyUp EXTENSIONS_UID_BRWEVT_KEYUP
-PBMouseEntered EXTENSIONS_UID_BRWEVT_MOUSEENTERED
-PMBMouseDragged EXTENSIONS_UID_BRWEVT_MOUSEDRAGGED
-PBMouseMoved EXTENSIONS_UID_BRWEVT_MOUSEMOVED
-PBMousePressed EXTENSIONS_UID_BRWEVT_MOUSEPRESSED
-PBMouseRelesed EXTENSIONS_UID_BRWEVT_MOUSERELEASED
-PBMouseExited EXTENSIONS_UID_BRWEVT_MOUSEEXITED
+*TabEventsControl sym:EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
+evtActionPerformed sym:EXTENSIONS_HID_EVT_ACTIONPERFORMED
+evtFocusGained sym:EXTENSIONS_HID_EVT_FOCUSGAINED
+evtFocusLost sym:EXTENSIONS_HID_EVT_FOCUSLOST
+evtKeyTyped sym:EXTENSIONS_HID_EVT_KEYTYPED
+evtKeyUp sym:EXTENSIONS_HID_EVT_KEYUP
+evtMouseEntered sym:EXTENSIONS_HID_EVT_MOUSEENTERED
+evtMouseDragged sym:EXTENSIONS_HID_EVT_MOUSEDRAGGED
+evtMouseMoved sym:EXTENSIONS_HID_EVT_MOUSEMOVED
+evtMousePressed sym:EXTENSIONS_HID_EVT_MOUSEPRESSED
+evtMouseRelesased sym:EXTENSIONS_HID_EVT_MOUSERELEASED
+evtMouseExited sym:EXTENSIONS_HID_EVT_MOUSEEXITED
+ScriptSelectorButton sym:EXTENSIONS_UID_EVT_MACRODLG
+PBActionPerformed sym:EXTENSIONS_UID_BRWEVT_ACTIONPERFORMED
+PBFocusGained sym:EXTENSIONS_UID_BRWEVT_FOCUSGAINED
+PBFocusLost sym:EXTENSIONS_UID_BRWEVT_FOCUSLOST
+PBKeyTyped sym:EXTENSIONS_UID_BRWEVT_KEYTYPED
+PBKeyUp sym:EXTENSIONS_UID_BRWEVT_KEYUP
+PBMouseEntered sym:EXTENSIONS_UID_BRWEVT_MOUSEENTERED
+PMBMouseDragged sym:EXTENSIONS_UID_BRWEVT_MOUSEDRAGGED
+PBMouseMoved sym:EXTENSIONS_UID_BRWEVT_MOUSEMOVED
+PBMousePressed sym:EXTENSIONS_UID_BRWEVT_MOUSEPRESSED
+PBMouseRelesed sym:EXTENSIONS_UID_BRWEVT_MOUSERELEASED
+PBMouseExited sym:EXTENSIONS_UID_BRWEVT_MOUSEEXITED
 
 
-*TabEventsForm EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
+*TabEventsForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
 
-*TabFieldLink extensions.TabPage.19729
-ValueTable extensions.ComboBox.19729.1
-ListTable extensions.ComboBox.19729.2
+*TabFieldLink sym:extensions.TabPage.19729
+ValueTable sym:extensions.ComboBox.19729.1
+ListTable sym:extensions.ComboBox.19729.2
 
-*TabFieldProperties DBACCESS_HID_TAB_DESIGN_FIELDCONTROL
-IntLength DBACCESS_HID_TAB_ENT_LEN
-DecimalPlaces DBACCESS_HID_TAB_ENT_SCALE
-EntryRequired DBACCESS_HID_TAB_ENT_REQUIRED
-TxtLength DBACCESS_HID_TAB_ENT_TEXT_LEN
-DefaultValue DBACCESS_HID_TAB_ENT_DEFAULT
-FormatExample DBACCESS_HID_TAB_ENT_FORMAT_SAMPLE
-BrowseBtm DBACCESS_HID_TAB_ENT_FORMAT
+*TabFieldProperties sym:DBACCESS_HID_TAB_DESIGN_FIELDCONTROL
+IntLength sym:DBACCESS_HID_TAB_ENT_LEN
+DecimalPlaces sym:DBACCESS_HID_TAB_ENT_SCALE
+EntryRequired sym:DBACCESS_HID_TAB_ENT_REQUIRED
+TxtLength sym:DBACCESS_HID_TAB_ENT_TEXT_LEN
+DefaultValue sym:DBACCESS_HID_TAB_ENT_DEFAULT
+FormatExample sym:DBACCESS_HID_TAB_ENT_FORMAT_SAMPLE
+BrowseBtm sym:DBACCESS_HID_TAB_ENT_FORMAT
 
-*TabFieldSelection extensions.TabPage.19728
-ExistingFields extensions.ListBox.19728.6
-DisplayField extensions.Edit.19728.4
+*TabFieldSelection sym:extensions.TabPage.19728
+ExistingFields sym:extensions.ListBox.19728.6
+DisplayField sym:extensions.Edit.19728.4
 
-*TabFirstStartOnlineUpdate DESKTOP_HID_FIRSTSTART_UPDATE_CHECK
-CheckForUpdates desktop.CheckBox.3008.3
+*TabFirstStartOnlineUpdate sym:DESKTOP_HID_FIRSTSTART_UPDATE_CHECK
+CheckForUpdates sym:desktop.CheckBox.3008.3
 
-*TabFirstStartLicense DESKTOP_HID_FIRSTSTART_LICENSE
-LicenseText desktop.MultiLineEdit.3007.6
-ScrollDown desktop.PushButton.3007.7
+*TabFirstStartLicense sym:DESKTOP_HID_FIRSTSTART_LICENSE
+LicenseText sym:desktop.MultiLineEdit.3007.6
+ScrollDown sym:desktop.PushButton.3007.7
 
-*TabFirstStartRegistration DESKTOP_HID_FIRSTSTART_REGISTRATION
-RegisterNow desktop.RadioButton.3004.5
-RegisterLater desktop.RadioButton.3004.6
-DoNotWantRegister desktop.RadioButton.3004.7
+*TabFirstStartRegistration sym:DESKTOP_HID_FIRSTSTART_REGISTRATION
+RegisterNow sym:desktop.RadioButton.3004.5
+RegisterLater sym:desktop.RadioButton.3004.6
+DoNotWantRegister sym:desktop.RadioButton.3004.7
 
-*TabFirstStartUser DESKTOP_HID_FIRSTSTART_USER
-FirstName desktop.Edit.3006.16
-LastName desktop.Edit.3006.17
-Initials desktop.Edit.3006.19
-FathersName desktop.Edit.3006.18
+*TabFirstStartUser sym:DESKTOP_HID_FIRSTSTART_USER
+FirstName sym:desktop.Edit.3006.16
+LastName sym:desktop.Edit.3006.17
+Initials sym:desktop.Edit.3006.19
+FathersName sym:desktop.Edit.3006.18
 
-*TabFirstStartWelcome DESKTOP_HID_FIRSTSTART_WELCOME
+*TabFirstStartWelcome sym:DESKTOP_HID_FIRSTSTART_WELCOME
 
-*TabFont CUI_HID_SVXPAGE_CHAR_NAME
-Font cui.ComboBox.10239.424
-Style cui.ComboBox.10239.426
-Size cui.MetricBox.10239.428
-Language cui.ListBox.10239.430
-FontWest cui.ComboBox.10239.102
-StyleWest cui.ComboBox.10239.104
-SizeWest cui.MetricBox.10239.106
-LanguageWest cui.ListBox.10239.108
-FontEast cui.ComboBox.10239.112
-StyleEast cui.ComboBox.10239.114
-SizeEast cui.MetricBox.10239.116
-LanguageEast cui.ListBox.10239.118
-FontCTL cui.ComboBox.10239.122
-StyleCTL cui.ComboBox.10239.124
-SizeCTL cui.MetricBox.10239.126
-LanguageCTL cui.ListBox.10239.128
-Color cui.ListBox.10239.142
+*TabFont sym:CUI_HID_SVXPAGE_CHAR_NAME
+Font sym:cui.ComboBox.10239.424
+Style sym:cui.ComboBox.10239.426
+Size sym:cui.MetricBox.10239.428
+Language sym:cui.ListBox.10239.430
+FontWest sym:cui.ComboBox.10239.102
+StyleWest sym:cui.ComboBox.10239.104
+SizeWest sym:cui.MetricBox.10239.106
+LanguageWest sym:cui.ListBox.10239.108
+FontEast sym:cui.ComboBox.10239.112
+StyleEast sym:cui.ComboBox.10239.114
+SizeEast sym:cui.MetricBox.10239.116
+LanguageEast sym:cui.ListBox.10239.118
+FontCTL sym:cui.ComboBox.10239.122
+StyleCTL sym:cui.ComboBox.10239.124
+SizeCTL sym:cui.MetricBox.10239.126
+LanguageCTL sym:cui.ListBox.10239.128
+Color sym:cui.ListBox.10239.142
 
-*TabFontEffects CUI_HID_SVXPAGE_CHAR_EFFECTS
-Underline cui.ListBox.10240.228
-Color cui.ListBox.10240.230
-Effects cui.ListBox.10240.205
-StrikeThrough cui.ListBox.10240.226
-IndividualWords cui.CheckBox.10240.231
-Emphasis cui.ListBox.10240.242
-Position cui.ListBox.10240.244
-Outline cui.TriStateBox.10240.208
-Overline cui.ListBox.10240.222
-OverlineColor cui.ListBox.10240.224
-Shadow cui.TriStateBox.10240.209
-Blinking cui.TriStateBox.10240.210
-Relief cui.ListBox.10240.207
-FontColor cui.ListBox.10240.202
-Hidden cui.TriStateBox.10240.211
+*TabFontEffects sym:CUI_HID_SVXPAGE_CHAR_EFFECTS
+Underline sym:cui.ListBox.10240.228
+Color sym:cui.ListBox.10240.230
+Effects sym:cui.ListBox.10240.205
+StrikeThrough sym:cui.ListBox.10240.226
+IndividualWords sym:cui.CheckBox.10240.231
+Emphasis sym:cui.ListBox.10240.242
+Position sym:cui.ListBox.10240.244
+Outline sym:cui.TriStateBox.10240.208
+Overline sym:cui.ListBox.10240.222
+OverlineColor sym:cui.ListBox.10240.224
+Shadow sym:cui.TriStateBox.10240.209
+Blinking sym:cui.TriStateBox.10240.210
+Relief sym:cui.ListBox.10240.207
+FontColor sym:cui.ListBox.10240.202
+Hidden sym:cui.TriStateBox.10240.211
 
-*TabFontPosition CUI_HID_SVXPAGE_CHAR_POSITION
-SuperScript cui.RadioButton.10241.301
-Normal cui.RadioButton.10241.302
-Subscript cui.RadioButton.10241.303
-RaiseLower cui.MetricField.10241.305
-RelativeFontSize cui.MetricField.10241.308
-Automatic cui.CheckBox.10241.306
-n0Degree cui.RadioButton.10241.311
-n90Degree cui.RadioButton.10241.312
-n270Degree cui.RadioButton.10241.313
-FitToLine cui.CheckBox.10241.314
-ScaleWith cui.MetricField.10241.316
-Spacing cui.ListBox.10241.321
-SpacingBy cui.MetricField.10241.323
-PairKerning cui.CheckBox.10241.324
-Super cui.RadioButton.10241.301
+*TabFontPosition sym:CUI_HID_SVXPAGE_CHAR_POSITION
+SuperScript sym:cui.RadioButton.10241.301
+Normal sym:cui.RadioButton.10241.302
+Subscript sym:cui.RadioButton.10241.303
+RaiseLower sym:cui.MetricField.10241.305
+RelativeFontSize sym:cui.MetricField.10241.308
+Automatic sym:cui.CheckBox.10241.306
+n0Degree sym:cui.RadioButton.10241.311
+n90Degree sym:cui.RadioButton.10241.312
+n270Degree sym:cui.RadioButton.10241.313
+FitToLine sym:cui.CheckBox.10241.314
+ScaleWith sym:cui.MetricField.10241.316
+Spacing sym:cui.ListBox.10241.321
+SpacingBy sym:cui.MetricField.10241.323
+PairKerning sym:cui.CheckBox.10241.324
+Super sym:cui.RadioButton.10241.301
 
-*TabFormat3dViewGeometry CHART2_HID_3D_VIEW
- AxisRotationXaxis       chart2.MetricField.915.1
- AxisRotationYaxis       chart2.MetricField.915.2
- AxisRotationZaxis       chart2.MetricField.915.3
- Perspective             chart2.CheckBox.915.1
+*TabFormat3dViewGeometry sym:CHART2_HID_3D_VIEW
+ AxisRotationXaxis       sym:chart2.MetricField.915.1
+ AxisRotationYaxis       sym:chart2.MetricField.915.2
+ AxisRotationZaxis       sym:chart2.MetricField.915.3
+ Perspective             sym:chart2.CheckBox.915.1
  
-*TabFormat3dViewAppearance chart2.TabPage.916
- Scheme                    chart2.ListBox.916.2
+*TabFormat3dViewAppearance sym:chart2.TabPage.916
+ Scheme                    sym:chart2.ListBox.916.2
  RoundedEdges              chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_ROUNDEDEDGE
- Shading                   chart2.CheckBox.916.2
- ObjectBorders             chart2.CheckBox.916.1
+ Shading                   sym:chart2.CheckBox.916.2
+ ObjectBorders             sym:chart2.CheckBox.916.1
  
-*TabFormat3dViewIllumination chart2.TabPage.917
- LightSource1                chart2.ImageButton.917.3
- LightSource2                chart2.ImageButton.917.4
- LightSource3                chart2.ImageButton.917.5
- LightSource4                chart2.ImageButton.917.6
- LightSource5                chart2.ImageButton.917.7
- LightSource6                chart2.ImageButton.917.8
- LightSource7                chart2.ImageButton.917.9
- LightSource8                chart2.ImageButton.917.10
- Color                       chart2.ListBox.917.2
- ColorSelect                 chart2.ImageButton.917.2
- AmbientLight                chart2.ListBox.917.1
- AmbientLightSelect          chart2.ImageButton.917.1
+*TabFormat3dViewIllumination sym:chart2.TabPage.917
+ LightSource1                sym:chart2.ImageButton.917.3
+ LightSource2                sym:chart2.ImageButton.917.4
+ LightSource3                sym:chart2.ImageButton.917.5
+ LightSource4                sym:chart2.ImageButton.917.6
+ LightSource5                sym:chart2.ImageButton.917.7
+ LightSource6                sym:chart2.ImageButton.917.8
+ LightSource7                sym:chart2.ImageButton.917.9
+ LightSource8                sym:chart2.ImageButton.917.10
+ Color                       sym:chart2.ListBox.917.2
+ ColorSelect                 sym:chart2.ImageButton.917.2
+ AmbientLight                sym:chart2.ListBox.917.1
+ AmbientLightSelect          sym:chart2.ImageButton.917.1
  
-*TabFormatChartTitleAlignment CHART2_HID_SCH_ALIGNMENT
- AngleKnob                    CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
- AngleText                    CHART2_HID_SCH_ALIGNMENT_DEGREES
- VerticallyStacked            CHART2_HID_SCH_ALIGNMENT_STACKED
- TextDirection                CHART2_HID_SCH_TEXTDIRECTION_TITLE
- TextDirection2               CHART2_HID_SCH_TEXTDIRECTION_EQUATION
+*TabFormatChartTitleAlignment sym:CHART2_HID_SCH_ALIGNMENT
+ AngleKnob                    sym:CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
+ AngleText                    sym:CHART2_HID_SCH_ALIGNMENT_DEGREES
+ VerticallyStacked            sym:CHART2_HID_SCH_ALIGNMENT_STACKED
+ TextDirection                sym:CHART2_HID_SCH_TEXTDIRECTION_TITLE
+ TextDirection2               sym:CHART2_HID_SCH_TEXTDIRECTION_EQUATION
 
-*TabFormatChartLine CUI_HID_LINE_LINE
- Style               cui.ListBox.10051.2
- Color               cui.ListBox.10051.1
- Width               cui.MetricField.10051.1
- Transparency        cui.MetricField.10051.5
- StyleLeft           cui.ListBox.10051.3
- WidthLeft           cui.MetricField.10051.3
- CenterLeft          cui.TriStateBox.10051.4
- StyleRight          cui.ListBox.10051.4
- WidthRight          cui.MetricField.10051.2
- CenterRight         cui.TriStateBox.10051.5
- SynchroniteEnds     cui.CheckBox.10051.1
- CornerStyle         cui.ListBox.10051.5
- IconSelect          cui.MenuButton.10051.26
- IconWidth           cui.MetricField.10051.22
- IconHeigth          cui.MetricField.10051.23
- KeepRatio           cui.CheckBox.10051.24
+*TabFormatChartLine sym:CUI_HID_LINE_LINE
+ Style               sym:cui.ListBox.10051.2
+ Color               sym:cui.ListBox.10051.1
+ Width               sym:cui.MetricField.10051.1
+ Transparency        sym:cui.MetricField.10051.5
+ StyleLeft           sym:cui.ListBox.10051.3
+ WidthLeft           sym:cui.MetricField.10051.3
+ CenterLeft          sym:cui.TriStateBox.10051.4
+ StyleRight          sym:cui.ListBox.10051.4
+ WidthRight          sym:cui.MetricField.10051.2
+ CenterRight         sym:cui.TriStateBox.10051.5
+ SynchroniteEnds     sym:cui.CheckBox.10051.1
+ CornerStyle         sym:cui.ListBox.10051.5
+ IconSelect          sym:cui.MenuButton.10051.26
+ IconWidth           sym:cui.MetricField.10051.22
+ IconHeigth          sym:cui.MetricField.10051.23
+ KeepRatio           sym:cui.CheckBox.10051.24
  
 +TabFormatChartBorders TabFormatChartLine
 
-*TabFormatEnvelope SW_HID_ENV_FMT
-AddresseeFromLeft sw.MetricField.22753.14
-AddresseeFromRight sw.MetricField.22753.16
-AddresseeEdit sw.MenuButton.22753.18
-SenderFromLeft sw.MetricField.22753.24
-SenderFromRight sw.MetricField.22753.26
-SenderEdit sw.MenuButton.22753.28
-SizeFormat sw.ListBox.22753.33
-SizeWidth sw.MetricField.22753.35
-SizeHeight sw.MetricField.22753.37
+*TabFormatEnvelope sym:SW_HID_ENV_FMT
+AddresseeFromLeft sym:sw.MetricField.22753.14
+AddresseeFromRight sym:sw.MetricField.22753.16
+AddresseeEdit sym:sw.MenuButton.22753.18
+SenderFromLeft sym:sw.MetricField.22753.24
+SenderFromRight sym:sw.MetricField.22753.26
+SenderEdit sym:sw.MenuButton.22753.28
+SizeFormat sym:sw.ListBox.22753.33
+SizeWidth sym:sw.MetricField.22753.35
+SizeHeight sym:sw.MetricField.22753.37
 
-*TabGeneral DBACCESS_HID_DSADMIN_PAGE_GENERAL
-DatabaseType DBACCESS_HID_DSADMIN_DSTYPE
-StatusMessage DBACCESS_HID_DSADMIN_SPECIAL_MESSAGE
+*TabGeneral sym:DBACCESS_HID_DSADMIN_PAGE_GENERAL
+DatabaseType sym:DBACCESS_HID_DSADMIN_DSTYPE
+StatusMessage sym:DBACCESS_HID_DSADMIN_SPECIAL_MESSAGE
 
-*TabGeneralForm EXTENSIONS_HID_FM_PROPDLG_TAB_GENERAL
-Encoding EXTENSIONS_HID_PROP_SUBMIT_ENCODING
-Frame EXTENSIONS_HID_PROP_TARGET_FRAME
-SubmitMethod   EXTENSIONS_HID_PROP_SUBMIT_METHOD
-URL EXTENSIONS_HID_PROP_TARGET_URL
+*TabGeneralForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_GENERAL
+Encoding sym:EXTENSIONS_HID_PROP_SUBMIT_ENCODING
+Frame sym:EXTENSIONS_HID_PROP_TARGET_FRAME
+SubmitMethod   sym:EXTENSIONS_HID_PROP_SUBMIT_METHOD
+URL sym:EXTENSIONS_HID_PROP_TARGET_URL
 
-*TabGeneralControl EXTENSIONS_HID_FM_PROPDLG_TAB_GENERAL
-Accuracy EXTENSIONS_HID_PROP_DECIMAL_ACCURACY
-Align EXTENSIONS_HID_PROP_ALIGN
-AutoComplete EXTENSIONS_HID_PROP_AUTOCOMPLETE
-Background EXTENSIONS_HID_PROP_BACKGROUNDCOLOR
-BackgroundButton EXTENSIONS_UID_PROP_DLG_BACKGROUNDCOLOR
-BlockIncrement EXTENSIONS_HID_PROP_BLOCKINCREMENT
-Border EXTENSIONS_HID_PROP_BORDER
-BorderColor EXTENSIONS_HID_PROP_BORDERCOLOR
-ButtonType EXTENSIONS_HID_PROP_BUTTONTYPE
-CharacterSet EXTENSIONS_HID_PROP_FONT
-CharacterSetButton EXTENSIONS_UID_PROP_DLG_FONT_TYPE
-CurrencySymbol EXTENSIONS_HID_PROP_CURRENCYSYMBOL
-CurrSymPosition EXTENSIONS_HID_PROP_CURRSYM_POSITION
-DateField EXTENSIONS_HID_PROP_DATE
-DateFormat EXTENSIONS_HID_PROP_DATEFORMAT
-DateMax EXTENSIONS_HID_PROP_DATEMAX
-DateMin EXTENSIONS_HID_PROP_DATEMIN
-DefaultButton EXTENSIONS_HID_PROP_DEFAULT_BUTTON
-DefaultSelection EXTENSIONS_HID_PROP_SELECTEDITEMS
-DefaultSelection2 EXTENSIONS_HID_PROP_DEFAULT_SELECT_SEQ
-DefaultSelectionButton EXTENSIONS_UID_PROP_DLG_SELECTION
-DefaultState EXTENSIONS_HID_PROP_DEFAULT_STATE
-DefaultSpinValue EXTENSIONS_HID_PROP_DEFAULT_SPINVALUE
-DefaultValue EXTENSIONS_HID_PROP_DEFAULTVALUE
-Delay EXTENSIONS_HID_PROP_REPEAT_DELAY
-DropDown EXTENSIONS_HID_PROP_DROPDOWN
-EditMask EXTENSIONS_HID_PROP_EDITMASK
-EffectiveMax EXTENSIONS_HID_PROP_EFFECTIVEMAX
-EffectiveMin EXTENSIONS_HID_PROP_EFFECTIVEMIN
-Enabled EXTENSIONS_HID_PROP_ENABLED
-FillColor EXTENSIONS_HID_PROP_FILLCOLOR
-FillColorButton EXTENSIONS_UID_PROP_DLG_FILLCOLOR
-FilteringSorting EXTENSIONS_HID_PROP_SHOW_FILTERSORT
-FormatKey EXTENSIONS_HID_PROP_FORMATKEY
-FormatkeyButton EXTENSIONS_UID_PROP_DLG_NUMBER_FORMAT
-Frame EXTENSIONS_HID_PROP_TARGET_FRAME
-Graphics EXTENSIONS_HID_PROP_IMAGE_URL
-GraphicsAlignment EXTENSIONS_HID_PROP_IMAGEPOSITION
-GraphicsButton EXTENSIONS_UID_PROP_DLG_IMAGE_URL
-Height EXTENSIONS_HID_PROP_HEIGHT
-Help EXTENSIONS_HID_PROP_HELPTEXT
-HelpText EXTENSIONS_HID_PROP_HELPTEXT
-HelpURL EXTENSIONS_HID_PROP_HELPURL
-HiddenValue EXTENSIONS_HID_PROP_HIDDEN_VALUE
-HideSelection EXTENSIONS_HID_PROP_HIDEINACTIVESELECTION
-HorizontalScroll EXTENSIONS_HID_PROP_HSCROLL
-IconSize EXTENSIONS_HID_PROP_ICONSIZE
-Information EXTENSIONS_HID_PROP_TAG
-Label EXTENSIONS_HID_PROP_LABEL
-LabelField EXTENSIONS_HID_PROP_CONTROLLABEL
-LabelFieldButton EXTENSIONS_UID_PROP_DLG_CONTROLLABEL
-LineCount EXTENSIONS_HID_PROP_LINECOUNT
-LineIncrement EXTENSIONS_HID_PROP_LINEINCREMENT
-ListEntries EXTENSIONS_HID_PROP_STRINGITEMLIST
-LiteralMask EXTENSIONS_HID_PROP_LITERALMASK
-MaxTextLen EXTENSIONS_HID_PROP_MAXTEXTLEN
-MultiLine EXTENSIONS_HID_PROP_MULTILINE
-Multiselection EXTENSIONS_HID_PROP_MULTISELECTION
-NameText EXTENSIONS_HID_PROP_NAME
-Navigation EXTENSIONS_HID_PROP_SHOW_NAVIGATION
-NavigationBar EXTENSIONS_HID_PROP_NAVIGATIONBAR
-Order EXTENSIONS_HID_PROP_TABINDEX
-Orientation EXTENSIONS_HID_PROP_ORIENTATION
-Password EXTENSIONS_HID_PROP_ECHO_CHAR
-PosX EXTENSIONS_HID_PROP_POSITIONX
-PosY EXTENSIONS_HID_PROP_POSITIONY
-Printable EXTENSIONS_HID_PROP_PRINTABLE
-ProgressValue EXTENSIONS_HID_PROP_PROGRESSVALUE
-ProgressValueMax EXTENSIONS_HID_PROP_PROGRESSVALUE_MAX
-ProgressValueMin EXTENSIONS_HID_PROP_PROGRESSVALUE_MIN
-PushButtonType EXTENSIONS_HID_PROP_PUSHBUTTONTYPE
-PageStep EXTENSIONS_HID_PROP_STEP
-Positioning EXTENSIONS_HID_PROP_SHOW_POSITION
-Readonly EXTENSIONS_HID_PROP_READONLY
-RecordActions EXTENSIONS_HID_PROP_SHOW_RECORDACTIONS
-RecordMarker EXTENSIONS_HID_PROP_RECORDMARKER
-Repeat EXTENSIONS_HID_PROP_REPEAT
-RowHeight EXTENSIONS_HID_PROP_ROWHEIGHT
-Scale EXTENSIONS_HID_PROP_SCALEIMAGE
-Scrollbars EXTENSIONS_HID_PROP_SHOW_SCROLLBARS
-ScrollValue EXTENSIONS_HID_PROP_SCROLLVALUE
-ScrollValueMin EXTENSIONS_HID_PROP_SCROLLVALUE_MIN
-ScrollValueMax EXTENSIONS_HID_PROP_SCROLLVALUE_MAX
-ScrollValueDefault EXTENSIONS_HID_PROP_DEFAULT_SCROLLVALUE
-Spin EXTENSIONS_HID_PROP_SPIN
-SpinIncrement EXTENSIONS_HID_PROP_SPININCREMENT
-SpinValueMin EXTENSIONS_HID_PROP_SPINVALUE_MIN
-SpinValueMax EXTENSIONS_HID_PROP_SPINVALUE_MAX
-Status EXTENSIONS_HID_PROP_STATE
-Submission EXTENSIONS_HID_PROP_SUBMISSION_ID
-TakeFocus EXTENSIONS_HID_PROP_FOCUSONCLICK
-ToggleProp EXTENSIONS_HID_PROP_TOGGLE
+*TabGeneralControl sym:EXTENSIONS_HID_FM_PROPDLG_TAB_GENERAL
+Accuracy sym:EXTENSIONS_HID_PROP_DECIMAL_ACCURACY
+Align sym:EXTENSIONS_HID_PROP_ALIGN
+AutoComplete sym:EXTENSIONS_HID_PROP_AUTOCOMPLETE
+Background sym:EXTENSIONS_HID_PROP_BACKGROUNDCOLOR
+BackgroundButton sym:EXTENSIONS_UID_PROP_DLG_BACKGROUNDCOLOR
+BlockIncrement sym:EXTENSIONS_HID_PROP_BLOCKINCREMENT
+Border sym:EXTENSIONS_HID_PROP_BORDER
+BorderColor sym:EXTENSIONS_HID_PROP_BORDERCOLOR
+ButtonType sym:EXTENSIONS_HID_PROP_BUTTONTYPE
+CharacterSet sym:EXTENSIONS_HID_PROP_FONT
+CharacterSetButton sym:EXTENSIONS_UID_PROP_DLG_FONT_TYPE
+CurrencySymbol sym:EXTENSIONS_HID_PROP_CURRENCYSYMBOL
+CurrSymPosition sym:EXTENSIONS_HID_PROP_CURRSYM_POSITION
+DateField sym:EXTENSIONS_HID_PROP_DATE
+DateFormat sym:EXTENSIONS_HID_PROP_DATEFORMAT
+DateMax sym:EXTENSIONS_HID_PROP_DATEMAX
+DateMin sym:EXTENSIONS_HID_PROP_DATEMIN
+DefaultButton sym:EXTENSIONS_HID_PROP_DEFAULT_BUTTON
+DefaultSelection sym:EXTENSIONS_HID_PROP_SELECTEDITEMS
+DefaultSelection2 sym:EXTENSIONS_HID_PROP_DEFAULT_SELECT_SEQ
+DefaultSelectionButton sym:EXTENSIONS_UID_PROP_DLG_SELECTION
+DefaultState sym:EXTENSIONS_HID_PROP_DEFAULT_STATE
+DefaultSpinValue sym:EXTENSIONS_HID_PROP_DEFAULT_SPINVALUE
+DefaultValue sym:EXTENSIONS_HID_PROP_DEFAULTVALUE
+Delay sym:EXTENSIONS_HID_PROP_REPEAT_DELAY
+DropDown sym:EXTENSIONS_HID_PROP_DROPDOWN
+EditMask sym:EXTENSIONS_HID_PROP_EDITMASK
+EffectiveMax sym:EXTENSIONS_HID_PROP_EFFECTIVEMAX
+EffectiveMin sym:EXTENSIONS_HID_PROP_EFFECTIVEMIN
+Enabled sym:EXTENSIONS_HID_PROP_ENABLED
+FillColor sym:EXTENSIONS_HID_PROP_FILLCOLOR
+FillColorButton sym:EXTENSIONS_UID_PROP_DLG_FILLCOLOR
+FilteringSorting sym:EXTENSIONS_HID_PROP_SHOW_FILTERSORT
+FormatKey sym:EXTENSIONS_HID_PROP_FORMATKEY
+FormatkeyButton sym:EXTENSIONS_UID_PROP_DLG_NUMBER_FORMAT
+Frame sym:EXTENSIONS_HID_PROP_TARGET_FRAME
+Graphics sym:EXTENSIONS_HID_PROP_IMAGE_URL
+GraphicsAlignment sym:EXTENSIONS_HID_PROP_IMAGEPOSITION
+GraphicsButton sym:EXTENSIONS_UID_PROP_DLG_IMAGE_URL
+Height sym:EXTENSIONS_HID_PROP_HEIGHT
+Help sym:EXTENSIONS_HID_PROP_HELPTEXT
+HelpText sym:EXTENSIONS_HID_PROP_HELPTEXT
+HelpURL sym:EXTENSIONS_HID_PROP_HELPURL
+HiddenValue sym:EXTENSIONS_HID_PROP_HIDDEN_VALUE
+HideSelection sym:EXTENSIONS_HID_PROP_HIDEINACTIVESELECTION
+HorizontalScroll sym:EXTENSIONS_HID_PROP_HSCROLL
+IconSize sym:EXTENSIONS_HID_PROP_ICONSIZE
+Information sym:EXTENSIONS_HID_PROP_TAG
+Label sym:EXTENSIONS_HID_PROP_LABEL
+LabelField sym:EXTENSIONS_HID_PROP_CONTROLLABEL
+LabelFieldButton sym:EXTENSIONS_UID_PROP_DLG_CONTROLLABEL
+LineCount sym:EXTENSIONS_HID_PROP_LINECOUNT
+LineIncrement sym:EXTENSIONS_HID_PROP_LINEINCREMENT
+ListEntries sym:EXTENSIONS_HID_PROP_STRINGITEMLIST
+LiteralMask sym:EXTENSIONS_HID_PROP_LITERALMASK
+MaxTextLen sym:EXTENSIONS_HID_PROP_MAXTEXTLEN
+MultiLine sym:EXTENSIONS_HID_PROP_MULTILINE
+Multiselection sym:EXTENSIONS_HID_PROP_MULTISELECTION
+NameText sym:EXTENSIONS_HID_PROP_NAME
+Navigation sym:EXTENSIONS_HID_PROP_SHOW_NAVIGATION
+NavigationBar sym:EXTENSIONS_HID_PROP_NAVIGATIONBAR
+Order sym:EXTENSIONS_HID_PROP_TABINDEX
+Orientation sym:EXTENSIONS_HID_PROP_ORIENTATION
+Password sym:EXTENSIONS_HID_PROP_ECHO_CHAR
+PosX sym:EXTENSIONS_HID_PROP_POSITIONX
+PosY sym:EXTENSIONS_HID_PROP_POSITIONY
+Printable sym:EXTENSIONS_HID_PROP_PRINTABLE
+ProgressValue sym:EXTENSIONS_HID_PROP_PROGRESSVALUE
+ProgressValueMax sym:EXTENSIONS_HID_PROP_PROGRESSVALUE_MAX
+ProgressValueMin sym:EXTENSIONS_HID_PROP_PROGRESSVALUE_MIN
+PushButtonType sym:EXTENSIONS_HID_PROP_PUSHBUTTONTYPE
+PageStep sym:EXTENSIONS_HID_PROP_STEP
+Positioning sym:EXTENSIONS_HID_PROP_SHOW_POSITION
+Readonly sym:EXTENSIONS_HID_PROP_READONLY
+RecordActions sym:EXTENSIONS_HID_PROP_SHOW_RECORDACTIONS
+RecordMarker sym:EXTENSIONS_HID_PROP_RECORDMARKER
+Repeat sym:EXTENSIONS_HID_PROP_REPEAT
+RowHeight sym:EXTENSIONS_HID_PROP_ROWHEIGHT
+Scale sym:EXTENSIONS_HID_PROP_SCALEIMAGE
+Scrollbars sym:EXTENSIONS_HID_PROP_SHOW_SCROLLBARS
+ScrollValue sym:EXTENSIONS_HID_PROP_SCROLLVALUE
+ScrollValueMin sym:EXTENSIONS_HID_PROP_SCROLLVALUE_MIN
+ScrollValueMax sym:EXTENSIONS_HID_PROP_SCROLLVALUE_MAX
+ScrollValueDefault sym:EXTENSIONS_HID_PROP_DEFAULT_SCROLLVALUE
+Spin sym:EXTENSIONS_HID_PROP_SPIN
+SpinIncrement sym:EXTENSIONS_HID_PROP_SPININCREMENT
+SpinValueMin sym:EXTENSIONS_HID_PROP_SPINVALUE_MIN
+SpinValueMax sym:EXTENSIONS_HID_PROP_SPINVALUE_MAX
+Status sym:EXTENSIONS_HID_PROP_STATE
+Submission sym:EXTENSIONS_HID_PROP_SUBMISSION_ID
+TakeFocus sym:EXTENSIONS_HID_PROP_FOCUSONCLICK
+ToggleProp sym:EXTENSIONS_HID_PROP_TOGGLE
 
-StrictFormat EXTENSIONS_HID_PROP_STRICTFORMAT
-SymbolColor EXTENSIONS_HID_PROP_SYMBOLCOLOR
-SymbolColorButton EXTENSIONS_UID_PROP_DLG_SYMBOLCOLOR
-TabOrderButton EXTENSIONS_UID_PROP_DLG_TABINDEX
-TabStop EXTENSIONS_HID_PROP_TABSTOP
-TextText EXTENSIONS_HID_PROP_TEXT
-TextType EXTENSIONS_HID_PROP_TEXTTYPE
-ThousandSeperator EXTENSIONS_HID_PROP_SHOWTHOUSANDSEP
-TimeField EXTENSIONS_HID_PROP_TIME
-TimeFormat EXTENSIONS_HID_PROP_TIMEFORMAT
-TimeMax EXTENSIONS_HID_PROP_TIMEMAX
-TimeMin EXTENSIONS_HID_PROP_TIMEMIN
-TriState EXTENSIONS_HID_PROP_TRISTATE
-URL EXTENSIONS_HID_PROP_TARGET_URL
-URLButton EXTENSIONS_UID_PROP_DLG_ATTR_TARGET_URL
-Value EXTENSIONS_HID_PROP_VALUE
-ValueMax EXTENSIONS_HID_PROP_VALUEMAX
-ValueMin EXTENSIONS_HID_PROP_VALUEMIN
-ValueStep EXTENSIONS_HID_PROP_VALUESTEP
-VerticalScroll EXTENSIONS_HID_PROP_VSCROLL
-VisibleSize EXTENSIONS_HID_PROP_VISIBLESIZE
-Width EXTENSIONS_HID_PROP_WIDTH
-WordBreak EXTENSIONS_HID_PROP_WORDBREAK
+StrictFormat sym:EXTENSIONS_HID_PROP_STRICTFORMAT
+SymbolColor sym:EXTENSIONS_HID_PROP_SYMBOLCOLOR
+SymbolColorButton sym:EXTENSIONS_UID_PROP_DLG_SYMBOLCOLOR
+TabOrderButton sym:EXTENSIONS_UID_PROP_DLG_TABINDEX
+TabStop sym:EXTENSIONS_HID_PROP_TABSTOP
+TextText sym:EXTENSIONS_HID_PROP_TEXT
+TextType sym:EXTENSIONS_HID_PROP_TEXTTYPE
+ThousandSeperator sym:EXTENSIONS_HID_PROP_SHOWTHOUSANDSEP
+TimeField sym:EXTENSIONS_HID_PROP_TIME
+TimeFormat sym:EXTENSIONS_HID_PROP_TIMEFORMAT
+TimeMax sym:EXTENSIONS_HID_PROP_TIMEMAX
+TimeMin sym:EXTENSIONS_HID_PROP_TIMEMIN
+TriState sym:EXTENSIONS_HID_PROP_TRISTATE
+URL sym:EXTENSIONS_HID_PROP_TARGET_URL
+URLButton sym:EXTENSIONS_UID_PROP_DLG_ATTR_TARGET_URL
+Value sym:EXTENSIONS_HID_PROP_VALUE
+ValueMax sym:EXTENSIONS_HID_PROP_VALUEMAX
+ValueMin sym:EXTENSIONS_HID_PROP_VALUEMIN
+ValueStep sym:EXTENSIONS_HID_PROP_VALUESTEP
+VerticalScroll sym:EXTENSIONS_HID_PROP_VSCROLL
+VisibleSize sym:EXTENSIONS_HID_PROP_VISIBLESIZE
+Width sym:EXTENSIONS_HID_PROP_WIDTH
+WordBreak sym:EXTENSIONS_HID_PROP_WORDBREAK
 
-*TabGrid SW_HID_TEXTGRID_PAGE
-NoGrid sw.RadioButton.20901.2
-LinesGrid sw.RadioButton.20901.3
-CharsGrid sw.RadioButton.20901.4
-LinesPerPage sw.NumericField.20901.8
-TextSize sw.MetricField.20901.11
-CharsPerLine sw.NumericField.20901.13
-RubySize sw.MetricField.20901.16
-RubyBelow sw.CheckBox.20901.17
-Display sw.CheckBox.20901.19
-PrintGrid sw.CheckBox.20901.20
-Color sw.ListBox.20901.22
+*TabGrid sym:SW_HID_TEXTGRID_PAGE
+NoGrid sym:sw.RadioButton.20901.2
+LinesGrid sym:sw.RadioButton.20901.3
+CharsGrid sym:sw.RadioButton.20901.4
+LinesPerPage sym:sw.NumericField.20901.8
+TextSize sym:sw.MetricField.20901.11
+CharsPerLine sym:sw.NumericField.20901.13
+RubySize sym:sw.MetricField.20901.16
+RubyBelow sym:sw.CheckBox.20901.17
+Display sym:sw.CheckBox.20901.19
+PrintGrid sym:sw.CheckBox.20901.20
+Color sym:sw.ListBox.20901.22
 
-*TabGroupBoxData extensions.TabPage.19722
-Address .uno:OpenUrl
-Names extensions.Edit.19722.1
-AddTo extensions.PushButton.19722.1
-RemoveFrom extensions.PushButton.19722.2
-OptionFields extensions.ListBox.19722.3
+*TabGroupBoxData sym:extensions.TabPage.19722
+Address sym:.uno:OpenUrl
+Names sym:extensions.Edit.19722.1
+AddTo sym:extensions.PushButton.19722.1
+RemoveFrom sym:extensions.PushButton.19722.2
+OptionFields sym:extensions.ListBox.19722.3
 

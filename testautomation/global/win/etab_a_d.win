@@ -1,474 +1,474 @@
-*TabAccessibility CUI_HID_OPTIONS_ACCESSIBILITYCONFIG
-ForPagePreviews cui.CheckBox.10250.2
-HelpTips cui.CheckBox.10250.4
-After cui.NumericField.10250.5
-AllowAnimatedGraphics cui.CheckBox.10250.7
-AllowAnimatedText cui.CheckBox.10250.8
-AlwaysUseAutomaticFontColor cui.CheckBox.10250.9
-SupportAssistiveTechnologyTools cui.CheckBox.10250.11
-UseTextSelectionCursor cui.CheckBox.10250.12
-AutomaticDetectHC cui.CheckBox.10250.13
+*TabAccessibility sym:CUI_HID_OPTIONS_ACCESSIBILITYCONFIG
+ForPagePreviews sym:cui.CheckBox.10250.2
+HelpTips sym:cui.CheckBox.10250.4
+After sym:cui.NumericField.10250.5
+AllowAnimatedGraphics sym:cui.CheckBox.10250.7
+AllowAnimatedText sym:cui.CheckBox.10250.8
+AlwaysUseAutomaticFontColor sym:cui.CheckBox.10250.9
+SupportAssistiveTechnologyTools sym:cui.CheckBox.10250.11
+UseTextSelectionCursor sym:cui.CheckBox.10250.12
+AutomaticDetectHC sym:cui.CheckBox.10250.13
 
-*TabAdabas DBACCESS_HID_DSADMIN_PAGE_ADABAS
-Hostname dbaccess.Edit.19205.5
-CacheSize dbaccess.NumericField.19205.2
-DataIncrement dbaccess.NumericField.19205.1
-CotrolUser dbaccess.Edit.19205.2
-ControlPassword dbaccess.Edit.19205.1
-ShutdownService dbaccess.CheckBox.19205.1
-Charset DBACCESS_HID_DSADMIN_CHARSET
-Extended dbaccess.PushButton.19205.1
+*TabAdabas sym:DBACCESS_HID_DSADMIN_PAGE_ADABAS
+Hostname sym:dbaccess.Edit.19205.5
+CacheSize sym:dbaccess.NumericField.19205.2
+DataIncrement sym:dbaccess.NumericField.19205.1
+CotrolUser sym:dbaccess.Edit.19205.2
+ControlPassword sym:dbaccess.Edit.19205.1
+ShutdownService sym:dbaccess.CheckBox.19205.1
+Charset sym:DBACCESS_HID_DSADMIN_CHARSET
+Extended sym:dbaccess.PushButton.19205.1
 
-*TabAdabasUserSettings DBACCESS_HID_TAB_PAGE_USERADMIN
-User DBACCESS_HID_TAB_PAGE_LBUSER
-AddUser DBACCESS_HID_TAB_PAGE_PBUSER
-ChangePassword DBACCESS_HID_TAB_PAGE_PBCHGPWD
-DeleteUser DBACCESS_HID_TAB_PAGE_PBUSERDELETE
-AccessRights DBACCESS_HID_TAB_PAGE_TBLGRANTS
+*TabAdabasUserSettings sym:DBACCESS_HID_TAB_PAGE_USERADMIN
+User sym:DBACCESS_HID_TAB_PAGE_LBUSER
+AddUser sym:DBACCESS_HID_TAB_PAGE_PBUSER
+ChangePassword sym:DBACCESS_HID_TAB_PAGE_PBCHGPWD
+DeleteUser sym:DBACCESS_HID_TAB_PAGE_PBUSERDELETE
+AccessRights sym:DBACCESS_HID_TAB_PAGE_TBLGRANTS
 
-*TabAdditionalSettings extensions.TabPage.19701
-Settings extensions.PushButton.19701.1
+*TabAdditionalSettings sym:extensions.TabPage.19701
+Settings sym:extensions.PushButton.19701.1
 
-*TabAddressDataSourceAutoPilot extensions.TabPage.19700
-Mozilla extensions.RadioButton.19700.1
-LDAP extensions.RadioButton.19700.6
-Outlook extensions.RadioButton.19700.7
-WinSystem extensions.RadioButton.19700.8
-Other extensions.RadioButton.19700.9
+*TabAddressDataSourceAutoPilot sym:extensions.TabPage.19700
+Mozilla sym:extensions.RadioButton.19700.1
+LDAP sym:extensions.RadioButton.19700.6
+Outlook sym:extensions.RadioButton.19700.7
+WinSystem sym:extensions.RadioButton.19700.8
+Other sym:extensions.RadioButton.19700.9
 
-*TabADO DBACCESS_HID_DSADMIN_PAGE_ADO
-URL DBACCESS_HID_DSADMIN_CONNURL_ADOPAGE
-UserName DBACCESS_HID_DSADMIN_USER_ADO
-PasswordRequired DBACCESS_HID_DSADMIN_PWDREC_ADO
+*TabADO sym:DBACCESS_HID_DSADMIN_PAGE_ADO
+URL sym:DBACCESS_HID_DSADMIN_CONNURL_ADOPAGE
+UserName sym:DBACCESS_HID_DSADMIN_USER_ADO
+PasswordRequired sym:DBACCESS_HID_DSADMIN_PWDREC_ADO
 
-*TabAppearance CUI_HID_OPTIONS_COLORCONFIG
-Scheme cui.ListBox.10249.3
-Save cui.PushButton.10249.4
-Delete cui.PushButton.10249.5
-ColorList CUI_HID_OPTIONS_COLORCONFIG_COLORLIST_WIN
-LBGeneralDocBg CUI_HID_COLORPAGE_DOCCOLOR_LB
-CBGeneralTextBd CUI_HID_COLORPAGE_DOCBOUNDARIES_CB
-LBGeneralTextBd CUI_HID_COLORPAGE_DOCBOUNDARIES_LB
-LBGeneralAppBg CUI_HID_COLORPAGE_APPBACKGROUND_LB
-CBGeneralObjBd CUI_HID_COLORPAGE_OBJECTBOUNDARIES_CB
-LBGeneralObjBd CUI_HID_COLORPAGE_OBJECTBOUNDARIES_LB
-CBGeneralTableBd CUI_HID_COLORPAGE_TABLEBOUNDARIES_CB
-LBGeneralTableBd CUI_HID_COLORPAGE_TABLEBOUNDARIES_LB
-LBGeneralFont CUI_HID_COLORPAGE_FONTCOLOR_LB
-CBGeneralUnvisitedLinks CUI_HID_COLORPAGE_LINKS_CB
-LBGeneralUnvisitedLinks CUI_HID_COLORPAGE_LINKS_LB
-CBGeneralVisitedLinks CUI_HID_COLORPAGE_LINKSVISITED_CB
-LBGeneralVisitedLinks CUI_HID_COLORPAGE_LINKSVISITED_LB
-LBGeneralAutoSpellcheck CUI_HID_COLORPAGE_SPELL_LB
-LBWriterGrid CUI_HID_COLORPAGE_WRITERTEXTGRID_LB
-CBWriterFieldShadings CUI_HID_COLORPAGE_WRITERFIELDSHADINGS_CB
-LBWriterFieldShadings CUI_HID_COLORPAGE_WRITERFIELDSHADINGS_LB
-CBWriterIndexShadings CUI_HID_COLORPAGE_WRITERIDXSHADINGS_CB
-LBWriterIndexShadings CUI_HID_COLORPAGE_WRITERIDXSHADINGS_LB
-LBWriterNoteIndicator CUI_HID_COLORPAGE_WRITERNOTESINDICATOR_LB
-LBWriterScriptIndicator CUI_HID_COLORPAGE_WRITERSCRIPTINDICATOR_LB
-CBWriterSectionBd CUI_HID_COLORPAGE_WRITERSECTIONBOUNDARIES_CB
-LBWriterSectionBd CUI_HID_COLORPAGE_WRITERSECTIONBOUNDARIES_LB
-LBWriterPageBreaks CUI_HID_COLORPAGE_WRITERPAGEBREAKS_LB
-LBWriterDirectCursor CUI_HID_COLORPAGE_WRITERDIRECTCURSOR_LB
-LBHtmlSGML CUI_HID_COLORPAGE_HTMLSGML_LB
-LBHtmlComment CUI_HID_COLORPAGE_HTMLCOMMENT_LB
-LBHtmlKeyword CUI_HID_COLORPAGE_HTMLKEYWORD_LB
-LBHtmlText CUI_HID_COLORPAGE_HTMLUNKNOWN_LB
-LBCalcGridlines CUI_HID_COLORPAGE_CALCGRID_LB
-LBCalcPageBreaks  CUI_HID_COLORPAGE_CALCPAGEBREAK_LB
-LBCalcManualBreaks CUI_HID_COLORPAGE_CALCPAGEBREAKMANUAL_LB
-LBCalcAutoBreaks CUI_HID_COLORPAGE_CALCPAGEBREAKAUTOMATIC_LB
-LBCalcDetective CUI_HID_COLORPAGE_CALCDETECTIVE_LB
-LBCalcDetectiveError CUI_HID_COLORPAGE_CALCDETECTIVEERROR_LB
-LBCalcReferences CUI_HID_COLORPAGE_CALCREFERENCE_LB
-LBCalcNotesBg CUI_HID_COLORPAGE_CALCNOTESBACKGROUND_LB
-LBDrawingGrid CUI_HID_COLORPAGE_DRAWGRID_LB
-LBBasicIdentifier CUI_HID_COLORPAGE_BASICIDENTIFIER_LB
-LBBasicComment CUI_HID_COLORPAGE_BASICCOMMENT_LB
-LBBasicNumber CUI_HID_COLORPAGE_BASICNUMBER_LB
-LBBasicString CUI_HID_COLORPAGE_BASICSTRING_LB
-LBBasicOperator CUI_HID_COLORPAGE_BASICOPERATOR_LB
-LBBasicReservedExpression CUI_HID_COLORPAGE_BASICKEYWORD_LB
-LBBasicError CUI_HID_COLORPAGE_BASICERROR_LB
+*TabAppearance sym:CUI_HID_OPTIONS_COLORCONFIG
+Scheme sym:cui.ListBox.10249.3
+Save sym:cui.PushButton.10249.4
+Delete sym:cui.PushButton.10249.5
+ColorList sym:CUI_HID_OPTIONS_COLORCONFIG_COLORLIST_WIN
+LBGeneralDocBg sym:CUI_HID_COLORPAGE_DOCCOLOR_LB
+CBGeneralTextBd sym:CUI_HID_COLORPAGE_DOCBOUNDARIES_CB
+LBGeneralTextBd sym:CUI_HID_COLORPAGE_DOCBOUNDARIES_LB
+LBGeneralAppBg sym:CUI_HID_COLORPAGE_APPBACKGROUND_LB
+CBGeneralObjBd sym:CUI_HID_COLORPAGE_OBJECTBOUNDARIES_CB
+LBGeneralObjBd sym:CUI_HID_COLORPAGE_OBJECTBOUNDARIES_LB
+CBGeneralTableBd sym:CUI_HID_COLORPAGE_TABLEBOUNDARIES_CB
+LBGeneralTableBd sym:CUI_HID_COLORPAGE_TABLEBOUNDARIES_LB
+LBGeneralFont sym:CUI_HID_COLORPAGE_FONTCOLOR_LB
+CBGeneralUnvisitedLinks sym:CUI_HID_COLORPAGE_LINKS_CB
+LBGeneralUnvisitedLinks sym:CUI_HID_COLORPAGE_LINKS_LB
+CBGeneralVisitedLinks sym:CUI_HID_COLORPAGE_LINKSVISITED_CB
+LBGeneralVisitedLinks sym:CUI_HID_COLORPAGE_LINKSVISITED_LB
+LBGeneralAutoSpellcheck sym:CUI_HID_COLORPAGE_SPELL_LB
+LBWriterGrid sym:CUI_HID_COLORPAGE_WRITERTEXTGRID_LB
+CBWriterFieldShadings sym:CUI_HID_COLORPAGE_WRITERFIELDSHADINGS_CB
+LBWriterFieldShadings sym:CUI_HID_COLORPAGE_WRITERFIELDSHADINGS_LB
+CBWriterIndexShadings sym:CUI_HID_COLORPAGE_WRITERIDXSHADINGS_CB
+LBWriterIndexShadings sym:CUI_HID_COLORPAGE_WRITERIDXSHADINGS_LB
+LBWriterNoteIndicator sym:CUI_HID_COLORPAGE_WRITERNOTESINDICATOR_LB
+LBWriterScriptIndicator sym:CUI_HID_COLORPAGE_WRITERSCRIPTINDICATOR_LB
+CBWriterSectionBd sym:CUI_HID_COLORPAGE_WRITERSECTIONBOUNDARIES_CB
+LBWriterSectionBd sym:CUI_HID_COLORPAGE_WRITERSECTIONBOUNDARIES_LB
+LBWriterPageBreaks sym:CUI_HID_COLORPAGE_WRITERPAGEBREAKS_LB
+LBWriterDirectCursor sym:CUI_HID_COLORPAGE_WRITERDIRECTCURSOR_LB
+LBHtmlSGML sym:CUI_HID_COLORPAGE_HTMLSGML_LB
+LBHtmlComment sym:CUI_HID_COLORPAGE_HTMLCOMMENT_LB
+LBHtmlKeyword sym:CUI_HID_COLORPAGE_HTMLKEYWORD_LB
+LBHtmlText sym:CUI_HID_COLORPAGE_HTMLUNKNOWN_LB
+LBCalcGridlines sym:CUI_HID_COLORPAGE_CALCGRID_LB
+LBCalcPageBreaks  sym:CUI_HID_COLORPAGE_CALCPAGEBREAK_LB
+LBCalcManualBreaks sym:CUI_HID_COLORPAGE_CALCPAGEBREAKMANUAL_LB
+LBCalcAutoBreaks sym:CUI_HID_COLORPAGE_CALCPAGEBREAKAUTOMATIC_LB
+LBCalcDetective sym:CUI_HID_COLORPAGE_CALCDETECTIVE_LB
+LBCalcDetectiveError sym:CUI_HID_COLORPAGE_CALCDETECTIVEERROR_LB
+LBCalcReferences sym:CUI_HID_COLORPAGE_CALCREFERENCE_LB
+LBCalcNotesBg sym:CUI_HID_COLORPAGE_CALCNOTESBACKGROUND_LB
+LBDrawingGrid sym:CUI_HID_COLORPAGE_DRAWGRID_LB
+LBBasicIdentifier sym:CUI_HID_COLORPAGE_BASICIDENTIFIER_LB
+LBBasicComment sym:CUI_HID_COLORPAGE_BASICCOMMENT_LB
+LBBasicNumber sym:CUI_HID_COLORPAGE_BASICNUMBER_LB
+LBBasicString sym:CUI_HID_COLORPAGE_BASICSTRING_LB
+LBBasicOperator sym:CUI_HID_COLORPAGE_BASICOPERATOR_LB
+LBBasicReservedExpression sym:CUI_HID_COLORPAGE_BASICKEYWORD_LB
+LBBasicError sym:CUI_HID_COLORPAGE_BASICERROR_LB
 
-*TabArea CUI_HID_AREA_AREA
-BackgroundColour cui.CheckBox.10056.21
-BackgroundColourList cui.ListBox.10056.22
-FillOptions cui.ListBox.10056.19
-ColourList cui.ListBox.10056.1
-GradientList cui.ListBox.10056.2
-HatchingList cui.ListBox.10056.3
-BitmapList cui.ListBox.10056.4
-Automatic cui.TriStateBox.10056.3
-Increments cui.NumericField.10056.1
-Tile cui.TriStateBox.10056.4
-Stretch cui.TriStateBox.10056.5
-Relative cui.TriStateBox.10056.1
-Original cui.TriStateBox.10056.6
-Width cui.MetricField.10056.4
-Height cui.MetricField.10056.5
-XOffset cui.MetricField.10056.1
-YOffset cui.MetricField.10056.2
-Row cui.RadioButton.10056.6
-Column cui.RadioButton.10056.7
-Offset cui.MetricField.10056.3
+*TabArea sym:CUI_HID_AREA_AREA
+BackgroundColour sym:cui.CheckBox.10056.21
+BackgroundColourList sym:cui.ListBox.10056.22
+FillOptions sym:cui.ListBox.10056.19
+ColourList sym:cui.ListBox.10056.1
+GradientList sym:cui.ListBox.10056.2
+HatchingList sym:cui.ListBox.10056.3
+BitmapList sym:cui.ListBox.10056.4
+Automatic sym:cui.TriStateBox.10056.3
+Increments sym:cui.NumericField.10056.1
+Tile sym:cui.TriStateBox.10056.4
+Stretch sym:cui.TriStateBox.10056.5
+Relative sym:cui.TriStateBox.10056.1
+Original sym:cui.TriStateBox.10056.6
+Width sym:cui.MetricField.10056.4
+Height sym:cui.MetricField.10056.5
+XOffset sym:cui.MetricField.10056.1
+YOffset sym:cui.MetricField.10056.2
+Row sym:cui.RadioButton.10056.6
+Column sym:cui.RadioButton.10056.7
+Offset sym:cui.MetricField.10056.3
 
-*TabAsianLayout CUI_HID_SVXPAGE_CHAR_TWOLINES
-TwoLinesEachLine cui.CheckBox.10242.401
-BeginningCharacter cui.ListBox.10242.412
-EndCharacter cui.ListBox.10242.414
+*TabAsianLayout sym:CUI_HID_SVXPAGE_CHAR_TWOLINES
+TwoLinesEachLine sym:cui.CheckBox.10242.401
+BeginningCharacter sym:cui.ListBox.10242.412
+EndCharacter sym:cui.ListBox.10242.414
 
-*TabAsianLayoutOptions CUI_HID_OPTIONS_ASIAN_LAYOUT
-WesternCharactersOnly cui.RadioButton.10246.2
-WesternTextAndPunctuation cui.RadioButton.10246.3
-NoCompression cui.RadioButton.10246.5
-CompressPunctuationOnly cui.RadioButton.10246.6
-CompressPunctuationAndJapaneseKana cui.RadioButton.10246.7
-Language cui.ListBox.10246.12
-Standard cui.CheckBox.10246.9
-NoStartOfLine cui.Edit.10246.14
-NoEndOfLine cui.Edit.10246.16
+*TabAsianLayoutOptions sym:CUI_HID_OPTIONS_ASIAN_LAYOUT
+WesternCharactersOnly sym:cui.RadioButton.10246.2
+WesternTextAndPunctuation sym:cui.RadioButton.10246.3
+NoCompression sym:cui.RadioButton.10246.5
+CompressPunctuationOnly sym:cui.RadioButton.10246.6
+CompressPunctuationAndJapaneseKana sym:cui.RadioButton.10246.7
+Language sym:cui.ListBox.10246.12
+Standard sym:cui.CheckBox.10246.9
+NoStartOfLine sym:cui.Edit.10246.14
+NoEndOfLine sym:cui.Edit.10246.16
 
-*TabAsianTypography CUI_HID_SVXPAGE_PARA_ASIAN
-ApplyList cui.TriStateBox.10245.4
-AllowHangingPunctuation cui.TriStateBox.10245.2
-ApplySpacingBetween cui.TriStateBox.10245.7
+*TabAsianTypography sym:CUI_HID_SVXPAGE_PARA_ASIAN
+ApplyList sym:cui.TriStateBox.10245.4
+AllowHangingPunctuation sym:cui.TriStateBox.10245.2
+ApplySpacingBetween sym:cui.TriStateBox.10245.7
 
-*TabAutoCaption SW_HID_OPTCAPTION_PAGE
-ObjectList SW_HID_OPTCAPTION_CLB
-Category sw.ComboBox.20878.14
-Numbering sw.ListBox.20878.16
-CaptionSeparator sw.Edit.20878.18
-Position sw.ListBox.20878.20
-Level sw.ListBox.20878.23
-ChapterSeparator sw.Edit.20878.25
-CharacterStyle sw.ListBox.20878.28
-ApplyBorderAndShadow sw.CheckBox.20878.29
+*TabAutoCaption sym:SW_HID_OPTCAPTION_PAGE
+ObjectList sym:SW_HID_OPTCAPTION_CLB
+Category sym:sw.ComboBox.20878.14
+Numbering sym:sw.ListBox.20878.16
+CaptionSeparator sym:sw.Edit.20878.18
+Position sym:sw.ListBox.20878.20
+Level sym:sw.ListBox.20878.23
+ChapterSeparator sym:sw.Edit.20878.25
+CharacterStyle sym:sw.ListBox.20878.28
+ApplyBorderAndShadow sym:sw.CheckBox.20878.29
 
-*TabBaseBookmarks DBACCESS_HID_DSADMIN_DOCUMENTLINKS
-Bookmarklist DBACCESS_HID_DSADMIN_DOCUMENTS
+*TabBaseBookmarks sym:DBACCESS_HID_DSADMIN_DOCUMENTLINKS
+Bookmarklist sym:DBACCESS_HID_DSADMIN_DOCUMENTS
 
-*TabBullet CUI_HID_SVXPAGE_PICK_BULLET
-Auswahl CUI_HID_VALUESET_BULLET
-Optionen SW_HID_NUM_FORMAT_BTN
-Zurueck SFX2_HID_TABDLG_RESET_BTN
-Remove SW_HID_NUM_RESET
+*TabBullet sym:CUI_HID_SVXPAGE_PICK_BULLET
+Auswahl sym:CUI_HID_VALUESET_BULLET
+Optionen sym:SW_HID_NUM_FORMAT_BTN
+Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
+Remove sym:SW_HID_NUM_RESET
 
-*TabChartAxisLabel CHART2_HID_SCH_TP_AXIS_LABEL
- ShowLabels        chart2.CheckBox.920.1
- Tile              chart2.RadioButton.920.14
- StaggerOdd        chart2.RadioButton.920.15
- StaggerEven       chart2.RadioButton.920.16
- Automatic         chart2.RadioButton.920.17
- Overlap           chart2.CheckBox.920.11
- Break             chart2.CheckBox.920.12
- AngleKnob         CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
- AngleText         CHART2_HID_SCH_ALIGNMENT_DEGREES
- VerticallyStacked CHART2_HID_SCH_ALIGNMENT_STACKED 
- TextDirection     chart2.ListBox.920.20 
+*TabChartAxisLabel sym:CHART2_HID_SCH_TP_AXIS_LABEL
+ ShowLabels        sym:chart2.CheckBox.920.1
+ Tile              sym:chart2.RadioButton.920.14
+ StaggerOdd        sym:chart2.RadioButton.920.15
+ StaggerEven       sym:chart2.RadioButton.920.16
+ Automatic         sym:chart2.RadioButton.920.17
+ Overlap           sym:chart2.CheckBox.920.11
+ Break             sym:chart2.CheckBox.920.12
+ AngleKnob         sym:CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
+ AngleText         sym:CHART2_HID_SCH_ALIGNMENT_DEGREES
+ VerticallyStacked sym:CHART2_HID_SCH_ALIGNMENT_STACKED 
+ TextDirection     sym:chart2.ListBox.920.20 
  
-*TabChartAxisNumbers CUI_HID_NUMBERFORMAT
- Category            cui.ListBox.10041.9
- FormatCurrency      cui.ListBox.10041.33
- FormatString        CUI_HID_NUMBERFORMAT_LB_FORMAT
- Language            cui.ListBox.10041.13
- Sourceformat        cui.CheckBox.10041.34
- DecimalPlaces       cui.NumericField.10041.22
- LeadingZeroes       cui.NumericField.10041.24
- NegativNumbersRed   cui.CheckBox.10041.25
- ThousandsSeparator  cui.CheckBox.10041.26
- FormatCode          cui.Edit.10041.14
- AddButton           CUI_HID_NUMBERFORMAT_TBI_ADD
- EditCommentButton   CUI_HID_NUMBERFORMAT_TBI_INFO
- RemoveButton        CUI_HID_NUMBERFORMAT_TBI_REMOVE
- Comment             cui.Edit.10041.28 
+*TabChartAxisNumbers sym:CUI_HID_NUMBERFORMAT
+ Category            sym:cui.ListBox.10041.9
+ FormatCurrency      sym:cui.ListBox.10041.33
+ FormatString        sym:CUI_HID_NUMBERFORMAT_LB_FORMAT
+ Language            sym:cui.ListBox.10041.13
+ Sourceformat        sym:cui.CheckBox.10041.34
+ DecimalPlaces       sym:cui.NumericField.10041.22
+ LeadingZeroes       sym:cui.NumericField.10041.24
+ NegativNumbersRed   sym:cui.CheckBox.10041.25
+ ThousandsSeparator  sym:cui.CheckBox.10041.26
+ FormatCode          sym:cui.Edit.10041.14
+ AddButton           sym:CUI_HID_NUMBERFORMAT_TBI_ADD
+ EditCommentButton   sym:CUI_HID_NUMBERFORMAT_TBI_INFO
+ RemoveButton        sym:CUI_HID_NUMBERFORMAT_TBI_REMOVE
+ Comment             sym:cui.Edit.10041.28 
  
-*TabChartAxisScale          chart2.TabPage.903  
-MinimumValue                chart2.SpinField.903.3
-MinimumAutomatic            chart2.CheckBox.903.1
-MaximumValue                chart2.SpinField.903.2
-MaximumAutomatic            chart2.CheckBox.903.2         
-MajorIntervalValue          chart2.SpinField.903.1      
-MajorIntervalAutomatic      chart2.CheckBox.903.3  
-MinorIntervalCount          chart2.MetricField.903.10    
-MinorIntervalCountAutomatic chart2.CheckBox.903.4
-ReferenceValue              chart2.SpinField.903.4              
-RreferenceValueAutomatic    chart2.CheckBox.903.5
-LogarithmicScale            chart2.CheckBox.903.6
-ReverseDirection            chart2.CheckBox.903.7
+*TabChartAxisScale          sym:chart2.TabPage.903  
+MinimumValue                sym:chart2.SpinField.903.3
+MinimumAutomatic            sym:chart2.CheckBox.903.1
+MaximumValue                sym:chart2.SpinField.903.2
+MaximumAutomatic            sym:chart2.CheckBox.903.2         
+MajorIntervalValue          sym:chart2.SpinField.903.1      
+MajorIntervalAutomatic      sym:chart2.CheckBox.903.3  
+MinorIntervalCount          sym:chart2.MetricField.903.10    
+MinorIntervalCountAutomatic sym:chart2.CheckBox.903.4
+ReferenceValue              sym:chart2.SpinField.903.4              
+RreferenceValueAutomatic    sym:chart2.CheckBox.903.5
+LogarithmicScale            sym:chart2.CheckBox.903.6
+ReverseDirection            sym:chart2.CheckBox.903.7
 
-*TabChartAxisPositioning    chart2.TabPage.904
-CrossOtherAxisAt            chart2.ListBox.904.1
-AxisAtValue                 chart2.SpinField.904.3
-AxisAtCategory              chart2.ComboBox.904.4
-Hidden_Checkbox1            chart2.CheckBox.904.1
-PlaceLabels                 chart2.ListBox.904.2
-Hidden_Spinfield1           chart2.SpinField.904.5
-MajorIntervalMarksInner     chart2.CheckBox.904.2
-MajorIntervalMarksOuter     chart2.CheckBox.904.3
-MinorIntervalMarksInner     chart2.CheckBox.904.4
-MinorIntervalMarksOuter     chart2.CheckBox.904.5
-PlaceMarks                  chart2.ListBox.904.6
-Hidden_Checkbox2            chart2.CheckBox.904.6
-Hidden_MoreBtn              chart2.PushButton.904.1
-Hidden_Checkbox3            chart2.CheckBox.904.7
-Hidden_More2                chart2.PushButton.904.2
+*TabChartAxisPositioning    sym:chart2.TabPage.904
+CrossOtherAxisAt            sym:chart2.ListBox.904.1
+AxisAtValue                 sym:chart2.SpinField.904.3
+AxisAtCategory              sym:chart2.ComboBox.904.4
+Hidden_Checkbox1            sym:chart2.CheckBox.904.1
+PlaceLabels                 sym:chart2.ListBox.904.2
+Hidden_Spinfield1           sym:chart2.SpinField.904.5
+MajorIntervalMarksInner     sym:chart2.CheckBox.904.2
+MajorIntervalMarksOuter     sym:chart2.CheckBox.904.3
+MinorIntervalMarksInner     sym:chart2.CheckBox.904.4
+MinorIntervalMarksOuter     sym:chart2.CheckBox.904.5
+PlaceMarks                  sym:chart2.ListBox.904.6
+Hidden_Checkbox2            sym:chart2.CheckBox.904.6
+Hidden_MoreBtn              sym:chart2.PushButton.904.1
+Hidden_Checkbox3            sym:chart2.CheckBox.904.7
+Hidden_More2                sym:chart2.PushButton.904.2
 
-*TabChartTypeDataRange chart2.TabPage.911
- DataRange             chart2.Edit.911.1
- SelectDataRange       chart2.ImageButton.911.1
- Rows                  chart2.RadioButton.911.1
- Columns               chart2.RadioButton.911.2
- FirstRowAsLabel       chart2.CheckBox.911.1
- FirstColumnAsLabel    chart2.CheckBox.911.2
+*TabChartTypeDataRange sym:chart2.TabPage.911
+ DataRange             sym:chart2.Edit.911.1
+ SelectDataRange       sym:chart2.ImageButton.911.1
+ Rows                  sym:chart2.RadioButton.911.1
+ Columns               sym:chart2.RadioButton.911.2
+ FirstRowAsLabel       sym:chart2.CheckBox.911.1
+ FirstColumnAsLabel    sym:chart2.CheckBox.911.2
  
 +TabDataRangesDataRange TabChartTypeDataRange
 +TabFormatDataRangesDataRange TabChartTypeDataRange
 
  
-*TabChartTypeDataSeries chart2.TabPage.914
- DataRanges             CHART2_HID_SCH_DATA_RANGES_LIST
- RangeFor               chart2.Edit.914.80
- SelectRange            chart2.ImageButton.914.90
- Categories             chart2.Edit.914.120
- SelectCategories       chart2.ImageButton.914.130
- AddButton              chart2.PushButton.914.30
- RemoveButton           chart2.PushButton.914.40
- MoveUp                 chart2.PushButton.914.140
- MoveDown               chart2.PushButton.914.150
- DataSeries             CHART2_HID_SCH_SERIES_LIST
+*TabChartTypeDataSeries sym:chart2.TabPage.914
+ DataRanges             sym:CHART2_HID_SCH_DATA_RANGES_LIST
+ RangeFor               sym:chart2.Edit.914.80
+ SelectRange            sym:chart2.ImageButton.914.90
+ Categories             sym:chart2.Edit.914.120
+ SelectCategories       sym:chart2.ImageButton.914.130
+ AddButton              sym:chart2.PushButton.914.30
+ RemoveButton           sym:chart2.PushButton.914.40
+ MoveUp                 sym:chart2.PushButton.914.140
+ MoveDown               sym:chart2.PushButton.914.150
+ DataSeries             sym:CHART2_HID_SCH_SERIES_LIST
  
 +TabDataRangesDataSeries TabChartTypeDataSeries
 +TabFormatDataRangesDataSeries TabChartTypeDataSeries
  
-*TabChartPieOptions chart2.TabPage.909
-Clockwise           chart2.CheckBox.909.1
-StartingAngle       CHART2_HID_SCH_STARTING_ANGLE_DIAL
-Degrees             chart2.NumericField.909.1
+*TabChartPieOptions sym:chart2.TabPage.909
+Clockwise           sym:chart2.CheckBox.909.1
+StartingAngle       sym:CHART2_HID_SCH_STARTING_ANGLE_DIAL
+Degrees             sym:chart2.NumericField.909.1
 
-*TabChartTypeChartElements chart2.TabPage.912
-Title                     CHART2_HID_SCH_TITLE_MAIN
-Subtitle                  CHART2_HID_SCH_TITLE_SUB
-TitleXaxis                CHART2_HID_SCH_TITLE_X
-TitleYaxis                CHART2_HID_SCH_TITLE_Y
-TitleZaxis                CHART2_HID_SCH_TITLE_Z
-SecondTitleXaxis          CHART2_HID_SCH_TITLE_SECONDARY_X
-SecondTitleYaxis          CHART2_HID_SCH_TITLE_SECONDARY_Y 
-Display                   CHART2_HID_SCH_LEGEND_SHOW
-PositionLeft              CHART2_HID_SCH_LEGEND_POS_LEFT
-PositionTop               CHART2_HID_SCH_LEGEND_POS_TOP
-PositionRight             CHART2_HID_SCH_LEGEND_POS_RIGHT
-PositionBottom            CHART2_HID_SCH_LEGEND_POS_BOTTOM
-GridLinesXaxis            CHART2_HID_SCH_CB_XGRID
-GridLinesYaxis            CHART2_HID_SCH_CB_YGRID
-GridLinesZaxis            CHART2_HID_SCH_CB_ZGRID
+*TabChartTypeChartElements sym:chart2.TabPage.912
+Title                     sym:CHART2_HID_SCH_TITLE_MAIN
+Subtitle                  sym:CHART2_HID_SCH_TITLE_SUB
+TitleXaxis                sym:CHART2_HID_SCH_TITLE_X
+TitleYaxis                sym:CHART2_HID_SCH_TITLE_Y
+TitleZaxis                sym:CHART2_HID_SCH_TITLE_Z
+SecondTitleXaxis          sym:CHART2_HID_SCH_TITLE_SECONDARY_X
+SecondTitleYaxis          sym:CHART2_HID_SCH_TITLE_SECONDARY_Y 
+Display                   sym:CHART2_HID_SCH_LEGEND_SHOW
+PositionLeft              sym:CHART2_HID_SCH_LEGEND_POS_LEFT
+PositionTop               sym:CHART2_HID_SCH_LEGEND_POS_TOP
+PositionRight             sym:CHART2_HID_SCH_LEGEND_POS_RIGHT
+PositionBottom            sym:CHART2_HID_SCH_LEGEND_POS_BOTTOM
+GridLinesXaxis            sym:CHART2_HID_SCH_CB_XGRID
+GridLinesYaxis            sym:CHART2_HID_SCH_CB_YGRID
+GridLinesZaxis            sym:CHART2_HID_SCH_CB_ZGRID
  
-*TabChartTypeChartLocation chart2.TabPage.913
-InsertInSheet             chart2.ListBox.913.1
+*TabChartTypeChartLocation sym:chart2.TabPage.913
+InsertInSheet             sym:chart2.ListBox.913.1
 
-*TabCreateOptionGroup extensions.TabPage.19726
-GroupCaption extensions.Edit.19726.3
+*TabCreateOptionGroup sym:extensions.TabPage.19726
+GroupCaption sym:extensions.Edit.19726.3
 
-*TabConnections cui.TabPage.17022
-DriverList CUI_HID_OFA_CONNPOOL_DRIVERLIST
-ConnectionPoolingEnabled cui.CheckBox.17022.2
-EnablePoolingForThisDriver cui.CheckBox.17022.7
-Timeout cui.NumericField.17022.9
+*TabConnections sym:cui.TabPage.17022
+DriverList sym:CUI_HID_OFA_CONNPOOL_DRIVERLIST
+ConnectionPoolingEnabled sym:cui.CheckBox.17022.2
+EnablePoolingForThisDriver sym:cui.CheckBox.17022.7
+Timeout sym:cui.NumericField.17022.9
 
-*TabConnection dbaccess.TabPage.19206
-dBasePath DBACCESS_HID_DSADMIN_DBASE_PATH
-SelectPath DBACCESS_HID_DSADMIN_BROWSECONN
-Username dbaccess.Edit.19206.1
-PasswordRequired dbaccess.CheckBox.19206.1
-JDBCDriverClass DBACCESS_HID_DSADMIN_DRIVERCLASS
-TestDriver dbaccess.PushButton.19206.1
-MySQLODBCDatasource DBACCESS_HID_DSADMIN_MYSQL_ODBC_DATASOURCE
-TestConnection dbaccess.PushButton.19206.2
-MySQLJDBCDatasource DBACCESS_HID_DSADMIN_MYSQL_DATABASE
-AdabasDatasource DBACCESS_HID_DSADMIN_ADABAS_DATABASE
-OracleJDBCDatasource DBACCESS_HID_DSADMIN_ORACLE_DATABASE
-ConnectUrl DBACCESS_HID_DSADMIN_URL_GENERAL
-OdbcDatasourceName DBACCESS_HID_DSADMIN_ODBC_DATASOURCE
-SpreadsheetPath DBACCESS_HID_DSADMIN_CALC_PATH
-HostName DBACCESS_HID_DSADMIN_LDAP_HOSTNAME
-BaseDN DBACCESS_HID_PAGE_DBWIZARD_LDAP_ET_BASEDN
-TextPath DBACCESS_HID_DSADMIN_FLAT_PATH
+*TabConnection sym:dbaccess.TabPage.19206
+dBasePath sym:DBACCESS_HID_DSADMIN_DBASE_PATH
+SelectPath sym:DBACCESS_HID_DSADMIN_BROWSECONN
+Username sym:dbaccess.Edit.19206.1
+PasswordRequired sym:dbaccess.CheckBox.19206.1
+JDBCDriverClass sym:DBACCESS_HID_DSADMIN_DRIVERCLASS
+TestDriver sym:dbaccess.PushButton.19206.1
+MySQLODBCDatasource sym:DBACCESS_HID_DSADMIN_MYSQL_ODBC_DATASOURCE
+TestConnection sym:dbaccess.PushButton.19206.2
+MySQLJDBCDatasource sym:DBACCESS_HID_DSADMIN_MYSQL_DATABASE
+AdabasDatasource sym:DBACCESS_HID_DSADMIN_ADABAS_DATABASE
+OracleJDBCDatasource sym:DBACCESS_HID_DSADMIN_ORACLE_DATABASE
+ConnectUrl sym:DBACCESS_HID_DSADMIN_URL_GENERAL
+OdbcDatasourceName sym:DBACCESS_HID_DSADMIN_ODBC_DATASOURCE
+SpreadsheetPath sym:DBACCESS_HID_DSADMIN_CALC_PATH
+HostName sym:DBACCESS_HID_DSADMIN_LDAP_HOSTNAME
+BaseDN sym:DBACCESS_HID_PAGE_DBWIZARD_LDAP_ET_BASEDN
+TextPath sym:DBACCESS_HID_DSADMIN_FLAT_PATH
 
-*TabCopyDatabaseTable DBACCESS_HID_TAB_WIZ_COPYTABLE
-TableName DBACCESS_HID_TAB_WIZ_TABLENAME_EDIT
-DefinitionAndData dbaccess.RadioButton.19212.1
-Definition dbaccess.RadioButton.19212.2
-AsTableView dbaccess.RadioButton.19212.3
-AttachData dbaccess.RadioButton.19212.4
-CreatePrimaryKey dbaccess.CheckBox.19212.5
-PrimaryKeyName dbaccess.Edit.19212.3
+*TabCopyDatabaseTable sym:DBACCESS_HID_TAB_WIZ_COPYTABLE
+TableName sym:DBACCESS_HID_TAB_WIZ_TABLENAME_EDIT
+DefinitionAndData sym:dbaccess.RadioButton.19212.1
+Definition sym:dbaccess.RadioButton.19212.2
+AsTableView sym:dbaccess.RadioButton.19212.3
+AttachData sym:dbaccess.RadioButton.19212.4
+CreatePrimaryKey sym:dbaccess.CheckBox.19212.5
+PrimaryKeyName sym:dbaccess.Edit.19212.3
 
-*TabColumnSelect DBACCESS_HID_TAB_WIZ_COLUMN_SELECT
-LeftColumNames dbaccess.MultiListBox.19209.1
-Add dbaccess.ImageButton.19209.1
-AddAll dbaccess.ImageButton.19209.3
-Remove dbaccess.ImageButton.19209.2
-RemoveAll dbaccess.ImageButton.19209.4
-RightColumNames dbaccess.MultiListBox.19209.2
+*TabColumnSelect sym:DBACCESS_HID_TAB_WIZ_COLUMN_SELECT
+LeftColumNames sym:dbaccess.MultiListBox.19209.1
+Add sym:dbaccess.ImageButton.19209.1
+AddAll sym:dbaccess.ImageButton.19209.3
+Remove sym:dbaccess.ImageButton.19209.2
+RemoveAll sym:dbaccess.ImageButton.19209.4
+RightColumNames sym:dbaccess.MultiListBox.19209.2
 
-*TabCompatibility SW_HID_OPTCOMPATIBILITY_PAGE
-Options SW_HID_COMPATIBILITY_OPTIONS_BOX
-Formatting sw.ListBox.20903.12
-Reset sw.PushButton.20903.15
-Default sw.PushButton.20903.16
+*TabCompatibility sym:SW_HID_OPTCOMPATIBILITY_PAGE
+Options sym:SW_HID_COMPATIBILITY_OPTIONS_BOX
+Formatting sym:sw.ListBox.20903.12
+Reset sym:sw.PushButton.20903.15
+Default sym:sw.PushButton.20903.16
 
-*TabComplexTextLayout CUI_HID_OPTIONS_CTL
-UseSequenceChecking cui.CheckBox.10252.11
-Logical cui.RadioButton.10252.22
-Visual cui.RadioButton.10252.23
-Numerals cui.ListBox.10252.32
-Restricted cui.CheckBox.10252.12
-TypeAndReplace cui.CheckBox.10252.13
+*TabComplexTextLayout sym:CUI_HID_OPTIONS_CTL
+UseSequenceChecking sym:cui.CheckBox.10252.11
+Logical sym:cui.RadioButton.10252.22
+Visual sym:cui.RadioButton.10252.23
+Numerals sym:cui.ListBox.10252.32
+Restricted sym:cui.CheckBox.10252.12
+TypeAndReplace sym:cui.CheckBox.10252.13
 
-*TabCustomizeEvents CUI_HID_SVX_CONFIG_EVENT
-SaveIn cui.ListBox.10295.11
-EventListbox CUI_HID_SVX_MACRO_LB_EVENT
-AssignMacro cui.PushButton.10295.2
-RemoveMacro cui.PushButton.10295.3
-ResetBtn SFX2_HID_TABDLG_RESET_BTN
+*TabCustomizeEvents sym:CUI_HID_SVX_CONFIG_EVENT
+SaveIn sym:cui.ListBox.10295.11
+EventListbox sym:CUI_HID_SVX_MACRO_LB_EVENT
+AssignMacro sym:cui.PushButton.10295.2
+RemoveMacro sym:cui.PushButton.10295.3
+ResetBtn sym:SFX2_HID_TABDLG_RESET_BTN
 
-*TabCustomizeMenu CUI_HID_SVX_CONFIG_MENU
-Menu cui.ListBox.10292.311
-BtnNew cui.PushButton.10292.312
-MenuBtn cui.MenuButton.10292.314
-AddCommands cui.PushButton.10292.326
-Command cui.MenuButton.10292.318
-BtnUp cui.ImageButton.10292.319
-BtnDown cui.ImageButton.10292.320
-SaveIn cui.ListBox.10292.324
-ResetBtn SFX2_HID_TABDLG_RESET_BTN
-Entries CUI_HID_SVX_CONFIG_MENU_CONTENTS
+*TabCustomizeMenu sym:CUI_HID_SVX_CONFIG_MENU
+Menu sym:cui.ListBox.10292.311
+BtnNew sym:cui.PushButton.10292.312
+MenuBtn sym:cui.MenuButton.10292.314
+AddCommands sym:cui.PushButton.10292.326
+Command sym:cui.MenuButton.10292.318
+BtnUp sym:cui.ImageButton.10292.319
+BtnDown sym:cui.ImageButton.10292.320
+SaveIn sym:cui.ListBox.10292.324
+ResetBtn sym:SFX2_HID_TABDLG_RESET_BTN
+Entries sym:CUI_HID_SVX_CONFIG_MENU_CONTENTS
 
-*TabCustomizeToolbars CUI_HID_SVX_CONFIG_TOOLBAR
-Menu cui.ListBox.10292.311
-BtnNew CUI_HID_SVX_NEW_TOOLBAR
-MenuBtn CUI_HID_SVX_MODIFY_TOOLBAR
-AddCommands CUI_HID_SVX_NEW_TOOLBAR_ITEM
-Command CUI_HID_SVX_MODIFY_TOOLBAR_ITEM
-BtnUp cui.ImageButton.10292.319
-BtnDown cui.ImageButton.10292.320
-SaveIn CUI_HID_SVX_SAVE_IN
-ToolbarContents CUI_HID_SVX_CONFIG_TOOLBAR_CONTENTS
-ResetBtn SFX2_HID_TABDLG_RESET_BTN
+*TabCustomizeToolbars sym:CUI_HID_SVX_CONFIG_TOOLBAR
+Menu sym:cui.ListBox.10292.311
+BtnNew sym:CUI_HID_SVX_NEW_TOOLBAR
+MenuBtn sym:CUI_HID_SVX_MODIFY_TOOLBAR
+AddCommands sym:CUI_HID_SVX_NEW_TOOLBAR_ITEM
+Command sym:CUI_HID_SVX_MODIFY_TOOLBAR_ITEM
+BtnUp sym:cui.ImageButton.10292.319
+BtnDown sym:cui.ImageButton.10292.320
+SaveIn sym:CUI_HID_SVX_SAVE_IN
+ToolbarContents sym:CUI_HID_SVX_CONFIG_TOOLBAR_CONTENTS
+ResetBtn sym:SFX2_HID_TABDLG_RESET_BTN
  
-*TabDatabaseField extensions.TabPage.19725
-YesSaveIt extensions.RadioButton.19725.3
-NoValueForm extensions.RadioButton.19725.4
-Fieldbox extensions.ListBox.19725.4
+*TabDatabaseField sym:extensions.TabPage.19725
+YesSaveIt sym:extensions.RadioButton.19725.3
+NoValueForm sym:extensions.RadioButton.19725.4
+Fieldbox sym:extensions.ListBox.19725.4
 
-*TabDatabaseValues extensions.TabPage.19724
-YesSaveIt extensions.RadioButton.19725.3
-NoValueForm extensions.RadioButton.19725.4
-Fieldbox extensions.ListBox.19725.4
-WhichValue extensions.Edit.19724.2
-OptionFields extensions.ListBox.19724.3
+*TabDatabaseValues sym:extensions.TabPage.19724
+YesSaveIt sym:extensions.RadioButton.19725.3
+NoValueForm sym:extensions.RadioButton.19725.4
+Fieldbox sym:extensions.ListBox.19725.4
+WhichValue sym:extensions.Edit.19724.2
+OptionFields sym:extensions.ListBox.19724.3
 
-*TabDataControl EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
-DataField EXTENSIONS_HID_PROP_CONTROLSOURCE
-EmptyStringIsNull EXTENSIONS_HID_PROP_EMPTY_IS_NULL
-FilterProposal EXTENSIONS_HID_PROP_FILTERPROPOSAL
-TypeOfListContent EXTENSIONS_HID_PROP_LISTSOURCETYPE
-ListContent EXTENSIONS_HID_PROP_LISTSOURCE
-BoundField EXTENSIONS_HID_PROP_BOUNDCOLUMN
-CellBound EXTENSIONS_HID_PROP_BOUND_CELL
-CellContentType EXTENSIONS_HID_PROP_CELL_EXCHANGE_TYPE
-CellRange EXTENSIONS_HID_PROP_LIST_CELL_RANGE
-ReferenceValue EXTENSIONS_HID_PROP_REFVALUE
-ReferenceValueOff EXTENSIONS_HID_PROP_UNCHECKEDREFVALUE
+*TabDataControl sym:EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
+DataField sym:EXTENSIONS_HID_PROP_CONTROLSOURCE
+EmptyStringIsNull sym:EXTENSIONS_HID_PROP_EMPTY_IS_NULL
+FilterProposal sym:EXTENSIONS_HID_PROP_FILTERPROPOSAL
+TypeOfListContent sym:EXTENSIONS_HID_PROP_LISTSOURCETYPE
+ListContent sym:EXTENSIONS_HID_PROP_LISTSOURCE
+BoundField sym:EXTENSIONS_HID_PROP_BOUNDCOLUMN
+CellBound sym:EXTENSIONS_HID_PROP_BOUND_CELL
+CellContentType sym:EXTENSIONS_HID_PROP_CELL_EXCHANGE_TYPE
+CellRange sym:EXTENSIONS_HID_PROP_LIST_CELL_RANGE
+ReferenceValue sym:EXTENSIONS_HID_PROP_REFVALUE
+ReferenceValueOff sym:EXTENSIONS_HID_PROP_UNCHECKEDREFVALUE
 'Controls in XForm Mode
-XFormDataModel EXTENSIONS_HID_PROP_XML_DATA_MODEL
-XFormBindExpression EXTENSIONS_HID_PROP_BIND_EXPRESSION
-XFormBindExpressionName EXTENSIONS_HID_PROP_BINDING_NAME
-XFormBindExpressionBtn EXTENSIONS_UID_PROP_DLG_BIND_EXPRESSION
-XFormRequired EXTENSIONS_HID_PROP_XSD_REQUIRED
-XFormRequiredBtn EXTENSIONS_UID_PROP_DLG_XSD_REQUIRED
-XFormReleveant EXTENSIONS_HID_PROP_XSD_RELEVANT
-XFormReleveantBtn EXTENSIONS_UID_PROP_DLG_XSD_RELEVANT
-XFormReadOnly EXTENSIONS_HID_PROP_XSD_READONLY
-XFormReadOnlyBtn EXTENSIONS_UID_PROP_DLG_XSD_READONLY
-XFormConstraint EXTENSIONS_HID_PROP_XSD_CONSTRAINT
-XFormConstraintBtn EXTENSIONS_UID_PROP_DLG_XSD_CONSTRAINT
-XFormCalculation EXTENSIONS_HID_PROP_XSD_CALCULATION
-XFormCalculationBtn EXTENSIONS_UID_PROP_DLG_XSD_CALCULATION
-XFormDataType EXTENSIONS_HID_PROP_XSD_DATA_TYPE
-XFormAddDataTypeBtn EXTENSIONS_UID_PROP_ADD_DATA_TYPE
-XFormRemoveDataTypeBtn EXTENSIONS_UID_PROP_REMOVE_DATA_TYPE
+XFormDataModel sym:EXTENSIONS_HID_PROP_XML_DATA_MODEL
+XFormBindExpression sym:EXTENSIONS_HID_PROP_BIND_EXPRESSION
+XFormBindExpressionName sym:EXTENSIONS_HID_PROP_BINDING_NAME
+XFormBindExpressionBtn sym:EXTENSIONS_UID_PROP_DLG_BIND_EXPRESSION
+XFormRequired sym:EXTENSIONS_HID_PROP_XSD_REQUIRED
+XFormRequiredBtn sym:EXTENSIONS_UID_PROP_DLG_XSD_REQUIRED
+XFormReleveant sym:EXTENSIONS_HID_PROP_XSD_RELEVANT
+XFormReleveantBtn sym:EXTENSIONS_UID_PROP_DLG_XSD_RELEVANT
+XFormReadOnly sym:EXTENSIONS_HID_PROP_XSD_READONLY
+XFormReadOnlyBtn sym:EXTENSIONS_UID_PROP_DLG_XSD_READONLY
+XFormConstraint sym:EXTENSIONS_HID_PROP_XSD_CONSTRAINT
+XFormConstraintBtn sym:EXTENSIONS_UID_PROP_DLG_XSD_CONSTRAINT
+XFormCalculation sym:EXTENSIONS_HID_PROP_XSD_CALCULATION
+XFormCalculationBtn sym:EXTENSIONS_UID_PROP_DLG_XSD_CALCULATION
+XFormDataType sym:EXTENSIONS_HID_PROP_XSD_DATA_TYPE
+XFormAddDataTypeBtn sym:EXTENSIONS_UID_PROP_ADD_DATA_TYPE
+XFormRemoveDataTypeBtn sym:EXTENSIONS_UID_PROP_REMOVE_DATA_TYPE
 
-*TabDataForm EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
-DataSource EXTENSIONS_HID_PROP_DATASOURCE
-ContentType EXTENSIONS_HID_PROP_CURSORSOURCETYPE
-Content EXTENSIONS_HID_PROP_CURSORSOURCE
-AnalyzeSQLCommand EXTENSIONS_HID_PROP_ESCAPE_PROCESSING
-Filter EXTENSIONS_HID_PROP_FILTER
-FilterDLGButton EXTENSIONS_UID_PROP_DLG_FILTER
-Sort EXTENSIONS_HID_PROP_SORT_CRITERIA
-AllowAdditions EXTENSIONS_HID_PROP_ALLOW_ADDITIONS
-AllowModifications EXTENSIONS_HID_PROP_ALLOW_EDITS
-DeleteData EXTENSIONS_HID_PROP_ALLOW_DELETIONS
-AddDataOnly EXTENSIONS_HID_PROP_DATAENTRY
-NavigationBar EXTENSIONS_HID_PROP_NAVIGATION
-Cycle EXTENSIONS_HID_PROP_CYCLE
-LinkMasterFields EXTENSIONS_HID_PROP_MASTERFIELDS
-LinkSlaveFields EXTENSIONS_HID_PROP_SLAVEFIELDS
-FormLinkDLGButton EXTENSIONS_UID_PROP_DLG_FORMLINKFIELDS
-OpenQueryDesign EXTENSIONS_UID_PROP_DLG_SQLCOMMAND
-SortDLGButton EXTENSIONS_UID_PROP_DLG_ORDER
+*TabDataForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
+DataSource sym:EXTENSIONS_HID_PROP_DATASOURCE
+ContentType sym:EXTENSIONS_HID_PROP_CURSORSOURCETYPE
+Content sym:EXTENSIONS_HID_PROP_CURSORSOURCE
+AnalyzeSQLCommand sym:EXTENSIONS_HID_PROP_ESCAPE_PROCESSING
+Filter sym:EXTENSIONS_HID_PROP_FILTER
+FilterDLGButton sym:EXTENSIONS_UID_PROP_DLG_FILTER
+Sort sym:EXTENSIONS_HID_PROP_SORT_CRITERIA
+AllowAdditions sym:EXTENSIONS_HID_PROP_ALLOW_ADDITIONS
+AllowModifications sym:EXTENSIONS_HID_PROP_ALLOW_EDITS
+DeleteData sym:EXTENSIONS_HID_PROP_ALLOW_DELETIONS
+AddDataOnly sym:EXTENSIONS_HID_PROP_DATAENTRY
+NavigationBar sym:EXTENSIONS_HID_PROP_NAVIGATION
+Cycle sym:EXTENSIONS_HID_PROP_CYCLE
+LinkMasterFields sym:EXTENSIONS_HID_PROP_MASTERFIELDS
+LinkSlaveFields sym:EXTENSIONS_HID_PROP_SLAVEFIELDS
+FormLinkDLGButton sym:EXTENSIONS_UID_PROP_DLG_FORMLINKFIELDS
+OpenQueryDesign sym:EXTENSIONS_UID_PROP_DLG_SQLCOMMAND
+SortDLGButton sym:EXTENSIONS_UID_PROP_DLG_ORDER
 
-*TabDataPointLayout chart2.TabPage.907
- BarColumnShape CHART2_HID_SCH_LB_BAR_GEOMETRY
+*TabDataPointLayout sym:chart2.TabPage.907
+ BarColumnShape sym:CHART2_HID_SCH_LB_BAR_GEOMETRY
 
-*TabDataSeriesLabels     CHART2_HID_SCH_DATA_DESCR
-ShowValue               CHART2_HID_SCH_DATALABEL_VALUE 
-AsNumber                CHART2_HID_SCH_DATALABEL_NUMBER
-AsPercentage            CHART2_HID_SCH_DATALABEL_PERCENT
-ShowLabelText           CHART2_HID_SCH_DATALABEL_TEXT
-ShowLegendIconWithLabel CHART2_HID_SCH_DATALABEL_SYMBOL
-NumberFormat            CHART2_HID_SCH_PB_NUMBERFORMAT
-PercentageFormat        CHART2_HID_SCH_PB_PERCENT_NUMBERFORMAT
-Separator               CHART2_HID_SCH_DATALABEL_SEPARATOR
-Placement               CHART2_HID_SCH_DATALABEL_PLACEMENT
-TextDirection           CHART2_HID_SCH_TEXTDIRECTION
-RotateAngle             CHART2_HID_SCH_DATALABEL_ROTATION_KNOB
-RotateDegrees           CHART2_HID_SCH_DATALABEL_ROTATION_EDIT
+*TabDataSeriesLabels     sym:CHART2_HID_SCH_DATA_DESCR
+ShowValue               sym:CHART2_HID_SCH_DATALABEL_VALUE 
+AsNumber                sym:CHART2_HID_SCH_DATALABEL_NUMBER
+AsPercentage            sym:CHART2_HID_SCH_DATALABEL_PERCENT
+ShowLabelText           sym:CHART2_HID_SCH_DATALABEL_TEXT
+ShowLegendIconWithLabel sym:CHART2_HID_SCH_DATALABEL_SYMBOL
+NumberFormat            sym:CHART2_HID_SCH_PB_NUMBERFORMAT
+PercentageFormat        sym:CHART2_HID_SCH_PB_PERCENT_NUMBERFORMAT
+Separator               sym:CHART2_HID_SCH_DATALABEL_SEPARATOR
+Placement               sym:CHART2_HID_SCH_DATALABEL_PLACEMENT
+TextDirection           sym:CHART2_HID_SCH_TEXTDIRECTION
+RotateAngle             sym:CHART2_HID_SCH_DATALABEL_ROTATION_KNOB
+RotateDegrees           sym:CHART2_HID_SCH_DATALABEL_ROTATION_EDIT
 
 +TabDataPointLabels TabDataSeriesLabels
 
-*TabDataSeriesOptions   chart2.TabPage.908
-PrimaryYaxis            chart2.RadioButton.908.2
-SecondaryYaxis          chart2.RadioButton.908.3
-Gap                     chart2.MetricField.908.4
-Overlap                 chart2.MetricField.908.5
-ConnectionLines         chart2.CheckBox.908.9
-ShowBarsSideBySide      chart2.CheckBox.908.10
-LeaveGap chart2.RadioButton.908.13
-AssumeZero chart2.RadioButton.908.14
-ContinueLine chart2.RadioButton.908.15
-IncludeHiddenCells chart2.CheckBox.908.16
+*TabDataSeriesOptions   sym:chart2.TabPage.908
+PrimaryYaxis            sym:chart2.RadioButton.908.2
+SecondaryYaxis          sym:chart2.RadioButton.908.3
+Gap                     sym:chart2.MetricField.908.4
+Overlap                 sym:chart2.MetricField.908.5
+ConnectionLines         sym:chart2.CheckBox.908.9
+ShowBarsSideBySide      sym:chart2.CheckBox.908.10
+LeaveGap sym:chart2.RadioButton.908.13
+AssumeZero sym:chart2.RadioButton.908.14
+ContinueLine sym:chart2.RadioButton.908.15
+IncludeHiddenCells sym:chart2.CheckBox.908.16
 
-*TabDataSourceName extensions.TabPage.19704
-SourceName extensions.Edit.19704.1
+*TabDataSourceName sym:extensions.TabPage.19704
+SourceName sym:extensions.Edit.19704.1
 
-*TabdBase DBACCESS_HID_DSADMIN_PAGE_DBASE
-CharSet DBACCESS_HID_DSADMIN_CHARSET
-DisplayInactiveRecords DBACCESS_HID_DSADMIN_SHOWDELETED
-Indexes DBACCESS_HID_DSADMIN_DBASE_INDICIES
+*TabdBase sym:DBACCESS_HID_DSADMIN_PAGE_DBASE
+CharSet sym:DBACCESS_HID_DSADMIN_CHARSET
+DisplayInactiveRecords sym:DBACCESS_HID_DSADMIN_SHOWDELETED
+Indexes sym:DBACCESS_HID_DSADMIN_DBASE_INDICIES
 
-*TabDefaultFieldSelection extensions.TabPage.19723
-YesFollowing extensions.RadioButton.19723.1
-NoSelected extensions.RadioButton.19723.2
-Selection extensions.ListBox.19723.3
+*TabDefaultFieldSelection sym:extensions.TabPage.19723
+YesFollowing sym:extensions.RadioButton.19723.1
+NoSelected sym:extensions.RadioButton.19723.2
+Selection sym:extensions.ListBox.19723.3
 
-*TabDialogs basctl.TabPage.14889
-ModuleList BASCTL_HID_BASICIDE_MODULES_TREE
-Edit basctl.PushButton.14889.4
-NewModule basctl.PushButton.14889.6
-NewDialog basctl.PushButton.14889.7
-Delete basctl.PushButton.14889.8
+*TabDialogs sym:basctl.TabPage.14889
+ModuleList sym:BASCTL_HID_BASICIDE_MODULES_TREE
+Edit sym:basctl.PushButton.14889.4
+NewModule sym:basctl.PushButton.14889.6
+NewDialog sym:basctl.PushButton.14889.7
+Delete sym:basctl.PushButton.14889.8
 
 

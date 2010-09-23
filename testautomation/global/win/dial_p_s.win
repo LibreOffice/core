@@ -1,170 +1,170 @@
-*Passwort SFX2_HID_PASSWD
-UserName sfx2.Edit.2316.12
-PasswortName sfx2.Edit.2316.14
-PasswortBestaetigen sfx2.Edit.2316.16
+*Passwort sym:SFX2_HID_PASSWD
+UserName sym:sfx2.Edit.2316.12
+PasswortName sym:sfx2.Edit.2316.14
+PasswortBestaetigen sym:sfx2.Edit.2316.16
 
-*PasswordFileOpen UUI_HID_DLG_PASSWORD_UUI
-PasswortName uui.Edit.14522.2
+*PasswordFileOpen sym:UUI_HID_DLG_PASSWORD_UUI
+PasswortName sym:uui.Edit.14522.2
 
-*PasswordFileSave CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY
-Password CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN
-PasswordConfirm CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN
-PasswordMoreOptions CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE
-PasswordFileReadonly CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY
-PasswordToModify CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY
-PasswordToModifyConfirm CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY
+*PasswordFileSave sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY
+Password sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN
+PasswordConfirm sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN
+PasswordMoreOptions sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE
+PasswordFileReadonly sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY
+PasswordToModify sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY
+PasswordToModifyConfirm sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY
 
-*PasswortEingeben .uno:ProtectTraceChangeMode
-SchutzAufheben SC_HID_CHG_PROTECT
-PasswortEingabe sfx2.Edit.2316.12
-PasswortBestaetigen sfx2.Edit.2316.16
+*PasswortEingeben sym:.uno:ProtectTraceChangeMode
+SchutzAufheben sym:SC_HID_CHG_PROTECT
+PasswortEingabe sym:sfx2.Edit.2316.12
+PasswortBestaetigen sym:sfx2.Edit.2316.16
 
-*PBMOptionen filter.ModalDialog.17409
-Binaer filter.RadioButton.17409.1
-Ascii filter.RadioButton.17409.2
+*PBMOptionen sym:filter.ModalDialog.17409
+Binaer sym:filter.RadioButton.17409.1
+Ascii sym:filter.RadioButton.17409.2
 
-*PfadeAuswaehlen CUI_HID_MULTIPATH
-Pfade CUI_HID_OPTIONS_MULTIPATH_LIST
+*PfadeAuswaehlen sym:CUI_HID_MULTIPATH
+Pfade sym:CUI_HID_OPTIONS_MULTIPATH_LIST
 Hinzufuegen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
 Loeschen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
 
-*PGMOptionen filter.ModalDialog.17410
-Binaer filter.RadioButton.17410.1
-Ascii filter.RadioButton.17410.2
+*PGMOptionen sym:filter.ModalDialog.17410
+Binaer sym:filter.RadioButton.17410.1
+Ascii sym:filter.RadioButton.17410.2
 
-*PICTOPtionen filter.ModalDialog.17400
-Original filter.RadioButton.17400.1
-Groesse filter.RadioButton.17400.2
-Breite filter.MetricField.17400.1
-Hoehe filter.MetricField.17400.2
+*PICTOPtionen sym:filter.ModalDialog.17400
+Original sym:filter.RadioButton.17400.1
+Groesse sym:filter.RadioButton.17400.2
+Breite sym:filter.MetricField.17400.1
+Hoehe sym:filter.MetricField.17400.2
 
-*Pipette .uno:BmpMask svx:DockingWindow:RID_SVXDLG_BMPMASK
-PipetteKnopf SVX_HID_BMPMASK_TBI_PIPETTE
-Farbfeld SVX_HID_BMPMASK_CTL_PIPETTE
-Ersetzen svx.PushButton.10420.1
-Quellfarbe1 svx.CheckBox.10420.1
-Quellfarbe2 svx.CheckBox.10420.4
-Quellfarbe3 svx.CheckBox.10420.3
-Quellfarbe4 svx.CheckBox.10420.2
-Toleranz1 svx.MetricField.10420.2
-Toleranz2 svx.MetricField.10420.4
-Toleranz3 svx.MetricField.10420.1
-Toleranz4 svx.MetricField.10420.3
-ErsetzenDurch1 svx.ListBox.10420.1
-ErsetzenDurch2 svx.ListBox.10420.2
-ErsetzenDurch3 svx.ListBox.10420.3
-ErsetzenDurch4 svx.ListBox.10420.4
-ErsetzenDurch5 svx.ListBox.10420.5
-Tranzparenz svx.CheckBox.10420.5
+*Pipette sym:.uno:BmpMask svx:DockingWindow:RID_SVXDLG_BMPMASK
+PipetteKnopf sym:SVX_HID_BMPMASK_TBI_PIPETTE
+Farbfeld sym:SVX_HID_BMPMASK_CTL_PIPETTE
+Ersetzen sym:svx.PushButton.10420.1
+Quellfarbe1 sym:svx.CheckBox.10420.1
+Quellfarbe2 sym:svx.CheckBox.10420.4
+Quellfarbe3 sym:svx.CheckBox.10420.3
+Quellfarbe4 sym:svx.CheckBox.10420.2
+Toleranz1 sym:svx.MetricField.10420.2
+Toleranz2 sym:svx.MetricField.10420.4
+Toleranz3 sym:svx.MetricField.10420.1
+Toleranz4 sym:svx.MetricField.10420.3
+ErsetzenDurch1 sym:svx.ListBox.10420.1
+ErsetzenDurch2 sym:svx.ListBox.10420.2
+ErsetzenDurch3 sym:svx.ListBox.10420.3
+ErsetzenDurch4 sym:svx.ListBox.10420.4
+ErsetzenDurch5 sym:svx.ListBox.10420.5
+Tranzparenz sym:svx.CheckBox.10420.5
 
-*PivotFilter SC_HID_SC_PIVOTFILTER
-Operator1 sc.ListBox.25637.27
-Operator2 sc.ListBox.25637.28
-FieldName1 sc.ListBox.25637.24
-FieldName2 sc.ListBox.25637.25
-FieldName3 sc.ListBox.25637.26
-Condition1 sc.ListBox.25637.29
-Condition2 sc.ListBox.25637.30
-Condition3 sc.ListBox.25637.31
-Value1 sc.ComboBox.25637.32
-Value2 sc.ComboBox.25637.33
-Value3 sc.ComboBox.25637.34
-More sc.MoreButton.25637.1
-CaseSensitive sc.CheckBox.25637.2
-RegularExpression sc.CheckBox.25637.3
-NoDuplication sc.CheckBox.25637.1
+*PivotFilter sym:SC_HID_SC_PIVOTFILTER
+Operator1 sym:sc.ListBox.25637.27
+Operator2 sym:sc.ListBox.25637.28
+FieldName1 sym:sc.ListBox.25637.24
+FieldName2 sym:sc.ListBox.25637.25
+FieldName3 sym:sc.ListBox.25637.26
+Condition1 sym:sc.ListBox.25637.29
+Condition2 sym:sc.ListBox.25637.30
+Condition3 sym:sc.ListBox.25637.31
+Value1 sym:sc.ComboBox.25637.32
+Value2 sym:sc.ComboBox.25637.33
+Value3 sym:sc.ComboBox.25637.34
+More sym:sc.MoreButton.25637.1
+CaseSensitive sym:sc.CheckBox.25637.2
+RegularExpression sym:sc.CheckBox.25637.3
+NoDuplication sym:sc.CheckBox.25637.1
 
-*PlugInEinfuegen .uno:InsertPlugin
+*PlugInEinfuegen sym:.uno:InsertPlugin
 DateiUrl cui:EDIT:MD_INSERT_OBJECT_PLUGIN:ED_FILEURL
 Durchsuchen cui:PUSHBUTTON:MD_INSERT_OBJECT_PLUGIN:BTN_FILEURL
 Optionen cui:MULTILINEEDIT:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS
 
-*PNGOptionen svtools.ModalDialog.16486
-Kompression svtools.NumericField.16486.1
-Interlaced svtools.CheckBox.16486.1
+*PNGOptionen sym:svtools.ModalDialog.16486
+Kompression sym:svtools.NumericField.16486.1
+Interlaced sym:svtools.CheckBox.16486.1
 
-*PPMOptionen filter.ModalDialog.17411
-Binaer filter.RadioButton.17411.1
-Ascii filter.RadioButton.17411.2
+*PPMOptionen sym:filter.ModalDialog.17411
+Binaer sym:filter.RadioButton.17411.1
+Ascii sym:filter.RadioButton.17411.2
 
-*QuelleAuswaehlen SC_HID_DATAPILOT_TYPE
-AktuelleSelektion sc.RadioButton.25733.4
-AngemeldeteDatenquelle sc.RadioButton.25733.5
-ExterneQuelle sc.RadioButton.25733.6
+*QuelleAuswaehlen sym:SC_HID_DATAPILOT_TYPE
+AktuelleSelektion sym:sc.RadioButton.25733.4
+AngemeldeteDatenquelle sym:sc.RadioButton.25733.5
+ExterneQuelle sym:sc.RadioButton.25733.6
 
-*Rechtschreibung CUI_HID_SPELLCHECK
-Original CUI_HID_SPELLDLG_SETWORD
-Ersetzen CUI_HID_SPLDLG_BUTTON_CHANGE
-AlleErsetzen CUI_HID_SPLDLG_BUTTON_CHANGEALL
-Ignorieren CUI_HID_SPLDLG_BUTTON_IGNORE
-AlleIgnorieren CUI_HID_SPLDLG_BUTTON_IGNOREALL
-Sprache cui.ListBox.10032.36
-RechtschreibungSchliessen CUI_HID_SPLDLG_BUTTON_CLOSE
+*Rechtschreibung sym:CUI_HID_SPELLCHECK
+Original sym:CUI_HID_SPELLDLG_SETWORD
+Ersetzen sym:CUI_HID_SPLDLG_BUTTON_CHANGE
+AlleErsetzen sym:CUI_HID_SPLDLG_BUTTON_CHANGEALL
+Ignorieren sym:CUI_HID_SPLDLG_BUTTON_IGNORE
+AlleIgnorieren sym:CUI_HID_SPLDLG_BUTTON_IGNOREALL
+Sprache sym:cui.ListBox.10032.36
+RechtschreibungSchliessen sym:CUI_HID_SPLDLG_BUTTON_CLOSE
 
-*Redlining SW_HID_REDLINE_ACCEPT
-TabControl SVX_HID_REDLINING_TABCONTROL
-TabListe SVX_HID_REDLINING_VIEW_PAGE
-Liste SVX_HID_REDLINING_VIEW_DG_VIEW
-ListItem SVX_HID_REDLINING_VIEW_DG_VIEW_TABLE
-Akzeptieren SVX_HID_REDLINING_VIEW_PB_ACCEPT
-AlleAkzeptieren SVX_HID_REDLINING_VIEW_PB_ACCEPTALL
-Ablehnen SVX_HID_REDLINING_VIEW_PB_REJECT
-AlleAblehnen SVX_HID_REDLINING_VIEW_PB_REJECTALL
-Undo SVX_HID_REDLINING_VIEW_PB_UNDO
+*Redlining sym:SW_HID_REDLINE_ACCEPT
+TabControl sym:SVX_HID_REDLINING_TABCONTROL
+TabListe sym:SVX_HID_REDLINING_VIEW_PAGE
+Liste sym:SVX_HID_REDLINING_VIEW_DG_VIEW
+ListItem sym:SVX_HID_REDLINING_VIEW_DG_VIEW_TABLE
+Akzeptieren sym:SVX_HID_REDLINING_VIEW_PB_ACCEPT
+AlleAkzeptieren sym:SVX_HID_REDLINING_VIEW_PB_ACCEPTALL
+Ablehnen sym:SVX_HID_REDLINING_VIEW_PB_REJECT
+AlleAblehnen sym:SVX_HID_REDLINING_VIEW_PB_REJECTALL
+Undo sym:SVX_HID_REDLINING_VIEW_PB_UNDO
 
-TabFilter SVX_HID_REDLINING_FILTER_PAGE cui:TABPAGE:SID_REDLIN_FILTER_PAGE
-Datum SVX_HID_REDLINING_FILTER_CB_DATE cui:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_DATE
-DatumListe SVX_HID_REDLINING_FILTER_LB_DATE cui:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_DATE
-Datum1 SVX_HID_REDLINING_FILTER_DF_DATE cui:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE
-Zeit1 SVX_HID_REDLINING_FILTER_TF_DATE cui:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE
-Aktuell1 SVX_HID_REDLINING_FILTER_IB_CLOCK SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK
-Datum2 SVX_HID_REDLINING_FILTER_DF_DATE2 SVX:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE2
-Zeit2 SVX_HID_REDLINING_FILTER_TF_DATE2 SVX:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE2
-Aktuell2 SVX_HID_REDLINING_FILTER_IB_CLOCK2 SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK2
-Autor SVX_HID_REDLINING_FILTER_CB_AUTOR SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_AUTOR
-AutoListe SVX_HID_REDLINING_FILTER_LB_AUTOR SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_AUTOR
-Bereich SVX_HID_REDLINING_FILTER_CB_RANGE SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_RANGE
-BereichText SVX_HID_REDLINING_FILTER_ED_RANGE SVX:EDIT:SID_REDLIN_FILTER_PAGE:ED_RANGE
-Button SVX_HID_REDLINING_FILTER_BTN_REF SVX:PUSHBUTTON:SID_REDLIN_FILTER_PAGE:BTN_REF
-Aktion SVX_HID_REDLINING_FILTER_CB_ACTION SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_ACTION
-Aktionsliste SVX_HID_REDLINING_FILTER_LB_ACTION SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_ACTION
-Comment SVX_HID_REDLINING_FILTER_CB_COMMENT SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_COMMENT
-CommentText SVX_HID_REDLINING_FILTER_ED_COMMENT SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:ED_COMMENT
+TabFilter sym:SVX_HID_REDLINING_FILTER_PAGE cui:TABPAGE:SID_REDLIN_FILTER_PAGE
+Datum sym:SVX_HID_REDLINING_FILTER_CB_DATE cui:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_DATE
+DatumListe sym:SVX_HID_REDLINING_FILTER_LB_DATE cui:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_DATE
+Datum1 sym:SVX_HID_REDLINING_FILTER_DF_DATE cui:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE
+Zeit1 sym:SVX_HID_REDLINING_FILTER_TF_DATE cui:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE
+Aktuell1 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK
+Datum2 sym:SVX_HID_REDLINING_FILTER_DF_DATE2 SVX:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE2
+Zeit2 sym:SVX_HID_REDLINING_FILTER_TF_DATE2 SVX:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE2
+Aktuell2 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK2 SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK2
+Autor sym:SVX_HID_REDLINING_FILTER_CB_AUTOR SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_AUTOR
+AutoListe sym:SVX_HID_REDLINING_FILTER_LB_AUTOR SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_AUTOR
+Bereich sym:SVX_HID_REDLINING_FILTER_CB_RANGE SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_RANGE
+BereichText sym:SVX_HID_REDLINING_FILTER_ED_RANGE SVX:EDIT:SID_REDLIN_FILTER_PAGE:ED_RANGE
+Button sym:SVX_HID_REDLINING_FILTER_BTN_REF SVX:PUSHBUTTON:SID_REDLIN_FILTER_PAGE:BTN_REF
+Aktion sym:SVX_HID_REDLINING_FILTER_CB_ACTION SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_ACTION
+Aktionsliste sym:SVX_HID_REDLINING_FILTER_LB_ACTION SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_ACTION
+Comment sym:SVX_HID_REDLINING_FILTER_CB_COMMENT SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_COMMENT
+CommentText sym:SVX_HID_REDLINING_FILTER_ED_COMMENT SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:ED_COMMENT
 
-*ReiheFuellen .uno:FillSeries
-Oben sc.RadioButton.25623.4
-Unten sc.RadioButton.25623.5
-Rechts sc.RadioButton.25623.3
-Links sc.RadioButton.25623.2
-Arithmetisch sc.RadioButton.25623.12
-Geometrisch sc.RadioButton.25623.13
-Datum sc.RadioButton.25623.14
-AutoAusfuellen sc.RadioButton.25623.15
-Tag sc.RadioButton.25623.22
-WochenTag sc.RadioButton.25623.23
-Monat sc.RadioButton.25623.24
-Jahr sc.RadioButton.25623.25
-StartWert sc.Edit.25623.52
-EndWert sc.Edit.25623.49
-Inkrement sc.Edit.25623.39
+*ReiheFuellen sym:.uno:FillSeries
+Oben sym:sc.RadioButton.25623.4
+Unten sym:sc.RadioButton.25623.5
+Rechts sym:sc.RadioButton.25623.3
+Links sym:sc.RadioButton.25623.2
+Arithmetisch sym:sc.RadioButton.25623.12
+Geometrisch sym:sc.RadioButton.25623.13
+Datum sym:sc.RadioButton.25623.14
+AutoAusfuellen sym:sc.RadioButton.25623.15
+Tag sym:sc.RadioButton.25623.22
+WochenTag sym:sc.RadioButton.25623.23
+Monat sym:sc.RadioButton.25623.24
+Jahr sym:sc.RadioButton.25623.25
+StartWert sym:sc.Edit.25623.52
+EndWert sym:sc.Edit.25623.49
+Inkrement sym:sc.Edit.25623.39
 
 *Schriften STARMATH:MODALDIALOG:RID_FONTDIALOG
 Schriftart STARMATH:COMBOBOX:RID_FONTDIALOG:1
 Fett STARMATH:CHECKBOX:RID_FONTDIALOG:1
 Kursiv STARMATH:CHECKBOX:RID_FONTDIALOG:2
 
-*Schriftarten .uno:ChangeFont
-Variablen starmath.ListBox.20004.1
-Funktionen starmath.ListBox.20004.2
-Zahlen starmath.ListBox.20004.3
-Text starmath.ListBox.20004.4
-Serif starmath.ListBox.20004.5
-Sans starmath.ListBox.20004.6
-Fixed starmath.ListBox.20004.7
-Aendern starmath.MenuButton.20004.1
-Standard starmath.PushButton.20004.2
+*Schriftarten sym:.uno:ChangeFont
+Variablen sym:starmath.ListBox.20004.1
+Funktionen sym:starmath.ListBox.20004.2
+Zahlen sym:starmath.ListBox.20004.3
+Text sym:starmath.ListBox.20004.4
+Serif sym:starmath.ListBox.20004.5
+Sans sym:starmath.ListBox.20004.6
+Fixed sym:starmath.ListBox.20004.7
+Aendern sym:starmath.MenuButton.20004.1
+Standard sym:starmath.PushButton.20004.2
 
-*Schriftgroessen .uno:ChangeFontSize
+*Schriftgroessen sym:.uno:ChangeFontSize
 BasisGroesse STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:1
 TextGroesse STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:4
 Indizes STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:5
@@ -176,194 +176,194 @@ Standard STARMATH:PUSHBUTTON:RID_FONTSIZEDIALOG:1
 *ScriptEinfuegen SW:MODALDIALOG:DLG_JAVAEDIT
 Scripttyp SW:EDIT:DLG_JAVAEDIT:ED_TYPE
 HierDerText SW:MULTILINEEDIT:DLG_JAVAEDIT:ED_EDIT
-ScriptURL sw.RadioButton.21110.19
-ScriptURLText sw.Edit.21110.20
-ScriptURLWaehlen sw.PushButton.21110.21
-ScriptText sw.RadioButton.21110.12
-NaechstesScript sw.ImageButton.21110.16
-VorherigesScript sw.ImageButton.21110.15
+ScriptURL sym:sw.RadioButton.21110.19
+ScriptURLText sym:sw.Edit.21110.20
+ScriptURLWaehlen sym:sw.PushButton.21110.21
+ScriptText sym:sw.RadioButton.21110.12
+NaechstesScript sym:sw.ImageButton.21110.16
+VorherigesScript sym:sw.ImageButton.21110.15
 
-*SeiteEinfuegen .uno:InsertPage
-AutoLayout SD_HID_SD_CTL_NEWFOIL
-Hintergrund SD_HID_SD_CHGFOIL_BACKGROUND
-ObjekteAufDemHintergund SD_HID_SD_CHGFOIL_OBJECTS
+*SeiteEinfuegen sym:.uno:InsertPage
+AutoLayout sym:SD_HID_SD_CTL_NEWFOIL
+Hintergrund sym:SD_HID_SD_CHGFOIL_BACKGROUND
+ObjekteAufDemHintergund sym:SD_HID_SD_CHGFOIL_OBJECTS
 
-*SeitenLayout .uno:ModifyPage
-AutoLayout SD_HID_SD_CHGFOIL_LAYOUT
-Hintergrund SD_HID_SD_CHGFOIL_BACKGROUND
-SeitenName SD_HID_SD_CHGFOIL_NAME
-ObjekteAufDemHintergrund SD_HID_SD_CHGFOIL_OBJECTS
+*SeitenLayout sym:.uno:ModifyPage
+AutoLayout sym:SD_HID_SD_CHGFOIL_LAYOUT
+Hintergrund sym:SD_HID_SD_CHGFOIL_BACKGROUND
+SeitenName sym:SD_HID_SD_CHGFOIL_NAME
+ObjekteAufDemHintergrund sym:SD_HID_SD_CHGFOIL_OBJECTS
 
-*SeitenObjekteEinfuegen SD_HID_DLG_INSERT_PAGES_OBJS
-Verknuepfung sd.CheckBox.938.1
-DeleteUnusedBackgrounds sd.CheckBox.938.2
-InsertObjectsList SD_HID_SD_PAGEOBJSTLB
+*SeitenObjekteEinfuegen sym:SD_HID_DLG_INSERT_PAGES_OBJS
+Verknuepfung sym:sd.CheckBox.938.1
+DeleteUnusedBackgrounds sym:sd.CheckBox.938.2
+InsertObjectsList sym:SD_HID_SD_PAGEOBJSTLB
 
-*Seitenvorlage .uno:PresentationLayout
-Laden sd.PushButton.868.2
-HintergrundseiteAustauschen sd.CheckBox.868.1
-DeleteUnusedBackgrounds sd.CheckBox.868.2
+*Seitenvorlage sym:.uno:PresentationLayout
+Laden sym:sd.PushButton.868.2
+HintergrundseiteAustauschen sym:sd.CheckBox.868.1
+DeleteUnusedBackgrounds sym:sd.CheckBox.868.2
 
-*SeitenvorlageLaden SW_HID_FILEDLG_LOADTEMPLATE
-Bereiche sfx2.ListBox.2053.21
-Beschreibung sfx2.MultiLineEdit.2053.71
-Schluesselworte sfx2.Edit.2053.61
-Thema sfx2.Edit.2053.55
-Titel sfx2.Edit.2053.56
-Vorlagen sfx2.ListBox.2053.52
-Vorschau sfx2.CheckBox.2053.51
-Zusaetze sfx2.MoreButton.2053.32
+*SeitenvorlageLaden sym:SW_HID_FILEDLG_LOADTEMPLATE
+Bereiche sym:sfx2.ListBox.2053.21
+Beschreibung sym:sfx2.MultiLineEdit.2053.71
+Schluesselworte sym:sfx2.Edit.2053.61
+Thema sym:sfx2.Edit.2053.55
+Titel sym:sfx2.Edit.2053.56
+Vorlagen sym:sfx2.ListBox.2053.52
+Vorschau sym:sfx2.CheckBox.2053.51
+Zusaetze sym:sfx2.MoreButton.2053.32
 
-*Serienbrief .uno:MergeDialog
-DatensaetzeAlle sw.RadioButton.22758.2
-DatensaetzeMarkiert sw.RadioButton.22758.3
-DatensaetzeVonBis sw.RadioButton.22758.4
-Von sw.NumericField.22758.5
-Bis sw.NumericField.22758.7
-Drucker sw.RadioButton.22758.11
-Mailing sw.RadioButton.22758.12
-AlsDatei sw.RadioButton.22758.23
-DateiButton sw.PushButton.22758.26
-Pfadeingabe sw.Edit.22758.25
-EinzelneDruckjobserzeugen sw.CheckBox.22758.18
-Adressfeld sw.ListBox.22758.14
-Anhaenge sw.Edit.22758.33
-AnhaengeAuswahl sw.PushButton.22758.34
-Betreff sw.Edit.22758.16
-FormatHTML sw.CheckBox.22758.21
-FormatRTF sw.CheckBox.22758.22
-FormatStarWriter sw.CheckBox.22758.20
-Datenbankfeldliste sw.ListBox.22758.30
+*Serienbrief sym:.uno:MergeDialog
+DatensaetzeAlle sym:sw.RadioButton.22758.2
+DatensaetzeMarkiert sym:sw.RadioButton.22758.3
+DatensaetzeVonBis sym:sw.RadioButton.22758.4
+Von sym:sw.NumericField.22758.5
+Bis sym:sw.NumericField.22758.7
+Drucker sym:sw.RadioButton.22758.11
+Mailing sym:sw.RadioButton.22758.12
+AlsDatei sym:sw.RadioButton.22758.23
+DateiButton sym:sw.PushButton.22758.26
+Pfadeingabe sym:sw.Edit.22758.25
+EinzelneDruckjobserzeugen sym:sw.CheckBox.22758.18
+Adressfeld sym:sw.ListBox.22758.14
+Anhaenge sym:sw.Edit.22758.33
+AnhaengeAuswahl sym:sw.PushButton.22758.34
+Betreff sym:sw.Edit.22758.16
+FormatHTML sym:sw.CheckBox.22758.21
+FormatRTF sym:sw.CheckBox.22758.22
+FormatStarWriter sym:sw.CheckBox.22758.20
+Datenbankfeldliste sym:sw.ListBox.22758.30
 
-*Sonderzeichen .uno:InsertSymbol
-Schrift cui.ListBox.10010.12
-SchriftListe CUI_HID_CHARMAP_CTL_SHOWSET
-Loeschen cui.PushButton.10010.20
-Zeichenanzeige CUI_HID_CHARMAP_CTL_SHOWCHAR
-Textanzeige CUI_HID_CHARMAP_CTL_SHOWTEXT
-Subset cui.ListBox.10010.31
+*Sonderzeichen sym:.uno:InsertSymbol
+Schrift sym:cui.ListBox.10010.12
+SchriftListe sym:CUI_HID_CHARMAP_CTL_SHOWSET
+Loeschen sym:cui.PushButton.10010.20
+Zeichenanzeige sym:CUI_HID_CHARMAP_CTL_SHOWCHAR
+Textanzeige sym:CUI_HID_CHARMAP_CTL_SHOWTEXT
+Subset sym:cui.ListBox.10010.31
 
-*SonstigesJavaabschaltung  cui.ModalDialog.10225
-NichtMehrAnzeigen cui.CheckBox.10225.222
+*SonstigesJavaabschaltung  sym:cui.ModalDialog.10225
+NichtMehrAnzeigen sym:cui.CheckBox.10225.222
 
-*Sortieren .uno:SortDialog
-Schluessel1 sw.CheckBox.21669.5
-Spalte1 sw.NumericField.21669.6
-Schluesseltyp1 sw.ListBox.21669.7
-Aufsteigend1 sw.RadioButton.21669.18
-Absteigend1 sw.RadioButton.21669.19
-Schluessel2 sw.CheckBox.21669.8
-Spalte2 sw.NumericField.21669.9
-Schluesseltyp2 sw.ListBox.21669.10
-Aufsteigend2 sw.RadioButton.21669.29
-Absteigend2 sw.RadioButton.21669.30
-Schluessel3 sw.CheckBox.21669.11
-Spalte3 sw.NumericField.21669.12
-Aufsteigend3 sw.RadioButton.21669.31
-Absteigend3 sw.RadioButton.21669.32
-Schluesseltyp3 sw.ListBox.21669.13
-Spalten sw.RadioButton.21669.15
-Zeilen sw.RadioButton.21669.16
-Tabulator sw.RadioButton.21669.21
-Zeichen sw.RadioButton.21669.22
-Zeichentext sw.Edit.21669.23
-Sonderzeichen sw.PushButton.21669.34
-Sprache sw.ListBox.21669.36
-ExakterVergleich sw.CheckBox.21669.38
+*Sortieren sym:.uno:SortDialog
+Schluessel1 sym:sw.CheckBox.21669.5
+Spalte1 sym:sw.NumericField.21669.6
+Schluesseltyp1 sym:sw.ListBox.21669.7
+Aufsteigend1 sym:sw.RadioButton.21669.18
+Absteigend1 sym:sw.RadioButton.21669.19
+Schluessel2 sym:sw.CheckBox.21669.8
+Spalte2 sym:sw.NumericField.21669.9
+Schluesseltyp2 sym:sw.ListBox.21669.10
+Aufsteigend2 sym:sw.RadioButton.21669.29
+Absteigend2 sym:sw.RadioButton.21669.30
+Schluessel3 sym:sw.CheckBox.21669.11
+Spalte3 sym:sw.NumericField.21669.12
+Aufsteigend3 sym:sw.RadioButton.21669.31
+Absteigend3 sym:sw.RadioButton.21669.32
+Schluesseltyp3 sym:sw.ListBox.21669.13
+Spalten sym:sw.RadioButton.21669.15
+Zeilen sym:sw.RadioButton.21669.16
+Tabulator sym:sw.RadioButton.21669.21
+Zeichen sym:sw.RadioButton.21669.22
+Zeichentext sym:sw.Edit.21669.23
+Sonderzeichen sym:sw.PushButton.21669.34
+Sprache sym:sw.ListBox.21669.36
+ExakterVergleich sym:sw.CheckBox.21669.38
 
-*SpalteAusblenden .uno:HideColumn
+*SpalteAusblenden sym:.uno:HideColumn
 
-*SpalteEinblenden .uno:ShowColumn
+*SpalteEinblenden sym:.uno:ShowColumn
 
-*SpaltenbreiteCalc .uno:ColumnWidth
-Breite sc.MetricField.25708.1 HID_SC_MTRIN_VAL
-Standardwert sc.CheckBox.25708.1 HID_SC_MTRIN_DEF
+*SpaltenbreiteCalc sym:.uno:ColumnWidth
+Breite sym:sc.MetricField.25708.1 HID_SC_MTRIN_VAL
+Standardwert sym:sc.CheckBox.25708.1 HID_SC_MTRIN_DEF
 
-*SpaltenBreite .uno:SetColumnWidth
-Spalte sw.NumericField.21456.2
-Breite sw.MetricField.21456.4
+*SpaltenBreite sym:.uno:SetColumnWidth
+Spalte sym:sw.NumericField.21456.2
+Breite sym:sw.MetricField.21456.4
 
-*Spaltenzuordnung EXTENSIONS_HID_DLG_MAPPING
-Kuerzel extensions.ListBox.15701.6
-Literaturart extensions.ListBox.15701.9
-Autor extensions.ListBox.15701.15
-Titel extensions.ListBox.15701.17
-Jahr extensions.ListBox.15701.21
-ISBN extensions.ListBox.15701.23
-Buchtitel extensions.ListBox.15701.25
-Kapitel extensions.ListBox.15701.27
-Ausgabe extensions.ListBox.15701.29
-Herausgeber extensions.ListBox.15701.31
-Ausgabeart extensions.ListBox.15701.33
-Institution extensions.ListBox.15701.35
-Zeitschrift extensions.ListBox.15701.37
-Monat extensions.ListBox.15701.19
-Notiz extensions.ListBox.15701.39
-Anmerkung extensions.ListBox.15701.13
-Nummer extensions.ListBox.15701.41
-Organisation extensions.ListBox.15701.43
-Seiten extensions.ListBox.15701.45
-Verlag extensions.ListBox.15701.47
-Adresse extensions.ListBox.15701.11
-Hochschule extensions.ListBox.15701.49
-Serie extensions.ListBox.15701.51
-ArtDesReport extensions.ListBox.15701.53
-Band extensions.ListBox.15701.55
-URL extensions.ListBox.15701.57
-Benutzerfeld1 extensions.ListBox.15701.59
-Benutzerfeld2 extensions.ListBox.15701.61
-Benutzerfeld3 extensions.ListBox.15701.63
-Benutzerfeld4 extensions.ListBox.15701.65
-Benutzerfeld5 extensions.ListBox.15701.67
+*Spaltenzuordnung sym:EXTENSIONS_HID_DLG_MAPPING
+Kuerzel sym:extensions.ListBox.15701.6
+Literaturart sym:extensions.ListBox.15701.9
+Autor sym:extensions.ListBox.15701.15
+Titel sym:extensions.ListBox.15701.17
+Jahr sym:extensions.ListBox.15701.21
+ISBN sym:extensions.ListBox.15701.23
+Buchtitel sym:extensions.ListBox.15701.25
+Kapitel sym:extensions.ListBox.15701.27
+Ausgabe sym:extensions.ListBox.15701.29
+Herausgeber sym:extensions.ListBox.15701.31
+Ausgabeart sym:extensions.ListBox.15701.33
+Institution sym:extensions.ListBox.15701.35
+Zeitschrift sym:extensions.ListBox.15701.37
+Monat sym:extensions.ListBox.15701.19
+Notiz sym:extensions.ListBox.15701.39
+Anmerkung sym:extensions.ListBox.15701.13
+Nummer sym:extensions.ListBox.15701.41
+Organisation sym:extensions.ListBox.15701.43
+Seiten sym:extensions.ListBox.15701.45
+Verlag sym:extensions.ListBox.15701.47
+Adresse sym:extensions.ListBox.15701.11
+Hochschule sym:extensions.ListBox.15701.49
+Serie sym:extensions.ListBox.15701.51
+ArtDesReport sym:extensions.ListBox.15701.53
+Band sym:extensions.ListBox.15701.55
+URL sym:extensions.ListBox.15701.57
+Benutzerfeld1 sym:extensions.ListBox.15701.59
+Benutzerfeld2 sym:extensions.ListBox.15701.61
+Benutzerfeld3 sym:extensions.ListBox.15701.63
+Benutzerfeld4 sym:extensions.ListBox.15701.65
+Benutzerfeld5 sym:extensions.ListBox.15701.67
 
-*SpalteOptimaleBreite .uno:SetOptimalColumnWidth
-Extra sc.MetricField.25709.1 HID_SC_MTRIN_VAL
-Standardwert sc.CheckBox.25709.1 HID_SC_MTRIN_DEF
+*SpalteOptimaleBreite sym:.uno:SetOptimalColumnWidth
+Extra sym:sc.MetricField.25709.1 HID_SC_MTRIN_VAL
+Standardwert sym:sc.CheckBox.25709.1 HID_SC_MTRIN_DEF
 
-*Spezialfilter .uno:DataFilterSpecialFilter
-BefindenBereich sc.ListBox.25613.51
-Befinden sc.Edit.25613.52
-GrossKleinschreibung sc.CheckBox.25613.2
-RegulaererAusdruck sc.CheckBox.25613.3
-BereichEnthaeltSpaltenkoepfe sc.CheckBox.25613.4
-KeineDuplikate sc.CheckBox.25613.1
-Persistent sc.CheckBox.25613.12
-FilterergebnisAusgeben sc.CheckBox.25613.5
-AusgebenBereich sc.ListBox.25613.6
-Ausgeben sc.Edit.25613.7
-Zusaetze sc.MoreButton.25613.1
-FilterkriterienMin sc.ImageButton.25613.53
-FilterergebnisMin sc.ImageButton.25613.8
+*Spezialfilter sym:.uno:DataFilterSpecialFilter
+BefindenBereich sym:sc.ListBox.25613.51
+Befinden sym:sc.Edit.25613.52
+GrossKleinschreibung sym:sc.CheckBox.25613.2
+RegulaererAusdruck sym:sc.CheckBox.25613.3
+BereichEnthaeltSpaltenkoepfe sym:sc.CheckBox.25613.4
+KeineDuplikate sym:sc.CheckBox.25613.1
+Persistent sym:sc.CheckBox.25613.12
+FilterergebnisAusgeben sym:sc.CheckBox.25613.5
+AusgebenBereich sym:sc.ListBox.25613.6
+Ausgeben sym:sc.Edit.25613.7
+Zusaetze sym:sc.MoreButton.25613.1
+FilterkriterienMin sym:sc.ImageButton.25613.53
+FilterergebnisMin sym:sc.ImageButton.25613.8
 
-*StandardFilter .uno:DataFilterStandardFilter
-FeldName1 sc.ListBox.25612.24
-Feldname2 sc.ListBox.25612.25
-Feldname3 sc.ListBox.25612.26
-Feldname4 sc.ListBox.25612.38
-Bedingung1 sc.ListBox.25612.29
-Bedingung2 sc.ListBox.25612.30
-Bedingung3 sc.ListBox.25612.31
-Bedingung4 sc.ListBox.25612.39
-Wert1 sc.ComboBox.25612.32
-Wert2 sc.ComboBox.25612.33
-Wert3 sc.ComboBox.25612.34
-Wert4 sc.ComboBox.25612.40
-Verknuepfung1 sc.ListBox.25612.27
-Verknuepfung2 sc.ListBox.25612.28
-Verknuepfung3 sc.ListBox.25612.37
-Verknuepfung4 sc.ListBox.25612.42
-Zusaetze sc.MoreButton.25612.1
-GrossKleinschreibung sc.CheckBox.25612.2
-BereicheEnthaeltSpaltenkoepfe sc.CheckBox.25612.4
-RegulaererAusdruck sc.CheckBox.25612.3
-KeineDuplikate sc.CheckBox.25612.1
-FilterergebnisNach sc.CheckBox.25612.5
-AusgebenBereich sc.ListBox.25612.6
-Ausgeben sc.Edit.25612.7
-DialogMin sc.ImageButton.25612.8
-Persistent sc.CheckBox.25612.12
+*StandardFilter sym:.uno:DataFilterStandardFilter
+FeldName1 sym:sc.ListBox.25612.24
+Feldname2 sym:sc.ListBox.25612.25
+Feldname3 sym:sc.ListBox.25612.26
+Feldname4 sym:sc.ListBox.25612.38
+Bedingung1 sym:sc.ListBox.25612.29
+Bedingung2 sym:sc.ListBox.25612.30
+Bedingung3 sym:sc.ListBox.25612.31
+Bedingung4 sym:sc.ListBox.25612.39
+Wert1 sym:sc.ComboBox.25612.32
+Wert2 sym:sc.ComboBox.25612.33
+Wert3 sym:sc.ComboBox.25612.34
+Wert4 sym:sc.ComboBox.25612.40
+Verknuepfung1 sym:sc.ListBox.25612.27
+Verknuepfung2 sym:sc.ListBox.25612.28
+Verknuepfung3 sym:sc.ListBox.25612.37
+Verknuepfung4 sym:sc.ListBox.25612.42
+Zusaetze sym:sc.MoreButton.25612.1
+GrossKleinschreibung sym:sc.CheckBox.25612.2
+BereicheEnthaeltSpaltenkoepfe sym:sc.CheckBox.25612.4
+RegulaererAusdruck sym:sc.CheckBox.25612.3
+KeineDuplikate sym:sc.CheckBox.25612.1
+FilterergebnisNach sym:sc.CheckBox.25612.5
+AusgebenBereich sym:sc.ListBox.25612.6
+Ausgeben sym:sc.Edit.25612.7
+DialogMin sym:sc.ImageButton.25612.8
+Persistent sym:sc.CheckBox.25612.12
 
-*Statusbar FWK_HID_STATUSBAR
+*Statusbar sym:FWK_HID_STATUSBAR
 
 '*Standardbrowser extensions:ModalDialog:MD_PROTCHK_DIALOG
 'StarOfficeVerwenden extensions:RadioButton:MD_PROTCHK_DIALOG:RB_STAROFFICE
@@ -374,23 +374,23 @@ Persistent sc.CheckBox.25612.12
 
 +Stylist Gestalter
 
-*SVMOptionen svtools.ModalDialog.16372
-Original svtools.RadioButton.16372.1
-Groesse svtools.RadioButton.16372.2
-Breite svtools.MetricField.16372.1
-Hoehe svtools.MetricField.16372.2
+*SVMOptionen sym:svtools.ModalDialog.16372
+Original sym:svtools.RadioButton.16372.1
+Groesse sym:svtools.RadioButton.16372.2
+Breite sym:svtools.MetricField.16372.1
+Hoehe sym:svtools.MetricField.16372.2
 
-*SymboleMath starmath.ModalDialog.20008
-Symbolset starmath.ListBox.20008.1
-Bearbeiten starmath.PushButton.20008.1
-Uebernehmen starmath.PushButton.20008.2
-Symbols STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW
+*SymboleMath sym:starmath.ModalDialog.20008
+Symbolset sym:starmath.ListBox.20008.1
+Bearbeiten sym:starmath.PushButton.20008.1
+Uebernehmen sym:starmath.PushButton.20008.2
+Symbols sym:STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW
 
-*SzenarioAnlegen SC:MODALDIALOG:RID_SCDLG_NEWSCENARIO .uno:ScenarioManager
-SzenarioName sc.Edit.25643.11
-Kommentar sc.MultiLineEdit.25643.13
+*SzenarioAnlegen SC:MODALDIALOG:RID_SCDLG_NEWSCENARIO sym:.uno:ScenarioManager
+SzenarioName sym:sc.Edit.25643.11
+Kommentar sym:sc.MultiLineEdit.25643.13
 RahmenAnzeigen SC:CHECKBOX:RID_SCDLG_NEWSCENARIO:CB_SHOWFRAME
 Rahmenfarbe SC:LISTBOX:RID_SCDLG_NEWSCENARIO:LB_COLOR
 Zurueckkopieren SC:CHECKBOX:RID_SCDLG_NEWSCENARIO:CB_TWOWAY
 GanzeTabelle SC:CHECKBOX:RID_SCDLG_NEWSCENARIO:CB_COPYALL
-PreventChanges sc.CheckBox.25643.28
+PreventChanges sym:sc.CheckBox.25643.28

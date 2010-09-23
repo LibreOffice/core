@@ -1,115 +1,115 @@
 ' **** general Printersettings-Dialog ( File/Printer settings )
 ' ****
-*DruckerEinrichten svtools.ModalDialog.16511
-Drucker svtools.ListBox.16511.2
-Eigenschaften svtools.PushButton.16511.3
+*DruckerEinrichten sym:svtools.ModalDialog.16511
+Drucker sym:svtools.ListBox.16511.2
+Eigenschaften sym:svtools.PushButton.16511.3
 
 '************************************************************************
 '************ all file-dialogs
 '************
-*GeneralFileDialog SVT_HID_EXPLORERDLG_FILE
-UebergeordneterOrdner fpicker.MenuButton.16374.14
-NeuerOrdner fpicker.ImageButton.16374.11
-Standard fpicker.MenuButton.16374.15
-DateiAuswahl SFX2_HID_FILEDLG_STANDARD
-Dateiname SFX2_HID_FILEDLG_AUTOCOMPLETEBOX
-Dateityp fpicker.ListBox.16374.35
-Oeffnen fpicker.PushButton.16374.16
-Auswaehlen fpicker.PushButton.16374.16
+*GeneralFileDialog sym:SVT_HID_EXPLORERDLG_FILE
+UebergeordneterOrdner sym:fpicker.MenuButton.16374.14
+NeuerOrdner sym:fpicker.ImageButton.16374.11
+Standard sym:fpicker.MenuButton.16374.15
+DateiAuswahl sym:SFX2_HID_FILEDLG_STANDARD
+Dateiname sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp sym:fpicker.ListBox.16374.35
+Oeffnen sym:fpicker.PushButton.16374.16
+Auswaehlen sym:fpicker.PushButton.16374.16
 
 +GrafikEinfuegenDlg GeneralFileDialog
-Pfad SFX2_HID_FILEDLG_AUTOCOMPLETEBOX SFX2_HID_FILEDLG_PATH_FILENAME
-Stil SVT_HID_FILEOPEN_IMAGE_TEMPLATE
-Verknuepfen SFX2_HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
-Vorschau SFX2_HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
-Link SFX2_HID_FILEDLG_LINK_CB
-Preview SFX2_HID_FILEDLG_PREVIEW_CB
+Pfad sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX sym:SFX2_HID_FILEDLG_PATH_FILENAME
+Stil sym:SVT_HID_FILEOPEN_IMAGE_TEMPLATE
+Verknuepfen sym:SFX2_HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
+Vorschau sym:SFX2_HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
+Link sym:SFX2_HID_FILEDLG_LINK_CB
+Preview sym:SFX2_HID_FILEDLG_PREVIEW_CB
 
 +OeffnenDlg GeneralFileDialog
-Pfad SFX2_HID_FILEDLG_AUTOCOMPLETEBOX SFX2_HID_FILEDLG_PATH_FILENAME
-Version SVT_HID_FILEOPEN_VERSION
-NurLesen SVT_HID_FILEOPEN_READONLY
-Einfuegen SFX2_HID_FILEDLG_INSERT_BTN
-Play SVT_HID_FILESAVE_DOPLAY
+Pfad sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX sym:SFX2_HID_FILEDLG_PATH_FILENAME
+Version sym:SVT_HID_FILEOPEN_VERSION
+NurLesen sym:SVT_HID_FILEOPEN_READONLY
+Einfuegen sym:SFX2_HID_FILEDLG_INSERT_BTN
+Play sym:SVT_HID_FILESAVE_DOPLAY
 
 +KonkordanzdateiOeffnen GeneralFileDialog
 
 +VorlagenLaden GeneralFileDialog
-Text SW_HID_LTEMPL_TEXT
-Rahmen SW_HID_LTEMPL_FRAME
-Seite SW_HID_LTEMPL_PAGE
-Numerierung SW_HID_LTEMPL_NUMBERING
-Ueberschreiben SW_HID_LTEMPL_OVERRIDE
+Text sym:SW_HID_LTEMPL_TEXT
+Rahmen sym:SW_HID_LTEMPL_FRAME
+Seite sym:SW_HID_LTEMPL_PAGE
+Numerierung sym:SW_HID_LTEMPL_NUMBERING
+Ueberschreiben sym:SW_HID_LTEMPL_OVERRIDE
 ' Vorlagen HID_LTEMPL_TEMPLATES
 
-*SpeichernDlg SVT_HID_FILESAVE_DIALOG
-Dateiname SVT_HID_FILESAVE_FILEURL
-Vorlage SVT_HID_FILESAVE_TEMPLATE
-Dateityp SVT_HID_FILESAVE_FILETYPE
-Speichern SVT_HID_FILESAVE_DOSAVE
-NeuerOrdner SVT_HID_FILESAVE_CREATEDIRECTORY
-Standard SVT_HID_FILESAVE_DEFAULTDIRECTORY
-DateiAuswahl SVT_HID_FILESAVE_FILEVIEW
-Passwort SVT_HID_FILESAVE_SAVEWITHPASSWORD
-AutomatischeDateinamenserweiterung SVT_HID_FILESAVE_AUTOEXTENSION
-UebergeordneterOrdner SVT_HID_FILESAVE_LEVELUP
+*SpeichernDlg sym:SVT_HID_FILESAVE_DIALOG
+Dateiname sym:SVT_HID_FILESAVE_FILEURL
+Vorlage sym:SVT_HID_FILESAVE_TEMPLATE
+Dateityp sym:SVT_HID_FILESAVE_FILETYPE
+Speichern sym:SVT_HID_FILESAVE_DOSAVE
+NeuerOrdner sym:SVT_HID_FILESAVE_CREATEDIRECTORY
+Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
+DateiAuswahl sym:SVT_HID_FILESAVE_FILEVIEW
+Passwort sym:SVT_HID_FILESAVE_SAVEWITHPASSWORD
+AutomatischeDateinamenserweiterung sym:SVT_HID_FILESAVE_AUTOEXTENSION
+UebergeordneterOrdner sym:SVT_HID_FILESAVE_LEVELUP
 
 +ExportierenDlg SpeichernDlg
-Selektion SVT_HID_FILESAVE_SELECTION
+Selektion sym:SVT_HID_FILESAVE_SELECTION
 
 ' **** Hyperlink-File-Dialog
 ' ****
-*HyperlinkAuswahlDlg SW_HID_FILEDLG_CHARDLG
-UebergeordneterOrdner fpicker.MenuButton.16374.14
-NeuerOrdner fpicker.ImageButton.16374.11
-Standard fpicker.MenuButton.16374.15
-DateiAuswahl SFX2_HID_FILEDLG_STANDARD
-Dateiname SFX2_HID_FILEDLG_AUTOCOMPLETEBOX
-Dateityp fpicker.ListBox.16374.35
-Oeffnen fpicker.PushButton.16374.16
-NurLesen fpicker.CheckBox.16374.40
+*HyperlinkAuswahlDlg sym:SW_HID_FILEDLG_CHARDLG
+UebergeordneterOrdner sym:fpicker.MenuButton.16374.14
+NeuerOrdner sym:fpicker.ImageButton.16374.11
+Standard sym:fpicker.MenuButton.16374.15
+DateiAuswahl sym:SFX2_HID_FILEDLG_STANDARD
+Dateiname sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp sym:fpicker.ListBox.16374.35
+Oeffnen sym:fpicker.PushButton.16374.16
+NurLesen sym:fpicker.CheckBox.16374.40
 
 ' **** general Color-Dialog ( under tools / options / staroffice / color / edit )
 ' ****
-*FarbeDlg svtools.ModalDialog.996
+*FarbeDlg sym:svtools.ModalDialog.996
 'Grundfarben
 'BenutzerdefinierteFarben
-Cyan svtools.MetricField.996.7
-Magenta svtools.MetricField.996.8
-Yellow svtools.MetricField.996.9
-Key svtools.MetricField.996.10
-Rot svtools.NumericField.996.1
-Gruen svtools.NumericField.996.2
-Blau svtools.NumericField.996.3
-Farbton svtools.NumericField.996.4
-Saettigung svtools.NumericField.996.5
-Hell svtools.NumericField.996.6
-Links svtools.PushButton.996.1
-Rechts svtools.PushButton.996.2
+Cyan sym:svtools.MetricField.996.7
+Magenta sym:svtools.MetricField.996.8
+Yellow sym:svtools.MetricField.996.9
+Key sym:svtools.MetricField.996.10
+Rot sym:svtools.NumericField.996.1
+Gruen sym:svtools.NumericField.996.2
+Blau sym:svtools.NumericField.996.3
+Farbton sym:svtools.NumericField.996.4
+Saettigung sym:svtools.NumericField.996.5
+Hell sym:svtools.NumericField.996.6
+Links sym:svtools.PushButton.996.1
+Rechts sym:svtools.PushButton.996.2
 
-*SendMasterDocument SVT_HID_FILESAVE_DIALOG
-Dateiname SW_HID_SEND_MASTER_CTRL_EDIT_FILEURL
-Vorlage SW_HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE
-Filter SW_HID_SEND_MASTER_CTRL_LISTBOX_FILTER
-AutomatischeDateinamenserweiterung SW_HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION
-Speichern SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_OK
-Cancel SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL
-DateiAuswahl SW_HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW
-UebergeordneterOrdner SVT_HID_FILESAVE_LEVELUP
-NeuerOrdner SVT_HID_FILESAVE_CREATEDIRECTORY
-Standard SVT_HID_FILESAVE_DEFAULTDIRECTORY
+*SendMasterDocument sym:SVT_HID_FILESAVE_DIALOG
+Dateiname sym:SW_HID_SEND_MASTER_CTRL_EDIT_FILEURL
+Vorlage sym:SW_HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE
+Filter sym:SW_HID_SEND_MASTER_CTRL_LISTBOX_FILTER
+AutomatischeDateinamenserweiterung sym:SW_HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION
+Speichern sym:SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_OK
+Cancel sym:SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL
+DateiAuswahl sym:SW_HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW
+UebergeordneterOrdner sym:SVT_HID_FILESAVE_LEVELUP
+NeuerOrdner sym:SVT_HID_FILESAVE_CREATEDIRECTORY
+Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
 
-*SendHTMLDocument SVT_HID_FILESAVE_DIALOG
-Dateiname SW_HID_SEND_HTML_CTRL_EDIT_FILEURL
-Vorlage SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE
-Filter SW_HID_SEND_HTML_CTRL_LISTBOX_FILTER
-AutomatischeDateinamenserweiterung SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION
-Speichern SW_HID_SEND_HTML_CTRL_PUSHBUTTON_OK
-Cancel SW_HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL
-DateiAuswahl SW_HID_SEND_HTML_CTRL_CONTROL_FILEVIEW
-UebergeordneterOrdner SVT_HID_FILESAVE_LEVELUP
-NeuerOrdner SVT_HID_FILESAVE_CREATEDIRECTORY
-Standard SVT_HID_FILESAVE_DEFAULTDIRECTORY
+*SendHTMLDocument sym:SVT_HID_FILESAVE_DIALOG
+Dateiname sym:SW_HID_SEND_HTML_CTRL_EDIT_FILEURL
+Vorlage sym:SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE
+Filter sym:SW_HID_SEND_HTML_CTRL_LISTBOX_FILTER
+AutomatischeDateinamenserweiterung sym:SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION
+Speichern sym:SW_HID_SEND_HTML_CTRL_PUSHBUTTON_OK
+Cancel sym:SW_HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL
+DateiAuswahl sym:SW_HID_SEND_HTML_CTRL_CONTROL_FILEVIEW
+UebergeordneterOrdner sym:SVT_HID_FILESAVE_LEVELUP
+NeuerOrdner sym:SVT_HID_FILESAVE_CREATEDIRECTORY
+Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
 
 
 ' **** Messageboxes amd Lastversion-message set to the active operator
@@ -119,12 +119,12 @@ Standard SVT_HID_FILESAVE_DEFAULTDIRECTORY
 
 ' **** new folder-dialog
 ' ****
-*NeuerOrdner fpicker.ModalDialog.16375
-OrdnerName fpicker.Edit.16375.11
+*NeuerOrdner sym:fpicker.ModalDialog.16375
+OrdnerName sym:fpicker.Edit.16375.11
 
 ' **** Translationwidow fuer das Ubersetzungstooling
 ' ****
-*TranslationWindow svtools.WorkWindow.12348 svtools:FloatingWindow:TT_INLINE_TRANSLATION
+*TranslationWindow sym:svtools.WorkWindow.12348 svtools:FloatingWindow:TT_INLINE_TRANSLATION
 
 ' **** specal longnames for bas test
 ' **** author marc.schwanz@sun.com

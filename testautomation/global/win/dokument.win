@@ -1,45 +1,43 @@
 ' german Part
 
-*DokumentWriter SW_HID_EDIT_WIN
-*DokumentWriterWeb SW_HID_EDIT_WIN
-*DokumentCalc SC_HID_SC_WIN_GRIDWIN
-*DokumentDraw SD_HID_SDGRAPHICVIEWSHELL SD_HID_SD_WIN_DOCUMENT
-*DokumentImpress SD_HID_SDDRAWVIEWSHELL SD_HID_SD_WIN_DOCUMENT
-*DokumentImpressDiatisch SD_IF_SDSLIDEVIEWSHELL
-*DokumentImpressGliederungsmodus SD_HID_SDOUTLINEVIEWSHELL
-*DokumentImpressNotizen .uno:NotesMode
-*DokumentImpressHandzettel .uno:HandoutMode
-*DokumentChart CHART2_HID_SCH_WIN_DOCUMENT
-*DokumentGlobalDoc SW_HID_EDIT_WIN
+*DokumentWriter sym:SW_HID_EDIT_WIN
+*DokumentWriterWeb sym:SW_HID_EDIT_WIN
+*DokumentCalc sym:SC_HID_SC_WIN_GRIDWIN
+*DokumentDraw sym:SD_HID_SDGRAPHICVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
+*DokumentImpress sym:SD_HID_SDDRAWVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
+*DokumentImpressGliederungsmodus sym:SD_HID_SDOUTLINEVIEWSHELL
+*DokumentImpressNotizen sym:.uno:NotesMode
+*DokumentImpressHandzettel sym:.uno:HandoutMode
+*DokumentChart sym:CHART2_HID_SCH_WIN_DOCUMENT
+*DokumentGlobalDoc sym:SW_HID_EDIT_WIN
 
-*DokumentMath STARMATH_HID_SMA_WIN_DOCUMENT
-*DokumentImageMap SVX_HID_IMAPDLG_GRAPHWND
-*DokumentPraesentation SD_HID_SD_WIN_PRESENTATION
+*DokumentMath sym:STARMATH_HID_SMA_WIN_DOCUMENT
+*DokumentImageMap sym:SVX_HID_IMAPDLG_GRAPHWND
+*DokumentPraesentation sym:SD_HID_SD_WIN_PRESENTATION
 
-*KommandosMath STARMATH_HID_SMA_COMMAND_WIN
-Kommandos STARMATH_HID_SMA_COMMAND_WIN_EDIT
+*KommandosMath sym:STARMATH_HID_SMA_COMMAND_WIN
+Kommandos sym:STARMATH_HID_SMA_COMMAND_WIN_EDIT
 
 *DokSeitenansichtWriter HID_PagePreview
 *DokSeitenansichtCalc HID_SC_Win_Preview
 
 
 ' english Part
-*DocumentWriter SW_HID_EDIT_WIN
-*DocumentWriterWeb SW_HID_EDIT_WIN
-*DocumentHTMLSourceView SW_HID_SOURCE_EDITWIN
-*DocumentCalc SC_HID_SC_WIN_GRIDWIN
-*DocumentDraw SD_HID_SDGRAPHICVIEWSHELL SD_HID_SD_WIN_DOCUMENT
-*DocumentImpress SD_HID_SDDRAWVIEWSHELL SD_HID_SD_WIN_DOCUMENT
-*DocumentImpressSlideView SD_IF_SDSLIDEVIEWSHELL
-*DocumentImpressOutlineView SD_HID_SDOUTLINEVIEWSHELL
-*DocumentImpressNotesView .uno:NotesMode
-*DocumentImpressHandoutView .uno:HandoutMode
-*DocumentChart CHART2_HID_SCH_WIN_DOCUMENT
-*DocumentMasterDoc SW_HID_EDIT_WIN
-*DocumentMath STARMATH_HID_SMA_WIN_DOCUMENT
-*DocumentImageMap SVX_HID_IMAPDLG_GRAPHWND
-*DocumentPresentation SD_HID_SD_WIN_PRESENTATION
-*DocumentBackground FWK_HID_BACKINGWINDOW
+*DocumentWriter sym:SW_HID_EDIT_WIN
+*DocumentWriterWeb sym:SW_HID_EDIT_WIN
+*DocumentHTMLSourceView sym:SW_HID_SOURCE_EDITWIN
+*DocumentCalc sym:SC_HID_SC_WIN_GRIDWIN
+*DocumentDraw sym:SD_HID_SDGRAPHICVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
+*DocumentImpress sym:SD_HID_SDDRAWVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
+*DocumentImpressOutlineView sym:SD_HID_SDOUTLINEVIEWSHELL
+*DocumentImpressNotesView sym:.uno:NotesMode
+*DocumentImpressHandoutView sym:.uno:HandoutMode
+*DocumentChart sym:CHART2_HID_SCH_WIN_DOCUMENT
+*DocumentMasterDoc sym:SW_HID_EDIT_WIN
+*DocumentMath sym:STARMATH_HID_SMA_WIN_DOCUMENT
+*DocumentImageMap sym:SVX_HID_IMAPDLG_GRAPHWND
+*DocumentPresentation sym:SD_HID_SD_WIN_PRESENTATION
+*DocumentBackground sym:FWK_HID_BACKINGWINDOW
 TextDocument .HelpId:StartCenter:WriterButton
 Spreadsheet .HelpId:StartCenter:CalcButton
 Presentation .HelpId:StartCenter:ImpressButton
@@ -52,24 +50,24 @@ Extensions .HelpId:StartCenter:Extensions
 Register .HelpId:StartCenter:Register
 Info .HelpId:StartCenter:Info
 
-*CommandsMath STARMATH_HID_SMA_COMMAND_WIN
-Commands STARMATH_HID_SMA_COMMAND_WIN_EDIT
+*CommandsMath sym:STARMATH_HID_SMA_COMMAND_WIN
+Commands sym:STARMATH_HID_SMA_COMMAND_WIN_EDIT
 
 *DocPageViewWriter HID_PagePreview
 *DocPageViewCalc HID_SC_Win_Preview
 
 ' to access the buttons in the lower left corner
-*DocumentDrawImpress SD_HID_SDGRAPHICVIEWSHELL
-ViewSlideButton SD_HID_SD_BTN_PAGE
-ViewLayerButton SD_HID_SD_BTN_LAYER
-ViewMasterButton SD_HID_SD_BTN_MASTERPAGE
-TabBar SD_HID_SD_TABBAR_PAGES
-LayerTabBar SD_HID_SD_TABBAR_LAYERS
+*DocumentDrawImpress sym:SD_HID_SDGRAPHICVIEWSHELL
+ViewSlideButton sym:SD_HID_SD_BTN_PAGE
+ViewLayerButton sym:SD_HID_SD_BTN_LAYER
+ViewMasterButton sym:SD_HID_SD_BTN_MASTERPAGE
+TabBar sym:SD_HID_SD_TABBAR_PAGES
+LayerTabBar sym:SD_HID_SD_TABBAR_LAYERS
 ' these are the buttons on the right side
-ButtonDrawingView   SD_HID_SD_BTN_DRAW
-ButtonOutlineView   SD_HID_SD_BTN_OUTLINE
-ButtonSlideView   SD_HID_SD_BTN_SLIDE
-ButtonNotesView   SD_HID_SD_BTN_NOTES
-ButtonHandoutView   SD_HID_SD_BTN_HANDOUT
-ButtonStartSlideShow   SD_HID_SD_BTN_PRESENTATION
+ButtonDrawingView   sym:SD_HID_SD_BTN_DRAW
+ButtonOutlineView   sym:SD_HID_SD_BTN_OUTLINE
+ButtonSlideView   sym:SD_HID_SD_BTN_SLIDE
+ButtonNotesView   sym:SD_HID_SD_BTN_NOTES
+ButtonHandoutView   sym:SD_HID_SD_BTN_HANDOUT
+ButtonStartSlideShow   sym:SD_HID_SD_BTN_PRESENTATION
 
