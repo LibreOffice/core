@@ -20,7 +20,7 @@
     <value>pdf_Portable_Document_Format</value>
    </prop>
    <prop oor:name="UIName">
-    <value xml:lang="x-default">PDF - Portable Document Format</value>
+    <value xml:lang="x-default">PDF - Portable Document Format (Draw)</value>
    </prop>
    <prop oor:name="TemplateName"/>
    <prop oor:name="UIComponent"/>
@@ -49,7 +49,7 @@
     <value>pdf_Portable_Document_Format</value>
    </prop>
    <prop oor:name="UIName">
-    <value xml:lang="x-default">PDF - Portable Document Format</value>
+    <value xml:lang="x-default">PDF - Portable Document Format (Impress)</value>
    </prop>
    <prop oor:name="TemplateName"/>
    <prop oor:name="UIComponent"/>
@@ -78,7 +78,7 @@
     <value>pdf_Portable_Document_Format</value>
    </prop>
    <prop oor:name="UIName">
-    <value xml:lang="x-default">PDF - Portable Document Format</value>
+    <value xml:lang="x-default">PDF - Portable Document Format (Writer)</value>
    </prop>
    <prop oor:name="TemplateName"/>
    <prop oor:name="UIComponent"/>
