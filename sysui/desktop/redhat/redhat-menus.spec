@@ -5,7 +5,7 @@ Summary: %productname desktop integration
 Name: %pkgprefix-redhat-menus
 Group: Office
 License: LGPL
-Vendor: LibreOffice
+Vendor: The Document Foundation
 AutoReqProv: no
 BuildArch: noarch
 Requires: redhat-release

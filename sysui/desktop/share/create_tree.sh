@@ -94,15 +94,15 @@ mkdir -p ${DESTDIR}/usr/bin
 
 office_root=/opt/${PREFIX}
 
-ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/soffice
-
 cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
+ln -sf /usr/bin/${PREFIX} ${DESTDIR}/usr/bin/libreoffice
+
 mkdir -p ${DESTDIR}/usr/share/mime/packages
-cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/
-chmod 0644 ${DESTDIR}/usr/share/mime/packages/openoffice.org.xml
+cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/libreoffice.xml
+chmod 0644 ${DESTDIR}/usr/share/mime/packages/libreoffice.xml
 
 mkdir -p ${DESTDIR}/usr/share/applications
 for i in `cat launcherlist`; do
