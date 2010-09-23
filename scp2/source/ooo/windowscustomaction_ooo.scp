@@ -487,15 +487,6 @@ WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
 	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
 End
 
-WindowsCustomAction gid_Customaction_ShowSurvey
-	Name = "ShowSurveyAfterUninstall";
-	Typ = "65";
-	Source = "relnotes.dll";
-	Target = "ShowSurveyAfter";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and Not UPGRADINGPRODUCTCODE", "end");
-End
-
 WindowsCustomAction gid_Customaction_LookForRegisteredExtensions
 	Name = "LookForRegisteredExtensions";
 	Typ = "65";
