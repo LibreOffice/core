@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=writerfilter
 TARGET=test-od_sl
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
