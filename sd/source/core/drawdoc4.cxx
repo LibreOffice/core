@@ -181,6 +181,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineEndWidthItem(300));
     rISet.Put(XLineStartCenterItem());
     rISet.Put(XLineEndCenterItem());
+    rISet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
 
                     // Fuellattribute (Extended OutputDevice)
     rISet.Put(XFillStyleItem(XFILL_SOLID));

@@ -522,6 +522,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(300));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundObjectsSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
+        rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
     }
 
     /**************************************************************************
