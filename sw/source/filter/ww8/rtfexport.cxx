@@ -342,11 +342,31 @@ void RtfExport::DoComboBox(const rtl::OUString& /*rName*/,
     // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
 
-void RtfExport::DoFormText(const SwInputField* /*pFld*/)
+void RtfExport::DoFormText(const SwInputField* pFld )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    // this is hanled in RtfAttributeOutput::OutputFlyFrame_Impl
+    ::rtl::OUString sResult = pFld->ExpandField(pDoc->IsClipBoard());
+    ::rtl::OUString sHelp( pFld->GetHelp() );
+    ::rtl::OUString sName = pFld->GetPar2();
+    ::rtl::OUString sStatus = pFld->GetToolTip();
+    m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST "{ FORMTEXT }");
+    m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD " {" OOO_STRING_SVTOOLS_RTF_FFTYPE "0" );
+    if( sHelp.getLength() )
+        m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNHELP );
+    if( sStatus.getLength() )
+        m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNSTAT );
+    m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0" );
+
+    if( sName.getLength() )
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append( OutString( sName, eDefaultEncoding )).append( "}" );
+    if( sHelp.getLength() )
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append( OutString( sHelp, eDefaultEncoding )).append( "}" );
+    m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append( OutString( sResult, eDefaultEncoding )).append( "}" );
+    if( sStatus.getLength() )
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append( OutString( sStatus, eDefaultEncoding )).append( "}");
+    m_pAttrOutput->RunText().append( "}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " " );
+    m_pAttrOutput->RunText().append( OutString( sResult, eDefaultEncoding )).append( "}}" );
 }
 
 ULONG RtfExport::ReplaceCr( BYTE )
