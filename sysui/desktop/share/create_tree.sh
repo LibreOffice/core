@@ -99,6 +99,7 @@ cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
 ln -sf /usr/bin/${PREFIX} ${DESTDIR}/usr/bin/libreoffice
+ln -sf /usr/bin/${PREFIX}-printeradmin ${DESTDIR}/usr/bin/libreoffice-printeradmin
 
 mkdir -p ${DESTDIR}/usr/share/mime/packages
 cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/libreoffice.xml
