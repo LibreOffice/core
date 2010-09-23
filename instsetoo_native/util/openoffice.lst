@@ -25,7 +25,7 @@ Globals
             POOLPRODUCT 1
             REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
-			PROGRESSBARCOLOR 14,133,205
+			PROGRESSBARCOLOR 126,170,23
 			PROGRESSSIZE 320,7
 			PROGRESSPOSITION 185,206
 			PROGRESSFRAMECOLOR 207,208,211
