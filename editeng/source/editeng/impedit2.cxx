@@ -2012,13 +2012,13 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
         ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.GetBuffer()), aText.Len(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
-        long nCount = ubidi_countRuns( pBidi, &nError );
+        size_t nCount = ubidi_countRuns( pBidi, &nError );
 
         int32_t nStart = 0;
         int32_t nEnd;
         UBiDiLevel nCurrDir;
 
-        for ( size_t nIdx = 0; nIdx < static_cast<size_t>(nCount); ++nIdx )
+        for ( size_t nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
             rInfos.push_back( WritingDirectionInfo( nCurrDir, (USHORT)nStart, (USHORT)nEnd ) );
