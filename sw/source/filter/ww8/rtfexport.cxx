@@ -920,7 +920,7 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
 OString RtfExport::OutString(const String &rStr, rtl_TextEncoding eDestEnc)
 {
     OSL_TRACE("%s, rStr = '%s'", OSL_THIS_FUNC,
-            OUStringToOString( OUString( rStr ), eCurrentEncoding ).getStr());
+            OUStringToOString( OUString( rStr ), eDestEnc ).getStr());
     OStringBuffer aBuf;
     int nUCMode = 1;
     for (xub_StrLen n = 0; n < rStr.Len(); ++n)

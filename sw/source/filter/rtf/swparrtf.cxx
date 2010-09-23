@@ -1376,6 +1376,7 @@ void SwRTFParser::ReadShapeObject()
     String shpTxt;
     bool bshpTxt=false;
     int txflTextFlow=0;
+    ::rtl::OUString sDescription, sName;
 
 
     while (level>0 && IsParserWorking())
@@ -1433,7 +1434,14 @@ void SwRTFParser::ReadShapeObject()
                       {
                         txflTextFlow=aToken.ToInt32();
                       }
-
+                    else if (sn.EqualsAscii("wzDescription"))
+                    {
+                        sDescription = aToken;
+                    }
+                    else if(sn.EqualsAscii("wzName"))
+                    {
+                        sName = aToken;
+                    }
                 }
                 break;
             case RTF_PICT:
@@ -1459,6 +1467,7 @@ void SwRTFParser::ReadShapeObject()
     }
     SkipToken(-1);
 
+    SdrObject* pSdrObject = 0;
     switch(shapeType)
     {
         case 202: /* Text Box */
@@ -1478,6 +1487,7 @@ void SwRTFParser::ReadShapeObject()
 
             const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
             SdrRectObj* pStroke = new SdrRectObj(aRect);
+            pSdrObject = pStroke;
             pStroke->SetSnapRect(aRect);
             pDoc->GetOrCreateDrawModel(); // create model
             InsertShpObject(pStroke, this->nZOrder++);
@@ -1525,6 +1535,7 @@ void SwRTFParser::ReadShapeObject()
             aLine.append(aPointRightBottom);
 
             SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aLine));
+            pSdrObject = pStroke;
             //pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
@@ -1545,10 +1556,16 @@ void SwRTFParser::ReadShapeObject()
             const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
 
             SdrRectObj* pStroke = new SdrGrafObj(aGrf);
+            pSdrObject = pStroke;
             pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
         }
+    }
+    if( pSdrObject )
+    {
+        pSdrObject->SetDescription(sDescription);
+        pSdrObject->SetTitle(sName);
     }
 }
 

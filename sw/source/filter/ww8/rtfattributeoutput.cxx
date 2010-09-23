@@ -1457,7 +1457,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             if ( pGrfNode )
-                FlyFrameGraphic( *pGrfNode, rFrame.GetLayoutSize() );
+                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode, rFrame.GetLayoutSize() );
             break;
         case sw::Frame::eDrawing:
             {
@@ -1694,7 +1694,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 {
                     SwNodeIndex aIdx(*rFrmFmt.GetCntnt().GetCntntIdx(), 1);
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-                    FlyFrameOLE(rOLENd, rFrame.GetLayoutSize());
+                    FlyFrameOLE(dynamic_cast<const SwFlyFrmFmt*>( &rFrmFmt ), rOLENd, rFrame.GetLayoutSize());
                 }
             }
             break;
@@ -3107,15 +3107,41 @@ static OString WriteHex(OString sString)
     return aRet.makeStringAndClear();
 }
 
-static OString ExportPICT(const Size &rOrig, const Size &rRendered, const Size &rMapped,
+void lcl_AppendSP( OStringBuffer& rBuffer,
+    const char cName[],
+    const ::rtl::OUString& rValue,
+    const RtfExport& rExport )
+{
+    rBuffer.append( "{" OOO_STRING_SVTOOLS_RTF_SP "{" ); // "{\sp{"
+    rBuffer.append( OOO_STRING_SVTOOLS_RTF_SN " " );//" \sn "
+    rBuffer.append( cName ); //"PropName"
+    rBuffer.append( "}{" OOO_STRING_SVTOOLS_RTF_SV " " );
+// "}{ \sv "
+    rBuffer.append( rExport.OutString( rValue, rExport.eCurrentEncoding ) );
+    rBuffer.append( "}}" );
+}
+
+static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, const Size &rRendered, const Size &rMapped,
     const SwCropGrf &rCr, const char *pBLIPType, const sal_uInt8 *pGraphicAry,
-    unsigned long nSize)
+    unsigned long nSize, const RtfExport& rExport )
 {
     OStringBuffer aRet;
     bool bIsWMF = (const char *)pBLIPType == (const char *)OOO_STRING_SVTOOLS_RTF_WMETAFILE ? true : false;
     if (pBLIPType && nSize && pGraphicAry)
     {
         aRet.append("{" OOO_STRING_SVTOOLS_RTF_PICT);
+
+        if( pFlyFrmFmt )
+        {
+            String sDescription = pFlyFrmFmt->GetObjDescription();
+            //write picture properties - wzDescription at first
+            //looks like: "{\*\picprop{\sp{\sn PropertyName}{\sv PropertyValue}}}"
+            aRet.append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_PICPROP );//"{\*\picprop
+            lcl_AppendSP( aRet, "wzDescription", sDescription, rExport );
+            String sName = pFlyFrmFmt->GetObjTitle();
+            lcl_AppendSP( aRet, "wzName", sName, rExport );
+            aRet.append( "}" ); //"}"
+        }
 
         long nXCroppedSize = rOrig.Width()-(rCr.GetLeft() + rCr.GetRight());
         long nYCroppedSize = rOrig.Height()-(rCr.GetTop() + rCr.GetBottom());
@@ -3209,7 +3235,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
     }
 }
 
-void RtfAttributeOutput::FlyFrameOLE( SwOLENode& rOLENode, const Size& rSize )
+void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -3245,11 +3271,11 @@ void RtfAttributeOutput::FlyFrameOLE( SwOLENode& rOLENode, const Size& rSize )
     nHeight-=nFontHeight/20;
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_DN).append(nHeight);
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
-    m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+    m_aRunText.append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
     m_aRunText.append("}}}}");
 }
 
-void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize )
+void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode, const Size& rSize )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -3322,7 +3348,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
         m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
 
     if (pBLIPType)
-        m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+        m_aRunText.append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport));
     else
     {
         aStream.Seek(0);
@@ -3332,7 +3358,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+        m_aRunText.append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
     }
 
     if (!bIsWMF)
@@ -3346,7 +3372,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+        m_aRunText.append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
 
         m_aRunText.append('}');
     }

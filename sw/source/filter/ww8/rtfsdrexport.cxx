@@ -447,6 +447,13 @@ void RtfSdrExport::AddShapeAttribute( sal_Int32 /*nAttribute*/, const rtl::OStri
 
 extern const char* pShapeTypes[];
 
+void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::rtl::OString& rValue)
+{
+    rRunText.append('{').append(OOO_STRING_SVTOOLS_RTF_SP)
+        .append('{').append(OOO_STRING_SVTOOLS_RTF_SN " ").append(cName).append('}')
+        .append('{').append(OOO_STRING_SVTOOLS_RTF_SV " ").append(rValue).append('}')
+        .append('}');
+}
 sal_Int32 RtfSdrExport::StartShape()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -466,10 +473,10 @@ sal_Int32 RtfSdrExport::StartShape()
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
     for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); i++)
-        m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SP)
-            .append('{').append(OOO_STRING_SVTOOLS_RTF_SN " ").append((*i).first).append('}')
-            .append('{').append(OOO_STRING_SVTOOLS_RTF_SV " ").append((*i).second).append('}')
-            .append('}');
+        lcl_AppendSP(m_rAttrOutput.RunText(), (*i).first, (*i).second );
+
+    lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", RtfExport::OutString( m_pSdrObject->GetDescription(), m_rExport.eCurrentEncoding));
+    lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", RtfExport::OutString( m_pSdrObject->GetTitle(), m_rExport.eCurrentEncoding));
 
     // now check if we have some text
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);

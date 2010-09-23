@@ -46,7 +46,8 @@ CDEFS=$(CDEFS) -Dmydebug
 EXCEPTIONSFILES=	\
         $(SLO)$/rtffly.obj \
         $(SLO)$/rtfnum.obj \
-        $(SLO)$/swparrtf.obj
+        $(SLO)$/swparrtf.obj \
+        $(SLO)$/rtffld.obj
 
 
 SLOFILES =	\

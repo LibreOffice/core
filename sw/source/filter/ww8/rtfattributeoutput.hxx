@@ -45,6 +45,7 @@ class RtfExport;
 class SwGrfNode;
 class SwOLENode;
 class SdrObject;
+class SwFlyFrmFmt;
 
 class RtfAttributeOutput : public AttributeOutputBase
 {
@@ -429,8 +430,8 @@ protected:
 private:
 
     /// Output graphic fly frames.
-    void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
-    void FlyFrameOLE( SwOLENode& rOLENode, const Size& rSize );
+    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode, const Size& rSize );
+    void FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize );
     void FlyFrameOLEData( SwOLENode& rOLENode );
 
     /*
