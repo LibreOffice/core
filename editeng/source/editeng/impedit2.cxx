@@ -1719,9 +1719,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    rTypes.Remove( 0, rTypes.Count() );
-
-//  pParaPortion->aExtraCharInfos.Remove( 0, pParaPortion->aExtraCharInfos.Count() );
+    rTypes.clear();
 
     ContentNode* pNode = pParaPortion->GetNode();
     if ( pNode->Len() )
@@ -1770,19 +1768,19 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
 
         sal_Int32 nPos = 0;
         short nScriptType = _xBI->getScriptType( aOUText, nPos );
-        rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
+        rTypes.push_back( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ) );
         nPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
         while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
         {
-            rTypes[rTypes.Count()-1].nEndPos = (USHORT)nPos;
+            rTypes.back().nEndPos = (USHORT)nPos;
 
             nScriptType = _xBI->getScriptType( aOUText, nPos );
             long nEndPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
 
-            if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes[rTypes.Count()-1].nScriptType ) )
+            if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
             {
                 // Expand last ScriptTypePosInfo, don't create weak or unecessary portions
-                rTypes[rTypes.Count()-1].nEndPos = (USHORT)nEndPos;
+                rTypes.back().nEndPos = (USHORT)nEndPos;
             }
             else
             {
@@ -1793,18 +1791,18 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
                     case U_ENCLOSING_MARK:
                     case U_COMBINING_SPACING_MARK:
                         --nPos;
-                        rTypes[rTypes.Count()-1].nEndPos--;
+                        rTypes.back().nEndPos--;
                         break;
                     }
                 }
-                rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
+                rTypes.push_back( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ) );
             }
 
             nPos = nEndPos;
         }
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
-            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
+            rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 
         // create writing direction information:
         if ( !pParaPortion->aWritingDirectionInfos.Count() )
@@ -1821,30 +1819,30 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
                 ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( aText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
             {
-                USHORT nIdx = 0;
+                size_t nIdx = 0;
 
                 // Skip entries in ScriptArray which are not inside the RTL run:
-                while ( nIdx < rTypes.Count() && rTypes[nIdx].nStartPos < nStart )
+                while ( nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart )
                     ++nIdx;
 
                 // Remove any entries *inside* the current run:
-                while ( nIdx < rTypes.Count() && rTypes[nIdx].nEndPos <= nEnd )
-                    rTypes.Remove( nIdx );
+                while ( nIdx < rTypes.size() && rTypes[nIdx].nEndPos <= nEnd )
+                    rTypes.erase( rTypes.begin()+nIdx );
 
                 // special case:
-                if(nIdx < rTypes.Count() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
+                if(nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
                 {
-                    rTypes.Insert( ScriptTypePosInfo( rTypes[nIdx].nScriptType, (USHORT)nEnd, rTypes[nIdx].nEndPos ), nIdx );
+                    rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( rTypes[nIdx].nScriptType, (USHORT)nEnd, rTypes[nIdx].nEndPos ) );
                     rTypes[nIdx].nEndPos = nStart;
                 }
 
                 if( nIdx )
                     rTypes[nIdx - 1].nEndPos = nStart;
 
-                rTypes.Insert( ScriptTypePosInfo( i18n::ScriptType::COMPLEX, (USHORT)nStart, (USHORT)nEnd), nIdx );
+                rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( i18n::ScriptType::COMPLEX, (USHORT)nStart, (USHORT)nEnd) );
                 ++nIdx;
 
-                if( nIdx < rTypes.Count() )
+                if( nIdx < rTypes.size() )
                     rTypes[nIdx].nStartPos = nEnd;
             }
         }
@@ -1853,7 +1851,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
         USHORT nDebugStt = 0;
         USHORT nDebugEnd = 0;
         short nDebugType = 0;
-        for ( USHORT n = 0; n < rTypes.Count(); ++n )
+        for ( size_t n = 0; n < rTypes.size(); ++n )
         {
             nDebugStt  = rTypes[n].nStartPos;
             nDebugEnd  = rTypes[n].nEndPos;
@@ -1874,12 +1872,12 @@ USHORT ImpEditEngine::GetScriptType( const EditPaM& rPaM, USHORT* pEndPos ) cons
     {
          USHORT nPara = GetEditDoc().GetPos( rPaM.GetNode() );
         ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
-        if ( !pParaPortion->aScriptInfos.Count() )
+        if ( pParaPortion->aScriptInfos.empty() )
             ((ImpEditEngine*)this)->InitScriptTypes( nPara );
 
         ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
         USHORT nPos = rPaM.GetIndex();
-        for ( USHORT n = 0; n < rTypes.Count(); n++ )
+        for ( size_t n = 0; n < rTypes.size(); n++ )
         {
             if ( ( rTypes[n].nStartPos <= nPos ) && ( rTypes[n].nEndPos >= nPos ) )
                {
@@ -1906,7 +1904,7 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
     for ( USHORT nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
-        if ( !pParaPortion->aScriptInfos.Count() )
+        if ( pParaPortion->aScriptInfos.empty() )
             ((ImpEditEngine*)this)->InitScriptTypes( nPara );
 
         ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
@@ -1916,7 +1914,7 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
         // well as with just moving the cursor from char to char.
         USHORT nS = ( nPara == nStartPara ) ? aSel.Min().GetIndex() : 0;
         USHORT nE = ( nPara == nEndPara ) ? aSel.Max().GetIndex() : pParaPortion->GetNode()->Len();
-        for ( USHORT n = 0; n < rTypes.Count(); n++ )
+        for ( size_t n = 0; n < rTypes.size(); n++ )
         {
             if (rTypes[n].nStartPos <= nS  &&  nE <= rTypes[n].nEndPos)
                {
@@ -1947,12 +1945,12 @@ BOOL ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
     {
         USHORT nPara = GetEditDoc().GetPos( rPaM.GetNode() );
         ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
-        if ( !pParaPortion->aScriptInfos.Count() )
+        if ( pParaPortion->aScriptInfos.empty() )
             ((ImpEditEngine*)this)->InitScriptTypes( nPara );
 
         ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
         USHORT nPos = rPaM.GetIndex();
-        for ( USHORT n = 0; n < rTypes.Count(); n++ )
+        for ( size_t n = 0; n < rTypes.size(); n++ )
         {
             if ( rTypes[n].nStartPos == nPos )
                {
@@ -1969,11 +1967,11 @@ BOOL ImpEditEngine::HasScriptType( USHORT nPara, USHORT nType ) const
     BOOL bTypeFound = FALSE;
 
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
-    if ( !pParaPortion->aScriptInfos.Count() )
+    if ( pParaPortion->aScriptInfos.empty() )
         ((ImpEditEngine*)this)->InitScriptTypes( nPara );
 
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( USHORT n = rTypes.Count(); n && !bTypeFound; )
+    for ( size_t n = rTypes.size(); n && !bTypeFound; )
     {
         if ( rTypes[--n].nScriptType == nType )
                 bTypeFound = TRUE;
@@ -1989,7 +1987,7 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
 
     BOOL bCTL = FALSE;
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( USHORT n = 0; n < rTypes.Count(); n++ )
+    for ( size_t n = 0; n < rTypes.size(); n++ )
     {
         if ( rTypes[n].nScriptType == i18n::ScriptType::COMPLEX )
            {

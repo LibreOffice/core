@@ -2294,11 +2294,11 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     }
     aPositions.Insert( pNode->Len() );
 
-    if ( !pParaPortion->aScriptInfos.Count() )
+    if ( pParaPortion->aScriptInfos.empty() )
         ((ImpEditEngine*)this)->InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
 
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( USHORT nT = 0; nT < rTypes.Count(); nT++ )
+    for ( size_t nT = 0; nT < rTypes.size(); nT++ )
         aPositions.Insert( rTypes[nT].nStartPos );
 
     const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
