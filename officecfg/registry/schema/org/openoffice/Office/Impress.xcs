@@ -878,7 +878,7 @@
               <desc>Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
               <label/>
             </info>
-            <value>1270</value>
+            <value>2540</value>
           </prop>
         </group>
         <group oor:name="YAxis">
@@ -902,7 +902,7 @@
               <desc>Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
               <label/>
             </info>
-            <value>1270</value>
+            <value>2540</value>
           </prop>
         </group>
       </group>

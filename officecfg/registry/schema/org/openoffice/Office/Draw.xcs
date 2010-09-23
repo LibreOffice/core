@@ -824,7 +824,7 @@
 						<desc>Specifies the number of points between two grid points on the X axis.</desc>
 						<label>X Axis Subdivision</label>
 					</info>
-					<value>1</value>
+					<value>9</value>
 				</prop>
 				<prop oor:name="YAxis" oor:type="xs:double">
 					<!-- OldPath: Draw/Grid/Subdivision -->
@@ -836,7 +836,7 @@
 						<desc>Specifies the number of points between two grid points on the Y axis.</desc>
 						<label>Y Axis Subdivision</label>
 					</info>
-					<value>1</value>
+					<value>9</value>
 				</prop>
 			</group>
 			<group oor:name="SnapGrid">
