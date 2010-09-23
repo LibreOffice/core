@@ -1288,7 +1288,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
         xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[(sal_uInt16)nFieldIndex]);
+        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[static_cast< size_t >(nFieldIndex)]);
     }
 
     m_nCurrentFieldIndex = nFieldIndex;
