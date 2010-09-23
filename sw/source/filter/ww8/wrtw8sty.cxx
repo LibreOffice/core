@@ -79,6 +79,7 @@
 #include "ww8par.hxx"
 #include "ww8attributeoutput.hxx"
 #include "docxattributeoutput.hxx"
+#include "rtfattributeoutput.hxx"
 
 using namespace sw::util;
 using namespace nsHdFtFlags;
@@ -713,6 +714,17 @@ void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
 }
 #endif
 
+void wwFont::WriteRtf( const RtfAttributeOutput* rAttrOutput ) const
+{
+    rAttrOutput->FontFamilyType( meFamily, *this );
+    rAttrOutput->FontPitchType( mePitch );
+    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ) );
+    rAttrOutput->StartFont( msFamilyNm );
+    if ( mbAlt )
+        rAttrOutput->FontAlternateName( msAltNm );
+    rAttrOutput->EndFont();
+}
+
 bool operator<(const wwFont &r1, const wwFont &r2)
 {
     int nRet = memcmp(r1.maWW8_FFN, r2.maWW8_FFN, sizeof(r1.maWW8_FFN));
@@ -764,6 +776,22 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+    }
+
+    if (!bLoadAllFonts)
+        return;
+
+    const USHORT aTypes[] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, 0 };
+    for (const USHORT* pId = aTypes; *pId; ++pId)
+    {
+        USHORT nMaxItem = rPool.GetItemCount( *pId );
+        for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
+            if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem(
+                            *pId, nGet )) )
+            {
+                GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
+                            pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+            }
     }
 }
 
@@ -838,6 +866,14 @@ void wwFontHelper::WriteFontTable( const DocxAttributeOutput& rAttrOutput )
         ::std::bind2nd( ::std::mem_fun( &wwFont::WriteDocx ), &rAttrOutput ) );
 }
 #endif
+
+void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
+{
+    ::std::vector<const wwFont *> aFontList( AsVector() );
+
+    ::std::for_each( aFontList.begin(), aFontList.end(),
+        ::std::bind2nd( ::std::mem_fun( &wwFont::WriteRtf ), &rAttrOutput ) );
+}
 
 /*  */
 

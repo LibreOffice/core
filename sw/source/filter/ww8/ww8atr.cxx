@@ -3340,7 +3340,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         m_rWW8Export.pO->Insert( (BYTE)0x02, m_rWW8Export.pO->Count() );
 
         sal_Unicode cStart = rTwoLines.GetStartBracket();
-        sal_Unicode cEnd = rTwoLines.GetStartBracket();
+        sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
         /*
         As per usual we have problems. We can have seperate left and right brackets
