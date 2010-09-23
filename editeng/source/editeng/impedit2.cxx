@@ -1805,12 +1805,12 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 
         // create writing direction information:
-        if ( !pParaPortion->aWritingDirectionInfos.Count() )
+        if ( pParaPortion->aWritingDirectionInfos.empty() )
             InitWritingDirections( nPara );
 
         // i89825: Use CTL font for numbers embedded into an RTL run:
         WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for ( USHORT n = 0; n < rDirInfos.Count(); ++n )
+        for ( size_t n = 0; n < rDirInfos.size(); ++n )
         {
             const xub_StrLen nStart = rDirInfos[n].nStartPos;
             const xub_StrLen nEnd   = rDirInfos[n].nEndPos;
@@ -1983,7 +1983,7 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
     WritingDirectionInfos& rInfos = pParaPortion->aWritingDirectionInfos;
-    rInfos.Remove( 0, rInfos.Count() );
+    rInfos.clear();
 
     BOOL bCTL = FALSE;
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
@@ -2018,10 +2018,10 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
         int32_t nEnd;
         UBiDiLevel nCurrDir;
 
-        for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
+        for ( size_t nIdx = 0; nIdx < static_cast<size_t>(nCount); ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.Insert( WritingDirectionInfo( nCurrDir, (USHORT)nStart, (USHORT)nEnd ), rInfos.Count() );
+            rInfos.push_back( WritingDirectionInfo( nCurrDir, (USHORT)nStart, (USHORT)nEnd ) );
             nStart = nEnd;
         }
 
@@ -2029,8 +2029,8 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
     }
 
     // No infos mean no CTL and default dir is L2R...
-    if ( !rInfos.Count() )
-        rInfos.Insert( WritingDirectionInfo( 0, 0, (USHORT)pParaPortion->GetNode()->Len() ), rInfos.Count() );
+    if ( rInfos.empty() )
+        rInfos.push_back( WritingDirectionInfo( 0, 0, (USHORT)pParaPortion->GetNode()->Len() ) );
 
 }
 
@@ -2094,12 +2094,12 @@ BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, U
     if ( pNode && pNode->Len() )
     {
         ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
-        if ( !pParaPortion->aWritingDirectionInfos.Count() )
+        if ( pParaPortion->aWritingDirectionInfos.empty() )
             InitWritingDirections( nPara );
 
 //        BYTE nType = 0;
         WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for ( USHORT n = 0; n < rDirInfos.Count(); n++ )
+        for ( size_t n = 0; n < rDirInfos.size(); n++ )
         {
             if ( ( rDirInfos[n].nStartPos <= nPos ) && ( rDirInfos[n].nEndPos >= nPos ) )
                {

@@ -114,7 +114,8 @@ struct WritingDirectionInfo
     }
 };
 
-SV_DECL_VARARR( WritingDirectionInfos, WritingDirectionInfo, 0, 4 )
+
+typedef std::deque< WritingDirectionInfo > WritingDirectionInfos;
 
 typedef EditCharAttrib* EditCharAttribPtr;
 SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 )

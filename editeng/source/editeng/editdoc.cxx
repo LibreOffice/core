@@ -255,8 +255,6 @@ USHORT aV5Map[] = {
 };
 
 SV_IMPL_PTRARR( DummyContentList, ContentNode* );
-SV_IMPL_VARARR( WritingDirectionInfos, WritingDirectionInfo );
-
 
 int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 {

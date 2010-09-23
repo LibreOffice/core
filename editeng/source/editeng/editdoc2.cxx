@@ -239,7 +239,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
     }
     bInvalid = TRUE;
     aScriptInfos.clear();
-    aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
+    aWritingDirectionInfos.clear();
 }
 
 void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /* nEnd */ )
@@ -258,7 +258,7 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /* nEnd */ )
     bInvalid = TRUE;
     bSimple = FALSE;
     aScriptInfos.clear();
-    aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
+    aWritingDirectionInfos.clear();
 }
 
 USHORT ParaPortion::GetLineNumber( USHORT nIndex )

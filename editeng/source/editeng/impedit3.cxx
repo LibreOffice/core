@@ -2302,7 +2302,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
         aPositions.Insert( rTypes[nT].nStartPos );
 
     const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
-    for ( USHORT nD = 0; nD < rWritingDirections.Count(); nD++ )
+    for ( size_t nD = 0; nD < rWritingDirections.size(); nD++ )
         aPositions.Insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
