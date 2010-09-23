@@ -102,6 +102,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         {
             String sDocumentName = FileHelper.appendPath(m_sOutputURL, m_sBasename);
             if (m_aParameterHelper.getReferenceType().toLowerCase().equals("ooo") ||
+                m_aParameterHelper.getReferenceType().toLowerCase().equals("o3") ||
                 m_aParameterHelper.getReferenceType().toLowerCase().equals("ps") )
             {
                 String sPrintURL = sDocumentName + ".ps";
