@@ -1847,7 +1847,7 @@ bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibrar
                 for ( int i = 0; i < sizeof(checksum); fprintf( fchksum, "%02X", checksum[i++] ) );
                 fprintf( fchksum, "\" bytes=\"%d\" file=\"%s\"/>\n",
                     nBytesProcessed,
-                    GetFileName( iter->first ) );
+                    GetFileName( iter->first ).c_str() );
             }
         }
 
