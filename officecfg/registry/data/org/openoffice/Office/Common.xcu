@@ -576,7 +576,6 @@
   </node>
   <node oor:name="Misc">
     <prop oor:name="UseSystemFileDialog">
-      <value install:module="UseOOoFileDialogs">false</value>
       <value install:module="gconflockdown" oor:external=
          "com.sun.star.configuration.backend.GconfBackend UseSystemFileDialog"/>
     </prop>
