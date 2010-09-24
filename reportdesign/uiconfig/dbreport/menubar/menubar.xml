@@ -413,7 +413,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelperDialog"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelpSupport"/>
+            <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
