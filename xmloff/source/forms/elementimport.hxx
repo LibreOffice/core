@@ -85,22 +85,25 @@ namespace xmloff
                 ,public OStackedLogging
     {
     protected:
-        ::rtl::OUString         m_sServiceName;     // the service name as extracted from the service-name attribute
-        ::rtl::OUString         m_sName;            // the name of the object (redundant, already contained in the base class' array)
+        ::rtl::OUString             m_sServiceName;     // the service name as extracted from the service-name attribute
+        ::rtl::OUString             m_sName;            // the name of the object (redundant, already contained in the base class' array)
         OFormLayerXMLImport_Impl&   m_rFormImport;      // the form import context
-        IEventAttacherManager&  m_rEventManager;    // the event attacher manager
+        IEventAttacherManager&      m_rEventManager;    // the event attacher manager
 
         const XMLTextStyleContext*  m_pStyleElement;    // the XML element which describes the style we encountered
                                                         // while reading our element
 
+        /// the parent container to insert the new element into
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        m_xParentContainer;
-            // the parent container to insert the new element into
+                                    m_xParentContainer;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-                        m_xInfo;
+        /// the element we're creating. Valid after StartElement
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        m_xElement;             // the element we're creating. Valid after StartElement
+                                    m_xElement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                                    m_xInfo;
+
+        bool                        m_bImplicitGenericAttributeHandling;
 
     public:
         /** ctor
@@ -159,6 +162,16 @@ namespace xmloff
             @see encounteredAttribute
         */
         void        simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
+
+        /** to be called from within handleAttribute, checks whether the given attribute is covered by our generic
+            attribute handler mechanisms
+        */
+        bool        tryGenericAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue );
+
+        /** controls whether |handleAttribute| implicitly calls |tryGenericAttribute|, or whether the derived class
+            must do this explicitly at a suitable place in its own |handleAttribute|
+        */
+        void        disableImplicitGenericAttributeHandling() { m_bImplicitGenericAttributeHandling = false; }
 
     private:
         ::rtl::OUString implGetDefaultName() const;

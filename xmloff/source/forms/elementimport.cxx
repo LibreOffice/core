@@ -160,6 +160,7 @@ namespace xmloff
         ,m_rEventManager(_rEventManager)
         ,m_pStyleElement( NULL )
         ,m_xParentContainer(_rxParentContainer)
+        ,m_bImplicitGenericAttributeHandling( true )
     {
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::OElementImport: invalid parent container!");
     }
@@ -545,30 +546,8 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OElementImport::tryGenericAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
     {
-        if ( token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION ) )
-            // ignore this, it has already been handled in OElementImport::StartElement
-            return true;
-
-        if ( token::IsXMLToken( _rLocalName, token::XML_NAME ) )
-        {
-            if ( !m_sName.getLength() )
-                // remember the name for later use in EndElement
-                m_sName = _rValue;
-            return true;
-        }
-
-        // maybe it's the style attribute?
-        if ( token::IsXMLToken( _rLocalName, token::XML_TEXT_STYLE_NAME ) )
-        {
-            const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement( _rValue );
-            OSL_ENSURE( pStyleContext, "OElementImport::handleAttribute: do not know the style!" );
-            // remember the element for later usage.
-            m_pStyleElement = PTR_CAST( XMLTextStyleContext, pStyleContext );
-            return true;
-        }
-
         // the generic approach (which I hope all props will be migrated to, on the medium term): property handlers
         const AttributeDescription attribute( metadata::getAttributeDescription( _nNamespaceKey, _rLocalName ) );
         if ( attribute.attributeToken != XML_TOKEN_INVALID )
@@ -577,7 +556,7 @@ namespace xmloff
             metadata::getPropertyGroupList( attribute, propertyGroups );
             const PropertyGroups::const_iterator pos = impl_matchPropertyGroup( propertyGroups );
             if ( pos == propertyGroups.end() )
-                return OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+                return false;
 
             do
             {
@@ -611,6 +590,37 @@ namespace xmloff
             // handled
             return true;
         }
+        return false;
+    }
+
+    //---------------------------------------------------------------------
+    bool OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        if ( token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION ) )
+            // ignore this, it has already been handled in OElementImport::StartElement
+            return true;
+
+        if ( token::IsXMLToken( _rLocalName, token::XML_NAME ) )
+        {
+            if ( !m_sName.getLength() )
+                // remember the name for later use in EndElement
+                m_sName = _rValue;
+            return true;
+        }
+
+        // maybe it's the style attribute?
+        if ( token::IsXMLToken( _rLocalName, token::XML_TEXT_STYLE_NAME ) )
+        {
+            const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement( _rValue );
+            OSL_ENSURE( pStyleContext, "OElementImport::handleAttribute: do not know the style!" );
+            // remember the element for later usage.
+            m_pStyleElement = PTR_CAST( XMLTextStyleContext, pStyleContext );
+            return true;
+        }
+
+        if ( m_bImplicitGenericAttributeHandling )
+            if ( tryGenericAttribute( _nNamespaceKey, _rLocalName, _rValue ) )
+                return true;
 
         // let the base class handle it
         return OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
@@ -664,6 +674,7 @@ namespace xmloff
         :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         ,m_eElementType(OControlElement::UNKNOWN)
     {
+        disableImplicitGenericAttributeHandling();
     }
 
     //---------------------------------------------------------------------
@@ -672,6 +683,7 @@ namespace xmloff
         :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         ,m_eElementType(_eType)
     {
+        disableImplicitGenericAttributeHandling();
     }
 
     //---------------------------------------------------------------------
@@ -763,7 +775,7 @@ namespace xmloff
             return true;
         }
 
-        if ( OElementImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue ) )
+        if ( OElementImport::tryGenericAttribute( _nNamespaceKey, _rLocalName, _rValue ) )
             return true;
 
         static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE);
@@ -807,7 +819,7 @@ namespace xmloff
             return true;
         }
 
-        return false;
+        return OElementImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //---------------------------------------------------------------------
