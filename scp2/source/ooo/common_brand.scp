@@ -1480,3 +1480,10 @@ File gid_Brand_File_Bin_Python
     Styles = (PACKED);
 End
 #endif
+
+File gid_License_Odt
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Brand_Root;
+    Name = "LICENSE.odt";
+    Styles = (PACKED);
+End
