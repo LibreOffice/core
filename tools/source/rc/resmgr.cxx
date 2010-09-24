@@ -1352,7 +1352,8 @@ sal_uInt64 ResMgr::GetUInt64( void* pDatum )
 // -----------------------------------------------------------------------
 sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const BYTE* pStr )
 {
-    sal_uInt32 nRet = GetStringSize( pStr );
+    sal_uInt32 nLen=0;
+    sal_uInt32 nRet = GetStringSize( pStr, nLen );
     UniString aString( (sal_Char*)pStr, RTL_TEXTENCODING_UTF8,
                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
@@ -1373,16 +1374,18 @@ sal_uInt32 ResMgr::GetString( UniString& rStr, const BYTE* pStr )
 
 sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const BYTE* pStr )
 {
-    sal_uInt32 nRet = GetStringSize( pStr );
-    rStr = rtl::OString( (const sal_Char*)pStr, nRet );
+    sal_uInt32 nLen=0;
+    sal_uInt32 nRet = GetStringSize( pStr, nLen );
+    rStr = rtl::OString( (const sal_Char*)pStr, nLen );
     return nRet;
 }
 
 // ------------------------------------------------------------------
 
-sal_uInt32 ResMgr::GetStringSize( const BYTE* pStr )
+sal_uInt32 ResMgr::GetStringSize( const BYTE* pStr, sal_uInt32& nLen )
 {
-    return GetStringSize( strlen( (const char*)pStr ) );
+    nLen = static_cast< sal_uInt32 >( strlen( (const char*)pStr ) );
+    return GetStringSize( nLen );
 }
 
 // -----------------------------------------------------------------------
@@ -1805,7 +1808,7 @@ rtl::OString ResMgr::GetAutoHelpId()
         return pFallbackResMgr->GetAutoHelpId();
 
     OSL_ENSURE( nCurStack, "resource stack empty in Auto help id generation" );
-    if( nCurStack < 1  )
+    if( nCurStack < 1 || nCurStack > 2 )
         return rtl::OString();
 
     // prepare HID, start with resource prefix
@@ -1817,35 +1820,67 @@ rtl::OString ResMgr::GetAutoHelpId()
     const ImpRCStack *pRC = StackTop();
     OSL_ENSURE( pRC, "missing resource stack level" );
 
-    switch( pRC->pResource->GetRT() ) { // maximal 32
-        case RSC_TABCONTROL:        aHID.append( "TabControl" );       break;
-        case RSC_RADIOBUTTON:       aHID.append( "RadioButton" );      break;
-        case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
-        case RSC_TRISTATEBOX:       aHID.append( "TristateBox" );      break;
-        case RSC_EDIT:              aHID.append( "Edit" );             break;
-        case RSC_MULTILINEEDIT:     aHID.append( "MultilineEdit" );    break;
-        case RSC_MULTILISTBOX:      aHID.append( "MultiListBox" );     break;
-        case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
-        case RSC_COMBOBOX:          aHID.append( "Combobox" );         break;
-        case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
-        case RSC_SPINFIELD:         aHID.append( "SpinField" );        break;
-        case RSC_PATTERNFIELD:      aHID.append( "PatternField" );     break;
-        case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
-        case RSC_METRICFIELD:       aHID.append( "MetricField" );      break;
-        case RSC_CURRENCYFIELD:     aHID.append( "CurrencyField" );    break;
-        case RSC_DATEFIELD:         aHID.append( "DateField" );        break;
-        case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
-        case RSC_IMAGERADIOBUTTON:  aHID.append( "ImageRadioButton" ); break;
-        case RSC_NUMERICBOX:        aHID.append( "NumericBox" );       break;
-        case RSC_METRICBOX:         aHID.append( "MetricBox" );        break;
-        case RSC_CURRENCYBOX:       aHID.append( "CurrencyBox" );      break;
-        case RSC_DATEBOX:           aHID.append( "DateBox" );          break;
-        case RSC_TIMEBOX:           aHID.append( "TimeBox" );          break;
-        case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
-        case RSC_MENUBUTTON:        aHID.append( "MenuButton" );       break;
-        case RSC_MOREBUTTON:        aHID.append( "MoreButton" );       break;
-        default:
-            ;
+    if ( nCurStack == 1 )
+    {
+        // auto help ids for top level windows
+        switch( pRC->pResource->GetRT() ) {
+            case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
+            case RSC_WORKWIN:           aHID.append( "WorkWindow" );       break;
+            case RSC_MODELESSDIALOG:    aHID.append( "ModelessDialog" );   break;
+            case RSC_FLOATINGWINDOW:    aHID.append( "FloatingWindow" );   break;
+            case RSC_MODALDIALOG:       aHID.append( "ModalDialog" );      break;
+            case RSC_TABPAGE:           aHID.append( "TabPage" );          break;
+            default: return rtl::OString();
+        }
+    }
+    else
+    {
+        // only controls with the following parents get auto help ids
+        const ImpRCStack *pRC1 = StackTop(1);
+        switch( pRC1->pResource->GetRT() ) {
+            case RSC_DOCKINGWINDOW:
+            case RSC_WORKWIN:
+            case RSC_MODELESSDIALOG:
+            case RSC_FLOATINGWINDOW:
+            case RSC_MODALDIALOG:
+            case RSC_TABPAGE:
+                // intentionally no breaks!
+                // auto help ids for controls
+                switch( pRC->pResource->GetRT() ) {
+                    case RSC_TABCONTROL:        aHID.append( "TabControl" );       break;
+                    case RSC_RADIOBUTTON:       aHID.append( "RadioButton" );      break;
+                    case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
+                    case RSC_TRISTATEBOX:       aHID.append( "TristateBox" );      break;
+                    case RSC_EDIT:              aHID.append( "Edit" );             break;
+                    case RSC_MULTILINEEDIT:     aHID.append( "MultilineEdit" );    break;
+                    case RSC_MULTILISTBOX:      aHID.append( "MultiListBox" );     break;
+                    case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
+                    case RSC_COMBOBOX:          aHID.append( "Combobox" );         break;
+                    case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
+                    case RSC_SPINFIELD:         aHID.append( "SpinField" );        break;
+                    case RSC_PATTERNFIELD:      aHID.append( "PatternField" );     break;
+                    case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
+                    case RSC_METRICFIELD:       aHID.append( "MetricField" );      break;
+                    case RSC_CURRENCYFIELD:     aHID.append( "CurrencyField" );    break;
+                    case RSC_DATEFIELD:         aHID.append( "DateField" );        break;
+                    case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
+                    case RSC_IMAGERADIOBUTTON:  aHID.append( "ImageRadioButton" ); break;
+                    case RSC_NUMERICBOX:        aHID.append( "NumericBox" );       break;
+                    case RSC_METRICBOX:         aHID.append( "MetricBox" );        break;
+                    case RSC_CURRENCYBOX:       aHID.append( "CurrencyBox" );      break;
+                    case RSC_DATEBOX:           aHID.append( "DateBox" );          break;
+                    case RSC_TIMEBOX:           aHID.append( "TimeBox" );          break;
+                    case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
+                    case RSC_MENUBUTTON:        aHID.append( "MenuButton" );       break;
+                    case RSC_MOREBUTTON:        aHID.append( "MoreButton" );       break;
+                    default:
+                        // no type, no auto HID
+                        return rtl::OString();
+                }
+                break;
+            default:
+                return rtl::OString();
+        }
     }
 
     // append resource id hierarchy

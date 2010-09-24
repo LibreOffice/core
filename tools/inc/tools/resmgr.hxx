@@ -189,7 +189,7 @@ public:
     // Groesse eines Strings in der Resource
     static sal_uInt32   GetStringSize( sal_uInt32 nLen )
                             { nLen++; return (nLen + nLen%2); }
-    static sal_uInt32   GetStringSize( const BYTE* pStr );
+    static sal_uInt32   GetStringSize( const BYTE* pStr, sal_uInt32& nLen );
 
     // return a int64
     static sal_uInt64   GetUInt64( void* pDatum );
