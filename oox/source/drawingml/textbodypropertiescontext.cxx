@@ -30,8 +30,9 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -165,7 +166,7 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
             case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
-                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= true;
+                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= TextFitToSizeType_AUTOFIT;
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
             case NMSP_DRAWINGML|XML_spAutoFit:
