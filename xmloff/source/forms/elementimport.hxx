@@ -175,7 +175,8 @@ namespace xmloff
 
     private:
         ::rtl::OUString implGetDefaultName() const;
-        void implImportGenericProperties();
+        void implApplyGenericProperties();
+        void implApplySpecificProperties();
 
         /** sets the style properties which have been read for the element (if any)
         */

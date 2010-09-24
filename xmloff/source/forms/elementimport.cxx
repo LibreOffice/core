@@ -225,26 +225,61 @@ namespace xmloff
         if (!m_xElement.is())
             return;
 
+        // apply the non-generic properties
+        implApplySpecificProperties();
+
+        // set the generic properties
+        implApplyGenericProperties();
+
+        // set the style properties
+        if ( m_pStyleElement && m_xElement.is() )
+        {
+            Reference< XPropertySet > xPropTranslation =
+                new OGridColumnPropertyTranslator( Reference< XMultiPropertySet >( m_xElement, UNO_QUERY ) );
+            const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( xPropTranslation );
+
+            const ::rtl::OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
+            if ( sNumberStyleName.getLength() )
+                // the style also has a number (sub) style
+                m_rContext.applyControlNumberStyle( m_xElement, sNumberStyleName );
+        }
+
+        // insert the element into the parent container
+        if (!m_sName.getLength())
+        {
+            OSL_ENSURE(sal_False, "OElementImport::EndElement: did not find a name attribute!");
+            m_sName = implGetDefaultName();
+        }
+
+        m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+        LEAVE_LOG_CONTEXT( );
+    }
+
+    //---------------------------------------------------------------------
+    void OElementImport::implApplySpecificProperties()
+    {
+        if ( m_aValues.empty() )
+            return;
+
         // set all the properties we collected
 #if OSL_DEBUG_LEVEL > 0
         // check if the object has all the properties
         // (We do this in the non-pro version only. Doing it all the time would be much to expensive)
         if ( m_xInfo.is() )
         {
-            PropertyValueArray::iterator aEnd = m_aValues.end();
+            PropertyValueArray::const_iterator aEnd = m_aValues.end();
             for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
                     aCheck != aEnd;
                     ++aCheck
                 )
             {
                 OSL_ENSURE(m_xInfo->hasPropertyByName(aCheck->Name),
-                        ::rtl::OString("OElementImport::EndElement: read a property (")
+                        ::rtl::OString("OElementImport::implApplySpecificProperties: read a property (")
                     +=  ::rtl::OString(aCheck->Name.getStr(), aCheck->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
                     +=  ::rtl::OString(") which does not exist on the element!"));
             }
         }
 #endif
-        OSL_ENSURE(!m_aValues.empty(), "OElementImport::EndElement: no properties read!");
 
         // set the properties
         const Reference< XMultiPropertySet > xMultiProps(m_xElement, UNO_QUERY);
@@ -281,7 +316,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OElementImport::EndElement: could not set the properties (using the XMultiPropertySet)!");
+                OSL_ENSURE(sal_False, "OElementImport::implApplySpecificProperties: could not set the properties (using the XMultiPropertySet)!");
             }
         }
 
@@ -302,42 +337,16 @@ namespace xmloff
                 catch(Exception&)
                 {
                     OSL_ENSURE(sal_False,
-                            ::rtl::OString("OElementImport::EndElement: could not set the property \"")
+                            ::rtl::OString("OElementImport::implApplySpecificProperties: could not set the property \"")
                         +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
                         +=  ::rtl::OString("\"!"));
                 }
             }
         }
-
-        // set the generic properties
-        implImportGenericProperties();
-
-        // set the style properties
-        if ( m_pStyleElement && m_xElement.is() )
-        {
-            Reference< XPropertySet > xPropTranslation =
-                new OGridColumnPropertyTranslator( Reference< XMultiPropertySet >( m_xElement, UNO_QUERY ) );
-            const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( xPropTranslation );
-
-            const ::rtl::OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
-            if ( sNumberStyleName.getLength() )
-                // the style also has a number (sub) style
-                m_rContext.applyControlNumberStyle( m_xElement, sNumberStyleName );
-        }
-
-        // insert the element into the parent container
-        if (!m_sName.getLength())
-        {
-            OSL_ENSURE(sal_False, "OElementImport::EndElement: did not find a name attribute!");
-            m_sName = implGetDefaultName();
-        }
-
-        m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
-        LEAVE_LOG_CONTEXT( );
     }
 
     //---------------------------------------------------------------------
-    void OElementImport::implImportGenericProperties()
+    void OElementImport::implApplyGenericProperties()
     {
         if ( m_aGenericValues.empty() )
             return;
@@ -362,7 +371,7 @@ namespace xmloff
                     if ( !xDynamicProperties.is() )
                     {
                     #if OSL_DEBUG_LEVEL > 0
-                        ::rtl::OString aMessage( "OElementImport::implImportGenericProperties: encountered an unknown property (" );
+                        ::rtl::OString aMessage( "OElementImport::implApplyGenericProperties: encountered an unknown property (" );
                         aMessage += ::rtl::OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
                         aMessage += "), but component is no PropertyBag!";
                         OSL_ENSURE( false, aMessage.getStr() );
@@ -401,18 +410,18 @@ namespace xmloff
 
                 if ( bPropIsSequence != bValueIsSequence )
                 {
-                    OSL_ENSURE( false, "OElementImport::implImportGenericProperties: either both value and property should be a sequence, or none of them!" );
+                    OSL_ENSURE( false, "OElementImport::implApplyGenericProperties: either both value and property should be a sequence, or none of them!" );
                     continue;
                 }
 
                 if ( bValueIsSequence )
                 {
                     OSL_ENSURE( eValueTypeClass == TypeClass_ANY,
-                        "OElementImport::implImportGenericProperties: only ANYs should have been imported as generic list property!" );
+                        "OElementImport::implApplyGenericProperties: only ANYs should have been imported as generic list property!" );
                         // (OPropertyImport should produce only Sequencer< Any >, since it cannot know the real type
 
                     OSL_ENSURE( ePropTypeClass == TypeClass_SHORT,
-                        "OElementImport::implImportGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
+                        "OElementImport::implApplyGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
 
                     Sequence< Any > aXMLValueList;
                     aPropValues->Value >>= aXMLValueList;
@@ -455,13 +464,13 @@ namespace xmloff
                             aPropValues->Value <<= static_cast< sal_Int64 >( nVal );
                             break;
                         default:
-                            OSL_ENSURE( false, "OElementImport::implImportGenericProperties: unsupported value type!" );
+                            OSL_ENSURE( false, "OElementImport::implApplyGenericProperties: unsupported value type!" );
                             break;
                         }
                     }
                     break;
                     default:
-                        OSL_ENSURE( false, "OElementImport::implImportGenericProperties: non-double values not supported!" );
+                        OSL_ENSURE( false, "OElementImport::implApplyGenericProperties: non-double values not supported!" );
                         break;
                     }
                 }
